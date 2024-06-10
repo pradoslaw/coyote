@@ -53,8 +53,22 @@ class FlagController extends BaseController
         $this->breadcrumb->push('#' . $post->id, route('adm.flag.show', [$post->id]));
 
         return $this->view('adm.flag.show')->with([
-            'post'    => $store->reportedPostById($post->id),
-            'reports' => $store->reportHistory($post->id),
+            'post' => [
+                'createdAgo' => '',
+                'forumUrl'   => '',
+                'forumSlug'  => '',
+                'author'     => [
+                    'avatarUrl' => '',
+                    'mention'   => '',
+                    'name'      => '',
+                    'id'        => '',
+                ],
+                'content'    => '',
+                'history'    => [
+                    ['authorMention' => '', 'createdAt' => '', 'createdAgo' => '', 'type' => 'flag', 'note' => 'wulg'],
+                    ['authorMention' => '', 'createdAt' => '', 'createdAgo' => '', 'type' => 'create', 'note' => null],
+                ],
+            ],
             'backUrl' => route('adm.flag'),
         ]);
     }
