@@ -28,7 +28,11 @@ class BaseController extends Controller
 
             /** @var \Lavary\Menu\Builder $menu */
             $menu->add('Strona główna', ['route' => 'adm.dashboard'])->prepend($fa('fa-desktop fa-fw'));
-            $menu->add('Dodane treści', ['route' => 'adm.flag'])->prepend($fa('fa-search fa-fw'));
+
+            $menu->add('Dodane posty', ['url' => route('adm.flag')])->prepend($fa('fa-search fa-fw'));
+            $menu->add('Dodane komentarze', ['url' => route('adm.flag', ['filter' => 'type:comment'])])->prepend($fa('fa-search fa-fw'));
+            $menu->add('Dodane mikroblogi', ['url' => route('adm.flag', ['filter' => 'type:microblog'])])->prepend($fa('fa-search fa-fw'));
+
             $menu->add('Użytkownicy', ['route' => 'adm.users'])->prepend($fa('fa-user fa-fw'));
             $menu->add('Grupy', ['route' => 'adm.groups'])->prepend($fa('fa-users fa-fw'))->data('permission', 'adm-group');
             $menu->add('Bany', ['route' => 'adm.firewall'])->prepend($fa('fa-user-lock fa-fw'));
