@@ -21,6 +21,9 @@ class HistoryItem
         if ($this->type === 'report') {
             return 'far fa-flag';
         }
+        if ($this->type === 'delete') {
+            return 'far fa-trash-alt';
+        }
         return 'far fa-comment';
     }
 
@@ -28,6 +31,9 @@ class HistoryItem
     {
         if ($this->type === 'report') {
             return 'zgłosił';
+        }
+        if ($this->type === 'delete') {
+            return 'usunął';
         }
         return 'dodał';
     }

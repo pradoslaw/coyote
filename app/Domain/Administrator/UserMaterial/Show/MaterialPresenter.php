@@ -35,6 +35,7 @@ class MaterialPresenter
         $topicTitle = $post->topic->title;
         $topicId = $post->topic_id;
         $topicSlug = $post->topic->slug;
+        $deletedAt = $post->deleted_at;
 
         /** @var Resource[] $resources */
         $resources = \Coyote\Models\Flag\Resource::query()
@@ -44,6 +45,16 @@ class MaterialPresenter
             ->get();
 
         $historyItems = [];
+        if ($deletedAt !== null) {
+            $historyItems[] = new HistoryItem(
+                new Mention($post->deleter_id, $post->deleter->name),
+                $this->time->date(new Carbon($deletedAt)),
+                'delete',
+                'post',
+                null,
+            );
+        }
+
         foreach ($resources as $resource) {
             $historyItems[] = new HistoryItem(
                 new Mention($resource->flag->user_id, $resource->flag->user->name),
@@ -52,6 +63,10 @@ class MaterialPresenter
                 $resource->flag->type->name,
                 $resource->text);
         }
+
+        \uSort($historyItems, function (HistoryItem $a, HistoryItem $b): int {
+            return $a->createdAt->format() > $b->createdAt->format() ? 1 : -1;
+        });
 
         return new Material(
             new Link(

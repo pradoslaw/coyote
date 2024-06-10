@@ -55,11 +55,7 @@
           <div>
             {{ item.authorMention }}
             {{ item.actionVerbPastTense }}
-
-            <span class="badge badge-secondary">
-              <i class="{{ item.icon }}"></i>
-              {{ item.kind }}
-            </span>
+            <span class="badge badge-secondary">{{ item.kind }}</span>
 
             {% if item.note %}
               z dopiskiem <code>{{ item.note }}</code>.
