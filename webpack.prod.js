@@ -51,6 +51,9 @@ const plugins = [
         'x-placement',
         'tox-notifications-container',
         'editor-4play',
+        'menu-group-service-operations',
+        'menu-group-moderator-actions',
+        'divider',
       ],
       deep: [
         /^logo/,
