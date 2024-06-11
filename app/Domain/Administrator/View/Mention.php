@@ -17,7 +17,7 @@ class Mention extends Html
 
     protected function toHtml(): string
     {
-        $url = route('profile', [$this->userId]);
+        $url = route('adm.users.show', [$this->userId]);
         return '<a class="mention" href="' . \htmlSpecialChars($url) . '">' . '@' . $this->userName . '</a>';
     }
 }
