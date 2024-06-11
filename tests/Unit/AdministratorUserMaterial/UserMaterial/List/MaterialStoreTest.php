@@ -275,7 +275,7 @@ class MaterialStoreTest extends TestCase
     private function newPostDeletedAt(string $content, string $deletedAt): void
     {
         $post = new Post(['text' => $content]);
-        $post->deleted_at = new Carbon($deletedAt, 'UTC');
+        $post->deleted_at = $this->deleteAtFieldValue($deletedAt);
         $this->storeThread(new Forum, new Topic, $post);
     }
 
@@ -302,15 +302,15 @@ class MaterialStoreTest extends TestCase
     {
         $microblog = new Microblog();
         $microblog->user_id = $this->newUser()->id;
-        $microblog->deleted_at = new Carbon($deletedAt, 'UTC');
+        $microblog->deleted_at = $this->deleteAtFieldValue($deletedAt);
         $microblog->text = $content;
         $microblog->save();
     }
 
-    private function newPostCreatedAt(string $time): void
+    private function newPostCreatedAt(string $createdAt): void
     {
         $post = new Post();
-        $post->created_at = new Carbon($time, 'UTC');
+        $post->created_at = new Carbon($createdAt, 'UTC');
         $this->storeThread(new Forum, new Topic, $post);
     }
 
@@ -415,6 +415,14 @@ class MaterialStoreTest extends TestCase
 
     private function assertDateTime(string $expectedDateTime, Carbon $dateTime): void
     {
+        $dateTime->setTimezone('UTC');
         $this->assertSame($expectedDateTime, $dateTime->toDateTimeString());
+    }
+
+    private function deleteAtFieldValue(string $deletedAt): string
+    {
+        $carbon = Carbon::createFromFormat('Y-m-d H:i:s', $deletedAt, 'UTC');
+        $carbon->setTimezone('Europe/Warsaw');
+        return $carbon->toDateTimeString();
     }
 }
