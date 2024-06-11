@@ -14,6 +14,7 @@ readonly class Navigation
     public string $posts;
     public string $microblogs;
     public string $activity;
+    public string $receivedFlags;
     public Mention $mention;
 
     public function __construct(User $user)
@@ -26,6 +27,7 @@ readonly class Navigation
         $this->posts = route('forum.user', [$user->id]);
         $this->microblogs = route('profile', [$user->id, 'tab' => 'Microblog']);
         $this->activity = route('adm.users.activity', [$user->id]);
+        $this->receivedFlags = route('adm.flag', ['filter' => "is:reported author:$user->id"]);
         $this->mention = Mention::of($user);
     }
 }
