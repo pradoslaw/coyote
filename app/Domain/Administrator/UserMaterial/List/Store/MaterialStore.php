@@ -34,6 +34,9 @@ class MaterialStore
                     ->where("$flagResourceTable.resource_type", $this->resourceClassByType($request->type)),
                 not:!$request->reported);
         }
+        if ($request->authorId !== null) {
+            $query->where('user_id', $request->authorId);
+        }
         $builder = $query->clone();
         $materials = $query
             ->select("$materialTable.*", 'users.name AS username', 'users.photo AS user_photo')

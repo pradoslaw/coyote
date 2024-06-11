@@ -33,6 +33,7 @@ class FlagController extends BaseController
             $filterParams['type'] ?? 'post',
             $filterParams['deleted'] ?? null,
             $filterParams['reported'] ?? null,
+            $filterParams['author'] ?? null,
         ));
 
         return $this->view('adm.flag.home', [
@@ -43,6 +44,7 @@ class FlagController extends BaseController
                 'type:post', 'type:comment', 'type:microblog',
                 'is:deleted', 'not:deleted',
                 'is:reported', 'not:reported',
+                'author:{id}',
             ],
         ]);
     }

@@ -219,6 +219,27 @@ class MaterialStoreTest extends TestCase
         $this->assertSame('regular', $material->contentMarkdown);
     }
 
+    /**
+     * @test
+     */
+    public function filterByAuthorId(): void
+    {
+        $first = $this->newPostWithAuthorId('important');
+        $this->newPost('trivial');
+        [$material] = $this->fetch($this->request(type:'post', authorId:$first));
+        $this->assertSame('important', $material->contentMarkdown);
+    }
+
+    private function newPostWithAuthorId(string $content): int
+    {
+        $user = new User();
+        $user->name = 'irrelevant';
+        $user->email = 'irrelevant';
+        $user->save();
+        $this->storeThread(new Forum, new Topic, new Post(['text' => $content, 'user_id' => $user->id]));
+        return $user->id;
+    }
+
     private function newPostReported(string $content = ''): void
     {
         $post = new Post(['text' => $content]);
@@ -352,6 +373,7 @@ class MaterialStoreTest extends TestCase
                              string $type = null,
                              ?bool  $deleted = null,
                              ?bool  $reported = null,
+                             ?int $authorId = null,
     ): MaterialRequest
     {
         return new MaterialRequest(
@@ -360,6 +382,7 @@ class MaterialStoreTest extends TestCase
             $type ?? 'post',
             $deleted,
             $reported,
+            $authorId,
         );
     }
 

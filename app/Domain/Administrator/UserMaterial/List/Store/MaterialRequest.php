@@ -9,6 +9,7 @@ class MaterialRequest
         public string $type,
         public ?bool $deleted,
         public ?bool $reported,
+        public ?int  $authorId,
     )
     {
     }
