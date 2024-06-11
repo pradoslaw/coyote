@@ -4,19 +4,17 @@
 {% block container %}
   <div class="card card-default">
     <div class="card-header">Status systemu</div>
-    <div class="card-body">
-      <ul class="list-group">
-        {% for item in checklist %}
-          <li class="list-group-item">
-            {% if item.value %}
-              <i class="fas fa-check text-success fa-fw"></i>
-            {% else %}
-              <i class="fas fa-times text-danger fa-fw"></i>
-            {% endif %}
-            <span>{{ item.label }}</span>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
+    <ul class="list-group list-group-flush">
+      {% for item in checklist %}
+        <li class="list-group-item">
+          {% if item.value %}
+            <i class="fas fa-check text-success fa-fw"></i>
+          {% else %}
+            <i class="fas fa-times text-danger fa-fw"></i>
+          {% endif %}
+          <span>{{ item.label }}</span>
+        </li>
+      {% endfor %}
+    </ul>
   </div>
 {% endblock %}
