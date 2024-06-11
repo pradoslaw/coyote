@@ -6,15 +6,8 @@
 
   <div class="card card-default">
     <div class="card-header">
-      <div class="d-flex justify-content-between">
-        <span>Użytkownik: {{ activity.mention }}</span>
-        <span>
-          <i class="fas fa-eye fa-fw"></i>
-          Podgląd aktywności
-        </span>
-      </div>
+      Użytkownik: {{ activity.mention }}
     </div>
-
     <ul class="list-group list-group-flush">
       <li class="list-group-item d-flex justify-content-between">
         <span><b>Utworzenie konta</b>: {{ activity.accountCreatedAt }}</span>

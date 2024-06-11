@@ -10,40 +10,72 @@
     <ul class="list-group list-group-flush">
       <li class="list-group-item">
         <p class="mb-2">Wyświetl na forum:</p>
-        <div>
-          <a class="btn btn-secondary" href="{{ navigation.profile }}">
-            <i class="fa fa-user fa-fw"></i>
-            Pokaż profil
-          </a>
-          <a class="btn btn-secondary" href="{{ navigation.posts }}">
-            <i class="fa fa-comments fa-fw"></i>
-            Pokaż posty
-          </a>
-          <a class="btn btn-secondary" href="{{ navigation.microblogs }}">
-            <i class="fa fa-comments fa-fw"></i>
-            Pokaż mikroblogi
-          </a>
-        </div>
+        <a class="btn btn-secondary" href="{{ navigation.profile }}">
+          <i class="fa fa-user fa-fw"></i>
+          Pokaż profil
+        </a>
       </li>
       <li class="list-group-item">
-        <p class="mb-2">Aktywność i logowanie użytkownika:</p>
-        <div>
-          <a class="btn btn-secondary" href="{{ navigation.stream }}">
-            <i class="fa fa-newspaper fa-fw"></i>
-            Dziennik zdarzeń
-          </a>
-          <button class="btn btn-secondary" disabled title="Funkcjonalność jeszcze nie jest gotowe">
-            <i class="fas fa-fingerprint fa-fw"></i>
-            Znajdź fingerprinty
-          </button>
-          <a class="btn btn-secondary" href="{{ navigation.activity }}">
-            <i class="fas fa-eye fa-fw"></i>
-            Podgląd aktywności
-          </a>
-        </div>
+        <p class="mb-2">Aktywność i podsumowanie:</p>
+
+        <a class="btn btn-secondary" href="{{ navigation.stream }}">
+          <i class="fa fa-newspaper fa-fw"></i>
+          Dziennik zdarzeń
+        </a>
+        <button class="btn btn-secondary" disabled title="Funkcjonalność jeszcze nie jest gotowe">
+          <i class="fas fa-fingerprint fa-fw"></i>
+          Znajdź fingerprinty
+        </button>
+        <a class="btn btn-secondary" href="{{ navigation.activity }}">
+          <i class="fas fa-chart-line fa-fw"></i>
+          Statystyki
+        </a>
       </li>
       <li class="list-group-item">
         <p class="mb-2">Wykonaj twarde akcje:</p>
+        <button class="btn btn-secondary" disabled title="Przekierowanie jeszcze nie jest gotowe">
+          <i class="fas fa-user-lock fa-fw"></i>
+          Wlep bana
+        </button>
+      </li>
+
+      <li class="list-group-item">
+        <p class="mb-2">Treści użytkownika:</p>
+        <a class="btn btn-secondary" href="{{ navigation.posts }}">
+          <i class="far fa-comment fa-fw"></i>
+          Napisane posty
+        </a>
+        <a class="btn btn-secondary" href="{{ navigation.microblogs }}">
+          <i class="far fa-comments fa-fw"></i>
+          Napisane mikroblogi
+        </a>
+        <a class="btn btn-secondary" href="{{ navigation.comments }}">
+          <i class="far fa-comments fa-fw"></i>
+          Napisane komentarze
+        </a>
+        <a class="btn btn-secondary" href="{{ navigation.receivedFlags }}">
+          <i class="far fa-flag fa-fw"></i>
+          Otrzymane raporty
+        </a>
+      </li>
+
+      <li class="list-group-item">
+        <p class="mb-2">Zgłoszenia od użytkownika:</p>
+        <button class="btn btn-secondary" disabled title="Przekierowanie jeszcze nie jest gotowe">
+          <i class="fas fa-flag fa-fw"></i>
+          Dodane raporty
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card card-default">
+    <div class="card-header">
+      Ustawienia
+    </div>
+
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
         <div>
           <a class="btn btn-secondary" href="{{ navigation.settings }}">
             <i class="fas fa-user-cog fa-fw"></i>
@@ -51,31 +83,8 @@
           </a>
           <button class="btn btn-secondary" disabled title="Przekierowanie jeszcze nie jest gotowe">
             <i class="fa fa-users fa-fw"></i>
-            Dołącz lub usuń z grupy
+            Dodaj lub usuń z grupy
           </button>
-          <button class="btn btn-secondary" disabled title="Przekierowanie jeszcze nie jest gotowe">
-            <i class="fas fa-user-lock fa-fw"></i>
-            Wlep bana
-          </button>
-        </div>
-      </li>
-
-      <li class="list-group-item">
-        <p class="mb-2">Zgłoszone treści:</p>
-        <div>
-          <a class="btn btn-secondary" href="{{ navigation.receivedFlags }}">
-            <i class="far fa-flag fa-fw"></i>
-            Otrzymane raporty
-          </a>
-          <button class="btn btn-secondary" disabled title="Przekierowanie jeszcze nie jest gotowe">
-            <i class="fas fa-flag fa-fw"></i>
-            Dodane raporty
-          </button>
-          <p class="mt-2 mb-0">
-            <i class="fas fa-info-circle"></i>
-            Otrzymane raporty to treści napisane przez użytkownika, które zostały zgłoszone przez inne osoby.
-            Dodane raporty to zgłoszenia wysłane przez tego użytkownika.
-          </p>
         </div>
       </li>
     </ul>

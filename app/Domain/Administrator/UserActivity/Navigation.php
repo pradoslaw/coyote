@@ -12,6 +12,7 @@ readonly class Navigation
     public string $settings;
     public string $profile;
     public string $posts;
+    public string $comments;
     public string $microblogs;
     public string $activity;
     public string $receivedFlags;
@@ -24,8 +25,9 @@ readonly class Navigation
         $this->users = route('adm.users');
         $this->settings = route('adm.users.save', [$user->id]);
         $this->profile = route('profile', [$user->id]);
-        $this->posts = route('forum.user', [$user->id]);
-        $this->microblogs = route('profile', [$user->id, 'tab' => 'Microblog']);
+        $this->posts = route('adm.flag', ['filter' => "type:post author:$user->id"]);
+        $this->comments = route('adm.flag', ['filter' => "type:comment author:$user->id"]);
+        $this->microblogs = route('adm.flag', ['filter' => "type:microblog author:$user->id"]);
         $this->activity = route('adm.users.activity', [$user->id]);
         $this->receivedFlags = route('adm.flag', ['filter' => "is:reported author:$user->id"]);
         $this->mention = Mention::of($user);
