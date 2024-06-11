@@ -47,7 +47,7 @@ class MaterialPresenter
         $historyItems = [];
         if ($deletedAt !== null) {
             $historyItems[] = new HistoryItem(
-                new Mention($post->deleter_id, $post->deleter->name),
+                $post->deleter ? new Mention($post->deleter_id, $post->deleter->name) : null,
                 $this->time->date(new Carbon($deletedAt)),
                 'delete',
                 'post',

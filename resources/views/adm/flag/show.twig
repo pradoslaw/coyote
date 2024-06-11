@@ -46,14 +46,14 @@
 
   {% if post.history|length > 1 %}
     <h4 class="mt-4 my-2">
-      Historia
+      Zebrane aktywności
     </h4>
     <div class="mb-4">
       {% for item in post.history %}
         <div class="d-flex mb-2">
           <i class="{{ item.icon }} fa-fw mt-1 mr-2"></i>
           <div>
-            {{ item.authorMention }}
+            {{ item.userMention }}
             {{ item.actionVerbPastTense }}
             <span class="badge badge-secondary">{{ item.kind }}</span>
 

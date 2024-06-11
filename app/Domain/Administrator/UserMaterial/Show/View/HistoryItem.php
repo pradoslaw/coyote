@@ -7,13 +7,21 @@ use Coyote\Domain\Administrator\View\Mention;
 class HistoryItem
 {
     public function __construct(
-        public Mention $authorMention,
-        public Date    $createdAt,
-        public string  $type,
-        public string  $kind,
-        public ?string $note,
+        public ?Mention $authorMention,
+        public Date     $createdAt,
+        public string   $type,
+        public string   $kind,
+        public ?string  $note,
     )
     {
+    }
+
+    public function userMention(): Mention|string
+    {
+        if ($this->authorMention === null) {
+            return 'Nieznany';
+        }
+        return $this->authorMention;
     }
 
     public function icon(): string
@@ -30,11 +38,11 @@ class HistoryItem
     public function actionVerbPastTense(): string
     {
         if ($this->type === 'report') {
-            return 'zgłosił';
+            return 'zgłosił tą treść z powodu';
         }
         if ($this->type === 'delete') {
-            return 'usunął';
+            return 'usunął ten';
         }
-        return 'dodał';
+        return 'dodał ten';
     }
 }
