@@ -2,12 +2,18 @@
 {% block title %}Użytkownicy :: {{ user.name }} :: {{ parent() }}{% endblock %}
 
 {% block container %}
+  {{ activity.chartLibrarySource }}
+
   <div class="card card-default">
     <div class="card-header">
       Użytkownik: {{ navigation.mention }}
     </div>
 
     <ul class="list-group list-group-flush">
+      <li class="list-group-item d-flex justify-content-between">
+        <span><b>Utworzenie konta</b>: {{ accountCreated.ago }}</span>
+        <span class="text-muted">{{ accountCreated.format }}</span>
+      </li>
       <li class="list-group-item">
         <p class="mb-2">Wyświetl na forum:</p>
         <a class="btn btn-secondary" href="{{ navigation.profile }}">
@@ -20,22 +26,11 @@
 
         <a class="btn btn-secondary" href="{{ navigation.stream }}">
           <i class="fa fa-newspaper fa-fw"></i>
-          Dziennik zdarzeń
+          Znajdź w dzienniku zdarzeń
         </a>
         <button class="btn btn-secondary" disabled title="Funkcjonalność jeszcze nie jest gotowe">
           <i class="fas fa-fingerprint fa-fw"></i>
           Znajdź fingerprinty
-        </button>
-        <a class="btn btn-secondary" href="{{ navigation.activity }}">
-          <i class="fas fa-chart-line fa-fw"></i>
-          Statystyki
-        </a>
-      </li>
-      <li class="list-group-item">
-        <p class="mb-2">Wykonaj twarde akcje:</p>
-        <button class="btn btn-secondary" disabled title="Przekierowanie jeszcze nie jest gotowe">
-          <i class="fas fa-user-lock fa-fw"></i>
-          Wlep bana
         </button>
       </li>
 
@@ -57,13 +52,9 @@
           <i class="far fa-flag fa-fw"></i>
           Otrzymane raporty
         </a>
-      </li>
-
-      <li class="list-group-item">
-        <p class="mb-2">Zgłoszenia od użytkownika:</p>
         <button class="btn btn-secondary" disabled title="Przekierowanie jeszcze nie jest gotowe">
           <i class="fas fa-flag fa-fw"></i>
-          Dodane raporty
+          Wysłane raporty
         </button>
       </li>
     </ul>
@@ -71,7 +62,97 @@
 
   <div class="card card-default">
     <div class="card-header">
-      Ustawienia
+      <i class="fas fa-chart-line fa-fw"></i>
+      Statystyki użytkownika {{ navigation.mention }}
+    </div>
+    <div class="card-body">
+      <div class="btn-group mb-4">
+        <a href="?" class="btn btn-secondary">
+          <i class="far fa-calendar-check"></i>
+          Wszystko
+        </a>
+        <a href="?last=year" type="button" class="btn btn-secondary">
+          <i class="far fa-calendar fa-fw"></i>
+          Ostatnie 365 dni
+        </a>
+        <a href="?last=month" type="button" class="btn btn-secondary">
+          <i class="fas fa-calendar-alt fa-fw"></i>
+          Ostatnie 31 dni
+        </a>
+        <a href="?last=week" type="button" class="btn btn-secondary">
+          <i class="fas fa-calendar-week fa-fw"></i>
+          Ostatnie 7 dni
+        </a>
+        <a href="?last=day" type="button" class="btn btn-secondary">
+          <i class="fas fa-calendar-day fa-fw"></i>
+          Ostatnie 24h
+        </a>
+      </div>
+
+      <div class="d-lg-flex">
+        <div class="col-lg-6 px-0">
+          <div class="card card-default">
+            <div class="card-header">
+              Posty dodawane w kategoriach
+            </div>
+            <div class="card-body">
+              {% if not activity.categoriesChart.empty %}
+                {{ activity.categoriesChart }}
+              {% else %}
+                Użytkownik nie napisał żadnego postu w zadanym zakresie.
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 px-0 pl-lg-3">
+          <div class="card card-default">
+            <div class="card-header">
+              Powody usunięć postów
+            </div>
+            <div class="card-body">
+              {% if not activity.deleteReasonsChart.empty %}
+                {{ activity.deleteReasonsChart }}
+                <p class="mb-0 mt-4 text-right">
+                  Posty usunięte <b>przez siebie</b> nie są brane pod uwagę.
+                </p>
+              {% else %}
+                Żaden post nie został usunięty przez moderatora w zadanym zakresie.
+              {% endif %}
+            </div>
+          </div>
+          <div class="card card-default">
+            <div class="card-header">
+              Usunięte posty
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                Napisanych postów: <b>{{ activity.postsStatistic.all }}</b>
+              </li>
+              <li class="list-group-item">
+                Postów usuniętych przez siebie:
+                <b> {{ activity.postsStatistic.deletedBySelf }}</b>
+                <span class="text-muted">
+                  {{ activity.postsStatistic.deletedBySelfProportion }}
+                </span>
+              </li>
+              <li class="list-group-item">
+                Postów usuniętych przez moderatora:
+                <b>{{ activity.postsStatistic.deletedByModerator }}</b>
+                <span class="text-muted">
+                  {{ activity.postsStatistic.deletedByModeratorProportion }}
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-default">
+    <div class="card-header">
+      <i class="fa fa-cog"></i>
+      Ustawienia użytkownika {{ navigation.mention }}
     </div>
 
     <ul class="list-group list-group-flush">

@@ -1,6 +1,9 @@
 <?php
 namespace Coyote\Domain;
 
+/**
+ * @deprecated this is used in store, but is actually part of view
+ */
 class PostStatistic
 {
     public function __construct(

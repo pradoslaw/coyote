@@ -1,5 +1,5 @@
 <?php
-namespace Coyote\Domain\Administrator\UserActivity;
+namespace Coyote\Domain\Administrator\User\Store;
 
 class Category
 {

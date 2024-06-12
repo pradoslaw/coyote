@@ -1,8 +1,7 @@
 <?php
 namespace Tests\Unit\Moderation;
 
-use Carbon\Carbon;
-use Coyote\Domain\Administrator\UserActivity\Post;
+use Coyote\Domain\Administrator\View\PostMarkdown;
 use Coyote\Domain\Administrator\View\PostPreview;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel\Application;
@@ -70,19 +69,18 @@ class PostPreviewTest extends TestCase
 
     private function assertPreviewNone(string $postContent): void
     {
-        $this->assertSame('', (string)$this->newPost($postContent)->previewHtml());
+        $this->assertSame('', $this->newPost($postContent));
     }
 
     private function assertPreview(string $postContent, string $expectedPreview): void
     {
-        $previewHtml = (string)$this->newPost($postContent)->previewHtml();
+        $previewHtml = $this->newPost($postContent);
         $this->assertSame($expectedPreview, \trim($previewHtml));
     }
 
-    private function newPost(string $postContent): Post
+    private function newPost(string $postContent): string
     {
-        return new Post($postContent,
-            '', '', '', '',
-            new Carbon(), false, false);
+        $postMarkdown = new PostMarkdown($postContent);
+        return $postMarkdown->previewHtml();
     }
 }

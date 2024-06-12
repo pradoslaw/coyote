@@ -2,7 +2,11 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Boduch\Grid\Source\EloquentSource;
-use Coyote\Domain\Administrator\UserActivity\Navigation;
+use Carbon\Carbon;
+use Coyote\Domain\Administrator\User\Store\UserStore;
+use Coyote\Domain\Administrator\User\View\Activity;
+use Coyote\Domain\Administrator\User\View\Navigation;
+use Coyote\Domain\Administrator\View\Date;
 use Coyote\Events\UserDeleted;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Forms\User\AdminForm;
@@ -14,6 +18,7 @@ use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
 use Coyote\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class UsersController extends BaseController
@@ -36,9 +41,30 @@ class UsersController extends BaseController
     public function show(User $user): View
     {
         $this->breadcrumb->push("@$user->name", route('adm.users.show', [$user->id]));
+        $daysAgo = $this->daysAgo($this->request);
+        $store = new UserStore($user, Carbon::now()->subDays($daysAgo));
         return $this->view('adm.users.show', [
-            'navigation' => new Navigation($user),
+            'accountCreated' => new Date($user->created_at, Carbon::now()),
+            'navigation'     => new Navigation($user->id, $user->name),
+            'activity'       => new Activity(
+                $store->postsCategoriesStatistic(),
+                $store->deleteReasons(),
+                $store->postStats(),
+            ),
         ]);
+    }
+
+    private function daysAgo(Request $request): int
+    {
+        $key = $request->query('last') ?? 'default';
+        $map = [
+            'day'     => 1,
+            'week'    => 7,
+            'month'   => 31,
+            'year'    => 365,
+            'default' => 40 * 365,
+        ];
+        return $map[$key] ?? $map['default'];
     }
 
     public function edit(User $user): View
@@ -46,9 +72,8 @@ class UsersController extends BaseController
         $this->breadcrumb->push("@$user->name", route('adm.users.show', [$user->id]));
         $this->breadcrumb->push('Ustawienia konta', route('adm.users.save', [$user->id]));
         return $this->view('adm.users.save', [
-            'user'       => $user,
-            'form'       => $this->getForm($user),
-            'navigation' => new Navigation($user),
+            'user' => $user,
+            'form' => $this->getForm($user),
         ]);
     }
 

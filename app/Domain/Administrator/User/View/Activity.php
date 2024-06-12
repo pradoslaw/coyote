@@ -1,53 +1,33 @@
 <?php
-namespace Coyote\Domain\Administrator\UserActivity;
+namespace Coyote\Domain\Administrator\User\View;
 
-use Carbon\Carbon;
-use Coyote\Domain\Administrator\View\Date;
-use Coyote\Domain\Administrator\View\Mention;
+use Coyote\Domain\Administrator\User\Store\Category;
+use Coyote\Domain\Administrator\User\Store\DeleteReason;
 use Coyote\Domain\Chart;
 use Coyote\Domain\Html;
 use Coyote\Domain\PostStatistic;
-use Coyote\User;
 
+/**
+ * @deprecated This is both a presenter and a view object, we should split it
+ */
 readonly class Activity
 {
     public Chart $categoriesChart;
     public Chart $deleteReasonsChart;
     public Html $chartLibrarySource;
-    public Mention $mention;
 
     /**
      * @param Category[] $categories
-     * @param Post[] $posts
      */
     public function __construct(
-        private User         $user,
-        public array         $posts,
         array                $categories,
         array $deleteReasons,
         public PostStatistic $postsStatistic,
     )
     {
-        $this->mention = Mention::of($user);
         $this->categoriesChart = $this->categoriesChart($this->categoriesSliced($this->categoriesSorted($categories), 10));
         $this->deleteReasonsChart = $this->deleteReasonsChart($this->reasonsSorted($deleteReasons));
         $this->chartLibrarySource = Chart::librarySourceHtml();
-    }
-
-    public function username(): string
-    {
-        return $this->user->name;
-    }
-
-    public function accountCreatedAt(): string
-    {
-        return $this->user->created_at->format('Y-m-d H:i:s');
-    }
-
-    public function createdAgo(): string
-    {
-        $createdAt = new Date($this->user->created_at, Carbon::now());
-        return $createdAt->ago();
     }
 
     private function deleteReasonsChart(array $array): Chart
