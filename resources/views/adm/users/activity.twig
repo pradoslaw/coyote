@@ -47,7 +47,7 @@
     </div>
   </div>
 
-  {% if activity.hasAnyPosts %}
+  {% if not activity.categoriesChart.empty %}
     <div class="d-xl-flex">
       <div class="col-xl-6 px-0">
         <div class="card card-default align-self-start">
@@ -144,7 +144,7 @@
             Powody usunięć postów
           </div>
           <div class="card-body">
-            {% if activity.hasDeleteReasons %}
+            {% if not activity.deleteReasonsChart.empty %}
               {{ activity.deleteReasonsChart }}
               <p class="mb-0 mt-4 text-right">
                 Posty usunięte <b>przez siebie</b> nie są brane pod uwagę.
@@ -166,7 +166,7 @@
     </div>
   {% endif %}
 
-  {% if not activity.hasAnyPosts %}
+  {% if activity.categoriesChart.empty %}
     <div class="card card-default">
       <div class="card-header">
         Posty użytkownika
