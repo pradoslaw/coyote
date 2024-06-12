@@ -76,6 +76,11 @@ class Chart extends Html
             '<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>');
     }
 
+    public function empty(): bool
+    {
+        return empty($this->labels);
+    }
+
     protected function toHtml(): string
     {
         return <<<html

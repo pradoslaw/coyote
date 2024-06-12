@@ -101,4 +101,22 @@ class ChartTest extends TestCase
     {
         $this->assertExpectedImage(new Chart(['Foo'], [20], ['#ff9f40'], 'chart', baseline:200, horizontal:true));
     }
+
+    /**
+     * @test
+     */
+    public function chartEmpty(): void
+    {
+        $chart = new Chart([], [], [], '');
+        $this->assertTrue($chart->empty());
+    }
+
+    /**
+     * @test
+     */
+    public function chartNotEmpty(): void
+    {
+        $chart = new Chart(['label'], [1], [], '');
+        $this->assertFalse($chart->empty());
+    }
 }

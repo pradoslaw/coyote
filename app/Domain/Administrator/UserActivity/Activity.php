@@ -23,7 +23,7 @@ readonly class Activity
         private User         $user,
         public array         $posts,
         array                $categories,
-        private array        $deleteReasons,
+        array $deleteReasons,
         public PostStatistic $postsStatistic,
     )
     {
@@ -31,16 +31,6 @@ readonly class Activity
         $this->categoriesChart = $this->categoriesChart($this->categoriesSliced($this->categoriesSorted($categories), 10));
         $this->deleteReasonsChart = $this->deleteReasonsChart($this->reasonsSorted($deleteReasons));
         $this->chartLibrarySource = Chart::librarySourceHtml();
-    }
-
-    public function hasDeleteReasons(): bool
-    {
-        return \count($this->deleteReasons) > 0;
-    }
-
-    public function hasAnyPosts(): bool
-    {
-        return \count($this->posts) > 0;
     }
 
     public function username(): string
