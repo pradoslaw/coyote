@@ -49,6 +49,7 @@ class UsersController extends BaseController
             'activity'       => new Activity(
                 $store->postsCategoriesStatistic(),
                 $store->deleteReasons(),
+                $store->reportReasons(),
                 $store->postStats(),
             ),
         ]);

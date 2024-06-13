@@ -3,6 +3,7 @@ namespace Coyote\Domain\Administrator\User\View;
 
 use Coyote\Domain\Administrator\User\Store\Category;
 use Coyote\Domain\Administrator\User\Store\DeleteReason;
+use Coyote\Domain\Administrator\User\Store\ReportReason;
 use Coyote\Domain\Chart;
 use Coyote\Domain\Html;
 use Coyote\Domain\PostStatistic;
@@ -14,6 +15,7 @@ readonly class Activity
 {
     public Chart $categoriesChart;
     public Chart $deleteReasonsChart;
+    public Chart $reportReasonsChart;
     public Html $chartLibrarySource;
 
     /**
@@ -22,11 +24,13 @@ readonly class Activity
     public function __construct(
         array                $categories,
         array $deleteReasons,
+        array $reportReasons,
         public PostStatistic $postsStatistic,
     )
     {
         $this->categoriesChart = $this->categoriesChart($this->categoriesSliced($this->categoriesSorted($categories), 10));
         $this->deleteReasonsChart = $this->deleteReasonsChart($this->reasonsSorted($deleteReasons));
+        $this->reportReasonsChart = $this->reportReasonsChart($this->reportReasonsSorted($reportReasons));
         $this->chartLibrarySource = Chart::librarySourceHtml();
     }
 
@@ -39,7 +43,7 @@ readonly class Activity
             ),
             array_map(fn($object) => $object->posts, $array),
             \array_map($this->deleteReasonColor(...), $array),
-            'reasons-chart',
+            'delete-reasons-chart',
             baseline:40,
             horizontal:true,
         );
@@ -131,5 +135,24 @@ readonly class Activity
         $important = \array_slice($categories, 0, $importantAmount);
         $important[] = new Category(null, $remaining);
         return $important;
+    }
+
+    private function reportReasonsChart(array $reportReasons): Chart
+    {
+        return new Chart(
+            \array_map(fn(ReportReason $reason) => $reason->reason, $reportReasons),
+            \array_map(fn(ReportReason $reason) => $reason->count, $reportReasons),
+            ['#ff6384'],
+            id:'report-reasons-chart',
+            baseline:40,
+            horizontal:true,
+        );
+    }
+
+    private function reportReasonsSorted(array $reportReasons): array
+    {
+        $order = \array_flip(['Spam', 'Wulgaryzmy', 'Off-Topic', 'Nieprawidłowa kategoria', 'Próba wyłudzenia gotowca', 'Inne']);
+        \uSort($reportReasons, fn(ReportReason $a, ReportReason $b): int => -$order[$b->reason] + $order[$a->reason]);
+        return $reportReasons;
     }
 }

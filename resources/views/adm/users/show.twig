@@ -103,6 +103,20 @@
               {% endif %}
             </div>
           </div>
+          <div class="card card-default">
+            <div class="card-header">
+              Powody zgłoszeń na posty użytkownika
+            </div>
+            <div class="card-body">
+              {% if not activity.reportReasonsChart.empty %}
+                <div class="mt-3">
+                  {{ activity.reportReasonsChart }}
+                </div>
+              {% else %}
+                Użytkownik nie otrzymał zgłoszeń w zadanym zakresie.
+              {% endif %}
+            </div>
+          </div>
         </div>
         <div class="col-lg-6 px-0 pl-lg-3">
           <div class="card card-default">
