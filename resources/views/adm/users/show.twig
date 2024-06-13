@@ -93,7 +93,7 @@
         <div class="col-lg-6 px-0">
           <div class="card card-default">
             <div class="card-header">
-              Posty dodawane w kategoriach
+              Posty dodawane w kategoriach ({{ activity.postsStatistic.all }})
             </div>
             <div class="card-body">
               {% if not activity.categoriesChart.empty %}
@@ -107,27 +107,9 @@
         <div class="col-lg-6 px-0 pl-lg-3">
           <div class="card card-default">
             <div class="card-header">
-              Powody usunięć postów
-            </div>
-            <div class="card-body">
-              {% if not activity.deleteReasonsChart.empty %}
-                {{ activity.deleteReasonsChart }}
-                <p class="mb-0 mt-4 text-right">
-                  Posty usunięte <b>przez siebie</b> nie są brane pod uwagę.
-                </p>
-              {% else %}
-                Żaden post nie został usunięty przez moderatora w zadanym zakresie.
-              {% endif %}
-            </div>
-          </div>
-          <div class="card card-default">
-            <div class="card-header">
               Usunięte posty
             </div>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">
-                Napisanych postów: <b>{{ activity.postsStatistic.all }}</b>
-              </li>
               <li class="list-group-item">
                 Postów usuniętych przez siebie:
                 <b> {{ activity.postsStatistic.deletedBySelf }}</b>
@@ -141,6 +123,11 @@
                 <span class="text-muted">
                   {{ activity.postsStatistic.deletedByModeratorProportion }}
                 </span>
+                {% if not activity.deleteReasonsChart.empty %}
+                  <div class="mt-3">
+                    {{ activity.deleteReasonsChart }}
+                  </div>
+                {% endif %}
               </li>
             </ul>
           </div>
