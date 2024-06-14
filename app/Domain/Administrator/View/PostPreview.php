@@ -5,45 +5,109 @@ use Coyote\Domain\Html;
 
 class PostPreview extends Html
 {
-    public function __construct(private string $postHtml)
+    private ?\DOMElement $body;
+
+    public function __construct(string $postHtml)
     {
+        if ($postHtml === '') {
+            $this->body = null;
+        } else {
+            $this->body = $this->body($postHtml);
+        }
     }
 
     protected function toHtml(): string
     {
-        if ($this->postHtml === '') {
+        if ($this->body === null) {
             return '';
         }
-        return $this->trimmed($this->textContent(), 85);
+        return $this->lineString($this->unwrapChildren($this->body));
     }
 
-    private function textContent(): string
+    private function lineString(string $items): string
     {
-        return $this->firstParagraph($this->document($this->postHtml));
+        return \trim(\str_replace("\n", ' ', $items));
     }
 
-    private function firstParagraph(\DOMDocument $document): string
+    private function unwrapChildren(\DOMElement $element): string
     {
-        $xPath = new \DOMXPath($document);
-        foreach ($xPath->query('/html/body/p/text()') as $item) {
-            return $item->ownerDocument->saveHTML($item);
+        return \implode('',
+            \array_map(
+                $this->unwrapNode(...),
+                \iterator_to_array($element->childNodes)));
+    }
+
+    private function unwrapNode(\DOMNode $node): string
+    {
+        if ($node->nodeType === XML_TEXT_NODE) {
+            return $node->ownerDocument->saveHTML($node);
         }
-        return '';
+        /** @var \DOMElement $node */
+        return $this->unwrapElement($node);
     }
 
-    private function document(string $html): \DOMDocument
+    private function unwrapElement(\DOMElement $item): string
+    {
+        if (\in_array($item->tagName, ['span', 'ul'])) {
+            return $this->unwrapChildren($item);
+        }
+        if ($item->tagName === 'blockquote') {
+            return $this->badge('fas fa-reply-all');
+        }
+        if ($item->tagName === 'video') {
+            return $this->badge('fas fa-film mr-1', 'video');
+        }
+        if ($item->tagName === 'table') {
+            return $this->badge('fas fa-table mr-1', 'table');
+        }
+        if ($item->tagName === 'iframe') {
+            return $this->badge('far fa-window-maximize mr-1', 'iframe');
+        }
+        if ($item->tagName === 'pre') {
+            return $this->badge('fas fa-code mr-1', 'code');
+        }
+        if ($item->tagName === 'br') {
+            return ' ' . $this->badge('fas fa-level-down-alt');
+        }
+        if ($item->tagName === 'img') {
+            if ($item->getAttribute('class') !== 'img-smile') {
+                return $this->badge('far fa-image mr-1', 'image');
+            }
+        }
+        $children = $this->unwrapChildren($item);
+        if ($item->tagName === 'a') {
+            if ($item->getAttribute('class') === 'mention') {
+                return '<span class="fake-anchor fake-mention">' . $children . '</span>';
+            }
+            return '<span class="fake-anchor">' . $children . '</span>';
+        }
+        if ($item->tagName === 'li') {
+            return $this->badge('fas fa-list-ol') . ' ' . $children;
+        }
+        $headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+        if (\in_array($item->tagName, $headings)) {
+            return $this->badge('fas fa-heading') . $children;
+        }
+        if ($item->tagName === 'p') {
+            if ($item->previousElementSibling && \in_array($item->previousElementSibling->tagName, ['p', ...$headings])) {
+                return $this->badge('fas fa-level-down-alt') . ' ' . $children;
+            }
+            return $children;
+        }
+        return $item->ownerDocument->saveHTML($item);
+    }
+
+    private function badge(string $iconClass, string $title = ''): string
+    {
+        $icon = '<i class="' . $iconClass . '"></i>';
+        return '<span class="badge badge-material-element">' . $icon . $title . '</span>';
+    }
+
+    private function body(string $html): \DOMElement
     {
         $document = new \DOMDocument();
         \libxml_use_internal_errors(true);
         $document->loadHTML("<html><head><meta charset='utf-8'></head><body>$html</body></html>");
-        return $document;
-    }
-
-    private function trimmed(string $string, int $length): string
-    {
-        if (\mb_strLen($string) > $length) {
-            return \mb_subStr($string, 0, $length) . '...';
-        }
-        return $string;
+        return $document->getElementsByTagName('body')[0];
     }
 }

@@ -114,3 +114,21 @@ p:last-child {
     content: 'Akcje moderatorskie';
   }
 }
+
+.badge.badge-material-element {
+  background-color: #c8bba4;
+
+  body.theme-dark & {
+    color: #c0bbb6;
+    background-color: #3b2c12;
+  }
+}
+
+span.fake-anchor {
+  color: #80a41a;
+  text-decoration: underline;
+
+  &.fake-mention {
+    font-weight: bold;
+  }
+}

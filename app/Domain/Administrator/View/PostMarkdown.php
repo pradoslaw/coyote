@@ -10,11 +10,6 @@ class PostMarkdown
     {
     }
 
-    public function hasPreview(): bool
-    {
-        return \str_contains($this->markdown, "\n");
-    }
-
     public function contentHtml(): Html
     {
         return new StringHtml($this->postHtmlString());
