@@ -6,7 +6,6 @@ use Coyote\User;
 
 class MacroTest extends TestCase
 {
-    // tests
     public function testExceptUsersMacro()
     {
         $users = collect([(new User)->forceFill(['id' => 1]), (new User)->forceFill(['id' => 2]), (new User)->forceFill(['id' => 3])]);

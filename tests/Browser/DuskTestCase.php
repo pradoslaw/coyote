@@ -18,7 +18,7 @@ abstract class DuskTestCase extends \Laravel\Dusk\TestCase
             '--headless',
             '--no-sandbox',
             '--ignore-ssl-errors',
-            '--whitelisted-ips=""'
+            '--whitelisted-ips=""',
         ]);
         $capabilities = DesiredCapabilities::chrome();
         $capabilities->setCapability(ChromeOptions::CAPABILITY, $chromeOptions);

@@ -2,10 +2,12 @@
 namespace Tests\Legacy;
 
 use Coyote\Http\Resources\TopicResource;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase
 {
     use CreatesApplication;
+    use DatabaseTransactions;
 
     /**
      * @before
