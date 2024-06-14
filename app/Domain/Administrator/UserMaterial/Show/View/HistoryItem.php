@@ -9,8 +9,8 @@ class HistoryItem
     public function __construct(
         public ?Mention $authorMention,
         public Date     $createdAt,
-        public string   $type,
-        public string   $kind,
+        private string $type,
+        public string  $badge,
         public ?string  $note,
     )
     {
@@ -26,6 +26,9 @@ class HistoryItem
 
     public function icon(): string
     {
+        if ($this->type === 'close-report') {
+            return 'fas fa-check';
+        }
         if ($this->type === 'report') {
             return 'far fa-flag';
         }
@@ -42,6 +45,9 @@ class HistoryItem
         }
         if ($this->type === 'delete') {
             return 'usunął ten';
+        }
+        if ($this->type === 'close-report') {
+            return 'zamknął raport';
         }
         return 'dodał ten';
     }

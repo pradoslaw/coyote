@@ -54,6 +54,11 @@ class Flag extends Model
         return $this->hasMany(Resource::class);
     }
 
+    public function moderator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'moderator_id');
+    }
+
     public function posts(): MorphToMany
     {
         return $this->morphedByMany(Post::class, 'resource', 'flag_resources');

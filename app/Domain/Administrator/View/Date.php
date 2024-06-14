@@ -20,6 +20,11 @@ readonly class Date
         return $this->date->format('Y-m-d H:i:s');
     }
 
+    public function timestamp(): int
+    {
+        return $this->date->timestamp;
+    }
+
     public function ago(): string
     {
         return $this->firstWords($this->interval(), 4) . ' temu';

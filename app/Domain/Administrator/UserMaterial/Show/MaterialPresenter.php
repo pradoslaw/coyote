@@ -39,7 +39,7 @@ class MaterialPresenter
 
         /** @var Resource[] $resources */
         $resources = \Coyote\Models\Flag\Resource::query()
-            ->with(['flag', 'flag.type'])
+            ->with(['flag', 'flag.type', 'flag.moderator'])
             ->where('resource_id', $postId)
             ->where('resource_type', Post::class)
             ->get();
@@ -56,16 +56,27 @@ class MaterialPresenter
         }
 
         foreach ($resources as $resource) {
+            $flag = $resource->flag;
+
             $historyItems[] = new HistoryItem(
-                new Mention($resource->flag->user_id, $resource->flag->user->name),
-                $this->time->date(new Carbon($resource->created_at)),
+                new Mention($flag->user_id, $flag->user->name),
+                $this->time->date($flag->created_at),
                 'report',
-                $resource->flag->type->name,
+                $flag->type->name,
                 $resource->text);
+            if ($flag->deleted_at) {
+                $historyItems[] = new HistoryItem(
+                    new Mention($flag->moderator_id, $flag->moderator->name),
+                    $this->time->date(new Carbon($flag->deleted_at, 'Europe/Warsaw')),
+                    'close-report',
+                    $flag->type->name,
+                    '',
+                );
+            }
         }
 
         \uSort($historyItems, function (HistoryItem $a, HistoryItem $b): int {
-            return $a->createdAt->format() > $b->createdAt->format() ? 1 : -1;
+            return $b->createdAt->timestamp() - $a->createdAt->timestamp();
         });
 
         return new Material(
