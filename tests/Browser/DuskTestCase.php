@@ -4,11 +4,13 @@ namespace Tests\Browser;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\Legacy\CreatesApplication;
 
 abstract class DuskTestCase extends \Laravel\Dusk\TestCase
 {
     use CreatesApplication;
+    use DatabaseTransactions;
 
     protected function driver(): RemoteWebDriver
     {
@@ -18,7 +20,7 @@ abstract class DuskTestCase extends \Laravel\Dusk\TestCase
             '--headless',
             '--no-sandbox',
             '--ignore-ssl-errors',
-            '--whitelisted-ips=""'
+            '--whitelisted-ips=""',
         ]);
         $capabilities = DesiredCapabilities::chrome();
         $capabilities->setCapability(ChromeOptions::CAPABILITY, $chromeOptions);
