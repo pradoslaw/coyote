@@ -59,7 +59,8 @@ class ViewMaterialsTest extends TestCase
     public function previewHtml(): void
     {
         $vo = $this->item($this->material(markdown:"> welcome\n\nparagraph"));
-        $this->assertHtml('paragraph', $vo->preview);
+        $mark = '<span class="badge badge-material-element"><i class="fas fa-reply-all"></i></span>';
+        $this->assertHtml($mark . ' paragraph', $vo->preview);
     }
 
     /**
@@ -68,7 +69,7 @@ class ViewMaterialsTest extends TestCase
     public function previewHtmlTrimmed(): void
     {
         $vo = $this->item($this->material(markdown:\str_repeat('a', 150)));
-        $this->assertHtml(\str_repeat('a', 85) . '...', $vo->preview);
+        $this->assertHtml(\str_repeat('a', 100) . '...', $vo->preview);
     }
 
     /**

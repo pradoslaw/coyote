@@ -115,6 +115,27 @@ p:last-child {
   }
 }
 
+.flex-ellipsis-container {
+  min-width: 0;
+
+  .flex-ellipsis,
+  .flex-ellipsis * {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .flex-ellipsis {
+    .badge {
+      vertical-align: middle;
+    }
+
+    .badge i {
+      vertical-align: bottom;
+    }
+  }
+}
+
 .badge.badge-material-element {
   background-color: #c8bba4;
 
@@ -124,7 +145,7 @@ p:last-child {
   }
 }
 
-span.fake-anchor {
+.fake-anchor {
   color: #80a41a;
   text-decoration: underline;
 
