@@ -199,8 +199,7 @@ class PostPreviewTest extends TestCase
 
     private function newPost(string $postContent): string
     {
-        $postMarkdown = new PostMarkdown($postContent);
-        return new SubstringHtml($postMarkdown->contentHtml(), 100);
+        return new SubstringHtml(new PostMarkdown($postContent), 100);
     }
 
     private function mark(string $iconClass, string $title = null): string

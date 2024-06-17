@@ -2,20 +2,14 @@
 namespace Coyote\Domain\Administrator\View;
 
 use Coyote\Domain\Html;
-use Coyote\Domain\StringHtml;
 
-class PostMarkdown
+class PostMarkdown extends Html
 {
     public function __construct(private string $markdown)
     {
     }
 
-    public function contentHtml(): Html
-    {
-        return new StringHtml($this->postHtmlString());
-    }
-
-    private function postHtmlString(): string
+    protected function toHtml(): string
     {
         return app('parser.post')->parse($this->markdown);
     }

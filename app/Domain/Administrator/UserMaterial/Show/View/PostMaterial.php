@@ -7,7 +7,7 @@ use Coyote\Domain\Html;
 
 readonly class PostMaterial
 {
-    private PostMarkdown $content;
+    public Html $content;
 
     /**
      * @param HistoryItem[] $history
@@ -23,10 +23,5 @@ readonly class PostMaterial
     )
     {
         $this->content = new PostMarkdown($contentMarkdown);
-    }
-
-    public function content(): Html
-    {
-        return $this->content->contentHtml();
     }
 }
