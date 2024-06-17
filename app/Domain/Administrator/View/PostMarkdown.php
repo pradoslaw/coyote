@@ -15,11 +15,6 @@ class PostMarkdown
         return new StringHtml($this->postHtmlString());
     }
 
-    public function previewHtml(): Html
-    {
-        return new SubstringHtml($this->contentHtml(), 100);
-    }
-
     private function postHtmlString(): string
     {
         return app('parser.post')->parse($this->markdown);
