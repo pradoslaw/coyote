@@ -31,11 +31,12 @@ readonly class MaterialVo
     {
         $content = $this->render->render($material->contentMarkdown);
 
+        $deletedAt = $material->parentDeletedAt ?? $material->deletedAt;
         return new MaterialItem(
             $this->type($material),
             $this->time->format($material->createdAt),
             $this->time->ago($material->createdAt),
-            $material->deletedAt ? $this->time->date($material->deletedAt) : null,
+            $deletedAt ? $this->time->date($deletedAt) : null,
             $material->authorUsername,
             $this->cdn->avatar($material->authorImageUrl),
             $content,
@@ -54,7 +55,10 @@ readonly class MaterialVo
     private function adminUrl(Material $material): ?string
     {
         if ($material->type === 'post') {
-            return route('adm.flag.show', [$material->id]);
+            return route('adm.flag.show.post', [$material->id]);
+        }
+        if ($material->type === 'comment') {
+            return route('adm.flag.show.comment', [$material->id]);
         }
         return null;
     }

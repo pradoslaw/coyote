@@ -96,6 +96,7 @@ class RouteServiceProvider extends ServiceProvider
 
         // we use model instead of repository to avoid putting global criteria to all methods in repository
         $this->router->bind('post_trashed', fn($id) => Post::withTrashed()->findOrFail($id));
+        $this->router->bind('comment_trashed', fn($id) => Post\Comment::withTrashed()->findOrFail($id));
 
         // we use model instead of repository to avoid putting global criteria to all methods in repository
         $this->router->bind('topic_trashed', fn($id) => Topic::withTrashed()->findOrFail($id));

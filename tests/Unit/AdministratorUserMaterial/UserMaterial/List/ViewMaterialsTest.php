@@ -186,6 +186,7 @@ class ViewMaterialsTest extends TestCase
             $type ?? 'post',
             $createdAt,
             $deletedAt,
+            null,
             $authorUsername ?? '',
             null,
             $markdown ?? '',

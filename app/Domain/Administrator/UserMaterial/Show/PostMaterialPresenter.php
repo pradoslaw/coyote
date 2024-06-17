@@ -6,13 +6,13 @@ use Coyote\Domain\Administrator\AvatarCdn;
 use Coyote\Domain\Administrator\UserMaterial\List\View\Time;
 use Coyote\Domain\Administrator\UserMaterial\Show\View\HistoryItem;
 use Coyote\Domain\Administrator\UserMaterial\Show\View\Link;
-use Coyote\Domain\Administrator\UserMaterial\Show\View\Material;
 use Coyote\Domain\Administrator\UserMaterial\Show\View\Person;
+use Coyote\Domain\Administrator\UserMaterial\Show\View\PostMaterial;
 use Coyote\Domain\Administrator\View\Mention;
 use Coyote\Models\Flag\Resource;
 use Coyote\Post;
 
-class MaterialPresenter
+class PostMaterialPresenter
 {
     public function __construct(
         private Time      $time,
@@ -21,7 +21,7 @@ class MaterialPresenter
     {
     }
 
-    public function post(int $postId): Material
+    public function post(int $postId): PostMaterial
     {
         /** @var Post $post */
         $post = Post::query()->withTrashed()->findOrFail($postId);
@@ -66,7 +66,9 @@ class MaterialPresenter
                 $resource->text);
             if ($flag->deleted_at) {
                 $historyItems[] = new HistoryItem(
-                    new Mention($flag->moderator_id, $flag->moderator->name),
+                    $flag->moderator
+                        ? new Mention($flag->moderator_id, $flag->moderator->name)
+                        : null,
                     $this->time->date(new Carbon($flag->deleted_at, 'Europe/Warsaw')),
                     'close-report',
                     $flag->type->name,
@@ -79,7 +81,7 @@ class MaterialPresenter
             return $b->createdAt->timestamp() - $a->createdAt->timestamp();
         });
 
-        return new Material(
+        return new PostMaterial(
             new Link(
                 route('forum.category', [$forumSlug]),
                 $forumSlug,

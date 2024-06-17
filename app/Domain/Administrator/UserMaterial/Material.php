@@ -10,6 +10,7 @@ readonly class Material
         public string  $type,
         public Carbon  $createdAt,
         public ?Carbon $deletedAt,
+        public ?Carbon $parentDeletedAt,
         public string  $authorUsername,
         public ?string $authorImageUrl,
         public string  $contentMarkdown,

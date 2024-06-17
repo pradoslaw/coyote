@@ -82,7 +82,8 @@ $this->group(
         $this->get('Stream', 'StreamController@index')->name('stream');
 
         $this->get('Flag', 'FlagController@index')->name('flag');
-        $this->get('Flag/Post/{post_trashed}', 'FlagController@show')->name('flag.show');
+        $this->get('Flag/Post/{post_trashed}', 'FlagController@showPost')->name('flag.show.post');
+        $this->get('Flag/Comment/{comment_trashed}', 'FlagController@showComment')->name('flag.show.comment');
 
         $this->get('Groups', ['uses' => 'GroupsController@index', 'middleware' => 'can:adm-group'])->name('groups');
 

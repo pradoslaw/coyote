@@ -5,7 +5,7 @@ use Coyote\Domain\Administrator\View\Date;
 use Coyote\Domain\Administrator\View\PostMarkdown;
 use Coyote\Domain\Html;
 
-readonly class Material
+readonly class PostMaterial
 {
     private PostMarkdown $content;
 

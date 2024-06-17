@@ -51,6 +51,7 @@ class MaterialStore
                 $request->type,
                 $material->created_at,
                 $this->deletedAt($material),
+                $this->parentDeletedAt($material),
                 $material->username ?? '',
                 $material->user_photo,
                 $material->text,
@@ -95,5 +96,13 @@ class MaterialStore
             return new Carbon($material->deleted_at);
         }
         return $material->deleted_at;
+    }
+
+    private function parentDeletedAt(Post|Post\Comment|Microblog $material): ?Carbon
+    {
+        if ($material instanceof Post\Comment) {
+            return $this->deletedAt($material->post);
+        }
+        return null;
     }
 }
