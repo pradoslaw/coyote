@@ -3,8 +3,6 @@ namespace Coyote\Http\Controllers\Adm;
 
 use Collective\Html\HtmlBuilder;
 use Coyote\Http\Controllers\Controller;
-use Lavary\Menu\Builder;
-use Lavary\Menu\Item;
 use Lavary\Menu\Menu;
 
 class BaseController extends Controller
@@ -12,7 +10,54 @@ class BaseController extends Controller
     public function __construct()
     {
         parent::__construct();
+
         $this->breadcrumb->push('Panel administracyjny', route('adm.home'));
+    }
+
+    /**
+     * @return \Lavary\Menu\Builder
+     */
+    protected function buildMenu()
+    {
+        return $this->getMenuFactory()->make('adm', function ($menu) {
+            /** @var HtmlBuilder $html */
+            $html = app('html');
+            $fa = function ($icon) use ($html) {
+                return $html->tag('i', '', ['class' => "fa $icon"]);
+            };
+
+            /** @var \Lavary\Menu\Builder $menu */
+            $menu->add('Strona główna', ['route' => 'adm.dashboard'])->prepend($fa('fa-desktop fa-fw'));
+            $menu->add('Użytkownicy', ['route' => 'adm.users'])->prepend($fa('fa-user fa-fw'));
+            $menu->add('Grupy', ['route' => 'adm.groups'])->prepend($fa('fa-users fa-fw'))->data('permission', 'adm-group');
+            $menu->add('Bany', ['route' => 'adm.firewall'])->prepend($fa('fa-user-lock fa-fw'));
+            $menu->add('Kto jest online', ['route' => 'adm.sessions'])->prepend($fa('fa-eye fa-fw'));
+
+            $forum = $menu->add('Forum', ['class' => 'list-unstyled collapse']);
+            $forum->link->attr(['data-toggle' => "collapse", 'aria-expanded' => "false", 'aria-controls' => "menu-forum"]);
+            $forum->link->href('#menu-forum');
+
+            $forum->prepend($fa('fa-comments fa-fw'));
+
+            $forum->add('Kategorie', ['route' => 'adm.forum.categories']);
+            $forum->add('Uprawnienia', ['route' => 'adm.forum.permissions'])->data('permission', 'adm-group');
+            $forum->add('Powody moderacji', ['route' => 'adm.forum.reasons']);
+
+            $menu->add('Dziennik zdarzeń', ['route' => 'adm.stream'])->prepend($fa('fa-newspaper fa-fw'));
+            $menu->add('Raporty', ['route' => 'adm.flag'])->prepend($fa('fa-flag fa-fw'));
+            $menu->add('Cenzura', ['route' => 'adm.words'])->prepend($fa('fa-ban fa-fw'));
+            $menu->add('Bloki statyczne', ['route' => 'adm.blocks'])->prepend($fa('fa-columns fa-fw'));
+
+            $menu->add('Faktury i płatności', ['route' => 'adm.payments'])->prepend($fa('fa-shopping-cart fa-fw'))->data('permission', 'adm-payment');
+            $menu->add('Tagi', ['route' => 'adm.tags'])->prepend($fa('fa-tag fa-fw'));
+        })
+            ->filter(function ($item) {
+                if ($item->data('permission')) {
+                    return auth()->user()->can($item->data('permission'));
+                }
+
+                return true;
+            });
     }
 
     /**
@@ -20,52 +65,21 @@ class BaseController extends Controller
      */
     protected function view($view = null, $data = [])
     {
-        return parent::view($view, array_merge($data, [
-            'menu' => $this->buildMenu(app(Menu::class)),
-        ]));
+        return parent::view($view, array_merge($data, ['menu' => $this->buildMenu()]));
     }
 
-    private function buildMenu(Menu $menu): Builder
+    /**
+     * @return Menu
+     */
+    protected function getMenuFactory()
     {
-        return $menu->make('adm', function (Builder $menu) {
-            /** @var HtmlBuilder $html */
-            $html = app('html');
-            $fa = function ($icon) use ($html) {
-                return $html->tag('i', '', ['class' => "fa $icon"]);
-            };
-
-            $menu->add('Strona główna', ['route' => 'adm.dashboard'])->prepend($fa('fa-desktop fa-fw'));
-            $menu->divide(['class' => 'menu-group-moderator-actions']);
-
-            $menu->add('Użytkownicy', ['route' => 'adm.users'])->prepend($fa('fa-user fa-fw'));
-            $menu->add('Raporty', ['url' => route('adm.flag', ['filter' => 'is:reported not:deleted'])])->prepend($fa('far fa-flag fa-fw'));
-            $menu->add('Bany', ['route' => 'adm.firewall'])->prepend($fa('fa-user-lock fa-fw'));
-            $menu->add('Kto jest online', ['route' => 'adm.sessions'])->prepend($fa('fa-eye fa-fw'));
-            $menu->add('Dziennik zdarzeń', ['route' => 'adm.stream'])->prepend($fa('fa-newspaper fa-fw'));
-            $menu->add('Cenzura', ['route' => 'adm.words'])->prepend($fa('fa-highlighter fa-fw'));
-            $menu->add('Tagi', ['route' => 'adm.tags'])->prepend($fa('fa-tag fa-fw'));
-
-            $menu->divide(['class' => 'menu-group-service-operations']);
-
-            $menu->add('Grupy', ['route' => 'adm.groups'])->prepend($fa('fa-users fa-fw'))->data('permission', 'adm-group');
-            $menu->add('Kategorie', ['route' => 'adm.forum.categories'])->prepend($fa('fa-th-list fa-fw'));
-            $menu->add('Uprawnienia w kategorii', ['route' => 'adm.forum.permissions'])->prepend($fa('fa-file-signature fa-fw'))->data('permission', 'adm-group');
-            $menu->add('Powody moderacji', ['route' => 'adm.forum.reasons'])->prepend($fa('fa-eraser fa-fw'));
-            $menu->add('Bloki statyczne', ['route' => 'adm.blocks'])->prepend($fa('far fa-file-code fa-fw'));
-            $menu->add('Faktury i płatności', ['route' => 'adm.payments'])->prepend($fa('fa-shopping-cart fa-fw'))->data('permission', 'adm-payment');
-        })
-            ->filter(function (Item $item): bool {
-                if ($item->data('permission')) {
-                    return auth()->user()->can($item->data('permission'));
-                }
-                return true;
-            });
+        return app(Menu::class);
     }
 
     /**
      * Clear users cache permission after updating groups etc.
      */
-    protected function flushPermission(): void
+    protected function flushPermission()
     {
         $this->getCacheFactory()->tags('permissions')->flush();
     }

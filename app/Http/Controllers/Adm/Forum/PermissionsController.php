@@ -37,7 +37,7 @@ class PermissionsController extends BaseController
 
         $this->forum = $forum;
         $this->group = $group;
-        $this->breadcrumb->push('Uprawnienia w kategorii', route('adm.forum.permissions'));
+        $this->breadcrumb->push('Prawa dostępu', route('adm.forum.permissions'));
     }
 
     public function index(): View

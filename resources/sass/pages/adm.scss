@@ -65,19 +65,3 @@ body.theme-dark {
     padding: 0;
   }
 }
-
-.administrator-panel aside#adm-menu ul li.divider {
-  border-bottom: 1px solid #ddd;
-  margin-top: 1.25rem;
-  margin-bottom: 0.5rem;
-  padding-left: 20px;
-  font-size: 0.85em;
-
-  &.menu-group-service-operations:after {
-    content: 'Ustawienia serwisu';
-  }
-
-  &.menu-group-moderator-actions:after {
-    content: 'Akcje moderatorskie';
-  }
-}
