@@ -2,7 +2,8 @@
 namespace Tests\Unit\Moderation;
 
 use Coyote\Domain\Administrator\View\PostMarkdown;
-use Coyote\Domain\Administrator\View\PostPreview;
+use Coyote\Domain\Administrator\View\SubstringHtml;
+use Coyote\Domain\StringHtml;
 use Coyote\User;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
@@ -126,7 +127,7 @@ class PostPreviewTest extends TestCase
      */
     public function markVideo(): void
     {
-        $preview = new PostPreview('<video>Foo</video> Bar');
+        $preview = new SubstringHtml(new StringHtml('<video>Foo</video> Bar'), 50);
         $videoIcon = $this->mark('fas fa-film', 'video');
         $this->assertSame("$videoIcon Bar", "$preview");
     }

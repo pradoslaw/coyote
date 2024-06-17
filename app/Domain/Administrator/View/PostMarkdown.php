@@ -17,7 +17,7 @@ class PostMarkdown
 
     public function previewHtml(): Html
     {
-        return new PostPreview($this->postHtmlString());
+        return new SubstringHtml($this->contentHtml(), 100);
     }
 
     private function postHtmlString(): string

@@ -3,30 +3,29 @@ namespace Coyote\Domain\Administrator\View;
 
 use Coyote\Domain\Html;
 
-class PostPreview extends Html
+class SubstringHtml extends Html
 {
     private InlineHtml $inline;
 
-    public function __construct(string $postHtml)
+    public function __construct(Html $html, private int $length)
     {
-        $this->inline = new InlineHtml($postHtml);
+        $this->inline = new InlineHtml($html);
     }
 
     protected function toHtml(): string
     {
         $body = $this->body($this->inline->toHtml());
         $limit = 0;
-        $maxLength = 100;
         $html = '';
         /** @var \DOMNode $node */
         foreach ($body->childNodes as $node) {
             $volume = \mb_strLen($node->textContent);
-            if ($limit + $volume < $maxLength) {
+            if ($limit + $volume < $this->length) {
                 $limit += $volume;
                 $html .= $node->ownerDocument->saveHTML($node);
             } else {
                 if ($node->nodeType === \XML_TEXT_NODE) {
-                    $html .= \htmlSpecialChars(\mb_subStr($node->textContent, 0, $maxLength - $limit)) . '...';
+                    $html .= \htmlSpecialChars(\mb_subStr($node->textContent, 0, $this->length - $limit)) . '...';
                 }
                 break;
             }

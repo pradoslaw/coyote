@@ -4,7 +4,7 @@ namespace Coyote\Domain\Administrator\UserMaterial\List\View;
 use Coyote\Domain\Administrator\AvatarCdn;
 use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialResult;
 use Coyote\Domain\Administrator\UserMaterial\Material;
-use Coyote\Domain\Administrator\View\PostPreview;
+use Coyote\Domain\Administrator\View\SubstringHtml;
 
 readonly class MaterialVo
 {
@@ -40,7 +40,7 @@ readonly class MaterialVo
             $material->authorUsername,
             $this->cdn->avatar($material->authorImageUrl),
             $content,
-            new PostPreview((string)$content),
+            new SubstringHtml($content, 100),
             $material->reported,
             $this->adminUrl($material),
         );
