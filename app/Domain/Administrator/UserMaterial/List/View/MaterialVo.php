@@ -1,7 +1,6 @@
 <?php
 namespace Coyote\Domain\Administrator\UserMaterial\List\View;
 
-use Carbon\Carbon;
 use Coyote\Domain\Administrator\AvatarCdn;
 use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialResult;
 use Coyote\Domain\Administrator\UserMaterial\Material;
@@ -36,9 +35,7 @@ readonly class MaterialVo
             $this->type($material),
             $this->time->format($material->createdAt),
             $this->time->ago($material->createdAt),
-            $material->deletedAt !== null,
-            $this->time->format($material->deletedAt ?? new Carbon()),
-            $this->time->ago($material->deletedAt ?? new Carbon()),
+            $material->deletedAt ? $this->time->date($material->deletedAt) : null,
             $material->authorUsername,
             $this->cdn->avatar($material->authorImageUrl),
             $content,

@@ -105,7 +105,7 @@ class ViewMaterialsTest extends TestCase
     public function deleted(): void
     {
         $vo = $this->item($this->material(deletedAt:new Carbon('2002-01-23 21:37:00')));
-        $this->assertTrue($vo->deleted);
+        $this->assertNotNull($vo->deletedAt);
     }
 
     /**
@@ -114,7 +114,7 @@ class ViewMaterialsTest extends TestCase
     public function existing(): void
     {
         $vo = $this->item($this->material(deletedAt:null));
-        $this->assertFalse($vo->deleted);
+        $this->assertNull($vo->deletedAt);
     }
 
     /**
@@ -123,7 +123,7 @@ class ViewMaterialsTest extends TestCase
     public function deletedAt(): void
     {
         $vo = $this->item($this->material(deletedAt:new Carbon('2002-01-23 21:37:00')));
-        $this->assertSame('2002-01-23 21:37:00', $vo->deletedAt);
+        $this->assertSame('2002-01-23 21:37:00', $vo->deletedAt->format());
     }
 
     /**
@@ -132,7 +132,7 @@ class ViewMaterialsTest extends TestCase
     public function deletedAgo(): void
     {
         $vo = $this->item($this->material(deletedAt:new Carbon('2023-06-04 13:42:00')));
-        $this->assertSame('101 lat 5 miesięcy temu', $vo->deletedAgo);
+        $this->assertSame('101 lat 5 miesięcy temu', $vo->deletedAt->ago());
     }
 
     /**

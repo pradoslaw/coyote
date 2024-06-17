@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Domain\Administrator\UserMaterial\List\View;
 
+use Coyote\Domain\Administrator\View\Date;
 use Coyote\Domain\Html;
 
 class MaterialItem
@@ -9,9 +10,7 @@ class MaterialItem
         public string  $type,
         public string  $createdAt,
         public string  $createdAgo,
-        public bool    $deleted,
-        public string  $deletedAt,
-        public string  $deletedAgo,
+        public ?Date   $deletedAt,
         public string  $authorUsername,
         public ?string $authorImageUrl,
         public Html    $content,
