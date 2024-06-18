@@ -30,11 +30,15 @@ class Handler extends ExceptionHandler
 
     public function report(Throwable $e)
     {
+        if (app()->runningUnitTests()) {
+            if ($e instanceof \PHPUnit\Exception) {
+                throw $e;
+            }
+        }
         if ($this->shouldReport($e) && app()->bound('sentry') && app()->environment('production')) {
             // send report to sentry
             app('sentry')->captureException($e);
         }
-
         parent::report($e);
     }
 
