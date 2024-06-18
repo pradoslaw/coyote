@@ -6,7 +6,7 @@ use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialResult;
 use Coyote\Domain\Administrator\UserMaterial\Material;
 use Coyote\Domain\Administrator\View\SubstringHtml;
 
-readonly class MaterialVo
+readonly class MaterialList
 {
     public function __construct(
         private MarkdownRender $render,

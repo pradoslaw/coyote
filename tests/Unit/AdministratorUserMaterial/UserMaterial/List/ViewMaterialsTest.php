@@ -6,7 +6,7 @@ use Coyote\Domain\Administrator\AvatarCdn;
 use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialResult;
 use Coyote\Domain\Administrator\UserMaterial\List\View\MarkdownRender;
 use Coyote\Domain\Administrator\UserMaterial\List\View\MaterialItem;
-use Coyote\Domain\Administrator\UserMaterial\List\View\MaterialVo;
+use Coyote\Domain\Administrator\UserMaterial\List\View\MaterialList;
 use Coyote\Domain\Administrator\UserMaterial\List\View\Time;
 use Coyote\Domain\Administrator\UserMaterial\Material;
 use Coyote\Domain\Html;
@@ -164,9 +164,9 @@ class ViewMaterialsTest extends TestCase
         return $this->materialVo($result)->items()[0];
     }
 
-    private function materialVo(MaterialResult $materials): MaterialVo
+    private function materialVo(MaterialResult $materials): MaterialList
     {
-        return new MaterialVo(
+        return new MaterialList(
             app(MarkdownRender::class),
             new Time(new Carbon('2124-11-04 13:42:00')),
             $materials,

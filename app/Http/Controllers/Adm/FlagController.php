@@ -6,7 +6,7 @@ use Coyote\Domain\Administrator\AvatarCdn;
 use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialRequest;
 use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialStore;
 use Coyote\Domain\Administrator\UserMaterial\List\View\MarkdownRender;
-use Coyote\Domain\Administrator\UserMaterial\List\View\MaterialVo;
+use Coyote\Domain\Administrator\UserMaterial\List\View\MaterialList;
 use Coyote\Domain\Administrator\UserMaterial\List\View\Time;
 use Coyote\Domain\Administrator\UserMaterial\Show\PostMaterialPresenter;
 use Coyote\Domain\Administrator\UserMaterial\Show\View\CommentMaterial;
@@ -36,14 +36,15 @@ class FlagController extends BaseController
             $filterParams['author'] ?? null,
         );
 
-        $materialVo = new MaterialVo($render,
+        $materials = new MaterialList(
+            $render,
             new Time(Carbon::now()),
             $store->fetch($request),
             new AvatarCdn());
 
         return $this->view('adm.flag.home', [
-            'materials'        => $materialVo,
-            'pagination'       => new BootstrapPagination($request->page, 10, $materialVo->total(), ['filter' => $paramFilterString]),
+            'materials'        => $materials,
+            'pagination'       => new BootstrapPagination($request->page, 10, $materials->total(), ['filter' => $paramFilterString]),
             'filter'           => $effectiveFilterString,
             'availableFilters' => [
                 'type:post', 'type:comment', 'type:microblog',
