@@ -1,5 +1,5 @@
 <?php
-namespace ColorScheme;
+namespace Tests\Unit\ColorScheme;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\ColorScheme;
