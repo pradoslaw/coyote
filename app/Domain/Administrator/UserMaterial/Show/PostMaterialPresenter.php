@@ -9,6 +9,7 @@ use Coyote\Domain\Administrator\UserMaterial\Show\View\Link;
 use Coyote\Domain\Administrator\UserMaterial\Show\View\Person;
 use Coyote\Domain\Administrator\UserMaterial\Show\View\PostMaterial;
 use Coyote\Domain\Administrator\View\Mention;
+use Coyote\Models\Flag;
 use Coyote\Models\Flag\Resource;
 use Coyote\Post;
 
@@ -38,7 +39,7 @@ class PostMaterialPresenter
         $deletedAt = $post->deleted_at;
 
         /** @var Resource[] $resources */
-        $resources = \Coyote\Models\Flag\Resource::query()
+        $resources = Flag\Resource::query()
             ->with(['flag', 'flag.type', 'flag.moderator'])
             ->where('resource_id', $postId)
             ->where('resource_type', Post::class)
@@ -63,7 +64,7 @@ class PostMaterialPresenter
                 $this->time->date($flag->created_at),
                 'report',
                 $flag->type->name,
-                $resource->text);
+                $flag->text);
             if ($flag->deleted_at) {
                 $historyItems[] = new HistoryItem(
                     $flag->moderator
@@ -72,7 +73,7 @@ class PostMaterialPresenter
                     $this->time->date(new Carbon($flag->deleted_at, 'Europe/Warsaw')),
                     'close-report',
                     $flag->type->name,
-                    '',
+                    null,
                 );
             }
         }
