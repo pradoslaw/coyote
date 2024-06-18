@@ -1,11 +1,12 @@
 <?php
-
 namespace Coyote\Post;
 
+use Carbon\Carbon;
 use Coyote\Post;
 use Coyote\Services\Parser\Factories\CommentFactory;
 use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -16,55 +17,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property Post $post
  * @property User $user
- * @property \Carbon\Carbon $created_at
+ * @property Carbon $created_at
  */
 class Comment extends Model
 {
     use SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = ['post_id', 'user_id', 'text'];
-
-    /**
-     * @var string[]
-     */
     protected $appends = ['html'];
-
-    /**
-     * @var string
-     */
     protected $dateFormat = 'Y-m-d H:i:se';
-
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
     protected $table = 'post_comments';
 
-    /**
-     * @var null|string
-     */
-    private $html = null;
+    private string|null $html = null;
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function post()
+    public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class)->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at', 'reputation'])->withTrashed();
+        return $this->belongsTo(User::class)
+            ->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at', 'reputation'])
+            ->withTrashed();
     }
 
     public function getHtmlAttribute(): string
