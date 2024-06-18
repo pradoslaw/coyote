@@ -1,52 +1,40 @@
 <?php
-namespace Coyote\Domain\Administrator\UserActivity;
+namespace Coyote\Domain\Administrator\User\View;
 
-use Coyote\Domain\Administrator\View\Date;
-use Coyote\Domain\Administrator\View\Mention;
+use Coyote\Domain\Administrator\User\Store\Category;
+use Coyote\Domain\Administrator\User\Store\DeleteReason;
+use Coyote\Domain\Administrator\User\Store\ReportReason;
 use Coyote\Domain\Html;
 use Coyote\Domain\PostStatistic;
 use Coyote\Domain\View\Chart;
-use Coyote\User;
 
+/**
+ * @deprecated This is both a presenter and a view object, we should split it
+ */
 readonly class Activity
 {
     public Chart $categoriesChart;
+    public Chart $categoriesChartLikes;
     public Chart $deleteReasonsChart;
+    public Chart $reportReasonsChart;
     public Html $chartLibrarySource;
-    public Mention $mention;
 
     /**
      * @param Category[] $categories
-     * @param Post[] $posts
      */
     public function __construct(
-        private User         $user,
-        public array         $posts,
         array                $categories,
-        array $deleteReasons,
+        array                $categoriesLikes,
+        array                $deleteReasons,
+        array                $reportReasons,
         public PostStatistic $postsStatistic,
     )
     {
-        $this->mention = Mention::of($user);
-        $this->categoriesChart = $this->categoriesChart($this->categoriesSliced($this->categoriesSorted($categories), 10));
+        $this->categoriesChart = $this->categoriesChart($this->categoriesSliced($this->categoriesSorted($categories), 10), 'categories-chart');
+        $this->categoriesChartLikes = $this->categoriesChart($this->categoriesSliced($this->categoriesSorted($categoriesLikes), 10), 'categories-like-chart');
         $this->deleteReasonsChart = $this->deleteReasonsChart($this->reasonsSorted($deleteReasons));
+        $this->reportReasonsChart = $this->reportReasonsChart($this->reportReasonsSorted($reportReasons));
         $this->chartLibrarySource = Chart::librarySourceHtml();
-    }
-
-    public function username(): string
-    {
-        return $this->user->name;
-    }
-
-    public function accountCreatedAt(): string
-    {
-        return $this->user->created_at->format('Y-m-d H:i:s');
-    }
-
-    public function createdAgo(): string
-    {
-        $createdAt = new Date($this->user->created_at);
-        return $createdAt->timeAgo();
     }
 
     private function deleteReasonsChart(array $array): Chart
@@ -58,19 +46,19 @@ readonly class Activity
             ),
             array_map(fn($object) => $object->posts, $array),
             \array_map($this->deleteReasonColor(...), $array),
-            'reasons-chart',
+            'delete-reasons-chart',
             baseline:40,
             horizontal:true,
         );
     }
 
-    private function categoriesChart(array $categories): Chart
+    private function categoriesChart(array $categories, string $id): Chart
     {
         return new Chart(
             array_map(fn($category) => $category->forumName ?? '(pozostałe)', $categories),
             array_map(fn($category) => $category->posts, $categories),
             \array_map($this->categoryColor(...), $categories),
-            'categories-chart',
+            $id,
             baseline:40,
             horizontal:true,
         );
@@ -150,5 +138,24 @@ readonly class Activity
         $important = \array_slice($categories, 0, $importantAmount);
         $important[] = new Category(null, $remaining);
         return $important;
+    }
+
+    private function reportReasonsChart(array $reportReasons): Chart
+    {
+        return new Chart(
+            \array_map(fn(ReportReason $reason) => $reason->reason, $reportReasons),
+            \array_map(fn(ReportReason $reason) => $reason->count, $reportReasons),
+            ['#ff6384'],
+            id:'report-reasons-chart',
+            baseline:40,
+            horizontal:true,
+        );
+    }
+
+    private function reportReasonsSorted(array $reportReasons): array
+    {
+        $order = \array_flip(['Spam', 'Wulgaryzmy', 'Off-Topic', 'Nieprawidłowa kategoria', 'Próba wyłudzenia gotowca', 'Inne']);
+        \uSort($reportReasons, fn(ReportReason $a, ReportReason $b): int => -$order[$b->reason] + $order[$a->reason]);
+        return $reportReasons;
     }
 }

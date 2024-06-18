@@ -1,40 +1,93 @@
 <?php
-
 namespace Coyote\Http\Controllers\Adm;
 
-use Coyote\Http\Grids\Adm\FlagsGrid;
-use Coyote\Repositories\Contracts\FlagRepositoryInterface as FlagRepository;
-use Coyote\Repositories\Criteria\FlagList;
-use Boduch\Grid\Source\EloquentSource;
+use Carbon\Carbon;
+use Coyote\Domain\Administrator\AvatarCdn;
+use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialRequest;
+use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialStore;
+use Coyote\Domain\Administrator\UserMaterial\List\View\MarkdownRender;
+use Coyote\Domain\Administrator\UserMaterial\List\View\MaterialList;
+use Coyote\Domain\Administrator\UserMaterial\List\View\Time;
+use Coyote\Domain\Administrator\UserMaterial\Show\PostMaterialPresenter;
+use Coyote\Domain\Administrator\UserMaterial\Show\View\CommentMaterial;
+use Coyote\Domain\Administrator\View\Mention;
+use Coyote\Domain\View\Filter\Filter;
+use Coyote\Domain\View\Pagination\BootstrapPagination;
+use Coyote\Post;
+use Coyote\Services\UrlBuilder;
+use Illuminate\View\View;
 
 class FlagController extends BaseController
 {
-    /**
-     * @var FlagRepository
-     */
-    protected $flag;
-
-    /**
-     * @param FlagRepository $flag
-     */
-    public function __construct(FlagRepository $flag)
+    public function index(MaterialStore $store, MarkdownRender $render): View
     {
-        parent::__construct();
+        $this->breadcrumb->push('Dodane treści', route('adm.flag'));
 
-        $this->flag = $flag;
-        $this->breadcrumb->push('Raporty', route('adm.flag'));
+        $paramFilterString = $this->queryOrNull('filter');
+
+        $filterParams = (new Filter($paramFilterString ?? ''))->toArray();
+        $request = new MaterialRequest(
+            \max(1, (int)$this->request->query('page', 1)),
+            10,
+            $filterParams['type'] ?? 'post',
+            $filterParams['deleted'] ?? null,
+            $filterParams['reported'] ?? null,
+            $filterParams['author'] ?? null,
+            $filterParams['open'] ?? null,
+        );
+
+        $materials = new MaterialList(
+            $render,
+            new Time(Carbon::now()),
+            $store->fetch($request),
+            new AvatarCdn());
+
+        return $this->view('adm.flag.home', [
+            'materials'        => $materials,
+            'pagination'       => new BootstrapPagination($request->page, $request->pageSize, $materials->total(), ['filter' => $paramFilterString]),
+            'filter'           => $paramFilterString,
+            'availableFilters' => [
+                'type:post', 'type:comment', 'type:microblog',
+                'is:deleted', 'not:deleted',
+                'is:reported', 'not:reported', 'is:open', 'not:open',
+                'author:{id}',
+            ],
+        ]);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function index()
+    public function showPost(Post $post, PostMaterialPresenter $presenter): View
     {
-        $this->flag->pushCriteria(new FlagList());
-        $this->flag->applyCriteria();
+        $this->breadcrumb->push('Dodane treści', route('adm.flag'));
+        $this->breadcrumb->push('Post #' . $post->id, route('adm.flag.show.post', [$post->id]));
 
-        $grid = $this->gridBuilder()->createGrid(FlagsGrid::class)->setSource(new EloquentSource($this->flag));
+        return $this->view('adm.flag.show.post')->with([
+            'post'    => $presenter->post($post->id),
+            'backUrl' => route('adm.flag'),
+        ]);
+    }
 
-        return $this->view('adm.flag')->with('grid', $grid);
+    public function showComment(Post\Comment $comment, Time $time): View
+    {
+        $this->breadcrumb->push('Dodane treści', route('adm.flag'));
+        $this->breadcrumb->push('Komentarz #' . $comment->id, route('adm.flag.show.comment', [$comment->id]));
+
+        return $this->view('adm.flag.show.comment')->with([
+            'comment' => new CommentMaterial(
+                $comment->text,
+                $comment->user_id,
+                new Mention($comment->user_id, $comment->user->name),
+                $time->date($comment->created_at),
+                UrlBuilder::postComment($comment),
+            ),
+            'backUrl' => route('adm.flag'),
+        ]);
+    }
+
+    private function queryOrNull(string $key): ?string
+    {
+        if ($this->request->query->has($key)) {
+            return $this->request->query->get($key, '');
+        }
+        return null;
     }
 }

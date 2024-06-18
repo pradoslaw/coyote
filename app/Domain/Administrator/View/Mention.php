@@ -2,22 +2,16 @@
 namespace Coyote\Domain\Administrator\View;
 
 use Coyote\Domain\Html;
-use Coyote\User;
 
 class Mention extends Html
 {
-    public static function of(User $user): Mention
-    {
-        return new Mention($user);
-    }
-
-    private function __construct(private User $user)
+    public function __construct(private int $userId, private string $userName)
     {
     }
 
     protected function toHtml(): string
     {
-        $url = route('profile', [$this->user->id]);
-        return '<a class="mention" href="' . \htmlSpecialChars($url) . '">' . '@' . $this->user->name . '</a>';
+        $url = route('adm.users.show', [$this->userId]);
+        return '<a class="mention" href="' . \htmlSpecialChars($url) . '">' . '@' . $this->userName . '</a>';
     }
 }

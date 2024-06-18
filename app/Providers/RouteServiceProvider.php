@@ -4,6 +4,7 @@ namespace Coyote\Providers;
 
 use Coyote\Guide;
 use Coyote\Microblog;
+use Coyote\Post;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
@@ -77,6 +78,11 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
 
         // we use model instead of repository to avoid putting global criteria to all methods in repository
         $this->router->bind('user_trashed', fn($id) => User::withTrashed()->findOrFail($id));
+
+        // we use model instead of repository to avoid putting global criteria to all methods in repository
+        $this->router->bind('post_trashed', fn($id) => Post::withTrashed()->findOrFail($id));
+        $this->router->bind('comment_trashed', fn($id) => Post\Comment::withTrashed()->findOrFail($id));
+
         // we use model instead of repository to avoid putting global criteria to all methods in repository
         $this->router->bind('topic_trashed', fn($id) => Topic::withTrashed()->findOrFail($id));
 
@@ -88,7 +94,7 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
             return Topic::findOrFail($id);
         });
 
-        $this->router->bind('any_microblog', fn($id) => Microblog::withoutGlobalScopes()->findOrFail($id));
+        $this->router->bind('any_microblog', fn($id) => Microblog::query()->withoutGlobalScopes()->findOrFail($id));
 
         parent::boot();
     }

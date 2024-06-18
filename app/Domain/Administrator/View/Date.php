@@ -4,32 +4,37 @@ namespace Coyote\Domain\Administrator\View;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 
-class Date
+readonly class Date
 {
-    public function __construct(private Carbon $date)
+    public function __construct(private Carbon $date, private Carbon $now)
     {
     }
 
-    public function __toString(): string
+    public function format(): string
     {
         return $this->date->format('Y-m-d H:i:s');
     }
 
-    public function timeAgo(): string
+    public function ago(): string
     {
-        return $this->firstWords($this->interval(), 4) . ' temu';
+        return $this->leadingWords($this->interval(), amount:4) . ' temu';
     }
 
-    private function firstWords(CarbonInterval $interval, int $words): string
+    private function leadingWords(CarbonInterval $interval, int $amount): string
     {
         return \implode(' ',
             \array_slice(
                 \explode(' ', $interval),
-                0, $words));
+                0, $amount));
     }
 
     private function interval(): CarbonInterval
     {
-        return $this->date->diff(Carbon::now());
+        return $this->date->diff($this->now);
+    }
+
+    public function timestamp(): int
+    {
+        return $this->date->timestamp;
     }
 }

@@ -1,0 +1,24 @@
+{% extends 'adm.base' %}
+{% block title %}Sprawy {{ parent() }}{% endblock %}
+
+{% block container %}
+  <style>
+      .post-comment {
+          border-top: 1px solid #ddd;
+      }
+  </style>
+
+  <div class="mt-4 mb-4 post-comment col-lg-6 mx-auto">
+    {{ comment.content }}
+    —
+    {{ comment.authorMention }}
+    <span class="text-muted">{{ comment.createdAt.ago }}</span>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <a class="btn btn-secondary" href="{{ comment.url }}">
+      <i class="fas fa-arrow-right"></i>
+      Przejdź do komentarza
+    </a>
+  </div>
+{% endblock %}

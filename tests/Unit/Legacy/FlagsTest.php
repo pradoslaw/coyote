@@ -57,7 +57,7 @@ class FlagsTest extends TestCase
     #[Test]
     public function shouldReturnReports_ofDeletedResources(): void
     {
-        $this->models->newPostDeletedReported('reported text');
+        $this->models->newPostDeletedReported('', 'reported text');
         $this->assertSame(
             ['reported text'],
             $this->flags->get()->pluck('text')->toArray());

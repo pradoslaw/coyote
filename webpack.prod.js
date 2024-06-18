@@ -63,6 +63,7 @@ const plugins = [
         /^cm/,
       ],
       greedy: [
+        /fake-(anchor|mention)/,
         /hire-me$/,
         /dropdown-menu/,
         /^tooltip/,
