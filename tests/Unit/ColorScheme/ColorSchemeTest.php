@@ -2,10 +2,12 @@
 namespace Tests\Unit\ColorScheme;
 
 use PHPUnit\Framework\TestCase;
+use Tests\Unit\BaseFixture;
 use Tests\Unit\ColorScheme;
 
 class ColorSchemeTest extends TestCase
 {
+    use BaseFixture\Server\Laravel\Transactional;
     use ColorScheme\Fixture\ColorScheme;
 
     /**

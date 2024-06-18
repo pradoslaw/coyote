@@ -2,10 +2,12 @@
 namespace Tests\Unit\Seo\Meta;
 
 use PHPUnit\Framework\TestCase;
+use Tests\Unit\BaseFixture;
 use Tests\Unit\Seo;
 
 class MetaRobotsTest extends TestCase
 {
+    use BaseFixture\Server\Laravel\Transactional;
     use Seo\Meta\Fixture\Assertion;
 
     /**
