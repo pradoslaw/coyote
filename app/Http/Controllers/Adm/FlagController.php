@@ -23,25 +23,27 @@ class FlagController extends BaseController
     {
         $this->breadcrumb->push('Dodane treści', route('adm.flag'));
 
-        $page = \max(1, (int)$this->request->query('page', 1));
-
         $paramFilterString = $this->queryOrNull('filter');
         $effectiveFilterString = $paramFilterString ?? 'type:post not:deleted';
 
         $filterParams = (new Filter($effectiveFilterString))->toArray();
-
-        $materials = $store->fetch(new MaterialRequest(
-            $page,
+        $request = new MaterialRequest(
+            \max(1, (int)$this->request->query('page', 1)),
             10,
             $filterParams['type'] ?? 'post',
             $filterParams['deleted'] ?? null,
             $filterParams['reported'] ?? null,
             $filterParams['author'] ?? null,
-        ));
+        );
+
+        $materialVo = new MaterialVo($render,
+            new Time(Carbon::now()),
+            $store->fetch($request),
+            new AvatarCdn());
 
         return $this->view('adm.flag.home', [
-            'materials'        => new MaterialVo($render, new Time(Carbon::now()), $materials, new AvatarCdn()),
-            'pagination'       => new BootstrapPagination($page, 10, $materials->total, ['filter' => $paramFilterString]),
+            'materials'        => $materialVo,
+            'pagination'       => new BootstrapPagination($request->page, 10, $materialVo->total(), ['filter' => $paramFilterString]),
             'filter'           => $effectiveFilterString,
             'availableFilters' => [
                 'type:post', 'type:comment', 'type:microblog',
