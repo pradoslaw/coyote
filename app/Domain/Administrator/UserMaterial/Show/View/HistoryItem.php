@@ -9,8 +9,8 @@ class HistoryItem
     public function __construct(
         public ?Mention $authorMention,
         public Date     $createdAt,
-        private string $type,
-        public string  $badge,
+        private string  $type,
+        public string   $badge,
         public ?string  $note,
     )
     {
