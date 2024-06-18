@@ -3,9 +3,9 @@ namespace Coyote\Domain\Administrator\UserActivity;
 
 use Coyote\Domain\Administrator\View\Date;
 use Coyote\Domain\Administrator\View\Mention;
-use Coyote\Domain\Chart;
 use Coyote\Domain\Html;
 use Coyote\Domain\PostStatistic;
+use Coyote\Domain\View\Chart;
 use Coyote\User;
 
 readonly class Activity

@@ -1,5 +1,8 @@
 <?php
-namespace Coyote\Domain;
+namespace Coyote\Domain\View;
+
+use Coyote\Domain\Html;
+use Coyote\Domain\StringHtml;
 
 class Chart extends Html
 {

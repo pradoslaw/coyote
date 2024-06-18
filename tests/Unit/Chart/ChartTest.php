@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\Chart;
 
-use Coyote\Domain\Chart;
+use Coyote\Domain\View\Chart;
 use PHPUnit\Framework\TestCase;
 
 class ChartTest extends TestCase

@@ -1,7 +1,7 @@
 <?php
 namespace Coyote\Http\Controllers\Profile;
 
-use Coyote\Domain\Chart;
+use Coyote\Domain\View\Chart;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Controllers\User\Menu\ProfileNavigation;
 use Coyote\Http\Requests\SkillsRequest;
