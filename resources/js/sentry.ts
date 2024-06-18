@@ -23,6 +23,8 @@ Sentry.init({
     "null is not an object (evaluating 'o.itemSize=3')",
     'Improper range',
     "undefined is not an object (evaluating 'hj.settings.site_id')",
+    'Failed to fetch',
+    'Load failed',
   ],
   tracesSampleRate: 0.0,
 });
