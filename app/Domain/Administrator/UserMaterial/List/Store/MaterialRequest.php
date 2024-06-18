@@ -7,9 +7,9 @@ class MaterialRequest
         public int    $page,
         public int    $pageSize,
         public string $type,
-        public ?bool $deleted,
-        public ?bool $reported,
-        public ?int  $authorId,
+        public ?bool  $deleted,
+        public ?bool  $reported,
+        public ?int   $authorId,
     )
     {
     }
