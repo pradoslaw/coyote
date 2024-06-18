@@ -21,8 +21,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $text
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property string|null $deleted_at
  * @property Flag\Type $type
  * @property User $user
+ * @property User|null $moderator
  * @property Forum[] $forums
  * @property Topic[] $topics
  * @property Post[] $posts
