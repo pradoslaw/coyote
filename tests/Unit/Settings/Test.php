@@ -3,11 +3,12 @@ namespace Tests\Unit\Settings;
 
 use Coyote\Services\Guest;
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture\Server;
+use Tests\Unit\BaseFixture;
 
 class Test extends TestCase
 {
-    use Server\Http;
+    use BaseFixture\Server\Laravel\Transactional;
+    use BaseFixture\Server\Http;
 
     public function test()
     {

@@ -3,9 +3,11 @@ namespace Tests\Unit\ColorScheme;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\ColorScheme;
+use Tests\Unit\BaseFixture;
 
 class DarkTest extends TestCase
 {
+    use BaseFixture\Server\Laravel\Transactional;
     use ColorScheme\Fixture\Dark;
 
     /**
