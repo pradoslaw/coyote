@@ -87,7 +87,7 @@ class ViewMaterialsTest extends TestCase
     public function createdAt(): void
     {
         $vo = $this->item($this->material(createdAt:new Carbon('2001-01-23 21:37:00')));
-        $this->assertSame('2001-01-23 21:37:00', $vo->createdAt);
+        $this->assertSame('2001-01-23 21:37:00', $vo->createdAt->format());
     }
 
     /**
@@ -96,7 +96,7 @@ class ViewMaterialsTest extends TestCase
     public function createdAgo(): void
     {
         $vo = $this->item($this->material(createdAt:new Carbon('2024-06-04 13:42:00')));
-        $this->assertSame('100 lat 5 miesięcy temu', $vo->createdAgo);
+        $this->assertSame('100 lat 5 miesięcy temu', $vo->createdAt->ago());
     }
 
     /**

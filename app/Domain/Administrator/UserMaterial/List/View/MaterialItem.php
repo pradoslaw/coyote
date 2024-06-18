@@ -8,8 +8,7 @@ class MaterialItem
 {
     public function __construct(
         public string  $type,
-        public string  $createdAt,
-        public string  $createdAgo,
+        public Date    $createdAt,
         public ?Date   $deletedAt,
         public string  $authorUsername,
         public ?string $authorImageUrl,

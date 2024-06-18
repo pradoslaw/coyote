@@ -62,7 +62,7 @@
                 <small>
                   <b>@{{ material.authorUsername }}</b>
                   napisał
-                  <b class="text-muted" title="{{ material.createdAt }}">{{ material.createdAgo }}</b>
+                  <b class="text-muted" title="{{ material.createdAt.format }}">{{ material.createdAt.ago }}</b>
                   {% if material.deletedAt %}
                     (usunięto <b title="{{ material.deletedAt.format }}">{{ material.deletedAt.ago }}</b>)
                   {% endif %}

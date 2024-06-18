@@ -34,8 +34,7 @@ readonly class MaterialList
         $deletedAt = $material->parentDeletedAt ?? $material->deletedAt;
         return new MaterialItem(
             $this->type($material),
-            $this->time->format($material->createdAt),
-            $this->time->ago($material->createdAt),
+            $this->time->date($material->createdAt),
             $this->time->dateOptional($deletedAt),
             $material->authorUsername,
             $this->cdn->avatar($material->authorImageUrl),
