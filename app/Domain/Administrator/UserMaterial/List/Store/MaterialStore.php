@@ -37,11 +37,11 @@ class MaterialStore
         if ($request->authorId !== null) {
             $query->where('user_id', $request->authorId);
         }
-        $builder = $query->clone();
         $materials = $query
+            ->clone()
             ->select("$materialTable.*", 'users.name AS username', 'users.photo AS user_photo')
-            ->offset(($request->page - 1) * $request->pageSize)
             ->leftJoin('users', 'users.id', '=', 'user_id')
+            ->offset(($request->page - 1) * $request->pageSize)
             ->limit($request->pageSize)
             ->orderBy('created_at', 'DESC')
             ->orderBy('id', 'DESC')
@@ -64,7 +64,7 @@ class MaterialStore
 
         return new MaterialResult(
             $materials,
-            $builder->count(),
+            $query->count(),
         );
     }
 
