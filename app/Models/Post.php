@@ -1,10 +1,18 @@
 <?php
-
 namespace Coyote;
 
+use Carbon\Carbon;
+use Coyote;
 use Coyote\Models\Asset;
 use Coyote\Models\Subscription;
+use Coyote\Post\Accept;
+use Coyote\Post\Log;
+use Coyote\Post\Vote;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -17,65 +25,49 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $editor_id
  * @property int $deleter_id
  * @property string $delete_reason
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $deleted_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $deleted_at
+ * @property Carbon $updated_at
  * @property string $user_name
  * @property string $text
  * @property string $html
  * @property string $ip
  * @property string $browser
- * @property \Coyote\Forum $forum
- * @property \Coyote\Topic $topic
- * @property \Coyote\Models\Asset[] $assets
- * @property \Coyote\Post\Vote[] $votes
- * @property \Coyote\Post\Comment[] $comments
- * @property \Coyote\User $user
- * @property \Coyote\User $editor
- * @property \Coyote\User $deleter
- * @property \Coyote\Post\Accept $accept
+ * @property Forum $forum
+ * @property Topic $topic
+ * @property Asset[] $assets
+ * @property Vote[] $votes
+ * @property Coyote\Post\Comment[] $comments
+ * @property User $user
+ * @property User $editor
+ * @property User $deleter
+ * @property Accept $accept
  */
 class Post extends Model
 {
     use SoftDeletes;
 
     protected $attributes = ['score' => 0];
-
     protected $fillable = ['topic_id', 'forum_id', 'user_id', 'user_name', 'text', 'ip', 'browser', 'edit_count', 'editor_id'];
-
     protected $dateFormat = 'Y-m-d H:i:se';
-
-    /**
-     * Related to Laravel 5.8. deleted_at has different date format that created_at and carbon throws exception
-     *
-     * @var string[]
-     */
     protected $casts = [
         'deleted_at' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    /**
-     * Html version of the post.
-     *
-     * @var null|string
-     */
-    private $html = null;
+    private string|null $html = null;
 
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
-
         static::restoring(function (Post $post) {
             $post->deleter_id = null;
             $post->delete_reason = null;
         });
-
         static::saved(function (Post $post) {
             if ($post->isDirtyWithRelations()) {
                 $topic = $post->topic()->withTrashed()->first();
-
                 $post->logs()->create(
                     array_merge(
                         $post->only(['user_id', 'text', 'ip', 'browser']),
@@ -86,92 +78,59 @@ class Post extends Model
         });
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function comments()
+    public function comments(): HasMany
     {
-        return $this->hasMany('Coyote\Post\Comment')->orderBy('id');
+        return $this->hasMany(Coyote\Post\Comment::class)->orderBy('id');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function subscribers()
+    public function subscribers(): MorphMany
     {
         return $this->morphMany(Subscription::class, 'resource');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function assets()
+    public function assets(): MorphMany
     {
         return $this->morphMany(Asset::class, 'content');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function votes()
+    public function votes(): HasMany
     {
-        return $this->hasMany('Coyote\Post\Vote');
+        return $this->hasMany(Vote::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function accept()
+    public function accept(): HasOne
     {
-        return $this->hasOne('Coyote\Post\Accept');
+        return $this->hasOne(Accept::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function topic()
+    public function topic(): BelongsTo
     {
-        return $this->belongsTo('Coyote\Topic')->withTrashed();
+        return $this->belongsTo(Topic::class)->withTrashed();
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function forum()
+    public function forum(): BelongsTo
     {
-        return $this->belongsTo('Coyote\Forum');
+        return $this->belongsTo(Forum::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function editor()
+    public function editor(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    /**
-     * @return mixed
-     */
-    public function deleter()
+    public function deleter(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function logs()
+    public function logs(): HasMany
     {
-        return $this->hasMany('Coyote\Post\Log');
+        return $this->hasMany(Log::class);
     }
 
     /**
@@ -182,49 +141,37 @@ class Post extends Model
      */
     public function subscribe($userId, $flag)
     {
-        if (!$flag) {
-            $this->subscribers()->forUser($userId)->delete();
-        } else {
+        if ($flag) {
             $this->subscribers()->firstOrCreate(['user_id' => $userId]);
+        } else {
+            $this->subscribers()->forUser($userId)->delete();
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getHtmlAttribute()
+    public function getHtmlAttribute(): string
     {
-        if ($this->html !== null) {
-            return $this->html;
+        if ($this->html === null) {
+            $this->html = app('parser.post')->parse($this->text);
         }
-
-        return $this->html = app('parser.post')->parse($this->text);
+        return $this->html;
     }
 
-    /**
-     * Get previous post. We use it in merge controller.
-     *
-     * @return mixed
-     */
-    public function previous()
+    public function previous(): ?Post
     {
-        return (new static)
+        /** @var Post|null $previous */
+        $previous = static::query()
             ->where('topic_id', $this->topic_id)
             ->where('created_at', '<', $this->created_at)
             ->orderBy('created_at', 'DESC')
             ->first();
+        return $previous;
     }
 
-    /**
-     * @param int $userId
-     * @param string|null $reason
-     */
-    public function deleteWithReason(int $userId, ?string $reason)
+    public function deleteWithReason(int $userId, ?string $reason): void
     {
         $this->deleter_id = $userId;
         $this->delete_reason = $reason;
         $this->{$this->getDeletedAtColumn()} = $this->freshTimestamp();
-
         $this->save();
     }
 
