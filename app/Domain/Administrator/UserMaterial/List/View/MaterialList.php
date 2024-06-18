@@ -4,7 +4,6 @@ namespace Coyote\Domain\Administrator\UserMaterial\List\View;
 use Coyote\Domain\Administrator\AvatarCdn;
 use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialResult;
 use Coyote\Domain\Administrator\UserMaterial\Material;
-use Coyote\Domain\Administrator\View\SubstringHtml;
 
 readonly class MaterialList
 {
@@ -29,17 +28,13 @@ readonly class MaterialList
 
     private function viewObject(Material $material): MaterialItem
     {
-        $content = $this->render->render($material->contentMarkdown);
-
-        $deletedAt = $material->parentDeletedAt ?? $material->deletedAt;
         return new MaterialItem(
             $this->type($material),
             $this->time->date($material->createdAt),
-            $this->time->dateOptional($deletedAt),
+            $this->time->dateOptional($material->parentDeletedAt ?? $material->deletedAt),
             $material->authorUsername,
             $this->cdn->avatar($material->authorImageUrl),
-            $content,
-            new SubstringHtml($content, 100),
+            $this->render->render($material->contentMarkdown),
             $material->reported,
             $this->adminUrl($material),
         );
