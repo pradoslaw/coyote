@@ -36,7 +36,7 @@ readonly class MaterialList
             $this->type($material),
             $this->time->format($material->createdAt),
             $this->time->ago($material->createdAt),
-            $deletedAt ? $this->time->date($deletedAt) : null,
+            $this->time->dateOptional($deletedAt),
             $material->authorUsername,
             $this->cdn->avatar($material->authorImageUrl),
             $content,

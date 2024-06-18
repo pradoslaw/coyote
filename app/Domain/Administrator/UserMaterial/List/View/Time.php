@@ -10,6 +10,14 @@ readonly class Time
     {
     }
 
+    public function dateOptional(?Carbon $date): ?Date
+    {
+        if ($date === null) {
+            return null;
+        }
+        return $this->date($date);
+    }
+
     public function date(Carbon $date): Date
     {
         return new Date($date, $this->now);
