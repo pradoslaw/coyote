@@ -46,7 +46,7 @@ class InlineHtml
 
     private function unwrapElement(\DOMElement $item): string
     {
-        if (\in_array($item->tagName, ['span', 'ul'])) {
+        if (\in_array($item->tagName, ['span', 'ul', 'ol'])) {
             return $this->unwrapChildren($item);
         }
         if ($item->tagName === 'blockquote') {

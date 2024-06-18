@@ -59,10 +59,19 @@ class PostPreviewTest extends TestCase
     /**
      * @test
      */
-    public function markListItems(): void
+    public function markListItemsUnordered(): void
     {
         $listMark = $this->mark('fas fa-list-ol');
         $this->assertPreview("- one\n- two", "{$listMark} one {$listMark} two");
+    }
+
+    /**
+     * @test
+     */
+    public function markListItemsOrdered(): void
+    {
+        $listMark = $this->mark('fas fa-list-ol');
+        $this->assertPreview("1. one\n2. two", "{$listMark} one {$listMark} two");
     }
 
     /**
