@@ -20,31 +20,16 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Coyote\Topic;
 use Coyote\User;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
 
-class RouteServiceProvider extends ServiceProvider
+class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\RouteServiceProvider
 {
-    /**
-     * This namespace is applied to the controller routes in your routes file.
-     *
-     * In addition, it is set as the URL generator's root namespace.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $namespace = 'Coyote\Http\Controllers';
-
-    /**
-     * @var Router
-     */
+    /** @var Router */
     protected $router;
 
-    /**
-     * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
         $this->router->pattern('id', '[0-9]+');
         $this->router->pattern('wiki', '[0-9]+');
@@ -103,11 +88,9 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->router->bind('topic', function ($id) {
             $user = $this->getCurrentRequest()->user();
-
             if ($this->router->currentRouteName() === 'forum.topic' && $user && $user->can('forum-delete')) {
                 return Topic::withTrashed()->findOrFail($id);
             }
-
             return Topic::findOrFail($id);
         });
 
@@ -116,40 +99,23 @@ class RouteServiceProvider extends ServiceProvider
         parent::boot();
     }
 
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
+    public function register(): void
     {
         parent::register();
-
         $this->router = $this->app->make(Router::class);
     }
 
-    /**
-     * Define the routes for the application.
-     *
-     * @return void
-     */
-    public function map()
+    public function map(): void
     {
         $this->mapApiRoutes();
         $this->mapWebRoutes();
     }
 
-    /**
-     * Define the "web" routes for the application.
-     *
-     * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
-     */
-    protected function mapWebRoutes()
+    private function mapWebRoutes(): void
     {
         $this->router->group([
-            'namespace' => $this->namespace, 'middleware' => 'web',
+            'namespace'  => $this->namespace,
+            'middleware' => 'web',
         ], function () {
             require base_path('routes/auth.php');
             require base_path('routes/misc.php');
@@ -166,19 +132,12 @@ class RouteServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Define the "api" routes for the application.
-     *
-     * These routes are typically stateless.
-     *
-     * @return void
-     */
-    protected function mapApiRoutes()
+    private function mapApiRoutes(): void
     {
         $this->router->group([
             'namespace'  => $this->namespace,
             'middleware' => 'api',
-            'domain'     => !$this->app->runningUnitTests() ? config('services.api.host') : '',
+            'domain'     => $this->app->runningUnitTests() ? '' : config('services.api.host'),
         ], function () {
             require base_path('routes/api.php');
         });

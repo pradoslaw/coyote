@@ -23,8 +23,8 @@ readonly class Activity
      */
     public function __construct(
         array                $categories,
-        array $deleteReasons,
-        array $reportReasons,
+        array                $deleteReasons,
+        array                $reportReasons,
         public PostStatistic $postsStatistic,
     )
     {

@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Adm;
 use Collective\Html\HtmlBuilder;
 use Coyote\Http\Controllers\Controller;
 use Lavary\Menu\Builder;
+use Lavary\Menu\Item;
 use Lavary\Menu\Menu;
 
 class BaseController extends Controller
@@ -11,25 +12,29 @@ class BaseController extends Controller
     public function __construct()
     {
         parent::__construct();
-
         $this->breadcrumb->push('Panel administracyjny', route('adm.home'));
     }
 
     /**
-     * @return Builder
+     * @inheritdoc
      */
-    protected function buildMenu()
+    protected function view($view = null, $data = [])
     {
-        return $this->getMenuFactory()->make('adm', function ($menu) {
+        return parent::view($view, array_merge($data, [
+            'menu' => $this->buildMenu(app(Menu::class)),
+        ]));
+    }
+
+    private function buildMenu(Menu $menu): Builder
+    {
+        return $menu->make('adm', function (Builder $menu) {
             /** @var HtmlBuilder $html */
             $html = app('html');
             $fa = function ($icon) use ($html) {
                 return $html->tag('i', '', ['class' => "fa $icon"]);
             };
 
-            /** @var Builder $menu */
             $menu->add('Strona główna', ['route' => 'adm.dashboard'])->prepend($fa('fa-desktop fa-fw'));
-
             $menu->divide(['class' => 'menu-group-moderator-actions']);
 
             $menu->add('Użytkownicy', ['route' => 'adm.users'])->prepend($fa('fa-user fa-fw'));
@@ -52,35 +57,18 @@ class BaseController extends Controller
             $menu->add('Bloki statyczne', ['route' => 'adm.blocks'])->prepend($fa('far fa-file-code fa-fw'));
             $menu->add('Faktury i płatności', ['route' => 'adm.payments'])->prepend($fa('fa-shopping-cart fa-fw'))->data('permission', 'adm-payment');
         })
-            ->filter(function ($item) {
+            ->filter(function (Item $item): bool {
                 if ($item->data('permission')) {
                     return auth()->user()->can($item->data('permission'));
                 }
-
                 return true;
             });
     }
 
     /**
-     * @inheritdoc
-     */
-    protected function view($view = null, $data = [])
-    {
-        return parent::view($view, array_merge($data, ['menu' => $this->buildMenu()]));
-    }
-
-    /**
-     * @return Menu
-     */
-    protected function getMenuFactory()
-    {
-        return app(Menu::class);
-    }
-
-    /**
      * Clear users cache permission after updating groups etc.
      */
-    protected function flushPermission()
+    protected function flushPermission(): void
     {
         $this->getCacheFactory()->tags('permissions')->flush();
     }
