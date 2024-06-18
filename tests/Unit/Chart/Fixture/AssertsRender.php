@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\Chart\Fixture;
 
-use Coyote\Domain\Chart;
+use Coyote\Domain\View\Chart;
 use PHPUnit\Framework\Assert;
 
 trait AssertsRender
