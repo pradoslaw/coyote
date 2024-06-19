@@ -69,7 +69,15 @@ abstract class Controller extends BaseController
      */
     protected function getSettings()
     {
-        return app(Guest::class)->getSettings();
+        /** @var Guest $app */
+        $app = app(Guest::class);
+        $settings = $app->getSettings();
+        return [
+            'colorScheme'     => $settings['colorScheme'] ?? 'system',
+            'lastColorScheme' => $settings['lastColorScheme'] ?? 'light',
+            'topicMode'       => ($settings['homepage.mode'] ?? 0) ? 'newest' : 'interesting',
+            'reputationMode'  => ['month', 'year', 'total'][$settings['homepage.reputation'] ?? 0],
+        ];
     }
 
     /**

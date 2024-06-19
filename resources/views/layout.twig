@@ -182,7 +182,9 @@
   </header>
 
   <div class="container-fluid">
-    {{ breadcrumb|raw }}
+    {% if breadcrumb is defined %}
+      {{ breadcrumb|raw }}
+    {% endif %}
 
     <noscript>
       <div class="row">
@@ -231,7 +233,9 @@
 
   <footer class="container-fluid mt-4">
     <div class="footer-top">
-      {{ breadcrumb|raw }}
+      {% if breadcrumb is defined %}
+        {{ breadcrumb|raw }}
+      {% endif %}
     </div>
 
     <div class="footer-inner row">
