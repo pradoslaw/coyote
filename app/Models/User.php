@@ -171,15 +171,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * Generuje liste z rocznikiem urodzenia (do wyboru m.in. w panelu uzytkownika)
      *
      * @return array
+     * @deprecated
      */
     public static function birthYearList()
     {
         $result = [null => '--'];
-
         for ($i = 1950, $year = date('Y'); $i <= $year; $i++) {
             $result[$i] = $i;
         }
-
         return $result;
     }
 
