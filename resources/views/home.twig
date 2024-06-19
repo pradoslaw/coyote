@@ -27,7 +27,7 @@
               <div class="col-lg-6">
                 <ul id="forum-tabs" class="nav nav-pills nav-forum">
                   <li class="nav-item">
-                    <a class="nav-link {{ settings['homepage.mode'] == 0 ? 'active' }}"
+                    <a class="nav-link {{ settings.topicMode == 'interesting' ? 'active' }}"
                        title="Zobacz najciekawsze wątki na forum"
                        href="#interesting"
                        role="tab" data-bs-toggle="tab">
@@ -35,7 +35,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link {{ settings['homepage.mode'] == 1 ? 'active' }}"
+                    <a class="nav-link {{ settings.topicMode == 'newest' ? 'active' }}"
                        title="Lista najnowszych wątków na forum" href="#newest"
                        role="tab" data-bs-toggle="tab">
                       Nowe wątki
@@ -45,7 +45,7 @@
 
                 <div id="box-forum-headline">
                   <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane {{ settings['homepage.mode'] == 0 ? 'active' }}" id="interesting">
+                    <div role="tabpanel" class="tab-pane {{ settings.topicMode == 'interesting' ? 'active' }}" id="interesting">
                       {% for topic in interesting %}
                         <div class="row">
                           <span class="display-count col-sm-2 col-lg-3 col-xl-2 d-none d-sm-block p-0">
@@ -72,7 +72,7 @@
                       {% endfor %}
                     </div>
 
-                    <div role="tabpanel" class="tab-pane {{ settings['homepage.mode'] == 1 ? 'active' }}" id="newest">
+                    <div role="tabpanel" class="tab-pane {{ settings.topicMode == 'newest' ? 'active' }}" id="newest">
                       {% for topic in newest %}
                         <div class="row">
                           <span class="display-count col-sm-2 col-lg-3 col-xl-2 d-none d-sm-block p-0">
@@ -250,23 +250,23 @@
 
           <div id="reputation-tabs" class="nav nav-panel card-tabs">
             <a role="tab" data-bs-toggle="tab" href="#month"
-               class="nav-item {{ settings['homepage.reputation'] == 0 ? 'active' }}">
+               class="nav-item {{ settings.reputationMode == 'month' ? 'active' }}">
               <span>W tym miesiącu</span>
             </a>
             <a role="tab" data-bs-toggle="tab" href="#year"
-               class="nav-item {{ settings['homepage.reputation'] == 1 ? 'active' }}">
+               class="nav-item {{ settings.reputationMode == 'year' ? 'active' }}">
               <span>W tym roku</span>
             </a>
             <a role="tab" data-bs-toggle="tab" href="#total"
-               class="nav-item {{ settings['homepage.reputation'] == 2 ? 'active' }}">
+               class="nav-item {{ settings.reputationMode == 'total' ? 'active' }}">
               <span>Ogólnie</span>
             </a>
           </div>
 
           <div class="card card-default card-reputation tab-content">
-            {% for key, mode in reputation %}
-              <div id="{{ key }}" role="tabpanel" class="card-body tab-pane {{ settings['homepage.reputation'] == loop.index0 ? 'active' }}">
-                {% for item in mode %}
+            {% for mode, items in reputation %}
+              <div id="{{ mode }}" role="tabpanel" class="card-body tab-pane {{ settings.reputationMode == mode ? 'active' }}">
+                {% for item in items %}
                   <div class="media">
                     <div class="mr-2">
                       <a href="{{ route('profile', [item.id]) }}">
