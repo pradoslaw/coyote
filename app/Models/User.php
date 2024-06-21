@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote;
 
 use Carbon\Carbon;
@@ -15,6 +14,11 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\RoutesNotifications;
@@ -49,10 +53,10 @@ use Ramsey\Uuid\Uuid;
  * @property string $email
  * @property string $password
  * @property string $provider
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property \Carbon\Carbon $visited_at
- * @property \Carbon\Carbon $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $visited_at
+ * @property Carbon $deleted_at
  * @property string $date_format
  * @property string $timezone
  * @property string $ip
@@ -82,23 +86,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 {
     use Authenticatable, Authorizable, CanResetPassword, RoutesNotifications, HasApiTokens, SoftDeletes, ExcludeBlocked, HasPushSubscriptions;
 
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
     protected $table = 'users';
-
-    /**
-     * @var array
-     */
     protected $attributes = ['date_format' => '%Y-%m-%d %H:%M'];
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'provider',
         'provider_id',
@@ -120,22 +109,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'allow_sticky_header',
         'marketing_agreement',
     ];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
     protected $hidden = ['password', 'remember_token', 'email', 'provider_id', 'provider', 'guest_id'];
-
-    /**
-     * @var string
-     */
     protected $dateFormat = 'Y-m-d H:i:se';
-
-    /**
-     * @var array
-     */
     protected $casts = [
         'allow_smilies'       => 'int',
         'allow_sig'           => 'int',
@@ -151,16 +126,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'deleted_at'          => 'datetime',
     ];
 
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
-
         static::creating(function (User $model) {
             if (empty($model->guest_id)) {
                 $model->guest_id = (string)Uuid::uuid4();
             }
         });
-
         static::saving(function (User $user) {
             // save group name. it rarely changes
             $user->group_name = $user->group_id ? $user->group->name : null;
@@ -173,7 +146,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @return array
      * @deprecated
      */
-    public static function birthYearList()
+    public static function birthYearList(): array
     {
         $result = [null => '--'];
         for ($i = 1950, $year = date('Y'); $i <= $year; $i++) {
@@ -195,73 +168,52 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return \array_combine($dateFormats, \array_map('\strFTime', $dateFormats));
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function group()
+    public function group(): HasOne
     {
-        return $this->hasOne('Coyote\Group', 'id', 'group_id');
+        return $this->hasOne(Group::class, 'id', 'group_id');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function groups()
+    public function groups(): BelongsToMany
     {
-        return $this->belongsToMany('Coyote\Group', 'group_users');
+        return $this->belongsToMany(Group::class, 'group_users');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
-     */
-    public function permissions()
+    public function permissions(): HasManyThrough
     {
-        return $this->hasManyThrough('Coyote\Group\Permission', 'Coyote\Group\User', 'user_id', 'group_id');
+        return $this->hasManyThrough(Group\Permission::class, Group\User::class, 'user_id', 'group_id');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function actkey()
+    public function actkey(): HasMany
     {
-        return $this->hasMany('Coyote\Actkey');
+        return $this->hasMany(Actkey::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function skills()
+    public function skills(): MorphToMany
     {
-        return $this->morphToMany(Tag::class, 'resource', 'tag_resources')->withPivot(['priority', 'order'])->orderByPivot('priority', 'desc');
+        return $this->morphToMany(Tag::class, 'resource', 'tag_resources')
+            ->withPivot(['priority', 'order'])
+            ->orderByPivot('priority', 'desc');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function invoices()
+    public function invoices(): HasMany
     {
-        return $this->hasMany('Coyote\Invoice');
+        return $this->hasMany(Invoice::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function notifications()
+    public function notifications(): HasMany
     {
         return $this->hasMany(Notification::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function relations()
+    public function relations(): HasMany
     {
         return $this->hasMany(Relation::class);
     }
 
-    public function followers()
+    public function followers(): HasManyThrough
     {
-        return $this->hasManyThrough(User::class, Relation::class, 'related_user_id', 'id', 'id', 'user_id')->where('user_relations.is_blocked', false);
+        return $this->hasManyThrough(User::class, Relation::class, 'related_user_id', 'id', 'id', 'user_id')
+            ->where('user_relations.is_blocked', false);
     }
 
     /**
@@ -270,13 +222,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function getUnreadNotification($objectId)
     {
-        return $this->hasOne(Notification::class)->where('object_id', '=', $objectId)->whereNull('read_at')->first();
+        return $this->hasOne(Notification::class)
+            ->where('object_id', '=', $objectId)
+            ->whereNull('read_at')
+            ->first();
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function notificationSettings()
+    public function notificationSettings(): HasMany
     {
         return $this->hasMany(Notification\Setting::class);
     }
@@ -304,9 +256,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->deleted_at === null;
     }
 
-    /**
-     * @return bool
-     */
     public function canReceiveEmail(): bool
     {
         return $this->email && !$this->deleted_at && $this->is_confirm && !$this->is_blocked;
@@ -332,7 +281,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @param string $ip
      * @return bool
      */
-    public function hasAccessByIp($ip)
+    public function hasAccessByIp($ip): bool
     {
         if (empty($this->access_ip)) {
             return true;
@@ -359,7 +308,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @param string $token
      * @return void
      */
-    public function sendPasswordResetNotification($token)
+    public function sendPasswordResetNotification($token): void
     {
         $this->notify(new ResetPasswordNotification($token));
     }
@@ -369,7 +318,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @return string
      */
-    public function receivesBroadcastNotificationsOn()
+    public function receivesBroadcastNotificationsOn(): string
     {
         return 'user:' . $this->id;
     }

@@ -20,57 +20,44 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
 
     const ID = \Coyote\Notification::FLAG;
 
-    /**
-     * @var Flag
-     */
-    private $flag;
-
-    /**
-     * @param Flag $flag
-     */
-    public function __construct(Flag $flag)
+    public function __construct(private Flag $flag)
     {
-        $this->flag = $flag;
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  \Coyote\User  $user
+     * @param User $user
      * @return array
      */
     public function via(User $user)
     {
         $this->broadcastChannel = 'user:' . $user->id;
-
         return $this->channels($user);
     }
 
     /**
-     * @param \Coyote\User $user
+     * @param User $user
      * @return array
      */
     public function toDatabase($user)
     {
         return [
-            'object_id'     => $this->objectId(),
-            'user_id'       => $user->id,
-            'type_id'       => static::ID,
-            'subject'       => $this->flag->type->name,
-            'excerpt'       => str_limit($this->flag->text, 250),
-            'url'           => $this->flag->url,
-            'id'            => $this->id
+            'object_id' => $this->objectId(),
+            'user_id'   => $user->id,
+            'type_id'   => static::ID,
+            'subject'   => $this->flag->type->name,
+            'excerpt'   => str_limit($this->flag->text, 250),
+            'url'       => $this->flag->url,
+            'id'        => $this->id,
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function sender()
+    public function sender(): array
     {
         return [
-            'user_id'       => $this->flag->user_id,
-            'name'          => $this->flag->user->name
+            'user_id' => $this->flag->user_id,
+            'name'    => $this->flag->user->name,
         ];
     }
 
@@ -79,20 +66,17 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
      *
      * @return string
      */
-    public function objectId()
+    public function objectId(): string
     {
         return substr(md5(static::ID . $this->flag->url), 16);
     }
 
-    /**
-     * @return BroadcastMessage
-     */
-    public function toBroadcast()
+    public function toBroadcast(): BroadcastMessage
     {
         return new BroadcastMessage([
-            'headline'  => $this->flag->user->name . ' dodał nowy raport',
-            'subject'   => $this->flag->type->name,
-            'url'       => $this->redirectionUrl()
+            'headline' => $this->flag->user->name . ' dodał nowy raport',
+            'subject'  => $this->flag->type->name,
+            'url'      => $this->redirectionUrl(),
         ]);
     }
 
