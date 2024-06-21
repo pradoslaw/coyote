@@ -7,6 +7,7 @@ use Coyote\Group;
 use Coyote\Http\Forms\Group\GroupForm;
 use Coyote\Http\Grids\Adm\GroupsGrid;
 use Coyote\Repositories\Contracts\GroupRepositoryInterface as GroupRepository;
+use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Group as Stream_Group;
@@ -60,11 +61,11 @@ class GroupsController extends BaseController
         $this->transaction(function () use ($group, $form) {
             $group->save();
 
-            $permissions = $form->permissions->getValue() ?? [];
+            $permissionIds = $form->permissions->getValue() ?? [];
             foreach ($group->permissions()->get() as $permission) {
                 $group->permissions()->updateExistingPivot(
                     $permission->id,
-                    ['value' => in_array($permission->id, $permissions)],
+                    ['value' => in_array($permission->id, $permissionIds)],
                 );
             }
 
@@ -80,31 +81,20 @@ class GroupsController extends BaseController
         return redirect()->route('adm.groups')->with('success', 'Zapisano ustawienia grupy.');
     }
 
-    /**
-     * @param Group $group
-     * @return RedirectResponse
-     */
-    public function delete($group)
+    public function delete(Group $group): RedirectResponse
     {
         if ($group->system) {
             abort(401);
         }
-
         $this->transaction(function () use ($group) {
             $group->delete();
-
             $this->flushPermission();
             stream(Stream_Delete::class, (new Stream_Group())->map($group));
         });
-
         return redirect()->route('adm.groups')->with('success', 'Grupa została usunięta.');
     }
 
-    /**
-     * @param Group $group
-     * @return \Coyote\Services\FormBuilder\Form
-     */
-    private function getForm($group)
+    private function getForm(Group $group): Form
     {
         return $this->createForm(GroupForm::class, $group);
     }
