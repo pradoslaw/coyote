@@ -72,11 +72,12 @@ class SettingsForm extends Form
             ->add('website', 'text', [
                 'rules' => 'nullable|url|reputation:50',
                 'label' => 'Strona WWW',
-                'help' => 'Strona domowa, blog, portfolio itp.',
+                'help'  => 'Strona domowa, blog, portfolio itp.',
             ])
             ->add('allow_smilies', 'checkbox', [
                 'rules' => 'boolean',
-                'label' => new StringHtml('Pokazuj emotikony jako obrazki (np. <code>:)</code>, <code>:D</code>)'),
+                'label' => new StringHtml('Pokazuj minki jako emotikony'),
+                'help'  => 'Wyświetl <code>:)</code> jako <code>:smile:</code>, <code>:D</code> jako <code>:laugh:</code>, <code>;)</code> jako <code>:wink:</code>.',
             ])
             ->add('allow_subscribe', 'checkbox', [
                 'rules' => 'boolean',
@@ -106,18 +107,18 @@ class SettingsForm extends Form
             ->add('position', 'text', [
                 'rules' => 'nullable|string|max:100',
                 'label' => 'Stanowisko',
-                'attr' => ['placeholder' => 'Np. Junior Java Developer'],
+                'attr'  => ['placeholder' => 'Np. Junior Java Developer'],
             ])
             ->add('github', 'text', [
                 'rules' => 'nullable|string|max:200',
                 'label' => 'Konto Github',
-                'help' => 'Nazwa użytkownika lub link do konta Github.',
+                'help'  => 'Nazwa użytkownika lub link do konta Github.',
             ])
             ->add('bio', 'textarea', [
                 'rules' => 'nullable|string|max:500',
                 'label' => 'O sobie',
                 'help'  => 'W tym polu możesz zamieścić krótką informację o sobie, czym się zajmujesz, co cię interesuje. Ta informacja zostanie wyświetlona na Twoim profilu.',
-                'attr' => ['rows' => 3],
+                'attr'  => ['rows' => 3],
             ])
             ->add('birthyear', 'select', [
                 'rules'       => 'nullable|integer|between:1950,' . (date('Y') - 1),
@@ -129,7 +130,7 @@ class SettingsForm extends Form
             ->add('location', 'text', [
                 'rules' => 'nullable|string|max:50',
                 'label' => 'Miejsce zamieszkania',
-                'attr' => ['placeholder' => 'Podaj nazwę miejscowości'],
+                'attr'  => ['placeholder' => 'Podaj nazwę miejscowości'],
             ])
             ->add('allow_count', 'checkbox', [
                 'rules' => 'boolean',
@@ -143,7 +144,7 @@ class SettingsForm extends Form
                 'rules' => 'nullable|string|max:499|spam_link:50',
                 'label' => 'Sygnatura',
                 'help'  => 'Podpis będzie widoczny przy każdym Twoim poście. Uwaga! Użytkownicy posiadający mniej niż 50 punktów reputacji nie mogą umieszczać linków w tym polu.',
-                'attr' => ['rows' => 3],
+                'attr'  => ['rows' => 3],
             ])
             ->add('submit', 'submit', [
                 'label' => 'Zapisz',

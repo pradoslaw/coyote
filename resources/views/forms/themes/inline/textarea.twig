@@ -1,13 +1,11 @@
 {% import 'components.forms' as forms %}
 
 <div {{ forms.attr(row_attr|merge({class: (row_attr.class|default('') ~ (error ? ' has-error'))|trim})) }}>
-
-    {% block wrap %}
-        {% block widget %}
-            {% include 'components.toolbar' %}
-            {{ include(widget_path) }}
-        {% endblock widget %}
-
-        {% block error %}{{ include(theme ~ '.error') }}{% endblock %}
-    {% endblock %}
+  {% block wrap %}
+    {% block widget %}
+      {% include 'components.toolbar' %}
+      {{ include(widget_path) }}
+    {% endblock widget %}
+    {% block error %}{{ include(theme ~ '.error') }}{% endblock %}
+  {% endblock %}
 </div>

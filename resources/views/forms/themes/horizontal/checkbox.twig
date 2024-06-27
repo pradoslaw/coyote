@@ -4,17 +4,18 @@
 
 {% block label %}{% endblock %}
 {% block wrap %}
-    <div class="{{ form_group_class }} {{ form_group_offset }}">
-        {% if not ('[]' in name) %}
-            {{ form_hidden(name, unchecked_value) }}
-        {% endif %}
-
-        <div class="custom-control custom-checkbox">
-            {{ include(widget_path) }}
-
-            <label for="{{ attr.id }}" class="custom-control-label">
-                {{ label }}
-            </label>
-        </div>
+  <div class="{{ form_group_class }} {{ form_group_offset }}">
+    {% if not ('[]' in name) %}
+      {{ form_hidden(name, unchecked_value) }}
+    {% endif %}
+    <div class="custom-control custom-checkbox">
+      {{ include(widget_path) }}
+      <label for="{{ attr.id }}" class="custom-control-label">
+        {{ label }}
+      </label>
+      {% if help %}
+        <span class="form-text form-text-help">{{ help|raw }}</span>
+      {% endif %}
     </div>
+  </div>
 {% endblock %}
