@@ -216,8 +216,11 @@ export default class VueForm extends Vue {
   @Prop({required: true})
   post!: Post;
 
+  private originalText?: string;
+
   @Emit()
   cancel() {
+    this.post.text = this.originalText!;
   }
 
   created() {
@@ -226,6 +229,7 @@ export default class VueForm extends Vue {
       this.post.text = this.$loadDraft(this.draftKey) as string;
       this.$watch('post.text', newValue => this.$saveDraft(this.draftKey, newValue));
     }
+    this.originalText = this.post.text;
   }
 
   async save() {
