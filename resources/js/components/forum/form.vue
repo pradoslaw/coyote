@@ -136,19 +136,19 @@
 </template>
 
 <script lang="ts">
+import {Emojis, Post, Tag, Topic} from "@/types/models";
+import axios from 'axios';
+import Prism from 'prismjs';
 import Vue from 'vue';
 import Component from "vue-class-component";
 import {Emit, Prop, ProvideReactive, Ref} from "vue-property-decorator";
+import {mapGetters, mapMutations, mapState} from "vuex";
+import VueMarkdown from '../../components/forms/markdown.vue';
 import store from "../../store";
 import VueButton from '../forms/button.vue';
-import VueTagsInline from '../forms/tags-inline.vue';
-import VueMarkdown from '../../components/forms/markdown.vue';
-import {Emojis, Post, Tag, Topic} from "@/types/models";
-import {mapGetters, mapMutations, mapState} from "vuex";
-import axios from 'axios';
 import VueError from '../forms/error.vue';
+import VueTagsInline from '../forms/tags-inline.vue';
 import VueText from '../forms/text.vue';
-import Prism from 'prismjs';
 import {default as PerfectScrollbar} from '../perfect-scrollbar.js';
 
 @Component({
@@ -160,26 +160,26 @@ import {default as PerfectScrollbar} from '../perfect-scrollbar.js';
     'vue-tags-inline': VueTagsInline,
     'vue-error': VueError,
     'vue-text': VueText,
-    'perfect-scrollbar': PerfectScrollbar
+    'perfect-scrollbar': PerfectScrollbar,
   },
   computed: {
     ...mapGetters('topics', ['topic']),
     ...mapState('poll', ['poll']),
-    ...mapGetters('posts', ['totalPages', 'currentPage'])
+    ...mapGetters('posts', ['totalPages', 'currentPage']),
   },
   watch: {
     poll: {
       handler(poll) {
         store.commit('poll/init', poll);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     ...mapMutations('poll', ['removeItem', 'resetDefaults']),
-    ...mapMutations('posts', ['deleteAttachment', 'changePage'])
+    ...mapMutations('posts', ['deleteAttachment', 'changePage']),
   },
-  inject: []
+  inject: [],
 })
 export default class VueForm extends Vue {
   isProcessing = false;
@@ -222,11 +222,10 @@ export default class VueForm extends Vue {
 
   created() {
     this.emojis = window.emojis;
-    if (this.exists) {
-      return;
+    if (!this.exists) {
+      this.post.text = this.$loadDraft(this.draftKey) as string;
+      this.$watch('post.text', newValue => this.$saveDraft(this.draftKey, newValue));
     }
-    this.post.text = this.$loadDraft(this.draftKey) as string;
-    this.$watch('post.text', newValue => this.$saveDraft(this.draftKey, newValue));
   }
 
   async save() {
