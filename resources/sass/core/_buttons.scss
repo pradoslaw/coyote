@@ -10,7 +10,7 @@
 }
 
 .btn-warning {
-  @include bg-gradient-variant(lighten($warning, 5%), $warning);
+  background: $warning;
 }
 
 .btn-follow {
