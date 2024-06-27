@@ -1,14 +1,14 @@
-
 $thumbnail-size: (
-  95: 95px,
-  35: 35px,
-  38: 38px,
-  45: 45px,
-  16: 16px,
+        95: 95px,
+        35: 35px,
+        38: 38px,
+        45: 45px,
+        16: 16px,
 );
 
 @each $name, $size in $thumbnail-size {
   .i-#{$name} {
-    @include size($size);
+    width: $size;
+    height: $size;
   }
 }
