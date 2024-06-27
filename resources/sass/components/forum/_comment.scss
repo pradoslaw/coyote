@@ -28,14 +28,6 @@
     }
   }
 
-  // comment text
-  > span {
-    &:before {
-      content: "▪";
-      margin-right: 5px;
-    }
-  }
-
   @include link-color-darker();
 
   span > a {

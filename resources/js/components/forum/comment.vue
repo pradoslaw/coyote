@@ -3,31 +3,26 @@
     <vue-flag v-for="flag in flags" :key="flag.id" :flag.sync="flag"></vue-flag>
 
     <template v-if="!comment.is_editing">
-      <span v-html="comment.html"></span> &mdash;
-
-      <vue-username :user="comment.user" :owner="comment.user.id === topic.owner_id"></vue-username>
-
-      <a :href="comment.url">
-        <vue-timeago :datetime="comment.created_at" class="text-muted small"></vue-timeago>
-      </a>
-
-      <a v-if="comment.editable" @click="edit" href="javascript:" title="Edytuj ten komentarz" class="btn-comment">
-        <i class="fas fa-pencil-alt"></i>
-      </a>
-
-      <a v-if="comment.editable" @click="deleteComment" href="javascript:" title="Usuń ten komentarz" class="btn-comment">
-        <i class="fas fa-trash-alt"></i>
-      </a>
-
-      <a v-if="comment.editable" @click="migrate" href="javascript:" title="Zamień w post" class="btn-comment">
-        <i class="fas fa-compress"></i>
-      </a>
-
-      <a :data-metadata="comment.metadata" :data-url="comment.url" title="Zgłoś ten komentarz" href="javascript:" class="btn-comment">
-        <i class="fas fa-flag"></i>
-      </a>
+      <div>
+        <vue-username :user="comment.user" :owner="comment.user.id === topic.owner_id"></vue-username>
+        <a :href="comment.url">
+          <vue-timeago :datetime="comment.created_at" class="text-muted small"></vue-timeago>
+        </a>
+        <a v-if="comment.editable" @click="edit" href="javascript:" title="Edytuj ten komentarz" class="btn-comment">
+          <i class="fas fa-pencil-alt"></i>
+        </a>
+        <a v-if="comment.editable" @click="deleteComment" href="javascript:" title="Usuń ten komentarz" class="btn-comment">
+          <i class="fas fa-trash-alt"></i>
+        </a>
+        <a v-if="comment.editable" @click="migrate" href="javascript:" title="Zamień w post" class="btn-comment">
+          <i class="fas fa-compress"></i>
+        </a>
+        <a :data-metadata="comment.metadata" :data-url="comment.url" title="Zgłoś ten komentarz" href="javascript:" class="btn-comment">
+          <i class="fas fa-flag"></i>
+        </a>
+      </div>
+      <span v-html="comment.html"></span>
     </template>
-
     <vue-comment-form
       v-if="comment.is_editing"
       :comment="comment"
