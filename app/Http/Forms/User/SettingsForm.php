@@ -69,10 +69,6 @@ class SettingsForm extends Form
         }
 
         $this
-            ->add('date_format', 'select', [
-                'label'   => 'Format daty',
-                'choices' => User::dateFormatList(),
-            ])
             ->add('website', 'text', [
                 'rules' => 'nullable|url|reputation:50',
                 'label' => 'Strona WWW',
