@@ -5,21 +5,23 @@ use Coyote\Forum;
 use Coyote\Microblog;
 use Coyote\Post;
 use Coyote\Topic;
-use Coyote\User;
 use Neon\Test\BaseFixture\View\ViewDom;
+use Tests\Unit\BaseFixture;
 
 trait UserProfile
 {
-    private function userWithMicroblog(): User
+    use BaseFixture\Forum\Models;
+
+    private function userWithMicroblog(): int
     {
-        $user = $this->userWithPost();
-        $this->addMicroblog($user);
-        return $user;
+        $userId = $this->userWithPost();
+        $this->addMicroblog($userId);
+        return $userId;
     }
 
-    private function userProfile(User $user): string
+    private function userProfile(int $userId): string
     {
-        return $this->server->get("/Profile/$user->id/Post")
+        return $this->server->get("/Profile/$userId/Post")
             ->assertSuccessful()
             ->content();
     }
@@ -30,38 +32,28 @@ trait UserProfile
         return $dom->findElementsFlatTexts('//ul[@id="box-stats"]/li');
     }
 
-    private function addMicroblog(User $user): void
+    private function addMicroblog(int $userId): void
     {
         $microblog = new Microblog();
-        $microblog->user_id = $user->id;
+        $microblog->user_id = $userId;
         $microblog->text = 'irrelevant';
         $microblog->save();
     }
 
-    function userWithPost(): User
+    function userWithPost(): int
     {
-        $user = $this->newUser();
+        $id = $this->models->newUserReturnId();
         $this->storeThread(new Forum, new Topic,
-            new Post(['user_id' => $user->id]));
-        return $user;
+            new Post(['user_id' => $id]));
+        return $id;
     }
 
-    function userWithAcceptedAnswer(): User
+    function userWithAcceptedAnswer(): int
     {
-        $author = $this->newUser();
-        $post = new Post(['user_id' => $author->id]);
+        $authorId = $this->models->newUserReturnId();
+        $post = new Post(['user_id' => $authorId]);
         $topic = $this->storeThread(new Forum, new Topic, $post);
-        $accepter = $this->newUser();
-        $topic->accept()->create(['post_id' => $post->id, 'user_id' => $accepter->id]);
-        return $author;
-    }
-
-    function newUser(): User
-    {
-        $user = new User;
-        $user->name = 'irrelevant' . \uniqId();
-        $user->email = 'irrelevant';
-        $user->save();
-        return $user;
+        $topic->accept()->create(['post_id' => $post->id, 'user_id' => $this->models->newUserReturnId()]);
+        return $authorId;
     }
 }
