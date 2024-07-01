@@ -1,10 +1,13 @@
 <?php
 namespace Tests\Unit\BaseFixture\Forum;
 
+use Coyote\Flag;
+use Coyote\Post;
 use Coyote\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\Concerns;
 use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
@@ -22,6 +25,12 @@ class ModelsFactoryTest extends TestCase
     {
         $this->models = new ModelsFactory();
         $this->app = $this->laravel->app;
+    }
+
+    #[Before]
+    public function removeFlags(): void
+    {
+        Flag::query()->delete();
     }
 
     #[Test]
@@ -88,5 +97,27 @@ class ModelsFactoryTest extends TestCase
     private function usersCount(): int
     {
         return User::query()->count();
+    }
+
+    #[Test]
+    public function newPostReport(): void
+    {
+        $this->models->newPostReported(reportContent:'report');
+        $this->assertDatabaseHas('flags', ['text' => 'report']);
+    }
+
+    #[Test]
+    public function newPostReported(): void
+    {
+        $this->models->newPostReported(reportContent:'report');
+        $this->assertTrue(Post::query()->whereHas('flags')->exists());
+    }
+
+    #[Test]
+    #[DoesNotPerformAssertions]
+    public function newPostReportedMany(): void
+    {
+        $this->models->newPostReported();
+        $this->models->newPostReported();
     }
 }
