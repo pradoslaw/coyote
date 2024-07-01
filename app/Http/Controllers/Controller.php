@@ -1,8 +1,11 @@
 <?php
 namespace Coyote\Http\Controllers;
 
+use Boduch\Grid\GridBuilder;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Services\Breadcrumbs;
+use Coyote\Services\FormBuilder\Form;
+use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\Guest;
 use Coyote\User;
 use Illuminate\Database\Connection;
@@ -10,10 +13,9 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\View\View;
 
-abstract class Controller extends BaseController
+abstract class Controller extends \Illuminate\Routing\Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests, CacheFactory;
 
@@ -59,7 +61,9 @@ abstract class Controller extends BaseController
      */
     protected function setSetting(string $name, $value)
     {
-        return app(Guest::class)->setSetting($name, $value);
+        /** @var Guest $guest */
+        $guest = app(Guest::class);
+        return $guest->setSetting($name, $value);
     }
 
     /**
@@ -80,41 +84,29 @@ abstract class Controller extends BaseController
         ];
     }
 
-    /**
-     * @param string $name
-     * @param null $default
-     * @return mixed|null
-     */
-    protected function getSetting($name, $default = null)
+    protected function getSetting(string $name, $default = null)
     {
-        return app(Guest::class)->getSetting($name, $default);
+        /** @var Guest $guest */
+        $guest = app(Guest::class);
+        return $guest->getSetting($name, $default);
     }
 
-    /**
-     * @param $formClass
-     * @param mixed $data
-     * @param array $options
-     * @return \Coyote\Services\FormBuilder\Form
-     */
-    protected function createForm($formClass, $data = null, array $options = [])
+    protected function createForm($formClass, $data = null, array $options = []): Form
     {
-        return app('form.builder')->createForm($formClass, $data, $options);
+        /** @var FormBuilder $builder */
+        $builder = app(FormBuilder::class);
+        return $builder->createForm($formClass, $data, $options);
     }
 
-    /**
-     * @return \Boduch\Grid\GridBuilder
-     */
-    protected function gridBuilder()
+    protected function gridBuilder(): GridBuilder
     {
-        return app('grid.builder');
+        return app(GridBuilder::class);
     }
 
-    /**
-     * @param \Closure $callback
-     * @return mixed
-     */
-    protected function transaction(\Closure $callback)
+    protected function transaction(callable $callback)
     {
-        return app(Connection::class)->transaction($callback);
+        /** @var Connection $connection */
+        $connection = app(Connection::class);
+        return $connection->transaction($callback);
     }
 }
