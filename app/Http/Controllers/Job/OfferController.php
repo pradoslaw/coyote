@@ -95,9 +95,13 @@ class OfferController extends Controller
 
     private function flags()
     {
-        $flags = resolve(Flags::class)->fromModels([Job::class, Comment::class])->permission('job-delete')->get();
-
-        return FlagResource::collection($flags)->toArray($this->request);
+        /** @var Flags $flags */
+        $flags = resolve(Flags::class);
+        $resourceFlags = $flags
+            ->fromModels([Job::class, Comment::class])
+            ->permission('job-delete')
+            ->get();
+        return FlagResource::collection($resourceFlags)->toArray($this->request);
     }
 
     private function subscriptions(): array

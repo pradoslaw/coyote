@@ -170,8 +170,13 @@ class TopicController extends BaseController
 
     private function flags(Forum $forum): array
     {
-        $flags = resolve(Flags::class)->fromModels([Topic::class])->permission('delete', [$forum])->get();
-        return FlagResource::collection($flags)->toArray($this->request);
+        /** @var Flags $flags */
+        $flags = resolve(Flags::class);
+        $resourceFlags = $flags
+            ->fromModels([Topic::class])
+            ->permission('delete', [$forum])
+            ->get();
+        return FlagResource::collection($resourceFlags)->toArray($this->request);
     }
 
     public function mark(Topic $topic): void

@@ -88,11 +88,12 @@ class HomeController extends Controller
 
     private function flags(): array
     {
-        $flags = app(Flags::class)
+        /** @var Flags $flags */
+        $flags = app(Flags::class);
+        $resourceFlags = $flags
             ->fromModels([Microblog::class])
             ->permission('microblog-delete')
             ->get();
-
-        return FlagResource::collection($flags)->toArray($this->request);
+        return FlagResource::collection($resourceFlags)->toArray($this->request);
     }
 }

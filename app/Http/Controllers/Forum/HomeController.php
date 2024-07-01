@@ -258,15 +258,18 @@ class HomeController extends BaseController
             ->setGuest($guest)
             ->setRepository($this->topic);
 
-        $flags = resolve(Flags::class)->fromModels([Topic::class])->permission('forum-delete')->get();
-
-        return $this->view('forum.topics')
-            ->with([
-                'topics'       => $topics,
-                'flags'        => FlagResource::collection($flags),
-                'postsPerPage' => $this->postsPerPage($this->request),
-                'renderParams' => $renderParams,
-            ]);
+        /** @var Flags $flags */
+        $flags = resolve(Flags::class);
+        $resourceFlags = $flags
+            ->fromModels([Topic::class])
+            ->permission('forum-delete')
+            ->get();
+        return $this->view('forum.topics', [
+            'topics'       => $topics,
+            'flags'        => FlagResource::collection($resourceFlags),
+            'postsPerPage' => $this->postsPerPage($this->request),
+            'renderParams' => $renderParams,
+        ]);
     }
 
     /**
