@@ -1,16 +1,12 @@
 <?php
 
+use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Schema\Builder;
+
 trait SchemaBuilder
 {
-    /**
-     * @var \Illuminate\Database\Schema\Builder
-     */
-    protected $schema;
-
-    /**
-     * @var \Illuminate\Database\Connection
-     */
-    protected $db;
+    protected DatabaseManager $db;
+    protected Builder $schema;
 
     public function __construct()
     {

@@ -1,147 +1,52 @@
 <?php
-
 namespace Database\Seeders;
 
+use Coyote\Group;
 use Illuminate\Database\Seeder;
 
 class PermissionsTableSeeder extends Seeder
 {
     use \SchemaBuilder;
 
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
+    {
+        $this->addPermission('adm-access', 'Dostęp do panelu administracyjnego');
+        $this->addPermission('adm-group', 'Edycja grup i ustawień');
+        $this->addPermission('adm-payment', 'Podgląd faktur i płatności');
+        $this->addPermission('comment-delete', 'Usuwanie komentarzy');
+        $this->addPermission('comment-update', 'Edycja komentarzy');
+        $this->addPermission('firm-delete', 'Usuwanie firm');
+        $this->addPermission('firm-update', 'Edycja firm');
+        $this->addPermission('forum-announcement', 'Pisanie ogłoszeń');
+        $this->addPermission('forum-delete', 'Kasowanie wątków i komentarzy');
+        $this->addPermission('forum-emphasis', 'Operatory ! oraz !! w komentarzach na forum');
+        $this->addPermission('forum-lock', 'Blokowanie wątków');
+        $this->addPermission('forum-merge', 'Łączenie postów');
+        $this->addPermission('forum-move', 'Przenoszenie wątków');
+        $this->addPermission('forum-sticky', 'Zakładanie przyklejonych tematów');
+        $this->addPermission('forum-update', 'Edycja postów i komentarzy');
+        $this->addPermission('guide-delete', 'Usuwanie wpisów z Q&A');
+        $this->addPermission('guide-update', 'Edycja wpisów z Q&A');
+        $this->addPermission('job-delete', 'Usuwanie ofert pracy');
+        $this->addPermission('job-update', 'Edycja ofert pracy');
+        $this->addPermission('microblog-delete', 'Usuwanie wpisów mikrobloga');
+        $this->addPermission('microblog-update', 'Edycja wpisów mikrobloga');
+        $this->addPermission('pastebin-delete', 'Usuwanie wpisów z Pastebin');
+        $this->addPermission('wiki-admin', 'Administracja stronami Wiki');
+
+        /** @var Group $group */
+        $group = Group::query()->firstWhere('name', 'Administrator');
+        $this->db->table('group_permissions')
+            ->where('group_id', $group->id)
+            ->update(['value' => true]);
+    }
+
+    private function addPermission(string $name, string $description): void
     {
         $this->db->table('permissions')->insert([
-            'name'           => 'adm-access',
-            'description'    => 'Dostęp do panelu administracyjnego',
-            'default'        => false
+            'name'        => $name,
+            'description' => $description,
+            'default'     => false,
         ]);
-
-        $this->db->table('permissions')->insert([
-            'name'           => 'adm-group',
-            'description'    => 'Edycja grup i ustawień',
-            'default'        => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name'           => 'adm-payment',
-            'description'    => 'Podgląd faktur i płatności',
-            'default'        => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name'           => 'forum-sticky',
-            'description'    => 'Zakładanie przyklejonych tematów',
-            'default'        => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name'           => 'forum-announcement',
-            'description'    => 'Pisanie ogłoszeń',
-            'default'        => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name'           => 'forum-delete',
-            'description'    => 'Kasowanie wątków i komentarzy',
-            'default'        => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name'           => 'forum-update',
-            'description'    => 'Edycja postów i komentarzy',
-            'default'        => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name'           => 'forum-lock',
-            'description'    => 'Blokowanie wątków',
-            'default'        => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name'           => 'forum-move',
-            'description'    => 'Przenoszenie wątków',
-            'default'        => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name'           => 'forum-merge',
-            'description'    => 'Łączenie postów',
-            'default'        => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name'           => 'forum-emphasis',
-            'description'    => 'Operatory ! oraz !! w komentarzach na forum',
-            'default'        => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name'           => 'wiki-admin',
-            'description'    => 'Administracja stronami Wiki',
-            'default'        => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name'           => 'pastebin-delete',
-            'description'    => 'Usuwanie wpisów z Pastebin',
-            'default'        => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name' => 'job-update',
-            'description' => 'Edycja ofert pracy',
-            'default' => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name' => 'job-delete',
-            'description' => 'Usuwanie ofert pracy',
-            'default' => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name' => 'firm-update',
-            'description' => 'Edycja firm',
-            'default' => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name' => 'firm-delete',
-            'description' => 'Usuwanie firm',
-            'default' => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name' => 'guide-delete',
-            'description' => 'Usuwanie wpisów z Q&A',
-            'default' => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name' => 'guide-update',
-            'description' => 'Edycja wpisów z Q&A',
-            'default' => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name' => 'comment-delete',
-            'description' => 'Usuwanie komentarzy',
-            'default' => false
-        ]);
-
-        $this->db->table('permissions')->insert([
-            'name' => 'comment-update',
-            'description' => 'Edycja komentarzy',
-            'default' => false
-        ]);
-
-        $group = \Coyote\Group::where('name', 'Administrator')->first();
-        $this->db->table('group_permissions')->where('group_id', '=', $group->id)->update(['value' => true]);
     }
 }
