@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -38,6 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Asset[] $assets
  * @property Vote[] $votes
  * @property Coyote\Post\Comment[] $comments
+ * @property Flag[] $flags
  * @property User $user
  * @property User $editor
  * @property User $deleter
@@ -86,6 +88,11 @@ class Post extends Model
     public function subscribers(): MorphMany
     {
         return $this->morphMany(Subscription::class, 'resource');
+    }
+
+    public function flags(): MorphToMany
+    {
+        return $this->morphToMany(Flag::class, 'resource', 'flag_resources');
     }
 
     public function assets(): MorphMany
