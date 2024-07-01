@@ -34,6 +34,27 @@ class ModelsFactoryTest extends TestCase
     }
 
     #[Test]
+    public function newUserName(): void
+    {
+        $this->models->newUser('Mark');
+        $this->assertDatabaseHas('users', ['name' => 'Mark']);
+    }
+
+    #[Test]
+    public function newUserDeleted(): void
+    {
+        $this->models->newUserDeleted('Mark');
+        $this->assertSoftDeleted('users', ['name' => 'Mark']);
+    }
+
+    #[Test]
+    public function newUserConfirmedEmail(): void
+    {
+        $this->models->newUserConfirmedEmail('mail');
+        $this->assertDatabaseHas('users', ['email' => 'mail', 'is_confirm' => true]);
+    }
+
+    #[Test]
     public function newUserMany(): void
     {
         $users = $this->usersCount();

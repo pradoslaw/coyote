@@ -6,16 +6,33 @@ use Coyote\User;
 
 class ModelsFactory
 {
-    public function newUser(): void
+    public function newUser(string $name = null): void
     {
-        $this->newUserReturn();
+        $this->newUserReturn(name:$name);
     }
 
-    private function newUserReturn(): User
+    public function newUserDeleted(string $name): void
+    {
+        $this->newUserReturn(name:$name, deleted:true);
+    }
+
+    public function newUserConfirmedEmail(string $email): void
+    {
+        $this->newUserReturn(email:$email, emailConfirmed:true);
+    }
+
+    private function newUserReturn(
+        string $name = null,
+        string $email = null,
+        bool   $emailConfirmed = null,
+        bool   $deleted = null,
+    ): User
     {
         $user = new User();
-        $user->name = 'irrelevant' . \uniqId();
-        $user->email = 'irrelevant';
+        $user->name = $name ?? 'irrelevant' . \uniqId();
+        $user->email = $email ?? 'irrelevant';
+        $user->is_confirm = $emailConfirmed ?? false;
+        $user->deleted_at = $deleted;
         $user->save();
         return $user;
     }

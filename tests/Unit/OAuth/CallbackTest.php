@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\OAuth;
 
+use Coyote\User;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
 use Tests\Unit\OAuth;
@@ -10,8 +11,8 @@ class CallbackTest extends TestCase
 {
     use BaseFixture\Server\Http;
     use BaseFixture\Server\RelativeUri;
+    use BaseFixture\Forum\Models;
     use OAuth\Fixture\Assertion;
-    use OAuth\Fixture\Models;
     use OAuth\Fixture\CallbackRequests;
     use OAuth\Fixture\CallbackAssertion;
 
@@ -70,7 +71,7 @@ class CallbackTest extends TestCase
      */
     public function failureDuplicateName()
     {
-        $this->newUser('John');
+        $this->models->newUser('John');
         $this->assertThat(
             $this->oAuthCallbackUsername('John'),
             $this->redirect(new UrlContainsQuery([
@@ -83,10 +84,12 @@ class CallbackTest extends TestCase
      */
     public function loginMergeUpdateAccount()
     {
-        $userId = $this->newUserConfirmedEmail('andy@mail');
+        $this->models->newUserConfirmedEmail('andy@mail');
         $this->oAuthLoggedIn('andy@mail', provider:'github', providerId:'provided-id');
-        $this->assertUserProvider($userId, 'github');
-        $this->assertUserProviderId($userId, 'provided-id');
+        /** @var User $user */
+        $user = User::query()->firstWhere('email', 'andy@mail');
+        $this->assertSame('github', $user->provider);
+        $this->assertSame('provided-id', $user->provider_id);
     }
 
     /**
@@ -94,7 +97,7 @@ class CallbackTest extends TestCase
      */
     public function failureDuplicateNameDeleted()
     {
-        $this->newUserDeleted('Mark');
+        $this->models->newUserDeleted('Mark');
         $this->assertThat(
             $this->oAuthCallbackUsername('Mark'),
             $this->redirect(new UrlContainsQuery([
