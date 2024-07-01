@@ -2,12 +2,13 @@
 namespace Tests\Unit\Seo\Microblog;
 
 use PHPUnit\Framework\TestCase;
+use Tests\Unit\BaseFixture;
 use Tests\Unit\Seo;
 
 class Test extends TestCase
 {
+    use BaseFixture\Forum\Models;
     use Seo\Microblog\Fixture\Assertion;
-    use Seo\Microblog\Fixture\Models;
     use Seo\Meta\Fixture\MetaCanonical;
     use Seo\Meta\Fixture\Assertion;
 
@@ -24,7 +25,7 @@ class Test extends TestCase
      */
     public function microblogSelfCanonical()
     {
-        $id = $this->newMicroblog();
+        $id = $this->models->newMicroblogReturnId();
         $this->assertSelfCanonical("/Mikroblogi/View/$id");
     }
 
@@ -41,7 +42,7 @@ class Test extends TestCase
      */
     public function microblogIndexable()
     {
-        $id = $this->newMicroblog();
+        $id = $this->models->newMicroblogReturnId();
         $this->assertIndexable("/Mikroblogi/View/$id");
     }
 }
