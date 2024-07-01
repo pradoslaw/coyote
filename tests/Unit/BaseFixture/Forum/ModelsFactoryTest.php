@@ -114,6 +114,22 @@ class ModelsFactoryTest extends TestCase
     }
 
     #[Test]
+    public function newPostDeletedReported(): void
+    {
+        $this->models->newPostDeletedReported(reportContent:'report');
+        $this->assertTrue($this->reportPost('report')->trashed());
+    }
+
+    private function reportPost(string $reportContent): Post
+    {
+        /** @var Flag $model */
+        $model = Flag::query()->where('text', $reportContent)->first();
+        /** @var Post $post */
+        $post = $model->posts()->withTrashed()->first();
+        return $post;
+    }
+
+    #[Test]
     #[DoesNotPerformAssertions]
     public function newPostReportedMany(): void
     {

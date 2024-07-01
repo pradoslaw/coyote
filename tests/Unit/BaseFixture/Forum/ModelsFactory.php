@@ -68,6 +68,16 @@ class ModelsFactory
 
     public function newPostReported(string $reportContent = null): void
     {
+        $this->createPostWithReport($reportContent, null);
+    }
+
+    public function newPostDeletedReported(string $reportContent): void
+    {
+        $this->createPostWithReport($reportContent, 1);
+    }
+
+    private function createPostWithReport(?string $reportContent, ?int $deletedAt): void
+    {
         $forumId = $this->newForumReturnId();
         /** @var Post $post */
         $post = Post::query()->create([
@@ -76,6 +86,9 @@ class ModelsFactory
             'topic_id' => $this->newTopicReturnId($forumId),
             'forum_id' => $forumId,
         ]);
+        if ($deletedAt) {
+            $post->delete();
+        }
         $flag = $this->newReport($reportContent);
         $flag->posts()->attach($post->id);
         $flag->save();
