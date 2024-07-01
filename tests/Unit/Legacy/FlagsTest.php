@@ -53,4 +53,13 @@ class FlagsTest extends TestCase
         $this->flags->fromModels([Microblog::class]);
         $this->assertEmpty($this->flags->get()->pluck('text')->toArray());
     }
+
+    #[Test]
+    public function shouldReturnReports_ofDeletedResources(): void
+    {
+        $this->models->newPostDeletedReported(reportContent:'reported text');
+        $this->assertSame(
+            ['reported text'],
+            $this->flags->get()->pluck('text')->toArray());
+    }
 }
