@@ -34,6 +34,13 @@ class ModelsFactoryTest extends TestCase
     }
 
     #[Test]
+    public function newUserReturnId(): void
+    {
+        $id = $this->models->newUserReturnId();
+        $this->assertDatabaseHas('users', ['id' => $id]);
+    }
+
+    #[Test]
     public function newUserName(): void
     {
         $this->models->newUser('Mark');

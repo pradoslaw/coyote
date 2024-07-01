@@ -16,6 +16,11 @@ class ModelsFactory
         $this->newUserReturn(name:$name, deleted:true);
     }
 
+    public function newUserReturnId(): int
+    {
+        return $this->newUserReturn()->id;
+    }
+
     public function newUserConfirmedEmail(string $email): void
     {
         $this->newUserReturn(email:$email, emailConfirmed:true);
