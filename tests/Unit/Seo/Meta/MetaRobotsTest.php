@@ -7,7 +7,7 @@ use Tests\Unit\Seo;
 
 class MetaRobotsTest extends TestCase
 {
-    use BaseFixture\Server\Laravel\Transactional;
+    use BaseFixture\Server\Laravel\Application;
     use Seo\Meta\Fixture\Assertion;
 
     /**
