@@ -51,7 +51,11 @@ class CategoryController extends BaseController
             )
             ->appends($request->except('page'));
 
-        $flags = resolve(Flags::class)->fromModels([Topic::class])->permission('delete', [$forum])->get();
+        /** @var Flags $flagsService */
+        $flagsService = resolve(Flags::class);
+        $flags = $flagsService->fromModels([Topic::class])
+            ->permission('delete', [$forum])
+            ->get();
         $flags = FlagResource::collection($flags);
 
         $guest = new Guest($this->guestId);
