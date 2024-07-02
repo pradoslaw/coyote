@@ -10,27 +10,7 @@ use Coyote\User;
 
 class ModelsFactory
 {
-    public function newUser(string $name = null): void
-    {
-        $this->newUserReturn(name:$name);
-    }
-
-    public function newUserDeleted(string $name): void
-    {
-        $this->newUserReturn(name:$name, deleted:true);
-    }
-
-    public function newUserReturnId(): int
-    {
-        return $this->newUserReturn()->id;
-    }
-
-    public function newUserConfirmedEmail(string $email): void
-    {
-        $this->newUserReturn(email:$email, emailConfirmed:true);
-    }
-
-    private function newUserReturn(
+    public function newUserReturn(
         string $name = null,
         string $email = null,
         bool   $emailConfirmed = null,
@@ -46,37 +26,7 @@ class ModelsFactory
         return $user;
     }
 
-    public function newMicroblog(string $contentMarkdown = null): void
-    {
-        $this->createMicroblog($contentMarkdown);
-    }
-
-    public function newMicroblogReturnId(): int
-    {
-        return $this->createMicroblog(null);
-    }
-
-    private function createMicroblog(?string $contentMarkdown): int
-    {
-        /** @var Microblog $microblog */
-        $microblog = Microblog::query()->create([
-            'user_id' => $this->newUserReturn()->id,
-            'text'    => $contentMarkdown ?? 'irrelevant',
-        ]);
-        return $microblog->id;
-    }
-
-    public function newPostReported(string $reportContent = null): void
-    {
-        $this->createPostWithReport($reportContent, null);
-    }
-
-    public function newPostDeletedReported(string $reportContent): void
-    {
-        $this->createPostWithReport($reportContent, 1);
-    }
-
-    private function createPostWithReport(?string $reportContent, ?int $deletedAt): void
+    public function newPostReturn(): Post
     {
         $forumId = $this->newForumReturnId();
         /** @var Post $post */
@@ -86,9 +36,35 @@ class ModelsFactory
             'topic_id' => $this->newTopicReturnId($forumId),
             'forum_id' => $forumId,
         ]);
-        if ($deletedAt) {
-            $post->delete();
-        }
+        return $post;
+    }
+
+    private function newForumReturnId(): int
+    {
+        /** @var Forum $forum */
+        $forum = Forum::query()->create(['name' => 'irrelevant', 'slug' => 'irrelevant', 'description' => 'irrelevant']);
+        return $forum->id;
+    }
+
+    private function newTopicReturnId(int $forumId): int
+    {
+        /** @var Topic $model */
+        $model = Topic::query()->create(['title' => 'irrelevant', 'forum_id' => $forumId]);
+        return $model->id;
+    }
+
+    public function newMicroblogReturnId(?string $contentMarkdown): int
+    {
+        /** @var Microblog $microblog */
+        $microblog = Microblog::query()->create([
+            'user_id' => $this->newUserReturn()->id,
+            'text'    => $contentMarkdown ?? 'irrelevant',
+        ]);
+        return $microblog->id;
+    }
+
+    public function reportPost(Post $post, ?string $reportContent): void
+    {
         $flag = $this->newReport($reportContent);
         $flag->posts()->attach($post->id);
         $flag->save();
@@ -99,7 +75,7 @@ class ModelsFactory
         /** @var Flag $flag */
         $flag = Flag::query()->create([
             'type_id' => $this->flagTypeId(),
-            'user_id' => $this->newUserReturnId(),
+            'user_id' => $this->newUserReturn()->id,
             'url'     => '',
             'text'    => $content,
         ]);
@@ -109,19 +85,5 @@ class ModelsFactory
     private function flagTypeId(): int
     {
         return Flag\Type::query()->first()->id;
-    }
-
-    private function newTopicReturnId(int $forumId): int
-    {
-        /** @var Topic $model */
-        $model = Topic::query()->create(['title' => 'irrelevant', 'forum_id' => $forumId]);
-        return $model->id;
-    }
-
-    private function newForumReturnId(): int
-    {
-        /** @var Forum $forum */
-        $forum = Forum::query()->create(['name' => 'irrelevant', 'slug' => 'irrelevant', 'description' => 'irrelevant']);
-        return $forum->id;
     }
 }
