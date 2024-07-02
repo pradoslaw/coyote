@@ -2,7 +2,6 @@
 
 // @deprecated
 $this->any('token/verify', ['uses' => 'User\SessionTokenController@verifyToken']);
-$this->get('users/{user}', ['uses' => 'User\UserApiController@get']);
 
 $this->prefix('v1')->group(function () {
     $this->get('microblogs', ['uses' => 'Api\MicroblogsController@index']);
@@ -27,4 +26,3 @@ if (config('services.api.host') && env('APP_ENV') !== 'testing') {
     // catch all url's and redirect to correct URL (like from api.4programmers.net/Forum to 4programmers.net/Forum)
     $this->get('{path}', ['uses' => 'Api\PermanentRedirectController@redirect'])->where('path', '.*');
 }
-
