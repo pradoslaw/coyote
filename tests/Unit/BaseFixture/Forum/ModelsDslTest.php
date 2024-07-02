@@ -136,4 +136,25 @@ class ModelsDslTest extends TestCase
         $this->models->newPostReported();
         $this->models->newPostReported();
     }
+
+    #[Test]
+    public function newUserWithPermission(): void
+    {
+        $userId = $this->models->newUserReturnId('forum-delete');
+        $this->assertUserCan(true, $userId, 'forum-delete');
+    }
+
+    #[Test]
+    public function newUserWithPermissionNoOther(): void
+    {
+        $userId = $this->models->newUserReturnId(permissionName:'job-update');
+        $this->assertUserCan(false, $userId, 'forum-delete');
+    }
+
+    private function assertUserCan(bool $expected, int $userId, string $permission): void
+    {
+        /** @var User $user */
+        $user = User::query()->findOrFail($userId);
+        $this->assertSame($expected, $user->can($permission));
+    }
 }

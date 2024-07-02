@@ -3,6 +3,7 @@ namespace Coyote\Providers;
 
 use Coyote\Domain\Clock;
 use Coyote\Domain\Github\GithubStars;
+use Coyote\Domain\Moderator\ReportNotifications;
 use Coyote\Domain\User\UserSettings;
 use Coyote\Http\Composers\InitialStateComposer;
 use Coyote\Http\Factories\CacheFactory;
@@ -33,15 +34,16 @@ class ViewServiceProvider extends ServiceProvider
         $view->composer(['layout', 'adm.home'], InitialStateComposer::class);
         $view->composer('layout', function (View $view) use ($clock, $cache) {
             $view->with([
-                '__master_menu'  => $this->buildMasterMenu(),
-                '__dark_theme'   => $this->initialDarkTheme(),
-                '__color_scheme' => $this->colorScheme(),
-                'github_stars'   => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
-                'gdpr'           => [
-                    'content' => (new UserSettings)->cookieAgreement(),
+                '__master_menu'       => $this->buildMasterMenu(),
+                '__dark_theme'        => $this->initialDarkTheme(),
+                '__color_scheme'      => $this->colorScheme(),
+                'github_stars'        => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
+                'gdpr'                => [
+                    'content'  => (new UserSettings)->cookieAgreement(),
                     'accepted' => $this->gdprAccepted(),
                 ],
-                'year'           => $clock->year(),
+                'year'                => $clock->year(),
+                'reportNotifications' => $this->reportNotifications(),
             ]);
         });
     }
@@ -128,5 +130,10 @@ class ViewServiceProvider extends ServiceProvider
             return 'system';
         }
         return $legacyDarkTheme ? 'dark' : 'light';
+    }
+
+    private function reportNotifications(): ReportNotifications
+    {
+        return new ReportNotifications(auth()->user());
     }
 }
