@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Domain\User\MenuItem;
-use Coyote\Http\Controllers\User\Menu\AccountMenu;
 use Coyote\Job;
 use Coyote\Microblog;
 use Coyote\Models\Subscription;
@@ -15,13 +14,10 @@ use Lavary\Menu\Menu;
 
 class FavoritesController extends BaseController
 {
-    use AccountMenu;
-
     public function __construct()
     {
         parent::__construct();
-
-        $this->breadcrumb->push('Ulubione i obserwowane strony', route('user.favorites'));
+        $this->breadcrumb->push('Obserwowane strony', route('user.favorites'));
     }
 
     public function index(): RedirectResponse
@@ -50,19 +46,19 @@ class FavoritesController extends BaseController
     protected function load(string $resource): View
     {
         $subscriptions = Subscription::where('user_id', $this->userId)
-          ->whereHasMorph('resource', [$resource])
-          ->with('resource')
-          ->orderBy('id', 'DESC')
-          ->paginate();
+            ->whereHasMorph('resource', [$resource])
+            ->with('resource')
+            ->orderBy('id', 'DESC')
+            ->paginate();
 
         return $this->view(
-          'user.favorites',
-          [
-            'tabs'          => $this->getTabs(),
-            'partial'       => $this->request->route()->getName(),
-            'subscriptions' => $subscriptions,
-            'paginate'      => $subscriptions->links()
-          ]
+            'user.favorites',
+            [
+                'tabs'          => $this->getTabs(),
+                'partial'       => $this->request->route()->getName(),
+                'subscriptions' => $subscriptions,
+                'paginate'      => $subscriptions->links(),
+            ],
         );
     }
 

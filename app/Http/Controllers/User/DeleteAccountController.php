@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\UserDeleted;
-use Coyote\Http\Controllers\User\Menu\AccountMenu;
 use Coyote\Rules\PasswordCheck;
 use Coyote\Services\Stream\Activities\Delete;
 use Coyote\Services\Stream\Objects\Person;
@@ -20,30 +19,29 @@ class DeleteAccountController extends BaseController
         logout as traitLogout;
     }
 
-    use AccountMenu;
-
     public function index(): View
     {
+        $this->breadcrumb->push('Usuń konto', route('user.delete'));
         return $this->view('user.delete');
     }
 
     public function delete(Request $request, Guard $guard): RedirectResponse
     {
         $this->validate($request, [
-          'password' => [
-            'bail',
-            Rule::requiredIf(fn() => $this->auth->password !== null),
-            app(PasswordCheck::class)
-          ]
+            'password' => [
+                'bail',
+                Rule::requiredIf(fn() => $this->auth->password !== null),
+                app(PasswordCheck::class),
+            ],
         ]);
 
         $this->auth->timestamps = false;
         $this->auth->forceFill([
-          'ip'         => $request->ip(),
-          'browser'    => $request->browser(),
-          'visits'     => $this->auth->visits + 1,
-          'visited_at' => now(),
-          'is_online'  => false
+            'ip'         => $request->ip(),
+            'browser'    => $request->browser(),
+            'visits'     => $this->auth->visits + 1,
+            'visited_at' => now(),
+            'is_online'  => false,
         ]);
 
         $this->transaction(function () use ($request, $guard) {

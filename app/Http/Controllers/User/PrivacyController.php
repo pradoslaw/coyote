@@ -1,11 +1,12 @@
 <?php
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PrivacyController extends BaseController
+class PrivacyController extends Controller
 {
     public function set(Request $request): Response
     {
@@ -19,9 +20,9 @@ class PrivacyController extends BaseController
                 'advertising' => (bool)$request->get('advertising'),
             ]);
             $this->auth->save();
-            return response(status: 200);
+            return response(status:200);
         }
-        return response(status: 403);
+        return response(status:403);
     }
 
     public function reset(): RedirectResponse

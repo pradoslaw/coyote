@@ -1,12 +1,11 @@
 {% extends 'user.base' %}
-{% block title %}Moje oceny{{ parent() }}{% endblock %}
+{% block title %}Oceny moich postów{{ parent() }}{% endblock %}
 
 {% block content %}
-    <h2>Moje oceny</h2>
-
-    <div id="box-start" class="card card-default">
-        <div class="card-body">
-            {{ grid(grid) }}
-        </div>
+  <h2>Oceny moich postów</h2>
+  <div id="box-start" class="card card-default">
+    <div class="card-body">
+      {{ grid(grid) }}
     </div>
+  </div>
 {% endblock %}

@@ -1,10 +1,10 @@
 {% extends 'user.base' %}
-{% block title %}Ulubione i obserwowane strony{{ parent() }}{% endblock %}
+{% block title %}Obserwowane strony{{ parent() }}{% endblock %}
 
 {% import 'components.forms' as forms %}
 
 {% block content %}
-  <h2>Ulubione i obserwowane strony</h2>
+  <h2>Obserwowane strony</h2>
 
   <nav class="nav nav-panel nav-card">
     {% for tab in tabs.roots() %}

@@ -1,8 +1,6 @@
 <?php
-
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Http\Controllers\User\Menu\SettingsMenu;
 use Coyote\Http\Requests\SkillsRequest;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Tag;
@@ -12,15 +10,13 @@ use Illuminate\View\View;
 
 class SkillsController extends BaseController
 {
-    use SettingsMenu;
-
     public function index(): View
     {
-        $this->breadcrumb->push('Umiejętności', route('user.skills'));
+        $this->breadcrumb->push('Twoje umiejętności', route('user.skills'));
 
         return $this->view('user.skills')->with([
-          'skills'      => TagResource::collection($this->auth->skills->load('category')),
-          'rate_labels' => SkillsRequest::RATE_LABELS
+            'skills'      => TagResource::collection($this->auth->skills->load('category')),
+            'rate_labels' => SkillsRequest::RATE_LABELS,
         ]);
     }
 
@@ -38,13 +34,13 @@ class SkillsController extends BaseController
     public function update(Request $request, int $id): void
     {
         $this
-          ->auth
-          ->skills()
-          ->newPivotStatement()
-          ->where('resource_id', $this->userId)
-          ->where('resource_type', User::class)
-          ->where('tag_id', $id)
-          ->update(['priority' => $request->input('priority')]);
+            ->auth
+            ->skills()
+            ->newPivotStatement()
+            ->where('resource_id', $this->userId)
+            ->where('resource_type', User::class)
+            ->where('tag_id', $id)
+            ->update(['priority' => $request->input('priority')]);
     }
 
     public function delete(int $id)
