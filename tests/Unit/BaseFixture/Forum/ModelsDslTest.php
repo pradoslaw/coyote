@@ -12,18 +12,18 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
 
-class ModelsFactoryTest extends TestCase
+class ModelsDslTest extends TestCase
 {
     use BaseFixture\Server\Laravel\Transactional;
     use Concerns\InteractsWithDatabase;
 
-    private ModelsFactory $models;
+    private ModelsDsl $models;
     private Application $app;
 
     #[Before]
     public function initializeModels(): void
     {
-        $this->models = new ModelsFactory();
+        $this->models = new ModelsDsl();
         $this->app = $this->laravel->app;
     }
 
