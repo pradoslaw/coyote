@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\PmCreated;
 use Coyote\Events\PmRead;
-use Coyote\Http\Controllers\User\Menu\AccountMenu;
 use Coyote\Http\Requests\PmRequest;
 use Coyote\Http\Resources\PmResource;
 use Coyote\Notifications\PmCreatedNotification;
@@ -24,8 +23,6 @@ use function app;
 
 class PmController extends BaseController
 {
-    use AccountMenu;
-
     private UserRepository $user;
     private NotificationRepository $notification;
     private PmRepository $pm;

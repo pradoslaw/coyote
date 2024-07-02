@@ -1,8 +1,6 @@
 <?php
-
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Http\Controllers\User\Menu\SettingsMenu;
 use Coyote\Http\Resources\UserResource;
 use Illuminate\Contracts\Cache;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,25 +8,21 @@ use Illuminate\View\View;
 
 class RelationsController extends BaseController
 {
-    use SettingsMenu;
-
-    private Cache\Repository $cache;
-
-    public function __construct(Cache\Repository $cache)
+    public function __construct(private Cache\Repository $cache)
     {
         parent::__construct();
-        $this->cache = $cache;
     }
 
     public function showRelations(): View
     {
+        $this->breadcrumb->push('Zablokowani oraz obserwowani', route('user.relations'));
         $users = $this->auth->relations()
-          ->with(['relatedUser' => fn(BelongsTo $builder) => $builder->withTrashed()])
-          ->get()
-          ->pluck('relatedUser');
+            ->with(['relatedUser' => fn(BelongsTo $builder) => $builder->withTrashed()])
+            ->get()
+            ->pluck('relatedUser');
 
         return $this->view('user.relations', [
-          'users' => UserResource::collection($users)
+            'users' => UserResource::collection($users),
         ]);
     }
 

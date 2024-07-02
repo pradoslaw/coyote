@@ -1,11 +1,8 @@
 <?php
-
 namespace Coyote\Http\Controllers\User;
 
 use Carbon;
 use Coyote\Events\NotificationRead;
-use Coyote\Http\Controllers\User\Menu\AccountMenu;
-use Coyote\Http\Controllers\User\Menu\SettingsMenu;
 use Coyote\Http\Resources\NotificationResource;
 use Coyote\Notification;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface;
@@ -16,26 +13,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
-use Lavary\Menu\Builder;
 
 class NotificationsController extends BaseController
 {
-    use SettingsMenu, AccountMenu {
-        SettingsMenu::getSideMenu as settingsSideMenu;
-        AccountMenu::getSideMenu as homeSideMenu;
-    }
-
     public function __construct(private NotificationRepositoryInterface $notification)
     {
         parent::__construct();
-    }
-
-    public function getSideMenu(): Builder
-    {
-        if ($this->request->route()->getName() == 'user.notifications') {
-            return $this->homeSideMenu();
-        }
-        return $this->settingsSideMenu();
     }
 
     public function index(): View

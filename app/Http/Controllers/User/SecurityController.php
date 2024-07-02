@@ -1,21 +1,17 @@
 <?php
-
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Http\Controllers\User\Menu\SettingsMenu;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class SecurityController extends BaseController
 {
-    use SettingsMenu;
-
     public function index(): View
     {
-        $this->breadcrumb->push('Bezpieczeństwo', route('user.security'));
+        $this->breadcrumb->push('Dostęp', route('user.security'));
         return $this->view('user.security', [
-          'ips' => explode('.', auth()->user()->access_ip)
+            'ips' => explode('.', auth()->user()->access_ip),
         ]);
     }
 

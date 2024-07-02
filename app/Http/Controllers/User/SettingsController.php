@@ -1,11 +1,9 @@
 <?php
-
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Actkey;
 use Coyote\Domain\User\UserSettings;
 use Coyote\Events\UserSaved;
-use Coyote\Http\Controllers\User\Menu\SettingsMenu;
 use Coyote\Http\Forms\User\SettingsForm;
 use Coyote\Mail\EmailConfirmation;
 use Coyote\Services\FormBuilder\Form;
@@ -18,11 +16,9 @@ use Illuminate\View\View;
 
 class SettingsController extends BaseController
 {
-    use SettingsMenu;
-
     public function index(): View
     {
-        $this->breadcrumb->push('Ustawienia', route('user.settings'));
+        $this->breadcrumb->push('Ustawienia konta', route('user.settings'));
         $email = $this->auth->actkey()->value('email');
         $form = $this->getForm();
         if ($email) {
