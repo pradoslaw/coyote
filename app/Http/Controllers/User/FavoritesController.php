@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Domain\User\UserMenu;
+use Coyote\Domain\User\MenuItem;
 use Coyote\Http\Controllers\User\Menu\AccountMenu;
 use Coyote\Job;
 use Coyote\Microblog;
@@ -68,7 +68,11 @@ class FavoritesController extends BaseController
 
     protected function getTabs(): Builder
     {
-        $menuItems = (new UserMenu())->favouriteTabs();
+        $menuItems = [
+            new MenuItem('Wątki na forum', 'user.favorites.forum'),
+            new MenuItem('Oferty pracy', 'user.favorites.job'),
+            new MenuItem('Mikroblogi', 'user.favorites.microblog'),
+        ];
 
         /** @var Menu $menu */
         $menu = app(Menu::class);
