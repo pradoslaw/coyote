@@ -150,17 +150,17 @@
 
               <div class="dropdown-divider"></div>
 
+              <a class="dropdown-item" href="{{ route('profile', [user('id')]) }}">
+                <i class="fas fa-user fa-fw"></i>
+                Profil
+              </a>
               <a class="dropdown-item" href="{{ route('user.pm') }}">
                 <i class="fas fa-envelope fa-fw"></i>
                 Wiadomości
               </a>
-              <a class="dropdown-item" href="{{ route('user.settings') }}">
+              <a class="dropdown-item" href="{{ route('user.home') }}">
                 <i class="fas fa-cog fa-fw"></i>
-                Ustawienia
-              </a>
-              <a class="dropdown-item" href="{{ route('profile', [user('id')]) }}">
-                <i class="fas fa-user fa-fw"></i>
-                Profil
+                Moje konto
               </a>
               <a class="dropdown-item" href="{{ url('Pomoc') }}">
                 <i class="fas fa-info-circle fa-fw"></i>
