@@ -3,18 +3,16 @@ namespace Coyote\Http\Controllers\Profile;
 
 use Coyote\Domain\View\Chart;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Controllers\User\Menu\ProfileNavigation;
 use Coyote\Http\Requests\SkillsRequest;
 use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Http\Resources\UserResource;
 use Coyote\Microblog;
 use Coyote\Post;
-use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
-use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
-use Coyote\Repositories\Eloquent\MicroblogRepository;
+use Coyote\Repositories\Eloquent\PostRepository;
+use Coyote\Repositories\Eloquent\ReputationRepository;
+use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Services\Microblogs\Builder;
 use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\User;
@@ -23,13 +21,10 @@ use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    use ProfileNavigation;
-
     public function __construct(
         private UserRepository       $user,
         private ReputationRepository $reputation,
         private PostRepository       $post,
-        private MicroblogRepository  $microblog,
     )
     {
         parent::__construct();
@@ -46,15 +41,7 @@ class HomeController extends Controller
     {
         $this->breadcrumb->push($user->name, route('profile', ['user_trashed' => $user->id]));
 
-        $menu = $this->getUserMenu();
-
-        if ($menu->get('profile')) {
-            // activate "Profile" tab no matter what.
-            $menu->get('profile')->activate();
-        }
-
         return $this->view('profile.home')->with([
-            'top_menu'           => $menu,
             'user'               => new UserResource($user),
             'skills'             => TagResource::collection($user->skills->load('category')),
             'rate_labels'        => SkillsRequest::RATE_LABELS,
@@ -78,7 +65,7 @@ class HomeController extends Controller
             'rank'        => $this->user->rank($user->id),
             'total_users' => $this->user->countUsersWithReputation(),
             'reputation'  => $this->reputation->history($user->id),
-            'chart' => $this->chart($user),
+            'chart'       => $this->chart($user),
         ]);
     }
 

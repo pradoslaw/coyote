@@ -7,10 +7,6 @@
     var skills = {{ skills|json_encode|raw }};
   </script>
 
-  {% if user.id == user('id') %}
-    {{ include('user/top', {active: 'profile'}) }}
-  {% endif %}
-
   <div class="row">
     <div class="col-md-9">
       {% if user.is_blocked %}
