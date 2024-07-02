@@ -20,18 +20,6 @@ class UserMenu
     /**
      * @return MenuItem[]
      */
-    public function favouriteTabs(): array
-    {
-        return [
-            new MenuItem('Wątki na forum', 'user.favorites.forum'),
-            new MenuItem('Oferty pracy', 'user.favorites.job'),
-            new MenuItem('Mikroblogi', 'user.favorites.microblog'),
-        ];
-    }
-
-    /**
-     * @return MenuItem[]
-     */
     public function settingsMenu(): array
     {
         return [
