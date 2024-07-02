@@ -3,49 +3,50 @@
 {% import 'components.forms' as forms %}
 
 {% block container %}
-    {{ include('user.top', {active: 'settings'}) }}
+  {{ include('user.top', {active: 'settings'}) }}
 
-    <div class="row">
-        <menu class="col-md-2">
-            <ul class="side-menu">
-                {% for item in side_menu.roots() %}
-                    <li id="{{ item.attr.id }}">
-                        <a href="{{ item.url }}">
-                            <i class="{{ item.attr.icon }}"></i>
-                            {{ item.title }}
-                            <small>{{ item.attr.subscript }}</small>
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </menu>
+  <div class="row">
+    <menu class="col-md-2">
+      <ul class="side-menu">
+        {% for item in side_menu.roots() %}
+          <li id="{{ item.attr.id }}">
+            <a href="{{ item.url }}">
+              <i class="{{ item.attr.icon }}"></i>
+              {{ item.title }}
+              <small>{{ item.attr.subscript }}</small>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </menu>
 
-        <main class="col-md-10">
-            {% if errors.any %}
-                <div class="alert alert-danger">
-                    Formularz zawiera błędy. Sprawdź poprawność wprowadzonych danych i spróbuj ponownie.
-                </div>
-            {% endif %}
+    <main class="col-md-10">
+      {% if errors.any %}
+        <div class="alert alert-danger">
+          Formularz zawiera błędy. Sprawdź poprawność wprowadzonych danych i spróbuj ponownie.
+        </div>
+      {% endif %}
 
-            {% if not user('is_confirm') %}
-                <p class="alert alert-warning">
-                    Twój adres e-mail <strong>nie został potwierdzony</strong>. Nie będziesz dostawał
-                    żadnych powiadomień na email. Nie będziemy mogli również wygenerować Ci nowego hasła.
-                    
-                    <br>
+      {% if not user('is_confirm') %}
+        <div class="alert alert-warning">
+          <p class="mb-0">
+            Twój adres e-mail <strong>nie został potwierdzony</strong>. Nie będziesz dostawał
+            żadnych powiadomień na email. Nie będziemy mogli również wygenerować Ci nowego hasła.
+          </p>
+          <p class="mb-0">
+            <a class="alert-link" href="{{ url('Confirm') }}">Kliknij, aby wygenerować</a> link
+            aktywacyjny umożliwiający potwierdzenie adresu e-mail.
+          </p>
+        </div>
+      {% endif %}
 
-                    <a class="alert-link" href="{{ url('Confirm') }}">Kliknij, aby wygenerować</a> link
-                    aktywacyjny umożliwiający potwierdzenie adresu e-mail.
-                </p>
-            {% endif %}
-
-            {% block wrapper %}
-                <section class="card card-wrapper">
-                    <div class="card-body">
-                        {% block content %}{% endblock content %}
-                    </div>
-                </section>
-            {% endblock %}
-        </main>
-    </div>
+      {% block wrapper %}
+        <section class="card card-wrapper">
+          <div class="card-body">
+            {% block content %}{% endblock content %}
+          </div>
+        </section>
+      {% endblock %}
+    </main>
+  </div>
 {% endblock %}
