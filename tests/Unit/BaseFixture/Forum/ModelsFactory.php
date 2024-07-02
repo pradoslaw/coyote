@@ -3,7 +3,9 @@ namespace Tests\Unit\BaseFixture\Forum;
 
 use Coyote\Flag;
 use Coyote\Forum;
+use Coyote\Group;
 use Coyote\Microblog;
+use Coyote\Permission;
 use Coyote\Post;
 use Coyote\Topic;
 use Coyote\User;
@@ -24,6 +26,23 @@ class ModelsFactory
         $user->deleted_at = $deleted;
         $user->save();
         return $user;
+    }
+
+    public function assignToGroupWithPermission(User $user, string $permissionName): void
+    {
+        $user->groups()->sync([$this->groupWithPermission($permissionName)->id]);
+    }
+
+    private function groupWithPermission(string $permissionName): Group
+    {
+        /** @var Permission $permission */
+        $permission = Permission::query()->createOrFirst(
+            ['name' => $permissionName],
+            ['name' => $permissionName]);
+        /** @var Group $group */
+        $group = Group::query()->create(['name' => 'irrelevant']);
+        $group->permissions()->updateExistingPivot($permission->id, ['value' => true]);
+        return $group;
     }
 
     public function newPostReturn(): Post
