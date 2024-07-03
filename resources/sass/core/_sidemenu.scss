@@ -6,16 +6,20 @@
   list-style-type: none;
 
   > li {
-    margin-bottom: 2px;
-    border-bottom: 1px solid $card-border-color;
     position: relative;
+
+    &.divider {
+      margin-bottom: 4px;
+      margin-top: 4px;
+      border-bottom: 1px solid $card-border-color;
+    }
 
     > a {
       color: $gray-dark;
       cursor: pointer;
       display: block;
       padding: 8px 0 8px 5px;
-      text-shadow: 1px 1px #FFF;
+      text-shadow: 1px 1px #fff;
       font-weight: bold;
       font-size: 12px;
       opacity: .8;
@@ -57,7 +61,6 @@
   //  }
   //}
 }
-
 
 // Favorite icon can be shown in multiple places
 // ------------------------------------------------

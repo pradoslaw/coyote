@@ -342,7 +342,9 @@ body.theme-dark {
 
   ul.side-menu {
     li {
-      border-bottom: 1px solid #2f2f2f !important;
+      &.divider {
+        border-bottom: 1px solid #2f2f2f;
+      }
 
       a {
         color: #acacac;
