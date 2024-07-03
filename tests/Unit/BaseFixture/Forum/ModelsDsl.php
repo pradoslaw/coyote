@@ -1,6 +1,8 @@
 <?php
 namespace Tests\Unit\BaseFixture\Forum;
 
+use Carbon\Carbon;
+
 readonly class ModelsDsl
 {
     private ModelsFactory $models;
@@ -36,24 +38,99 @@ readonly class ModelsDsl
 
     public function newMicroblog(string $contentMarkdown = null): void
     {
-        $this->models->newMicroblogReturnId($contentMarkdown);
+        $this->models->newMicroblogReturn($contentMarkdown);
+    }
+
+    public function newMicroblogDeletedAt(string $contentMarkdown, string $deletedAtNoTz): void
+    {
+        $this->models->newMicroblogReturn(content:$contentMarkdown, deletedAt:$deletedAtNoTz);
     }
 
     public function newMicroblogReturnId(): int
     {
-        return $this->models->newMicroblogReturnId(null);
+        return $this->models->newMicroblogReturn()->id;
     }
 
-    public function newPostReported(string $reportContent = null): void
+    public function newPost(string $contentMarkdown): void
     {
-        $post = $this->models->newPostReturn();
+        $this->models->newPostReturn(content:$contentMarkdown);
+    }
+
+    public function newPostCreatedAt(string $createdAt): void
+    {
+        $this->models->newPostReturn(createdAt:new Carbon($createdAt, 'UTC'));
+    }
+
+    public function newPostAuthor(string $authorName): void
+    {
+        $this->models->newPostReturn(authorName:$authorName);
+    }
+
+    public function newPostAuthorPhoto(string $authorPhotoUrl): void
+    {
+        $this->models->newPostReturn(authorPhotoUrl:$authorPhotoUrl);
+    }
+
+    public function newPostReturnAuthorId(string $contentMarkdown): int
+    {
+        $post = $this->models->newPostReturn($contentMarkdown);
+        return $post->user_id;
+    }
+
+    public function newPostDeleted(string $contentMarkdown): void
+    {
+        $this->newPostDeletedAt($contentMarkdown, '1970-01-01 00:00:00');
+    }
+
+    public function newPostDeletedAt(string $contentMarkdown, string $deletedAtNoTz): void
+    {
+        $this->models->newPostReturn($contentMarkdown, deletedAt:$deletedAtNoTz);
+    }
+
+    public function newPostDeletedReported(string $postContentMarkdown = null, string $reportContent = null): void
+    {
+        $post = $this->models->newPostReturn(content:$postContentMarkdown, deletedAt:'1970-01-01 00:00:00');
         $this->models->reportPost($post, $reportContent);
     }
 
-    public function newPostDeletedReported(string $reportContent): void
+    public function newComment(string $contentMarkdown): void
     {
-        $post = $this->models->newPostReturn();
-        $post->delete();
+        $this->models->newCommentReturn($contentMarkdown);
+    }
+
+    public function newPostReported(
+        string $postContentMarkdown = null,
+        string $reportContent = null): void
+    {
+        $post = $this->models->newPostReturn($postContentMarkdown);
         $this->models->reportPost($post, $reportContent);
+    }
+
+    public function newPostReportedClosed(string $contentMarkdown): void
+    {
+        $post = $this->models->newPostReturn($contentMarkdown);
+        $this->models->reportPost($post, null)->delete();
+    }
+
+    public function newMicroblogReported(string $microblogContentMarkdown = null, string $reportContent = null): void
+    {
+        $microblog = $this->models->newMicroblogReturn($microblogContentMarkdown);
+        $this->models->reportMicroblog($microblog, $reportContent);
+    }
+
+    public function newMicroblogReportedClosed(string $contentMarkdown): void
+    {
+        $microblog = $this->models->newMicroblogReturn($contentMarkdown);
+        $this->models->reportMicroblog($microblog, null)->delete();
+    }
+
+    public function newCommentReported(): void
+    {
+        $this->models->reportComment($this->models->newCommentReturn());
+    }
+
+    public function newCommentReportedClosed(string $contentMarkdown): void
+    {
+        $this->models->reportComment($this->models->newCommentReturn($contentMarkdown))->delete();
     }
 }
