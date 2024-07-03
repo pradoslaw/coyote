@@ -33,7 +33,7 @@ class Flags
         }
         $builder = Flag::with(['resources', 'user:id,name', 'type']);
         foreach ($this->models as $model) {
-            $builder = $builder->orHas(str_plural(strtolower(class_basename($model))));
+            $builder = $builder->orHas($this->relationName($model));
         }
         return $builder->get();
     }
@@ -44,5 +44,10 @@ class Flags
             return true;
         }
         return $this->gate->allows(...$this->permission);
+    }
+
+    private function relationName(string $model): string
+    {
+        return str_plural(\strToLower(class_basename($model)));
     }
 }
