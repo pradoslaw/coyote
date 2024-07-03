@@ -68,6 +68,39 @@ body.theme-dark {
   }
 }
 
+body.theme-dark {
+  .post-preview {
+    background-color: #111111;
+    border-color: #333333;
+  }
+
+  .input-group {
+    input.form-control {
+      border-color: #2f2f2f;
+      background-color: #101010;
+    }
+  }
+}
+
+.post-preview {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: .5em;
+  border-radius: .25em;
+}
+
+.post-preview p {
+  margin: 0;
+}
+
+img.img-smile {
+  height: 1em;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
 .administrator-panel aside#adm-menu ul li.divider {
   border-bottom: 1px solid #ddd;
   margin-top: 1.25rem;
@@ -81,5 +114,44 @@ body.theme-dark {
 
   &.menu-group-moderator-actions:after {
     content: 'Akcje moderatorskie';
+  }
+}
+
+.flex-ellipsis-container {
+  min-width: 0;
+
+  .flex-ellipsis,
+  .flex-ellipsis * {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .flex-ellipsis {
+    .badge {
+      vertical-align: middle;
+    }
+
+    .badge i {
+      vertical-align: bottom;
+    }
+  }
+}
+
+.badge.badge-material-element {
+  background-color: #c8bba4;
+
+  body.theme-dark & {
+    color: #c0bbb6;
+    background-color: #3b2c12;
+  }
+}
+
+.fake-anchor {
+  color: #80a41a;
+  text-decoration: underline;
+
+  &.fake-mention {
+    font-weight: bold;
   }
 }

@@ -2,11 +2,13 @@
 namespace Coyote\Post;
 
 use Carbon\Carbon;
+use Coyote\Flag;
 use Coyote\Post;
 use Coyote\Services\Parser\Factories\CommentFactory;
 use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -32,7 +34,7 @@ class Comment extends Model
 
     public function post(): BelongsTo
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Post::class)->withTrashed();
     }
 
     public function user(): BelongsTo
@@ -40,6 +42,11 @@ class Comment extends Model
         return $this->belongsTo(User::class)
             ->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at', 'reputation'])
             ->withTrashed();
+    }
+
+    public function flags(): MorphToMany
+    {
+        return $this->morphToMany(Flag::class, 'resource', 'flag_resources');
     }
 
     public function getHtmlAttribute(): string
