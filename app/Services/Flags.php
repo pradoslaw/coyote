@@ -4,6 +4,7 @@ namespace Coyote\Services;
 use Coyote\Flag;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Database\Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 
 class Flags
 {
@@ -33,7 +34,9 @@ class Flags
         }
         $builder = Flag::with(['resources', 'user:id,name', 'type']);
         foreach ($this->models as $model) {
-            $builder = $builder->orHas($this->relationName($model));
+            $builder = $builder->orWhereHas(
+                $this->relationName($model),
+                fn(Builder $query) => $query->withTrashed());
         }
         return $builder->get();
     }

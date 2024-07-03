@@ -2,8 +2,10 @@
 namespace Tests\Unit\BaseFixture\Forum;
 
 use Coyote\Flag;
+use Coyote\Microblog;
 use Coyote\Post;
 use Coyote\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\Concerns;
 use PHPUnit\Framework\Attributes\Before;
@@ -94,6 +96,16 @@ class ModelsDslTest extends TestCase
         $this->assertDatabaseHas('microblogs', ['id' => $id]);
     }
 
+    #[Test]
+    public function newMicroblogDeletedAt(): void
+    {
+        $this->models->newMicroblogDeletedAt('content', '2005-04-02 21:37:00');
+        $this->assertDatabaseHas('microblogs', [
+            'text'       => 'content',
+            'deleted_at' => '2005-04-02 21:37:00',
+        ]);
+    }
+
     private function usersCount(): int
     {
         return User::query()->count();
@@ -111,6 +123,15 @@ class ModelsDslTest extends TestCase
     {
         $this->models->newPostReported(reportContent:'report');
         $this->assertTrue(Post::query()->whereHas('flags')->exists());
+    }
+
+    #[Test]
+    public function newPostReportedContent(): void
+    {
+        $this->models->newPostReported(postContentMarkdown:'content');
+        $this->assertTrue(Post::query()->where(['text' => 'content'])
+            ->whereHas('flags')
+            ->exists());
     }
 
     #[Test]
@@ -138,9 +159,106 @@ class ModelsDslTest extends TestCase
     }
 
     #[Test]
+    public function newPostReportedReportContent(): void
+    {
+        $this->models->newPostReported('content', 'report text');
+        $this->assertSame(
+            'report text',
+            Post::query()->firstWhere(['text' => 'content'])->flags->pluck('text')->first());
+    }
+
+    #[Test]
+    public function newMicroblogReported(): void
+    {
+        $reportedPosts = $this->reportedMicroblogsCount();
+        $this->models->newMicroblogReported();
+        $this->assertSame($reportedPosts + 1, $this->reportedMicroblogsCount());
+    }
+
+    #[Test]
+    public function newMicroblogReportedReportContent(): void
+    {
+        $this->models->newMicroblogReported(microblogContentMarkdown:'content', reportContent:'report text');
+        $this->assertSame(
+            'report text',
+            Microblog::query()->firstWhere(['text' => 'content'])->flags->pluck('text')->first());
+    }
+
+    private function reportedMicroblogsCount(): int
+    {
+        return Microblog::query()->whereHas('flags')->count();
+    }
+
+    #[Test]
+    public function newPostReportedClosed(): void
+    {
+        $this->models->newPostReportedClosed(contentMarkdown:'content');
+        $this->assertTrue($this->postHasClosedReport('content'));
+    }
+
+    #[Test]
+    public function newPostDeletedReported_postIsDeleted(): void
+    {
+        $this->models->newPostDeletedReported(postContentMarkdown:'content');
+        $this->assertSoftDeleted('posts', [
+            'text' => 'content',
+        ]);
+    }
+
+    #[Test]
+    public function newPostDeletedReported_reportHasContent(): void
+    {
+        $this->models->newPostDeletedReported(reportContent:'reported text');
+        $this->assertDatabaseHas('flags', [
+            'text' => 'reported text',
+        ]);
+    }
+
+    #[Test]
+    public function newMicroblogReportedClosed(): void
+    {
+        $this->models->newMicroblogReportedClosed(contentMarkdown:'content');
+        $this->assertTrue($this->microblogHasClosedReport('content'));
+    }
+
+    #[Test]
+    public function newCommentReportedClosed(): void
+    {
+        $this->models->newCommentReportedClosed(contentMarkdown:'content');
+        $this->assertTrue($this->commentHasClosedReport('content'));
+    }
+
+    private function postHasClosedReport(string $content): bool
+    {
+        /** @var Post $post */
+        $post = Post::query()->where(['text' => $content])->firstOrFail();
+        /** @var Flag $flag */
+        [$flag] = $post->flags()->withTrashed()->get();
+        return $flag->trashed();
+    }
+
+    private function microblogHasClosedReport(string $content): bool
+    {
+        /** @var Microblog $microblog */
+        $microblog = Microblog::query()->where(['text' => $content])->firstOrFail();
+        /** @var Flag $flag */
+        [$flag] = $microblog->flags()->withTrashed()->get();
+        return $flag->trashed();
+    }
+
+    private function commentHasClosedReport(string $content): bool
+    {
+        /** @var Post\Comment $comment */
+        $comment = Post\Comment::query()->where(['text' => $content])->firstOrFail();
+        /** @var Flag $flag */
+        [$flag] = $comment->flags()->withTrashed()->get();
+        return $flag->trashed();
+    }
+
+    #[Test]
     public function newUserWithPermission(): void
     {
-        $userId = $this->models->newUserReturnId('forum-delete');
+        $userId = $this->models->newUserReturnId(permissionName:'forum-delete');
         $this->assertUserCan(true, $userId, 'forum-delete');
     }
 
@@ -156,5 +274,95 @@ class ModelsDslTest extends TestCase
         /** @var User $user */
         $user = User::query()->findOrFail($userId);
         $this->assertSame($expected, $user->can($permission));
+    }
+
+    #[Test]
+    public function newPostContent(): void
+    {
+        $this->models->newPost('content');
+        $this->assertDatabaseHas('posts', ['text' => 'content']);
+    }
+
+    #[Test]
+    public function newPostDeleted(): void
+    {
+        $this->models->newPostDeleted('content');
+        $this->assertSoftDeleted('posts', ['text' => 'content']);
+    }
+
+    #[Test]
+    public function newPostDeletedAt(): void
+    {
+        $this->models->newPostDeletedAt('content', '2005-04-02 21:37:00');
+        $this->assertDatabaseHas('posts', [
+            'text'       => 'content',
+            'deleted_at' => '2005-04-02 21:37:00',
+        ]);
+    }
+
+    #[Test]
+    public function newPostCreatedAt(): void
+    {
+        $this->models->newPostCreatedAt('2005-04-02 21:37:00');
+        $this->assertDatabaseHas('posts', [
+            'created_at' => '2005-04-02 21:37:00+00',
+        ]);
+    }
+
+    #[Test]
+    public function newPostAuthorName(): void
+    {
+        $this->models->newPostAuthor('Mark');
+        $this->assertDatabaseRelationHas('posts', 'user', ['name' => 'Mark']);
+    }
+
+    #[Test]
+    public function newPostAuthorPhoto(): void
+    {
+        $this->models->newPostAuthorPhoto('image.png');
+        $this->assertDatabaseRelationHas('posts', 'user', ['photo' => 'image.png']);
+    }
+
+    #[Test]
+    public function newPostAuthorId(): void
+    {
+        $id = $this->models->newPostReturnAuthorId('content');
+        $this->assertDatabaseRelationHas('posts', 'user', ['user_id' => $id]);
+    }
+
+    #[Test]
+    public function newPostAuthorIdContent(): void
+    {
+        $this->models->newPostReturnAuthorId('content');
+        $this->assertDatabaseRelationHas('posts', 'user', ['text' => 'content']);
+    }
+
+    #[Test]
+    public function newComment(): void
+    {
+        $this->models->newComment('content');
+        $this->assertDatabaseHas('post_comments', ['text' => 'content']);
+    }
+
+    #[Test]
+    public function newCommentReported(): void
+    {
+        $reportedComments = $this->reportedCommentsCount();
+        $this->models->newCommentReported();
+        $this->assertSame($reportedComments + 1, $this->reportedCommentsCount());
+    }
+
+    private function reportedCommentsCount(): int
+    {
+        return Post\Comment::query()->whereHas('flags')->count();
+    }
+
+    private function assertDatabaseRelationHas(string $table, string $relation, array $data): void
+    {
+        if ($table !== 'posts') {
+            throw new \InvalidArgumentException();
+        }
+        $query = Post::query()->whereHas($relation, fn(Builder $query) => $query->where($data));
+        $this->assertTrue($query->exists());
     }
 }

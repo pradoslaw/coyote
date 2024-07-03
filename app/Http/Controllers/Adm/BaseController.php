@@ -38,7 +38,10 @@ class BaseController extends Controller
             $menu->divide(['class' => 'menu-group-moderator-actions']);
 
             $menu->add('Użytkownicy', ['route' => 'adm.users'])->prepend($fa('fa-user fa-fw'));
-            $menu->add('Raporty', ['url' => route('adm.flag', ['filter' => 'is:reported not:deleted'])])->prepend($fa('far fa-flag fa-fw'));
+            $menu->add('Dodane posty', ['url' => route('adm.flag', ['filter' => 'type:post'])])->prepend($fa('fa-magnifying-glass fa-fw'));
+            $menu->add('Dodane komentarze', ['url' => route('adm.flag', ['filter' => 'type:comment'])])->prepend($fa('fa-magnifying-glass fa-fw'));
+            $menu->add('Dodane mikroblogi', ['url' => route('adm.flag', ['filter' => 'type:microblog'])])->prepend($fa('fa-magnifying-glass fa-fw'));
+            $menu->add('Zgłoszone treści', ['url' => route('adm.flag', ['filter' => 'is:reported is:open'])])->prepend($fa('far fa-flag fa-fw'));
             $menu->add('Bany', ['route' => 'adm.firewall'])->prepend($fa('fa-user-lock fa-fw'));
             $menu->add('Kto jest online', ['route' => 'adm.sessions'])->prepend($fa('fa-eye fa-fw'));
             $menu->add('Dziennik zdarzeń', ['route' => 'adm.stream'])->prepend($fa('fa-newspaper fa-fw'));

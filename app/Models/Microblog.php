@@ -131,6 +131,11 @@ class Microblog extends Model
             ->withTrashed();
     }
 
+    public function flags(): MorphToMany
+    {
+        return $this->morphToMany(Flag::class, 'resource', 'flag_resources');
+    }
+
     public function setHtmlAttribute(string $value): void
     {
         $this->html = $value;
