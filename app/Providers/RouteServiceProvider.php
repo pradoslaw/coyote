@@ -88,7 +88,7 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
             return Topic::findOrFail($id);
         });
 
-        $this->router->bind('any_microblog', fn($id) => Microblog::withoutGlobalScopes()->findOrFail($id));
+        $this->router->bind('any_microblog', fn($id) => Microblog::query()->withoutGlobalScopes()->findOrFail($id));
 
         parent::boot();
     }
