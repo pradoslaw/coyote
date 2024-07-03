@@ -74,11 +74,11 @@ class FavoritesController extends BaseController
         $menu = app(Menu::class);
         return $menu->make('favorites', function (Builder $menu) use ($menuItems) {
             foreach ($menuItems as $menuItem) {
-                $item = $menu->add("<span>{$menuItem->title}</span>", ['route' => $menuItem->route]);
-                $item->link->attr(['class' => 'nav-item']);
+                $item = $menu->add($menuItem->title, ['route' => $menuItem->route]);
+                $item->attr(['class' => 'nav-item']);
 
                 if ($menuItem->routeName === request()->route()->getName()) {
-                    $item->link->active();
+                    $item->active();
                 }
             }
         });

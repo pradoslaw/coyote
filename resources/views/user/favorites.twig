@@ -6,25 +6,30 @@
 {% block content %}
   <h2>Obserwowane strony</h2>
 
-  <nav class="nav nav-panel nav-card">
+  <ul class="nav nav-panel">
     {% for tab in tabs.roots() %}
-      <a href="{{ tab.url }}" {{ forms.attr(tab.link.attr) }}>{{ tab.title|raw }}</a>
+      <li {{ forms.attr(tab.attr) }}>
+        <a href="{{ tab.url }}" style="color:inherit;">
+          {{ tab.title }}
+        </a>
+      </li>
     {% endfor %}
-  </nav>
+  </ul>
 
   <div class="card card-default">
     <div class="card-body">
-      <nav class="d-flex justify-content-center mt-2 mb-2">{{ paginate|raw }}</nav>
-
+      <nav class="d-flex justify-content-center mt-2 mb-2">
+        {{ paginate|raw }}
+      </nav>
       <table class="table table-striped">
         <thead>
-          <tr>
-            <th>Tytuł</th>
-            <th>Data dodania do obserwowanych</th>
-          </tr>
+        <tr>
+          <th>Tytuł</th>
+          <th>Data dodania do obserwowanych</th>
+        </tr>
         </thead>
         <tbody>
-          {{ include(partial) }}
+        {{ include(partial) }}
         </tbody>
       </table>
 
