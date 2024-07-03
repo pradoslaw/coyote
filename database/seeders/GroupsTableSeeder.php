@@ -16,12 +16,14 @@ class GroupsTableSeeder extends Seeder
         $group->system = true;
         $group->save();
 
-        $user = User::query()->create([
+        $user = new User([
             'name'       => 'admin',
             'email'      => 'admin@localhost',
             'password'   => bcrypt('admin'),
             'reputation' => 10000,
         ]);
+        $user->gdpr = '{}';
+        $user->save();
 
         Coyote\Group\User::query()->create([
             'group_id' => $group->id,
