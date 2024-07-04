@@ -56,7 +56,7 @@ if (isDarkThemeWip) {
 const icons = {
   'dark-theme': 'fas fa-moon',
   'light-theme': 'fas fa-sun',
-  'system-theme': 'fas fa-desktop',
+  'system-theme': 'fas fa-display',
 };
 type Icon = keyof typeof icons;
 

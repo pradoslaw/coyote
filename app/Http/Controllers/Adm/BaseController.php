@@ -34,7 +34,7 @@ class BaseController extends Controller
                 return $html->tag('i', '', ['class' => "fa $icon"]);
             };
 
-            $menu->add('Strona główna', ['route' => 'adm.dashboard'])->prepend($fa('fa-desktop fa-fw'));
+            $menu->add('Strona główna', ['route' => 'adm.dashboard'])->prepend($fa('fa-display fa-fw'));
             $menu->divide(['class' => 'menu-group-moderator-actions']);
 
             $menu->add('Użytkownicy', ['route' => 'adm.users'])->prepend($fa('fa-user fa-fw'));
