@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .alert-dismissible .close {
   padding: .16rem .25rem !important;
 }
@@ -10,8 +12,8 @@
 .alert.bottom,
 .alert.bottom-end,
 .alert.bottom-start {
-  padding-top: $alert-padding-y / 3;
-  padding-bottom: $alert-padding-y / 3;
+  padding-top: math.div($alert-padding-y, 3);
+  padding-bottom: math.div($alert-padding-y, 3);
   z-index: 1;
 
   @include media-breakpoint-down(lg) {
@@ -29,7 +31,7 @@
 }
 
 .alert.bottom,
-.alert.bottom-end ,
+.alert.bottom-end,
 .alert.bottom-start {
   &:before, &:after {
     bottom: 100%;
