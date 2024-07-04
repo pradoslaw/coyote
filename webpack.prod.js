@@ -11,6 +11,7 @@ const webpack = require('webpack');
 const plugins = [
   new PurgeCssPlugin({
     paths: glob.sync([
+      path.join(__dirname, 'app/**/*.php'),
       path.join(__dirname, 'resources/views/**/*.twig'),
       path.join(__dirname, 'resources/js/components/**/*.vue'),
       path.join(__dirname, 'resources/js/**/*.ts'),
