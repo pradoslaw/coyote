@@ -146,35 +146,35 @@ export default class VueMarkdown extends Vue {
       can: false,
       title: 'Pogrub zaznaczony tekst lub dodaj pogrubienie',
       break: 'Dodanie tutaj pogrubienia mogłoby uszkodzić składnię',
-      icon: 'fa-bold'
+      icon: 'fa-bold',
     },
     italics: {
       click: this.makeItalics,
       can: false,
       title: 'Pochyl tekst lub dodaj pochylenie',
       break: 'Dodanie tutaj pochylenia mogłoby uszkodzić składnię',
-      icon: 'fa-italic'
+      icon: 'fa-italic',
     },
     underline: {
       click: this.makeUnderline,
       can: false,
       title: 'Podkreśl tekst lub dodaj podkreślenie',
       break: 'Dodanie tutaj podkreślenia mogłoby uszkodzić składnię',
-      icon: 'fa-underline'
+      icon: 'fa-underline',
     },
     strike: {
       click: this.makeStrikeThrough,
       can: false,
       title: 'Przekreśl tekst lub dodaj przekreślenie',
       break: 'Dodanie tutaj przekreślenia mogłoby uszkodzić składnię',
-      icon: 'fa-strikethrough'
+      icon: 'fa-strikethrough',
     },
     link: {
       click: this.makeLink,
       can: false,
       title: 'Zamień zaznaczenie w link lub dodaj link',
       break: 'Dodanie tutaj linku mogłoby uszkodzić składnię',
-      icon: 'fa-link'
+      icon: 'fa-link',
     },
     code: {
       click: this.insertCode,
@@ -188,7 +188,7 @@ export default class VueMarkdown extends Vue {
       can: false,
       title: 'Dodaj obraz',
       break: 'Dodanie tutaj obrazu mogłoby uszkodzić składnię',
-      icon: 'fa-image'
+      icon: 'fa-image',
     },
     key: {
       click: this.insertKeyNotation,
@@ -202,42 +202,42 @@ export default class VueMarkdown extends Vue {
       can: false,
       title: 'Zmień zaznaczenie w listę lub dodaj listę uporządkowaną',
       break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
-      icon: 'fa-list-ol'
+      icon: 'fa-list-ol',
     },
     listUnordered: {
       click: this.insertUnorderedList,
       can: false,
       title: 'Zmień zaznaczenie w listę lub dodaj listę nieuporządkowaną',
       break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
-      icon: 'fa-list-ul'
+      icon: 'fa-list-ul',
     },
     quote: {
       click: this.insertBlockQuote,
       can: false,
       title: 'Cytuj post innego użytkownika lub zmień zaznaczenie w cytat postu',
       break: 'Dodanie tutaj cytatu mogłoby uszkodzić składnię',
-      icon: 'fa-quote-left'
+      icon: 'fa-quote-left',
     },
     table: {
       click: this.insertTable,
       can: false,
       title: 'Zmień zaznaczoną treść w tabelkę lub dodaj pustą tabelkę',
       break: 'Dodanie tutaj tabelki mogłoby spowodować uszkodzenie składni',
-      icon: 'fa-table'
+      icon: 'fa-table',
     },
     indentLess: {
       click: this.indentLess,
       can: false,
       title: 'Usuń wcięcie zaznaczonego tekstu',
       break: null,
-      icon: 'fa-outdent'
+      icon: 'fa-outdent',
     },
     indentMore: {
       click: this.indentMore,
       can: false,
       title: 'Dodaj wcięcie zaznaczonego tekstu',
       break: null,
-      icon: 'fa-indent'
+      icon: 'fa-indent',
     },
     insertEmoji: {
       click: this.toggleEmojiPicker,
@@ -245,7 +245,7 @@ export default class VueMarkdown extends Vue {
       title: 'Dodaj emotikonę',
       break: 'Dodanie tutaj emotikony mogłoby spowodować uszkodzenie składni',
       icon: 'fa-face-smile-beam',
-    }
+    },
   };
 
   @Ref('editor')
@@ -504,9 +504,8 @@ export default class VueMarkdown extends Vue {
   }
 
   showPreview() {
-    axios.post(this.previewUrl, {text: this.value}).then(response => {
-      this.previewHtml = response.data;
-
+    axios.post<any>(this.previewUrl, {text: this.value}).then(response => {
+      this.previewHtml = response.data as string;
       this.$nextTick(() => Prism.highlightAll());
     });
   }

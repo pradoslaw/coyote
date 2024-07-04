@@ -159,7 +159,7 @@ const actions = {
   },
 
   saveComment({ state, commit, getters }, comment: Microblog) {
-    return axios.post(`/Mikroblogi/Comment/${comment.id || ''}`, comment).then(response => {
+    return axios.post<any>(`/Mikroblogi/Comment/${comment.id || ''}`, comment).then(response => {
       const comment = response.data.data;
       const parent = state.data[comment.parent_id!];
 
@@ -187,7 +187,7 @@ const actions = {
       return;
     }
 
-    return axios.get(`/Mikroblogi/Voters/${microblog.id}`).then(response => {
+    return axios.get<any>(`/Mikroblogi/Voters/${microblog.id}`).then(response => {
       dispatch('updateVoters', { microblog, users: response.data.users });
     });
   },
@@ -199,7 +199,7 @@ const actions = {
   vote({ commit, dispatch }, microblog: Microblog) {
     commit('VOTE', microblog);
 
-    return axios.post(`/Mikroblogi/Vote/${microblog.id}`)
+    return axios.post<any>(`/Mikroblogi/Vote/${microblog.id}`)
       .then(response => dispatch('updateVoters', { microblog, users: response.data.users }))
       .catch(() => commit('VOTE', microblog));
   },

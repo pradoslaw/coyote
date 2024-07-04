@@ -80,11 +80,11 @@ const actions = {
   mark ({ commit }, message) {
     commit('mark', message);
 
-    return axios.post(`/User/Pm/Mark/${message.id}`).then(response => commit('inbox/SET_COUNT', response.data.count, { root: true }));
+    return axios.post<any>(`/User/Pm/Mark/${message.id}`).then(response => commit('inbox/SET_COUNT', response.data.count, { root: true }));
   },
 
   loadMore ({ state, commit }, authorId) {
-    return axios.get('/User/Pm/Infinity', {params: {author_id: authorId, offset: state.offset}}).then(response => {
+    return axios.get<any>('/User/Pm/Infinity', {params: {author_id: authorId, offset: state.offset}}).then(response => {
       commit('merge', response.data.data);
 
       return response;
@@ -92,7 +92,7 @@ const actions = {
   },
 
   paginate ({ commit }, page) {
-    return axios.get('/User/Pm', {params: {page}}).then(response => {
+    return axios.get<any>('/User/Pm', {params: {page}}).then(response => {
       commit('init', {messages: response.data.messages, total: response.data.total, currentPage: response.data.current_page, perPage: response.data.per_page});
 
       return response;

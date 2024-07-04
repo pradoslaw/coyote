@@ -95,8 +95,8 @@
     submitForm() {
       this.isProcessing = true;
 
-      axios.post(`/Praca/Application/${this.job.id}`, this.applicationSync)
-        .then(result => window.location.href = result.data)
+      axios.post<any>(`/Praca/Application/${this.job.id}`, this.applicationSync)
+        .then(result => window.location.href = result.data as string)
         .catch(err => {
           if (err.response.status !== 422) {
             return;

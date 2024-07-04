@@ -136,7 +136,7 @@ const actions = {
   vote({commit, dispatch}, post: Post) {
     commit('vote', post);
 
-    return axios.post(`/Forum/Post/Vote/${post.id}`)
+    return axios.post<any>(`/Forum/Post/Vote/${post.id}`)
       .then(response => dispatch('updateVoters', {post, users: response.data.users}))
       .catch(() => commit('vote', post));
   },
@@ -166,14 +166,14 @@ const actions = {
       tags: topic.tags!.map(o => o['name']),
       poll: rootState.poll.poll
     };
-    return axios.post(savePostUrl(forum, topic, post), payload).then(result => {
+    return axios.post<any>(savePostUrl(forum, topic, post), payload).then(result => {
       commit(getters.exists(result.data.id) ? 'update' : 'add', result.data);
       return result;
     });
   },
 
   saveComment({state, commit, getters}, comment: PostComment) {
-    return axios.post(`/Forum/Comment/${comment.id || ''}`, comment).then(result => {
+    return axios.post<any>(`/Forum/Comment/${comment.id || ''}`, comment).then(result => {
       const post = state.data[result.data.data.post_id!];
 
       commit(result.data.is_subscribed ? 'subscribe' : 'unsubscribe', post);
@@ -234,7 +234,7 @@ const actions = {
       return;
     }
 
-    return axios.get(`/Forum/Post/Voters/${post.id}`).then(response => {
+    return axios.get<any>(`/Forum/Post/Voters/${post.id}`).then(response => {
       dispatch('updateVoters', {post, users: response.data.users});
     });
   },

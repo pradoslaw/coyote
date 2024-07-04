@@ -271,7 +271,7 @@ export default class VueForm extends Vue {
     if (!this.topic.title) {
       return;
     }
-    axios.get('/completion/similar', {params: {q: this.topic.title}}).then(response => this.similar = response.data.hits);
+    axios.get<any>('/completion/similar', {params: {q: this.topic.title}}).then(response => this.similar = response.data.hits);
   }
 
   addItem() {
@@ -295,7 +295,7 @@ export default class VueForm extends Vue {
     }
 
     this.isProcessing = true;
-    const response = await axios.post('/Forum/Tag/Validation', {tags: this.topic.tags.map(tag => tag.name)});
+    const response: any = await axios.post<any>('/Forum/Tag/Validation', {tags: this.topic.tags.map(tag => tag.name)});
 
     this.isProcessing = false;
 

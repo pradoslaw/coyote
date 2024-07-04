@@ -17,7 +17,7 @@ new Vue({
 
       const tags = (this.$refs.input as HTMLInputElement).value.replace(new RegExp(',', 'g'), ' ').split(' ').filter(tag => tag !== '');
 
-      axios.post('/Forum/Tag/Save', { tags })
+      axios.post<any>('/Forum/Tag/Save', { tags })
         .then(result => {
           this.tags = result.data;
           this.isEditing = false;
