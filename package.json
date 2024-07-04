@@ -6,11 +6,11 @@
     "watch": "yarn webpack --watch --config webpack.dev.js"
   },
   "dependencies": {
-    "@babel/core": "^7.15.8",
-    "@babel/plugin-proposal-decorators": "^7.10.5",
-    "@babel/preset-env": "^7.15.8",
-    "@babel/preset-typescript": "^7.10.4",
-    "@babel/runtime": "^7.15.4",
+    "@babel/core": "^7.24.7",
+    "@babel/plugin-proposal-decorators": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "@babel/preset-typescript": "^7.24.7",
+    "@babel/runtime": "^7.24.7",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@popperjs/core": "^2.10.2",
     "@riddled/4play": "^1.18.3",
