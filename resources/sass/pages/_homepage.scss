@@ -166,6 +166,8 @@
   }
 
   .media-body {
+    min-width: 0; // makes flex children not exceed parent width
+
     p {
       margin: 0;
       @include text-truncate();
