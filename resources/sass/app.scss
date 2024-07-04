@@ -1,9 +1,9 @@
 @charset "UTF-8";
 
-// variables need to be at the top
 @import "helpers/variables";
 @import "helpers/mixins";
 @import "helpers/sprites";
+@import "~@fortawesome/fontawesome-free/scss/functions";
 @import "~@fortawesome/fontawesome-free/scss/variables";
 
 @import "~bootstrap/scss/functions";
