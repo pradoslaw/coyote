@@ -23,7 +23,6 @@
     "@vue/test-utils": "^1.1.0",
     "autosize": "^4.0.2",
     "axios": "^0.21.4",
-    "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^26.0.1",
     "babel-loader": "8.2.2",
     "babel-plugin-prismjs": "^2.1.0",
