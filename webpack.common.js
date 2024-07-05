@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const {WebpackManifestPlugin} = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
@@ -8,18 +8,12 @@ const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 const exec = require('child_process').exec;
 
 module.exports = {
-  node: {
-    Buffer: false,
-    process: false,
-  },
   devtool: 'source-map', // slower but better
   module: {
     rules: [
       {
         test: /\.ts(x?)$/,
-        exclude: {
-          test: /node_modules\/(?!@riddled)/,
-        },
+        exclude: /node_modules\/(?!@riddled)/,
         use: [
           {
             loader: 'babel-loader',
@@ -63,9 +57,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: {
-          test: /node_modules\/(?!@riddled)/,
-        },
+        exclude: /node_modules\/(?!@riddled)/,
         use: {
           loader: 'babel-loader',
           options: {
@@ -136,13 +128,13 @@ module.exports = {
 
     new CleanWebpackPlugin(['public/js/*.*', 'public/css/*.*'], {}),
     // @see https://webpack.js.org/guides/caching/#module-identifiers
-    new webpack.HashedModuleIdsPlugin(),
+    new webpack.ids.HashedModuleIdsPlugin(),
 
     new MiniCssExtractPlugin({
       filename: "css/[name]-[contenthash].css",
     }),
 
-    new ManifestPlugin({
+    new WebpackManifestPlugin({
       fileName: 'manifest.json',
     }),
 
