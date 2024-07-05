@@ -67,7 +67,7 @@
   import Component from "vue-class-component";
   import VueDropdown from '../forms/dropdown.vue';
   import { Tag } from '@/types/models';
-  import axios from 'axios';
+  import axios, {AxiosResponse} from 'axios';
 
   @Component({
     name: 'tags-inline',
@@ -109,7 +109,7 @@
         return;
       }
 
-      axios.get(this.sourceUrl, { params: {q: searchText} }).then(result => this.filteredTags = result.data);
+      axios.get<any>(this.sourceUrl, { params: {q: searchText} }).then((result: AxiosResponse<any>) => this.filteredTags = result.data);
     }
 
     toggleTag(tag: Tag) {

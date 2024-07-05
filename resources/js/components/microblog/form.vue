@@ -93,7 +93,7 @@ export default class VueForm extends Mixins(MicroblogFormMixin) {
 
       this.cancelTokenSource = axios.CancelToken.source();
 
-      axios.get('/assets/opg', {params: {url: matches[0]}, errorHandle: false, cancelToken: this.cancelTokenSource.token})
+      axios.get<any>('/assets/opg', {params: {url: matches[0]}, errorHandle: false, cancelToken: this.cancelTokenSource.token})
         .then(response => this.microblog.assets.push(response.data))
         .catch(this.startUrlDetector);
     };

@@ -190,7 +190,7 @@
   import { mapMutations } from "vuex";
   import TinyMceOptions from '@/libs/tinymce';
   import store from "@/store";
-  import axios from "axios";
+  import axios, {AxiosResponse} from "axios";
   import VueTagsInline from "@/components/forms/tags-inline.vue";
 
   @Component({
@@ -248,7 +248,7 @@
       let pluck = this.job.tags.map(item => item.name);
 
       // request suggestions
-      axios.get('/Praca/Tag/Suggestions', {params: {t: pluck}}).then(response => this.suggestions = response.data);
+      axios.get<any>('/Praca/Tag/Suggestions', {params: {t: pluck}}).then((response: AxiosResponse<any>) => this.suggestions = response.data);
     }
 
     get tinyMceOptions() {

@@ -83,7 +83,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import { mixin as clickaway } from 'vue-clickaway';
-  import axios from 'axios';
+  import axios, {AxiosResponse} from 'axios';
   import store from '../../store';
   import { Hit } from '@/types/hit';
   import { SpecialKeys } from '@/types/keys';
@@ -240,7 +240,7 @@
         return;
       }
 
-      axios.get(this.endpoint, {params: {q: this.value || null}, headers}).then(response => {
+      axios.get<any>(this.endpoint, {params: {q: this.value || null}, headers}).then((response: AxiosResponse<any>) => {
         this.items = response.data;
         this.isDropdownVisible = true;
       });

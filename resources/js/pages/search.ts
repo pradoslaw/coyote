@@ -199,7 +199,7 @@ new Vue({
     },
 
     request() {
-      axios.get(`/Search?timestamp=${new Date().getTime()}`, {params: this.requestParams}).then(result => {
+      axios.get<any>(`/Search?timestamp=${new Date().getTime()}`, {params: this.requestParams}).then(result => {
         this.hits = result.data;
 
         this.pushState();

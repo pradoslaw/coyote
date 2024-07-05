@@ -151,7 +151,7 @@ const actions = {
   },
 
   save({ commit, getters }, microblog: Microblog) {
-    return axios.post(`/Mikroblogi/Edit/${microblog.id || ''}`, microblog).then(result => {
+    return axios.post<Microblog,any>(`/Mikroblogi/Edit/${microblog.id || ''}`, microblog).then(result => {
       commit(getters.exists(result.data.id) ? 'UPDATE' : 'ADD', result.data);
 
       return result;
