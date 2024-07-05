@@ -22,7 +22,7 @@
     "@types/vue-clickaway": "^2.2.0",
     "@vue/test-utils": "^1.1.0",
     "autosize": "^4.0.2",
-    "axios": "^0.23.0",
+    "axios": "^0.27.2",
     "babel-jest": "^26.0.1",
     "babel-loader": "8.2.2",
     "babel-plugin-prismjs": "^2.1.0",
