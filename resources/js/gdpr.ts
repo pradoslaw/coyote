@@ -1,5 +1,5 @@
 import axios from "axios";
-import {guest} from "./store/modules/user.ts";
+import {guest} from "./store/modules/user";
 
 const root = rootElement();
 if (root) {
