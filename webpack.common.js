@@ -8,6 +8,10 @@ const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 const exec = require('child_process').exec;
 
 module.exports = {
+  node: {
+    Buffer: false,
+    process: false,
+  },
   devtool: 'source-map', // slower but better
   module: {
     rules: [
