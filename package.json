@@ -36,7 +36,6 @@
     "diff": "^5.0.0",
     "dotenv-webpack": "^7.0.3",
     "faker": "^4.1.0",
-    "file-loader": "^4.3.0",
     "flatpickr": "^4.6.3",
     "glob-all": "^3.1.0",
     "jest": "^26.0.1",
