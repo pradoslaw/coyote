@@ -89,10 +89,10 @@ export default class FlagModal extends Vue {
 
   icon(name: string): string {
     const icons = {
-      'Spam': 'fas fa-mail-bulk',
-      'Wulgaryzmy': 'fas fa-book-dead',
+      'Spam': 'fas fa-envelopes-bulk',
+      'Wulgaryzmy': 'fas fa-book-skull',
       'Off-Topic': 'fas fa-wave-square',
-      'Nieprawidłowa kategoria': 'fas fa-th-list',
+      'Nieprawidłowa kategoria': 'fas fa-table-list',
       'Próba wyłudzenia gotowca': 'fas fa-user-graduate',
       'Inne': "far fa-flag",
     };

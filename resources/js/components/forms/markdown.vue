@@ -244,7 +244,7 @@ export default class VueMarkdown extends Vue {
       can: false,
       title: 'Dodaj emotikonę',
       break: 'Dodanie tutaj emotikony mogłoby spowodować uszkodzenie składni',
-      icon: 'fa-smile-beam',
+      icon: 'fa-face-smile-beam',
     }
   };
 

@@ -81,17 +81,17 @@
       </div>
 
       <div v-if="isAuthorized" class="dropdown">
-        <button class="btn btn-xs border-0 text-muted" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="small fa fa-ellipsis-h"></i></button>
+        <button class="btn btn-xs border-0 text-muted" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="small fa fa-ellipsis"></i></button>
 
         <div class="dropdown-menu dropdown-menu-right">
           <template v-if="comment.permissions.update">
 
             <template v-if="!comment.deleted_at">
-              <a @click="edit(comment)" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
-              <a @click="deleteItem" class="dropdown-item btn-sm-remove" href="javascript:"><i class="fas fa-trash-alt fa-fw"></i> Usuń</a>
+              <a @click="edit(comment)" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-pen-to-square fa-fw"></i> Edytuj</a>
+              <a @click="deleteItem" class="dropdown-item btn-sm-remove" href="javascript:"><i class="fas fa-trash-can fa-fw"></i> Usuń</a>
             </template>
 
-            <a v-else @click="restoreItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-restore fa-fw"></i> Przywróć</a>
+            <a v-else @click="restoreItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-arrow-up fa-fw"></i> Przywróć</a>
 
             <div v-if="comment.user.id !== user.id" class="dropdown-divider"></div>
           </template>

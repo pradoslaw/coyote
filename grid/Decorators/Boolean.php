@@ -19,7 +19,7 @@ class Boolean extends Decorator
     /**
      * @var string
      */
-    protected $trueIcon = 'fa-check-circle';
+    protected $trueIcon = 'fa-circle-check';
 
     /**
      * @var string

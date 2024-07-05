@@ -7,7 +7,7 @@
     <div class="item-options">
       <a :href="item.url" class="ml-3" title="Przejdź do profilu użytkownika"><i class="fas fa-user"></i></a>
       <a :href="'/User/Pm/Submit?to=' + item.name" class="ml-3" title="Napisz wiadomość"><i class="fas fa-comment"></i></a>
-      <a :href="'/Search?model=Topic&sort=date&user=' + item.name" class="ml-3" title="Znajdź posty użytkownika"><i class="fas fa-search"></i></a>
+      <a :href="'/Search?model=Topic&sort=date&user=' + item.name" class="ml-3" title="Znajdź posty użytkownika"><i class="fas fa-magnifying-glass"></i></a>
     </div>
   </a>
 </template>

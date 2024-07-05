@@ -41,7 +41,7 @@
   font-size: $font-size-lg;
   font-weight: 900;
 
-  @include font-awesome($fa-var-times);
+  @include font-awesome($fa-var-xmark);
 }
 
 @mixin list-inline($name, $spacing) {

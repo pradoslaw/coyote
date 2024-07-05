@@ -10,13 +10,13 @@
       </template>
 
       <div v-else class="bg-light placeholder-mask">
-        <i v-if="!isProcessing" class="fas fa-plus-circle fa-2x"></i>
+        <i v-if="!isProcessing" class="fas fa-circle-plus fa-2x"></i>
       </div>
 
       <a v-if="url" href="javascript:" class="thumbnail-mask" @click="insertImage"></a>
 
       <a v-if="url" href="javascript:" class="btn btn-sm btn-danger delete" @click="deleteImage" title="Usuń">
-        <i class="fas fa-times"></i>
+        <i class="fas fa-xmark"></i>
       </a>
 
       <div v-if="isProcessing" class="spinner-mask">

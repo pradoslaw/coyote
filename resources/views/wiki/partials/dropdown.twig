@@ -3,8 +3,8 @@
         <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="comment-menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="comment-menu">
-            <a class="dropdown-item" href="{{ route('wiki.submit', [wiki.id]) }}" title="Kliknij, aby edytować tę stronę"><i class="fas fa-edit fa-fw"></i> Edycja</a>
-            <a class="dropdown-item" href="{{ route('wiki.log', [wiki.id]) }}"><i class="fas fa-fw fa-history"></i> Historia i autorzy</a>
+            <a class="dropdown-item" href="{{ route('wiki.submit', [wiki.id]) }}" title="Kliknij, aby edytować tę stronę"><i class="fas fa-pen-to-square fa-fw"></i> Edycja</a>
+            <a class="dropdown-item" href="{{ route('wiki.log', [wiki.id]) }}"><i class="fas fa-fw fa-clock-rotate-left"></i> Historia i autorzy</a>
 
             {% include 'wiki.partials.admin' %}
         </ul>

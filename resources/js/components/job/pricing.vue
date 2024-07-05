@@ -9,14 +9,14 @@
           <div>
             Promocja ogłoszenia w kanałach social media
 
-            <span data-balloon-pos="up" aria-label="Jedynie ogłoszenia z podanymi widełkami płacowymi"><i class="fa fa-question-circle"></i></span>
+            <span data-balloon-pos="up" aria-label="Jedynie ogłoszenia z podanymi widełkami płacowymi"><i class="fa fa-circle-question"></i></span>
           </div>
         </li>
         <li>
           <div>
             <strong>Podbicie</strong> ogłoszenia
 
-            <span data-balloon-pos="right" aria-label="W okresie promowania oferty, podbijemy Twoje ogłoszenie na górę listy ogłoszeń. Dzięki temu więcej ludzi będzie mogło je zobaczyć."><i class="fa fa-question-circle"></i></span>
+            <span data-balloon-pos="right" aria-label="W okresie promowania oferty, podbijemy Twoje ogłoszenie na górę listy ogłoszeń. Dzięki temu więcej ludzi będzie mogło je zobaczyć."><i class="fa fa-circle-question"></i></span>
           </div>
         </li>
 
@@ -25,7 +25,7 @@
             <strong>Reklama</strong> oferty na forum i stronie głównej
 
             <a href="javascript:" class="plan-tooltip-wrapper">
-              <i class="fa fa-question-circle"></i>
+              <i class="fa fa-circle-question"></i>
 
               <div class="plan-tooltip"><img src="/img/offer-example.jpg"></div>
             </a>
@@ -36,7 +36,7 @@
             <strong>Wyróżnienie</strong> kolorem
 
             <a href="javascript:" class="plan-tooltip-wrapper">
-              <i class="fa fa-question-circle"></i>
+              <i class="fa fa-circle-question"></i>
 
               <div class="plan-tooltip"><img src="/img/offer-color-example.png"></div>
             </a>
@@ -59,12 +59,12 @@
           <ul class="plan-features">
             <li v-for="n in 6">
               <strong v-if="plan.benefits[n - 1] === 'is_boost'" class="text-muted">{{ plan.boost }}x</strong>
-              <i v-else class="fa fa-fw" :class="{'fa-check-circle': plan.benefits.length >= n, 'text-primary': plan.benefits.length >= n, 'fa-remove': plan.benefits.length < n, 'text-muted': plan.benefits.length < n}"></i>
+              <i v-else class="fa fa-fw" :class="{'fa-circle-check': plan.benefits.length >= n, 'text-primary': plan.benefits.length >= n, 'fa-remove': plan.benefits.length < n, 'text-muted': plan.benefits.length < n}"></i>
             </li>
 
             <li class="feature-button">
               <button class="btn btn-secondary" v-if="valueLocal != plan.id" @click.prevent="changePlan(plan.id)">Wybierz</button>
-              <span class="text-primary" v-if="valueLocal == plan.id"><i class="fa fa-check-circle fa-fw text-primary"></i> Wybrano</span>
+              <span class="text-primary" v-if="valueLocal == plan.id"><i class="fa fa-circle-check fa-fw text-primary"></i> Wybrano</span>
             </li>
           </ul>
         </div>

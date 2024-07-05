@@ -159,11 +159,11 @@
                 Wiadomości
               </a>
               <a class="dropdown-item" href="{{ route('user.home') }}">
-                <i class="fas fa-cog fa-fw"></i>
+                <i class="fas fa-gear fa-fw"></i>
                 Moje konto
               </a>
               <a class="dropdown-item" href="{{ url('Pomoc') }}">
-                <i class="fas fa-info-circle fa-fw"></i>
+                <i class="fas fa-circle-info fa-fw"></i>
                 Pomoc
               </a>
               {% if can('adm-access') %}
@@ -176,7 +176,7 @@
               <div class="dropdown-divider"></div>
 
               <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out" rel="nofollow">
-                <i class="fas fa-sign-out-alt fa-fw"></i>
+                <i class="fas fa-right-from-bracket fa-fw"></i>
                 Wyloguj
               </a>
             </div>
@@ -230,7 +230,7 @@
           <div class="row">
             <div class="col-12">
               <div class="alert alert-danger mt-3">
-                <i class="fas fa-exclamation-triangle"></i>
+                <i class="fas fa-triangle-exclamation"></i>
 
                 {{ session_get('error') }}
               </div>

@@ -7,7 +7,7 @@
         {{ tag.real_name || tag.name }}
 
         <a v-if="editable" @click="deleteTag(tag)" class="remove">
-          <i class="fa fa-times"></i>
+          <i class="fa fa-xmark"></i>
         </a>
       </component>
 

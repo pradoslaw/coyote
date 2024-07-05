@@ -46,7 +46,7 @@
           </a>
         </li>
         <li>
-          <a href="{{ route('wiki.log', [wiki.id]) }}"><i class="fas fa-fw fa-history"></i> Historia i autorzy</a>
+          <a href="{{ route('wiki.log', [wiki.id]) }}"><i class="fas fa-fw fa-clock-rotate-left"></i> Historia i autorzy</a>
         </li>
 
         {% include 'wiki.partials.admin' %}
@@ -55,7 +55,7 @@
       {% if author.bio %}
         <section id="box-author" class="box">
           <h4 class="heading">
-            <i class="fas fa-male fa-fw"></i> 
+            <i class="fas fa-person fa-fw"></i> 
             O autorze
           </h4>
 

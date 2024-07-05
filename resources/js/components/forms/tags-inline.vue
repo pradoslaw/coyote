@@ -11,7 +11,7 @@
     </ul>
 
     <template v-if="popularTags.length > 3">
-      <button class="btn btn-xs text-muted" type="button" data-bs-toggle="dropdown" aria-label="Dropdown" title="Więcej..."><i class="fa fa-ellipsis-h"></i></button>
+      <button class="btn btn-xs text-muted" type="button" data-bs-toggle="dropdown" aria-label="Dropdown" title="Więcej..."><i class="fa fa-ellipsis"></i></button>
 
       <div class="dropdown-menu p-2">
         <ul class="tag-clouds">
@@ -31,7 +31,7 @@
         <span>
           {{ tag.name }}
 
-          <a @click="toggleTag(tag)" class="remove"><i class="fa fa-times"></i></a>
+          <a @click="toggleTag(tag)" class="remove"><i class="fa fa-xmark"></i></a>
         </span>
       </li>
     </ul>

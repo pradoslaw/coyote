@@ -175,7 +175,7 @@
               <a class="btn-history"
                  :title="post.permissions.update ? 'Zobacz historię zmian tego posta' : ''"
                  :href="post.permissions.update ? `/Forum/Post/Log/${post.id}` : ''">
-                <i class="fas fa-external-link-alt"></i>
+                <i class="fas fa-up-right-from-square"></i>
               </a>
               edytowany {{ post.edit_count }}x,
               ostatnio:
@@ -242,7 +242,7 @@
             </button>
 
             <button @click="copy" class="btn btn-sm">
-              <i class="fas fa-fw fa-share-alt"></i> <span class="d-none d-sm-inline">Udostępnij</span>
+              <i class="fas fa-fw fa-share-nodes"></i> <span class="d-none d-sm-inline">Udostępnij</span>
             </button>
 
             <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
@@ -253,16 +253,16 @@
 
           <div v-if="post.permissions.write" class="ml-auto">
             <button v-if="post.permissions.update && !post.deleted_at" @click="edit" class="btn btn-sm">
-              <i :class="{'text-primary': post.is_editing}" class="fas fa-fw fa-edit"></i>
+              <i :class="{'text-primary': post.is_editing}" class="fas fa-fw fa-pen-to-square"></i>
               <span class="d-none d-sm-inline">Edytuj</span>
             </button>
 
             <template v-if="post.permissions.delete">
               <button v-if="!post.deleted_at" @click="deletePost(true)" class="btn btn-sm">
-                <i class="fa fa-fw fa-trash-alt"></i> <span class="d-none d-sm-inline">Usuń</span>
+                <i class="fa fa-fw fa-trash-can"></i> <span class="d-none d-sm-inline">Usuń</span>
               </button>
               <button v-else class="btn btn-sm" @click="restore">
-                <i class="fa fa-fw fa-undo"></i> <span class="d-none d-sm-inline">Przywróć</span>
+                <i class="fa fa-fw fa-arrow-rotate-left"></i> <span class="d-none d-sm-inline">Przywróć</span>
               </button>
             </template>
 
@@ -282,7 +282,7 @@
 
             <div v-if="post.permissions.merge || post.permissions.adm_access" class="dropdown float-right">
               <button class="btn btn-sm" data-bs-toggle="dropdown">
-                <i class="fas fa-fw fa-ellipsis-h"></i>
+                <i class="fas fa-fw fa-ellipsis"></i>
               </button>
 
               <div class="dropdown-menu dropdown-menu-right">

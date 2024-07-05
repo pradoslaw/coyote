@@ -1,14 +1,14 @@
 {% if can('wiki-admin') %}
   {% if not wiki.deleted_at %}
-    <li><a href="#modal-delete" data-bs-toggle="modal"><i class="fas fa-fw fa-trash-alt"></i> Usuń stronę</a></li>
+    <li><a href="#modal-delete" data-bs-toggle="modal"><i class="fas fa-fw fa-trash-can"></i> Usuń stronę</a></li>
     {% if categories|length > 1 %}
       <li><a href="#modal-unlink" data-bs-toggle="modal" title="Artykuł nie zostanie usunięty, a jedynie jego kopia" class="dropdown-item"><i class="fas fa-fw fa-chain-broken"></i> Usuń tylko tę kopię strony</a></li>
     {% endif %}
-    <li><a href="{{ route('wiki.purge', [wiki.id]) }}"><i class="far fa-fw fa-trash-alt"></i> Usuń cache</a></li>
+    <li><a href="{{ route('wiki.purge', [wiki.id]) }}"><i class="far fa-fw fa-trash-can"></i> Usuń cache</a></li>
     <li><a href="{{ route('wiki.clone', [wiki.id]) }}"><i class="far fa-fw fa-clone"></i> Utwórz kopię</a></li>
-    <li><a href="{{ route('wiki.move', [wiki.id]) }}"><i class="fas fa-fw fa-arrow-alt-circle-right"></i> Przenieś stronę</a></li>
+    <li><a href="{{ route('wiki.move', [wiki.id]) }}"><i class="fas fa-fw fa-circle-right"></i> Przenieś stronę</a></li>
     <li><a href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}"><i class="fas fa-fw fa-plus"></i> Utwórz podstronę</a></li>
   {% else %}
-    <li><a href="#modal-restore" data-bs-toggle="modal"><i class="fas fa-fw fa-undo"></i> Przywróć usuniętą wersję</a></li>
+    <li><a href="#modal-restore" data-bs-toggle="modal"><i class="fas fa-fw fa-arrow-rotate-left"></i> Przywróć usuniętą wersję</a></li>
   {% endif %}
 {% endif %}

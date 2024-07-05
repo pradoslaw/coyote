@@ -1,11 +1,11 @@
 <template>
   <ul class="metadata list-inline">
     <li class="list-inline-item">
-      <i class="fa fa-user-alt"></i> <vue-user-name :user="guide.user" />
+      <i class="fa fa-user-large"></i> <vue-user-name :user="guide.user" />
     </li>
 
     <li class="list-inline-item">
-      <i class="far fa-calendar-alt"></i> <vue-timeago :datetime="guide.created_at"></vue-timeago>
+      <i class="far fa-calendar-days"></i> <vue-timeago :datetime="guide.created_at"></vue-timeago>
     </li>
 
     <li class="list-inline-item">

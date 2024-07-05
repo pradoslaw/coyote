@@ -15,7 +15,7 @@
       </template>
 
       <a @click="deleteMessage" class="btn-delete float-right text-danger" href="javascript:" title="Usuń">
-        <i class="fas fa-trash-alt"></i>
+        <i class="fas fa-trash-can"></i>
       </a>
 
       <a v-if="clickableText" :href="'/User/Pm/Show/' + message.id" class="excerpt">{{ message.excerpt ? message.excerpt : '(kliknij, aby przeczytać)' }}</a>

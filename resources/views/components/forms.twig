@@ -94,7 +94,7 @@
   <div class="form-group row">
     <div class="col-md-10 offset-md-2">
       <a class="btn btn-secondary" href="javascript:window.history.back()" rel="nofollow">
-        <i class="fas fa-undo"></i> Powrót
+        <i class="fas fa-arrow-rotate-left"></i> Powrót
       </a>
       <input type="submit" value="{{ label }}" class="btn btn-primary">
       {% if delete_url %}
@@ -104,7 +104,7 @@
            data-url="{{ delete_url }}"
            data-bs-toggle="modal"
            data-bs-target="#confirm-delete">
-          <i class="fas fa-trash-alt"></i>
+          <i class="fas fa-trash-can"></i>
           Usuń
         </a>
       {% endif %}
@@ -116,7 +116,7 @@
   <div class="form-group row">
     <div class="col-sm-10 col-sm-offset-2">
       <a class="btn btn-secondary" href="{{ url ? url : 'javascript:window.history.back()' }}" rel="nofollow">
-        <i class="fas fa-undo"></i>
+        <i class="fas fa-arrow-rotate-left"></i>
         Powrót
       </a>
     </div>

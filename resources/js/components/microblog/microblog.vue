@@ -40,17 +40,17 @@
             </div>
 
             <div v-if="isAuthorized" class="dropdown">
-              <button class="btn btn-xs border-0 text-muted" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
+              <button class="btn btn-xs border-0 text-muted" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis"></i></button>
 
               <div class="dropdown-menu dropdown-menu-right">
                 <template v-if="microblog.permissions.update">
 
                   <template v-if="!microblog.deleted_at">
-                    <a @click="edit(microblog)" class="dropdown-item" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
-                    <a @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-alt fa-fw"></i> Usuń</a>
+                    <a @click="edit(microblog)" class="dropdown-item" href="javascript:"><i class="fas fa-pen-to-square fa-fw"></i> Edytuj</a>
+                    <a @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-can fa-fw"></i> Usuń</a>
                   </template>
 
-                  <a v-else @click="restoreItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-restore fa-fw"></i> Przywróć</a>
+                  <a v-else @click="restoreItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-arrow-up fa-fw"></i> Przywróć</a>
 
                   <a v-if="microblog.permissions.moderate && !microblog.deleted_at"
                      @click="toggleSponsored(microblog)"
@@ -98,7 +98,7 @@
               </div>
             </div>
 
-            <div v-if="isWrapped" @click="unwrap" class="show-more"><a href="javascript:"><i class="fa fa-arrow-alt-circle-right"></i> Zobacz całość</a></div>
+            <div v-if="isWrapped" @click="unwrap" class="show-more"><a href="javascript:"><i class="fa fa-circle-right"></i> Zobacz całość</a></div>
           </div>
 
           <vue-form v-if="microblog.is_editing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="edit(microblog)" @save="edit(microblog)"></vue-form>
@@ -124,7 +124,7 @@
             </a>
 
             <a @click.prevent="copy" :href="microblog.url" class="btn btn-gradient" title="Kopiuj link do schowka">
-              <i class="fas fa-share-alt"></i>
+              <i class="fas fa-share-nodes"></i>
 
               <span class="d-none d-sm-inline">Udostępnij</span>
             </a>

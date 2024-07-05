@@ -50,7 +50,7 @@
         <div class="d-none d-lg-block col-lg-2"></div>
         <div class="col-12 d-flex col-lg-10">
           <a v-if="isRollbackEnabled" @click="rollback" title="Cofnij do tej wersji" class="btn btn-sm btn-rollback">
-            <i class="fas fa-undo"/>
+            <i class="fas fa-arrow-rotate-left"/>
             Cofnij do tej wersji
           </a>
           <a v-else class="btn btn-sm" :href="this.topicLink">

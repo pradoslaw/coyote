@@ -2,12 +2,12 @@
   <div class="card-section card pt-1">
     <div class="section-name pb-2 pl-lg-3 pt-lg-2 pr-lg-2">
       <h2 class="float-left">
-        <a v-if="$listeners.collapse" href="javascript:" @click="collapse"><i :class="[isCollapse ? 'fa-plus-square': 'fa-minus-square']" class="far"></i> {{ name }}</a>
+        <a v-if="$listeners.collapse" href="javascript:" @click="collapse"><i :class="[isCollapse ? 'fa-square-plus': 'fa-square-minus']" class="far"></i> {{ name }}</a>
         <template v-else>{{ name }}</template>
       </h2>
 
       <div v-if="isAuthorized && !categories[0].parent_id" :class="{'open': isDropdown}" v-on-clickaway="hideDropdown" class="dropdown float-right dropleft">
-        <a href="javascript:" @click="isDropdown = ! isDropdown" class="card-cog mt-2 mr-2"><i class="fas fa-cogs"></i></a>
+        <a href="javascript:" @click="isDropdown = ! isDropdown" class="card-cog mt-2 mr-2"><i class="fas fa-gears"></i></a>
 
         <div :class="{'d-block': isDropdown}" class="dropdown-menu">
           <a v-for="category in categories" href="javascript:" class="dropdown-item" @click="toggle(category)">

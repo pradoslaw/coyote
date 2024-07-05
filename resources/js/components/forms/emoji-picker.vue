@@ -40,7 +40,7 @@
         <div class="search-box">
           <input class="form-control" v-model="searchPhrase" placeholder="Wyszukaj emoji..."/>
           <button class="btn btn-primary" type="button" ref="close-button" @click="close">
-            <i class="fas fa-times"/>
+            <i class="fas fa-xmark"/>
             Zamknij
           </button>
         </div>

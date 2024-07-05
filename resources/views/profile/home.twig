@@ -37,7 +37,7 @@
                 <h1 class="m-0">{{ user.name }}</h1>
                 <div>
                   <button class="btn btn-secondary d-block" data-bs-toggle="dropdown">
-                    <i class="fa fa-ellipsis-h"></i>
+                    <i class="fa fa-ellipsis"></i>
                   </button>
                   <div class="dropdown-menu">
                     <a v-if="isBlocked(user.id)" @click="unblock(user.id)" href="javascript:" class="dropdown-item" rel="nofollow">
@@ -66,7 +66,7 @@
 
                 {% if user.location %}
                   <li class="list-inline-item">
-                    <i class="fas fa-map-marker-alt fa-fw"></i>
+                    <i class="fas fa-location-dot fa-fw"></i>
                     {{ user.location }}
                   </li>
                 {% endif %}
@@ -87,7 +87,7 @@
                 {% endif %}
                 {% if user.visited_at %}
                   <li class="list-inline-item" title="Ostatnia wizyta">
-                    <i class="fas fa-sign-in-alt fa-fw"></i>
+                    <i class="fas fa-right-to-bracket fa-fw"></i>
                     {{ user.visited_at|format_date }}
                   </li>
                 {% endif %}
@@ -102,7 +102,7 @@
 
                 {% if user.birthyear %}
                   <li class="list-inline-item" title="Wiek">
-                    <i class="fas fa-calendar-alt fa-fw"></i>
+                    <i class="fas fa-calendar-days fa-fw"></i>
                     {{ "now"|date("Y") - user.birthyear }} lat
                   </li>
                 {% endif %}
@@ -170,7 +170,7 @@
 
         <li>
           <a href="{{ route('forum.user', [user.id]) }}">
-            <i class="fas fa-fw fa-search"></i>
+            <i class="fas fa-fw fa-magnifying-glass"></i>
             Znajdź posty użytkownika
           </a>
         </li>
@@ -211,7 +211,7 @@
 
             <li class="pt-2 pb-2 row">
               <div class="col-3">
-                <i class="fa  {{ user.reputation >= value ? 'fa-check text-primary' : 'fa-times text-danger' }}"></i>
+                <i class="fa  {{ user.reputation >= value ? 'fa-check text-primary' : 'fa-xmark text-danger' }}"></i>
 
                 <strong>{{ value }}</strong>
               </div>

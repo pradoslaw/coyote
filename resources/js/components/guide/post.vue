@@ -4,11 +4,11 @@
 
     <div v-if="!guide.is_editing" class="card-body">
       <div v-if="guide.permissions.update" class="dropdown float-right">
-        <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
+        <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis"></i></button>
 
         <div class="dropdown-menu dropdown-menu-right">
-          <a @click="edit" class="dropdown-item" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
-          <a @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-alt fa-fw"></i> Usuń</a>
+          <a @click="edit" class="dropdown-item" href="javascript:"><i class="fas fa-pen-to-square fa-fw"></i> Edytuj</a>
+          <a @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-can fa-fw"></i> Usuń</a>
         </div>
       </div>
 

@@ -17,7 +17,7 @@
     </div>
 
     <a @click.stop="deleteNotification(notification)" href="javascript:" class="btn-action" title="Usuń">
-      <i class="fas fa-times"></i>
+      <i class="fas fa-xmark"></i>
     </a>
   </div>
 </template>

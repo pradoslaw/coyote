@@ -48,11 +48,11 @@ class BaseController extends Controller
             $menu->divide(['class' => 'menu-group-service-operations']);
 
             $menu->add('Grupy', ['route' => 'adm.groups'])->prepend($fa('fa-users fa-fw'))->data('permission', 'adm-group');
-            $menu->add('Kategorie', ['route' => 'adm.forum.categories'])->prepend($fa('fa-th-list fa-fw'));
+            $menu->add('Kategorie', ['route' => 'adm.forum.categories'])->prepend($fa('fa-table-list fa-fw'));
             $menu->add('Uprawnienia w kategorii', ['route' => 'adm.forum.permissions'])->prepend($fa('fa-file-signature fa-fw'))->data('permission', 'adm-group');
             $menu->add('Powody moderacji', ['route' => 'adm.forum.reasons'])->prepend($fa('fa-eraser fa-fw'));
             $menu->add('Bloki statyczne', ['route' => 'adm.blocks'])->prepend($fa('far fa-file-code fa-fw'));
-            $menu->add('Faktury i płatności', ['route' => 'adm.payments'])->prepend($fa('fa-shopping-cart fa-fw'))->data('permission', 'adm-payment');
+            $menu->add('Faktury i płatności', ['route' => 'adm.payments'])->prepend($fa('fa-cart-shopping fa-fw'))->data('permission', 'adm-payment');
         })
             ->filter(function (Item $item): bool {
                 if ($item->data('permission')) {

@@ -261,7 +261,7 @@ blockquote {
     font-size: .8rem;
 
     &:before {
-      @include font-awesome($fa-var-external-link-alt);
+      @include font-awesome($fa-var-up-right-from-square);
       left: 0;
       font-weight: 900;
     }

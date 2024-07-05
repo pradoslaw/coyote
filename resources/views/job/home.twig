@@ -41,7 +41,7 @@
           <div class="card card-default mt-3">
             <div class="job-search-form card-body">
               <div class="input-item keyword-search" :class="{'extended': selectedTab === 'tech'}">
-                <i class="fas fa-fw fa-search fa-icon"></i>
+                <i class="fas fa-fw fa-magnifying-glass fa-icon"></i>
 
                 <ul v-cloak class="list-group list-group-tech inline">
                   <li v-for="tag in input.tags" class="list-group-item">
@@ -67,7 +67,7 @@
               </div>
 
               <div class="input-item location-search" :class="{'extended': selectedTab === 'location'}">
-                <i class="fas fa-fw fa-map-marker-alt fa-icon"></i>
+                <i class="fas fa-fw fa-location-dot fa-icon"></i>
 
                 <ul v-cloak class="list-group list-group-tech inline">
                   <li v-if="input.remote" class="list-group-item">
@@ -120,7 +120,7 @@
 
               <div class="input-item button-search d-none d-md-block">
                 <button tabindex="4" class="btn btn-primary btn-search" type="submit">
-                  <i class="fas fa-search"></i>
+                  <i class="fas fa-magnifying-glass"></i>
                 </button>
               </div>
             </div>

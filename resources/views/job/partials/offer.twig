@@ -24,7 +24,7 @@
 
         <ul class="metadata list-inline location">
           <li class="list-inline-item" title="Lokalizacja">
-            <i class="fas fa-map-marker-alt"></i>
+            <i class="fas fa-location-dot"></i>
 
             {% include 'job.partials.location' with {'locations': job.locations} %}
           </li>
@@ -139,7 +139,7 @@
           <ul class="features list-group list-group-horizontal row">
             {% for feature in job.features %}
               <li class="list-group-item col-12 col-sm-6 {{ feature.pivot.checked ? 'checked' }}">
-                <i class="fas fa-fw {{ feature.pivot.checked ? 'fa-check' : 'fa-times' }}"></i> {{ feature.name }}
+                <i class="fas fa-fw {{ feature.pivot.checked ? 'fa-check' : 'fa-xmark' }}"></i> {{ feature.name }}
 
                 {% if feature.pivot.getAttribute('value') %}
                   <small class="text-muted"> ― {{ feature.pivot.getAttribute('value') }}</small>

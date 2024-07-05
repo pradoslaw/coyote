@@ -29,8 +29,8 @@
             <div class="col-sm-12">
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <a title="Dodaj więcej lokalizacji" class="input-group-text text-decoration-none" href="javascript:" @click="ADD_LOCATION"><i class="fas fa-fw fa-plus-circle"></i></a>
-                  <a title="Usuń lokalizację" class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION(location)" v-if="job.locations.length > 1"><i class="fas fa-fw fa-minus-circle text-danger"></i></a>
+                  <a title="Dodaj więcej lokalizacji" class="input-group-text text-decoration-none" href="javascript:" @click="ADD_LOCATION"><i class="fas fa-fw fa-circle-plus"></i></a>
+                  <a title="Usuń lokalizację" class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION(location)" v-if="job.locations.length > 1"><i class="fas fa-fw fa-circle-minus text-danger"></i></a>
                 </div>
 
                 <vue-google-place @change="setLocation(index, ...arguments)" :label="location.label"></vue-google-place>
@@ -114,7 +114,7 @@
             <li class="list-group-item w-50" v-for="(feature, index) in job.features" :class="{checked: feature.checked}">
               <div class="row form-group">
                 <div class="col-6" @click="TOGGLE_FEATURE(feature)">
-                  <i class="fas fa-fw " :class="{'fa-check': feature.checked, 'fa-times': !feature.checked}"></i>
+                  <i class="fas fa-fw " :class="{'fa-check': feature.checked, 'fa-xmark': !feature.checked}"></i>
 
                   {{ feature.name }}
                 </div>

@@ -20,7 +20,7 @@
     <div class="col-12">
       <h3>Dodatkowe pytania?</h3>
 
-      <i class="fas fa-info-circle fa-2x float-left d-none d-lg-inline"></i>
+      <i class="fas fa-circle-info fa-2x float-left d-none d-lg-inline"></i>
 
       <div class="float-left ml-1">
         <a href="#comments" style="font-size: 15px" class="text-muted">Zadaj pytanie dotyczace tego ogłoszenia</a>
@@ -43,19 +43,19 @@
   {% if not job.is_expired and can('update', job) %}
     <li>
       <a class="btn-edit" href="{{ route('job.submit', [job.id]) }}">
-        <i class="fas fa-fw fa-edit"></i>
+        <i class="fas fa-fw fa-pen-to-square"></i>
         Edycja oferty
       </a>
     </li>
   {% endif %}
 
   <li>
-    <a class="btn-add" href="{{ route('job.submit') }}?revalidate=1"><i class="fas fa-fw fa-pencil-alt"></i> Dodaj ofertę pracy</a>
+    <a class="btn-add" href="{{ route('job.submit') }}?revalidate=1"><i class="fas fa-fw fa-pencil"></i> Dodaj ofertę pracy</a>
   </li>
 
   {% if can('delete', job) %}
     <li>
-      <a class="btn-delete" href="#modal-delete" data-bs-toggle="modal"><i class="fas fa-fw fa-trash-alt"></i> Usuń tę ofertę pracy</a>
+      <a class="btn-delete" href="#modal-delete" data-bs-toggle="modal"><i class="fas fa-fw fa-trash-can"></i> Usuń tę ofertę pracy</a>
     </li>
   {% endif %}
 

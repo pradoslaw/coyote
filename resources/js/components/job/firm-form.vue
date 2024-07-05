@@ -15,7 +15,7 @@
       <vue-form-group :errors="errors['firm.name']" label="Nazwa firmy" class="border-bottom">
         <div class="input-group">
           <div class="input-group-prepend">
-            <a @click="addFirm" class="input-group-text text-decoration-none" href="javascript:" title="Dodaj nową firmę"><i class="fas fa-fw fa-plus-circle"></i></a>
+            <a @click="addFirm" class="input-group-text text-decoration-none" href="javascript:" title="Dodaj nową firmę"><i class="fas fa-fw fa-circle-plus"></i></a>
           </div>
 
           <vue-text v-model="firm.name" :is-invalid="'firm.name' in errors" name="firm[name]"></vue-text>
@@ -132,14 +132,14 @@
             :class="{checked: firm.benefits.includes(benefit)}"
             @click="TOGGLE_BENEFIT(benefit)"
           >
-            <i class="fas fa-fw " :class="{'fa-check': firm.benefits.includes(benefit), 'fa-times': !firm.benefits.includes(benefit)}"></i> {{ benefit }}
+            <i class="fas fa-fw " :class="{'fa-check': firm.benefits.includes(benefit), 'fa-xmark': !firm.benefits.includes(benefit)}"></i> {{ benefit }}
           </li>
 
           <li class="list-group-item w-50 checked" v-for="benefit in firm.benefits" v-if="!defaultBenefits.includes(benefit)">
             <i class="fas fa-fw fa-check"></i>
 
             <input type="text" maxlength="100" :value="benefit" class="form-control form-control-sm" @keydown.enter.prevent="">
-            <button class="btn btn-sm btn-delete" title="Usuń tę pozycję" @click.prevent="REMOVE_BENEFIT(benefit)"><i class="fas fa-minus-circle text-danger"></i></button>
+            <button class="btn btn-sm btn-delete" title="Usuń tę pozycję" @click.prevent="REMOVE_BENEFIT(benefit)"><i class="fas fa-circle-minus text-danger"></i></button>
           </li>
 
           <li class="list-group-item w-50 checked">

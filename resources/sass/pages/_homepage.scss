@@ -144,7 +144,7 @@
     }
 
     span.microblog:after {
-      content: fa-content($fa-var-male);
+      content: fa-content($fa-var-person);
     }
 
     span.comment:after {
@@ -157,7 +157,7 @@
     }
 
     span.post:after {
-      content: fa-content($fa-var-file-alt);
+      content: fa-content($fa-var-file-lines);
     }
 
     @include media-breakpoint-down(sm) {

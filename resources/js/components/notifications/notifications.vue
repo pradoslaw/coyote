@@ -10,7 +10,7 @@
       <div class="dropdown-header">
         <div v-if="unreadNotifications.length > 0" class="float-right">
           <a @click="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="mr-1">
-            <i class="fas fa-external-link-alt"></i>
+            <i class="fas fa-up-right-from-square"></i>
           </a>
 
           <a @click="markAllAsRead" title="Oznacz jako przeczytane" href="javascript:">

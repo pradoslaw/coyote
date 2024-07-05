@@ -16,7 +16,7 @@
         @keydown.esc="cancel"
       ></textarea>
 
-      <button type="submit" @click.prevent="saveComment" class="btn btn-sm btn-comment-submit" title="Zapisz (Ctrl+Enter)"><i class="far fa-fw fa-share-square"></i></button>
+      <button type="submit" @click.prevent="saveComment" class="btn btn-sm btn-comment-submit" title="Zapisz (Ctrl+Enter)"><i class="far fa-fw fa-share-from-square"></i></button>
     </vue-prompt>
   </form>
 </template>

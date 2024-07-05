@@ -1,7 +1,7 @@
 <template>
   <div v-on-clickaway="blurInput" :class="{'nav-search-mobile': isMobile}" class="nav-search">
     <div :class="{'active': isActive}" class="search-bar ml-md-4 mr-md-4">
-      <i class="fas fa-search ml-2 mr-2"></i>
+      <i class="fas fa-magnifying-glass ml-2 mr-2"></i>
 
       <form action="/Search" role="search" ref="search" class="flex-grow-1">
         <input v-for="[key, value] of params" type="hidden" :name="key" :value="value">
@@ -25,7 +25,7 @@
 
       <!-- close mobile menu -->
       <button v-if="isMobile" @click="toggleMobile" class="btn nav-link">
-        <i class="fa fa-2x fa-times"></i>
+        <i class="fa fa-2x fa-xmark"></i>
       </button>
 
       <div v-if="isHelpEnabled" class="search-dropdown p-3">
@@ -74,7 +74,7 @@
     <!-- show this only on mobile devices to show search bar -->
     <div v-if="!isMobile" class="d-md-none navbar-nav ml-auto mr-2">
       <a @click="toggleMobile" href="javascript:" class="nav-link">
-        <i class="fa fa-search fa-fw"></i>
+        <i class="fa fa-magnifying-glass fa-fw"></i>
       </a>
     </div>
   </div>
