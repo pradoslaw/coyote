@@ -1,4 +1,4 @@
-const merge = require('webpack-merge');
+const {merge} = require('webpack-merge');
 const common = require('./webpack.common.js');
 const glob = require('glob-all');
 const path = require('path');
@@ -80,7 +80,11 @@ const plugins = [
     },
   }),
 
-  new webpack.EnvironmentPlugin(['FRONTEND_SENTRY_DSN', 'VAPID_PUBLIC_KEY', 'RELEASE']),
+  new webpack.EnvironmentPlugin({
+    'FRONTEND_SENTRY_DSN': null,
+    'VAPID_PUBLIC_KEY': null,
+    'RELEASE': null,
+  }),
 ];
 
 if (process.env.RELEASE) {
@@ -97,7 +101,7 @@ if (process.env.RELEASE) {
 module.exports = merge(common, {
   mode: "production",
   optimization: {
-    namedChunks: true,
+    chunkIds: 'named',
     minimize: true,
     usedExports: true,
     minimizer: [
