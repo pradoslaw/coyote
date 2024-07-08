@@ -4,7 +4,7 @@ import VuePostWrapper from "@/components/forum/post-wrapper.vue";
 import VuePagination from "@/components/pagination.vue";
 import {PostCommentSaved, PostSaved, PostVoted, Subscriber} from "@/libs/live";
 import store from "@/store";
-import {Post} from "@/types/models.ts";
+import {Post} from "@/types/models";
 import Vue from "vue";
 import {mapGetters, mapState} from "vuex";
 

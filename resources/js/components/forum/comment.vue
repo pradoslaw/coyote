@@ -46,7 +46,7 @@ import {mixin as clickaway} from "vue-clickaway";
 import {Prop, Ref} from "vue-property-decorator";
 import {mapGetters} from "vuex";
 
-import store from "../../store/index.ts";
+import store from "../../store/index";
 import VueFlag from "../flags/flag.vue";
 import {default as mixins} from '../mixins/user.js';
 import VueUserName from '../user-name.vue';
