@@ -35,7 +35,7 @@
   import Component from "vue-class-component";
   import DesktopNotifications from '../../libs/notifications';
   import { default as ws } from '../../libs/realtime';
-  import { default as PerfectScrollbar } from '../perfect-scrollbar';
+  import { default as PerfectScrollbar } from '../perfect-scrollbar.js';
   import { mixin as clickaway } from 'vue-clickaway';
   import VueMessage from './message-compact.vue';
   import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
