@@ -17,7 +17,7 @@ services:
       - coyote
 
   php:
-    image: 4programmers/php-node:8.3.2
+    image: 4programmers/php-node:8.3.2-20
     working_dir: /var/www
     environment:
       - ENABLE_XDEBUG=$ENABLE_XDEBUG
@@ -37,7 +37,7 @@ services:
       - coyote
 
   cron:
-    image: 4programmers/php-node:8.3.2
+    image: 4programmers/php-node:8.3.2-20
     working_dir: /var/www
     user: nginx
     volumes:
