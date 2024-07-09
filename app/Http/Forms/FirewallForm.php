@@ -73,12 +73,11 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Powód',
                 'rules' => 'max:1000',
             ])
-            ->add('expire_at', 'text', [
+            ->add('expire_at', 'date', [
                 'label' => 'Data wygaśnięcia',
                 'rules' => 'required_if:lifetime,0|date_format:Y-m-d',
                 'attr'  => [
-                    'placeholder' => 'YYYY-MM-DD',
-                    'id'          => 'expire-at',
+                    'id' => 'expire-at',
                 ],
             ])
             ->add('lifetime', 'checkbox', [

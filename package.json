@@ -39,7 +39,6 @@
     "date-fns": "^2.9.0",
     "diff": "^5.0.0",
     "dotenv-webpack": "^7.0.3",
-    "flatpickr": "^4.6.3",
     "glob-all": "^3.1.0",
     "mini-css-extract-plugin": "^2.9.0",
     "perfect-scrollbar": "^1.5.0",
