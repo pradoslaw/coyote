@@ -46,7 +46,7 @@
             <a @click="checkAuth(vote, guide)" href="javascript:" title="Kliknij jeżeli uważasz ten wpis za wartościowy" class="btn btn-gradient">
               <i :class="{'fa text-primary': guide.is_voted, 'far': !guide.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
-              {{ guide.votes }} {{ guide.votes | declination(['głos', 'głosy', 'głosów']) }}
+              {{ guide.votes }} {{ declination(guide.votes, ['głos', 'głosy', 'głosów']) }}
             </a>
           </li>
 
@@ -54,7 +54,7 @@
             <a @click="checkAuth(subscribe, guide)" href="javascript:" title="Otrzymuj powiadomienia o zmianach na tej stronie" class="btn btn-gradient">
               <i :class="{'fa text-primary': guide.is_subscribed, 'far': !guide.is_subscribed}" class="fa-fw fa-bell"></i>
 
-              {{ guide.subscribers }} {{ guide.subscribers | declination(['obserwator', 'obserwatorów', 'obserwatorów']) }}
+              {{ guide.subscribers }} {{ declination(guide.subscribers, ['obserwator', 'obserwatorów', 'obserwatorów']) }}
             </a>
           </li>
         </ul>

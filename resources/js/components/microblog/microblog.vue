@@ -27,7 +27,7 @@
                 </li>
                 <li class="list-inline-item small">
                   {{ microblog.views }}
-                  {{ microblog.views | declination(['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}
+                  {{ declination(microblog.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}
                 </li>
                 <li v-if="microblog.is_sponsored" class="list-inline-item small">
                   Sponsorowane
@@ -108,7 +108,7 @@
                data-balloon-break>
               <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
-              {{ microblog.votes }} {{ microblog.votes | declination(['głos', 'głosy', 'głosów']) }}
+              {{ microblog.votes }} {{ declination(microblog.votes, ['głos', 'głosy', 'głosów']) }}
             </a>
 
             <a @click="checkAuth(subscribe, microblog)" href="javascript:" class="btn btn-gradient" title="Wł/Wył obserwowanie tego wpisu">
@@ -137,8 +137,13 @@
           </div>
           <div ref="comments" class="microblog-comments">
             <div v-if="microblog.comments_count > Object.keys(microblog.comments).length" class="show-all-comments">
-              <a @click="loadComments(microblog)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }}
-                {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
+              <a @click="loadComments(microblog)" href="javascript:">
+                <i class="far fa-comments"></i> 
+                Zobacz 
+                {{ declination(totalComments, ['pozostały', 'pozostałe', 'pozostałe']) }}
+                {{ totalComments }} 
+                {{ declination(totalComments, ['komentarz', 'komentarze', 'komentarzy']) }}
+              </a>
             </div>
 
             <vue-comment v-for="comment in microblog.comments" :key="comment.id" :comment="comment" @reply="reply"></vue-comment>

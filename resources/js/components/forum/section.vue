@@ -51,12 +51,12 @@
             <ul class="list-inline mb-0 mt-1">
               <li class="list-inline-item">
                 <strong>{{ category.topics | number }}</strong>
-                <small class="text-muted text-wide-spacing">{{ category.topics | declination(['wątek', 'wątków', 'wątków']) }}</small>
+                <small class="text-muted text-wide-spacing">{{ declination(category.topics, ['wątek', 'wątków', 'wątków']) }}</small>
               </li>
 
               <li class="list-inline-item">
                 <strong>{{ category.posts | number }}</strong>
-                <small class="text-muted text-wide-spacing">{{ category.posts | declination(['post', 'postów', 'postów']) }}</small>
+                <small class="text-muted text-wide-spacing">{{ declination(category.posts, ['post', 'postów', 'postów']) }}</small>
               </li>
             </ul>
           </div>
