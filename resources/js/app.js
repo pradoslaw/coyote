@@ -25,16 +25,6 @@ Vue.use(VueAutosize);
 new Router()
   .on(['/User', '/User/Skills', '/User/Relations', '/User/Tokens'], () => require('./pages/user'))
   .on(['/Register', '/Login'], () => require('./pages/auth'))
-  .on(['/Adm/Firewall/*'], () => {
-    require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
-      require('flatpickr');
-      require('../sass/vendor/_flatpickr.scss');
-      $('#expire-at').flatpickr({
-        allowInput: true,
-        locale: require('flatpickr/dist/l10n/pl.js').pl,
-      });
-    });
-  })
   .on(['/Adm/Mailing'], () => require('./libs/tinymce').default())
   .on(['/User/Pm/Submit', '/User/Pm/Show/*', '/User/Pm'], () => require('./pages/pm'))
   .on(['/Mikroblogi', '/Mikroblogi/*', '/Profile/*/Microblog'], () => require('./pages/microblog'))
