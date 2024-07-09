@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const {WebpackManifestPlugin} = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 const exec = require('child_process').exec;
@@ -124,8 +124,9 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
-
-    new CleanWebpackPlugin(['public/js/*.*', 'public/css/*.*'], {}),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['js/*.*', 'css/*.*', '!*/.gitignore'],
+    }),
     // @see https://webpack.js.org/guides/caching/#module-identifiers
     new webpack.ids.HashedModuleIdsPlugin(),
 

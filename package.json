@@ -29,7 +29,7 @@
     "balloon-css": "^1.2.0",
     "bootstrap": "^4.4.1",
     "bootstrap5": "npm:bootstrap@5.0.0",
-    "clean-webpack-plugin": "^1.0.0",
+    "clean-webpack-plugin": "^4.0.0",
     "core-js": "^3.18.3",
     "css-loader": "^5.2.7",
     "date-fns": "^2.9.0",
