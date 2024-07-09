@@ -48,7 +48,6 @@
     "sass": "^1.77.6",
     "sass-loader": "^10.5.2",
     "svg-spritemap-webpack-plugin": "3.6.0",
-    "terser-webpack-plugin": "^2.3.4",
     "ts-loader": "^8.2.0",
     "typescript": "^3.9.9",
     "vue": "2.6.14",
