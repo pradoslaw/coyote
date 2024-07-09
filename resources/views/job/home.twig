@@ -78,7 +78,7 @@
 
                   <li v-for="location in input.locations" class="list-group-item">
                     <a @click.prevent="toggleLocation(location)" href="javascript:" rel="nofollow">
-                      ${ location|capitalize }
+                      ${ capitalize(location) }
                     </a>
                   </li>
                 </ul>
@@ -155,7 +155,7 @@
                     <input type="hidden" name="locations[]" :value="location" :checked="includesLocation(location)">
 
                     <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && includesLocation(location)}" rel="nofollow">
-                      ${ location|capitalize }
+                      ${ capitalize(location) }
                     </a>
                   </li>
                 </ul>
