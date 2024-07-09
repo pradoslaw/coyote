@@ -14,7 +14,11 @@ export default {
     }
   },
 
-  filters: {
+  methods: {
+    declination(count, set) {
+      return declination(count, set);
+    },
+
     number(value) {
       return Math.abs(value) > 999 ? Math.sign(value) * ((Math.abs(value)/1000).toFixed(1)) + 'k' : Math.sign(value) * Math.abs(value);
     },
@@ -22,12 +26,7 @@ export default {
     size(size) {
       return size > 1024 * 1024 ? Math.round(size / 1024 / 1024) + ' MB' : Math.round(size / 1024) + ' KB';
     },
-  },
-
-  methods: {
-    declination(count, set) {
-      return declination(count, set);
-    },
+    
     checkAuth(cb, ...args) {
       if (!this.isAuthorized) {
         this.$notify({

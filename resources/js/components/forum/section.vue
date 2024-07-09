@@ -50,12 +50,12 @@
           <div v-if="!category.is_redirected" class="col-6 col-md-12 col-lg-2 d-flex align-items-center">
             <ul class="list-inline mb-0 mt-1">
               <li class="list-inline-item">
-                <strong>{{ category.topics | number }}</strong>
+                <strong>{{ number(category.topics) }}</strong>
                 <small class="text-muted text-wide-spacing">{{ declination(category.topics, ['wątek', 'wątków', 'wątków']) }}</small>
               </li>
 
               <li class="list-inline-item">
-                <strong>{{ category.posts | number }}</strong>
+                <strong>{{ number(category.posts) }}</strong>
                 <small class="text-muted text-wide-spacing">{{ declination(category.posts, ['post', 'postów', 'postów']) }}</small>
               </li>
             </ul>
