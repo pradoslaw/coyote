@@ -4,7 +4,9 @@
       <div class="col-12">
         <strong>{{ pollSync.title }}</strong>
 
-        <em v-if="pollSync.max_items > 1" class="max-items">(* możesz oddać maksymalnie {{ poll.max_items }} {{ poll.max_items|declination(['głos', 'głosy', 'głosów']) }})</em>
+        <em v-if="pollSync.max_items > 1" class="max-items">
+          (* możesz oddać maksymalnie {{ poll.max_items }} {{ declination(poll.max_items, ['głos', 'głosy', 'głosów']) }})
+        </em>
       </div>
     </div>
 

@@ -9,13 +9,13 @@
     </li>
 
     <li class="list-inline-item">
-      <i class="far fa-comments"></i> {{ guide.comments_count }} {{ guide.comments_count | declination(['komentarz', 'komentarze', 'komentarzy']) }}
+      <i class="far fa-comments"></i> {{ guide.comments_count }} {{ declination(guide.comments_count, ['komentarz', 'komentarze', 'komentarzy']) }}
     </li>
 
     <li class="list-inline-item">
       <i class="far fa-eye"></i>
 
-      {{ guide.views }} {{ guide.views | declination(['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}
+      {{ guide.views }} {{ declination(guide.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}
     </li>
   </ul>
 </template>

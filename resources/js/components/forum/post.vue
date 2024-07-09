@@ -190,9 +190,9 @@
               <a @click="loadComments(post)" href="javascript:">
                 <i class="far fa-comments"></i>
                 Zobacz
-                {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }}
+                {{ declination(totalComments, ['pozostały', 'pozostałe', 'pozostałe']) }}
                 {{ totalComments }}
-                {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}
+                {{ declination(totalComments, ['komentarz', 'komentarze', 'komentarzy']) }}
               </a>
             </div>
 

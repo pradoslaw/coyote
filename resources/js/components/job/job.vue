@@ -55,9 +55,12 @@
               </a>
             </li>
             <li class="list-inline-item">
-              <a :href="job.url + '#comments'"><i class="far fa-fw fa-comment"></i> {{ job.comments_count }} {{ job.comments_count | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
+              <a :href="job.url + '#comments'">
+                <i class="far fa-fw fa-comment"></i> 
+                {{ job.comments_count }} 
+                {{ declination(job.comments_count, ['komentarz', 'komentarze', 'komentarzy']) }}
+              </a>
             </li>
-            <!--<li><a href="#"><i class="fa fa-fw fa-share"></i> Udostępnij</a></li>-->
           </ul>
         </div>
       </div>

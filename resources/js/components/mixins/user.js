@@ -22,13 +22,12 @@ export default {
     size(size) {
       return size > 1024 * 1024 ? Math.round(size / 1024 / 1024) + ' MB' : Math.round(size / 1024) + ' KB';
     },
-
-    declination(count, set) {
-      return declination(count, set);
-    }
   },
 
   methods: {
+    declination(count, set) {
+      return declination(count, set);
+    },
     checkAuth(cb, ...args) {
       if (!this.isAuthorized) {
         this.$notify({
