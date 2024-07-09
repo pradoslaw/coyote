@@ -12,9 +12,11 @@
               <label class="col-form-label">Tytuł oferty <em>*</em></label>
             </template>
 
-            <vue-text name="title" v-model="job.title" placeholder="Np. Senior Java Developer" maxlength="60" :is-invalid="'title' in errors"></vue-text>
+            <vue-text name="title" v-model="job.title" placeholder="Np. Senior Java Developer" :maxlength="titleMaxLength" :is-invalid="'title' in errors"></vue-text>
 
-            <span class="form-text text-muted">Pozostało <strong>{{ job.title | charCounter(60) }}</strong> znaków</span>
+            <span class="form-text text-muted">
+              Pozostało <strong>{{ jobTitleCharactersRemaining }}</strong> znaków
+            </span>
           </vue-form-group>
 
           <vue-form-group class="col-sm-3" label="Staż pracy">
@@ -210,11 +212,6 @@
     methods: {
       ...mapMutations('jobs', ['ADD_LOCATION', 'REMOVE_LOCATION', 'SET_LABEL', 'ADD_TAG', 'REMOVE_TAG', 'TOGGLE_FEATURE'])
     },
-    filters: {
-      charCounter(value, limit = 60) {
-        return limit - String(value ?? '').length;
-      }
-    },
     watch: {
       job: {
         handler(job) {
@@ -236,6 +233,7 @@
     errors;
 
     suggestions = {};
+    titleMaxLength: number = 60;
 
     setLocation(index, location) {
       this.$store.commit('jobs/SET_LOCATION', { index, location });
@@ -251,6 +249,10 @@
       axios.get<any>('/Praca/Tag/Suggestions', {params: {t: pluck}}).then((response: AxiosResponse<any>) => this.suggestions = response.data);
     }
 
+    get jobTitleCharactersRemaining():number {
+      return this.titleMaxLength - String(this.job.title ?? '').length;
+    }
+    
     get tinyMceOptions() {
       return TinyMceOptions;
     }
