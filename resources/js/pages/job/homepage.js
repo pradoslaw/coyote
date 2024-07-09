@@ -40,12 +40,11 @@ new Vue({
     this.initXScrollbar(document.querySelector('#js-filter-location'));
     this.initXScrollbar(document.querySelector('#js-filter-tech'));
   },
-  filters: {
+  methods: {
     capitalize(value) {
       return value.charAt(0).toUpperCase() + value.slice(1);
-    }
-  },
-  methods: {
+    },
+
     toggleTag(tag) {
       this.toggle(this.input.tags, tag);
     },
