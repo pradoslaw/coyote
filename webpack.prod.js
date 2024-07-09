@@ -2,7 +2,7 @@ const {merge} = require('webpack-merge');
 const common = require('./webpack.common.js');
 const glob = require('glob-all');
 const path = require('path');
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const PurgeCssPlugin = require('purgecss-webpack-plugin');
 const SentryPlugin = require("@sentry/webpack-plugin");
 const webpack = require('webpack');
@@ -105,7 +105,7 @@ module.exports = merge(common, {
     usedExports: true,
     minimizer: [
       '...',
-      new OptimizeCSSAssetsPlugin({}),
+      new CssMinimizerPlugin(),
     ],
   },
   plugins,
