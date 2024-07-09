@@ -142,7 +142,7 @@
               Publikacja ogłoszenia ({{ payment.days }} dni)
             </div>
             <div class="float-right text-right">
-              ${ netPrice | money } zł
+              ${ money(netPrice) } zł
             </div>
           </div>
 
@@ -151,7 +151,7 @@
               Rabat
             </div>
             <div class="float-right text-right">
-              ${ coupon.amount | money } zł
+              ${ money(coupon.amount) } zł
             </div>
           </div>
 
@@ -160,7 +160,7 @@
               VAT (${ percentageVatRate }%)
             </div>
             <div class="float-right">
-              ${ vatPrice | money } zł
+              ${ money(vatPrice) } zł
             </div>
           </div>
 
@@ -171,7 +171,7 @@
               <strong>Suma:</strong>
             </div>
             <div class="float-right">
-              <strong>${ grossPrice | money } zł</strong>
+              <strong>${ money(grossPrice) } zł</strong>
             </div>
           </div>
 
@@ -199,7 +199,7 @@
               <span>Do zapłaty:</span>
             </div>
             <div class="float-right">
-              <span>${ grossPrice | money } zł</span>
+              <span>${ money(grossPrice) } zł</span>
             </div>
           </div>
         </div>

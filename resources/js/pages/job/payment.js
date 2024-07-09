@@ -19,11 +19,6 @@ new Vue({
     'vue-checkbox': VueCheckbox,
     'vue-button': VueButton
   },
-  filters: {
-    money(value) {
-      return parseFloat(value).toFixed(2);
-    }
-  },
   data: {
     countries: window.countries,
     netPrice: window.netPrice,
@@ -52,6 +47,10 @@ new Vue({
     this.card.mount('#card-element');
   },
   methods: {
+    money(value) {
+      return parseFloat(value).toFixed(2);
+    },
+
     calculate() {
       // if VAT ID is empty we must add VAT
       this.vatRate = this.form.invoice.vat_id.trim() !== ''
