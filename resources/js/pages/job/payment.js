@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import VueMaskedInput from 'vue-masked-input';
 import axios from 'axios';
 
 import VueButton from '@/components/forms/button.vue';
@@ -18,7 +17,6 @@ new Vue({
     'vue-text': VueText,
     'vue-select': VueSelect,
     'vue-checkbox': VueCheckbox,
-    'vue-masked-input': VueMaskedInput,
     'vue-button': VueButton
   },
   filters: {
