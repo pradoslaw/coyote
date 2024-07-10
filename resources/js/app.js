@@ -31,7 +31,6 @@ new Router()
   .on(['/Profile/*'], () => require('./pages/profile'))
   .on(['/'], () => require('./pages/homepage'))
   .on(['/Search'], () => require('./pages/search'))
-  .on(['/Guide', '/Guide/*'], () => require('./pages/guide'))
   .resolve();
 
 // must be at the end so other vue components can render
