@@ -55,86 +55,73 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import Component from "vue-class-component";
-  import VueFormGroup from '@/components/forms/form-group.vue';
-  import VueText from '@/components/forms/text.vue';
-  import VueSelect from '@/components/forms/select.vue';
-  import VueCheckbox from '@/components/forms/checkbox.vue';
-  import VueButton from '@/components/forms/button.vue';
-  import VueError from '@/components/forms/error.vue';
-  import VueThumbnail from "@/components/thumbnail.vue";
-  import VueTinyMce from '@tinymce/tinymce-vue';
-  import { Prop, PropSync } from "vue-property-decorator";
-  import { Application, Job, Asset } from '@/types/models';
-  import TinyMceOptions from '@/libs/tinymce';
-  import axios from 'axios';
+import Vue from 'vue';
+import VueFormGroup from '@/components/forms/form-group.vue';
+import VueText from '@/components/forms/text.vue';
+import VueSelect from '@/components/forms/select.vue';
+import VueCheckbox from '@/components/forms/checkbox.vue';
+import VueButton from '@/components/forms/button.vue';
+import VueError from '@/components/forms/error.vue';
+import VueThumbnail from "@/components/thumbnail.vue";
+import VueTinyMce from '@tinymce/tinymce-vue';
+import { Application, Job, Asset } from '@/types/models';
+import TinyMceOptions from '@/libs/tinymce';
+import axios from 'axios';
 
-  @Component({
-    components: {
-      'vue-form-group': VueFormGroup,
-      'vue-text': VueText,
-      'vue-select': VueSelect,
-      'vue-checkbox': VueCheckbox,
-      'vue-button': VueButton,
-      'vue-error': VueError,
-      'vue-tinymce': VueTinyMce,
-      'vue-thumbnail': VueThumbnail
-    }
-  })
-  export default class VueApplicationForm extends Vue {
-    @PropSync('application')
-    applicationSync!: Application;
-
-    @Prop(Object)
-    job!: Job;
-
-    private errors = {};
-    private isProcessing = false;
-
-    submitForm() {
-      this.isProcessing = true;
-
-      axios.post<any>(`/Praca/Application/${this.job.id}`, this.applicationSync)
-        .then(result => window.location.href = result.data as string)
-        .catch(err => {
-          if (err.response.status !== 422) {
-            return;
-          }
-
-          this.errors = err.response.data.errors;
-        })
-        .finally(() => this.isProcessing = false);
-    }
-
-    addAsset(asset: Asset) {
-      Vue.set(this.applicationSync, 'cv', asset.filename!);
-    }
-
-    deleteAsset() {
-      this.applicationSync.cv = null;
-    }
-
-    get tinyMceOptions() {
+export default Vue.extend({
+  name: 'VueApplicationForm',
+  components: {
+    'vue-form-group': VueFormGroup,
+    'vue-text': VueText,
+    'vue-select': VueSelect,
+    'vue-checkbox': VueCheckbox,
+    'vue-button': VueButton,
+    'vue-error': VueError,
+    'vue-tinymce': VueTinyMce,
+    'vue-thumbnail': VueThumbnail,
+  },
+  props: {
+    application: {
+      type: Object,
+      required: true,
+    },
+    job: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      errors: {},
+      isProcessing: false,
+    };
+  },
+  computed: {
+    applicationSync: {
+      get() {
+        return this.application;
+      },
+      set(value) {
+        this.$emit('update:application', value);
+      },
+    },
+    tinyMceOptions() {
       return TinyMceOptions;
-    }
-
-    get dismissalPeriod() {
+    },
+    dismissalPeriod() {
       return [
         'Brak',
         '3 dni robocze',
         '1 tydzień',
         '2 tygodnie',
         '1 miesiąc',
-        '3 miesiące'
+        '3 miesiące',
       ].reduce((acc, value) => {
         acc[value] = value;
-
         return acc;
-      }, {})
-    }
-
-    get salaryChoices() {
+      }, {});
+    },
+    salaryChoices() {
       return [
         'od 1000 zł m-c',
         'od 2000 zł m-c',
@@ -148,9 +135,31 @@
         'od 10000 zł m-c',
       ].reduce((acc, value) => {
         acc[value] = value;
-
         return acc;
-      }, {})
-    }
-  }
+      }, {});
+    },
+  },
+  methods: {
+    submitForm() {
+      this.isProcessing = true;
+
+      axios.post<any>(`/Praca/Application/${this.job.id}`, this.applicationSync)
+        .then(result => window.location.href = result.data as string)
+        .catch(err => {
+          if (err.response.status !== 422) {
+            return;
+          }
+
+          this.errors = err.response.data.errors;
+        })
+        .finally(() => this.isProcessing = false);
+    },
+    addAsset(asset: Asset) {
+      Vue.set(this.applicationSync, 'cv', asset.filename);
+    },
+    deleteAsset() {
+      this.applicationSync.cv = null;
+    },
+  },
+});
 </script>

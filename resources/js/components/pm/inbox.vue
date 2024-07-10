@@ -31,65 +31,50 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import Component from "vue-class-component";
-  import DesktopNotifications from '../../libs/notifications';
-  import { default as ws } from '../../libs/realtime';
-  import { default as PerfectScrollbar } from '../perfect-scrollbar.js';
-  import { mixin as clickaway } from 'vue-clickaway';
-  import VueMessage from './message-compact.vue';
-  import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-  import { Message, User } from "@/types/models";
-  import store from "@/store";
+import Vue from 'vue';
+import {mixin as clickaway} from 'vue-clickaway';
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+import DesktopNotifications from '../../libs/notifications';
+import {default as ws} from '../../libs/realtime';
+import {default as PerfectScrollbar} from '../perfect-scrollbar.js';
+import VueMessage from './message-compact.vue';
 
-  @Component({
-    mixins: [ clickaway ],
-    components: {
-      'perfect-scrollbar': PerfectScrollbar,
-      'vue-message': VueMessage
+export default Vue.extend({
+  name: 'VueInbox',
+  mixins: [clickaway],
+  components: {
+    'perfect-scrollbar': PerfectScrollbar,
+    'vue-message': VueMessage,
+  },
+  data() {
+    return {
+      isOpen: false,
+      currentTitle: null as string | null,
+      animationId: null as NodeJS.Timer | null,
+    };
+  },
+  computed: {
+    ...mapState('inbox', ['messages', 'count']),
+    ...mapState('user', ['user']),
+    ...mapGetters('inbox', ['isEmpty']),
+    channel() {
+      return ws.subscribe(`user:${this.user.id}`);
     },
-    methods: {
-      ...mapMutations('inbox', ['SET_COUNT', 'RESET_MESSAGE', 'MARK']),
-      ...mapActions('inbox', ['get']),
-    },
-    computed: {
-      ...mapState('inbox', ['messages', 'count']),
-      ...mapState('user', ['user']),
-      ...mapGetters('inbox', ['isEmpty']),
-    }
-  })
-  export default class VueInbox extends Vue {
-    isOpen = false;
-    currentTitle: string | null = null;
-    animationId: null | NodeJS.Timer = null;
-    count!: number;
-    messages!: Message[];
-    isEmpty!: boolean;
-    user!: User;
-    SET_COUNT!: (count: number) => void;
-    RESET_MESSAGE!: () => void;
-    MARK!: (message: Message) => void;
-    get!: () => any;
-
-    mounted() {
-      this.listenForMessages();
-      this.listenForVisibilityChange();
-    }
-
+  },
+  methods: {
+    ...mapMutations('inbox', ['SET_COUNT', 'RESET_MESSAGE', 'MARK']),
+    ...mapActions('inbox', ['get']),
     loadMessages() {
       this.isOpen = !this.isOpen;
-
       if (this.isEmpty) {
         this.get();
       }
-    }
-
+    },
     hideDropdown() {
       this.isOpen = false;
-    }
-
+    },
     listenForMessages() {
-      this.channel.on('PmCreated', ({ count, data }) => {
+      this.channel.on('PmCreated', ({count, data}) => {
         this.SET_COUNT(count);
         this.RESET_MESSAGE();
 
@@ -117,8 +102,7 @@
           this.MARK(message);
         }
       });
-    }
-
+    },
     listenForVisibilityChange() {
       document.addEventListener('visibilitychange', () => {
         if (!document.hidden) {
@@ -127,8 +111,7 @@
       });
 
       this.channel.on('PmVisible', this.stopAnimation);
-    }
-
+    },
     startAnimation(user) {
       if (!document.hidden) {
         // page is not hidden. tell other tabs to stop animation
@@ -145,10 +128,9 @@
       this.currentTitle = document.title;
 
       this.animationId = setInterval(() =>
-        document.title = document.title === this.currentTitle ? 'Masz wiadomość od: ' + user.name : this.currentTitle as string, 2000
+        document.title = document.title === this.currentTitle ? 'Masz wiadomość od: ' + user.name : this.currentTitle as string, 2000,
       );
-    }
-
+    },
     stopAnimation() {
       if (this.animationId === null) {
         return;
@@ -162,15 +144,15 @@
       this.currentTitle = this.animationId = null;
 
       this.stopAnimationOnAllWindows();
-    }
-
+    },
     stopAnimationOnAllWindows() {
       // send event to other tabs
       this.channel.whisper('PmVisible', {});
-    }
-
-    get channel() {
-      return ws.subscribe(`user:${this.user.id}`);
-    }
-  }
+    },
+  },
+  mounted() {
+    this.listenForMessages();
+    this.listenForVisibilityChange();
+  },
+});
 </script>

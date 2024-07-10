@@ -156,58 +156,64 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import Component from "vue-class-component";
-  import VueFormGroup from '@/components/forms/form-group.vue';
-  import VueText from '@/components/forms/text.vue';
-  import VueSelect from '@/components/forms/select.vue';
-  import VueButton from '@/components/forms/button.vue';
-  import VueError from '@/components/forms/error.vue';
-  import VueTinyMce from '@tinymce/tinymce-vue';
-  import VueMap from '@/components/google-maps/map.vue';
-  import VueMarker from '@/components/google-maps/marker.vue';
-  import VueThumbnail from '@/components/thumbnail.vue';
-  import { Prop } from "vue-property-decorator";
-  import { Firm, Asset } from '@/types/models';
-  import { mapMutations } from "vuex";
-  import Geocoder from '../../libs/geocoder';
-  import TinyMceOptions from '../../libs/tinymce';
-  import store from '../../store';
+import Vue from 'vue';
+import VueFormGroup from '@/components/forms/form-group.vue';
+import VueText from '@/components/forms/text.vue';
+import VueSelect from '@/components/forms/select.vue';
+import VueButton from '@/components/forms/button.vue';
+import VueError from '@/components/forms/error.vue';
+import VueTinyMce from '@tinymce/tinymce-vue';
+import VueMap from '@/components/google-maps/map.vue';
+import VueMarker from '@/components/google-maps/marker.vue';
+import VueThumbnail from '@/components/thumbnail.vue';
+import { Firm, Asset } from '@/types/models';
+import { mapMutations } from 'vuex';
+import Geocoder from '../../libs/geocoder.js';
+import TinyMceOptions from '../../libs/tinymce.js';
+import store from '../../store';
 
-  @Component({
-    components: {
-      'vue-form-group': VueFormGroup,
-      'vue-text': VueText,
-      'vue-select': VueSelect,
-      'vue-button': VueButton,
-      'vue-error': VueError,
-      'vue-tinymce': VueTinyMce,
-      'vue-map': VueMap,
-      'vue-marker': VueMarker,
-      'vue-thumbnail': VueThumbnail,
+export default Vue.extend({
+  name: 'VueFirmForm',
+  components: {
+    'vue-form-group': VueFormGroup,
+    'vue-text': VueText,
+    'vue-select': VueSelect,
+    'vue-button': VueButton,
+    'vue-error': VueError,
+    'vue-tinymce': VueTinyMce,
+    'vue-map': VueMap,
+    'vue-marker': VueMarker,
+    'vue-thumbnail': VueThumbnail,
+  },
+  props: {
+    firm: {
+      type: Object,
+      required: true,
     },
-    methods: {
-      ...mapMutations('jobs', ['REMOVE_BENEFIT', 'TOGGLE_BENEFIT'])
-    }
-  })
-  export default class VueFirmForm extends Vue {
-    @Prop()
-    firm!: Firm;
-
-    @Prop()
-    errors;
-
-    @Prop()
-    defaultBenefits!: string[];
-
-    @Prop()
-    employees!: number[];
-
-    @Prop()
-    firms!: Firm[];
-
-    benefit: string = '';
-
+    errors: {
+      type: Object,
+      required: false,
+    },
+    defaultBenefits: {
+      type: Array,
+      required: true,
+    },
+    employees: {
+      type: Array,
+      required: true,
+    },
+    firms: {
+      type: Array,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      benefit: '',
+    };
+  },
+  methods: {
+    ...mapMutations('jobs', ['REMOVE_BENEFIT', 'TOGGLE_BENEFIT']),
     changeAddress(e) {
       const val = e.target.value.trim();
       const geocoder = new Geocoder();
@@ -221,40 +227,30 @@
           this.firm[field] = null;
         });
       }
-    }
-
+    },
     geocode(latlng) {
       const geocoder = new Geocoder();
-
       geocoder.reverseGeocode(latlng, result => this.firm = Object.assign(this.firm, result));
-    }
-
+    },
     addBenefit() {
       if (this.benefit.trim()) {
         store.commit('jobs/ADD_BENEFIT', this.benefit);
       }
-
       this.benefit = '';
-    }
-
+    },
     addLogo(input) {
       this.firm.logo = input.url;
-    }
-
+    },
     addPhoto(asset: Asset) {
       this.firm.assets.push(asset);
-    }
-
+    },
     removeLogo() {
       this.firm.logo = null;
-    }
-
+    },
     removePhoto(url: string) {
       const gallery = this.firm.assets;
-
       gallery.splice(gallery.findIndex(asset => asset.url === url), 1);
-    }
-
+    },
     addFirm() {
       this.$store.commit('jobs/SET_FIRM', {
         id: null,
@@ -277,19 +273,18 @@
         postcode: null,
         city: null,
         street_number: null,
-        country_id: null
-      })
-    }
-
-    get address() {
+        country_id: null,
+      });
+    },
+  },
+  computed: {
+    address() {
       return String((this.firm.street || '') + ' ' + (this.firm.street_number || '') + ' ' + (this.firm.postcode || '') + ' ' + (this.firm.city || '')).trim();
-    }
-
-    get gallery() {
+    },
+    gallery() {
       return this.firm.assets?.length ? this.firm.assets : [];
-    }
-
-    get founded() {
+    },
+    founded() {
       const year = new Date().getFullYear();
       let result = {};
 
@@ -298,30 +293,28 @@
       }
 
       return result;
-    }
-
-    get tinyMceOptions() {
+    },
+    tinyMceOptions() {
       return TinyMceOptions;
-    }
-
-    get firmsSelect() {
+    },
+    firmsSelect() {
       return this.firms.reduce((acc, curr) => {
         acc[curr.id as unknown as string] = curr.name;
         return acc;
       }, {});
-    }
-
-    get defaultFirm() {
-      return this.firm.id;
-    }
-
-    set defaultFirm(id) {
-      if (!id) {
-        this.addFirm();
-
-        return;
-      }
-      this.$store.commit('jobs/SET_FIRM', this.firms.find(firm => firm.id == id));
-    }
-  }
+    },
+    defaultFirm: {
+      get() {
+        return this.firm.id;
+      },
+      set(id) {
+        if (!id) {
+          this.addFirm();
+          return;
+        }
+        this.$store.commit('jobs/SET_FIRM', this.firms.find(firm => firm.id == id));
+      },
+    },
+  },
+});
 </script>

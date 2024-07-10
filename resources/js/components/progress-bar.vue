@@ -13,33 +13,37 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import Component from "vue-class-component";
-  import { Prop } from "vue-property-decorator";
-  import { default as mixin } from '@/components/mixins/form.js';
+import {default as mixin} from '@/components/mixins/form.js';
+import Vue from 'vue';
 
-  @Component({
-    mixins: [ mixin ]
-  })
-  export default class VueProgressBar extends Vue {
-    @Prop()
-    readonly value!: number;
-
-    @Prop({default: false})
-    readonly editable!: boolean;
-
-    @Prop({default: 3})
-    readonly max!: number;
-
-    @Prop({default: () => ['podstawy', 'średnio zaawansowany', 'zaawansowany']})
-    readonly tooltips!: string[];
-
-    setValue(value: number) {
+export default Vue.extend({
+  name: 'VueProgressBar',
+  mixins: [mixin],
+  props: {
+    value: {
+      type: Number,
+      required: true,
+    },
+    editable: {
+      type: Boolean,
+      default: false,
+    },
+    max: {
+      type: Number,
+      default: 3,
+    },
+    tooltips: {
+      type: Array,
+      default: () => ['podstawy', 'średnio zaawansowany', 'zaawansowany'],
+    },
+  },
+  methods: {
+    setValue(value) {
       if (!this.editable) {
         return;
       }
-
       this.$emit('click', value);
-    }
-  }
+    },
+  },
+});
 </script>

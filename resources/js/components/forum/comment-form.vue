@@ -31,53 +31,51 @@
 <script lang="ts">
 import {PostComment} from "@/types/models";
 import Vue from 'vue';
-import Component from "vue-class-component";
-import {Prop, Ref} from "vue-property-decorator";
-import VueAutosize from '../../plugins/autosize';
+import VueAutosize from '../../plugins/autosize.js';
 import store from "../../store";
 import VueButton from '../forms/button.vue';
 import VuePrompt from '../forms/prompt.vue';
 
 Vue.use(VueAutosize);
 
-@Component({
+export default Vue.extend({
   name: 'post-comment-form',
-  store,
+  props: {
+    comment: {
+      type: Object as () => PostComment,
+      required: true,
+    },
+  },
   components: {
     'vue-prompt': VuePrompt,
     'vue-button': VueButton,
   },
-})
-export default class VueCommentForm extends Vue {
-  @Prop(Object)
-  comment!: PostComment;
+  data() {
+    return {
+      isProcessing: false,
+      maxLength: 580,
+    };
+  },
+  methods: {
+    saveComment() {
+      this.$data.isProcessing = true;
 
-  @Ref()
-  readonly textarea!: HTMLTextAreaElement;
+      store.dispatch('posts/saveComment', this.comment)
+        .then(() => {
+          this.$emit('save');
 
-  private isProcessing = false;
-  private readonly maxLength = 580;
-
-  saveComment() {
-    this.isProcessing = true;
-
-    store.dispatch('posts/saveComment', this.comment)
-      .then(() => {
-        this.$emit('save');
-
-        if (!this.comment.id) {
-          this.comment.text = '';
-        }
-      })
-      .finally(() => this.isProcessing = false);
-  }
-
-  focus() {
-    this.textarea.focus();
-  }
-
-  cancel() {
-    this.$emit('cancel');
-  }
-}
+          if (!this.comment.id) {
+            this.comment.text = '';
+          }
+        })
+        .finally(() => this.isProcessing = false);
+    },
+    focus() {
+      (this.$refs.textarea as HTMLTextAreaElement).focus();
+    },
+    cancel() {
+      this.$emit('cancel');
+    },
+  },
+});
 </script>

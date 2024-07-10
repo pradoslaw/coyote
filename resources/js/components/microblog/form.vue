@@ -43,12 +43,10 @@
 </template>
 
 <script lang="ts">
-import axios, {CancelTokenSource} from 'axios';
-import Component from "vue-class-component";
-import {Mixins, Prop, ProvideReactive, Ref} from "vue-property-decorator";
-
+import axios from 'axios';
+import Vue from 'vue';
 import store from "../../store";
-import {Emojis, Tag} from "../../types/models";
+import {Tag} from "../../types/models";
 import VueButton from '../forms/button.vue';
 import VueMarkdown from '../forms/markdown.vue';
 import VuePrompt from '../forms/prompt.vue';
@@ -57,51 +55,30 @@ import {MicroblogFormMixin} from '../mixins/microblog';
 
 const DRAFT_KEY = 'microblog';
 
-@Component({
+export default Vue.extend({
   name: 'microblog-form',
   store,
   components: {
     'vue-button': VueButton,
     'vue-prompt': VuePrompt,
     'vue-markdown': VueMarkdown,
-    'vue-tags-inline': VueTagsInline
+    'vue-tags-inline': VueTagsInline,
   },
-  inject: []
-})
-export default class VueForm extends Mixins(MicroblogFormMixin) {
-  private timeoutId?: number;
-  private urlDetector: any;
-  private cancelTokenSource?: CancelTokenSource;
-  emojis?: Emojis;
-
-  @Ref('markdown')
-  public markdown!: VueMarkdown;
-
-  @Prop({default: () => []})
-  @ProvideReactive('popularTags')
-  readonly popularTags!: Tag[];
-
-  detectUrl() {
-    const handler = () => {
-      const matches = this.microblog.text.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig);
-
-      if (!matches) {
-        return;
-      }
-
-      this.urlDetector(); // remove watcher
-
-      this.cancelTokenSource = axios.CancelToken.source();
-
-      axios.get<any>('/assets/opg', {params: {url: matches[0]}, errorHandle: false, cancelToken: this.cancelTokenSource.token})
-        .then(response => this.microblog.assets.push(response.data))
-        .catch(this.startUrlDetector);
+  mixins: [MicroblogFormMixin],
+  props: {
+    popularTags: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  data() {
+    return {
+      timeoutId: undefined,
+      urlDetector: null,
+      cancelTokenSource: undefined,
+      emojis: undefined,
     };
-
-    clearTimeout(this.timeoutId);
-    this.timeoutId = window.setTimeout(handler, 500);
-  }
-
+  },
   created() {
     this.emojis = window.emojis;
     if (this.microblog.id) {
@@ -109,24 +86,41 @@ export default class VueForm extends Mixins(MicroblogFormMixin) {
     }
     this.$set(this.microblog, 'text', this.$loadDraft(DRAFT_KEY));
     this.$watch('microblog.text', newValue => this.$saveDraft(DRAFT_KEY, newValue));
-
     this.startUrlDetector();
-  }
+  },
+  methods: {
+    detectUrl() {
+      const handler = () => {
+        const matches = this.microblog.text.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig);
 
-  saveMicroblog() {
-    if (this.cancelTokenSource) {
-      this.cancelTokenSource.cancel();
-    }
+        if (!matches) {
+          return;
+        }
 
-    this.save('microblogs/save').then(() => this.$removeDraft(DRAFT_KEY))
-  }
+        this.urlDetector(); // remove watcher
 
-  toggleTag(tag: Tag) {
-    store.commit('microblogs/TOGGLE_TAG', {microblog: this.microblog, tag});
-  }
+        this.cancelTokenSource = axios.CancelToken.source();
 
-  startUrlDetector() {
-    this.urlDetector = this.$watch('microblog.text', this.detectUrl);
-  }
-}
+        axios.get<any>('/assets/opg', {params: {url: matches[0]}, errorHandle: false, cancelToken: this.cancelTokenSource.token})
+          .then(response => this.microblog.assets.push(response.data))
+          .catch(this.startUrlDetector);
+      };
+
+      clearTimeout(this.timeoutId);
+      this.timeoutId = window.setTimeout(handler, 500);
+    },
+    saveMicroblog() {
+      if (this.cancelTokenSource) {
+        this.cancelTokenSource.cancel();
+      }
+      this.save('microblogs/save').then(() => this.$removeDraft(DRAFT_KEY));
+    },
+    toggleTag(tag: Tag) {
+      store.commit('microblogs/TOGGLE_TAG', {microblog: this.microblog, tag});
+    },
+    startUrlDetector() {
+      this.urlDetector = this.$watch('microblog.text', this.detectUrl);
+    },
+  },
+});
 </script>

@@ -26,49 +26,58 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import Component from "vue-class-component";
-import {Prop, Ref} from "vue-property-decorator";
-import {Flag} from "../../types/models";
 import VueModal from '../modal.vue';
 import VueUserName from "../user-name.vue";
 
-@Component({
+export default Vue.extend({
   name: 'flag',
-  components: {'vue-username': VueUserName, 'vue-modal': VueModal},
-})
-export default class VueFlag extends Vue {
-  @Prop()
-  readonly flag!: Flag;
-
-  @Ref()
-  readonly modal!: VueModal;
-
-  closeFlag() {
-    this.modal.close()
-    this.$store.dispatch('flags/delete', this.flag);
-  }
-
-  get elementNameAccusative(): string {
-    for (const resource of this.flag.resources) {
-      if (resource.resource_type === 'Coyote\\Post\\Comment') {
-        return 'komentarz';
+  components: {
+    'vue-username': VueUserName,
+    'vue-modal': VueModal,
+  },
+  props: {
+    flag: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      modal: null as unknown as VueModal,
+    };
+  },
+  methods: {
+    closeFlag() {
+      this.modal.close();
+      this.$store.dispatch('flags/delete', this.flag);
+    },
+  },
+  computed: {
+    elementNameAccusative(): string {
+      for (const resource of this.flag.resources) {
+        if (resource.resource_type === 'Coyote\\Post\\Comment') {
+          return 'komentarz';
+        }
+        if (resource.resource_type === 'Coyote\\Comment') {
+          return 'komentarz';
+        }
       }
-      if (resource.resource_type === 'Coyote\\Comment') {
-        return 'komentarz';
+      for (const resource of this.flag.resources) {
+        if (resource.resource_type === 'Coyote\\Post') {
+          return 'post';
+        }
+        if (resource.resource_type === 'Coyote\\Microblog') {
+          return 'mikroblog';
+        }
+        if (resource.resource_type === 'Coyote\\Job') {
+          return 'ofertę pracy';
+        }
       }
-    }
-    for (const resource of this.flag.resources) {
-      if (resource.resource_type === 'Coyote\\Post') {
-        return 'post';
-      }
-      if (resource.resource_type === 'Coyote\\Microblog') {
-        return 'mikroblog';
-      }
-      if (resource.resource_type === 'Coyote\\Job') {
-        return 'ofertę pracy';
-      }
-    }
-    return '';
-  }
-}
+      return '';
+    },
+  },
+  mounted() {
+    this.modal = this.$refs.modal;
+  },
+});
 </script>

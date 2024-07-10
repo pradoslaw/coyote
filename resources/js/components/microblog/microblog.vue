@@ -138,10 +138,10 @@
           <div ref="comments" class="microblog-comments">
             <div v-if="microblog.comments_count > Object.keys(microblog.comments).length" class="show-all-comments">
               <a @click="loadComments(microblog)" href="javascript:">
-                <i class="far fa-comments"></i> 
-                Zobacz 
+                <i class="far fa-comments"></i>
+                Zobacz
                 {{ declination(totalComments, ['pozostały', 'pozostałe', 'pozostałe']) }}
-                {{ totalComments }} 
+                {{ totalComments }}
                 {{ declination(totalComments, ['komentarz', 'komentarze', 'komentarzy']) }}
               </a>
             </div>
@@ -174,18 +174,16 @@ import IsImage from '@/libs/assets';
 import useBrackets from "@/libs/prompt";
 import {User} from '@/types/models';
 import Vue from 'vue';
-import Component from "vue-class-component";
 import {mixin as clickaway} from "vue-clickaway";
 import VueLightbox from 'vue-cool-lightbox';
-import {Mixins, Prop, Ref} from "vue-property-decorator";
 import {mapActions, mapGetters, mapState} from "vuex";
 import VueClipboard from '../../plugins/clipboard';
-import VueTimeago from '../../plugins/timeago';
+import VueTimeago from '../../plugins/timeago.js';
 import store from "../../store";
 import VueAvatar from '../avatar.vue';
 import VueFlag from '../flags/flag.vue';
 import {MicroblogMixin} from "../mixins/microblog";
-import {default as mixins} from '../mixins/user';
+import {default as mixins} from '../mixins/user.js';
 import VueTags from '../tags.vue';
 import VueUserName from "../user-name.vue";
 import VueCommentForm from './comment-form.vue';
@@ -195,9 +193,9 @@ import VueForm from './form.vue';
 Vue.use(VueTimeago);
 Vue.use(VueClipboard);
 
-@Component({
+export default Vue.extend({
   name: 'microblog',
-  mixins: [clickaway, mixins],
+  mixins: [clickaway, mixins, MicroblogMixin],
   store,
   components: {
     'vue-avatar': VueAvatar,
@@ -209,34 +207,22 @@ Vue.use(VueClipboard);
     'vue-flag': VueFlag,
     'vue-tags': VueTags,
   },
-  computed: {
-    ...mapGetters('user', ['isAuthorized']),
-    ...mapState('user', ['user']),
+  props: {
+    wrap: {type: Boolean},
   },
-  methods: {
-    ...mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments', 'toggleSponsored']),
+  data() {
+    return {
+      index: null,
+      commentDefault: {parent_id: this.microblog.id, text: '', assets: []},
+    }
   },
-})
-export default class VueMicroblog extends Mixins(MicroblogMixin) {
-  private index: number | null = null;
-  private commentDefault = {parent_id: this.microblog.id, text: '', assets: []};
-
-  @Ref('comment-form')
-  readonly commentForm!: VueCommentForm;
-
-  @Ref('microblog-text')
-  readonly microblogText!: Element;
-
-  @Prop()
-  wrap!: boolean;
-
   mounted() {
-    if (this.wrap && this.microblogText.clientHeight > 300) {
+    if (this.wrap && this.$refs['microblog-text'].clientHeight > 300) {
       this.isWrapped = true;
     }
 
     const pageHitHandler = () => {
-      const rect = this.microblogText.getBoundingClientRect();
+      const rect = this.$refs['microblog-text'].getBoundingClientRect();
 
       if (rect.top >= 0 && rect.top <= window.innerHeight) {
         document.removeEventListener('scroll', pageHitHandler);
@@ -251,61 +237,67 @@ export default class VueMicroblog extends Mixins(MicroblogMixin) {
     if (!pageHitHandler()) {
       document.addEventListener('scroll', pageHitHandler);
     }
-  }
+  },
+  methods: {
+    ...mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments', 'toggleSponsored']),
 
-  reply(user: User) {
-    this.commentForm.markdown.value += `@${useBrackets(user.name)}: `;
-    this.commentForm.markdown.focus();
-  }
+    reply(user: User) {
+      this.$refs['comment-form'].markdown.value += `@${useBrackets(user.name)}: `;
+      this.$refs['comment-form'].markdown.focus();
+    },
 
-  unwrap() {
-    this.isWrapped = false;
-  }
+    unwrap() {
+      this.isWrapped = false;
+    },
 
-  deleteItem() {
-    this.delete('microblogs/delete', this.microblog);
-  }
+    deleteItem() {
+      this.delete('microblogs/delete', this.microblog);
+    },
 
-  restoreItem() {
-    store.dispatch('microblogs/restore', this.microblog);
-  }
+    restoreItem() {
+      store.dispatch('microblogs/restore', this.microblog);
+    },
 
-  copy() {
-    if (this.$copy(this.microblog.url)) {
-      this.$notify({type: 'success', text: 'Link prawidłowo skopiowany do schowka.'});
-    } else {
-      this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
-    }
-  }
+    copy() {
+      if (this.$copy(this.microblog.url)) {
+        this.$notify({type: 'success', text: 'Link prawidłowo skopiowany do schowka.'});
+      } else {
+        this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
+      }
+    },
+  },
+  computed: {
+    ...mapGetters('user', ['isAuthorized']),
+    ...mapState('user', ['user']),
 
-  get voters() {
-    return this.splice(this.microblog.voters);
-  }
+    voters() {
+      return this.splice(this.microblog.voters);
+    },
 
-  get totalComments() {
-    return this.microblog.comments_count! - Object.keys(this.microblog.comments).length;
-  }
+    totalComments() {
+      return this.microblog.comments_count! - Object.keys(this.microblog.comments).length;
+    },
 
-  get images() {
-    return this
-      .microblog
-      .assets
-      .filter(asset => IsImage(asset.name!) && !asset.metadata)
-      .map(asset => {
-        return {src: asset.url, thumb: asset.thumbnail, url: asset.url};
-      });
-  }
+    images() {
+      return this
+        .microblog
+        .assets
+        .filter(asset => IsImage(asset.name!) && !asset.metadata)
+        .map(asset => {
+          return {src: asset.url, thumb: asset.thumbnail, url: asset.url};
+        });
+    },
 
-  get opg() {
-    return this
-      .microblog
-      .assets
-      .find(asset => asset.metadata !== null)
-  }
+    opg() {
+      return this
+        .microblog
+        .assets
+        .find(asset => asset.metadata !== null)
+    },
 
-  get flags() {
-    return store.getters['flags/filter'](this.microblog.id, 'Coyote\\Microblog');
-  }
-}
+    flags() {
+      return store.getters['flags/filter'](this.microblog.id, 'Coyote\\Microblog');
+    },
+  },
+});
 </script>
-

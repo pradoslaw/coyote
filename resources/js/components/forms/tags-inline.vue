@@ -62,59 +62,55 @@
 </template>
 
 <script lang="ts">
-  import Vue from "vue";
-  import {Prop, Watch, Ref, InjectReactive} from "vue-property-decorator";
-  import Component from "vue-class-component";
-  import VueDropdown from '../forms/dropdown.vue';
-  import { Tag } from '@/types/models';
-  import axios, {AxiosResponse} from 'axios';
+import {Tag} from '@/types/models';
+import axios, {AxiosResponse} from 'axios';
+import Vue from "vue";
+import VueDropdown from '../forms/dropdown.vue';
 
-  @Component({
-    name: 'tags-inline',
-    components: {
-      'vue-dropdown': VueDropdown
+export default Vue.extend({
+  name: 'tags-inline',
+  components: {
+    'vue-dropdown': VueDropdown,
+  },
+  props: {
+    sourceUrl: {
+      type: String,
+      default: '/completion/prompt/tags',
     },
-  })
-  export default class VueTagsInline extends Vue {
-    @Prop({default: '/completion/prompt/tags'})
-    readonly sourceUrl!: string;
-
-    @Prop({default: ''})
-    readonly placeholder!: string;
-
-    @Prop({default: () => []})
-    readonly tags!: Tag[];
-
-    @Ref('dropdown')
-    readonly dropdown!: VueDropdown;
-
-    @Ref('input')
-    readonly input!: HTMLInputElement;
-
-    @Ref('editor')
-    readonly editor!: HTMLElement;
-
-    @Ref('cloud')
-    readonly cloud!: HTMLElement;
-
-    @InjectReactive({from: 'popularTags', default: []})
-    readonly popularTags!: Tag[];
-
-    private searchText: string = '';
-    private filteredTags = [];
-
-    @Watch('searchText')
-    filterResults(searchText) {
-      if (!searchText) {
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    tags: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  data() {
+    return {
+      searchText: '',
+      filteredTags: [],
+    };
+  },
+  inject: {
+    popularTags: {
+      from: 'popularTags',
+      default: () => [],
+    },
+  },
+  watch: {
+    searchText(val) {
+      if (!val) {
         return;
       }
-
-      axios.get<any>(this.sourceUrl, { params: {q: searchText} }).then((result: AxiosResponse<any>) => this.filteredTags = result.data);
-    }
-
+      axios.get<any>(this.sourceUrl, {params: {q: val}})
+        .then((result: AxiosResponse<any>) => this.filteredTags = result.data);
+    },
+  },
+  methods: {
     toggleTag(tag: Tag) {
       this.searchText = '';
-      this.input.focus();
+      this.$refs.input.focus();
 
       this.$emit('change', tag);
 
@@ -123,20 +119,15 @@
       if (searchIndex > -1) {
         this.popularTags.splice(searchIndex, 1);
       }
-    }
-
+    },
     selectTag(event) {
-      // @ts-ignore
-      if (this.dropdown.getSelected()) {
-        // @ts-ignore
-        this.applyTag(this.dropdown.getSelected()['name']);
-
+      if (this.$refs.dropdown.getSelected()) {
+        this.applyTag(this.$refs.dropdown.getSelected().name);
         event.preventDefault(); // prevent submitting the form
       }
-    }
-
+    },
     setTag() {
-      let input = this.searchText.trim().toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, '')
+      let input = this.searchText.trim().toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, '');
 
       if (input.startsWith('#')) {
         input = input.substr(1);
@@ -145,14 +136,11 @@
       if (input) {
         this.applyTag(input);
       }
-    }
-
-    private applyTag(name: string) {
-      this.toggleTag({ name });
-      // @ts-ignore
-      // hiding dropdown resets internal index of selected position. it's important because otherwise pressing enter would apply
-      // last selected tag
-      this.dropdown.hideDropdown();
-    }
-  }
+    },
+    applyTag(name: string) {
+      this.toggleTag({name});
+      this.$refs.dropdown.hideDropdown();
+    },
+  },
+});
 </script>

@@ -5,26 +5,27 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import Component from "vue-class-component";
-  import { mixin as clickaway } from 'vue-clickaway';
+import Vue from 'vue';
+import { mixin as clickaway } from 'vue-clickaway';
 
-  // @ts-ignore
-  @Component({
-    mixins: [ clickaway ]
-  })
-  export default class VueDropdownMenu extends Vue {
-    public isDropdownVisible = false;
-
+export default Vue.extend({
+  name: 'VueDropdownMenu',
+  mixins: [clickaway],
+  data() {
+    return {
+      isDropdownVisible: false,
+    };
+  },
+  methods: {
     hideDropdown(event) {
       if (event && !event.target.classList.contains('dropdown-toggle')) {
         this.isDropdownVisible = false;
       }
-    }
-
+    },
     toggle() {
       this.isDropdownVisible = !this.isDropdownVisible;
-    }
-  }
+    },
+  },
+});
 </script>
 

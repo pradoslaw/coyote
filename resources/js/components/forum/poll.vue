@@ -63,54 +63,65 @@
 
     <div v-if="pollSync.expired" class="row">
       <div class="col-12">
-        <p><em>Ankieta wygasła <vue-timeago :datetime="pollSync.expired_at"></vue-timeago></em></p>
+        <p><em>Ankieta wygasła
+          <vue-timeago :datetime="pollSync.expired_at"></vue-timeago>
+        </em></p>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import { PropSync } from "vue-property-decorator";
-  import Component from "vue-class-component";
-  import { Poll, PollItem } from '../../types/models';
-  import VueButton from "../forms/button.vue";
-  import { default as mixins } from '../mixins/user';
-  import store from "../../store";
-  import { mapGetters } from "vuex";
+import Vue from 'vue';
+import {mapGetters} from "vuex";
+import store from "../../store";
+import {Poll, PollItem} from '../../types/models';
+import VueButton from "../forms/button.vue";
+import mixins from '../mixins/user.js';
 
-  @Component({
-    name: 'forum-poll',
-    mixins: [ mixins ],
-    store,
-    components: { 'vue-button': VueButton },
-    computed: mapGetters('user', ['isAuthorized']),
-  })
-  export default class VuePoll extends Vue {
-    @PropSync('poll')
-    readonly pollSync!: Poll;
-
-    readonly isAuthorized! : boolean;
-    checkedOptions: number[] = [];
-    isProcessing = false;
-
+export default Vue.extend({
+  name: 'forum-poll',
+  mixins: [mixins],
+  store,
+  components: {'vue-button': VueButton},
+  props: {
+    poll: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      checkedOptions: [] as number[],
+      isProcessing: false,
+    };
+  },
+  computed: {
+    ...mapGetters('user', ['isAuthorized']),
+    totalVotes() {
+      return this.poll.items.reduce((total, curr) => total += curr.total, 0);
+    },
+    isVoteable() {
+      return this.poll.votes?.length === 0 && this.isAuthorized && !this.poll.expired;
+    },
+    pollSync: {
+      get(): Poll {
+        return this.poll;
+      },
+      set(value: Poll) {
+        this.$emit('update:poll', value);
+      },
+    },
+  },
+  methods: {
     percentage(item: PollItem) {
-      return this.totalVotes ? Math.round(100 * item.total / this.totalVotes) : 0
-    }
-
+      return this.totalVotes ? Math.round(100 * item.total / this.totalVotes) : 0;
+    },
     vote() {
       this.isProcessing = true;
-
       store.dispatch('poll/vote', Array.isArray(this.checkedOptions) ? this.checkedOptions : [this.checkedOptions])
         .finally(() => this.isProcessing = false);
-    }
-
-    get totalVotes() {
-      return this.pollSync.items.reduce((total, curr) => total += curr.total, 0);
-    }
-
-    get isVoteable() {
-      return this.pollSync.votes?.length === 0 && this.isAuthorized && !this.pollSync.expired;
-    }
-  }
+    },
+  },
+});
 </script>

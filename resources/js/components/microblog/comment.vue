@@ -110,24 +110,21 @@
 import declination from '@/libs/declination';
 import VueTimeago from '@/plugins/timeago';
 import store from "@/store";
-import {Microblog} from "@/types/models";
 import Vue from 'vue';
-import Component from "vue-class-component";
 import {mixin as clickaway} from "vue-clickaway";
-import {Mixins, Prop} from "vue-property-decorator";
 import {mapActions, mapGetters, mapState} from "vuex";
 import VueAvatar from '../avatar.vue';
 import VueFlag from '../flags/flag.vue';
 import {MicroblogMixin} from "../mixins/microblog";
-import {default as mixins} from '../mixins/user';
+import mixins from '../mixins/user.js';
 import VueUserName from '../user-name.vue';
 import VueCommentForm from "./comment-form.vue";
 
 Vue.use(VueTimeago);
 
-@Component({
+export default Vue.extend({
   name: 'comment',
-  mixins: [clickaway, mixins],
+  mixins: [clickaway, mixins, MicroblogMixin],
   store,
   components: {
     'vue-avatar': VueAvatar,
@@ -135,48 +132,42 @@ Vue.use(VueTimeago);
     'vue-comment-form': VueCommentForm,
     'vue-flag': VueFlag,
   },
-  computed: {
-    ...mapState('user', ['user']),
-    ...mapGetters('user', ['isAuthorized']),
+  props: {
+    comment: {
+      type: Object,
+      required: true,
+    },
   },
   methods: {
     ...mapActions('microblogs', ['vote', 'loadVoters']),
+    reply() {
+      this.$emit('reply', this.comment.user);
+    },
+    deleteItem() {
+      this.delete('microblogs/deleteComment', this.comment);
+    },
+    restoreItem() {
+      store.dispatch('microblogs/restoreComment', this.comment);
+    },
   },
-})
-export default class VueComment extends Mixins(MicroblogMixin) {
-  @Prop(Object)
-  comment!: Microblog;
-
-  reply() {
-    this.$emit('reply', this.comment.user);
-  }
-
-  deleteItem() {
-    this.delete('microblogs/deleteComment', this.comment);
-  }
-
-  restoreItem() {
-    store.dispatch('microblogs/restoreComment', this.comment);
-  }
-
-  get anchor() {
-    return `comment-${this.comment.id}`;
-  }
-
-  get highlight() {
-    return '#' + this.anchor === window.location.hash;
-  }
-
-  get commentLabel() {
-    return this.comment.votes + ' ' + declination(this.comment.votes, ['głos', 'głosy', 'głosów']);
-  }
-
-  get commentVoters() {
-    return this.splice(this.comment.voters);
-  }
-
-  get flags() {
-    return store.getters['flags/filter'](this.comment.id, 'Coyote\\Microblog');
-  }
-}
+  computed: {
+    ...mapState('user', ['user']),
+    ...mapGetters('user', ['isAuthorized']),
+    anchor() {
+      return `comment-${this.comment.id}`;
+    },
+    highlight() {
+      return '#' + this.anchor === window.location.hash;
+    },
+    commentLabel() {
+      return this.comment.votes + ' ' + declination(this.comment.votes, ['głos', 'głosy', 'głosów']);
+    },
+    commentVoters() {
+      return this.splice(this.comment.voters);
+    },
+    flags() {
+      return store.getters['flags/filter'](this.comment.id, 'Coyote\\Microblog');
+    },
+  },
+});
 </script>

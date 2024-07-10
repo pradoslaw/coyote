@@ -64,69 +64,81 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import {Prop} from "vue-property-decorator";
-import {PostLog} from "@/types/models";
-import Component from "vue-class-component";
-import VueUserName from "@/components/user-name.vue";
 import VueModal from "@/components/delete-modal.vue";
+import VueUserName from "@/components/user-name.vue";
+import Vue from 'vue';
 
-@Component({
-  components: {'vue-username': VueUserName, 'vue-modal': VueModal}
-})
-export default class VuePostLog extends Vue {
-  @Prop()
-  readonly log!: PostLog;
-  @Prop()
-  readonly topicLink!: string;
-
-  @Prop()
-  readonly isRollbackEnabled!: boolean;
-
-  @Prop({default: null})
-  readonly oldStr!: string | null;
-
-  isLoaded = false;
-  private diff: any;
-
+export default Vue.extend({
+  name: 'VuePostLog',
+  components: {
+    'vue-username': VueUserName,
+    'vue-modal': VueModal,
+  },
+  props: {
+    log: {
+      type: Object,
+      required: true,
+    },
+    topicLink: {
+      type: String,
+      required: true,
+    },
+    isRollbackEnabled: {
+      type: Boolean,
+      required: true,
+    },
+    oldStr: {
+      type: String,
+      default: null,
+    },
+  },
+  data() {
+    return {
+      isLoaded: false,
+      diff: null as any,
+    };
+  },
   created() {
-    return import('diff').then((diff) => {
+    import('diff').then((diff) => {
       this.diff = diff;
       this.isLoaded = true;
     });
-  }
+  },
+  methods: {
+    async rollback() {
+      await this.$confirm({
+        message: 'Treść posta zostanie zastąpiona. Czy chcesz kontynuować?',
+        title: 'Potwierdź operację',
+        okLabel: 'Tak, przywróć',
+      });
 
-  async rollback() {
-    await this.$confirm({
-      message: 'Treść posta zostanie zastąpiona. Czy chcesz kontynuować?',
-      title: 'Potwierdź operację',
-      okLabel: 'Tak, przywróć'
-    });
+      const {data} = await this.$store.dispatch('posts/rollback', this.log);
 
-    const {data} = await this.$store.dispatch('posts/rollback', this.log);
-
-    window.location.href = data.url;
-  }
-
-  get diffStr() {
-    if (!this.oldStr) {
-      return this.log.text;
-    }
-    const diff = this.diff.diffWords(
-      encodeHtml(this.oldStr),
-      encodeHtml(this.log.text));
-
-    return diff.reduce((acc: string, part): string => {
-      if (part.added) {
-        return acc + `<ins class="text-primary">${part.value}</ins>`;
+      window.location.href = data.url;
+    },
+  },
+  computed: {
+    diffStr() {
+      if (!this.oldStr) {
+        return this.log.text;
       }
-      if (part.removed) {
-        return acc + `<del class="text-danger">${part.value}</del>`;
-      }
-      return acc + part.value;
-    }, '');
-  }
-}
+      const diff = this.diff.diffWords(
+        encodeHtml(this.oldStr),
+        encodeHtml(this.log.text),
+      );
+
+      return diff.reduce((acc: string, part): string => {
+        if (part.added) {
+          return acc + `<ins class="text-primary">${part.value}</ins>`;
+        }
+        if (part.removed) {
+          return acc + `<del class="text-danger">${part.value}</del>`;
+        }
+        return acc + part.value;
+      }, '');
+    },
+  },
+});
 
 const tmp = document.createElement("div");
 

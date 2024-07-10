@@ -310,30 +310,27 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
-import {Prop, Ref} from "vue-property-decorator";
-import Component from "vue-class-component";
-import {Post, Topic, User} from '@/types/models';
-import VueClipboard from '@/plugins/clipboard';
-import VueAvatar from '../avatar.vue';
-import VueUserName from "../user-name.vue";
-import VueComment from './comment.vue';
-import VueForm from './form.vue';
-import VueCommentForm from "./comment-form.vue";
-import VueSelect from './../forms/select.vue';
-import VueButton from './../forms/button.vue';
-import VueFlag from './../flags/flag.vue';
-import {mapActions, mapGetters, mapState} from "vuex";
-import VueModal from "../delete-modal.vue";
 import VueTags from '@/components/tags.vue';
+import VueClipboard from '@/plugins/clipboard';
+import store from "@/store";
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import pl from 'date-fns/locale/pl';
-import {default as mixins} from '../mixins/user';
-import store from "@/store";
+import Vue from 'vue';
+import {mapActions, mapGetters, mapState} from "vuex";
+import VueAvatar from '../avatar.vue';
+import VueDeleteModal from "../delete-modal.vue";
+import {default as mixins} from '../mixins/user.js';
+import VueUserName from "../user-name.vue";
+import VueFlag from './../flags/flag.vue';
+import VueButton from './../forms/button.vue';
+import VueSelect from './../forms/select.vue';
+import VueCommentForm from "./comment-form.vue";
+import VueComment from './comment.vue';
+import VueForm from './form.vue';
 
 Vue.use(VueClipboard);
 
-@Component({
+export default Vue.extend({
   name: 'post',
   mixins: [mixins],
   components: {
@@ -342,137 +339,107 @@ Vue.use(VueClipboard);
     'vue-comment': VueComment,
     'vue-comment-form': VueCommentForm,
     'vue-form': VueForm,
-    'vue-modal': VueModal,
+    'vue-modal': VueDeleteModal,
     'vue-select': VueSelect,
     'vue-button': VueButton,
     'vue-flag': VueFlag,
-    'vue-tags': VueTags
+    'vue-tags': VueTags,
   },
-  methods: mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments', 'loadVoters']),
+  props: {
+    post: {
+      type: Object,
+      required: true,
+    },
+    uploadMaxSize: {
+      type: Number,
+      default: 20,
+    },
+    uploadMimes: {
+      type: String,
+    },
+  },
+  data() {
+    return {
+      isProcessing: false,
+      isCollapsed: this.post.deleted_at != null,
+      isCommenting: false,
+      commentDefault: {text: '', post_id: this.post.id},
+    }
+  },
+  methods: {
+    ...mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments', 'loadVoters']),
+    formatDistanceToNow(date) {
+      return formatDistanceToNow(new Date(date), {locale: pl});
+    },
+    copy() {
+      if (this.$copy(this.post.url)) {
+        this.$notify({type: 'success', text: 'Link prawidłowo skopiowany do schowka.'});
+      } else {
+        this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
+      }
+    },
+    edit() {
+      store.commit('posts/edit', this.post);
+      if (this.post.is_editing) {
+        this.$nextTick(() => (this.$refs.form as VueForm).markdown.focus());
+      }
+    },
+    comment() {
+      this.$data.isCommenting = !this.$data.isCommenting;
+      if (this.$data.isCommenting) {
+        this.$nextTick(() => (this.$refs['comment-form'] as typeof VueCommentForm).focus());
+      }
+    },
+    deletePost(confirm = false, reasonId: number | null = null) {
+      if (confirm) {
+        (this.$refs['delete-modal'] as typeof VueDeleteModal).open();
+      } else {
+        (this.$refs['delete-modal'] as typeof VueDeleteModal)!.close();
+        store.dispatch('posts/delete', {post: this.post, reasonId}).then(() => this.$data.isCollapsed = true);
+      }
+    },
+    merge() {
+      this.$confirm({
+        message: 'Czy chcesz połaczyć ten post z poprzednim?',
+        title: 'Połączyć posty?',
+        okLabel: 'Tak, połącz',
+      }).then(() => {
+        this.$store.dispatch('posts/merge', this.post);
+      });
+    },
+    restore() {
+      this.$data.isCollapsed = false;
+      this.$store.dispatch('posts/restore', this.post);
+    },
+  },
   computed: {
     ...mapState('user', ['user']),
     ...mapState('topics', ['reasons']),
     ...mapGetters('user', ['isAuthorized']),
     ...mapGetters('posts', ['posts']),
-    ...mapGetters('topics', ['topic'])
-  }
-})
-export default class VuePost extends Vue {
-  @Prop(Object)
-  post!: Post;
-
-  @Prop({default: 20})
-  readonly uploadMaxSize!: number;
-
-  @Prop()
-  readonly uploadMimes!: string;
-
-  @Ref()
-  readonly form!: VueForm;
-
-  @Ref('comment-form')
-  readonly commentForm!: VueCommentForm;
-
-  @Ref('delete-modal')
-  readonly deleteModal!: VueModal;
-
-  isProcessing = false;
-  isCollapsed = this.post.deleted_at != null;
-  isCommenting = false;
-
-  readonly topic!: Topic;
-  readonly isAuthorized!: boolean;
-  readonly posts!: Post[];
-  readonly user!: User;
-
-  private commentDefault = {text: '', post_id: this.post.id};
-
-  formatDistanceToNow(date) {
-    return formatDistanceToNow(new Date(date), {locale: pl});
-  }
-
-  copy() {
-    if (this.$copy(this.post.url)) {
-      this.$notify({type: 'success', text: 'Link prawidłowo skopiowany do schowka.'});
-    } else {
-      this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
-    }
-  }
-
-  edit() {
-    store.commit('posts/edit', this.post);
-
-    if (this.post.is_editing) {
-      // @ts-ignore
-      this.$nextTick(() => this.form.markdown.focus());
-    }
-  }
-
-  comment() {
-    this.isCommenting = !this.isCommenting;
-
-    if (this.isCommenting) {
-      // @ts-ignore
-      this.$nextTick(() => this.commentForm.focus());
-    }
-  }
-
-  deletePost(confirm = false, reasonId: number | null = null) {
-    if (confirm) {
-      // @ts-ignore
-      this.deleteModal.open();
-    } else {
-      // @ts-ignore
-      this.deleteModal.close();
-      store.dispatch('posts/delete', {post: this.post, reasonId}).then(() => this.isCollapsed = true);
-    }
-  }
-
-  merge() {
-    this.$confirm({
-      message: 'Czy chcesz połaczyć ten post z poprzednim?',
-      title: 'Połączyć posty?',
-      okLabel: 'Tak, połącz'
-    })
-      .then(() => {
-        this.$store.dispatch('posts/merge', this.post);
-      });
-  }
-
-  restore() {
-    this.isCollapsed = false;
-    this.$store.dispatch('posts/restore', this.post);
-  }
-
-  get voters() {
-    const users = this.post.voters;
-
-    if (!users?.length) {
-      return null;
-    }
-
-    return users.length > 10 ? users.splice(0, 10).concat('...').join("\n") : users.join("\n");
-  }
-
-  get tags() {
-    return this.post.id === this.topic.first_post_id ? this.topic.tags : [];
-  }
-
-  get anchor() {
-    return `id${this.post.id}`;
-  }
-
-  get highlight() {
-    return '#' + this.anchor === window.location.hash;
-  }
-
-  get totalComments() {
-    return this.post.comments_count - Object.keys(this.post.comments).length;
-  }
-
-  get flags() {
-    return store.getters['flags/filter'](this.post.id, 'Coyote\\Post');
-  }
-}
+    ...mapGetters('topics', ['topic']),
+    voters() {
+      const users = this.post.voters;
+      if (!users?.length) {
+        return null;
+      }
+      return users.length > 10 ? users.splice(0, 10).concat('...').join("\n") : users.join("\n");
+    },
+    tags() {
+      return this.post.id === this.topic.first_post_id ? this.topic.tags : [];
+    },
+    anchor() {
+      return `id${this.post.id}`;
+    },
+    highlight() {
+      return '#' + this.anchor === window.location.hash;
+    },
+    totalComments() {
+      return this.post.comments_count - Object.keys(this.post.comments).length;
+    },
+    flags() {
+      return store.getters['flags/filter'](this.post.id, 'Coyote\\Post');
+    },
+  },
+});
 </script>
-

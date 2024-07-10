@@ -39,20 +39,16 @@
 </template>
 
 <script lang="ts">
-import {PostComment} from "@/types/models";
 import Vue from 'vue';
-import Component from "vue-class-component";
 import {mixin as clickaway} from "vue-clickaway";
-import {Prop, Ref} from "vue-property-decorator";
 import {mapGetters} from "vuex";
-
 import store from "../../store/index";
 import VueFlag from "../flags/flag.vue";
 import {default as mixins} from '../mixins/user.js';
 import VueUserName from '../user-name.vue';
 import VueCommentForm from "./comment-form.vue";
 
-@Component({
+export default Vue.extend({
   name: 'comment',
   mixins: [clickaway, mixins],
   components: {
@@ -60,58 +56,60 @@ import VueCommentForm from "./comment-form.vue";
     'vue-comment-form': VueCommentForm,
     'vue-flag': VueFlag,
   },
-  computed: mapGetters('topics', ['topic']),
-})
-export default class VueComment extends Vue {
-  @Ref('comment-form')
-  readonly commentForm!: VueCommentForm;
+  props: {
+    comment: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      isEditing: false,
+    };
+  },
+  computed: {
+    ...mapGetters('topics', ['topic']),
+    anchor() {
+      return `comment-${this.comment.id}`;
+    },
+    highlight() {
+      return '#' + this.anchor === window.location.hash;
+    },
+    flags() {
+      return [
+        ...store.getters['flags/filter'](this.comment.id, 'Coyote\\Comment'),
+        ...store.getters['flags/filter'](this.comment.id, 'Coyote\\Post\\Comment'),
+      ];
+    },
+  },
+  methods: {
+    edit() {
+      this.$store.commit('posts/edit', this.comment);
 
-  @Prop(Object)
-  comment!: PostComment;
-
-  edit() {
-    this.$store.commit('posts/edit', this.comment);
-
-    if (this.comment.is_editing) {
-      this.$nextTick(() => this.commentForm.focus());
-    }
-  }
-
-  deleteComment() {
-    this.$confirm({
-      message: 'Tej operacji nie będzie można cofnąć.',
-      title: 'Usunąć komentarz?',
-      okLabel: 'Tak, usuń',
-    })
-      .then(() => this.$store.dispatch('posts/deleteComment', this.comment));
-  }
-
-  migrate() {
-    this.$confirm({
-      message: 'Tej operacji nie będzie można cofnąć.',
-      title: 'Zamienić na post?',
-      okLabel: 'Tak, zamień',
-    })
-      .then(() => {
-        this.$store
-          .dispatch('posts/migrateComment', this.comment)
-          .then(response => window.location.href = response.data.url);
-      });
-  }
-
-  get anchor() {
-    return `comment-${this.comment.id}`;
-  }
-
-  get highlight() {
-    return '#' + this.anchor === window.location.hash;
-  }
-
-  get flags() {
-    return [
-      ...store.getters['flags/filter'](this.comment.id, 'Coyote\\Comment'),
-      ...store.getters['flags/filter'](this.comment.id, 'Coyote\\Post\\Comment'),
-    ];
-  }
-}
+      if (this.comment.is_editing) {
+        this.$nextTick(() => this.$refs.commentForm.focus());
+      }
+    },
+    deleteComment() {
+      this.$confirm({
+        message: 'Tej operacji nie będzie można cofnąć.',
+        title: 'Usunąć komentarz?',
+        okLabel: 'Tak, usuń',
+      })
+        .then(() => this.$store.dispatch('posts/deleteComment', this.comment));
+    },
+    migrate() {
+      this.$confirm({
+        message: 'Tej operacji nie będzie można cofnąć.',
+        title: 'Zamienić na post?',
+        okLabel: 'Tak, zamień',
+      })
+        .then(() => {
+          this.$store
+            .dispatch('posts/migrateComment', this.comment)
+            .then(response => window.location.href = response.data.url);
+        });
+    },
+  },
+});
 </script>

@@ -1,10 +1,11 @@
-import { Component } from "vue-property-decorator";
+import Vue from 'vue';
 import Decorator from './decorator.vue';
 
-@Component
-export default class MicroblogDecorator extends Decorator {
-  // @ts-ignore
-  text = this.item.text;
-}
-
-
+export default Vue.extend({
+  extends: Decorator,
+  data() {
+    return {
+      text: this.item.text,
+    };
+  },
+});

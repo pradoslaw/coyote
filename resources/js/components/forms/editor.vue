@@ -4,33 +4,26 @@
 </template>
 
 <script lang="ts">
-import {CodeBlockLanguages, Editor4Play, EditorState, Emojis, EmojiUrl} from "@riddled/4play";
+import {CodeBlockLanguages, Editor4Play, EditorState} from "@riddled/4play";
 import Vue from 'vue';
-import Component from 'vue-class-component';
-import {Emit, Prop, Ref, Watch} from "vue-property-decorator";
 
-@Component
-export default class VueEditor extends Vue {
-
-  @Prop()
-  readonly value!: string;
-  @Prop()
-  readonly placeholder!: string;
-  @Prop()
-  readonly autocompleteSource!: Function
-  @Prop()
-  readonly emojiUrl!: EmojiUrl
-  @Prop()
-  readonly emojis!: Emojis
-
-  @Ref('view')
-  readonly view!: HTMLElement;
-
-  editor: Editor4Play | null = null;
-
+export default Vue.extend({
+  name: 'VueEditor',
+  props: {
+    value: String,
+    placeholder: String,
+    autocompleteSource: Function,
+    emojiUrl: Function,
+    emojis: Object,
+  },
+  data() {
+    return {
+      editor: null,
+    };
+  },
   mounted() {
     this.editor = new Editor4Play(
-      this.view,
+      this.$refs.view,
       this.placeholder,
       this.value,
       {onChange: this.input, onSubmit: this.submit, onCancel: this.cancel, onStateChange: this.state},
@@ -71,193 +64,169 @@ export default class VueEditor extends Vue {
       },
       this.dark,
     );
-  }
+  },
+  methods: {
+    input(content: string) {
+      this.$emit('input', content);
+    },
+    submit(content: string) {
+      this.$emit('submit', content);
+    },
+    cancel() {
+      this.$emit('cancel');
+    },
+    state(state: EditorState) {
+      this.$emit('state', state);
+    },
+    destroy() {
+      this.editor!.destroy();
+    },
+    insertImage(href: string, title: string) {
+      this.editor!.insertImage(href, title);
+    },
+    insertLink(href: string, title: string) {
+      this.editor!.insertLink(href, title);
+    },
+    makeBold() {
+      this.editor!.putBold();
+    },
+    makeItalics() {
+      this.editor!.putItalics();
+    },
+    makeUnderline() {
+      this.editor!.putUnderline();
+    },
+    makeStrikeThrough() {
+      this.editor!.putStrikeThrough();
+    },
+    insertBlockQuote(placeholder: string) {
+      this.editor!.putBlockQuote(placeholder);
+    },
+    makeLink(placeholder: string) {
+      this.editor!.putLink(placeholder);
+    },
+    makeImage(placeholder: string) {
+      this.editor!.putImage(placeholder);
+    },
+    makeKeyNotation(key: string) {
+      this.editor!.putKey(key);
+    },
+    appendBlockQuote(content: string) {
+      this.editor!.appendBlockQuote(content);
+    },
+    appendUserMention(username: string) {
+      this.editor!.appendUserMention(username);
+    },
+    insertListOrdered(placeholder: string) {
+      this.editor!.putListOrdered(placeholder);
+    },
+    insertListUnordered(placeholder: string) {
+      this.editor!.putListUnordered(placeholder);
+    },
+    insertCodeBlock() {
+      this.editor!.putCodeBlock();
+    },
+    indentMore() {
+      this.editor!.indentMore();
+    },
+    indentLess() {
+      this.editor!.indentLess();
+    },
+    addTable(header: string, placeholder: string) {
+      this.editor!.putTable(index => header + ' ' + (index + 1), placeholder);
+    },
+    insertEmoji(emojiName: string) {
+      this.editor!.insertEmoji(emojiName);
+    },
+    focus() {
+      this.editor!.focus();
+    },
+    codeBlockLanguages(): CodeBlockLanguages {
+      return Object.fromEntries(
+        languages()
+          .flatMap(({title, codes}) => codes.map(code => [code, title])),
+      );
 
-  @Emit()
-  input(content: string) {
-  }
+      function languages() {
+        function language(title: string, codes: string[]) {
+          return {title, codes};
+        }
 
-  @Emit()
-  submit(content: string) {
-  }
-
-  @Emit()
-  cancel() {
-  }
-
-  @Emit()
-  state(state: EditorState) {
-  }
-
-  created(): void {
+        return [
+          language('Ada', ['ada']),
+          language('Asembler', ['asm']),
+          language('Basic', ['basic']),
+          language('Skrypt powłoki', ['bash', 'sh']),
+          language('Plik wsadowy', ['batch', 'bat']),
+          language('BrainFuck', ['brainfuck', 'bf']),
+          language('Język C', ['c']),
+          language('C++', ['c++', 'cpp']),
+          language('C#', ['c#', 'cs']),
+          language('Clojure', ['clojure', 'clj']),
+          language('Arkusz stylów', ['css', 'scss', 'sass', 'less']),
+          language('Format CSV', ['csv']),
+          language('Delphi/Pascal', ['pascal', 'delphi']),
+          language('Dockerfile', ['dockerfile']),
+          language('Elixir', ['elixir']),
+          language('Erlang', ['erlang']),
+          language('F#', ['f#', 'fsharp']),
+          language('Fortran', ['fortran']),
+          language('Go', ['go']),
+          language('Groovy', ['groovy']),
+          language('GraphQL', ['graphql']),
+          language('HTML', ['html']),
+          language('Haskell', ['hs', 'haskell']),
+          language('INI', ['ini']),
+          language('Java', ['java']),
+          language('JavaScript', ['js']),
+          language('Format JSON', ['json']),
+          language('Julia', ['julia']),
+          language('JSX', ['jsx']),
+          language('Kotlin', ['kt', 'kotlin']),
+          language('Składnia LaTeX', ['latex', 'tex']),
+          language('Lisp', ['lisp']),
+          language('Lua', ['lua']),
+          language('Markdown', ['markdown', 'md']),
+          language('MatLab', ['matlab']),
+          language('Perl', ['perl']),
+          language('PHP', ['php']),
+          language('Prolog', ['prolog']),
+          language('PowerShell', ['powershell', 'ps']),
+          language('Python', ['py', 'python']),
+          language('Język R', ['r']),
+          language('Rust', ['rs', 'rust']),
+          language('Ruby', ['rb', 'ruby']),
+          language('RSS', ['rss', 'atom']),
+          language('Scala', ['scala']),
+          language('Język SQL', ['sql']),
+          language('Twig', ['twig']),
+          language('TypeScript/JSX', ['tsx']),
+          language('TypeScript', ['ts']),
+          language('Visual Basic', ['vb']),
+          language('XML', ['xml', 'svg']),
+          language('Format YAML', ['yaml', 'yml']),
+        ];
+      }
+    },
+  },
+  watch: {
+    value(newValue: string, oldValue: string) {
+      if (newValue === '') {
+        this.editor!.clear();
+      }
+    },
+  },
+  created() {
     this.$store.subscribe((mutation, state) => {
       if (mutation.type === 'theme/CHANGE_THEME') {
         this.editor!.changeTheme(state.theme.darkTheme);
       }
     });
-  }
-
-  get dark(): boolean {
-    return this.$store.state.theme.darkTheme;
-  }
-
-  destroy() {
-    this.editor!.destroy();
-  }
-
-  @Watch('value')
-  onValueChanged(newValue: string, oldValue: string) {
-    if (newValue === '') {
-      this.editor!.clear();
-    }
-  }
-
-  insertImage(href: string, title: string) {
-    this.editor!.insertImage(href, title);
-  }
-
-  insertLink(href: string, title: string) {
-    this.editor!.insertLink(href, title);
-  }
-
-  makeBold() {
-    this.editor!.putBold();
-  }
-
-  makeItalics() {
-    this.editor!.putItalics();
-  }
-
-  makeUnderline() {
-    this.editor!.putUnderline();
-  }
-
-  makeStrikeThrough() {
-    this.editor!.putStrikeThrough();
-  }
-
-  insertBlockQuote(placeholder: string) {
-    this.editor!.putBlockQuote(placeholder);
-  }
-
-  makeLink(placeholder: string) {
-    this.editor!.putLink(placeholder);
-  }
-
-  makeImage(placeholder: string) {
-    this.editor!.putImage(placeholder);
-  }
-
-  makeKeyNotation(key: string) {
-    this.editor!.putKey(key);
-  }
-
-  appendBlockQuote(content: string) {
-    this.editor!.appendBlockQuote(content);
-  }
-
-  appendUserMention(username: string) {
-    this.editor!.appendUserMention(username);
-  }
-
-  insertListOrdered(placeholder: string) {
-    this.editor!.putListOrdered(placeholder);
-  }
-
-  insertListUnordered(placeholder: string) {
-    this.editor!.putListUnordered(placeholder);
-  }
-
-  insertCodeBlock() {
-    this.editor!.putCodeBlock();
-  }
-
-  indentMore() {
-    this.editor!.indentMore();
-  }
-
-  indentLess() {
-    this.editor!.indentLess();
-  }
-
-  addTable(header: string, placeholder: string) {
-    this.editor!.putTable(index => header + ' ' + (index + 1), placeholder);
-  }
-
-  insertEmoji(emojiName: string) {
-    this.editor!.insertEmoji(emojiName);
-  }
-
-  focus() {
-    this.editor!.focus();
-  }
-
-  codeBlockLanguages(): CodeBlockLanguages {
-    return Object.fromEntries(
-      languages()
-        .flatMap(({title, codes}) => codes.map(code => [code, title])));
-
-    function languages() {
-      function language(title: string, codes: string[]) {
-        return {title, codes};
-      }
-
-      return [
-        language('Ada', ['ada']),
-        language('Asembler', ['asm']),
-        language('Basic', ['basic']),
-        language('Skrypt powłoki', ['bash', 'sh']),
-        language('Plik wsadowy', ['batch', 'bat']),
-        language('BrainFuck', ['brainfuck', 'bf']),
-        language('Język C', ['c']),
-        language('C++', ['c++', 'cpp']),
-        language('C#', ['c#', 'cs']),
-        language('Clojure', ['clojure', 'clj']),
-        language('Arkusz stylów', ['css', 'scss', 'sass', 'less']),
-        language('Format CSV', ['csv']),
-        language('Delphi/Pascal', ['pascal', 'delphi']),
-        language('Dockerfile', ['dockerfile']),
-        language('Elixir', ['elixir']),
-        language('Erlang', ['erlang']),
-        language('F#', ['f#', 'fsharp']),
-        language('Fortran', ['fortran']),
-        language('Go', ['go']),
-        language('Groovy', ['groovy']),
-        language('GraphQL', ['graphql']),
-        language('HTML', ['html']),
-        language('Haskell', ['hs', 'haskell']),
-        language('INI', ['ini']),
-        language('Java', ['java']),
-        language('JavaScript', ['js']),
-        language('Format JSON', ['json']),
-        language('Julia', ['julia']),
-        language('JSX', ['jsx']),
-        language('Kotlin', ['kt', 'kotlin']),
-        language('Składnia LaTeX', ['latex', 'tex']),
-        language('Lisp', ['lisp']),
-        language('Lua', ['lua']),
-        language('Markdown', ['markdown', 'md']),
-        language('MatLab', ['matlab']),
-        language('Perl', ['perl']),
-        language('PHP', ['php']),
-        language('Prolog', ['prolog']),
-        language('PowerShell', ['powershell', 'ps']),
-        language('Python', ['py', 'python']),
-        language('Język R', ['r']),
-        language('Rust', ['rs', 'rust']),
-        language('Ruby', ['rb', 'ruby']),
-        language('RSS', ['rss', 'atom']),
-        language('Scala', ['scala']),
-        language('Język SQL', ['sql']),
-        language('Twig', ['twig']),
-        language('TypeScript/JSX', ['tsx']),
-        language('TypeScript', ['ts']),
-        language('Visual Basic', ['vb']),
-        language('XML', ['xml', 'svg']),
-        language('Format YAML', ['yaml', 'yml']),
-      ];
-    }
-
-  }
-}
+  },
+  computed: {
+    dark() {
+      return this.$store.state.theme.darkTheme;
+    },
+  },
+});
 </script>

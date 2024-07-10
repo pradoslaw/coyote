@@ -98,14 +98,11 @@
 </template>
 
 <script lang="ts">
-import {Asset, Emojis} from '@/types/models';
-import {EditorState, link} from "@riddled/4play/index.js";
+import {link} from "@riddled/4play/index.js";
 import axios from 'axios';
 import Prism from 'prismjs';
 import Vue from 'vue';
-import Component from "vue-class-component";
 import {mixin as clickAway} from 'vue-clickaway';
-import {Emit, Prop, Ref, Watch} from "vue-property-decorator";
 import isImage from '../../libs/assets';
 import store from '../../store';
 import VueError from '../forms/error.vue';
@@ -120,7 +117,8 @@ import VueHelp from './help.vue';
 const CONTENT = 'Treść';
 const PREVIEW = 'Podgląd';
 
-@Component({
+export default Vue.extend({
+  name: 'VueMarkdown',
   mixins: [clickAway, formMixin],
   components: {
     'vue-prompt': VuePrompt,
@@ -131,399 +129,373 @@ const PREVIEW = 'Podgląd';
     'vue-help': VueHelp,
     'vue-emoji-picker': VueEmojiPicker,
   },
-})
-export default class VueMarkdown extends Vue {
-  searchText: string = '';
-  previewHtml: string = '';
-  currentTab: string = CONTENT;
-  isProcessing = false;
-  progress = 0;
-  tabs: string[] = [CONTENT, PREVIEW];
-  emojiPickerOpen = false;
-  buttons = {
-    bold: {
-      click: this.makeBold,
-      can: false,
-      title: 'Pogrub zaznaczony tekst lub dodaj pogrubienie',
-      break: 'Dodanie tutaj pogrubienia mogłoby uszkodzić składnię',
-      icon: 'fa-bold',
+  props: {
+    value: String,
+    tabIndex: {
+      type: Number,
+      required: false,
     },
-    italics: {
-      click: this.makeItalics,
-      can: false,
-      title: 'Pochyl tekst lub dodaj pochylenie',
-      break: 'Dodanie tutaj pochylenia mogłoby uszkodzić składnię',
-      icon: 'fa-italic',
+    uploadMaxSize: {
+      type: Number,
+      default: 20,
     },
-    underline: {
-      click: this.makeUnderline,
-      can: false,
-      title: 'Podkreśl tekst lub dodaj podkreślenie',
-      break: 'Dodanie tutaj podkreślenia mogłoby uszkodzić składnię',
-      icon: 'fa-underline',
+    uploadMimes: {
+      type: String,
+      default: 'jpg, jpeg, gif, png, zip, rar, txt, pdf, doc, docx, xls, xlsx, cpp, 7z, 7zip, patch, webm',
     },
-    strike: {
-      click: this.makeStrikeThrough,
-      can: false,
-      title: 'Przekreśl tekst lub dodaj przekreślenie',
-      break: 'Dodanie tutaj przekreślenia mogłoby uszkodzić składnię',
-      icon: 'fa-strikethrough',
+    autoInsertAssets: {
+      type: Boolean,
+      default: true,
     },
-    link: {
-      click: this.makeLink,
-      can: false,
-      title: 'Zamień zaznaczenie w link lub dodaj link',
-      break: 'Dodanie tutaj linku mogłoby uszkodzić składnię',
-      icon: 'fa-link',
+    promptUrl: {
+      type: String,
+      default: '/completion/prompt/users',
     },
-    code: {
-      click: this.insertCode,
-      can: false,
-      title: 'Zmień zaznaczoną treść w kod lub dodaj pusty znacznik (kod źródłowy, błąd, stack-trace, wynik działania programu itp.)',
-      break: 'Dodanie tutaj tekstu preformatowanego mogłoby uszkodzić składnię',
-      icon: 'fa-code',
+    previewUrl: {
+      type: String,
+      required: true,
     },
-    image: {
-      click: this.makeImage,
-      can: false,
-      title: 'Dodaj obraz',
-      break: 'Dodanie tutaj obrazu mogłoby uszkodzić składnię',
-      icon: 'fa-image',
+    error: {
+      type: String,
+      default: null,
     },
-    key: {
-      click: this.insertKeyNotation,
-      can: false,
-      title: 'Dodaj notację klawisza wprowadzonego z klawiatury',
-      break: 'Dodanie tutaj znacznika klawisza mogłoby uszkodzić składnię',
-      icon: 'fa-keyboard',
+    assets: {
+      type: Array,
+      default: () => [],
     },
-    listOrdered: {
-      click: this.insertOrderedList,
-      can: false,
-      title: 'Zmień zaznaczenie w listę lub dodaj listę uporządkowaną',
-      break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
-      icon: 'fa-list-ol',
+    isInvalid: {
+      type: Boolean,
+      default: false,
     },
-    listUnordered: {
-      click: this.insertUnorderedList,
-      can: false,
-      title: 'Zmień zaznaczenie w listę lub dodaj listę nieuporządkowaną',
-      break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
-      icon: 'fa-list-ul',
+    emojis: {
+      type: Object,
+      required: false,
     },
-    quote: {
-      click: this.insertBlockQuote,
-      can: false,
-      title: 'Cytuj post innego użytkownika lub zmień zaznaczenie w cytat postu',
-      break: 'Dodanie tutaj cytatu mogłoby uszkodzić składnię',
-      icon: 'fa-quote-left',
+  },
+  data() {
+    return {
+      previewHtml: '',
+      currentTab: CONTENT,
+      isProcessing: false,
+      progress: 0,
+      tabs: [CONTENT, PREVIEW],
+      emojiPickerOpen: false,
+      buttons: {
+        bold: {
+          click: this.makeBold,
+          can: false,
+          title: 'Pogrub zaznaczony tekst lub dodaj pogrubienie',
+          break: 'Dodanie tutaj pogrubienia mogłoby uszkodzić składnię',
+          icon: 'fa-bold',
+        },
+        italics: {
+          click: this.makeItalics,
+          can: false,
+          title: 'Pochyl tekst lub dodaj pochylenie',
+          break: 'Dodanie tutaj pochylenia mogłoby uszkodzić składnię',
+          icon: 'fa-italic',
+        },
+        underline: {
+          click: this.makeUnderline,
+          can: false,
+          title: 'Podkreśl tekst lub dodaj podkreślenie',
+          break: 'Dodanie tutaj podkreślenia mogłoby uszkodzić składnię',
+          icon: 'fa-underline',
+        },
+        strike: {
+          click: this.makeStrikeThrough,
+          can: false,
+          title: 'Przekreśl tekst lub dodaj przekreślenie',
+          break: 'Dodanie tutaj przekreślenia mogłoby uszkodzić składnię',
+          icon: 'fa-strikethrough',
+        },
+        link: {
+          click: this.makeLink,
+          can: false,
+          title: 'Zamień zaznaczenie w link lub dodaj link',
+          break: 'Dodanie tutaj linku mogłoby uszkodzić składnię',
+          icon: 'fa-link',
+        },
+        code: {
+          click: this.insertCode,
+          can: false,
+          title: 'Zmień zaznaczoną treść w kod lub dodaj pusty znacznik (kod źródłowy, błąd, stack-trace, wynik działania programu itp.)',
+          break: 'Dodanie tutaj tekstu preformatowanego mogłoby uszkodzić składnię',
+          icon: 'fa-code',
+        },
+        image: {
+          click: this.makeImage,
+          can: false,
+          title: 'Dodaj obraz',
+          break: 'Dodanie tutaj obrazu mogłoby uszkodzić składnię',
+          icon: 'fa-image',
+        },
+        key: {
+          click: this.insertKeyNotation,
+          can: false,
+          title: 'Dodaj notację klawisza wprowadzonego z klawiatury',
+          break: 'Dodanie tutaj znacznika klawisza mogłoby uszkodzić składnię',
+          icon: 'fa-keyboard',
+        },
+        listOrdered: {
+          click: this.insertOrderedList,
+          can: false,
+          title: 'Zmień zaznaczenie w listę lub dodaj listę uporządkowaną',
+          break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
+          icon: 'fa-list-ol',
+        },
+        listUnordered: {
+          click: this.insertUnorderedList,
+          can: false,
+          title: 'Zmień zaznaczenie w listę lub dodaj listę nieuporządkowaną',
+          break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
+          icon: 'fa-list-ul',
+        },
+        quote: {
+          click: this.insertBlockQuote,
+          can: false,
+          title: 'Cytuj post innego użytkownika lub zmień zaznaczenie w cytat postu',
+          break: 'Dodanie tutaj cytatu mogłoby uszkodzić składnię',
+          icon: 'fa-quote-left',
+        },
+        table: {
+          click: this.insertTable,
+          can: false,
+          title: 'Zmień zaznaczoną treść w tabelkę lub dodaj pustą tabelkę',
+          break: 'Dodanie tutaj tabelki mogłoby spowodować uszkodzenie składni',
+          icon: 'fa-table',
+        },
+        indentLess: {
+          click: this.indentLess,
+          can: false,
+          title: 'Usuń wcięcie zaznaczonego tekstu',
+          break: null,
+          icon: 'fa-outdent',
+        },
+        indentMore: {
+          click: this.indentMore,
+          can: false,
+          title: 'Dodaj wcięcie zaznaczonego tekstu',
+          break: null,
+          icon: 'fa-indent',
+        },
+        insertEmoji: {
+          click: this.toggleEmojiPicker,
+          can: false,
+          title: 'Dodaj emotikonę',
+          break: 'Dodanie tutaj emotikony mogłoby spowodować uszkodzenie składni',
+          icon: 'fa-face-smile-beam',
+        },
+      },
+    };
+  },
+  methods: {
+    makeBold() {
+      this.$refs.editor.makeBold();
     },
-    table: {
-      click: this.insertTable,
-      can: false,
-      title: 'Zmień zaznaczoną treść w tabelkę lub dodaj pustą tabelkę',
-      break: 'Dodanie tutaj tabelki mogłoby spowodować uszkodzenie składni',
-      icon: 'fa-table',
+    makeItalics() {
+      this.$refs.editor.makeItalics();
     },
-    indentLess: {
-      click: this.indentLess,
-      can: false,
-      title: 'Usuń wcięcie zaznaczonego tekstu',
-      break: null,
-      icon: 'fa-outdent',
+    makeUnderline() {
+      this.$refs.editor.makeUnderline();
     },
-    indentMore: {
-      click: this.indentMore,
-      can: false,
-      title: 'Dodaj wcięcie zaznaczonego tekstu',
-      break: null,
-      icon: 'fa-indent',
+    makeStrikeThrough() {
+      this.$refs.editor.makeStrikeThrough();
     },
-    insertEmoji: {
-      click: this.toggleEmojiPicker,
-      can: false,
-      title: 'Dodaj emotikonę',
-      break: 'Dodanie tutaj emotikony mogłoby spowodować uszkodzenie składni',
-      icon: 'fa-face-smile-beam',
+    makeLink() {
+      this.$refs.editor.makeLink('http://');
     },
-  };
+    makeImage() {
+      this.$refs.editor.makeImage('http://');
+    },
+    insertKeyNotation() {
+      this.$refs.editor.makeKeyNotation('Ctrl');
+    },
+    insertBlockQuote() {
+      this.$refs.editor.insertBlockQuote('Dodaj cytat...');
+    },
+    insertOrderedList() {
+      this.$refs.editor.insertListOrdered('Pierwszy element...');
+    },
+    insertUnorderedList() {
+      this.$refs.editor.insertListUnordered('Pierwszy element...');
+    },
+    insertCode() {
+      this.$refs.editor.insertCodeBlock();
+    },
+    insertTable() {
+      this.$refs.editor.addTable('Nagłówek', 'Dodaj...');
+    },
+    indentMore() {
+      this.$refs.editor.indentMore();
+    },
+    indentLess() {
+      this.$refs.editor.indentLess();
+    },
+    insertEmoji(emoji) {
+      this.$refs.editor.insertEmoji(emoji);
+    },
+    appendBlockQuote(username, postId, content) {
+      const title = username + ' napisał(a)';
+      const href = '/Forum/' + postId;
 
-  @Ref('editor')
-  readonly editor!: VueEditor;
-
-  @Ref('search')
-  readonly search!: HTMLInputElement;
-
-  @Ref('emoji-picker')
-  readonly emojiPicker!: any;
-
-  @Prop()
-  value!: string;
-
-  @Prop({required: false})
-  tabIndex!: number;
-
-  @Prop({default: 20})
-  readonly uploadMaxSize!: number;
-
-  @Prop({default: 'jpg, jpeg, gif, png, zip, rar, txt, pdf, doc, docx, xls, xlsx, cpp, 7z, 7zip, patch, webm'})
-  readonly uploadMimes!: string;
-
-  @Prop({default: true})
-  readonly autoInsertAssets!: boolean;
-
-  @Prop({default: '/completion/prompt/users'})
-  readonly promptUrl!: string;
-
-  @Prop()
-  readonly previewUrl!: string;
-
-  @Prop({default: null})
-  readonly error: string | null = null;
-
-  @Prop({default: () => []})
-  readonly assets!: Asset[];
-
-  @Prop({default: false})
-  readonly isInvalid!: boolean;
-
-  @Prop()
-  readonly emojis?: Emojis;
-
-  @Emit('save')
-  save() {
-  }
-
-  @Emit('cancel')
-  cancel() {
-  }
-
-  addAsset(asset: Asset) {
-    this.assets.push(asset);
-
-    if (this.autoInsertAssets) {
-      this.insertAssetAtCaret(asset)
-    }
-  }
-
-  insertAssetAtCaret(asset: Asset) {
-    if (isImage(asset.name!)) {
-      this.editor.insertImage(asset.url, asset.name!);
-    } else {
-      this.editor.insertLink(asset.url, asset.name!);
-    }
-  }
-
-  @Watch('value')
-  clearPreview(value) {
-    if (!value) {
-      this.previewHtml = '';
-    }
-  }
-
-  updateState(state: EditorState) {
-    this.buttons.bold.can = state.canBold;
-    this.buttons.italics.can = state.canItalics;
-    this.buttons.underline.can = state.canUnderline;
-    this.buttons.strike.can = state.canStrikeThrough;
-    this.buttons.listOrdered.can = state.canList;
-    this.buttons.listUnordered.can = state.canList;
-    this.buttons.code.can = state.canCode;
-    this.buttons.table.can = state.canTable;
-    this.buttons.quote.can = state.canBlockQuote;
-    this.buttons.link.can = state.canLink;
-    this.buttons.image.can = state.canImage;
-    this.buttons.key.can = state.canKey;
-    this.buttons.indentMore.can = state.canIndent;
-    this.buttons.indentLess.can = state.canIndent;
-    this.buttons.insertEmoji.can = state.canEmoji;
-  }
-
-  autocomplete(nick: string) {
-    return store
-      .dispatch('prompt/request', {value: nick, source: this.promptUrl})
-      .then(users => users.map(user => ({
-        name: user.name,
-        badge: user.group,
-        avatar: user.photo || '/img/avatar.png',
-      })));
-  }
-
-  deleteAsset(asset: Asset) {
-    this.assets.splice(this.assets.indexOf(asset), 1);
-  }
-
-  chooseFile() {
-    const Thumbnail = new VueThumbnail({propsData: {name: 'asset'}}).$mount();
-
-    this.progress = 0;
-
-    Thumbnail.$on('upload', this.addAsset);
-    Thumbnail.$on('progress', progress => {
-      this.progress = progress;
-      this.isProcessing = progress > 0 && progress < 100
-    });
-
-    Thumbnail.openDialog();
-  }
-
-  makeBold() {
-    this.editor.makeBold();
-  }
-
-  makeItalics() {
-    this.editor.makeItalics();
-  }
-
-  makeUnderline() {
-    this.editor.makeUnderline();
-  }
-
-  makeStrikeThrough() {
-    this.editor.makeStrikeThrough();
-  }
-
-  makeImage() {
-    this.editor.makeImage('http://');
-  }
-
-  insertKeyNotation() {
-    this.editor.makeKeyNotation('Ctrl');
-  }
-
-  makeLink() {
-    this.editor.makeLink('http://');
-  }
-
-  insertBlockQuote() {
-    this.editor.insertBlockQuote('Dodaj cytat...');
-  }
-
-  insertOrderedList() {
-    this.editor.insertListOrdered('Pierwszy element...');
-  }
-
-  insertUnorderedList() {
-    this.editor.insertListUnordered('Pierwszy element...');
-  }
-
-  insertCode() {
-    this.editor.insertCodeBlock();
-  }
-
-  insertTable() {
-    this.editor.addTable('Nagłówek', 'Dodaj...')
-  }
-
-  indentMore() {
-    this.editor.indentMore()
-  }
-
-  indentLess() {
-    this.editor.indentLess()
-  }
-
-  insertEmoji(emoji: string) {
-    this.editor.insertEmoji(emoji);
-  }
-
-  appendBlockQuote(username: string, postId: number, content: string) {
-    const title = username + ' napisał(a)';
-    const href = '/Forum/' + postId;
-
-    this.editor.appendBlockQuote(`##### ${(link(title, href))}:\n${content}`);
-  }
-
-  appendUserMention(username: string) {
-    this.editor.appendUserMention(username);
-  }
-
-  toggleEmojiPicker() {
-    this.emojiPickerOpen = !this.emojiPickerOpen;
-    this.$nextTick(() => {
-      if (this.emojiPicker) {
-        this.emojiPicker.clearSearchPhrase();
+      this.$refs.editor.appendBlockQuote(`##### ${(link(title, href))}:\n${content}`);
+    },
+    appendUserMention(username) {
+      this.$refs.editor.appendUserMention(username);
+    },
+    toggleEmojiPicker() {
+      this.emojiPickerOpen = !this.emojiPickerOpen;
+      this.$nextTick(() => {
+        if (this.$refs['emoji-picker']) {
+          this.$refs['emoji-picker'].clearSearchPhrase();
+        }
+      });
+    },
+    blurEmojiPicker(event) {
+      if (!this.isEmojiToggleControl(event.target as HTMLElement)) {
+        this.closeEmojiPicker();
       }
-    });
-  }
-
-  blurEmojiPicker(event: Event) {
-    if (!this.isEmojiToggleControl(event.target as HTMLElement)) {
-      this.closeEmojiPicker();
-    }
-  }
-
-  closeEmojiPicker() {
-    this.emojiPickerOpen = false;
-  }
-
-  isEmojiToggleControl(element: HTMLElement) {
-    if (element.title === 'Dodaj emotikonę') {
-      return true;
-    }
-    if (element.parentElement) {
-      if (element.parentElement.title === 'Dodaj emotikonę') {
+    },
+    closeEmojiPicker() {
+      this.emojiPickerOpen = false;
+    },
+    isEmojiToggleControl(element) {
+      if (element.title === 'Dodaj emotikonę') {
         return true;
       }
-    }
-    return false;
-  }
-
-  emojiUrl(emojiName: string): string | null {
-    const emoticon = this.emojis?.emoticons[emojiName];
-    if (emoticon) {
-      return 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/' + emoticon.unified + '.svg'
-    }
-    return null;
-  }
-
-  get emojisProperty() {
-    const {categories, subcategories, emoticons} = this.emojis!;
-    const emojis = {};
-    for (const category of categories) {
-      for (const subcategory of category.subcategories) {
-        for (const emoticon of subcategories[subcategory]) {
-          const emoji = emoticons[emoticon];
-          emojis[':' + emoji.id + ':'] = emoji.name
+      if (element.parentElement) {
+        if (element.parentElement.title === 'Dodaj emotikonę') {
+          return true;
         }
       }
-    }
-    return emojis;
-  }
+      return false;
+    },
+    emojiUrl(emojiName) {
+      const emoticon = this.emojis?.emoticons[emojiName];
+      if (emoticon) {
+        return 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/' + emoticon.unified + '.svg';
+      }
+      return null;
+    },
+    addAsset(asset) {
+      this.assets.push(asset);
 
-  focus() {
-    this.editor.focus();
-  }
+      if (this.autoInsertAssets) {
+        this.insertAssetAtCaret(asset);
+      }
+    },
+    insertAssetAtCaret(asset) {
+      if (isImage(asset.name!)) {
+        this.$refs.editor.insertImage(asset.url, asset.name!);
+      } else {
+        this.$refs.editor.insertLink(asset.url, asset.name!);
+      }
+    },
+    deleteAsset(asset) {
+      this.assets.splice(this.assets.indexOf(asset), 1);
+    },
+    chooseFile() {
+      const Thumbnail = new VueThumbnail({propsData: {name: 'asset'}}).$mount();
 
-  switchTab(index: number) {
-    this.currentTab = this.tabs[index];
+      this.progress = 0;
 
-    if (this.tabs[index] === PREVIEW) {
-      this.showPreview();
-    }
-  }
+      Thumbnail.$on('upload', this.addAsset);
+      Thumbnail.$on('progress', progress => {
+        this.progress = progress;
+        this.isProcessing = progress > 0 && progress < 100;
+      });
 
-  showPreview() {
-    axios.post<any>(this.previewUrl, {text: this.value}).then(response => {
-      this.previewHtml = response.data as string;
-      this.$nextTick(() => Prism.highlightAll());
-    });
-  }
+      Thumbnail.openDialog();
+    },
+    autocomplete(nick) {
+      return store
+        .dispatch('prompt/request', {value: nick, source: this.promptUrl})
+        .then(users => users.map(user => ({
+          name: user.name,
+          badge: user.group,
+          avatar: user.photo || '/img/avatar.png',
+        })));
+    },
+    save() {
+      this.$emit('save');
+    },
+    cancel() {
+      this.$emit('cancel');
+    },
+    focus() {
+      this.$refs.editor.focus();
+    },
+    switchTab(index) {
+      this.currentTab = this.tabs[index];
 
-  errorNotification(errorMessage: string) {
-    this.$notify({type: 'error', text: errorMessage});
-  }
-
-  get uploadTooltip() {
-    return `Maksymalnie ${this.uploadMaxSize}MB. Dostępne rozszerzenia: ${this.uploadMimes}`;
-  }
-
-  get isContent() {
-    return this.currentTab == CONTENT;
-  }
-
-  get isPreview() {
-    return this.currentTab === PREVIEW;
-  }
-}
+      if (this.tabs[index] === PREVIEW) {
+        this.showPreview();
+      }
+    },
+    showPreview() {
+      axios.post<any>(this.previewUrl, {text: this.value}).then(response => {
+        this.previewHtml = response.data as string;
+        this.$nextTick(() => Prism.highlightAll());
+      });
+    },
+    updateState(state) {
+      this.buttons.bold.can = state.canBold;
+      this.buttons.italics.can = state.canItalics;
+      this.buttons.underline.can = state.canUnderline;
+      this.buttons.strike.can = state.canStrikeThrough;
+      this.buttons.listOrdered.can = state.canList;
+      this.buttons.listUnordered.can = state.canList;
+      this.buttons.code.can = state.canCode;
+      this.buttons.table.can = state.canTable;
+      this.buttons.quote.can = state.canBlockQuote;
+      this.buttons.link.can = state.canLink;
+      this.buttons.image.can = state.canImage;
+      this.buttons.key.can = state.canKey;
+      this.buttons.indentMore.can = state.canIndent;
+      this.buttons.indentLess.can = state.canIndent;
+      this.buttons.insertEmoji.can = state.canEmoji;
+    },
+    errorNotification(errorMessage) {
+      this.$notify({type: 'error', text: errorMessage});
+    },
+  },
+  watch: {
+    value(newValue) {
+      if (!newValue) {
+        this.previewHtml = '';
+      }
+    },
+  },
+  computed: {
+    uploadTooltip() {
+      return `Maksymalnie ${this.uploadMaxSize}MB. Dostępne rozszerzenia: ${this.uploadMimes}`;
+    },
+    isContent() {
+      return this.currentTab == CONTENT;
+    },
+    isPreview() {
+      return this.currentTab === PREVIEW;
+    },
+    emojisProperty() {
+      const {categories, subcategories, emoticons} = this.emojis!;
+      const emojis = {};
+      for (const category of categories) {
+        for (const subcategory of category.subcategories) {
+          for (const emoticon of subcategories[subcategory]) {
+            const emoji = emoticons[emoticon];
+            emojis[':' + emoji.id + ':'] = emoji.name;
+          }
+        }
+      }
+      return emojis;
+    },
+  },
+  updated() {
+    this.$nextTick(() => Prism.highlightAll());
+  },
+  mounted() {
+    this.$nextTick(() => Prism.highlightAll());
+  },
+});
 </script>

@@ -64,53 +64,55 @@
 </template>
 
 <script lang="ts">
-  import Component from "vue-class-component";
-  import {Mixins, Prop, ProvideReactive} from "vue-property-decorator";
-  import { Tag } from '@/types/models';
-  import { default as mixins } from '../mixins/user';
-  import VueButton from '@/components/forms/button.vue';
-  import VueTagsInline from '@/components/forms/tags-inline.vue';
-  import VueMarkdown from '@/components/forms/markdown.vue';
-  import VueText from '@/components/forms/text.vue';
-  import VueSelect from '@/components/forms/select.vue';
-  import VueError from '@/components/forms/error.vue';
-  import { mapMutations, mapState } from 'vuex';
-  import VueFormGroup from "@/components/forms/form-group.vue";
-  import store from '@/store';
-  import { GuideMixin } from "@/components/mixins/guide";
+import VueButton from '@/components/forms/button.vue';
+import VueError from '@/components/forms/error.vue';
+import VueFormGroup from "@/components/forms/form-group.vue";
+import VueMarkdown from '@/components/forms/markdown.vue';
+import VueSelect from '@/components/forms/select.vue';
+import VueTagsInline from '@/components/forms/tags-inline.vue';
+import VueText from '@/components/forms/text.vue';
+import {GuideMixin} from "@/components/mixins/guide";
+import store from '@/store';
+import Vue from 'vue';
+import {mapMutations, mapState} from 'vuex';
+import {default as mixins} from '../mixins/user.js';
 
-  @Component({
-    mixins: [ mixins ],
-    store,
-    components: {
-      'vue-form-group': VueFormGroup,
-      'vue-text': VueText,
-      'vue-select': VueSelect,
-      'vue-markdown': VueMarkdown,
-      'vue-button': VueButton,
-      'vue-tags-inline': VueTagsInline,
-      'vue-error': VueError
+export default Vue.extend({
+  name: 'VueForm',
+  mixins: [mixins, GuideMixin],
+  store,
+  components: {
+    'vue-form-group': VueFormGroup,
+    'vue-text': VueText,
+    'vue-select': VueSelect,
+    'vue-markdown': VueMarkdown,
+    'vue-button': VueButton,
+    'vue-tags-inline': VueTagsInline,
+    'vue-error': VueError,
+  },
+  props: {
+    popularTags: {
+      type: Array,
+      default: () => [],
     },
-    computed: {
-      ...mapState('guides', ['guide'])
+  },
+  data() {
+    return {
+      errors: {},
+      isProcessing: false,
+    };
+  },
+  computed: {
+    ...mapState('guides', ['guide']),
+    providedPopularTags() {
+      return this.popularTags;
     },
-    methods: {
-      ...mapMutations('guides', ['TOGGLE_TAG'])
-    },
-    inject: []
-  })
-  export default class VueForm extends Mixins(GuideMixin) {
-    public errors = {};
-    private isProcessing = false;
-
-    @Prop({default: () => []})
-    @ProvideReactive('popularTags')
-    readonly popularTags!: Tag[];
-
+  },
+  methods: {
+    ...mapMutations('guides', ['TOGGLE_TAG']),
     cancel() {
       store.commit('guides/EDIT');
-    }
-
+    },
     save() {
       this.isProcessing = true;
 
@@ -130,7 +132,12 @@
           this.errors = err.response?.data.errors;
         })
         .finally(() => this.isProcessing = false);
-    }
-  }
+    },
+  },
+  provide() {
+    return {
+      popularTags: this.providedPopularTags,
+    };
+  },
+});
 </script>
-
