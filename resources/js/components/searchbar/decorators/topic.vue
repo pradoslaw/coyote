@@ -7,11 +7,10 @@
 </template>
 
 <script lang="ts">
-  import { Component, Mixins } from "vue-property-decorator";
-  import DecoratorMixin from '../mixin';
+import Vue from 'vue';
+import DecoratorMixin from '../mixin';
 
-  @Component
-  export default class TopicDecorator extends Mixins(DecoratorMixin) {
-    //
-  }
+export default Vue.extend({
+  mixins: [DecoratorMixin],
+});
 </script>

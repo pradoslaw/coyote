@@ -13,14 +13,14 @@
 </template>
 
 <script lang="ts">
-  import { Component, Mixins } from "vue-property-decorator";
-  import DecoratorMixin from '../mixin';
-  import VueAvatar from "../../avatar.vue";
+import Vue from 'vue';
+import VueAvatar from '../../avatar.vue';
+import DecoratorMixin from '../mixin';
 
-  @Component({
-    components: { 'vue-avatar': VueAvatar }
-  })
-  export default class UserDecorator extends Mixins(DecoratorMixin) {
-    //
-  }
+export default Vue.extend({
+  mixins: [DecoratorMixin],
+  components: {
+    'vue-avatar': VueAvatar,
+  },
+});
 </script>

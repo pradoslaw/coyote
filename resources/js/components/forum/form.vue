@@ -136,12 +136,9 @@
 </template>
 
 <script lang="ts">
-import {Emojis, Post, Tag, Topic} from "@/types/models";
 import axios from 'axios';
 import Prism from 'prismjs';
 import Vue from 'vue';
-import Component from "vue-class-component";
-import {Emit, Prop, ProvideReactive, Ref} from "vue-property-decorator";
 import {mapGetters, mapMutations, mapState} from "vuex";
 import VueMarkdown from '../../components/forms/markdown.vue';
 import store from "../../store";
@@ -149,9 +146,9 @@ import VueButton from '../forms/button.vue';
 import VueError from '../forms/error.vue';
 import VueTagsInline from '../forms/tags-inline.vue';
 import VueText from '../forms/text.vue';
-import {default as PerfectScrollbar} from '../perfect-scrollbar.js';
+import PerfectScrollbar from '../perfect-scrollbar.js';
 
-@Component({
+export default Vue.extend({
   name: 'forum-form',
   store,
   components: {
@@ -162,10 +159,41 @@ import {default as PerfectScrollbar} from '../perfect-scrollbar.js';
     'vue-text': VueText,
     'perfect-scrollbar': PerfectScrollbar,
   },
-  computed: {
-    ...mapGetters('topics', ['topic']),
-    ...mapState('poll', ['poll']),
-    ...mapGetters('posts', ['totalPages', 'currentPage']),
+  props: {
+    showTitleInput: {
+      type: Boolean,
+      default: false,
+    },
+    showTagsInput: {
+      type: Boolean,
+      default: false,
+    },
+    showStickyCheckbox: {
+      type: Boolean,
+      default: false,
+    },
+    requireTag: {
+      type: Boolean,
+      default: false,
+    },
+    popularTags: {
+      type: Array,
+      default: () => [],
+    },
+    post: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      isProcessing: false,
+      currentTab: 0,
+      errors: {},
+      similar: [],
+      emojis: window.emojis,
+      originalText: this.post.text,
+    };
   },
   watch: {
     poll: {
@@ -175,54 +203,6 @@ import {default as PerfectScrollbar} from '../perfect-scrollbar.js';
       deep: true,
     },
   },
-  methods: {
-    ...mapMutations('poll', ['removeItem', 'resetDefaults']),
-    ...mapMutations('posts', ['deleteAttachment', 'changePage']),
-  },
-  inject: [],
-})
-export default class VueForm extends Vue {
-  isProcessing = false;
-  currentTab: number = 0;
-  errors = {};
-  similar: Topic[] = [];
-  readonly topic!: Topic;
-  readonly totalPages!: number;
-  readonly currentPage!: number;
-  emojis?: Emojis;
-
-  @Ref('markdown')
-  readonly markdown!: VueMarkdown;
-
-  @Ref('attachment')
-  readonly attachment!: HTMLInputElement;
-
-  @Prop({default: false})
-  readonly showTitleInput!: boolean;
-
-  @Prop({default: false})
-  readonly showTagsInput!: boolean;
-
-  @Prop({default: false})
-  readonly showStickyCheckbox!: boolean;
-
-  @Prop({default: false})
-  readonly requireTag!: boolean;
-
-  @Prop({default: () => []})
-  @ProvideReactive('popularTags')
-  readonly popularTags!: string[];
-
-  @Prop({required: true})
-  post!: Post;
-
-  private originalText?: string;
-
-  @Emit()
-  cancel() {
-    this.post.text = this.originalText!;
-  }
-
   created() {
     this.emojis = window.emojis;
     if (!this.exists) {
@@ -230,94 +210,97 @@ export default class VueForm extends Vue {
       this.$watch('post.text', newValue => this.$saveDraft(this.draftKey, newValue));
     }
     this.originalText = this.post.text;
-  }
+  },
+  methods: {
+    cancel() {
+      this.post.text = this.originalText;
+      this.$emit('cancel');
+    },
+    ...mapMutations('poll', ['removeItem', 'resetDefaults']),
+    ...mapMutations('posts', ['deleteAttachment', 'changePage']),
+    async save() {
+      await this.validateTags();
 
-  async save() {
-    await this.validateTags();
+      this.isProcessing = true;
+      this.errors = {};
 
-    this.isProcessing = true;
-    this.errors = {};
+      await this.lastPage();
 
-    await this.lastPage();
+      store.dispatch('posts/save', this.post)
+        .then(result => {
+          this.$emit('save', result.data);
 
-    store.dispatch('posts/save', this.post)
-      .then(result => {
-        this.$emit('save', result.data);
+          this.$nextTick(() => {
+            // remove local storage data after clearing input
+            this.$removeDraft(this.draftKey);
+            Prism.highlightAll();
+          });
+        })
+        .catch(err => {
+          if (err.response?.status !== 422) {
+            return;
+          }
+          this.errors = err.response?.data.errors;
+        })
+        .finally(() => this.isProcessing = false);
+    },
+    openDialog() {
+      (this.$refs.attachment as HTMLInputElement).click();
+    },
+    toggleTag(tag) {
+      store.commit('topics/toggleTag', {topic: this.topic, tag});
+    },
+    findSimilar() {
+      if (!this.topic.title) {
+        return;
+      }
+      axios.get('/completion/similar', {params: {q: this.topic.title}}).then(response => this.similar = response.data.hits);
+    },
+    addItem() {
+      store.commit('poll/addItem');
 
-        this.$nextTick(() => {
-          // remove local storage data after clearing input
-          this.$removeDraft(this.draftKey);
-          Prism.highlightAll();
-        });
-      })
-      .catch(err => {
-        if (err.response?.status !== 422) {
-          return;
-        }
-        this.errors = err.response?.data.errors;
-      })
-      .finally(() => this.isProcessing = false);
-  }
+      // @ts-ignore
+      this.$nextTick(() => this.$refs['poll-items'][this.$refs['poll-items'].length - 1].$el.focus());
+    },
+    async lastPage() {
+      if (!this.exists && this.currentPage < this.totalPages) {
+        history.pushState({page: this.totalPages}, '', `?page=${this.totalPages}`);
 
-  openDialog() {
-    (this.$refs.attachment as HTMLInputElement).click();
-  }
+        await store.dispatch('posts/changePage', this.totalPages);
+      }
+    },
+    async validateTags() {
+      if (!this.topic.tags?.length || !this.isFirstPost) {
+        return;
+      }
 
-  toggleTag(tag: Tag) {
-    store.commit('topics/toggleTag', {topic: this.topic, tag});
-  }
+      this.isProcessing = true;
+      const response = await axios.post('/Forum/Tag/Validation', {tags: this.topic.tags.map(tag => tag.name)});
 
-  findSimilar() {
-    if (!this.topic.title) {
-      return;
-    }
-    axios.get<any>('/completion/similar', {params: {q: this.topic.title}}).then(response => this.similar = response.data.hits);
-  }
+      this.isProcessing = false;
 
-  addItem() {
-    store.commit('poll/addItem');
+      if (!response.data.warning) {
+        return;
+      }
 
-    // @ts-ignore
-    this.$nextTick(() => this.$refs['poll-items'][this.$refs['poll-items'].length - 1].$el.focus());
-  }
+      await this.$confirm({message: response.data.message, title: 'Czy to tag techniczny?', okLabel: 'Tak, jestem pewien'});
 
-  async lastPage() {
-    if (!this.exists && this.currentPage < this.totalPages) {
-      history.pushState({page: this.totalPages}, '', `?page=${this.totalPages}`);
-
-      await store.dispatch('posts/changePage', this.totalPages);
-    }
-  }
-
-  async validateTags() {
-    if (!this.topic.tags?.length || !this.isFirstPost) {
-      return;
-    }
-
-    this.isProcessing = true;
-    const response: any = await axios.post<any>('/Forum/Tag/Validation', {tags: this.topic.tags.map(tag => tag.name)});
-
-    this.isProcessing = false;
-
-    if (!response.data.warning) {
-      return;
-    }
-
-    await this.$confirm({message: response.data.message, title: 'Czy to tag techniczny?', okLabel: 'Tak, jestem pewien'});
-
-    return true;
-  }
-
-  private get isFirstPost() {
-    return !this.topic || this.topic.first_post_id === this.post.id;
-  }
-
-  private get draftKey(): string {
-    return `topic-${this.topic.id ? this.topic.id : ''}`
-  }
-
-  private get exists(): boolean {
-    return this.post.id !== undefined;
-  }
-}
+      return true;
+    },
+  },
+  computed: {
+    ...mapGetters('topics', ['topic']),
+    ...mapState('poll', ['poll']),
+    ...mapGetters('posts', ['totalPages', 'currentPage']),
+    isFirstPost() {
+      return !this.topic || this.topic.first_post_id === this.post.id;
+    },
+    draftKey() {
+      return `topic-${this.topic.id ? this.topic.id : ''}`;
+    },
+    exists() {
+      return this.post.id !== undefined;
+    },
+  },
+});
 </script>

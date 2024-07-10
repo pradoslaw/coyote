@@ -26,57 +26,64 @@
 </template>
 
 <script lang="ts">
-import {Emojis, Model} from '@/types/models';
+import {Emojis} from '@/types/models';
 import Vue from 'vue';
-import Component from "vue-class-component";
-import {Prop} from "vue-property-decorator";
 import {mapState} from 'vuex';
 import VueAvatar from '../avatar.vue';
 import VueButton from '../forms/button.vue';
 import VueMarkdown from '../forms/markdown.vue';
-import VuePromp from '../forms/prompt.vue';
-import {default as mixins} from '../mixins/user';
+import VuePrompt from '../forms/prompt.vue';
+import mixins from '../mixins/user.js';
 
-// @ts-ignore
-@Component({
+export default Vue.extend({
+  name: 'VueForm',
   components: {
     'vue-avatar': VueAvatar,
     'vue-button': VueButton,
-    'vue-prompt': VuePromp,
-    'vue-markdown': VueMarkdown
+    'vue-prompt': VuePrompt,
+    'vue-markdown': VueMarkdown,
   },
   mixins: [mixins],
-  computed: mapState('user', ['user'])
-})
-export default class VueForm extends Vue {
-  public emojis!: Emojis;
-
-  @Prop()
-  readonly resource!: Model;
-
-  @Prop()
-  readonly resourceId!: number;
-
-  isSubmitting = false;
-  defaultText = '';
-
+  computed: {
+    ...mapState('user', ['user']),
+  },
+  props: {
+    resource: {
+      type: Object,
+      required: true,
+    },
+    resourceId: {
+      type: Number,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      emojis: {} as Emojis,
+      isSubmitting: false,
+      defaultText: '',
+    };
+  },
   created() {
     this.emojis = window.emojis;
-  }
-
-  saveComment() {
-    this.isSubmitting = true;
-
-    this.$store.dispatch('comments/save', {text: this.defaultText, resource_type: this.resource, resource_id: this.resourceId})
-      .then(response => {
-        this.defaultText = '';
-        this.scrollIntoView(response.data);
-      })
-      .finally(() => this.isSubmitting = false);
-  }
-
-  scrollIntoView(comment) {
-    this.$nextTick(() => window.location.hash = `comment-${comment.id}`);
-  }
-}
+  },
+  methods: {
+    saveComment() {
+      this.isSubmitting = true;
+      this.$store.dispatch('comments/save', {text: this.defaultText, resource_type: this.resource, resource_id: this.resourceId})
+        .then(response => {
+          this.defaultText = '';
+          this.scrollIntoView(response.data);
+        })
+        .finally(() => {
+          this.isSubmitting = false;
+        });
+    },
+    scrollIntoView(comment) {
+      this.$nextTick(() => {
+        window.location.hash = `comment-${comment.id}`;
+      });
+    },
+  },
+});
 </script>

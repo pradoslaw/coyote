@@ -32,7 +32,8 @@
               <div class="input-group">
                 <div class="input-group-prepend">
                   <a title="Dodaj więcej lokalizacji" class="input-group-text text-decoration-none" href="javascript:" @click="ADD_LOCATION"><i class="fas fa-fw fa-circle-plus"></i></a>
-                  <a title="Usuń lokalizację" class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION(location)" v-if="job.locations.length > 1"><i class="fas fa-fw fa-circle-minus text-danger"></i></a>
+                  <a title="Usuń lokalizację" class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION(location)" v-if="job.locations.length > 1"><i
+                    class="fas fa-fw fa-circle-minus text-danger"></i></a>
                 </div>
 
                 <vue-google-place @change="setLocation(index, ...arguments)" :label="location.label"></vue-google-place>
@@ -175,70 +176,64 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import Component from "vue-class-component";
-  import VueFormGroup from '@/components/forms/form-group.vue';
-  import VueText from '@/components/forms/text.vue';
-  import VueSelect from '@/components/forms/select.vue';
-  import VueCheckbox from '@/components/forms/checkbox.vue';
-  import VueRadio from '@/components/forms/radio.vue';
-  import VueButton from '@/components/forms/button.vue';
-  import VueError from '@/components/forms/error.vue';
-  import VueTags from '@/components/tags.vue';
-  import VueGooglePlace from '@/components/google-maps/place.vue';
-  import VueTinyMce from '@tinymce/tinymce-vue';
-  import { Prop } from "vue-property-decorator";
-  import {Job, Rate, Employment, Seniority, Currency, Tag } from '@/types/models';
-  import { mapMutations } from "vuex";
-  import TinyMceOptions from '@/libs/tinymce';
-  import store from "@/store";
-  import axios, {AxiosResponse} from "axios";
-  import VueTagsInline from "@/components/forms/tags-inline.vue";
+import VueButton from '@/components/forms/button.vue';
+import VueCheckbox from '@/components/forms/checkbox.vue';
+import VueError from '@/components/forms/error.vue';
+import VueFormGroup from '@/components/forms/form-group.vue';
+import VueRadio from '@/components/forms/radio.vue';
+import VueSelect from '@/components/forms/select.vue';
+import VueTagsInline from '@/components/forms/tags-inline.vue';
+import VueText from '@/components/forms/text.vue';
+import VueGooglePlace from '@/components/google-maps/place.vue';
+import VueTags from '@/components/tags.vue';
+import TinyMceOptions from '@/libs/tinymce';
+import store from '@/store';
+import {Employment, Rate, Seniority, Tag} from '@/types/models';
+import VueTinyMce from '@tinymce/tinymce-vue';
+import axios, {AxiosResponse} from 'axios';
+import Vue from 'vue';
+import {mapMutations} from 'vuex';
 
-  @Component({
-    components: {
-      'vue-form-group': VueFormGroup,
-      'vue-text': VueText,
-      'vue-select': VueSelect,
-      'vue-checkbox': VueCheckbox,
-      'vue-radio': VueRadio,
-      'vue-button': VueButton,
-      'vue-error': VueError,
-      'vue-tags-inline': VueTagsInline,
-      'vue-tags': VueTags,
-      'vue-google-place': VueGooglePlace,
-      'vue-tinymce': VueTinyMce
+export default Vue.extend({
+  name: 'VueForm',
+  components: {
+    'vue-form-group': VueFormGroup,
+    'vue-text': VueText,
+    'vue-select': VueSelect,
+    'vue-checkbox': VueCheckbox,
+    'vue-radio': VueRadio,
+    'vue-button': VueButton,
+    'vue-error': VueError,
+    'vue-tags-inline': VueTagsInline,
+    'vue-tags': VueTags,
+    'vue-google-place': VueGooglePlace,
+    'vue-tinymce': VueTinyMce,
+  },
+  props: {
+    job: {
+      type: Object,
+      required: true,
     },
-    methods: {
-      ...mapMutations('jobs', ['ADD_LOCATION', 'REMOVE_LOCATION', 'SET_LABEL', 'ADD_TAG', 'REMOVE_TAG', 'TOGGLE_FEATURE'])
+    currencies: {
+      type: Array,
+      required: true,
     },
-    watch: {
-      job: {
-        handler(job) {
-          store.commit('jobs/INIT_FORM', job);
-        },
-        deep: true
-      }
+    errors: {
+      type: Object,
+      required: false,
     },
-    inject: []
-  })
-  export default class VueForm extends Vue {
-    @Prop(Object)
-    job!: Job;
-
-    @Prop()
-    currencies!: Currency[];
-
-    @Prop()
-    errors;
-
-    suggestions = {};
-    titleMaxLength: number = 60;
-
+  },
+  data() {
+    return {
+      suggestions: {},
+      titleMaxLength: 60,
+    };
+  },
+  methods: {
+    ...mapMutations('jobs', ['ADD_LOCATION', 'REMOVE_LOCATION', 'SET_LABEL', 'ADD_TAG', 'REMOVE_TAG', 'TOGGLE_FEATURE']),
     setLocation(index, location) {
-      this.$store.commit('jobs/SET_LOCATION', { index, location });
-    }
-
+      this.$store.commit('jobs/SET_LOCATION', {index, location});
+    },
     addTag(tag: Tag) {
       this.$store.commit('jobs/ADD_TAG', tag.name);
 
@@ -246,18 +241,18 @@
       let pluck = this.job.tags.map(item => item.name);
 
       // request suggestions
-      axios.get<any>('/Praca/Tag/Suggestions', {params: {t: pluck}}).then((response: AxiosResponse<any>) => this.suggestions = response.data);
-    }
-
-    get jobTitleCharactersRemaining():number {
+      axios.get<any>('/Praca/Tag/Suggestions', {params: {t: pluck}})
+        .then((response: AxiosResponse<any>) => this.suggestions = response.data);
+    },
+  },
+  computed: {
+    jobTitleCharactersRemaining(): number {
       return this.titleMaxLength - String(this.job.title ?? '').length;
-    }
-    
-    get tinyMceOptions() {
+    },
+    tinyMceOptions() {
       return TinyMceOptions;
-    }
-
-    get remoteRange() {
+    },
+    remoteRange() {
       let result = {};
 
       for (let i = 100; i > 0; i -= 10) {
@@ -265,35 +260,39 @@
       }
 
       return result;
-    }
-
-    get rates() {
+    },
+    rates() {
       return Rate;
-    }
-
-    get seniorities() {
+    },
+    seniorities() {
       return Seniority;
-    }
-
-    get employments() {
+    },
+    employments() {
       return Employment;
-    }
-
-    get currenciesValues() {
+    },
+    currenciesValues() {
       return this.currencies.reduce((acc, value) => {
         acc[value.id as unknown as string] = `${value.name} (${value.symbol})`;
-
-        return acc
+        return acc;
       }, {});
-    }
-
-    get isGross() {
-      return +this.job.is_gross;
-    }
-
-    set isGross(flag) {
-      this.job.is_gross = !!flag;
-    }
-  }
+    },
+    isGross: {
+      get() {
+        return +this.job.is_gross;
+      },
+      set(flag) {
+        this.job.is_gross = !!flag;
+      },
+    },
+  },
+  watch: {
+    job: {
+      handler(job) {
+        store.commit('jobs/INIT_FORM', job);
+      },
+      deep: true,
+    },
+  },
+});
 
 </script>

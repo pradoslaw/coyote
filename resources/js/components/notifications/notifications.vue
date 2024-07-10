@@ -37,62 +37,54 @@
 </template>
 
 <script lang="ts">
-import DesktopNotifications from '../../libs/notifications';
-import {default as ws} from '../../libs/realtime';
-import Session from '../../libs/session';
-import store from '../../store';
-import {default as PerfectScrollbar} from '../perfect-scrollbar';
-import {mixin as clickaway} from 'vue-clickaway';
-import VueNotification from './notification.vue';
-import {mapGetters, mapState} from 'vuex';
 import environment from '@/environment';
 import Vue from 'vue';
-import Component from "vue-class-component";
-import {Ref, Watch} from "vue-property-decorator";
-import {Notification} from '@/types/models';
+import {mixin as clickaway} from 'vue-clickaway';
+import {mapGetters, mapState} from 'vuex';
+import DesktopNotifications from '../../libs/notifications';
+import {default as ws} from '../../libs/realtime';
+import Session from '../../libs/session.js';
+import store from '../../store';
+import {default as PerfectScrollbar} from '../perfect-scrollbar.js';
+import VueNotification from './notification.vue';
 
 function urlBase64ToUint8Array(base64String) {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
 
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
 
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
   }
+  return outputArray;
+}
 
-  @Component({
-    mixins: [clickaway],
-    components: {
-      'perfect-scrollbar': PerfectScrollbar,
-      'vue-notification': VueNotification
-    },
-    store,
-    computed: {
-      ...mapState('notifications', ['notifications', 'count']),
-      ...mapGetters('notifications', ['unreadNotifications', 'isEmpty'])
-    }
-  })
-  export default class VueNotifications extends Vue {
-    @Ref('scrollbar')
-    scrollBar!: PerfectScrollbar;
-
-    title: string = '';
-    isOpen = false;
-    count!: number;
-    notifications!: null | Notification[];
-    unreadNotifications!: null | Notification[];
-
-    mounted() {
-      this.syncCount();
-      this.listenForNotification();
-
-      this.title = document.title;
-    }
-
+export default Vue.extend({
+  name: 'VueNotifications',
+  mixins: [clickaway],
+  components: {
+    'perfect-scrollbar': PerfectScrollbar,
+    'vue-notification': VueNotification,
+  },
+  store,
+  data() {
+    return {
+      title: '',
+      isOpen: false,
+    };
+  },
+  computed: {
+    ...mapState('notifications', ['notifications', 'count']),
+    ...mapGetters('notifications', ['unreadNotifications', 'isEmpty']),
+  },
+  mounted() {
+    this.syncCount();
+    this.listenForNotification();
+    this.title = document.title;
+  },
+  methods: {
     toggleDropdown() {
       this.isOpen = !this.isOpen;
 
@@ -101,47 +93,35 @@ function urlBase64ToUint8Array(base64String) {
       }
 
       this.subscribeUser();
-    }
-
+    },
     loadNotifications() {
       return store.dispatch('notifications/load').then(result => {
-        // no more new notifications? remove listener to avoid infinite loop
         if (!result.data.notifications.length) {
           this.removeScrollbarListener();
         }
-
-        // sync unread notifications counter with other tabs
         this.syncCount();
       });
-    }
-
+    },
     markAllAsRead() {
       store.dispatch('notifications/markAll');
-    }
-
+    },
     openAll() {
-      this.unreadNotifications!.forEach(notification => {
+      this.unreadNotifications.forEach(notification => {
         window.open(`/notification/${notification.id}`);
-
         store.commit('notifications/mark', notification);
       });
-    }
-
+    },
     hideDropdown() {
       this.isOpen = false;
-    }
-
+    },
     resetNotifications() {
       this.isOpen = false;
       store.commit('notifications/reset');
-
       this.removeScrollbarListener();
-    }
-
+    },
     removeScrollbarListener() {
-      this.scrollBar.$refs.container.removeEventListener('ps-y-reach-end', this.loadNotifications);
-    }
-
+      this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-end', this.loadNotifications);
+    },
     listenForNotification() {
       Session.addListener(e => {
         if (e.key === 'notifications' && e.newValue < this.count) {
@@ -152,70 +132,58 @@ function urlBase64ToUint8Array(base64String) {
       ws.subscribe(`user:${store.state.user.user.id}`)
         .on('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', data => {
           this.resetNotifications();
-
           store.commit('notifications/increment');
           this.syncCount();
-
           DesktopNotifications.notify(data.headline, data.subject, data.url);
         })
-        // notification link was clicked in email or desktop notifications.
         .on('NotificationRead', () => store.commit('notifications/decrement'));
-    }
-
+    },
     subscribeUser() {
       if (!('PushManager' in window) || !('serviceWorker' in navigator)) {
         return;
       }
 
       navigator.serviceWorker.ready.then(registration => {
-          const serverKey = urlBase64ToUint8Array(environment.vapidKey);
+        const serverKey = urlBase64ToUint8Array(environment.vapidKey);
 
-          return registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: serverKey
-          });
-        })
+        return registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: serverKey,
+        });
+      })
         .catch(() => console.log('Push notification: access denied.'))
         .then(pushSubscription => pushSubscription && store.dispatch('user/pushSubscription', pushSubscription));
-    }
-
+    },
     setIcon(path) {
-      const icon = document.querySelector('head link[rel="shortcut icon"]')! as HTMLLinkElement;
-
+      const icon = document.querySelector('head link[rel="shortcut icon"]');
       icon.href = path;
-    }
-
+    },
     setTitle(title) {
       document.title = title;
-    }
-
+    },
     syncCount() {
       Session.setItem('notifications', this.count);
-    }
-
-    @Watch('count')
-    setupTitle(value) {
+    },
+  },
+  watch: {
+    count(value) {
       if (value > 0) {
         this.setTitle(`(${this.count}) ${this.title}`);
       } else {
         this.setTitle(this.title);
       }
-    }
-
-    @Watch('isOpen')
-    setupScrollBar(isOpen) {
+    },
+    isOpen(isOpen) {
       if (isOpen) {
         if (this.notifications === null) {
           this.loadNotifications();
         }
 
-        this.scrollBar.$refs.container.addEventListener('ps-y-reach-end', this.loadNotifications);
-      }
-      else {
-        // we must remove listener after closing a list. I don't know why but scrollbar event works even after
-        // hiding the list
+        this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-end', this.loadNotifications);
+      } else {
         this.removeScrollbarListener();
       }
-    }
-  }
+    },
+  },
+});
 </script>

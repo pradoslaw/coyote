@@ -26,32 +26,34 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import Component from "vue-class-component";
 
-@Component
-export default class VueModal extends Vue {
-  isOpen = false;
+export default Vue.extend({
+  name: 'VueModal',
+  data() {
+    return {
+      isOpen: false,
+      bodyOverflow: '',
+    };
+  },
+  methods: {
+    open() {
+      this.isOpen = true;
 
-  private bodyOverflow: string = '';
+      this.$nextTick(() => {
+        // firefox hack: set focus to make Esc button works
+        (this.$el as HTMLElement).focus();
 
-  open() {
-    this.isOpen = true;
+        this.bodyOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
 
-    this.$nextTick(() => {
-      // firefox hack: set focus to make Esc button works
-      (this.$el as HTMLElement).focus();
-
-      this.bodyOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-
-      // set focus on any first element
-      (this.$el.querySelectorAll('select,input')[0] as HTMLInputElement)?.focus();
-    })
-  }
-
-  close() {
-    this.isOpen = false;
-    document.body.style.overflow = this.bodyOverflow;
-  }
-}
+        // set focus on any first element
+        (this.$el.querySelectorAll('select,input')[0] as HTMLInputElement)?.focus();
+      });
+    },
+    close() {
+      this.isOpen = false;
+      document.body.style.overflow = this.bodyOverflow;
+    },
+  },
+});
 </script>

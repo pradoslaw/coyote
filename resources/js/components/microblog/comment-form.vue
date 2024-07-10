@@ -22,39 +22,40 @@
 </template>
 
 <script lang="ts">
-  import Component from "vue-class-component";
-  import { Mixins, Ref } from "vue-property-decorator";
-  import store from "@/store";
-  import VuePrompt from '../forms/prompt.vue';
-  import { MicroblogFormMixin } from '../mixins/microblog';
-  import { Asset } from "@/types/models";
-  import { default as Textarea } from '@/libs/textarea';
-  import IsImage from "@/libs/assets";
+import Vue from "vue";
+import IsImage from "@/libs/assets";
+import Textarea from '@/libs/textarea';
+import store from "@/store";
+import VuePrompt from '../forms/prompt.vue';
+import {MicroblogFormMixin} from '../mixins/microblog';
 
-  @Component({
-    name: 'microblog-comment-form',
-    store,
-    components: {
-      'vue-prompt': VuePrompt
-    }
-  })
-  export default class VueCommentForm extends Mixins(MicroblogFormMixin) {
-    @Ref()
-    readonly markdown!: HTMLTextAreaElement;
-
+export default Vue.extend({
+  name: 'microblog-comment-form',
+  store,
+  components: {
+    'vue-prompt': VuePrompt,
+  },
+  mixins: [MicroblogFormMixin],
+  data() {
+    return {
+      markdown: null,
+    };
+  },
+  mounted() {
+    this.markdown = this.$refs.markdown;
+  },
+  methods: {
     saveComment() {
       this.save('microblogs/saveComment');
-    }
-
-    addAsset(asset: Asset) {
+    },
+    addAsset(asset) {
       this.microblog.assets.push(asset);
       this.insertAssetAtCaret(asset);
-    }
-
-    private insertAssetAtCaret(asset: Asset) {
-      new Textarea(this.markdown).insertAtCaret((IsImage(asset.name!) ? '!' : '') + '[' + asset.name + '](' + asset.url + ')', '', '');
-
+    },
+    insertAssetAtCaret(asset) {
+      new Textarea(this.markdown).insertAtCaret((IsImage(asset.name) ? '!' : '') + '[' + asset.name + '](' + asset.url + ')', '', '');
       this.markdown.dispatchEvent(new Event('input', {'bubbles': true}));
-    }
-  }
+    },
+  },
+});
 </script>

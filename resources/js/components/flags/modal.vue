@@ -31,72 +31,75 @@
 </template>
 
 <script lang="ts">
-import {FlagType} from "@/types/models";
 import axios from 'axios';
 import Vue from 'vue';
-import Component from "vue-class-component";
-import {Prop, Ref} from "vue-property-decorator";
-
 import VueRadio from '../forms/radio.vue';
 import VueModal from '../modal.vue';
 
-@Component({
-  components: {'vue-modal': VueModal, 'vue-radio': VueRadio},
-})
-export default class FlagModal extends Vue {
-  @Ref('modal')
-  readonly modal!: VueModal;
-
-  @Prop()
-  readonly url!: string;
-
-  @Prop()
-  protected metadata!: any;
-
-  @Prop()
-  readonly types!: FlagType[];
-
-  selectedType: number | null = null;
-  text: string | null = null;
-  isProcessing = false;
-
-  mounted() {
-    this.modal.open();
-  }
-
-  beforeDestroy() {
-    this.modal.close();
-  }
-
-  closeModal() {
-    // destroy the vue listeners, etc
-    this.$destroy();
-
-    // remove the element from the DOM
-    this.$el.parentNode!.removeChild(this.$el);
-  }
-
-  sendReport() {
-    this.isProcessing = true;
-
-    axios.post('/Flag', {type_id: this.selectedType, url: this.url, metadata: this.metadata, text: this.text})
-      .then(() => {
-        this.$notify({type: 'success', text: 'Dziękujemy za wysłanie raportu.'});
-        this.closeModal();
-      })
-      .finally(() => this.isProcessing = false);
-  }
-
-  icon(name: string): string {
-    const icons = {
-      'Spam': 'fas fa-envelopes-bulk',
-      'Wulgaryzmy': 'fas fa-book-skull',
-      'Off-Topic': 'fas fa-wave-square',
-      'Nieprawidłowa kategoria': 'fas fa-table-list',
-      'Próba wyłudzenia gotowca': 'fas fa-user-graduate',
-      'Inne': "far fa-flag",
+export default Vue.extend({
+  name: 'FlagModal',
+  components: {
+    'vue-modal': VueModal,
+    'vue-radio': VueRadio,
+  },
+  props: {
+    url: {
+      type: String,
+      required: true,
+    },
+    metadata: {
+      type: Object,
+      required: true,
+    },
+    types: {
+      type: Array,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      selectedType: null as number | null,
+      text: null as string | null,
+      isProcessing: false,
     };
-    return icons[name];
-  }
-}
+  },
+  mounted() {
+    this.$refs.modal.open();
+  },
+  beforeDestroy() {
+    this.$refs.modal.close();
+  },
+  methods: {
+    closeModal() {
+      this.$destroy();
+      this.$el.parentNode!.removeChild(this.$el);
+    },
+    sendReport() {
+      this.isProcessing = true;
+
+      axios.post('/Flag', {
+        type_id: this.selectedType,
+        url: this.url,
+        metadata: this.metadata,
+        text: this.text,
+      })
+        .then(() => {
+          this.$notify({type: 'success', text: 'Dziękujemy za wysłanie raportu.'});
+          this.closeModal();
+        })
+        .finally(() => this.isProcessing = false);
+    },
+    icon(name: string): string {
+      const icons = {
+        'Spam': 'fas fa-envelopes-bulk',
+        'Wulgaryzmy': 'fas fa-book-skull',
+        'Off-Topic': 'fas fa-wave-square',
+        'Nieprawidłowa kategoria': 'fas fa-table-list',
+        'Próba wyłudzenia gotowca': 'fas fa-user-graduate',
+        'Inne': "far fa-flag",
+      };
+      return icons[name];
+    },
+  },
+});
 </script>

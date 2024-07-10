@@ -22,36 +22,36 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import Component from "vue-class-component";
-  import { Prop, Emit } from "vue-property-decorator";
-  import { Tag } from '@/types/models';
-  import VueProgressBar from "@/components/progress-bar.vue";
+import Vue from 'vue';
+import {Tag} from "../types/models";
+import VueProgressBar from "./progress-bar.vue";
 
-  @Component({
-    components: { 'vue-progress-bar': VueProgressBar }
-  })
-  export default class VueTags extends Vue {
-    @Prop({default: () => []})
-    readonly tags!: Tag[];
-
-    @Prop({default: false})
-    readonly editable!: boolean;
-
-    @Emit('change')
+export default Vue.extend({
+  name: 'VueTags',
+  components: {'vue-progress-bar': VueProgressBar},
+  props: {
+    tags: {
+      type: Array,
+      default: () => [],
+    },
+    editable: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  methods: {
     setPriority(tag: Tag, priority: number) {
       tag.priority = priority;
-
-      return tag;
-    }
-
-    @Emit('delete')
+      this.$emit('change', tag);
+    },
     deleteTag(tag: Tag) {
-      return tag;
-    }
-
-    get tagName() {
+      this.$emit('delete', tag);
+    },
+  },
+  computed: {
+    tagName() {
       return this.editable ? 'span' : 'a';
-    }
-  }
+    },
+  },
+});
 </script>

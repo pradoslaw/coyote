@@ -16,35 +16,38 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import { Prop, Ref } from "vue-property-decorator";
-  import Component from "vue-class-component";
-  import VueModal from "./modal.vue";
-  import VueSelect from  './forms/select.vue';
+import Vue from 'vue';
+import VueSelect from './forms/select.vue';
+import VueModal from './modal.vue';
 
-  @Component({
-    components: { 'vue-modal': VueModal, 'vue-select': VueSelect }
-  })
-  export default class VueDeleteModal extends Vue {
-    @Ref('modal')
-    modal!: VueModal;
-
-    @Prop(Object)
-    readonly reasons!: { [key: number]: string };
-
-    reasonId: number | null = null;
-
+export default Vue.extend({
+  name: 'VueDeleteModal',
+  components: {
+    'vue-modal': VueModal,
+    'vue-select': VueSelect,
+  },
+  props: {
+    reasons: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      reasonId: null,
+    };
+  },
+  methods: {
     open() {
-      this.modal.open();
-    }
-
+      (this.$refs.modal as VueModal).open();
+    },
     close() {
-      this.modal.close();
-    }
-
+      (this.$refs.modal as VueModal).close();
+    },
     deletePost() {
       this.$emit('delete', this.reasonId);
       this.close();
-    }
-  }
+    },
+  },
+});
 </script>

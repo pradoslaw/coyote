@@ -31,69 +31,71 @@
 <script lang="ts">
 import axios from 'axios';
 import Vue from 'vue';
-import Component from 'vue-class-component';
-import {Emit, Prop, Ref} from 'vue-property-decorator';
 import IsImage from '../libs/assets';
 
-@Component
-export default class VueThumbnail extends Vue {
-  @Ref('input')
-  readonly input!: HTMLInputElement;
-
-  @Prop()
-  readonly url?: string;
-
-  @Prop({required: false, default: '/assets'})
-  readonly uploadUrl!: string;
-
-  @Prop({default: 'photo'})
-  readonly name!: string;
-
-  @Prop({default: false})
-  readonly onlyImage!: boolean;
-
-  isProcessing = false;
-
-  upload() {
-    let formData = new FormData();
-    formData.append(this.name, this.input.files![0]);
-
-    this.isProcessing = true;
-
-    const config = {
-      onUploadProgress: event => {
-        this.$emit('progress', Math.round((event.loaded * 100) / event.total));
-      },
+export default Vue.extend({
+  name: 'VueThumbnail',
+  props: {
+    url: {
+      type: String,
+      required: false,
+    },
+    uploadUrl: {
+      type: String,
+      default: '/assets',
+    },
+    name: {
+      type: String,
+      default: 'photo',
+    },
+    onlyImage: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      isProcessing: false,
     };
+  },
+  methods: {
+    upload() {
+      let formData = new FormData();
+      formData.append(this.name, this.$refs.input.files[0]);
 
-    return axios.post(this.uploadUrl, formData, config)
-      .then(response => this.$emit('upload', response.data))
-      .finally(() => this.isProcessing = false);
-  }
+      this.isProcessing = true;
 
-  @Emit('delete')
-  deleteImage() {
-    return this.url;
-  }
+      const config = {
+        onUploadProgress: event => {
+          this.$emit('progress', Math.round((event.loaded * 100) / event.total));
+        },
+      };
 
-  @Emit('insert')
-  insertImage() {
-    return this.url;
-  }
-
-  // this method can be used by other components to open upload dialog
-  openDialog() {
-    this.input.click();
-  }
-
-  private get isImage() {
-    return IsImage(this.url!);
-  }
-
-  get accept() {
-    return this.onlyImage ? 'image/jpeg,image/png,image/gif' : '';
-  }
-}
+      return axios.post(this.uploadUrl, formData, config)
+        .then(response => this.$emit('upload', response.data))
+        .finally(() => {
+          this.isProcessing = false;
+        });
+    },
+    deleteImage() {
+      this.$emit('delete', this.url);
+    },
+    insertImage() {
+      this.$emit('insert', this.url);
+    },
+    openDialog() {
+      this.$refs.input.click();
+    },
+  },
+  computed: {
+    isImage() {
+      return IsImage(this.url);
+    },
+    accept() {
+      return this.onlyImage ? 'image/jpeg,image/png,image/gif' : '';
+    },
+  },
+});
 
 </script>
 

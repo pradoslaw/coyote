@@ -1,28 +1,30 @@
 <template>
-  <div v-if="isBlocked()" class="card card-post is-deleted"><div class="post-delete card-body">Treść posta została ukryta ponieważ autorem jest zablokowany przez Ciebie użytkownik.</div></div>
+  <div v-if="isBlocked()" class="card card-post is-deleted">
+    <div class="post-delete card-body">Treść posta została ukryta ponieważ autorem jest zablokowany przez Ciebie użytkownik.</div>
+  </div>
   <vue-post v-else :post="post" @reply="reply"></vue-post>
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import { Prop } from "vue-property-decorator";
-  import Component from "vue-class-component";
-  import { Post } from '@/types/models';
-  import VuePost from '@/components/forum/post.vue';
+import VuePost from '@/components/forum/post.vue';
+import Vue from 'vue';
 
-  @Component({
-    components: { VuePost }
-  })
-  export default class PostWrapper extends Vue {
-    @Prop()
-    readonly post!: Post;
-
+export default Vue.extend({
+  name: 'PostWrapper',
+  components: {VuePost},
+  props: {
+    post: {
+      type: Object,
+      required: true,
+    },
+  },
+  methods: {
     isBlocked() {
       return this.post.user_id && this.$store.getters['user/isBlocked'](this.post.user_id);
-    }
-
+    },
     reply() {
       this.$emit('reply', ...arguments);
-    }
-  }
+    },
+  },
+});
 </script>
