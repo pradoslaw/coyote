@@ -237,6 +237,7 @@ new Vue({
       });
 
       if (this.page === 1) {
+        // @ts-ignore
         delete params['page'];
       }
 
