@@ -353,6 +353,8 @@ secrets:
     external: true
   GOOGLE_SECRET_ID_FILE:
     external: true
+  GOOGLE_MAPS_KEY_FILE:
+    external: true
   FACEBOOK_CLIENT_ID_FILE:
     external: true
   FACEBOOK_SECRET_ID_FILE:
