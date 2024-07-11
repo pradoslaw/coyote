@@ -126,6 +126,8 @@ services:
     secrets: *secrets
     deploy:
       replicas: 2
+    depends_on:
+      - db
     healthcheck:
       test: [ "CMD", "php", "artisan", "help" ]
       interval: 5s
@@ -148,6 +150,8 @@ services:
       replicas: 2
     environment: *env
     secrets: *secrets
+    depends_on:
+      - php
     logging:
       driver: "json-file"
       options:
@@ -163,6 +167,8 @@ services:
       - codebase:/var/www
     networks:
       - coyote
+    depends_on:
+      - db
     logging:
       driver: "json-file"
       options:
