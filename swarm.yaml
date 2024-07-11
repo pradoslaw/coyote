@@ -40,15 +40,6 @@ x-env:
   RECAPTCHA_KEY_FILE: /run/secrets/RECAPTCHA_KEY_FILE
   RECAPTCHA_SECRET_FILE: /run/secrets/RECAPTCHA_SECRET_FILE
 
-  P24_CLIENT_ID_FILE: /run/secrets/P24_CLIENT_ID_FILE
-  P24_SALT_FILE: /run/secrets/P24_SALT_FILE
-  P24_PAYMENT_URL: "https://secure.przelewy24.pl/trnDirect"
-  P24_VERIFY_URL: "https://secure.przelewy24.pl/trnVerify"
-
-  PAYLANE_USERNAME_FILE: /run/secrets/PAYLANE_USERNAME_FILE
-  PAYLANE_PASSWORD_FILE: /run/secrets/PAYLANE_PASSWORD_FILE
-  PAYLANE_SALT_FILE: /run/secrets/PAYLANE_SALT_FILE
-
   STRIPE_KEY_FILE: /run/secrets/STRIPE_KEY_FILE
   STRIPE_SECRET_FILE: /run/secrets/STRIPE_SECRET_FILE
   STRIPE_ENDPOINT_SECRET_FILE: /run/secrets/STRIPE_ENDPOINT_SECRET_FILE
@@ -86,11 +77,6 @@ x-secrets:
   - SENTRY_DSN_FILE
   - RECAPTCHA_KEY_FILE
   - RECAPTCHA_SECRET_FILE
-  - P24_CLIENT_ID_FILE
-  - P24_SALT_FILE
-  - PAYLANE_USERNAME_FILE
-  - PAYLANE_PASSWORD_FILE
-  - PAYLANE_SALT_FILE
   - GITHUB_CLIENT_ID_FILE
   - GITHUB_SECRET_ID_FILE
   - GOOGLE_CLIENT_ID_FILE
@@ -358,16 +344,6 @@ secrets:
   RECAPTCHA_KEY_FILE:
     external: true
   RECAPTCHA_SECRET_FILE:
-    external: true
-  P24_CLIENT_ID_FILE:
-    external: true
-  P24_SALT_FILE:
-    external: true
-  PAYLANE_USERNAME_FILE:
-    external: true
-  PAYLANE_PASSWORD_FILE:
-    external: true
-  PAYLANE_SALT_FILE:
     external: true
   GITHUB_CLIENT_ID_FILE:
     external: true
