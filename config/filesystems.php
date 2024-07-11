@@ -72,7 +72,7 @@ return [
             'bucket'                  => 'public',
             'endpoint'                => env('MINIO_ENDPOINT', docker_secret('MINIO_ENDPOINT_FILE')),
             'disable_asserts'         => true,
-            'url'                     => env('AWS_URL', docker_secret('AWS_URL_FILE')),
+            'url'                     => env('AWS_URL'),
             'throw' => true,
 
             'cache' => [
