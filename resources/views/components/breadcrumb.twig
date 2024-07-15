@@ -1,28 +1,26 @@
-<div class="row container-xxl no-gutters">
-  <div class="col-12">
-    <ul class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a href="{{ root_href }}" class="d-block d-sm-none">
-          <i class="fas fa-house"></i>
-        </a>
-        <a href="{{ root_href }}" class="d-none d-sm-inline-block">
-          {{ root_name }}
-        </a>
-      </li>
+<div class="container-xxl">
+  <ul class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ root_href }}" class="d-block d-sm-none">
+        <i class="fas fa-house"></i>
+      </a>
+      <a href="{{ root_href }}" class="d-none d-sm-inline-block">
+        {{ root_name }}
+      </a>
+    </li>
 
-      {% for breadcrumb in breadcrumbs %}
-        <li class="breadcrumb-item">
-          {% if loop.last %}
-            <span>{{ breadcrumb.name }}</span>
-          {% else %}
-            <a href="{{ breadcrumb.url }}">
-              {{ breadcrumb.name }}
-            </a>
-          {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
+    {% for breadcrumb in breadcrumbs %}
+      <li class="breadcrumb-item">
+        {% if loop.last %}
+          <span>{{ breadcrumb.name }}</span>
+        {% else %}
+          <a href="{{ breadcrumb.url }}">
+            {{ breadcrumb.name }}
+          </a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
 </div>
 
 {{ schema_breadcrumb }}

@@ -102,7 +102,7 @@
         </div>
 
         <template v-slot:bottom>
-          <div v-if="showTagsInput" class="row no-gutters p-1">
+          <div v-if="showTagsInput" class="p-1 d-flex">
             <vue-tags-inline
               :tags="topic.tags"
               :class="{'is-invalid': 'tags' in errors}"

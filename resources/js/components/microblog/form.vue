@@ -11,7 +11,7 @@
       preview-url="/Mikroblogi/Preview"
     >
       <template v-slot:bottom>
-        <div class="row no-gutters p-1">
+        <div class="p-1">
           <vue-tags-inline
             :tags="microblog.tags"
             placeholder="...inny? kliknij, aby wybrać tag"

@@ -62,7 +62,7 @@
             </ul>
           </div>
 
-          <div class="row no-gutters mt-1">
+          <div class="d-flex mt-1">
             <div class="d-none d-lg-inline small text-truncate">
               <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`" 
                  class="text-muted topic-date">
