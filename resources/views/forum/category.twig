@@ -29,7 +29,7 @@
 
     {% include 'forum.partials.topics' %}
 
-    <section class="row no-gutters mt-3">
+    <section class="d-flex mt-3">
       {% include 'forum.partials.per_page' with {label: 'Liczba wątków na stronę', perPage: topics.perPage()} %}
     </section>
 

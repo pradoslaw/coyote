@@ -51,7 +51,7 @@
     <hr class="m-0"/>
     <slot name="bottom"/>
 
-    <div class="row no-gutters pt-1 pl-2 pr-2">
+    <div class="pt-1 pl-2 pr-2 d-flex">
       <div class="small mr-auto">
         <template v-if="isProcessing">
           <i class="fas fa-spinner fa-spin small"/>
@@ -75,7 +75,7 @@
       </div>
     </div>
 
-    <div v-if="assets.length" class="row pt-3 pb-3 pl-2 pr-2">
+    <div v-if="assets.length" class="pt-3 pb-3 pl-2 pr-2 d-flex">
       <div v-for="item in assets" :key="item.id" class="col-sm-2">
         <vue-thumbnail
           name="asset"
@@ -87,10 +87,8 @@
       </div>
     </div>
 
-    <div id="js-wiki-help" class="row collapse mt-2">
-      <div class="col-md-12">
-        <vue-help/>
-      </div>
+    <div id="js-wiki-help" class="mt-2 collapse">
+      <vue-help/>
     </div>
 
     <slot/>
