@@ -1,7 +1,11 @@
 import '@popperjs/core'; // must be imported before bootstrap
 import Prism from 'prismjs';
 import Vue from 'vue';
-import './bootstrap.js';
+import 'bootstrap/js/dist/tooltip.js';
+import 'bootstrap/js/dist/collapse.js';
+import 'bootstrap/js/dist/dropdown.js';
+import 'bootstrap/js/dist/modal.js';
+import 'bootstrap/js/dist/tab.js';
 import './components/breadcrumb.js';
 import './components/navbar-toggle.ts';
 import './components/bannerCount.ts';
