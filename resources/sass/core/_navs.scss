@@ -7,7 +7,7 @@
 }
 
 .nav > li > a {
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     padding: 5px;
     font-size: 12px;
   }

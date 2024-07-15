@@ -1,5 +1,5 @@
 .microblog {
-  @include media-breakpoint-down(md) {
+  @include media-breakpoint-down(lg) {
     textarea::placeholder {
       color: transparent;
     }

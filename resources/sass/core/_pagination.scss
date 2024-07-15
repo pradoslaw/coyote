@@ -8,7 +8,7 @@
   font-weight: bold;
 }
 
-@include media-breakpoint-down(sm)  {
+@include media-breakpoint-down(md)  {
   .pagination-sm .page-link {
     font-size: $font-size-sm;
     padding: $pagination-padding-y-sm - .1rem $pagination-padding-x-sm - .1rem;

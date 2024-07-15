@@ -16,7 +16,7 @@
   width: 52.1%;
   float: right;
 
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     background: none;
     float: none;
     width: 100%;
@@ -70,7 +70,7 @@ article > header {
   h1 {
     margin-top: 0;
 
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       font-size: 120%;
     }
   }
@@ -96,7 +96,7 @@ article > header {
 .wiki-text {
   color: #333;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     font-size: $font-size-sm;
   }
 
@@ -132,7 +132,7 @@ article > header {
   }
 
   .img-thumbnail {
-    @include media-breakpoint-down(md) {
+    @include media-breakpoint-down(lg) {
       display: none;
     }
   }
@@ -248,7 +248,7 @@ article > header {
     font-size: 110%;
   }
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     .media-heading {
       font-size: 110%;
     }

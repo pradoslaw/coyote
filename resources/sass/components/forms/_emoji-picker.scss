@@ -40,7 +40,7 @@
         }
       }
 
-      @include media-breakpoint-down(xs) {
+      @include media-breakpoint-down(sm) {
         border-right: none;
         border-left: none;
         border-bottom: none;

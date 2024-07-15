@@ -60,7 +60,7 @@
 }
 
 .nav-search:not(.nav-search-mobile) {
-  @include media-breakpoint-down('sm') {
+  @include media-breakpoint-down(md) {
     .search-bar {
       display: none;
     }

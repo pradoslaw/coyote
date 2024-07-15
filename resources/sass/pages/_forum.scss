@@ -8,7 +8,7 @@
     margin-top: 0;
   }
 
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     .nav-tabs {
       li:nth-child(3), li:nth-child(4), li:nth-child(5) {
         display: none;
@@ -16,7 +16,7 @@
     }
   }
 
-  @include media-breakpoint-down(lg) {
+  @include media-breakpoint-down(xl) {
     padding-right: 0;
   }
 }
@@ -48,7 +48,7 @@
   margin-right: -25%;
   z-index: 1000;
 
-  @include media-breakpoint-down(lg) {
+  @include media-breakpoint-down(xl) {
     display: none;
     position: absolute;
     z-index: 101;
@@ -61,7 +61,7 @@
     width: 45%; // na urzadzeniach mobilnych rozszerzamy to okno aby cokolwiek bylo tam widac
   }
 
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     width: 65%;
   }
 }

@@ -38,7 +38,7 @@
     padding-top: 25px;
     padding-left: 2px;
 
-    @include media-breakpoint-down(lg) {
+    @include media-breakpoint-down(xl) {
       margin-top: 20px;
       background-position-x: 10px;
       padding-left: 15px;
@@ -50,7 +50,7 @@
     position: relative;
     overflow: hidden;
 
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       padding-left: 15px;
     }
   }
@@ -103,7 +103,7 @@
     border-left: 1px solid $card-border-color;
     margin: 10px 0 0 10px;
 
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       border-left: none;
       margin-left: 0;
     }
@@ -160,7 +160,7 @@
       content: fa-content($fa-var-file-lines);
     }
 
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       padding: 0;
     }
   }
