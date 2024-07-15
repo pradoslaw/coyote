@@ -69,19 +69,19 @@ $arrow-size: 8px;
 }
 
 .alert.right:before {
-  border-right-color: theme-color-level('warning', $alert-border-level);
+  border-right-color: $alert-warning-border;
   border-width: $arrow-size + 3px;
   margin-top: -($arrow-size + 3px);
 }
 
 .alert.left:after {
-  border-left-color: theme-color-level('warning', $alert-bg-level);
+  border-left-color: $alert-warning-border;
   border-width: $arrow-size;
   margin-top: -$arrow-size;
 }
 
 .alert.left:before {
-  border-left-color: theme-color-level('warning', $alert-border-level);
+  border-left-color: $alert-warning-border;
   border-width: $arrow-size + 3px;
   margin-top: -($arrow-size + 3px);
 }
@@ -89,7 +89,7 @@ $arrow-size: 8px;
 .alert.bottom:after,
 .alert.bottom-end:after,
 .alert.bottom-start:after {
-  border-bottom-color: theme-color-level('warning', $alert-bg-level);
+  border-bottom-color: $alert-warning-border;
   border-width: $arrow-size;
   margin-left: -$arrow-size;
 }
@@ -97,19 +97,19 @@ $arrow-size: 8px;
 .alert.bottom:before,
 .alert.bottom-end:before,
 .alert.bottom-start:before {
-  border-bottom-color: theme-color-level('warning', $alert-border-level);
+  border-bottom-color: $alert-warning-border;
   border-width: $arrow-size + 3px;
   margin-left: -($arrow-size + 3px);
 }
 
 .alert.top:after, .alert.top-end:after, .alert.top-start:after {
-  border-top-color: theme-color-level('warning', $alert-bg-level);
+  border-top-color: $alert-warning-border;
   border-width: $arrow-size;
   margin-left: -$arrow-size;
 }
 
 .alert.top:before, .alert.top-end:before, .alert.top-start:before {
-  border-top-color: theme-color-level('warning', $alert-border-level);
+  border-top-color: $alert-warning-border;
   border-width: $arrow-size + 3px;
   margin-left: -($arrow-size + 3px);
 }
