@@ -4,7 +4,7 @@
   .media-body {
     padding: 0 20px;
 
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       padding: 0 5px;
     }
 
@@ -30,7 +30,7 @@
   .media-object {
     width: 70px;
 
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       display: none;
     }
   }
@@ -39,7 +39,7 @@
     font-size: 22px;
     margin-bottom: 10px;
 
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       font-size: $font-size-lg;
     }
   }
@@ -95,7 +95,7 @@
   // Offer description (or company description)
   // ----------------------------------------------------
   .text {
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       font-size: $font-size-sm;
     }
 

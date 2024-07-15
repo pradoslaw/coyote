@@ -149,7 +149,7 @@ body.padding-top {
     overflow: hidden;
   }
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     // na urzedzeniach mobilnych okno powiadomien oraz wiadomosci prywatnych musi byc rozciagniete na cala szerokosc
     position: static;
   }
@@ -278,7 +278,7 @@ body.padding-top {
 }
 
 /* Za malo miejsca w pionie, by wyswietlac przyklejony navbar */
-@include media-breakpoint-down(sm) {
+@include media-breakpoint-down(md) {
   /* zostawiamy navbar na gorze strony */
   .fixed-top {
     position: absolute;

@@ -94,7 +94,7 @@
   }
 
   // mobile
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     .not-read {
       @include not-read-border();
     }

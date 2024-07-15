@@ -97,7 +97,7 @@
     }
   }
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     flex-flow: column nowrap;
 
     > .input-item {
@@ -120,7 +120,7 @@
     }
   }
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     .filters {
       position: relative;
     }

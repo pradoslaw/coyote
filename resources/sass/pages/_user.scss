@@ -28,7 +28,7 @@
   .progress {
     width: 50%;
 
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       width: 100%;
     }
   }
