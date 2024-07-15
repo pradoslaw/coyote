@@ -1,5 +1,6 @@
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/functions";
+@import "bootstrap/scss/mixins/buttons";
 
 $alert-warning-color: #714907;
 $alert-warning-background: #f7e8cf;
@@ -8,3 +9,19 @@ $alert-warning-border: #f4dfbb;
 $alert-danger-color: #712b29;
 $alert-danger-background: #f7dddc;
 $alert-danger-border: #f4cfce;
+
+@each $name, $color in $theme-colors {
+  .btn-#{$name} {
+    @if $name == 'secondary' {
+      @include button-variant($background: $color, $border: #ccc);
+    } @else {
+      @include button-variant(
+              $background: $color,
+              $border: $color,
+              $color: #fff,
+              $hover-color: #fff,
+              $active-color: #fff,
+              $disabled-color: #fff);
+    }
+  }
+}
