@@ -1,0 +1,10 @@
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/functions";
+
+$alert-warning-color: theme-color-level("warning", $alert-color-level);
+$alert-warning-background: theme-color-level("warning", $alert-bg-level);
+$alert-warning-border: theme-color-level('warning', $alert-border-level);
+
+$alert-danger-color: theme-color-level("danger", $alert-color-level);
+$alert-danger-background: theme-color-level("danger", $alert-bg-level);
+$alert-danger-border: theme-color-level('danger', $alert-border-level);

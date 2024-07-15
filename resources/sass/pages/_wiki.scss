@@ -232,7 +232,7 @@ article > header {
   .btn-warning {
     padding: 4px;
     font-weight: bold;
-    box-shadow: 1px 1px theme-color-level('warning', $alert-border-level);
+    box-shadow: 1px 1px $alert-warning-border;
     margin: 0 5px;
   }
 }

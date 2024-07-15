@@ -45,10 +45,10 @@
 }
 
 .post-delete {
-  color: theme-color-level("warning", $alert-color-level);
-  background-color: theme-color-level("warning", $alert-bg-level);
+  color: $alert-warning-color;
+  background-color: $alert-warning-background;
   font-size: 11px;
-  border-bottom: 1px solid theme-color-level('warning', $alert-border-level);
+  border-bottom: 1px solid $alert-warning-border;
 
   a {
     display: block;
