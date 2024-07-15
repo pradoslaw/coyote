@@ -21,20 +21,6 @@
   </div>
 {% endmacro %}
 
-{% macro inline(html, label, error, help) %}
-  <div class="form-group row {{ error ? 'has-error' }}">
-    <label>{{ label }}</label>
-
-    {{ html|raw }}
-
-    {% if error %}
-      <span class="invalid-feedback">{{ error }}</span>
-    {% elseif help %}
-      <span class="form-text text-muted">{{ help }}</span>
-    {% endif %}
-  </div>
-{% endmacro %}
-
 {% macro text(name, label, value, attr, help) %}
   {{ _self.element(form_text(name, value, {'class': 'form-control' ~ (session_get('errors').first(name) ? ' is-invalid')}), label, session_get('errors').first(name), attr, help) }}
 {% endmacro %}
