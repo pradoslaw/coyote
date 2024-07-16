@@ -2,27 +2,25 @@
   padding: 0.375rem;
 
   h3 {
+    margin-top: 20px;
+    margin-bottom: 15px;
+
     &:first-child {
       margin-top: 0;
     }
-
-    margin-top: 20px;
-    margin-bottom: 15px;
   }
 
   h4 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+
     &:first-child {
       margin-top: 0;
     }
-
-    margin-top: 15px;
-    margin-bottom: 5px;
   }
 
-  ul {
-    li {
-      margin-bottom: 2px;
-    }
+  ul li {
+    margin-bottom: 2px;
   }
 
   .card-version {
