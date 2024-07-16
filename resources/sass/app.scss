@@ -3,12 +3,12 @@
 @import "helpers/variables";
 @import "helpers/mixins";
 @import "helpers/sprites";
-@import "~@fortawesome/fontawesome-free/scss/functions";
-@import "~@fortawesome/fontawesome-free/scss/variables";
+@import "@fortawesome/fontawesome-free/scss/functions";
+@import "@fortawesome/fontawesome-free/scss/variables";
 
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins";
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
 @import "helpers/bootstrap";
 
 @import "core/logos";
@@ -44,5 +44,5 @@
 @import "components/heading";
 
 @import "vendor/lightbox";
-@import "~perfect-scrollbar/css/perfect-scrollbar";
-@import "~balloon-css/src/balloon";
+@import "perfect-scrollbar/css/perfect-scrollbar";
+@import "balloon-css/src/balloon";
