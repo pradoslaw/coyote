@@ -30,8 +30,8 @@
           <vue-timeago :datetime="token.created_at" class="small"></vue-timeago>
         </div>
 
-        <div class="form-group row mt-4">
-          <div class="col">
+        <div class="form-group d-flex mt-4">
+          <div class="me-2">
             <input
                 v-model="tokenName"
                 @keyup.enter="addToken"
@@ -41,11 +41,9 @@
                 name="token"
             >
           </div>
-          <div class="col">
-            <button @click="addToken" type="submit" class="btn btn-primary">
-              Dodaj
-            </button>
-          </div>
+          <button @click="addToken" type="submit" class="btn btn-primary">
+            Dodaj
+          </button>
         </div>
       </div>
     </div>
