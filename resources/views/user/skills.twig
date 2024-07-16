@@ -6,15 +6,12 @@
 
   <div v-cloak id="js-skills" class="card card-default card-skills">
     <div class="card-body">
-      <div class="form-group row">
-        <div class="col">
-          <vue-tags-inline
-              @change="addSkill"
-              placeholder="Np. java, c#"
-              data-popover='{"message": "Umiejętności będą widoczne na Twoim profilu.", "placement": "top-start"}'
-          >
-          </vue-tags-inline>
-        </div>
+      <div class="mb-4">
+        <vue-tags-inline
+            @change="addSkill"
+            placeholder="Np. java, c#"
+            data-popover='{"message": "Umiejętności będą widoczne na Twoim profilu.", "placement": "top-start"}'>
+        </vue-tags-inline>
       </div>
 
       <div class="row">
