@@ -10,13 +10,16 @@
     color: white;
     position: absolute;
 
-    &.rep {
+    &.rep, &.rank {
       top: 11px;
+      line-height: 0;
+    }
+
+    &.rep {
       left: 10px;
     }
 
     &.rank {
-      top: 11px;
       right: 10px;
     }
   }
