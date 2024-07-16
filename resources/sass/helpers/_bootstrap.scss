@@ -25,3 +25,179 @@ $alert-danger-border: #f4cfce;
     }
   }
 }
+
+html {
+  scroll-behavior: auto !important;
+}
+
+body.theme-dark {
+  .card {
+    --bs-card-color: #acacac;
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #0000001a;
+  opacity: 1;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #eee;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  &, &:focus {
+    background-color: white;
+  }
+
+  &::placeholder {
+    color: unset;
+  }
+}
+
+.form-text {
+  display: block;
+  margin-top: .25rem;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -5px;
+  margin-right: -5px
+}
+
+.form-row > .col,
+.form-row > [class*=col-] {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.form-inline {
+  align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+@media(min-width: 576px) {
+  .form-inline {
+    label {
+      justify-content: center;
+    }
+
+    .form-group, label {
+      align-items: center;
+      display: flex;
+      margin-bottom: 0;
+    }
+
+    .form-group {
+      flex: 0 0 auto;
+      flex-flow: row wrap;
+    }
+
+    .form-control {
+      display: inline-block;
+      vertical-align: middle;
+      width: auto;
+    }
+
+    .form-control-plaintext {
+      display: inline-block;
+    }
+
+    .input-group {
+      width: auto;
+    }
+
+    .custom-control {
+      align-items: center;
+      justify-content: center;
+    }
+
+    .custom-control-label {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.dropdown-menu {
+  top: 100%;
+
+  &.dropdown-menu-end {
+    right: 0;
+    left: auto;
+  }
+
+  &.dropdown-menu-start {
+    left: 0;
+    right: auto;
+  }
+
+  .dropdown-item {
+    &:hover {
+      background-color: #e9ecef;
+      color: #16181b;
+    }
+
+    &.active {
+      background-color: unset;
+    }
+  }
+}
+
+.media {
+  display: flex;
+
+  > div:first-of-type {
+    flex-shrink: 0;
+  }
+
+  .media-body {
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+}
+
+.table, table {
+  > :not(caption) > * > * {
+    color: unset;
+    background-color: unset;
+  }
+}
+
+.nav-tabs .nav-link:focus {
+  color: unset;
+  border-color: transparent;
+}
+
+.close {
+  color: black;
+  float: right;
+  font-size: 1.275rem;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0.5;
+  text-shadow: 0 1px 0 #fff;
+  background-color: #0000;
+  border: 0;
+  padding: 0;
+  transition: opacity 0.5s;
+
+  &:hover {
+    opacity: 0.75;
+  }
+}
