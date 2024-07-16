@@ -161,7 +161,7 @@ const controls = new Vue({
       <div class="d-none d-xl-flex mr-2">
         <vue-github-button size="large" :theme="dark ? 'dark' : 'light'"/>
       </div>
-      <span :class="['position-relative', 'btn','btn-sm', 'btn-toggle-theme', {open}]" @click="toggleOpen" v-if="toggleEnabled">
+      <span :class="['position-relative', 'px-2', 'py-2', 'btn-toggle-theme', {open}]" @click="toggleOpen" v-if="toggleEnabled" style="cursor:pointer;">
         <vue-icon :icon="oppositeIcon"/>
         <div class="dropdown-menu dropdown-menu-right" style="display:block" v-show="open">
           <span v-for="(item, itemTheme, index) in items"
