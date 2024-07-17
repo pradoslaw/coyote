@@ -85,18 +85,16 @@ export default Vue.extend({
       type: Array,
       default: () => [],
     },
+    popularTags: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
       searchText: '',
       filteredTags: [],
     };
-  },
-  inject: {
-    popularTags: {
-      from: 'popularTags',
-      default: () => [],
-    },
   },
   watch: {
     searchText(val) {
