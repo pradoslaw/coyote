@@ -104,6 +104,7 @@
             <vue-tags-inline
               :tags="topic.tags"
               :class="{'is-invalid': 'tags' in errors}"
+              :popular-tags="popularTags"
               :placeholder="requireTag ? 'Minimum 1 tag jest wymagany': '...inny? kliknij, aby wybrać tag'"
               @change="toggleTag"/>
             <vue-error :message="errors['tags']"/>
