@@ -12,7 +12,7 @@
         </div>
         <input name="filter" class="form-control" value="{{ filter }}">
       </div>
-      <div class="ml-2">
+      <div class="ms-2">
         <button class="btn btn-secondary">
           Szukaj
         </button>
@@ -54,7 +54,7 @@
       {% for material in materials.items %}
         <a href="{{ material.adminUrl }}" class="list-group-item material-list-item {{ material.reportOpen ? 'report-open' : '' }}">
           <div class="d-flex" style="opacity:{{ material.deletedAt ? '0.4' : '1.0' }};">
-            <img class="img-thumbnail mr-2" style="width:40px;" src="{{ material.authorImageUrl }}" alt="{{ material.authorUsername }}" title="{{ material.authorUsername }}">
+            <img class="img-thumbnail me-2" style="width:40px;" src="{{ material.authorImageUrl }}" alt="{{ material.authorUsername }}" title="{{ material.authorUsername }}">
             <div class="flex-ellipsis-container">
               <p class="flex-ellipsis m-0">
                 {{ material.preview }}
@@ -72,7 +72,7 @@
                 </small>
               </p>
             </div>
-            <div class="flex-grow-1 text-right text-muted report-icon">
+            <div class="flex-grow-1 text-end text-muted report-icon">
               {% if material.reported %}
                 {% if material.reportOpen %}
                   <i class="far fa-flag" title="Treść została zgłoszona, raport jest otwarty"></i>

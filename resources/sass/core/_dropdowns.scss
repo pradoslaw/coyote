@@ -9,7 +9,7 @@
   }
 }
 
-.dropdown-menu.dropdown-menu-right {
+.dropdown-menu.dropdown-menu-end {
   &:before {
     content: ' ';
     bottom: 100%;
@@ -27,8 +27,8 @@
   }
 }
 
-.dropdown-menu.dropdown-menu-left {
-  @extend .dropdown-menu, .dropdown-menu-right;
+.dropdown-menu.dropdown-menu-start {
+  @extend .dropdown-menu, .dropdown-menu-end;
 
   &:before {
     left: 9px;

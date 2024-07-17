@@ -6,10 +6,10 @@
       <i class="fas fa-bell fa-fw"></i>
     </a>
 
-    <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-right">
+    <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-end">
       <div class="dropdown-header">
-        <div v-if="unreadNotifications.length > 0" class="float-right">
-          <a @click="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="mr-1">
+        <div v-if="unreadNotifications.length > 0" class="float-end">
+          <a @click="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="me-1">
             <i class="fas fa-up-right-from-square"></i>
           </a>
 

@@ -23,8 +23,8 @@
       </div>
 
       <div class="list-group list-group-flush">
-        <div v-for="token in tokens" :key="token.id" class="list-group-item pl-0 pr-0">
-          <button @click="deleteToken(token.id)" class="btn btn-sm btn-danger float-right mt-1">Usuń</button>
+        <div v-for="token in tokens" :key="token.id" class="list-group-item ps-0 pe-0">
+          <button @click="deleteToken(token.id)" class="btn btn-sm btn-danger float-end mt-1">Usuń</button>
           <h5 class="mb-0">${ token.name }</h5>
 
           <vue-timeago :datetime="token.created_at" class="small"></vue-timeago>

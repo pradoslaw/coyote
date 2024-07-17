@@ -45,7 +45,7 @@
 
     <div :class="{'collapse': isCollapsed}" class="card-body">
       <div class="media d-lg-none mb-2">
-        <div class="media-left mr-2">
+        <div class="media-left me-2">
           <vue-avatar
             v-if="post.user"
             :id="post.user.id"
@@ -251,7 +251,7 @@
             </button>
           </div>
 
-          <div v-if="post.permissions.write" class="ml-auto">
+          <div v-if="post.permissions.write" class="ms-auto">
             <button v-if="post.permissions.update && !post.deleted_at" @click="edit" class="btn btn-sm">
               <i :class="{'text-primary': post.is_editing}" class="fas fa-fw fa-pen-to-square"></i>
               <span class="d-none d-sm-inline">Edytuj</span>
@@ -280,12 +280,12 @@
               </a>
             </template>
 
-            <div v-if="post.permissions.merge || post.permissions.adm_access" class="dropdown float-right">
+            <div v-if="post.permissions.merge || post.permissions.adm_access" class="dropdown float-end">
               <button class="btn btn-sm" data-bs-toggle="dropdown">
                 <i class="fas fa-fw fa-ellipsis"></i>
               </button>
 
-              <div class="dropdown-menu dropdown-menu-right">
+              <div class="dropdown-menu dropdown-menu-end">
                 <a v-if="!post.deleted_at && post.permissions.merge && post.id !== topic.first_post_id"
                    @click="merge"
                    href="javascript:" class="dropdown-item">

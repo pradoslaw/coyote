@@ -39,7 +39,7 @@
               <perfect-scrollbar id="wrap">
                 <a v-for="forum in forums" @click="toggleCategory(forum.id)" :key="forum.id" class="dropdown-item" href="javascript:" rel="nofollow">
                   <i v-if="categories.indexOf(forum.id) > -1" class="fa fa-check"></i>
-                  <span :class="{'pl-2': forum.indent}">${ forum.name }</span>
+                  <span :class="{'ps-2': forum.indent}">${ forum.name }</span>
                 </a>
               </perfect-scrollbar>
             </div>

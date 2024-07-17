@@ -1,13 +1,13 @@
 <template>
   <div class="card-section card pt-1">
-    <div class="section-name pb-2 pl-lg-3 pt-lg-2 pr-lg-2">
-      <h2 class="float-left">
+    <div class="section-name pb-2 ps-lg-3 pt-lg-2 pe-lg-2">
+      <h2 class="float-start">
         <a v-if="$listeners.collapse" href="javascript:" @click="collapse"><i :class="[isCollapse ? 'fa-square-plus': 'fa-square-minus']" class="far"></i> {{ name }}</a>
         <template v-else>{{ name }}</template>
       </h2>
 
-      <div v-if="isAuthorized && !categories[0].parent_id" :class="{'open': isDropdown}" v-on-clickaway="hideDropdown" class="dropdown float-right dropleft">
-        <a href="javascript:" @click="isDropdown = ! isDropdown" class="card-cog mt-2 mr-2"><i class="fas fa-gears"></i></a>
+      <div v-if="isAuthorized && !categories[0].parent_id" :class="{'open': isDropdown}" v-on-clickaway="hideDropdown" class="dropdown float-end dropleft">
+        <a href="javascript:" @click="isDropdown = ! isDropdown" class="card-cog mt-2 me-2"><i class="fas fa-gears"></i></a>
 
         <div :class="{'d-block': isDropdown}" class="dropdown-menu">
           <a v-for="category in categories" href="javascript:" class="dropdown-item" @click="toggle(category)">
@@ -25,7 +25,7 @@
       <div v-for="(category, index) in categories" v-if="!category.is_hidden" :class="{'not-read': !category.is_read}" class="card-body">
         <div class="row">
           <div class="col-6 col-md-12 col-lg-5 d-flex align-items-center">
-            <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative mr-2">
+            <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative me-2">
               <i v-if="category.is_locked" class="logo fas fa-lock "></i>
 
               <i v-else :class="[className(category.name)]" class="logo far fa-comments"></i>
@@ -68,7 +68,7 @@
           <div v-if="!category.is_redirected" class="col-12 col-lg-5">
             <div v-if="category.post" class="media">
               <a v-profile="category.post.user ? category.post.user.id : null">
-                <vue-avatar v-bind="category.post.user" class="i-38 mr-2 d-none d-sm-block img-thumbnail"></vue-avatar>
+                <vue-avatar v-bind="category.post.user" class="i-38 me-2 d-none d-sm-block img-thumbnail"></vue-avatar>
               </a>
 
               <div class="media-body overflow-hidden">

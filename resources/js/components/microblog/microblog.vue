@@ -7,14 +7,14 @@
       </div>
 
       <div class="media">
-        <div class="d-none d-sm-block mr-2">
+        <div class="d-none d-sm-block me-2">
           <a v-profile="microblog.user.id">
             <vue-avatar v-bind="microblog.user" :is-online="microblog.user.is_online" class="i-45 d-block img-thumbnail"></vue-avatar>
           </a>
         </div>
         <div class="media-body">
           <div class="d-flex flex-nowrap">
-            <div class="flex-shrink-0 mr-auto">
+            <div class="flex-shrink-0 me-auto">
               <h5 class="media-heading">
                 <vue-username :user="microblog.user"></vue-username>
               </h5>
@@ -42,7 +42,7 @@
             <div v-if="isAuthorized" class="dropdown">
               <button class="btn btn-xs border-0 text-muted" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis"></i></button>
 
-              <div class="dropdown-menu dropdown-menu-right">
+              <div class="dropdown-menu dropdown-menu-end">
                 <template v-if="microblog.permissions.update">
 
                   <template v-if="!microblog.deleted_at">
@@ -150,7 +150,7 @@
 
             <form v-if="isAuthorized" method="POST">
               <div class="media microblog-input rounded border-top-0">
-                <div class="mr-2">
+                <div class="me-2">
                   <a v-profile="user.id">
                     <vue-avatar :photo="user.photo" :name="user.name" class="i-35 d-block img-thumbnail"></vue-avatar>
                   </a>

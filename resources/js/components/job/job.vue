@@ -4,14 +4,14 @@
 
     <div class="card-body">
       <div class="media">
-        <div class="d-none d-sm-block mr-3">
+        <div class="d-none d-sm-block me-3">
           <a :href="job.url">
             <img :src="job.firm.logo || '/img/logo-gray.png'" :alt="job.firm.logo ? job.firm.name : ''" class="i-95">
           </a>
         </div>
 
         <div class="media-body">
-          <h4 class="float-left"><a :href="job.url">{{ job.title }}</a></h4>
+          <h4 class="float-start"><a :href="job.url">{{ job.title }}</a></h4>
 
           <a v-if="job.is_medal" :href="job.url" class="medal d-none d-sm-inline-block" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy"></a>
 
@@ -21,7 +21,7 @@
             :currency_symbol="job.currency_symbol"
             :rate="job.rate"
             :is_gross="job.is_gross"
-            :options="{'class': 'float-right'}"
+            :options="{'class': 'float-end'}"
           >
           </vue-salary>
 
@@ -33,8 +33,8 @@
 
           <div class="clearfix"></div>
 
-          <span v-if="job.is_new" class="badge label-new float-right mt-2">Nowe</span>
-          <small v-else class="text-muted float-right">{{ job.boost_at }}</small>
+          <span v-if="job.is_new" class="badge label-new float-end mt-2">Nowe</span>
+          <small v-else class="text-muted float-end">{{ job.boost_at }}</small>
 
           <ul class="tag-clouds tag-clouds-sm">
             <li v-for="tag in limitedTags">

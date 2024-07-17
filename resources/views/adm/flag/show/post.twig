@@ -43,8 +43,8 @@
     <div class="card-footer">
       <div class="row">
         <div class="col-2"></div>
-        <div class="col-10 text-right text-muted">
-          <i class="fas fa-ellipsis mr-2"></i>
+        <div class="col-10 text-end text-muted">
+          <i class="fas fa-ellipsis me-2"></i>
         </div>
       </div>
     </div>
@@ -64,7 +64,7 @@
     <div class="mb-4">
       {% for item in post.history %}
         <div class="d-flex mb-2">
-          <i class="{{ item.icon }} fa-fw mt-1 mr-2"></i>
+          <i class="{{ item.icon }} fa-fw mt-1 me-2"></i>
           <div>
             {{ item.userMention }}
             {{ item.actionVerbPastTense }}

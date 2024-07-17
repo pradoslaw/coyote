@@ -1,12 +1,12 @@
 <template>
   <div :class="{'sequential': message.sequential, 'unread': ! isRead}" class="media">
-    <a v-if="!message.sequential" v-profile="message.user.id" class="i-45 mr-2 d-none d-sm-block">
+    <a v-if="!message.sequential" v-profile="message.user.id" class="i-45 me-2 d-none d-sm-block">
       <vue-avatar :photo="message.user.photo" :name="message.user.name" class="mw-100"></vue-avatar>
     </a>
 
     <div class="media-body">
       <template v-if="!message.sequential">
-        <small class="float-right text-muted">
+        <small class="float-end text-muted">
           <vue-timeago :datetime="message.created_at"></vue-timeago>
         </small>
 
@@ -16,7 +16,7 @@
         </h3>
       </template>
 
-      <a @click="deleteMessage" class="btn-delete float-right text-danger" href="javascript:" title="Usuń">
+      <a @click="deleteMessage" class="btn-delete float-end text-danger" href="javascript:" title="Usuń">
         <i class="fas fa-trash-can"></i>
       </a>
 
