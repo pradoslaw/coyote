@@ -1,17 +1,17 @@
 <template>
   <div :id="'comment-' + comment.id" class="comment">
     <div class="media" :class="{author: comment.is_owner}">
-      <div class="mr-2">
+      <div class="me-2">
         <a v-profile="comment.user.id">
           <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="img-thumbnail media-object i-38"></vue-avatar>
         </a>
       </div>
 
       <div class="media-body">
-        <div class="dropdown float-right" v-if="comment.permissions.update">
+        <div class="dropdown float-end" v-if="comment.permissions.update">
           <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis"></i></button>
 
-          <div class="dropdown-menu dropdown-menu-right">
+          <div class="dropdown-menu dropdown-menu-end">
             <a @click="edit" href="javascript:" class="dropdown-item">
               <i class="fa fa-pen-to-square fa-fw"></i>
               Edytuj
@@ -45,7 +45,7 @@
           />
 
           <div class="d-flex mt-2 justify-content-end">
-            <button type="button" class="btn btn-danger btn-sm mr-1" @click="isEditing = false">Anuluj</button>
+            <button type="button" class="btn btn-danger btn-sm me-1" @click="isEditing = false">Anuluj</button>
             <vue-button :disabled="isSubmitting" @click.native="saveComment(comment)" class="btn btn-primary btn-sm">Zapisz</vue-button>
           </div>
         </div>
@@ -71,7 +71,7 @@
         />
 
         <div class="d-flex mt-2 justify-content-end">
-          <button type="button" class="btn btn-danger btn-sm mr-1" @click="isReplying = false">Anuluj</button>
+          <button type="button" class="btn btn-danger btn-sm me-1" @click="isReplying = false">Anuluj</button>
 
           <vue-button @click.native="saveComment(replyForm)" :disabled="isSubmitting" type="submit" class="btn btn-primary btn-sm" title="Ctrl+Enter aby opublikować">
             Zapisz

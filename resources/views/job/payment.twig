@@ -9,7 +9,7 @@
     <form @submit.prevent="makePayment" class="col-md-9">
       <div v-if="hasPaymentError" class="alert alert-danger alert-report">
         <p class="mb-3">
-          <i class="fas fa-triangle-exclamation mr-1"></i>
+          <i class="fas fa-triangle-exclamation me-1"></i>
           <b>Wystąpił nieoczekiwany błąd podczas przetwarzania płatności.</b>
         </p>
         <p class="mb-0">
@@ -117,11 +117,11 @@
           </div>
 
           <div>
-            <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-left">
+            <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-start">
               <i class="fas fa-angle-left"></i> 
               Powrót do ogłoszenia
             </a>
-            <vue-button :disabled="isProcessing" class="btn btn-primary float-right">
+            <vue-button :disabled="isProcessing" class="btn btn-primary float-end">
               Zapłać i zapisz
               <i class="fas fa-angle-right"></i>
             </vue-button>
@@ -138,28 +138,28 @@
 
         <div class="card-body">
           <div class="mt-1 mb-1 clearfix">
-            <div class="float-left">
+            <div class="float-start">
               Publikacja ogłoszenia ({{ payment.days }} dni)
             </div>
-            <div class="float-right text-right">
+            <div class="float-end text-end">
               ${ money(netPrice) } zł
             </div>
           </div>
 
           <div class="mt-1 mb-1 clearfix" v-if="coupon.amount > 0">
-            <div class="float-left">
+            <div class="float-start">
               Rabat
             </div>
-            <div class="float-right text-right">
+            <div class="float-end text-end">
               ${ money(coupon.amount) } zł
             </div>
           </div>
 
           <div class="margin-xs-top margin-xs-bottom clearfix">
-            <div class="float-left">
+            <div class="float-start">
               VAT (${ percentageVatRate }%)
             </div>
-            <div class="float-right">
+            <div class="float-end">
               ${ money(vatPrice) } zł
             </div>
           </div>
@@ -167,10 +167,10 @@
           <hr>
 
           <div class="clearfix">
-            <div class="float-left">
+            <div class="float-start">
               <strong>Suma:</strong>
             </div>
-            <div class="float-right">
+            <div class="float-end">
               <strong>${ money(grossPrice) } zł</strong>
             </div>
           </div>
@@ -195,10 +195,10 @@
 
         <div class="card-footer">
           <div class="clearfix">
-            <div class="float-left">
+            <div class="float-start">
               <span>Do zapłaty:</span>
             </div>
-            <div class="float-right">
+            <div class="float-end">
               <span>${ money(grossPrice) } zł</span>
             </div>
           </div>

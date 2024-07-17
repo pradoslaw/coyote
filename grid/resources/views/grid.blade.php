@@ -1,13 +1,13 @@
 <div class="grid">
     @section('header')
         @if(isset($add_url))
-            <div class="float-left">
+            <div class="float-start">
                 <a class="btn btn-secondary btn-add" href="{{ $add_url }}">
                     <i class="fa fa-plus"></i>
                     {{ $add_label ?: 'Nowy' }}
                 </a>
             </div>
-            <div class="float-right">{{ $pagination }}</div>
+            <div class="float-end">{{ $pagination }}</div>
         @else
             {{ $pagination }}
         @endif
@@ -49,7 +49,7 @@
 
     @section('footer')
         @if(isset($add_url))
-            <div class="float-right">{{ $pagination }}</div>
+            <div class="float-end">{{ $pagination }}</div>
         @else
             {{ $pagination }}
         @endif

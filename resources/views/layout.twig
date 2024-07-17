@@ -79,7 +79,7 @@
           />
         </a>
 
-        <div class="collapse navbar-collapse flex-grow-0 order-3 order-lg-1 ml-2" id="mobile-menu">
+        <div class="collapse navbar-collapse flex-grow-0 order-3 order-lg-1 ms-2" id="mobile-menu">
           <ul class="navbar-nav">
             {% for item in __master_menu.roots() %}
               <li {{ forms.attr(item.attr) }}>
@@ -91,7 +91,7 @@
 
                 {% if item.hasChildren() %}
                   <div class="dropdown-container">
-                    <div class="dropdown-menu dropdown-menu-left">
+                    <div class="dropdown-menu dropdown-menu-start">
                       {% for children in item.children() %}
                         <a class="dropdown-item" href="{{ children.url }}">{{ children.title }}</a>
                       {% endfor %}
@@ -139,7 +139,7 @@
               <img alt="{{ user('name') }}" src="{{ user_photo(user('photo')) }}" style="width: 100%"/>
             </a>
 
-            <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-menu dropdown-menu-end">
               <a class="dropdown-item profile-name" href="{{ route('user.home') }}">
                 {{ user('name') }}
 
@@ -182,7 +182,7 @@
             </div>
           </div>
         {% else %}
-          <div class="form-inline order-2 ml-auto">
+          <div class="form-inline order-2 ms-auto">
             <a class="btn btn-sm btn-login" href="{{ route('login') }}">
               Logowanie
             </a>
@@ -271,7 +271,7 @@
             4programmers.net - programowanie i tworzenie stron WWW
           </a>
         </div>
-        <div class="ml-auto">
+        <div class="ms-auto">
           Coyote {{ config('app.version') }}: {{ timer() }}
         </div>
       </div>

@@ -8,7 +8,7 @@
 
   <div id="vcard-content">
     <div class="media">
-      <div class="mr-2 d-flex flex-column">
+      <div class="me-2 d-flex flex-column">
         <div class="position-relative img-thumbnail">
           <img src="{{ user_photo(user.photo) }}" style="max-width:95px;max-height:95px;" alt="{{ user.name }}"/>
           {% if user.is_online %}
@@ -57,7 +57,7 @@
     <div class="mt-3">
       <vue-follow-button :user-id="{{ user.id }}" class="btn-sm"></vue-follow-button>
 
-      <a href="{{ route('forum.user', [user.id]) }}" title="Znajdź posty użytkownika" class="btn btn-sm btn-secondary mr-1">
+      <a href="{{ route('forum.user', [user.id]) }}" title="Znajdź posty użytkownika" class="btn btn-sm btn-secondary me-1">
         <i class="fas fa-magnifying-glass fa-fw"></i>
       </a>
 
@@ -66,11 +66,11 @@
       </a>
 
       {% if can('adm-access') %}
-        <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}" title="Zbanuj tego użytkownika" class="btn btn-sm btn-secondary float-right ml-1">
+        <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}" title="Zbanuj tego użytkownika" class="btn btn-sm btn-secondary float-end ms-1">
           <i class="fas fa-user-lock fa-fw"></i>
         </a>
 
-        <a href="{{ route('adm.users.show', [user.id]) }}" title="Pokaż w panelu administracyjnym" class="btn btn-sm btn-secondary float-right">
+        <a href="{{ route('adm.users.show', [user.id]) }}" title="Pokaż w panelu administracyjnym" class="btn btn-sm btn-secondary float-end">
           <i class="fas fa-eye fa-fw"></i>
         </a>
       {% endif %}

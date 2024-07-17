@@ -1,7 +1,7 @@
 <template>
   <div class="media text-truncate">
     <a class="media-link" :href="job.url" :title="fullTitle">
-      <div class="d-none d-xl-inline-block mr-2">
+      <div class="d-none d-xl-inline-block me-2">
         <img :src="job.firm.logo || '/img/logo-gray.png'" :alt="job.firm.logo ? job.firm.name : ''" class="i-45">
       </div>
 

@@ -17,7 +17,7 @@
         {% endif %}
 
         {% if job.salary_from or job.salary_to %}
-          <p class="salary float-right">
+          <p class="salary float-end">
             {% include 'job.partials.salary' with {net_label: true, rate_label: true} %}
           </p>
         {% endif %}

@@ -216,7 +216,7 @@ class PostMarkdownTest extends TestCase
         if ($title === null) {
             $icon = '<i class="' . $iconClass . '"></i>';
         } else {
-            $icon = '<i class="' . $iconClass . ' mr-1"></i>';
+            $icon = '<i class="' . $iconClass . ' me-1"></i>';
         }
         return '<span class="badge badge-material-element">' . $icon . $title . '</span>';
     }

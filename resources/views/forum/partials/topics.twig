@@ -8,7 +8,7 @@
 </ul>
 
 {% if forum is defined and not forum.is_locked %}
-  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right mt-1 mb-3">Nowy wątek</a>
+  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-end mt-1 mb-3">Nowy wątek</a>
 {% endif %}
 
 <div class="clearfix"></div>
@@ -25,12 +25,12 @@
 </div>
 
 <div class="d-flex mb-3">
-  <div class="mr-auto">
+  <div class="me-auto">
     {{ topics.render()|raw }}
   </div>
 
   {% if forumList is defined %}
-    <div class="ml-auto">
+    <div class="ms-auto">
       {{ form_select('forum', forumList, forum.slug, {'id': 'js-forum-list', 'class': 'form-control d-inline w-auto'}) }}
 
       <a class="btn" href="javascript:" id="js-reload" rel="nofollow">
@@ -41,6 +41,6 @@
 </div>
 
 {% if topics.count() > 10 and forum is defined and not forum.is_locked %}
-  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right">Nowy wątek</a>
+  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-end">Nowy wątek</a>
   <div class="clearfix"></div>
 {% endif %}

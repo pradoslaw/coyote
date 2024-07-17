@@ -1,8 +1,8 @@
 <template>
   <div :class="{'is-invalid': isInvalid}" class="editor">
     <vue-tabs @click="switchTab" :items="tabs" :current-tab="tabs.indexOf(currentTab)" type="pills" class="mb-2">
-      <div v-if="isContent" class="btn-toolbar ml-auto">
-        <div class="btn-group d-inline mr-2 ml-2 mt-1" role="group" aria-label="...">
+      <div v-if="isContent" class="btn-toolbar ms-auto">
+        <div class="btn-group d-inline me-2 ms-2 mt-1" role="group" aria-label="...">
           <button
             v-for="button in buttons"
             @click="button.click"
@@ -51,8 +51,8 @@
     <hr class="m-0"/>
     <slot name="bottom"/>
 
-    <div class="pt-1 pl-2 pr-2 d-flex">
-      <div class="small mr-auto">
+    <div class="pt-1 ps-2 pe-2 d-flex">
+      <div class="small me-auto">
         <template v-if="isProcessing">
           <i class="fas fa-spinner fa-spin small"/>
           <span class="small">{{ progress }}%</span>
@@ -67,7 +67,7 @@
         <slot name="options"/>
       </div>
 
-      <div class="small ml-auto">
+      <div class="small ms-auto">
         <a href="#js-wiki-help" tabindex="-1" data-bs-toggle="collapse" class="small text-muted">
           <i class="fab fa-markdown"/>
           Instrukcja obsługi Markdown
@@ -75,7 +75,7 @@
       </div>
     </div>
 
-    <div v-if="assets.length" class="pt-3 pb-3 pl-2 pr-2 d-flex">
+    <div v-if="assets.length" class="pt-3 pb-3 ps-2 pe-2 d-flex">
       <div v-for="item in assets" :key="item.id" class="col-sm-2">
         <vue-thumbnail
           name="asset"

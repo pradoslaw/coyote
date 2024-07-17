@@ -6,9 +6,9 @@
       <i class="fas fa-envelope fa-fw"></i>
     </a>
 
-    <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-right">
+    <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-end">
       <div class="dropdown-header">
-        <a class="float-right small" href="/User/Pm/Submit">
+        <a class="float-end small" href="/User/Pm/Submit">
           Wyślij wiadomość
         </a>
 

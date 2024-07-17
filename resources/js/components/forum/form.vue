@@ -38,7 +38,7 @@
         @cancel="cancel"
         ref="markdown">
         <template v-if="isFirstPost" v-slot:options>
-          <a href="javascript:" data-bs-target="#js-poll-form" data-bs-toggle="collapse" class="ml-1 small text-muted">
+          <a href="javascript:" data-bs-target="#js-poll-form" data-bs-toggle="collapse" class="ms-1 small text-muted">
             <i class="fa fa-square-poll-horizontal"/>
             <span class="d-none d-sm-inline">
               Ankieta
@@ -48,7 +48,7 @@
 
         <div v-if="isFirstPost" id="js-poll-form" class="bg-light p-3 mt-2 collapse">
           <div class="form-group row">
-            <label class="col-md-3 col-form-label text-right">Odpowiedzi w ankiecie</label>
+            <label class="col-md-3 col-form-label text-end">Odpowiedzi w ankiecie</label>
 
             <div class="col-md-6">
               <div v-for="(item, index) in poll.items" :key="item.id" class="input-group mb-1">
@@ -72,7 +72,7 @@
           </div>
 
           <div class="form-group row">
-            <label class="col-md-3 col-form-label text-right">Możliwych odpowiedzi</label>
+            <label class="col-md-3 col-form-label text-end">Możliwych odpowiedzi</label>
 
             <div class="col-md-6">
               <vue-text v-model="poll.max_items" :is-invalid="`poll.max_items` in errors" class="input-sm"></vue-text>
@@ -82,7 +82,7 @@
           </div>
 
           <div class="form-group row">
-            <label class="col-md-3 col-form-label text-right">Długość działania</label>
+            <label class="col-md-3 col-form-label text-end">Długość działania</label>
 
             <div class="col-md-6">
               <vue-text v-model="poll.length" :is-invalid="`poll.length` in errors" class="input-sm"></vue-text>
@@ -127,7 +127,7 @@
           Zapisz
         </vue-button>
 
-        <button v-if="post.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-danger mr-2">
+        <button v-if="post.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-danger me-2">
           Anuluj
         </button>
       </div>

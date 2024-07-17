@@ -55,23 +55,23 @@ class InlineHtml extends Html
             return $this->badge('fas fa-reply-all');
         }
         if ($item->tagName === 'video') {
-            return $this->badge('fas fa-film mr-1', 'video');
+            return $this->badge('fas fa-film me-1', 'video');
         }
         if ($item->tagName === 'table') {
-            return $this->badge('fas fa-table mr-1', 'table');
+            return $this->badge('fas fa-table me-1', 'table');
         }
         if ($item->tagName === 'iframe') {
-            return $this->badge('far fa-window-maximize mr-1', 'iframe');
+            return $this->badge('far fa-window-maximize me-1', 'iframe');
         }
         if ($item->tagName === 'pre') {
-            return $this->badge('fas fa-code mr-1', 'code');
+            return $this->badge('fas fa-code me-1', 'code');
         }
         if ($item->tagName === 'br') {
             return ' ' . $this->lineBreak();
         }
         if ($item->tagName === 'img') {
             if ($item->getAttribute('class') !== 'img-smile') {
-                return $this->badge('far fa-image mr-1', 'image');
+                return $this->badge('far fa-image me-1', 'image');
             }
         }
         $children = $this->unwrapChildren($item);

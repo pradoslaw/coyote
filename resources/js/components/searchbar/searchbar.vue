@@ -1,7 +1,7 @@
 <template>
   <div v-on-clickaway="blurInput" :class="{'nav-search-mobile': isMobile}" class="nav-search">
-    <div :class="{'active': isActive}" class="search-bar ml-md-4 mr-md-4">
-      <i class="fas fa-magnifying-glass ml-2 mr-2"></i>
+    <div :class="{'active': isActive}" class="search-bar ms-md-4 me-md-4">
+      <i class="fas fa-magnifying-glass ms-2 me-2"></i>
 
       <form action="/Search" role="search" ref="search" class="flex-grow-1">
         <input v-for="[key, value] of params" type="hidden" :name="key" :value="value">
@@ -65,7 +65,7 @@
       </div>
     </div>
 
-    <div v-if="!isMobile" class="d-md-none navbar-nav ml-auto mr-2">
+    <div v-if="!isMobile" class="d-md-none navbar-nav ms-auto me-2">
       <a @click="toggleMobile" href="javascript:" class="nav-link">
         <i class="fa fa-magnifying-glass fa-fw"></i>
       </a>

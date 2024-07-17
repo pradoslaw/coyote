@@ -31,9 +31,9 @@
     <div id="js-skeleton">
       <div class="page-topic-controls d-flex mb-3">
         {% if is_writeable %}
-          <div class="ml-auto">
+          <div class="ms-auto">
             <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm">Nowy wątek</a>
-            <a href="#js-submit-form" class="btn btn-primary btn-sm ml-2">Odpowiedz</a>
+            <a href="#js-submit-form" class="btn btn-primary btn-sm ms-2">Odpowiedz</a>
           </div>
         {% endif %}
       </div>
@@ -53,7 +53,7 @@
 
           <div class="card-body">
             <div class="media d-lg-none mb-2">
-              <div class="media-left mr-2">
+              <div class="media-left me-2">
                 <div style="width: 35px; height: 35px"></div>
               </div>
 
@@ -103,7 +103,7 @@
                   </button>
                 </div>
 
-                <div class="ml-auto">
+                <div class="ms-auto">
 
                 </div>
               </div>
@@ -115,14 +115,14 @@
 
     <div id="js-post">
       <div class="d-flex mb-3">
-        <div class="mr-auto">
+        <div class="me-auto">
           <vue-pagination @change="changePage" :current-page="currentPage" :total-pages="totalPages" class="pagination-sm"></vue-pagination>
         </div>
 
         {% if is_writeable %}
-          <div class="ml-auto">
+          <div class="ms-auto">
             <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm">Nowy wątek</a>
-            <a href="#js-submit-form" class="btn btn-primary btn-sm ml-2">Odpowiedz</a>
+            <a href="#js-submit-form" class="btn btn-primary btn-sm ms-2">Odpowiedz</a>
           </div>
         {% endif %}
       </div>
@@ -139,7 +139,7 @@
       ></vue-post-wrapper>
 
       <div class="page-pagination d-flex mb-3">
-        <div class="page-page-selector mr-auto">
+        <div class="page-page-selector me-auto">
           <vue-pagination @change="changePage" :current-page="currentPage" :total-pages="totalPages" class="pagination-sm"></vue-pagination>
         </div>
 
@@ -159,7 +159,7 @@
 
       <section class="page-change-category d-flex mt-3">
         {% if user_forums is defined %}
-          <div class="ml-auto">
+          <div class="ms-auto">
             {{ form_select('forum', user_forums, forum.slug, {'id': 'js-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
 
             <a class="btn" href="javascript:" id="js-reload" rel="nofollow">

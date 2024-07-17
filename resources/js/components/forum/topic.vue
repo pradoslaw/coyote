@@ -2,7 +2,7 @@
   <div class="card-body" :class="{'not-read': !topic.is_read, 'flagged': flag != null, 'tagged': highlight}">
     <div class="row">
       <div :class="{'col-xl-9 col-lg-10': showCategoryName, 'col-xl-10 col-lg-10': ! showCategoryName}" class="col-md-12 d-flex align-items-center">
-        <a @click.left="mark" :href="getUrl()" :class="{'not-read': !topic.is_read}" class="topic-icon mr-2 d-none d-md-flex">
+        <a @click.left="mark" :href="getUrl()" :class="{'not-read': !topic.is_read}" class="topic-icon me-2 d-none d-md-flex">
           <i v-if="topic.is_sticky" class="fas fa-info"></i>
           <i v-else-if="topic.is_locked" class="fas fa-lock"></i>
           <i v-else class="far fa-comment"></i>
@@ -30,7 +30,7 @@
               </a>
             </h5>
 
-            <div v-if="totalPages > 1" class="d-none d-sm-inline ml-2 topic-pagination">
+            <div v-if="totalPages > 1" class="d-none d-sm-inline ms-2 topic-pagination">
               <i class="far fa-file small"></i>
 
               <a :href="topic.url + '?page=1'">1</a>
@@ -44,7 +44,7 @@
               <template v-for="i in paginatorPages"><a :href="topic.url + '?page=' + i">{{ i }}</a>&nbsp;</template>
             </div>
 
-            <ul class="topic-statistic list-inline small mt-1 mt-sm-0 mb-0 d-block d-sm-inline ml-sm-auto flex-sm-shrink-0">
+            <ul class="topic-statistic list-inline small mt-1 mt-sm-0 mb-0 d-block d-sm-inline ms-sm-auto flex-sm-shrink-0">
               <li class="list-inline-item small" title="Liczba odpowiedzi">
                 <i :class="{'fas topic-has-reply': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i> 
                 {{ number(topic.replies) }}
@@ -87,7 +87,7 @@
       <div class="col-xl-2 col-lg-2 col-md-12">
         <div class="media m-md-0">
           <a v-profile="this.topic.last_post.user ? this.topic.last_post.user.id : null">
-            <vue-avatar v-bind="topic.last_post.user" class="i-35 mr-2 d-none d-md-inline-block position-relative img-thumbnail"></vue-avatar>
+            <vue-avatar v-bind="topic.last_post.user" class="i-35 me-2 d-none d-md-inline-block position-relative img-thumbnail"></vue-avatar>
           </a>
 
           <div class="media-body small text-truncate">

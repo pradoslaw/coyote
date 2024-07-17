@@ -64,7 +64,7 @@
                             <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">
                               {{ topic.forum }}
                             </a>
-                            <small class="float-right">
+                            <small class="float-end">
                               {{ topic.last_post_created_at|format_date }}
                             </small>
                           </div>
@@ -91,7 +91,7 @@
                             <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">
                               {{ topic.forum }}
                             </a>
-                            <small class="float-right">
+                            <small class="float-end">
                               {{ topic.last_post_created_at|format_date }}
                             </small>
                           </div>
@@ -110,7 +110,7 @@
                         <span class="{{ activity.object }} d-none d-sm-block" title="{{ activity.headline|striptags|unescape }}">
                         </span>
 
-                        <div class="d-none d-sm-block mr-2">
+                        <div class="d-none d-sm-block me-2">
                           <a href="{{ route('profile', [activity.user_id]) }}">
                             <img class="media-object" src="{{ user_photo(activity.user.photo) }}" style="width: 38px; height: 38px;" alt="activity.user.name">
                           </a>
@@ -177,7 +177,7 @@
             <div class="card card-default card-event" style="display:none;">
               <div class="card-body p-2">
                 <div class="d-flex d-md-block d-lg-flex">
-                  <p class="m-0 mr-3 text-nowrap align-self-center event-date">
+                  <p class="m-0 me-3 text-nowrap align-self-center event-date">
                     {{ event.date }} | {{ event.dayShortName }}
                   </p>
                   <div>
@@ -268,7 +268,7 @@
               <div id="{{ mode }}" role="tabpanel" class="card-body tab-pane {{ settings.reputationMode == mode ? 'active' }}">
                 {% for item in items %}
                   <div class="media">
-                    <div class="mr-2">
+                    <div class="me-2">
                       <a href="{{ route('profile', [item.id]) }}">
                         <img src="{{ user_photo(item.photo) }}" alt="{{ item.name }}">
                       </a>

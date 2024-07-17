@@ -28,13 +28,13 @@
           :disabled="isProcessing"
           @click.native.prevent="saveMicroblog"
           title="Kliknij, aby wysłać (Ctrl+Enter)"
-          class="btn btn-sm btn-primary float-right"
+          class="btn btn-sm btn-primary float-end"
           tabindex="2"
           type="submit">
           Zapisz
         </vue-button>
 
-        <button v-if="microblog.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger float-right mr-2" tabindex="3">
+        <button v-if="microblog.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger float-end me-2" tabindex="3">
           Anuluj
         </button>
       </div>

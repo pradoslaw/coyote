@@ -1,6 +1,6 @@
 <template>
   <div :id="anchor" :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false, 'border border-danger': comment.deleted_at}" class="media">
-    <div class="mr-2">
+    <div class="me-2">
       <a v-profile="comment.user.id">
         <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="i-35 d-block img-thumbnail"></vue-avatar>
       </a>
@@ -11,7 +11,7 @@
         v-if="comment.is_editing"
         :microblog="comment"
         ref="form"
-        class="w-100 mr-1"
+        class="w-100 me-1"
         @cancel="edit(comment)"
         @save="edit(comment)"
       />
@@ -83,7 +83,7 @@
       <div v-if="isAuthorized" class="dropdown">
         <button class="btn btn-xs border-0 text-muted" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="small fa fa-ellipsis"></i></button>
 
-        <div class="dropdown-menu dropdown-menu-right">
+        <div class="dropdown-menu dropdown-menu-end">
           <template v-if="comment.permissions.update">
 
             <template v-if="!comment.deleted_at">

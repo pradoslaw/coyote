@@ -5,12 +5,12 @@
     </template>
     <slot>
       <div v-for="(type, index) in types" :key="index" class="media">
-        <div class="mr-2">
+        <div class="me-2">
           <vue-radio name="type_id" v-model="selectedType" :checked-value="type.id" :id="`type-${type.id}`"></vue-radio>
         </div>
         <div class="media-body">
-          <i :class="icon(type.name)" class="mr-1"/>
-          <label :for="`type-${type.id}`" class="font-weight-bold">{{ type.name }}</label>
+          <i :class="icon(type.name)" class="me-1"/>
+          <label :for="`type-${type.id}`" class="fw-bold">{{ type.name }}</label>
           <p>{{ type.description }}</p>
         </div>
       </div>

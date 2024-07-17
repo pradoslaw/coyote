@@ -7,13 +7,13 @@
   <div v-cloak id="js-followers" class="card card-default">
     <div class="card-body">
       <div class="list-group list-group-flush">
-        <div v-for="follower in followers" :key="follower.user_id" class="list-group-item pl-0 pr-0">
+        <div v-for="follower in followers" :key="follower.user_id" class="list-group-item ps-0 pe-0">
           <div class="media">
-            <vue-avatar v-bind="user(follower.user_id)" :is-online="user(follower.user_id).is_online" class="i-35 d-block img-thumbnail mr-3"></vue-avatar>
+            <vue-avatar v-bind="user(follower.user_id)" :is-online="user(follower.user_id).is_online" class="i-35 d-block img-thumbnail me-3"></vue-avatar>
 
             <div class="media-body">
-              <button v-if="isBlocked(follower.user_id)" @click="unfollow(follower.user_id)" class="btn btn-sm btn-secondary float-right mt-1">Odblokuj</button>
-              <vue-follow-button v-else :user-id="follower.user_id" class="btn-sm float-right mt-1 btm-sm">Przestań obserwować</vue-follow-button>
+              <button v-if="isBlocked(follower.user_id)" @click="unfollow(follower.user_id)" class="btn btn-sm btn-secondary float-end mt-1">Odblokuj</button>
+              <vue-follow-button v-else :user-id="follower.user_id" class="btn-sm float-end mt-1 btm-sm">Przestań obserwować</vue-follow-button>
 
               <h5 class="mb-0"><vue-username :user="user(follower.user_id)"></vue-username></h5>
 

@@ -158,16 +158,16 @@ const controls = new Vue({
   },
   template: `
     <div :class="['d-flex', 'align-items-center', 'h-100']" v-away="close">
-      <div class="d-none d-xl-flex mr-2">
+      <div class="d-none d-xl-flex me-2">
         <vue-github-button size="large" :theme="dark ? 'dark' : 'light'"/>
       </div>
       <span :class="['position-relative', 'px-2', 'py-2', 'btn-toggle-theme', {open}]" @click="toggleOpen" v-if="toggleEnabled" style="cursor:pointer;">
         <vue-icon :icon="oppositeIcon"/>
-        <div class="dropdown-menu dropdown-menu-right" style="display:block" v-show="open">
+        <div class="dropdown-menu dropdown-menu-end" style="display:block" v-show="open">
           <span v-for="(item, itemTheme, index) in items"
                 :class="['dropdown-item', {active: itemTheme === theme}]"
                 @click="event => toggleTheme(event, itemTheme)">
-            <vue-icon :icon="item.icon" className="mr-1"/>
+            <vue-icon :icon="item.icon" className="me-1"/>
             {{ item.title }}
             <span v-if="index === 2" style="opacity:0.75">
               {{ systemThemeTitle }}
