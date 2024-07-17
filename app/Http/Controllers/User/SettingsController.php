@@ -2,6 +2,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Actkey;
+use Coyote\Domain\StringHtml;
 use Coyote\Domain\User\UserSettings;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Forms\User\SettingsForm;
@@ -22,13 +23,13 @@ class SettingsController extends BaseController
         $email = $this->auth->actkey()->value('email');
         $form = $this->getForm();
         if ($email) {
-            $form->get('email')->setAttr(['data-popover' => json_encode([
-                'message'   => "Na adres $email wysłaliśmy link umożliwiający zmianę adresu e-mail.",
-                'placement' => 'top',
-            ])]);
+            $emailConfirmation = new StringHtml("Na adres <code>$email</code> wysłaliśmy link umożliwiający zmianę adresu e-mail.");
+        } else {
+            $emailConfirmation = null;
         }
         return $this->view('user.settings', [
             'email'             => $email,
+            'emailConfirmation' => $emailConfirmation,
             'form'              => $form,
             'informationClause' => (new UserSettings())->informationClause(),
         ]);
