@@ -14,10 +14,7 @@
 
       <vue-form-group :errors="errors['firm.name']" label="Nazwa firmy" class="border-bottom">
         <div class="input-group">
-          <div class="input-group-prepend">
-            <a @click="addFirm" class="input-group-text text-decoration-none" href="javascript:" title="Dodaj nową firmę"><i class="fas fa-fw fa-circle-plus"></i></a>
-          </div>
-
+          <a @click="addFirm" class="input-group-text text-decoration-none" href="javascript:" title="Dodaj nową firmę"><i class="fas fa-fw fa-circle-plus"></i></a>
           <vue-text v-model="firm.name" :is-invalid="'firm.name' in errors" name="firm[name]"></vue-text>
         </div>
 
