@@ -46,7 +46,7 @@
     "sass-loader": "^13.3.3",
     "svg-spritemap-webpack-plugin": "3.6.0",
     "ts-loader": "^8.2.0",
-    "typescript": "~4.2.4",
+    "typescript": "^5.5.3",
     "vue": "^2.7.16",
     "vue-clickaway": "^2.2.2",
     "vue-cool-lightbox": "^2.2.2",
