@@ -52,11 +52,9 @@
 
             <div class="col-md-6">
               <div v-for="(item, index) in poll.items" :key="item.id" class="input-group mb-1">
-                <div class="input-group-prepend">
-                  <a @click="removeItem(item)" class="input-group-text text-decoration-none" href="javascript:">
-                    <i :class="{'text-danger': poll.items.length > 2, 'text-muted': poll.items.length <= 2}" title="Usuń odpowiedź" class="fas fa-fw fa-circle-minus"></i>
-                  </a>
-                </div>
+                <a @click="removeItem(item)" class="input-group-text text-decoration-none" href="javascript:">
+                  <i :class="{'text-danger': poll.items.length > 2, 'text-muted': poll.items.length <= 2}" title="Usuń odpowiedź" class="fas fa-fw fa-circle-minus"></i>
+                </a>
 
                 <vue-text
                   v-model="item.text"

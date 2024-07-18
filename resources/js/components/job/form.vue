@@ -30,12 +30,12 @@
           <div v-for="(location, index) in job.locations" class="row mb-2">
             <div class="col-sm-12">
               <div class="input-group">
-                <div class="input-group-prepend">
-                  <a title="Dodaj więcej lokalizacji" class="input-group-text text-decoration-none" href="javascript:" @click="ADD_LOCATION"><i class="fas fa-fw fa-circle-plus"></i></a>
-                  <a title="Usuń lokalizację" class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION(location)" v-if="job.locations.length > 1"><i
-                    class="fas fa-fw fa-circle-minus text-danger"></i></a>
-                </div>
-
+                <a title="Dodaj więcej lokalizacji" class="input-group-text text-decoration-none" href="javascript:" @click="ADD_LOCATION">
+                  <i class="fas fa-fw fa-circle-plus"></i>
+                </a>
+                <a title="Usuń lokalizację" class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION(location)" v-if="job.locations.length > 1">
+                  <i class="fas fa-fw fa-circle-minus text-danger"></i>
+                </a>
                 <vue-google-place @change="setLocation(index, ...arguments)" :label="location.label"></vue-google-place>
               </div>
             </div>
