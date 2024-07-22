@@ -142,7 +142,7 @@ services:
       - coyote
 
   es:
-    image: 4programmers/coyote-es:latest
+    image: 4programmers/coyote-es:1.1
     tty: true
     networks:
       - coyote
