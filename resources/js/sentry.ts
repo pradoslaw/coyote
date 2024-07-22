@@ -25,6 +25,7 @@ Sentry.init({
     "undefined is not an object (evaluating 'hj.settings.site_id')",
     'Failed to fetch',
     'Load failed',
+    'CanceledError',
   ],
   tracesSampleRate: 0.0,
 });
