@@ -118,21 +118,7 @@
         </div>
 
         {% if auth_check() %}
-          <div class="order-2 d-flex align-items-center">
-            {% if reportNotifications.hasAccess %}
-              <div class="navbar-nav">
-                <a class="nav-link position-relative py-0" style="padding:0 9px;">
-                  {% if reportNotifications.hasAny %}
-                    <span class="badge">
-                      {{ reportNotifications.count }}
-                    </span>
-                  {% endif %}
-                  <i class="fas fa-flag"></i>
-                </a>
-              </div>
-            {% endif %}
-            <ul id="nav-auth" class="nav-auth navbar-nav"></ul>
-          </div>
+          <ul id="nav-auth" class="nav-auth navbar-nav order-2"></ul>
 
           <div class="dropdown nav-avatar order-2">
             <a href="#" class="dropdown-toggle img-thumbnail d-block i-35" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
