@@ -5,11 +5,17 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Tests\Unit\BaseFixture;
 use Tests\Unit\BaseFixture\Server\Laravel;
 
+/**
+ * If nginx configuration changed, perform "nginx -s reload"
+ * in nginx container, before running this test.
+ */
 class NginxTest extends TestCase
 {
     use Laravel\Application;
+    use BaseFixture\View\AssertsHtml;
 
     #[Test]
     public function staticFile(): void
@@ -23,7 +29,7 @@ class NginxTest extends TestCase
     {
         $response = $this->get("http://nginx/Forum/Foo/bar.php");
         $this->assertSame(404, $response->status());
-        $this->assertSame("No input file specified.\n", $response->body());
+        $this->assertTextNodes(['404 :: 4programmers.net'], $response->body(), '/html/head/title/text()');
     }
 
     #[Test]
