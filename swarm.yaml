@@ -85,10 +85,11 @@ x-secrets:
 services:
   db:
     image: postgres:13-alpine
+    command: postgres -c config_file=/etc/postgresql/postgresql.auto.conf
     ports:
       - 5432:5432
     volumes:
-      - ./docker/postgres/postgresql.prod.conf:/var/lib/postgresql/data/postgresql.auto.conf
+      - ./docker/postgres/postgresql.prod.conf:/etc/postgresql/postgresql.auto.conf
       - postgres:/var/lib/postgresql/data:z
     environment:
       POSTGRES_USER: coyote
