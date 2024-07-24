@@ -31,7 +31,9 @@
         </div>
       </div>
 
-      {{ breadcrumb|raw }}
+      <div class="container">
+        {{ breadcrumb|raw }}
+      </div>
 
       {% if session_has('success') %}
         <div class="row">
