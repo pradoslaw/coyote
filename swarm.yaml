@@ -137,7 +137,7 @@ services:
     image: 4programmers/coyote:latest
     networks:
       - coyote
-    command: php artisan queue:work --delay=5 --tries=3 -n redis
+    command: php artisan queue:work --delay=5 --tries=3 --no-interaction redis
     deploy:
       replicas: 2
     environment: *env
