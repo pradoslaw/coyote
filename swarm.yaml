@@ -113,11 +113,6 @@ services:
 
   php:
     image: 4programmers/coyote:latest
-    build:
-      context: .
-      dockerfile: docker/coyote/Dockerfile
-      cache_from:
-        - 4programmers/coyote:latest
     volumes:
       - codebase:/var/www
     environment:
