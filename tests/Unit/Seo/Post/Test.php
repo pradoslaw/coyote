@@ -153,6 +153,6 @@ class Test extends TestCase
 
     private function htmlLink(string $uri): string
     {
-        return '<p><a href="' . $uri . '" rel="ugc,nofollow">title</a></p>';
+        return '<p><a href="' . $uri . '" rel="nofollow">title</a></p>';
     }
 }

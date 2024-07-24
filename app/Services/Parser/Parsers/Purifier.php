@@ -29,7 +29,7 @@ class Purifier implements Parser
         $def = $this->config->getHTMLDefinition(true);
 
         $anchor = $def->addBlankElement('a');
-        $anchor->attr_transform_post[] = new SetAttribute('rel', 'ugc,nofollow');
+        $anchor->attr_transform_post[] = new SetAttribute('rel', 'nofollow');
 
         $def->addAttribute('a', 'data-user-id', 'Number');
         $def->addAttribute('iframe', 'allowfullscreen', 'Bool');

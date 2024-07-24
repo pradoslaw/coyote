@@ -9,7 +9,7 @@ class PurifierTest extends \Tests\Legacy\TestCase
     {
         $this->assertHtmlTransformation(
             '<a href="http://www.wp.pl">http://www.wp.pl</a>',
-            '<a href="http://www.wp.pl" rel="ugc,nofollow">http://www.wp.pl</a>');
+            '<a href="http://www.wp.pl" rel="nofollow">http://www.wp.pl</a>');
     }
 
     public function testParseBlockquotes()

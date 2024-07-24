@@ -15,7 +15,7 @@ class Test extends TestCase
     {
         $this->assertRenderPost(
             '[foo](http://external)',
-            '<p><a href="http://external" rel="ugc,nofollow">foo</a></p>');
+            '<p><a href="http://external" rel="nofollow">foo</a></p>');
     }
 
     /**
@@ -25,7 +25,7 @@ class Test extends TestCase
     {
         $this->assertRenderPost(
             '<a href="http://external">foo</a>',
-            '<p><a href="http://external" rel="ugc,nofollow">foo</a></p>');
+            '<p><a href="http://external" rel="nofollow">foo</a></p>');
     }
 
     /**
@@ -35,6 +35,6 @@ class Test extends TestCase
     {
         $this->assertRenderPost(
             '<a href="http://external" rel="follow">foo</a>',
-            '<p><a href="http://external" rel="ugc,nofollow">foo</a></p>');
+            '<p><a href="http://external" rel="nofollow">foo</a></p>');
     }
 }
