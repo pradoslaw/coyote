@@ -56,8 +56,22 @@ class NginxTest extends TestCase
         $this->assertSame('http://nginx/Forum', $response->header('Location'));
     }
 
-    private function get(string $uri): Response
+    #[Test]
+    public function resourceHrefWithoutBasePath(): void
     {
-        return Http::withOptions(['allow_redirects' => false])->get($uri);
+        $response = $this->get("http://nginx/Forum/", allowRedirect:true); // slash at the end
+        $stylesheetHref = $this->stylesheetHref($response);
+        $this->assertStringStartsWith('/css/core-', $stylesheetHref);
+        $this->assertStringStartsNotWith('/Forum/css/core-', $stylesheetHref);
+    }
+
+    private function stylesheetHref(Response $response): string
+    {
+        return $this->textNode($response->body(), '/html/head/link[@rel="stylesheet"]/@href');
+    }
+
+    private function get(string $uri, bool $allowRedirect = false): Response
+    {
+        return Http::withOptions(['allow_redirects' => $allowRedirect])->get($uri);
     }
 }
