@@ -48,6 +48,14 @@ class NginxTest extends TestCase
         $this->assertSame('http://nginx/', $response->header('Location'));
     }
 
+    #[Test]
+    public function redirectTrailingSlash(): void
+    {
+        $response = $this->get("http://nginx/Forum/");
+        $this->assertSame(301, $response->status());
+        $this->assertSame('http://nginx/Forum', $response->header('Location'));
+    }
+
     private function get(string $uri): Response
     {
         return Http::withOptions(['allow_redirects' => false])->get($uri);
