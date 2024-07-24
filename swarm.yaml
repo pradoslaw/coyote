@@ -20,7 +20,6 @@ x-env:
   ELASTICSEARCH_HOST: elasticsearch
   REDIS_HOST: redis
   BROADCAST_DRIVER: redis
-  CACHE_DRIVER: redis
   QUEUE_DRIVER: redis
   LOG_CHANNEL: gelf
 
