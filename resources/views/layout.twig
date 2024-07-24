@@ -63,7 +63,7 @@
     {{ form_close() }}
 
     <nav class="navbar navbar-expand-lg {{ __dark_theme ? 'navbar-dark' : 'navbar-light' }}">
-      <div class="container-xxl d-flex flex-wrap">
+      <div class="container-3xl d-flex flex-wrap">
         <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-menu">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -199,7 +199,7 @@
     {{ render_region('header') }}
 
     {% block fixed %}
-      <div class="container-xxl">
+      <div class="container-3xl">
         {% if session_has('success') %}
           <div class="row">
             <div class="col-12">
@@ -240,7 +240,7 @@
 
     <div class="footer-inner row">
       <div class="col-12">
-        <div class="container-xxl">
+        <div class="container-3xl">
           {{ render_block('footer') }}
         </div>
         <a href="javascript:" id="scroll-to-top" title="Powrót na górę" rel="nofollow">
@@ -250,7 +250,7 @@
     </div>
 
     <div id="footer-copyright">
-      <div class="container-xxl d-flex">
+      <div class="container-3xl d-flex">
         <div>
           Copyright &copy; 2000-{{ year }}
           <a href="https://4programmers.net/" class="logo" title="4programmers.net -- programowanie">
