@@ -540,6 +540,10 @@ body.theme-dark {
       background-color: #1a1a1a;
     }
   }
+
+  .stream .media:not(:last-child) {
+    border-bottom: 1px solid #333;
+  }
 }
 
 .topic-username {
