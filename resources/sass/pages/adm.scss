@@ -38,12 +38,12 @@ abbr {
 @import "adm/table";
 
 body.theme-dark {
+  --bs-body-color: #acacac;
+
   .administrator-panel .btn {
     color: unset;
   }
-}
 
-body.theme-dark {
   .post-preview {
     background-color: #111111;
     border-color: #333333;
@@ -53,6 +53,20 @@ body.theme-dark {
     input.form-control {
       border-color: #2f2f2f;
       background-color: #101010;
+    }
+  }
+
+  #adm-menu,
+  #box-user,
+  #adm-header {
+    border-bottom: 1px solid #444;
+  }
+
+  aside#adm-menu {
+    border-right: 1px solid #444;
+
+    ul li.divider {
+      border-bottom: 1px solid #444;
     }
   }
 }
