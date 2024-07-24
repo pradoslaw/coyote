@@ -87,7 +87,7 @@ export default Vue.extend({
       this.$store.commit('posts/edit', this.comment);
 
       if (this.comment.is_editing) {
-        this.$nextTick(() => this.$refs.commentForm.focus());
+        this.$nextTick(() => this.$refs['comment-form'].focus());
       }
     },
     deleteComment() {
