@@ -283,7 +283,7 @@ services:
         max-size: 10m
 
   es:
-    image: 4programmers/coyote-es:1.1
+    image: 4programmers/coyote-es:1.2.1
     networks:
       - coyote
     tty: true
