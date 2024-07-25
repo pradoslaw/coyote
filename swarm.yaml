@@ -170,8 +170,6 @@ services:
       - ./docker/nginx/:/etc/nginx/conf.d/
     ports:
       - 80:80
-    depends_on:
-      - php
     networks:
       - coyote
     logging:
@@ -248,9 +246,6 @@ services:
       - GRAYLOG_HTTP_EXTERNAL_URI=https://graylog.4programmers.dev/
     networks:
       - coyote
-    depends_on:
-      - mongo
-      - elasticsearch
     secrets:
       - GRAYLOG_ROOT_PASSWORD_SHA2_FILE
       - GRAYLOG_PASSWORD_SECRET_FILE
