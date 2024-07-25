@@ -27,6 +27,7 @@ RUN apt-get update -yqq && apt-get install -y \
     pkg-config \
     libssl-dev \
     libonig-dev \
+    libfcgi-dev \
     cron \
     gnupg2 \
     nodejs \
@@ -93,5 +94,11 @@ RUN rm -rf /var/lib/apt/lists/*
 
 ADD ./docker/php/entrypoint.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
+
+ADD ./docker/php/php-fpm-healthcheck.sh /usr/local/bin/php-fpm-healthcheck.sh
+RUN chmod +x /usr/local/bin/php-fpm-healthcheck.sh
+
+HEALTHCHECK --start-period=1s --interval=3s --retries=10 \
+  CMD /usr/local/bin/php-fpm-healthcheck.sh
 
 CMD ["/entrypoint.sh"]
