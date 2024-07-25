@@ -95,11 +95,6 @@ services:
     secrets: *secrets
     deploy:
       replicas: 2
-    healthcheck:
-      test: [ "CMD", "php", "artisan", "help" ]
-      interval: 5s
-      timeout: 10s
-      retries: 3
     networks:
       - coyote
     logging:
@@ -279,7 +274,7 @@ volumes:
 
 networks:
   coyote:
-    name: coyote
+    name: coyote-swarm
 
 secrets:
   APP_KEY_FILE:

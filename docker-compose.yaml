@@ -22,11 +22,6 @@ services:
       - XDEBUG_PORT=$XDEBUG_PORT
     volumes:
       - ./:/var/www
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost/" ]
-      interval: 5s
-      timeout: 10s
-      retries: 3
     logging:
       options:
         max-size: 10m
