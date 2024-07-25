@@ -4,9 +4,9 @@ return [
     'Core.Encoding'        => 'UTF-8',
     'Cache.SerializerPath' => storage_path('app/purifier'),
 
-    'HTML.Allowed' => 'b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title|class],' .
+    'HTML.Allowed' => 'b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol,li,span,' .
         'img[width|height|alt|src|title|class],sub,sup,pre,code[class],div,kbd,mark,h1,h2,h3,h4,h5,h6,blockquote,del,' .
-        'table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp,iframe[src|class|allowfullscreen]',
+        'table,thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp,iframe[src|class|allowfullscreen]',
 
     'CSS.AllowedProperties'          => 'font,font-size,font-weight,font-style,font-family,text-decoration,color,background-color,background-image,text-align',
     'AutoFormat.AutoParagraph'       => false,
