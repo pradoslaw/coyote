@@ -59,12 +59,6 @@ x-env:
   VAPID_PUBLIC_KEY_FILE: /run/secrets/VAPID_PUBLIC_KEY_FILE
   VAPID_PRIVATE_KEY_FILE: /run/secrets/VAPID_PRIVATE_KEY_FILE
 
-  VENDOR_NAME: "Makana Sp. z o.o."
-  VENDOR_ADDRESS: "ul. Krupnicza 13"
-  VENDOR_POSTAL_CODE: "50-075"
-  VENDOR_CITY: "Wrocław"
-  VENDOR_COUNTRY: "Polska"
-
 x-secrets:
   &secrets
   - APP_KEY_FILE
