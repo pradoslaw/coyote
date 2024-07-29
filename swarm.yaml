@@ -236,7 +236,6 @@ services:
     image: graylog/graylog:3.1
     environment:
       - GRAYLOG_PASSWORD_SECRET_FILE=/run/secrets/GRAYLOG_PASSWORD_SECRET_FILE
-#      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
       - GRAYLOG_ROOT_PASSWORD_SHA2__FILE=/run/secrets/GRAYLOG_ROOT_PASSWORD_SHA2_FILE
       - GRAYLOG_HTTP_EXTERNAL_URI=https://graylog.4programmers.dev/
     networks:
@@ -282,11 +281,6 @@ services:
       ELASTICSEARCH_HOST: "elasticsearch"
       INDEX: "coyote"
       APP_KEY_FILE: /run/secrets/APP_KEY_FILE
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://localhost:3500/healtcheck || exit 1"]
-#      interval: 30s
-#      timeout: 20s
-#      retries: 3
     secrets:
       - APP_KEY_FILE
     logging:
