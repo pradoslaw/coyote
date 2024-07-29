@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
- * @property int $user_id
+ * @property int|null $user_id
  * @property int $forum_id
  * @property int $topic_id
  * @property int $score
@@ -40,10 +40,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Vote[] $votes
  * @property Coyote\Post\Comment[] $comments
  * @property Flag[] $flags
- * @property User $user
- * @property User $editor
- * @property User $deleter
- * @property Accept $accept
+ * @property User|null $user
+ * @property User|null $editor
+ * @property User|null $deleter
+ * @property Accept|null $accept
  */
 class Post extends Model
 {

@@ -63,6 +63,9 @@ class DispatchPostNotifications implements ShouldQueue
         Support\Collection $subscribers,
         string             $senderName): void
     {
+        if ($post->user === null) {
+            return;
+        }
         // get id of users that were mentioned in the text
         $usersId = (new Helper\Login)->grab($post->html);
 
@@ -80,6 +83,6 @@ class DispatchPostNotifications implements ShouldQueue
 
     private function postUsername(Post $post): string
     {
-        return $post->user->name ?? $post->user_name;
+        return $post->user?->name ?? $post->user_name;
     }
 }
