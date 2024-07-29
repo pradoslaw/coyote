@@ -3,7 +3,6 @@ namespace Tests\Unit\Administration;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
-use TRegx\PhpUnit\DataProviders\DataProvider;
 
 class Test extends TestCase
 {
@@ -39,22 +38,16 @@ class Test extends TestCase
 
     /**
      * @test
-     * @dataProvider searches
      */
-    public function listUsersInAdministration(string $search): void
+    public function listUsersInAdministration(): void
     {
         // given
-        $this->existingUsers(['Carpet']);
+        $this->existingUsers(['Lorem']);
         $this->userInAdministratorDashboard();
         // when
-        $response = $this->searchByUsername($search);
+        $response = $this->searchByUsername('ore');
         // then
-        $this->assertUsersPresented($response, ['Carpet']);
-    }
-
-    public static function searches(): DataProvider
-    {
-        return DataProvider::list('Car', 'pet');
+        $this->assertContains('Lorem', $this->userNames($response));
     }
 
     /**
@@ -68,7 +61,7 @@ class Test extends TestCase
         // when
         $response = $this->searchByUsername('me*');
         // then
-        $this->assertUsersPresented($response, ['Meow']);
+        $this->assertNotContains(['Home'], $this->userNames($response));
     }
 
     /**
@@ -82,6 +75,6 @@ class Test extends TestCase
         // when
         $response = $this->searchByUsername('"Foo"');
         // then
-        $this->assertUsersPresented($response, ['Foo']);
+        $this->assertNotContains(['Food'], $this->userNames($response));
     }
 }

@@ -76,9 +76,9 @@ trait AdministratorPanel
         $this->userPassesLoginPrompt();
     }
 
-    function existingUsers(array $array): void
+    function existingUsers(array $usernames): void
     {
-        foreach ($array as $name) {
+        foreach ($usernames as $name) {
             if (User::query()->where('name', $name)->exists()) {
                 continue;
             }
