@@ -23,7 +23,7 @@ class SettingsController extends BaseController
         $email = $this->auth->actkey()->value('email');
         $form = $this->getForm();
         if ($email) {
-            $emailConfirmation = new StringHtml("Na adres <code>$email</code> wysłaliśmy link umożliwiający zmianę adresu e-mail.");
+            $emailConfirmation = new StringHtml("Na adres <code>$email</code> został wysłany link umożliwiający zmianę adresu e-mail.");
         } else {
             $emailConfirmation = null;
         }
