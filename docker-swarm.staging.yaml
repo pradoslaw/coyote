@@ -23,3 +23,7 @@ services:
   worker:
     environment: *staging-env
     secrets: [ MAILGUN_SECRET_FILE ]
+
+secrets:
+  MAILGUN_SECRET_FILE:
+    external: true

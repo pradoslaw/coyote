@@ -484,9 +484,6 @@ secrets:
   GRAYLOG_ROOT_PASSWORD_SHA2_FILE:
     name: GRAYLOG_ROOT_PASSWORD_SHA2_FILE
     external: true
-  MAILGUN_SECRET_FILE:
-    name: MAILGUN_SECRET_FILE
-    external: true
   POSTGRES_PASSWORD_FILE:
     name: POSTGRES_PASSWORD_FILE
     external: true

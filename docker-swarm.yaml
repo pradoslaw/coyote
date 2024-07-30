@@ -295,8 +295,6 @@ secrets:
     external: true
   WS_PROXY_FILE:
     external: true
-  MAILGUN_SECRET_FILE:
-    external: true
   SENTRY_DSN_FILE:
     external: true
   RECAPTCHA_KEY_FILE:
