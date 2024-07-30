@@ -1,0 +1,26 @@
+version: '3.5'
+
+x-production-env: &production-env
+  API_HOST: api.4programmers.net
+  APP_DEBUG: "false"
+  APP_URL: https://4programmers.net
+  AWS_URL: https://4programmers.net/uploads/
+  FACEBOOK_REDIRECT: "https://4programmers.net/OAuth/Facebook/Callback"
+  GITHUB_REDIRECT: "https://4programmers.net/OAuth/Github/Callback"
+  GOOGLE_REDIRECT: "https://4programmers.net/OAuth/Google/Callback"
+  MAILGUN_DOMAIN: mg.4programmers.net
+  MAILGUN_SECRET_FILE: /run/secrets/MAILGUN_SECRET_FILE
+  MAIL_DRIVER: mailgun
+  SESSION_DOMAIN: ".4programmers.net"
+  WS_HOST: ws.4programmers.net
+
+services:
+  php:
+    environment: *production-env
+    secrets: [ MAILGUN_SECRET_FILE ]
+  cron:
+    environment: *production-env
+    secrets: [ MAILGUN_SECRET_FILE ]
+  worker:
+    environment: *production-env
+    secrets: [ MAILGUN_SECRET_FILE ]

@@ -527,14 +527,11 @@ secrets:
     name: WS_PROXY_FILE
     external: true
 x-env:
-  API_HOST: api.4programmers.net
   APP_DEBUG: "false"
   APP_ENV: production
   APP_KEY_FILE: /run/secrets/APP_KEY_FILE
-  APP_URL: https://4programmers.net
   AWS_ACCESS_KEY_ID_FILE: /run/secrets/AWS_ACCESS_KEY_ID_FILE
   AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
-  AWS_URL: https://4programmers.net/uploads/
   BROADCAST_DRIVER: redis
   DB_CONNECTION: pgsql
   DB_DATABASE: coyote
@@ -544,38 +541,29 @@ x-env:
   DB_USERNAME: coyote
   ELASTICSEARCH_HOST: elasticsearch
   FACEBOOK_CLIENT_ID_FILE: /run/secrets/FACEBOOK_CLIENT_ID_FILE
-  FACEBOOK_REDIRECT: https://4programmers.net/OAuth/Facebook/Callback
   FACEBOOK_SECRET_ID_FILE: /run/secrets/FACEBOOK_SECRET_ID_FILE
   GITHUB_CLIENT_ID_FILE: /run/secrets/GITHUB_CLIENT_ID_FILE
-  GITHUB_REDIRECT: https://4programmers.net/OAuth/Github/Callback
   GITHUB_SECRET_ID_FILE: /run/secrets/GITHUB_SECRET_ID_FILE
   GOOGLE_CLIENT_ID_FILE: /run/secrets/GOOGLE_CLIENT_ID_FILE
   GOOGLE_MAPS_KEY_FILE: /run/secrets/GOOGLE_MAPS_KEY_FILE
-  GOOGLE_REDIRECT: https://4programmers.net/OAuth/Google/Callback
   GOOGLE_SECRET_ID_FILE: /run/secrets/GOOGLE_SECRET_ID_FILE
   LOG_CHANNEL: gelf
-  MAIL_DRIVER: mailgun
-  MAILGUN_DOMAIN: mg.4programmers.net
-  MAILGUN_SECRET_FILE: /run/secrets/MAILGUN_SECRET_FILE
   MINIO_ENDPOINT: http://minio:9000/
   QUEUE_DRIVER: redis
   RECAPTCHA_KEY_FILE: /run/secrets/RECAPTCHA_KEY_FILE
   RECAPTCHA_SECRET_FILE: /run/secrets/RECAPTCHA_SECRET_FILE
   REDIS_HOST: redis
   SENTRY_DSN_FILE: /run/secrets/SENTRY_DSN_FILE
-  SESSION_DOMAIN: .4programmers.net
   STRIPE_ENDPOINT_SECRET_FILE: /run/secrets/STRIPE_ENDPOINT_SECRET_FILE
   STRIPE_KEY_FILE: /run/secrets/STRIPE_KEY_FILE
   STRIPE_SECRET_FILE: /run/secrets/STRIPE_SECRET_FILE
   VAPID_PRIVATE_KEY_FILE: /run/secrets/VAPID_PRIVATE_KEY_FILE
   VAPID_PUBLIC_KEY_FILE: /run/secrets/VAPID_PUBLIC_KEY_FILE
-  WS_HOST: ws.4programmers.net
 x-secrets:
 - APP_KEY_FILE
 - POSTGRES_PASSWORD_FILE
 - AWS_ACCESS_KEY_ID_FILE
 - AWS_SECRET_ACCESS_KEY_FILE
-- MAILGUN_SECRET_FILE
 - SENTRY_DSN_FILE
 - RECAPTCHA_KEY_FILE
 - RECAPTCHA_SECRET_FILE

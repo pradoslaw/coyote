@@ -5,5 +5,5 @@ if (!\file_exists('docker-snapshot')) {
 }
 \file_put_contents(
     'docker-snapshot/production.yaml',
-    `docker stack config -c swarm.yaml`,
+    `docker stack config -c docker-swarm.yaml -c docker-swarm.production.yaml`,
 );

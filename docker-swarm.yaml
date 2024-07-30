@@ -1,14 +1,9 @@
 version: '3.5'
 
-x-env:
-  &env
+x-env: &env
   APP_ENV: production
   APP_DEBUG: "false"
   APP_KEY_FILE: /run/secrets/APP_KEY_FILE
-  APP_URL: https://4programmers.net
-  API_HOST: api.4programmers.net
-
-  SESSION_DOMAIN: ".4programmers.net"
 
   DB_CONNECTION: pgsql
   DB_PORT: 5432
@@ -25,14 +20,7 @@ x-env:
 
   AWS_ACCESS_KEY_ID_FILE: /run/secrets/AWS_ACCESS_KEY_ID_FILE
   AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
-  AWS_URL: https://4programmers.net/uploads/
   MINIO_ENDPOINT: http://minio:9000/
-
-  WS_HOST: ws.4programmers.net
-
-  MAIL_DRIVER: mailgun
-  MAILGUN_DOMAIN: mg.4programmers.net
-  MAILGUN_SECRET_FILE: /run/secrets/MAILGUN_SECRET_FILE
 
   SENTRY_DSN_FILE: /run/secrets/SENTRY_DSN_FILE
 
@@ -45,27 +33,22 @@ x-env:
 
   GITHUB_CLIENT_ID_FILE: /run/secrets/GITHUB_CLIENT_ID_FILE
   GITHUB_SECRET_ID_FILE: /run/secrets/GITHUB_SECRET_ID_FILE
-  GITHUB_REDIRECT: "https://4programmers.net/OAuth/Github/Callback"
 
   GOOGLE_CLIENT_ID_FILE: /run/secrets/GOOGLE_CLIENT_ID_FILE
   GOOGLE_SECRET_ID_FILE: /run/secrets/GOOGLE_SECRET_ID_FILE
   GOOGLE_MAPS_KEY_FILE: /run/secrets/GOOGLE_MAPS_KEY_FILE
-  GOOGLE_REDIRECT: "https://4programmers.net/OAuth/Google/Callback"
 
   FACEBOOK_CLIENT_ID_FILE: /run/secrets/FACEBOOK_CLIENT_ID_FILE
   FACEBOOK_SECRET_ID_FILE: /run/secrets/FACEBOOK_SECRET_ID_FILE
-  FACEBOOK_REDIRECT: "https://4programmers.net/OAuth/Facebook/Callback"
 
   VAPID_PUBLIC_KEY_FILE: /run/secrets/VAPID_PUBLIC_KEY_FILE
   VAPID_PRIVATE_KEY_FILE: /run/secrets/VAPID_PRIVATE_KEY_FILE
 
-x-secrets:
-  &secrets
+x-secrets: &secrets
   - APP_KEY_FILE
   - POSTGRES_PASSWORD_FILE
   - AWS_ACCESS_KEY_ID_FILE
   - AWS_SECRET_ACCESS_KEY_FILE
-  - MAILGUN_SECRET_FILE
   - SENTRY_DSN_FILE
   - RECAPTCHA_KEY_FILE
   - RECAPTCHA_SECRET_FILE
@@ -215,7 +198,7 @@ services:
     ports:
       - 39000:9000
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
       interval: 30s
       timeout: 20s
       retries: 3
