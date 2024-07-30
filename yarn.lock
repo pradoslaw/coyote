@@ -1003,7 +1003,7 @@
     "@codemirror/view" "^6.17.0"
     "@lezer/common" "^1.0.0"
 
-"@codemirror/commands@^6.3.0":
+"@codemirror/commands@^6.6.0":
   version "6.6.0"
   resolved "https://registry.yarnpkg.com/@codemirror/commands/-/commands-6.6.0.tgz#d308f143fe1b8896ca25fdb855f66acdaf019dd4"
   integrity sha512-qnY+b7j1UNcTS31Eenuc/5YJB6gQOzkUoNmJQc0rznwqSRpeaWWpjkWy2C/MPTcePpsKJEM26hXrOXl1+nceXg==
@@ -1052,7 +1052,7 @@
     "@lezer/common" "^1.0.0"
     "@lezer/javascript" "^1.0.0"
 
-"@codemirror/lang-markdown@^6.2.2":
+"@codemirror/lang-markdown@^6.2.5":
   version "6.2.5"
   resolved "https://registry.yarnpkg.com/@codemirror/lang-markdown/-/lang-markdown-6.2.5.tgz#451941bf743d3788e73598f1aedb71cbeb6f71ba"
   integrity sha512-Hgke565YcO4fd9pe2uLYxnMufHO5rQwRr+AAhFq8ABuhkrjyX8R5p5s+hZUTdV60O0dMRjxKhBLxz8pu/MkUVA==
@@ -1091,10 +1091,19 @@
   resolved "https://registry.yarnpkg.com/@codemirror/state/-/state-6.4.1.tgz#da57143695c056d9a3c38705ed34136e2b68171b"
   integrity sha512-QkEyUiLhsJoZkbumGZlswmAhA7CBU02Wrz7zvH4SrcifbsqwlXShVXg65f3v/ts57W3dqyamEriMhij1Z3Zz4A==
 
-"@codemirror/view@^6.0.0", "@codemirror/view@^6.17.0", "@codemirror/view@^6.22.0", "@codemirror/view@^6.23.0", "@codemirror/view@^6.27.0":
+"@codemirror/view@^6.0.0", "@codemirror/view@^6.17.0", "@codemirror/view@^6.23.0", "@codemirror/view@^6.27.0":
   version "6.28.5"
   resolved "https://registry.yarnpkg.com/@codemirror/view/-/view-6.28.5.tgz#e98421d8f96bf15a04fbb1a2475d0387b512267c"
   integrity sha512-NkUtfUa1lV7Jqg5DfHE/uLl7jKyoymDkaueMQXzePYuezL7FwX3ATANy74iAGlHCGe25hBGB0R+I5dC5EZ5JBg==
+  dependencies:
+    "@codemirror/state" "^6.4.0"
+    style-mod "^4.1.0"
+    w3c-keyname "^2.2.4"
+
+"@codemirror/view@^6.29.1":
+  version "6.29.1"
+  resolved "https://registry.yarnpkg.com/@codemirror/view/-/view-6.29.1.tgz#9c6c6f8a15e12df1b7e9d136dcbf4ff90b81ef71"
+  integrity sha512-7r+DlO/QFwPqKp73uq5mmrS4TuLPUVotbNOKYzN3OLP5ScrOVXcm4g13/48b6ZXGhdmzMinzFYqH0vo+qihIkQ==
   dependencies:
     "@codemirror/state" "^6.4.0"
     style-mod "^4.1.0"
@@ -1255,15 +1264,7 @@
   dependencies:
     "@lezer/common" "^1.0.0"
 
-"@lezer/markdown@1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@lezer/markdown/-/markdown-1.1.1.tgz#9176ab0fd2ce106baa5cf09b0cd14ac433cd95fa"
-  integrity sha512-kmxvLnXCogUx2mexslWwVME1W2GQP76pwUODcFXLsuubuK41TcEJhKRm2FTKugNfEkUIspJNq9+jNo6b7dxVLA==
-  dependencies:
-    "@lezer/common" "^1.0.0"
-    "@lezer/highlight" "^1.0.0"
-
-"@lezer/markdown@^1.0.0":
+"@lezer/markdown@^1.0.0", "@lezer/markdown@^1.3.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@lezer/markdown/-/markdown-1.3.0.tgz#a954d48aa3256d07173353f80086f1a3bc6f965f"
   integrity sha512-ErbEQ15eowmJUyT095e9NJc3BI9yZ894fjSDtHftD0InkfUBGgnKSU6dvan9jqsZuNHg2+ag/1oyDRxNsENupQ==
@@ -1281,20 +1282,20 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@riddled/4play@^1.18.3":
-  version "1.18.3"
-  resolved "https://registry.yarnpkg.com/@riddled/4play/-/4play-1.18.3.tgz#4b9ace8d1561e7827fcf5f3f326bbcbfd543888d"
-  integrity sha512-ygyU1luJGOku9WwW+9t1vw+V7sC12xpRW3/+4imHslfFttK9XZY6HeWbsbqd5NM10FCa8lexWZ8z2Nz1rpeRaQ==
+"@riddled/4play@1.18.4":
+  version "1.18.4"
+  resolved "https://registry.yarnpkg.com/@riddled/4play/-/4play-1.18.4.tgz#90ec45dc6267c7e7b571a12bbc8a320784a6c15f"
+  integrity sha512-zc09HGp/WiI9UI9tWiAoXR+RWLCIyIyVox0sQ96SrOKuqDeG2yULa9G4JTTlXlpHh1nkJ5iMTibsnCB8ZyjZhQ==
   dependencies:
     "@codemirror/autocomplete" "*"
-    "@codemirror/commands" "^6.3.0"
-    "@codemirror/lang-markdown" "^6.2.2"
+    "@codemirror/commands" "^6.6.0"
+    "@codemirror/lang-markdown" "^6.2.5"
     "@codemirror/language" "*"
     "@codemirror/state" "*"
-    "@codemirror/view" "^6.22.0"
+    "@codemirror/view" "^6.29.1"
     "@lezer/common" "*"
     "@lezer/highlight" "*"
-    "@lezer/markdown" "1.1.1"
+    "@lezer/markdown" "^1.3.0"
 
 "@sentry/browser@^6.16.1":
   version "6.19.7"
