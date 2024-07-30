@@ -23,6 +23,9 @@ services:
   worker:
     environment: *staging-env
     secrets: [ MAILGUN_SECRET_FILE ]
+  db:
+    volumes:
+      - ./docker/postgres/postgresql.local.conf:/etc/postgresql/postgresql.auto.conf
 
 secrets:
   MAILGUN_SECRET_FILE:

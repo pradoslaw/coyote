@@ -109,7 +109,7 @@ services:
     - source: POSTGRES_PASSWORD_FILE
     volumes:
     - type: bind
-      source: /home/danon/Projects/coyote/docker/postgres/postgresql.prod.conf
+      source: /home/danon/Projects/coyote/docker/postgres/postgresql.local.conf
       target: /etc/postgresql/postgresql.auto.conf
     - type: volume
       source: postgres

@@ -18,3 +18,6 @@ services:
     environment: *local-env
   worker:
     environment: *local-env
+  db:
+    volumes:
+      - ./docker/postgres/postgresql.local.conf:/etc/postgresql/postgresql.auto.conf

@@ -24,6 +24,9 @@ services:
   worker:
     environment: *production-env
     secrets: [ MAILGUN_SECRET_FILE ]
+  db:
+    volumes:
+      - ./docker/postgres/postgresql.prod.conf:/etc/postgresql/postgresql.auto.conf
 
 secrets:
   MAILGUN_SECRET_FILE:

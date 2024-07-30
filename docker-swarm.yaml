@@ -72,7 +72,6 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./docker/postgres/postgresql.prod.conf:/etc/postgresql/postgresql.auto.conf
       - postgres:/var/lib/postgresql/data:z
     environment:
       POSTGRES_USER: coyote
