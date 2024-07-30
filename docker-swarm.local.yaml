@@ -1,0 +1,20 @@
+version: '3.5'
+
+x-local-env: &local-env
+  API_HOST: api.4programmers.local
+  APP_URL: https://4programmers.local
+  AWS_URL: https://4programmers.local/uploads/
+  FACEBOOK_REDIRECT: "https://4programmers.local/OAuth/Facebook/Callback"
+  GITHUB_REDIRECT: "https://4programmers.local/OAuth/Github/Callback"
+  GOOGLE_REDIRECT: "https://4programmers.local/OAuth/Google/Callback"
+  MAIL_DRIVER: smtp
+  SESSION_DOMAIN: ".4programmers.local"
+  WS_HOST: ws.4programmers.local
+
+services:
+  php:
+    environment: *local-env
+  cron:
+    environment: *local-env
+  worker:
+    environment: *local-env
