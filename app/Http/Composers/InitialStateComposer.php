@@ -38,7 +38,7 @@ class InitialStateComposer
                 ],
             ],
             $this->registerUserModel(),
-            $this->registerFollowers()
+            $this->registerFollowers(),
         );
     }
 
@@ -63,6 +63,7 @@ class InitialStateComposer
         if (empty($this->request->user())) {
             return [];
         }
+        /** @var User $user */
         $user = $this->request->user();
         return [
             'user' => [
@@ -75,6 +76,7 @@ class InitialStateComposer
                 'created_at'           => $user->created_at->toIso8601String(),
                 'photo'                => (string)$user->photo->url(),
                 'is_sponsor'           => $user->is_sponsor,
+                'postCommentStyle'     => $user->guest->settings['postCommentStyle'] ?? 'legacy',
             ],
         ];
     }

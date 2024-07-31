@@ -14,6 +14,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -81,6 +82,7 @@ use Ramsey\Uuid\Uuid;
  * @property User[] $followers
  * @property Tag[] $skills
  * @property string|null $gdpr
+ * @property Guest|null $guest
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -186,6 +188,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function actkey(): HasMany
     {
         return $this->hasMany(Actkey::class);
+    }
+
+    public function guest(): BelongsTo
+    {
+        return $this->belongsTo(Guest::class);
     }
 
     public function skills(): MorphToMany

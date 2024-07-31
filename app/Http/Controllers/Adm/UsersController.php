@@ -74,8 +74,9 @@ class UsersController extends BaseController
         $this->breadcrumb->push("@$user->name", route('adm.users.show', [$user->id]));
         $this->breadcrumb->push('Ustawienia konta', route('adm.users.save', [$user->id]));
         return $this->view('adm.users.save', [
-            'user' => $user,
-            'form' => $this->getForm($user),
+            'user'         => $user,
+            'form'         => $this->getForm($user),
+            'userSettings' => \json_encode($user->guest?->settings, \JSON_PRETTY_PRINT),
         ]);
     }
 
@@ -98,6 +99,14 @@ class UsersController extends BaseController
             $user->groups()->sync((array)$data['groups']);
             stream(Update::class, new Person($user));
             event($user->deleted_at ? new UserDeleted($user) : new UserSaved($user));
+
+            if ($user->guest) {
+                if ($this->request->has('local-settings-action')) {
+                    $modern = $this->request->get('local-settings-action') === 'post-comments-modern';
+                    $user->guest->setSetting('postCommentStyle', $modern ? 'modern' : 'legacy');
+                    $user->guest->save();
+                }
+            }
         });
 
         return back()->with('success', 'Zmiany zostały poprawie zapisane');

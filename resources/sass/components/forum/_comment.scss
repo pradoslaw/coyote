@@ -28,8 +28,7 @@
     }
   }
 
-  // comment text
-  > span {
+  .comment-text.legacy {
     &:before {
       content: "▪";
       margin-right: 5px;
