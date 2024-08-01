@@ -6,6 +6,9 @@ up:
 bash:
 	docker-compose exec -u nginx php bash
 
+bash-root:
+	docker-compose exec -u root php bash
+
 composer-install:
 	docker-compose exec -T -u nginx php composer install
 
