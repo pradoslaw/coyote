@@ -22,7 +22,7 @@ jobs:
         run: cp .env.default .env
 
       - name: Run docker containers
-        run: docker-compose -f docker-compose.yaml -f docker-compose.testing.yaml up -d
+        run: docker compose -f docker-compose.yaml -f docker-compose.testing.yaml up -d
         env:
           STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
           STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
@@ -48,4 +48,4 @@ jobs:
         run: make install
 
       - name: Run tests
-        run: docker-compose exec -T -u nginx php php vendor/bin/phpunit
+        run: docker compose exec -T -u nginx php php vendor/bin/phpunit
