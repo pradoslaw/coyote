@@ -5,9 +5,9 @@ module.exports = {
       {
         "debug": false,
         "corejs": 3,
-        "useBuiltIns": "usage"
-      }
-    ]
+        "useBuiltIns": "usage",
+      },
+    ],
   ],
   "plugins": [
     [
@@ -69,14 +69,14 @@ module.exports = {
           "tsx",
           "typescript",
           "yaml",
-          "visual-basic"
+          "visual-basic",
         ],
         "plugins": [
-          "line-numbers"
+          "line-numbers",
         ],
-        "css": false
-      }
-    ]
+        "css": false,
+      },
+    ],
   ],
   "env": {
     "test": {
@@ -85,15 +85,12 @@ module.exports = {
           "@babel/preset-env",
           {
             "targets": {
-              "node": "current"
-            }
-          }
+              "node": "current",
+            },
+          },
         ],
-        "@babel/preset-typescript"
+        "@babel/preset-typescript",
       ],
-      "plugins": [
-        ["@babel/plugin-proposal-decorators", { "legacy": true }]
-      ]
-    }
-  }
+    },
+  },
 };
