@@ -22,6 +22,28 @@ describe('render', () => {
     assertMatch(component.text(), /count: 1/);
   });
 
+  test('find text by selector', async () => {
+    const component = render({template: '<div>foo<p>bar</p></div>'});
+    assertEquals(component.textBy('div p'), 'bar');
+  });
+
+  test('find html by selector', async () => {
+    const component = render({template: '<div>foo<p>bar</p></div>'});
+    assertEquals(component.innerHtml('div'), 'foo<p>bar</p>');
+  });
+
+  describe('checkbox attribute', () => {
+    test('unchecked', async () => {
+      const component = render({template: '<input type="checkbox"/>'});
+      assertFalse(component.inputChecked('input'));
+    });
+
+    test('checked', async () => {
+      const component = render({template: '<input type="checkbox" checked="checked"/>'});
+      assertTrue(component.inputChecked('input'));
+    });
+  });
+
   describe('inspect emitted vue event', () => {
     test('no event', async () => {
       const empty = render({template: '<div/>'});
