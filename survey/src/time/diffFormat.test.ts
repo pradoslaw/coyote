@@ -17,6 +17,8 @@ describe('time difference', () => {
   test('1 day', () => assertFormat(60 * 60 * 24, '0t:1d:00h:00min'));
   test('1 week', () => assertFormat(60 * 60 * 24 * 7, '1t:0d:00h:00min'));
 
+  test('0 seconds', () => assertFormat(-60 * 60, '0t:0d:00h:00min'));
+
   function assertFormat(seconds: number, expectedFormat: string): void {
     assertEquals(diffFormat(seconds), expectedFormat);
   }

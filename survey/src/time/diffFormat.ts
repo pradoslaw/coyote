@@ -1,5 +1,5 @@
 export default function (seconds: number): string {
-  return difference(seconds + 59);
+  return difference(Math.max(seconds + 59, 0));
 }
 
 function difference(seconds: number) {
