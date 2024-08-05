@@ -1,0 +1,54 @@
+.survey.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1040;
+  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.2);
+
+  section {
+    position: absolute;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    h3 {
+      font-weight: 600;
+      font-size: 1.3em;
+    }
+
+    &.enroll {
+      display: flex;
+
+      .image-container {
+        height: 350px;
+        width: 350px;
+        background-color: #174808;
+        background-image: url('/img/survey.svg');
+        background-size: cover;
+        background-position: center;
+      }
+
+      .main-container {
+        width: 290px;
+        height: 350px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+    }
+  }
+
+  section {
+    background-color: white;
+
+    body.theme-dark & {
+      background-color: black;
+    }
+  }
+}

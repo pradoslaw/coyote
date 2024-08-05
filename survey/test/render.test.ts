@@ -1,5 +1,5 @@
 import {describe, test} from '@jest/globals';
-import {assertMatch} from "./assert";
+import {assertEquals, assertFalse, assertMatch, assertTrue} from "./assert";
 import {render} from "./render";
 
 describe('render', () => {
@@ -20,6 +20,33 @@ describe('render', () => {
     assertMatch(component.text(), /count: 0/);
     await component.click('button');
     assertMatch(component.text(), /count: 1/);
+  });
+
+  describe('inspect emitted vue event', () => {
+    test('no event', async () => {
+      const empty = render({template: '<div/>'});
+      assertFalse(empty.emitted('input'));
+    });
+
+    test('emitted', async () => {
+      const emitter = render({
+        template: '<div/>',
+        created(this: Vue): void {
+          this.$emit('input');
+        },
+      });
+      assertTrue(emitter.emitted('input'));
+    });
+  });
+
+  test('inspect emitted value', async () => {
+    const emitter = render({
+      template: '<div/>',
+      created(this: Vue): void {
+        this.$emit('input', 'foo');
+      },
+    });
+    assertEquals(emitter.emittedValue('input'), 'foo');
   });
 });
 

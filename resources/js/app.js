@@ -23,6 +23,8 @@ import './sentry.ts';
 import './store/index.ts';
 import './gdpr.ts';
 
+import '../../survey/src/survey';
+
 Prism.highlightAll();
 Vue.use(VueAutosize);
 
