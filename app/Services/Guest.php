@@ -1,9 +1,7 @@
 <?php
-
 namespace Coyote\Services;
 
 use Carbon\Carbon;
-use Coyote\Guest as Model;
 
 /**
  * @property int $id
@@ -13,111 +11,62 @@ use Coyote\Guest as Model;
 class Guest
 {
     /**
-     * @var string
-     */
-    private $guestId;
-
-    /**
      * Default value is null. It means we have to retrieve settings from db. Once settings are retrieved from db, this will be an empty array.
-     *
-     * @var \Coyote\Guest|null
      */
-    protected $model = null;
+    protected ?\Coyote\Guest $model = null;
+    private ?Carbon $defaultSessionTime;
 
-    /**
-     * @var Carbon
-     */
-    private $defaultSessionTime;
-
-    /**
-     * @param string|null $guestId
-     */
-    public function __construct(?string $guestId)
+    public function __construct(private ?string $guestId)
     {
-        $this->guestId = $guestId;
     }
 
-    /**
-     * @param Carbon $defaultSessionTime
-     * @return $this
-     */
     public function setDefaultSessionTime(Carbon $defaultSessionTime): self
     {
         $this->defaultSessionTime = $defaultSessionTime;
-
         return $this;
     }
 
-    /**
-     * @return Carbon
-     */
     public function getDefaultSessionTime(): Carbon
     {
         return $this->defaultSessionTime ?? Carbon::now('utc');
     }
 
-    /**
-     * @param string $name
-     * @param $value
-     * @return string
-     */
     public function setSetting(string $name, $value)
     {
         if ($this->getSetting($name) === $value) {
             return $value;
         }
-
         $this->model->setSetting($name, $value);
         $this->model->save();
-
         return $value;
     }
 
-    /**
-     * Get user's settings as array (setting => value)
-     *
-     * @return array|null
-     */
-    public function getSettings()
+    public function getSettings(): ?array
     {
         if (!$this->guestId) {
             return [];
         }
-
         $this->load();
-
         return $this->model->settings;
     }
 
-    /**
-     * @param string $name
-     * @param null $default
-     * @return mixed|null
-     */
     public function getSetting(string $name, $default = null)
     {
         return $this->getSettings()[$name] ?? $default;
     }
 
-    /**
-     * @param $name
-     * @return mixed|null
-     */
     public function __get($name)
     {
         $this->load();
-
         return $this->model->$name ?? null;
     }
 
-    protected function load()
+    private function load(): void
     {
-        if (!is_null($this->model)) {
+        if ($this->model !== null) {
             return;
         }
-
-        $this->model = Model::findOrNew($this->guestId, ['id', 'settings', 'created_at', 'updated_at']);
-
+        $this->model = \Coyote\Guest::query()->findOrNew($this->guestId, ['id', 'settings', 'created_at', 'updated_at']);
         if (!$this->model->exists) {
             $this->model->id = $this->guestId;
         }
