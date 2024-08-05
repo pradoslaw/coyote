@@ -15,6 +15,7 @@ const plugins = [
       path.join(__dirname, 'resources/js/components/**/*.vue'),
       path.join(__dirname, 'resources/js/**/*.ts'),
       path.join(__dirname, 'resources/js/**/*.js'),
+      path.join(__dirname, 'survey/**/*.*'),
     ]),
     safelist: {
       standard: [
