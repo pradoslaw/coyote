@@ -26,7 +26,11 @@ const mutations = {
 
   REMOVE_RELATION(state, {userId, isBlocked}) {
     state.followers.splice(state.followers.findIndex(follower => follower.user_id === userId && follower.is_blocked === isBlocked), 1);
-  }
+  },
+
+  changePostStyle(state, style): void {
+    state.user = Object.assign(state.user, {postCommentStyle: style});
+  },
 };
 
 const actions = {
@@ -48,13 +52,13 @@ const actions = {
 
   pushSubscription({commit}, pushSubscription) {
     return axios.post('/User/push', pushSubscription);
-  }
-}
+  },
+};
 
 export default {
   namespaced: true,
   state,
   getters,
   mutations,
-  actions
+  actions,
 };

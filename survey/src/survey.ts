@@ -1,5 +1,8 @@
 import axios from "axios";
 import Vue from "vue";
+import {mapMutations} from "vuex";
+
+import store from "../../resources/js/store/index";
 import SurveyBadge from "./screen/badge";
 import SurveyEnroll from "./screen/enroll";
 import SurveyParticipate, {Experiment} from "./screen/participate";
@@ -21,6 +24,7 @@ function screen(surveyState: string): Screen {
 new Vue({
   name: 'Survey',
   el: '#survey',
+  store,
   components: {
     'vue-survey-enroll': SurveyEnroll,
     'vue-survey-participate': SurveyParticipate,
@@ -57,6 +61,7 @@ new Vue({
     };
   },
   methods: {
+    ...mapMutations('user', ['changePostStyle']),
     secondsUntil(dateFormat: string): number {
       const timestampDifference = new Date(dateFormat).getTime() - new Date().getTime();
       return timestampDifference / 1000;
@@ -72,7 +77,9 @@ new Vue({
     },
     experimentOpt(opt: string): void {
       this.experiment.optedIn = opt === 'in';
-      storePostCommentStyle(opt === 'in' ? 'modern' : 'legacy');
+      const style: PostStyle = opt === 'in' ? 'modern' : 'legacy';
+      storePostCommentStyle(style);
+      this.changePostStyle(style);
     },
     close(): void {
       this.screen = 'badge';
@@ -84,6 +91,7 @@ new Vue({
 });
 
 type Screen = 'enroll' | 'participate' | 'badge' | 'none';
+type PostStyle = 'modern' | 'legacy';
 
 interface Instance extends Members {
   secondsUntil(dateFormat: string): number;
@@ -94,7 +102,7 @@ interface Members {
   experiment: Experiment;
 }
 
-function storePostCommentStyle(postCommentStyle: 'modern' | 'legacy'): void {
+function storePostCommentStyle(postCommentStyle: PostStyle): void {
   axios.post('/User/Settings/Ajax', {postCommentStyle});
 }
 
