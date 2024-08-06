@@ -33,15 +33,17 @@ class ViewServiceProvider extends ServiceProvider
         $view->composer(['layout', 'adm.home'], InitialStateComposer::class);
         $view->composer('layout', function (View $view) use ($clock, $cache) {
             $view->with([
-                '__master_menu'  => $this->buildMasterMenu(),
-                '__dark_theme'   => $this->initialDarkTheme(),
-                '__color_scheme' => $this->colorScheme(),
-                'github_stars'   => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
-                'gdpr'           => [
-                    'content' => (new UserSettings)->cookieAgreement(),
+                '__master_menu'    => $this->buildMasterMenu(),
+                '__dark_theme'     => $this->initialDarkTheme(),
+                '__color_scheme'   => $this->colorScheme(),
+                'github_stars'     => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
+                'gdpr'             => [
+                    'content'  => (new UserSettings)->cookieAgreement(),
                     'accepted' => $this->gdprAccepted(),
                 ],
-                'year'           => $clock->year(),
+                'year'             => $clock->year(),
+                'surveyState'      => $this->surveyState(),
+                'postCommentStyle' => $this->postCommentStyle(),
             ]);
         });
     }
@@ -128,5 +130,19 @@ class ViewServiceProvider extends ServiceProvider
             return 'system';
         }
         return $legacyDarkTheme ? 'dark' : 'light';
+    }
+
+    private function surveyState(): string
+    {
+        /** @var Guest $guest */
+        $guest = $this->app[Guest::class];
+        return $guest->getSetting('surveyState', 'hidden');
+    }
+
+    private function postCommentStyle(): string
+    {
+        /** @var Guest $guest */
+        $guest = $this->app[Guest::class];
+        return $guest->getSetting('postCommentStyle', 'legacy');
     }
 }

@@ -55,6 +55,10 @@
   {{ schema_organization }}
 
   {% include 'components.gdpr' %}
+  <script>
+    var surveyState = {{ surveyState|json_encode|raw }};
+    var postCommentStyle = {{ postCommentStyle|json_encode|raw }};
+  </script>
   <div id="survey"></div>
 
   <header class="{{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }}">

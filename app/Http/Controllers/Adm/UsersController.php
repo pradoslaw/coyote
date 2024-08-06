@@ -14,6 +14,7 @@ use Coyote\Http\Grids\Adm\UsersGrid;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Services\FormBuilder\Form;
+use Coyote\Services\Guest;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
 use Coyote\User;
@@ -100,11 +101,20 @@ class UsersController extends BaseController
             stream(Update::class, new Person($user));
             event($user->deleted_at ? new UserDeleted($user) : new UserSaved($user));
 
-            if ($user->guest) {
-                if ($this->request->has('local-settings-action')) {
-                    $modern = $this->request->get('local-settings-action') === 'post-comments-modern';
-                    $user->guest->setSetting('postCommentStyle', $modern ? 'modern' : 'legacy');
-                    $user->guest->save();
+            $guestService = new Guest($user->guest_id);
+            if ($this->request->has('local-settings-action')) {
+                $action = $this->request->get('local-settings-action');
+                if ($action === 'post-comments-modern') {
+                    $guestService->setSetting('postCommentStyle', 'modern');
+                }
+                if ($action === 'post-comments-legacy') {
+                    $guestService->setSetting('postCommentStyle', 'legacy');
+                }
+                if ($action === 'survey-hidden') {
+                    $guestService->setSetting('surveyState', 'hidden');
+                }
+                if ($action === 'survey-enroll') {
+                    $guestService->setSetting('surveyState', 'enroll');
                 }
             }
         });
