@@ -8,9 +8,6 @@
   }
 }
 
-// Kolor linkow w komunikacie bledow
-// ------------------------------------------------------------------------------------
-
 .alert.alert-danger {
   a:not(.badge),
   a {
@@ -21,9 +18,4 @@
   .post-comment & {
     margin-bottom: 0.25rem;
   }
-}
-
-.vue-notification a {
-  color: inherit;
-  text-decoration: underline;
 }
