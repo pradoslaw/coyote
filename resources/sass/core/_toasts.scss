@@ -1,6 +1,3 @@
-@import "../layout/header";
-@import "bootstrap/scss/mixins/breakpoints";
-
 .vue-notification-group {
   width: 100% !important;
   max-width: 1600px;
@@ -28,6 +25,18 @@
         a {
           color: inherit;
           text-decoration: underline;
+        }
+
+        &.success {
+          body.theme-light & {
+            background-color: #80a41a;
+            border-left-color: darken(#80a41a, 10%);
+          }
+
+          body.theme-dark & {
+            background-color: #435b00;
+            border-left-color: darken(#435b00, 10%);
+          }
         }
       }
     }
