@@ -1,16 +1,22 @@
 <template>
   <vue-modal ref="modal">
+    <template slot="title">
+      Usunąć wpis?
+    </template>
+
     Tej operacji nie będzie można cofnąć.
 
-    <template slot="title">Usunąć wpis?</template>
-
     <p v-if="reasons" class="mt-2">
-      <vue-select name="reason_id" :options="reasons" v-model="reasonId" class="form-control-sm" placeholder="-- wybierz --"></vue-select>
+      <vue-select name="reason_id" :options="reasons" v-model="reasonId" class="form-control-sm" placeholder="-- wybierz --"/>
     </p>
 
     <template slot="buttons">
-      <button @click="modal.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-      <button @click="deletePost" type="submit" class="btn btn-danger danger">Tak, usuń</button>
+      <button @click="close" type="button" class="btn btn-secondary" data-dismiss="modal">
+        Anuluj
+      </button>
+      <button @click="deletePost" type="submit" class="btn btn-danger danger">
+        Tak, usuń
+      </button>
     </template>
   </vue-modal>
 </template>
@@ -27,10 +33,7 @@ export default Vue.extend({
     'vue-select': VueSelect,
   },
   props: {
-    reasons: {
-      type: Object,
-      required: true,
-    },
+    reasons: {type: Object},
   },
   data() {
     return {
