@@ -54,6 +54,8 @@ const plugins = [
         'menu-group-service-operations',
         'menu-group-moderator-actions',
         'divider',
+        'vue-notification-group',
+        'vue-notification-wrapper',
       ],
       deep: [
         /^logo/,
