@@ -1,5 +1,3 @@
-version: '3.5'
-
 x-staging-env: &staging-env
   API_HOST: api.4programmers.dev
   APP_URL: https://4programmers.dev

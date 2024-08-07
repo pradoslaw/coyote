@@ -1,5 +1,3 @@
-version: '3.5'
-
 x-production-env: &production-env
   API_HOST: api.4programmers.net
   APP_DEBUG: "false"

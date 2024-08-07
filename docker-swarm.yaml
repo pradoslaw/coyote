@@ -1,5 +1,3 @@
-version: '3.5'
-
 x-env: &env
   APP_ENV: production
   APP_DEBUG: "false"

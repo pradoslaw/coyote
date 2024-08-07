@@ -1,5 +1,3 @@
-version: '3.5'
-
 x-local-env: &local-env
   API_HOST: api.4programmers.local
   APP_URL: https://4programmers.local
