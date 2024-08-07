@@ -67,19 +67,35 @@ new Vue({
       return timestampDifference / 1000;
     },
     enrollOpt(opt: string): void {
-      if (opt === 'in') {
+      const optIn = opt === 'in';
+      if (optIn) {
         this.screen = 'participate';
         storeSurveyState('enrollOptIn');
       } else {
         this.screen = 'none';
         storeSurveyState('enrollOptOut');
       }
+      this.$notify({
+        type: 'success',
+        title: 'Zmieniaj forum na lepsze!',
+        text: optIn
+          ? '<i class="fa-solid fa-flask fa-fw"></i> Dołączyłeś do testów forum!'
+          : '<i class="fa-solid fa-bug-slash fa-fw"></i> Wypisano z udziału w testach.',
+      });
     },
     experimentOpt(opt: string): void {
-      this.experiment.optedIn = opt === 'in';
-      const style: PostStyle = opt === 'in' ? 'modern' : 'legacy';
+      const optIn = opt === 'in';
+      this.experiment.optedIn = optIn;
+      const style: PostStyle = optIn ? 'modern' : 'legacy';
       storePostCommentStyle(style);
       this.changePostStyle(style);
+      this.$notify({
+        type: 'success',
+        title: 'Układ treści w komentarzach.',
+        text: optIn
+          ? '<i class="fa-solid fa-toggle-on fa-fw"></i> Włączono testową wersję.'
+          : '<i class="fa-solid fa-toggle-off fa-fw"></i> Przywrócono poprzednią wersję.',
+      });
     },
     close(): void {
       this.screen = 'badge';
