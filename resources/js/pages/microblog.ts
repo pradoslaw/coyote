@@ -34,6 +34,7 @@ declare global {
 }
 
 new Vue({
+  name: 'Microblog',
   el: '#js-microblog',
   delimiters: ['${', '}'],
   mixins: [LiveMixin],
@@ -43,11 +44,11 @@ new Vue({
     'vue-form': VueForm,
     'vue-avatar': VueAvatar,
     'vue-username': VueUserName,
-    'vue-follow-button': VueFollowButton
+    'vue-follow-button': VueFollowButton,
   },
   store,
   data() {
-    return {popularTags: window.popularTags, recommendedUsers: window.recommendedUsers}
+    return {popularTags: window.popularTags, recommendedUsers: window.recommendedUsers};
   },
   created() {
     if ('pagination' in window) {
@@ -72,13 +73,13 @@ new Vue({
 
     scrollToMicroblog(microblog: Microblog) {
       window.location.hash = `#entry-${microblog.id}`;
-    }
+    },
   },
   computed: {
     ...mapGetters('microblogs', ['microblogs', 'currentPage', 'totalPages']),
 
     microblog(): Microblog {
       return this.microblogs[Object.keys(this.microblogs)[0]];
-    }
-  }
+    },
+  },
 });

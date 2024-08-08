@@ -9,19 +9,20 @@ import Vue from "vue";
 import {mapGetters, mapState} from "vuex";
 
 export default Vue.extend({
+  name: 'Posts',
   delimiters: ['${', '}'],
   components: {
     'vue-post-wrapper': VuePostWrapper,
     'vue-form': VueForm,
     'vue-poll': VuePoll,
-    'vue-pagination': VuePagination
+    'vue-pagination': VuePagination,
   },
   store,
   data: () => ({
     showStickyCheckbox: window.showStickyCheckbox,
     undefinedPost: {text: '', html: '', assets: []},
     reasons: window.reasons,
-    popularTags: window.popularTags
+    popularTags: window.popularTags,
   }),
   created() {
     store.commit('posts/init', window.pagination);
@@ -41,7 +42,7 @@ export default Vue.extend({
     [
       document.querySelector('#js-submit-form input[name="title"]'),
       document.querySelector('#js-submit-form textarea[name="text"]'),
-      document.querySelector('#js-submit-form input[name="tags"]')
+      document.querySelector('#js-submit-form input[name="tags"]'),
     ].forEach(el => {
       if (!el) {
         return;
@@ -64,9 +65,9 @@ export default Vue.extend({
     liveUpdate() {
       const subscriber = new Subscriber(`topic:${window.topic.id}`);
 
-      subscriber.subscribe('CommentSaved', new PostCommentSaved())
-      subscriber.subscribe('PostSaved', new PostSaved())
-      subscriber.subscribe('PostVoted', new PostVoted())
+      subscriber.subscribe('CommentSaved', new PostCommentSaved());
+      subscriber.subscribe('PostSaved', new PostSaved());
+      subscriber.subscribe('PostVoted', new PostVoted());
     },
 
     redirectToTopic(post: Post) {
@@ -94,7 +95,7 @@ export default Vue.extend({
     resetPost(post: Post) {
       this.undefinedPost = {text: '', html: '', assets: []};
       window.location.hash = `id${post.id}`;
-    }
+    },
   },
   computed: {
     markdownRef(): VueMarkdown {
@@ -104,6 +105,6 @@ export default Vue.extend({
     ...mapGetters('posts', ['posts', 'totalPages', 'currentPage']),
     ...mapGetters('topics', ['topic']),
     ...mapGetters('user', ['isAuthorized']),
-    ...mapState('poll', ['poll'])
-  }
+    ...mapState('poll', ['poll']),
+  },
 });

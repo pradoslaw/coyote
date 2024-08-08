@@ -1,6 +1,6 @@
+import VueFollowButton from '@/components/forms/follow-button';
 import axios from 'axios';
 import Vue from 'vue';
-import VueFollowButton from '@/components/forms/follow-button';
 
 let tooltipTimer;
 let vm;
@@ -29,7 +29,7 @@ function showVCard(event) {
 
       document.getElementsByTagName('body')[0].appendChild(container);
 
-      vm = new Vue({ el: '#vcard', components: { 'vue-follow-button': VueFollowButton } });
+      vm = new Vue({name: 'VCard', el: '#vcard', components: {'vue-follow-button': VueFollowButton}});
 
       const vcard = document.getElementById('vcard');
 
@@ -59,4 +59,4 @@ function bindEvents() {
   });
 }
 
-new MutationObserver(bindEvents).observe(document.body, { attributes: true, childList: true, subtree: true });
+new MutationObserver(bindEvents).observe(document.body, {attributes: true, childList: true, subtree: true});

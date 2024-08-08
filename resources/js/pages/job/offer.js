@@ -12,6 +12,7 @@ import VueCommentForm from "../../components/comments/form.vue";
 Vue.use(VueAutosize);
 
 new Vue({
+  name: 'Flags',
   el: '#js-flags',
   delimiters: ['${', '}'],
   data: {job: window.job},
@@ -23,8 +24,8 @@ new Vue({
   computed: {
     flags() {
       return store.getters['flags/filter'](this.job.id, 'Coyote\\Job').filter(flag => flag.resources.length === 1);
-    }
-  }
+    },
+  },
 });
 
 new Vue({
@@ -32,8 +33,8 @@ new Vue({
   delimiters: ['${', '}'],
   components: {
     'vue-map': VueMap,
-    'vue-marker': VueMarker
-  }
+    'vue-marker': VueMarker,
+  },
 });
 
 new Vue({
@@ -48,12 +49,12 @@ new Vue({
   methods: {
     subscribe() {
       store.dispatch('jobs/subscribe', this.job);
-    }
+    },
   },
   computed: {
     ...mapGetters('jobs', ['isSubscribed']),
-    ...mapGetters('user', ['isAuthorized'])
-  }
+    ...mapGetters('user', ['isAuthorized']),
+  },
 });
 
 new Vue({
@@ -62,7 +63,7 @@ new Vue({
   mixins: [mixins],
   components: {
     'vue-comment': VueComment,
-    'vue-comment-form': VueCommentForm
+    'vue-comment-form': VueCommentForm,
   },
   store,
   created() {
@@ -75,5 +76,5 @@ new Vue({
     commentsCount() {
       return Object.keys(store.state.comments.comments).length;
     },
-  }
+  },
 });

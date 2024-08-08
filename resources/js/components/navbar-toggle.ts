@@ -12,7 +12,7 @@ Array
       Array.from(document.querySelectorAll('div.theme-notice'))
         .forEach((div: Element) => {
           (div as HTMLElement).style.display = 'none';
-        })
+        });
       setViewTheme(false);
       storeThemeSetting('light', false);
     });
@@ -101,6 +101,7 @@ if (!isDarkThemeWip) {
 type Theme = 'light' | 'dark' | 'system';
 
 const controls = new Vue({
+  name: 'NonAlertControls',
   el: '#non-alert-controls',
   components: {
     'vue-github-button': GithubButton,

@@ -1,27 +1,28 @@
-import PerfectScrollbar from 'perfect-scrollbar';
-import axios from 'axios';
-import Vue from "vue";
 import VueFollowButton from "@/components/forms/follow-button.vue";
-import VueTags from "@/components/tags.vue";
 import {default as SkillsMixin} from "@/components/mixins/skills";
-import store from "@/store";
-import VueNotifications from "vue-notification";
+import VueTags from "@/components/tags.vue";
 import VueModals from "@/plugins/modals";
-import { mapActions, mapGetters } from "vuex";
+import store from "@/store";
+import axios from 'axios';
+import PerfectScrollbar from 'perfect-scrollbar';
+import Vue from "vue";
+import VueNotifications from "vue-notification";
+import {mapActions, mapGetters} from "vuex";
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);
 
 new Vue({
+  name: 'Profile',
   el: '#js-profile',
   delimiters: ['${', '}'],
-  components: { 'vue-follow-button': VueFollowButton, 'vue-tags': VueTags },
-  mixins: [ SkillsMixin ],
+  components: {'vue-follow-button': VueFollowButton, 'vue-tags': VueTags},
+  mixins: [SkillsMixin],
   store,
   data() {
     return {
       user: window.user,
-      skills: window.skills
+      skills: window.skills,
     };
   },
   methods: {
@@ -29,24 +30,24 @@ new Vue({
       this.$confirm({
         message: 'Nie będziesz widział komentarzy ani wpisów tego użytkownika',
         title: 'Zablokować użytkownika?',
-        okLabel: 'Tak, zablokuj'
+        okLabel: 'Tak, zablokuj',
       })
-      .then(() => {
-        store.dispatch('user/block', this.user.id);
+        .then(() => {
+          store.dispatch('user/block', this.user.id);
 
-        this.$notify({type: 'success', duration: 5000, title: 'Gotowe!', text: 'Użytkownik został zablokowany.'});
-      });
+          this.$notify({type: 'success', duration: 5000, title: 'Gotowe!', text: 'Użytkownik został zablokowany.'});
+        });
     },
 
-    ...mapActions('user', ['unblock'])
+    ...mapActions('user', ['unblock']),
   },
   computed: {
     isAuthorized() {
       return store.getters['user/isAuthorized'] && store.state.user.user.id !== this.user.id;
     },
 
-    ...mapGetters('user', ['isBlocked'])
-  }
+    ...mapGetters('user', ['isBlocked']),
+  },
 });
 
 (function () {

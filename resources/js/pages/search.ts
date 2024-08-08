@@ -1,17 +1,17 @@
-import Vue, { VNode } from "vue";
+import {Hit, Hits, SearchOptions, Sort} from "@/types/hit";
+import {Model, User} from "@/types/models";
+import axios from 'axios';
+import Vue, {VNode} from "vue";
+import VueNotifications from "vue-notification";
+import VueDropdownMenu from '../components/dropdown-menu.vue';
+import VueAutocomplete from '../components/forms/autocomplete.vue';
 import VueTopic from '../components/forum/topic.vue';
 import VuePagination from '../components/pagination.vue';
-import VueTimeago from '../plugins/timeago';
-import VueAutocomplete from '../components/forms/autocomplete.vue';
-import VueDropdownMenu from '../components/dropdown-menu.vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
+import {default as axiosErrorHandler} from '../libs/axios-error-handler';
+import VueTimeago from '../plugins/timeago';
 import store from "../store";
-import { Hit, Hits, Sort, SearchOptions } from "@/types/hit";
-import { Models as ModelsDict } from "../types/search";
-import { default as axiosErrorHandler } from '../libs/axios-error-handler';
-import { Model, User } from "@/types/models";
-import axios from 'axios';
-import VueNotifications from "vue-notification";
+import {Models as ModelsDict} from "../types/search";
 
 interface ForumItem {
   id: number;
@@ -47,20 +47,19 @@ axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 Vue.component('vue-result-common', {
   props: {
     hits: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   methods: {
     title(hit: Hit) {
       if (hit.title) {
         return hit.title;
-      }
-      else if (hit.name) {
+      } else if (hit.name) {
         return hit.name;
       }
 
       return hit.text;
-    }
+    },
   },
   template: `
     <ul id="search-results" class="list-unstyled">
@@ -68,7 +67,9 @@ Vue.component('vue-result-common', {
         <h2 class="mt-4 mb-2 text-truncate"><a :href="hit.url" v-html="title(hit)"></a></h2>
 
         <div class="mb-2">
-          <span class="text-muted"><vue-timeago :datetime="hit.created_at"></vue-timeago></span> <span v-html="hit.text"></span>
+          <span class="text-muted">
+            <vue-timeago :datetime="hit.created_at"></vue-timeago>
+          </span> <span v-html="hit.text"></span>
         </div>
 
         <ul v-if="hit.children.length" class="children mt-2 mb-2">
@@ -82,26 +83,27 @@ Vue.component('vue-result-common', {
           <li v-for="breadcrumb in hit.breadcrumbs" class="breadcrumb-item"><a :href="breadcrumb.url">{{ breadcrumb.name }}</a></li>
         </ul>
       </li>
-    </ul>`
-})
+    </ul>`,
+});
 
 Vue.component('vue-result-topic', {
   props: {
     hits: {
-      type: Array
-    }
+      type: Array,
+    },
   },
-  components: { 'vue-topic': VueTopic },
-  render: function(createElement) {
+  components: {'vue-topic': VueTopic},
+  render: function (createElement) {
     let items: VNode[] = [];
 
-    this.hits.forEach(hit => items.push(createElement('vue-topic', {props: {topic: hit, postsPerPage: window.postsPerPage, showCategoryName: true }})))
+    this.hits.forEach(hit => items.push(createElement('vue-topic', {props: {topic: hit, postsPerPage: window.postsPerPage, showCategoryName: true}})));
 
-    return createElement('div', { class: 'card card-default card-topics' }, items)
-  }
-})
+    return createElement('div', {class: 'card card-default card-topics'}, items);
+  },
+});
 
 new Vue({
+  name: 'Search',
   el: '#js-search',
   delimiters: ['${', '}'],
   data: {
@@ -113,15 +115,15 @@ new Vue({
     categories: window.categories,
     forums: window.forums,
     defaults: {
-      sort: 'score'
+      sort: 'score',
     },
     sortOptions: SortOptions,
     modelOptions: ModelsDict,
     user: window.user,
     isDropdownVisible: false,
-    pageLimit: window.pageLimit
+    pageLimit: window.pageLimit,
   },
-  components: { 'vue-pagination': VuePagination, 'perfect-scrollbar': PerfectScrollbar, 'vue-autocomplete': VueAutocomplete, 'vue-dropdown-menu': VueDropdownMenu },
+  components: {'vue-pagination': VuePagination, 'perfect-scrollbar': PerfectScrollbar, 'vue-autocomplete': VueAutocomplete, 'vue-dropdown-menu': VueDropdownMenu},
   store,
   created() {
     store.commit('topics/init', window.hits.data || []);
@@ -184,7 +186,7 @@ new Vue({
     },
 
     modelUrl(model?: Model) {
-      let params = { ...this.requestParams, model }
+      let params = {...this.requestParams, model};
       delete params['page'];
 
       if (!model) {
@@ -195,7 +197,7 @@ new Vue({
     },
 
     sortUrl(sort: Sort) {
-      return this.getUrl({ ...this.requestParams, sort });
+      return this.getUrl({...this.requestParams, sort});
     },
 
     request() {
@@ -211,7 +213,7 @@ new Vue({
     },
 
     pushState() {
-      history.pushState({ params: this.requestParams, hits: this.hits }, '', this.getUrl(this.requestParams));
+      history.pushState({params: this.requestParams, hits: this.hits}, '', this.getUrl(this.requestParams));
     },
 
     popState(event) {
@@ -223,12 +225,12 @@ new Vue({
 
       Object.keys(event.state.params).forEach(key => this[key] = event.state.params[key]);
       this.hits = event.state.hits;
-    }
+    },
   },
 
   computed: {
     requestParams(): SearchOptions {
-      let params = { q: this.query, model: this.model, page: this.page, sort: this.sort, categories: this.categories, user: this.user };
+      let params = {q: this.query, model: this.model, page: this.page, sort: this.sort, categories: this.categories, user: this.user};
 
       Object.keys(params).forEach(key => {
         if (!params[key] || (Array.isArray(params[key]) && params[key].length === 0)) {
@@ -252,7 +254,7 @@ new Vue({
       return this
         .categories
         .map(id => {
-          const index = this.forums.findIndex(forum => forum.id == id) // == because id can be string
+          const index = this.forums.findIndex(forum => forum.id == id); // == because id can be string
 
           // operator "?" is import. category ID passed in URL could be hidden for given user
           return this.forums[index]?.name;
@@ -263,14 +265,14 @@ new Vue({
 
     shouldShowCategories(): boolean {
       return !this.model || this.model === Model.Topic;
-    }
-  }
+    },
+  },
 });
 
-(function(history){
+(function (history) {
   const pushState = history.pushState;
 
-  history.pushState = function(state) {
+  history.pushState = function (state) {
     // @ts-ignore
     if (typeof history.onpushstate == "function") {
       // @ts-ignore

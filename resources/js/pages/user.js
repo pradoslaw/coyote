@@ -1,56 +1,58 @@
-import Vue from "vue";
-import VueThumbnail from '../components/thumbnail';
-import VueNotifications from 'vue-notification';
 import VueAvatar from '@/components/avatar';
-import VueUserName from '@/components/user-name';
-import VueModal from '@/components/modal';
 import VueFollowButton from '@/components/forms/follow-button';
-import VueTags from '@/components/tags.vue';
 import VueTagsInline from '@/components/forms/tags-inline.vue';
+import {default as SkillsMixin} from '@/components/mixins/skills';
+import VueModal from '@/components/modal';
+import VueTags from '@/components/tags.vue';
+import VueUserName from '@/components/user-name';
 import axios from 'axios';
+import Vue from "vue";
+import VueNotifications from 'vue-notification';
+import {mapActions, mapGetters, mapState} from 'vuex';
+import VueThumbnail from '../components/thumbnail';
+import {default as axiosErrorHandler} from '../libs/axios-error-handler';
 import store from '../store';
-import { default as axiosErrorHandler } from '../libs/axios-error-handler';
-import { default as SkillsMixin } from '@/components/mixins/skills';
-import { mapActions, mapGetters, mapState } from 'vuex';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 new Vue({
+  name: 'User',
   el: '#js-user',
   delimiters: ['${', '}'],
-  components: { 'vue-thumbnail': VueThumbnail },
+  components: {'vue-thumbnail': VueThumbnail},
   methods: {
     setPhoto(data) {
-      store.commit('user/update', { photo: data.url });
+      store.commit('user/update', {photo: data.url});
     },
 
     deletePhoto() {
       axios.delete('/User/Photo/Delete');
 
-      store.commit('user/update', { photo: null });
-    }
+      store.commit('user/update', {photo: null});
+    },
   },
   computed: {
     url() {
       return store.state.user.user.photo;
-    }
-  }
+    },
+  },
 });
 
 new Vue({
+  name: 'Skills',
   el: '#js-skills',
   delimiters: ['${', '}'],
-  mixins: [ SkillsMixin ],
+  mixins: [SkillsMixin],
   components: {
     'vue-tags': VueTags,
-    'vue-tags-inline': VueTagsInline
+    'vue-tags-inline': VueTagsInline,
   },
   data() {
     return {
       skills: window.skills,
-      rateLabels: window.rateLabels
+      rateLabels: window.rateLabels,
     };
   },
   methods: {
@@ -70,18 +72,19 @@ new Vue({
       this.skills.splice(this.skills.findIndex(skill => skill.id === tag.id), 1);
 
       axios.delete(`/User/Skills/${tag.id}`);
-    }
-  }
+    },
+  },
 });
 
 new Vue({
+  name: 'Followers',
   el: '#js-followers',
   delimiters: ['${', '}'],
   store,
-  components: { 'vue-avatar': VueAvatar, 'vue-username': VueUserName, 'vue-follow-button': VueFollowButton },
+  components: {'vue-avatar': VueAvatar, 'vue-username': VueUserName, 'vue-follow-button': VueFollowButton},
   data() {
     return {
-      users: window.users
+      users: window.users,
     };
   },
   methods: {
@@ -89,23 +92,24 @@ new Vue({
       return this.users.find(user => user.id === userId);
     },
 
-    ...mapActions('user', ['unfollow'])
+    ...mapActions('user', ['unfollow']),
   },
   computed: {
     ...mapState('user', ['followers']),
-    ...mapGetters('user', ['isBlocked'])
-  }
+    ...mapGetters('user', ['isBlocked']),
+  },
 });
 
 new Vue({
+  name: 'Tokens',
   el: '#js-tokens',
   delimiters: ['${', '}'],
-  components: { 'vue-modal': VueModal },
+  components: {'vue-modal': VueModal},
   data() {
     return {
       tokens: [],
       tokenName: null,
-      tokenId: null
+      tokenId: null,
     };
   },
   mounted() {
@@ -117,7 +121,7 @@ new Vue({
     },
 
     addToken() {
-      axios.post('/oauth/personal-access-tokens', { name: this.tokenName })
+      axios.post('/oauth/personal-access-tokens', {name: this.tokenName})
         .then(response => {
           this.tokenId = response.data.accessToken;
           this.loadTokens();
@@ -131,6 +135,6 @@ new Vue({
       axios.delete(`/oauth/personal-access-tokens/${tokenId}`);
 
       this.loadTokens();
-    }
-  }
+    },
+  },
 });

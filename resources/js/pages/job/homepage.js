@@ -1,17 +1,18 @@
-import Vue from 'vue';
-import VueJob from '@/components/job/job.vue';
 import VueJobTiny from '@/components/job/job-tiny.vue';
+import VueJob from '@/components/job/job.vue';
 import VuePagination from '@/components/pagination.vue';
 import VueTabs from '@/components/tabs.vue';
-import axios from 'axios';
 import store from '@/store';
+import axios from 'axios';
 import PerfectScrollbar from 'perfect-scrollbar';
-import { mapState } from 'vuex';
+import Vue from 'vue';
 import VueNotifications from "vue-notification";
+import {mapState} from 'vuex';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
 new Vue({
+  name: 'Job',
   el: '#js-job',
   delimiters: ['${', '}'],
   components: {
@@ -19,7 +20,7 @@ new Vue({
     'vue-pagination': VuePagination,
     'vue-job-tiny': VueJobTiny,
     'vue-notification': VueNotifications,
-    'vue-tabs': VueTabs
+    'vue-tabs': VueTabs,
   },
   data: window.data,
   store,
@@ -27,7 +28,7 @@ new Vue({
     store.state.jobs.subscriptions = window.data.subscribed;
   },
   mounted() {
-    window.history.pushState({ jobs: window.data.jobs, input: window.data.input }, '', window.location.href);
+    window.history.pushState({jobs: window.data.jobs, input: window.data.input}, '', window.location.href);
 
     window.onpopstate = e => {
       this.jobs = e.state?.jobs || this.jobs;
@@ -95,7 +96,7 @@ new Vue({
         currency: this.input.currency,
         remote: this.input.remote,
         remote_range: this.input.remote_range,
-        locations: this.input.locations
+        locations: this.input.locations,
       };
 
       this.skeleton = true;
@@ -106,15 +107,15 @@ new Vue({
 
       axios.get(
         `${window.location.pathname}?timestamp=${new Date().getTime()}`,
-        {params: input, headers: {'Cache-Control': 'no-cache', 'Pragma': 'no-cache', 'Expires': '0'}}
+        {params: input, headers: {'Cache-Control': 'no-cache', 'Pragma': 'no-cache', 'Expires': '0'}},
       )
-      .then(response => {
-        this.jobs = response.data.jobs;
-        this.defaults = response.data.defaults;
+        .then(response => {
+          this.jobs = response.data.jobs;
+          this.defaults = response.data.defaults;
 
-        window.history.pushState(response.data, '', response.data.url);
-      })
-      .then(() => this.skeleton = false);
+          window.history.pushState(response.data, '', response.data.url);
+        })
+        .then(() => this.skeleton = false);
     },
 
     includesLocation(location) {
@@ -149,7 +150,7 @@ new Vue({
 
     getTabDropdownClass(tab) {
       return {'fa-angle-up': this.selectedTab !== tab, 'fa-angle-down': this.selectedTab === tab};
-    }
+    },
   },
   computed: {
     defaultSort: {
@@ -158,7 +159,7 @@ new Vue({
       },
       set(value) {
         this.input.sort = value;
-      }
+      },
     },
 
     defaultCurrency: {
@@ -167,13 +168,13 @@ new Vue({
       },
       set(value) {
         this.input.currency = value;
-      }
+      },
     },
 
     tabs() {
-      return { '/Praca': 'Ogłoszenia', '/Praca/Moje': 'Moje ogłoszenia' };
+      return {'/Praca': 'Ogłoszenia', '/Praca/Moje': 'Moje ogłoszenia'};
     },
 
-    ...mapState('jobs', ['subscriptions'])
-  }
+    ...mapState('jobs', ['subscriptions']),
+  },
 });
