@@ -1,15 +1,15 @@
-import Vue from 'vue';
-import axios from 'axios';
-
 import VueButton from '@/components/forms/button.vue';
 import VueCheckbox from '@/components/forms/checkbox.vue';
 import VueFormGroup from '@/components/forms/form-group.vue';
 import VueSelect from '@/components/forms/select.vue';
 import VueText from '@/components/forms/text.vue';
+import axios from 'axios';
+import Vue from 'vue';
 
 const VAT_RATE = 1.23;
 
 new Vue({
+  name: 'Payment',
   el: '#js-payment',
   delimiters: ['${', '}'],
   components: {
@@ -17,7 +17,7 @@ new Vue({
     'vue-text': VueText,
     'vue-select': VueSelect,
     'vue-checkbox': VueCheckbox,
-    'vue-button': VueButton
+    'vue-button': VueButton,
   },
   data: {
     countries: window.countries,
@@ -28,19 +28,19 @@ new Vue({
     banks: window.banks,
     coupon: {
       code: null,
-      amount: 0
+      amount: 0,
     },
     isCoupon: false,
     errors: {},
     hasPaymentError: false,
-    isProcessing: false
+    isProcessing: false,
   },
   mounted() {
     this.stripe = Stripe(window.stripeKey);
     const elements = this.stripe.elements();
 
     const style = {
-      iconStyle: 'solid'
+      iconStyle: 'solid',
     };
 
     this.card = elements.create('card', {style});
@@ -63,9 +63,9 @@ new Vue({
         payment_method: {
           card: this.card,
           billing_details: {
-            name: this.form.invoice.name
-          }
-        }
+            name: this.form.invoice.name,
+          },
+        },
       }).then(result => {
         if (result.error) {
           this.$notify({type: 'error', text: result.error.message});
@@ -85,11 +85,11 @@ new Vue({
         {
           payment_method: {
             billing_details: {
-              email: this.form.invoice.email
-            }
+              email: this.form.invoice.email,
+            },
           },
           return_url: success_url,
-        }
+        },
       );
 
       if (error) {
@@ -126,7 +126,7 @@ new Vue({
 
     setPaymentMethod(method) {
       this.form.payment_method = method;
-    }
+    },
   },
   computed: {
     percentageVatRate() {
@@ -143,7 +143,7 @@ new Vue({
 
     vatPrice() {
       return this.grossPrice - this.discountNetPrice;
-    }
+    },
   },
   watch: {
     'coupon.code': function (newValue) {
@@ -160,5 +160,5 @@ new Vue({
     'form.invoice.vat_id': function () {
       this.calculate();
     },
-  }
+  },
 });

@@ -15,6 +15,7 @@ Vue.use(VueModals);
 Vue.use(VuePaste, {url: '/assets'});
 
 new Vue({
+  name: 'Microblog',
   el: '#js-microblog',
   delimiters: ['${', '}'],
   mixins: [LiveMixin],

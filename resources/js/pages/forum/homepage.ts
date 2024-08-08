@@ -1,15 +1,16 @@
+import {Forum, Topic} from '@/types/models';
 import Vue from "vue";
-import store from "../../store";
+import {mapState} from "vuex";
 import VueSection from '../../components/forum/section.vue';
 import VueTopic from "../../components/forum/topic.vue";
-import { mapState } from "vuex";
-import { Forum, Topic } from '@/types/models';
+import store from "../../store";
 
 type ForumGroup = {
   [key in number]: Forum;
 };
 
 export default Vue.extend({
+  name: 'Homepage',
   delimiters: ['${', '}'],
   store,
   data: () => ({
@@ -18,11 +19,11 @@ export default Vue.extend({
     flags: window.flags || [],
     showCategoryName: window.showCategoryName || false,
     groupStickyTopics: window.groupStickyTopics || false,
-    tags: window.tags || {}
+    tags: window.tags || {},
   }),
   components: {
     'vue-section': VueSection,
-    'vue-topic': VueTopic
+    'vue-topic': VueTopic,
   },
   created() {
     store.commit('forums/init', window.forums || []);
@@ -41,7 +42,7 @@ export default Vue.extend({
 
       // @ts-ignore
       return topic.tags.filter(tag => this.tagNames.includes(tag.name)).length > 0;
-    }
+    },
   },
   computed: {
     forums(): Forum[] {
@@ -51,22 +52,23 @@ export default Vue.extend({
     sections(): Forum[] {
       return Object.values(
         <Forum>
-        this
-          .forums
-          .sort((a, b) => a.order < b.order ? -1 : 1)
-          .reduce((acc, forum) => {
-            if (!acc[forum.section]) {
-              acc[forum.section] = {name: forum.section, order: forum.order, categories: [], isCollapse: !!(this.collapse[forum.id])};
-            }
+          this
+            .forums
+            .sort((a, b) => a.order < b.order ? -1 : 1)
+            .reduce((acc, forum) => {
+              if (!acc[forum.section]) {
+                acc[forum.section] = {name: forum.section, order: forum.order, categories: [], isCollapse: !!(this.collapse[forum.id])};
+              }
 
-            acc[forum.section].categories.push(forum);
+              acc[forum.section].categories.push(forum);
 
-            return acc;
-          }, {})
+              return acc;
+            }, {}),
       ).sort((a, b) => (a as Forum).order < (b as Forum).order ? -1 : 1); // sort sections
     },
 
     groups(): ForumGroup {
+      // @ts-ignore
       return this.topics.reduce((acc, item) => {
         let index = this.groupStickyTopics ? (+!item.is_sticky) : 0;
 
@@ -85,5 +87,5 @@ export default Vue.extend({
     },
 
     ...mapState('topics', ['topics']),
-  }
+  },
 });

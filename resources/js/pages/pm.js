@@ -30,6 +30,7 @@ const DRAFT_KEY = 'pm';
 const INBOX = 1;
 
 new Vue({
+  name: 'Pm',
   el: '#app-pm',
   delimiters: ['${', '}'],
   components: {
@@ -40,7 +41,7 @@ new Vue({
     'vue-markdown': VueMarkdown,
     'vue-pagination': VuePagination,
     'vue-autocomplete': VueAutocomplete,
-    'vue-error': VueError
+    'vue-error': VueError,
   },
   data() {
     return {
@@ -52,7 +53,7 @@ new Vue({
       errors: {},
       items: [],
       assets: [],
-      isTyping: false
+      isTyping: false,
     };
   },
   store,
@@ -191,7 +192,7 @@ new Vue({
       this.loadMore().then(() => this.$nextTick(() => {
           this.scrollToBottom();
           this.addScrollbarEvent();
-        })
+        }),
       );
     },
 
@@ -212,7 +213,7 @@ new Vue({
 
     channel() {
       return ws.subscribe(`user:${store.state.user.user.id}`);
-    }
+    },
   },
   computed: {
     totalPages() {
@@ -246,6 +247,6 @@ new Vue({
       return 'private:' + [store.state.user.user.id, this.recipient.id].sort((a, b) => a - b).join('');
     },
 
-    ...mapState('messages', ['messages', 'currentPage', 'total', 'perPage'])
-  }
+    ...mapState('messages', ['messages', 'currentPage', 'total', 'perPage']),
+  },
 });
