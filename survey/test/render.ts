@@ -53,4 +53,8 @@ export class Component {
     }
     return emitted[eventName];
   }
+
+  classes(): string[] {
+    return [...this.wrapper.element.classList.values()];
+  }
 }

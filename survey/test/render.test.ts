@@ -70,6 +70,11 @@ describe('render', () => {
     });
     assertEquals(emitter.emittedValue('input'), 'foo');
   });
+
+  test('container css classes', async () => {
+    const classer = render({template: '<div class="foo bar"/>'});
+    assertEquals(classer.classes(), ['foo', 'bar']);
+  });
 });
 
 const counter = {
