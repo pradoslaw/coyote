@@ -57,4 +57,8 @@ export class Component {
   classes(): string[] {
     return [...this.wrapper.element.classList.values()];
   }
+
+  exists(cssSelector: string): boolean {
+    return this.wrapper.find(cssSelector).exists();
+  }
 }

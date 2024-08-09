@@ -75,6 +75,18 @@ describe('render', () => {
     const classer = render({template: '<div class="foo bar"/>'});
     assertEquals(classer.classes(), ['foo', 'bar']);
   });
+
+  describe('exists()', () => {
+    test('element exists', () => {
+      const classer = render({template: '<div><span id="foo"/></div>'});
+      assertTrue(classer.exists('#foo'));
+    });
+
+    test('element is missing', () => {
+      const classer = render({template: '<div/>'});
+      assertFalse(classer.exists('#foo'));
+    });
+  });
 });
 
 const counter = {

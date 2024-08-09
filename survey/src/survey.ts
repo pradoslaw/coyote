@@ -10,6 +10,7 @@ import diffFormat from "./time/diffFormat";
 
 const initialScreen = screen(window['surveyState']);
 const initiallyOptedIn = window['postCommentStyle'] === 'modern';
+const initialTooltip = window['surveyState'] === 'enroll';
 
 function screen(surveyState: string): Screen {
   if (surveyState === 'enroll') {
@@ -42,12 +43,16 @@ new Vue({
         @close="close"/>
       <vue-survey-badge
         v-if="screen === 'badge'"
-        @engage="engage"/>
+        :tooltip="tooltip"
+        @engage="engage"
+        @notice="tooltip=false"
+      />
     </div>
   `,
   data(this: Instance): Members {
     return {
       screen: initialScreen,
+      tooltip: initialTooltip,
       experiment: {
         title: 'Układ treści w komentarzach.',
         optedIn: initiallyOptedIn,
@@ -116,6 +121,7 @@ interface Instance extends Members {
 interface Members {
   screen: Screen,
   experiment: Experiment;
+  tooltip: boolean;
 }
 
 function storePostCommentStyle(postCommentStyle: PostStyle): void {

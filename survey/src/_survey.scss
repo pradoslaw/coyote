@@ -235,4 +235,60 @@
       background: #141513;
     }
   }
+
+  .survey-tooltip-container {
+    .survey-tooltip {
+      bottom: -24px;
+      right: 40px;
+
+      width: 230px;
+
+      text-wrap: wrap;
+      border-radius: 4px;
+      text-align: left;
+      line-height: 1.25em;
+
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-top: 6px solid transparent;
+        border-bottom: 6px solid transparent;
+        border-left-width: 10px;
+        border-left-style: solid;
+        position: absolute;
+        right: -6px;
+        bottom: 16px;
+        z-index: 2;
+      }
+
+      .btn-thin {
+        padding: 5px 9px;
+        border-radius: 3px;
+      }
+
+      body.theme-light & {
+        color: #17181c;
+        background: white;
+
+        &::before {
+          border-left-color: white;
+        }
+      }
+
+      body.theme-dark & {
+        color: #ddd;
+        background: black;
+
+        &::before {
+          border-left-color: black;
+        }
+
+        hr {
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+  }
 }
