@@ -15,3 +15,11 @@ export function assertEquals(actual: any, expected: any): void {
 export function assertMatch(string: string, regexp: RegExp): void {
   assert.match(string, regexp);
 }
+
+export function assertContains(array: any[], expected: any): void {
+  assertTrue(array.includes(expected));
+}
+
+export function assertNotContains(array: any[], expected: any): void {
+  assertFalse(array.includes(expected));
+}

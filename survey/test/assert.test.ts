@@ -1,7 +1,7 @@
 import {describe, test} from "@jest/globals";
 import {strict as assert} from "node:assert";
 
-import {assertEquals, assertFalse, assertMatch, assertTrue} from "./assert";
+import {assertContains, assertEquals, assertFalse, assertMatch, assertNotContains, assertTrue} from "./assert";
 
 describe('assert', () => {
   describe('assertTrue', () => {
@@ -25,6 +25,16 @@ describe('assert', () => {
   describe('assertMatch', () => {
     test('pass', () => passes(() => assertMatch('foo', /foo/)));
     test('fail', () => fails(() => assertMatch('foo', /bar/)));
+  });
+
+  describe('assertContains', () => {
+    test('pass', () => passes(() => assertContains(['foo', 'bar'], 'bar')));
+    test('fail', () => fails(() => assertContains(['foo'], 'bar')));
+  });
+
+  describe('assertNotContains', () => {
+    test('pass', () => passes(() => assertNotContains(['foo'], 'bar')));
+    test('fail', () => fails(() => assertNotContains(['foo', 'bar'], 'bar')));
   });
 
   function passes(operation: () => void): void {
