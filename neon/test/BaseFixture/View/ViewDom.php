@@ -72,6 +72,9 @@ readonly class ViewDom
         if ($node->nodeType === \XML_TEXT_NODE) {
             return $node->textContent;
         }
+        if ($node->nodeType === \XML_CDATA_SECTION_NODE) {
+            return $node->textContent;
+        }
         throw new \Exception("Failed to get element as string: <$node->tagName>");
     }
 

@@ -7,11 +7,13 @@ use Illuminate\Config\Repository;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Bootstrap\LoadConfiguration;
+use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Symfony\Component\HttpFoundation;
 
 class TestCase extends \Illuminate\Foundation\Testing\TestCase
 {
     use OverridesSymfonyRequest;
+    use InteractsWithDatabase;
 
     /** @var Application */
     public $app;
@@ -70,5 +72,10 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
             $request->server->set('REQUEST_URI', $request->server->get('REQUEST_URI') . '?');
         }
         return $request;
+    }
+
+    public function assertSeeInDatabase(string $table, array $data): void
+    {
+        $this->assertDatabaseHas($table, $data);
     }
 }

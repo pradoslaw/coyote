@@ -3,6 +3,7 @@ namespace Coyote\Providers;
 
 use Coyote\Domain\Clock;
 use Coyote\Domain\Github\GithubStars;
+use Coyote\Domain\Survey\Survey;
 use Coyote\Domain\User\UserSettings;
 use Coyote\Http\Composers\InitialStateComposer;
 use Coyote\Http\Factories\CacheFactory;
@@ -38,10 +39,11 @@ class ViewServiceProvider extends ServiceProvider
                 '__color_scheme' => $this->colorScheme(),
                 'github_stars'   => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
                 'gdpr'           => [
-                    'content' => (new UserSettings)->cookieAgreement(),
+                    'content'  => (new UserSettings)->cookieAgreement(),
                     'accepted' => $this->gdprAccepted(),
                 ],
                 'year'           => $clock->year(),
+                'survey'         => $this->survey($this->app[Survey::class]),
             ]);
         });
     }
@@ -128,5 +130,12 @@ class ViewServiceProvider extends ServiceProvider
             return 'system';
         }
         return $legacyDarkTheme ? 'dark' : 'light';
+    }
+
+    private function survey(Survey $survey): array
+    {
+        return [
+            'surveyState' => $survey->state(),
+        ];
     }
 }
