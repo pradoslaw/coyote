@@ -73,5 +73,16 @@
   </div>
 
   {{ form_end(form) }}
-
+  
+  <script>
+    window.addEventListener('load', () => {
+      jQuery('.nav-tabs a[href="' + window.location.hash + '"]').tab('show');
+      const tabs = document.querySelectorAll('.nav-link');
+      Array.from(tabs).forEach(tab => {
+        tab.addEventListener('click', () => {
+          window.location.href = tab.href;
+        });
+      });
+    });
+  </script>
 {% endblock %}
