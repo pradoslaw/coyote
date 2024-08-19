@@ -14,15 +14,16 @@ class SurveyTest extends TestCase
     use Application;
 
     private string $guestId;
+    private Guest $guest;
     private Survey $survey;
 
     #[Before]
     public function createGuestForSurvey(): void
     {
         $this->guestId = $this->randomUuid();
-        $guest = new Guest($this->guestId);
-        $this->laravel->app->instance(Guest::class, $guest);
-        $this->survey = new Survey($guest);
+        $this->guest = new Guest($this->guestId);
+        $this->laravel->app->instance(Guest::class, $this->guest);
+        $this->survey = new Survey($this->guest);
     }
 
     private function randomUuid(): string
@@ -55,7 +56,7 @@ class SurveyTest extends TestCase
     public function passSurveyStateToView_surveyInvited(): void
     {
         $this->survey->setState('survey-invited');
-        $this->assertSame(['surveyState' => 'survey-invited'], $this->surveyViewInput());
+        $this->assertSame('survey-invited', $this->surveyViewInput()['surveyState']);
     }
 
     #[Test]
@@ -91,5 +92,39 @@ class SurveyTest extends TestCase
     private function viewDom(): ViewDom
     {
         return new ViewDom($this->laravel->get('/')->assertSuccessful()->content());
+    }
+
+    #[Test]
+    public function initiallyUserChoiceIsNone(): void
+    {
+        $this->assertSame('none', $this->survey->choice());
+    }
+
+    #[Test]
+    public function userChoosesModern(): void
+    {
+        $this->guest->setSetting('postCommentStyle', 'modern');
+        $this->assertSame('modern', $this->survey->choice());
+    }
+
+    #[Test]
+    public function userChoosesLegacy(): void
+    {
+        $this->guest->setSetting('postCommentStyle', 'legacy');
+        $this->assertSame('legacy', $this->survey->choice());
+    }
+
+    #[Test]
+    public function rejectMalformedValue(): void
+    {
+        $this->guest->setSetting('postCommentStyle', 'boo hoo');
+        $this->assertSame('none', $this->survey->choice());
+    }
+
+    #[Test]
+    public function passSurveyExperimentToView_modern(): void
+    {
+        $this->guest->setSetting('postCommentStyle', 'modern');
+        $this->assertSame('modern', $this->surveyViewInput()['surveyChoice']);
     }
 }

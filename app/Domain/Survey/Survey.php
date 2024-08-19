@@ -18,4 +18,13 @@ readonly class Survey
     {
         return $this->guest->getSetting('surveyState', 'survey-none');
     }
+
+    public function choice(): string
+    {
+        $style = $this->guest->getSetting('postCommentStyle', 'none');
+        if (\in_array($style, ['modern', 'legacy'])) {
+            return $style;
+        }
+        return 'none';
+    }
 }

@@ -135,7 +135,8 @@ class ViewServiceProvider extends ServiceProvider
     private function survey(Survey $survey): array
     {
         return [
-            'surveyState' => $survey->state(),
+            'surveyState'  => $survey->state(),
+            'surveyChoice' => $survey->choice(),
         ];
     }
 }
