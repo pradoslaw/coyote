@@ -14,8 +14,8 @@ export const experiment = {
   reason,
   solution,
   dueTime: diffFormat(secondsUntil('2024-08-20 14:00:00')),
-  imageLegacy: '/img/survey/postCommentStyleLegacy.png?v3',
-  imageModern: '/img/survey/postCommentStyleModern.png?v5',
+  imageLegacy: '/img/survey/postCommentStyle/legacy.png',
+  imageModern: '/img/survey/postCommentStyle/modern.png',
 };
 
 function secondsUntil(dateFormat: string): number {

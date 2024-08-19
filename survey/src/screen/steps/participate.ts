@@ -34,7 +34,7 @@ export default {
               {{ experiment.dueTime }}
             </span>
           </div>
-          <div class="d-flex justify-content-center">
+          <div class="d-flex justify-content-center image-height-holder align-items-center">
             <img :src="experiment.imageLegacy" alt="Legacy post comment style" v-if="selected === 'first'"/>
             <img :src="experiment.imageModern" alt="Modern post comment style" v-else/>
           </div>
