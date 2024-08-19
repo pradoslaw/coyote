@@ -1,5 +1,5 @@
 import {describe, test} from '@jest/globals';
-import {assertContains, assertEquals, assertMatch, assertNotContains, assertTrue} from "../../../test/assert";
+import {assertEquals, assertFalse, assertMatch, assertTrue} from "../../../test/assert";
 import {Component, render} from "../../../test/render";
 import SurveyParticipate from "./participate";
 
@@ -77,23 +77,45 @@ describe('participate step', () => {
       });
     });
 
-    describe('active tab', () => {
-      test('initially active', () => {
-        const participate = renderParticipate({optedIn: false});
-        assertContains(participate.classesOf('.preview-container'), 'active');
-      });
+    describe('active selection', () => {
+      test('opted out, select is active', () =>
+        assertTrue(isSelectionActive(renderParticipate({optedIn: false}))));
+      test('opted in, select is active', () =>
+        assertTrue(isSelectionActive(renderParticipate({optedIn: true}))));
 
       test('after opting in, active disappears', async () => {
         const participate = renderParticipate({optedIn: false});
         await toggleExperimentOptIn(participate);
-        assertNotContains(participate.classesOf('.preview-container'), 'active');
+        assertFalse(isSelectionActive(participate));
       });
 
       test('after opting out, active disappears', async () => {
         const participate = renderParticipate({optedIn: true});
         await toggleExperimentOptOut(participate);
-        assertNotContains(participate.classesOf('.preview-container'), 'active');
+        assertFalse(isSelectionActive(participate));
       });
+
+      test('when opted nothing', () => {
+        const participate = renderParticipate({optedIn: null});
+        assertFalse(isSelectionActive(participate));
+      });
+
+      test('when opted nothing, after opting in', async () => {
+        const participate = renderParticipate({optedIn: null});
+        await toggleExperimentOptIn(participate);
+        assertFalse(isSelectionActive(participate));
+      });
+
+      test('when opted nothing, after opting and out', async () => {
+        const participate = renderParticipate({optedIn: null});
+        await toggleExperimentOptIn(participate);
+        await toggleExperimentOptOut(participate);
+        assertFalse(isSelectionActive(participate));
+      });
+
+      function isSelectionActive(component: Component) {
+        return component.classesOf('.preview-container').includes('active');
+      }
     });
   });
 
@@ -113,9 +135,19 @@ describe('participate step', () => {
                                imageLegacy = '',
                                imageModern = '',
                                optedIn = false,
-                             } = {}): Component {
+                             }: ExperimentBuilder = {}): Component {
     return render(SurveyParticipate, {
       experiment: {title, optedIn, reason, solution, dueTime, imageLegacy, imageModern},
     });
   }
 });
+
+interface ExperimentBuilder {
+  title?: string;
+  reason?: string;
+  solution?: string;
+  dueTime?: string;
+  imageLegacy?: string;
+  imageModern?: string;
+  optedIn?: boolean | null;
+}

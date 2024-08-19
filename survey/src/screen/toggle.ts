@@ -1,6 +1,6 @@
 import Vue from "vue";
 
-export type ToggleValue = 'first' | 'second';
+export type ToggleValue = 'first' | 'second' | 'none';
 
 interface Instance extends Vue, Data {
   selected: ToggleValue;

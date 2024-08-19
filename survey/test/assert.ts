@@ -5,7 +5,7 @@ export function assertTrue(condition: boolean): void {
 }
 
 export function assertFalse(condition: boolean): void {
-  assertTrue(!condition);
+  assert.equal(condition, false);
 }
 
 export function assertEquals(actual: any, expected: any): void {
