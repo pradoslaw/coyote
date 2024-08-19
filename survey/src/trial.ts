@@ -9,7 +9,7 @@ const solution = 'Proponujemy zmianę, która zakłada uporządkowanie treści w
   '<code>kto?</code>, <code>kiedy?</code>, <code>co?</code>. ' +
   'Dzięki temu szybko uzyskamy informację o autorze komentarza, dacie jego napisania oraz jego treści.';
 
-export const experiment = {
+export const trial = {
   title,
   reason,
   solution,

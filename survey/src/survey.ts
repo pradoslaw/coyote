@@ -2,10 +2,10 @@ import axios from "axios";
 import Vue from "vue";
 
 import store from "../../resources/js/store/index";
-import {experiment} from "./experiment";
 import {type Experiment} from "./screen/screen";
 import {ExperimentOpt} from "./screen/steps/participate";
 import SurveyTally, {type State} from "./tally";
+import {trial} from "./trial";
 
 const survey: Survey = JSON.parse(document.getElementById('survey')!.textContent!);
 
@@ -28,14 +28,16 @@ new Vue({
       :state="state"
       :experiment="experiment"
       @experimentOpt="experimentOpt"
-      @change="change"/>`,
+      @change="change"/>
+  `,
   data(): Data {
+    const experiment: Experiment = {
+      ...trial,
+      optedIn: survey.surveyChoice,
+    };
     return {
       state: survey.surveyState,
-      experiment: {
-        ...experiment,
-        optedIn: survey.surveyChoice,
-      },
+      experiment,
     };
   },
   methods: {
