@@ -76,7 +76,15 @@ export class Component {
   }
 
   classes(): string[] {
-    return [...this.wrapper.element.classList.values()];
+    return this.elementClasses(this.wrapper);
+  }
+
+  classesOf(cssSelector: string): string[] {
+    return this.elementClasses(this.wrapper.find(cssSelector));
+  }
+
+  private elementClasses(wrapper: Wrapper<Vue>): string[] {
+    return [...wrapper.element.classList.values()];
   }
 
   exists(cssSelector: string): boolean {

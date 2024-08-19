@@ -107,7 +107,7 @@
 
         body.theme-light &,
         body.theme-dark & {
-          &.highlight {
+          &.active {
             border: 1px solid #80a41a;
 
             &:before {

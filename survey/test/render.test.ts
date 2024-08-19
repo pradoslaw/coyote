@@ -31,6 +31,11 @@ describe('render', () => {
     const component = render({template: '<a href="foo"/>'});
     assertEquals(component.attributeOf('a', 'href'), 'foo');
   });
+
+  test('find classes by selector', async () => {
+    const component = render({template: '<a class="foo bar"/>'});
+    assertEquals(component.classesOf('a'), ['foo','bar']);
+  });
   
   test('find html by selector', async () => {
     const component = render({template: '<div>foo<p>bar</p></div>'});

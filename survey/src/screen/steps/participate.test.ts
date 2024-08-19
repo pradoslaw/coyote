@@ -1,5 +1,5 @@
 import {describe, test} from '@jest/globals';
-import {assertEquals, assertMatch, assertTrue} from "../../../test/assert";
+import {assertContains, assertEquals, assertMatch, assertNotContains, assertTrue} from "../../../test/assert";
 import {Component, render} from "../../../test/render";
 import SurveyParticipate from "./participate";
 
@@ -64,19 +64,46 @@ describe('participate step', () => {
     describe('experiment opt', () => {
       test('emit event with optIn', async () => {
         const participate = renderParticipate({optedIn: false});
-        await participate.click('.survey-toggle span.second');
+        await toggleExperimentOptIn(participate);
         await participate.click('button.btn-primary');
         assertEquals(participate.emittedValue('experimentOpt'), 'in');
       });
 
       test('emit event with optOut', async () => {
         const participate = renderParticipate({optedIn: true});
-        await participate.click('.survey-toggle span.first');
+        await toggleExperimentOptOut(participate);
         await participate.click('button.btn-primary');
         assertEquals(participate.emittedValue('experimentOpt'), 'out');
       });
     });
+
+    describe('active tab', () => {
+      test('initially active', () => {
+        const participate = renderParticipate({optedIn: false});
+        assertContains(participate.classesOf('.preview-container'), 'active');
+      });
+
+      test('after opting in, active disappears', async () => {
+        const participate = renderParticipate({optedIn: false});
+        await toggleExperimentOptIn(participate);
+        assertNotContains(participate.classesOf('.preview-container'), 'active');
+      });
+
+      test('after opting out, active disappears', async () => {
+        const participate = renderParticipate({optedIn: true});
+        await toggleExperimentOptOut(participate);
+        assertNotContains(participate.classesOf('.preview-container'), 'active');
+      });
+    });
   });
+
+  async function toggleExperimentOptIn(participate: Component): Promise<void> {
+    await participate.click('.survey-toggle span.second');
+  }
+
+  async function toggleExperimentOptOut(participate: Component): Promise<void> {
+    await participate.click('.survey-toggle span.first');
+  }
 
   function renderParticipate({
                                title = '',

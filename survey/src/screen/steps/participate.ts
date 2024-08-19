@@ -26,7 +26,7 @@ export default {
   template: `
     <div class="survey overlay">
       <section class="participate d-flex">
-        <div class="preview-container me-4" :class="{highlight: disabled}">
+        <div class="preview-container me-4" :class="{active: isInitialSelection}">
           <div class="timer">
             Do końca testu:
             <span>
@@ -59,7 +59,7 @@ export default {
             <b>Jak?</b>
             <span v-html="experiment.solution"/>
           </p>
-          <button class="btn btn-primary mt-auto mb-2" @click="experimentOpt" :disabled="disabled">
+          <button class="btn btn-primary mt-auto mb-2" @click="experimentOpt" :disabled="isInitialSelection">
             <i class="fa-solid" :class="selected === 'first' ? 'fa-toggle-off' : 'fa-toggle-on'"/>
             Zapisz wybór
           </button>
@@ -87,7 +87,7 @@ export default {
     },
   },
   computed: {
-    disabled(this: Participate): boolean {
+    isInitialSelection(this: Participate): boolean {
       return this.selected === selected(this.experiment);
     },
   },
