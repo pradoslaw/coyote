@@ -7,6 +7,7 @@ use Coyote\Domain\Administrator\User\Store\UserStore;
 use Coyote\Domain\Administrator\User\View\Activity;
 use Coyote\Domain\Administrator\User\View\Navigation;
 use Coyote\Domain\Administrator\View\Date;
+use Coyote\Domain\Survey\Survey;
 use Coyote\Events\UserDeleted;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Forms\User\AdminForm;
@@ -80,12 +81,12 @@ class UsersController extends BaseController
         ]);
     }
 
-    public function save(User $user): RedirectResponse
+    public function save(User $user, Survey $survey): RedirectResponse
     {
         $form = $this->getForm($user);
         $form->validate();
 
-        $this->transaction(function () use ($user, $form) {
+        $this->transaction(function () use ($survey, $user, $form) {
             $data = $form->all();
             if ($form->get('delete_photo')->isChecked()) {
                 $data['photo'] = null;
@@ -102,9 +103,20 @@ class UsersController extends BaseController
 
             if ($user->guest) {
                 if ($this->request->has('local-settings-action')) {
-                    $modern = $this->request->get('local-settings-action') === 'post-comments-modern';
-                    $user->guest->setSetting('postCommentStyle', $modern ? 'modern' : 'legacy');
+                    $action = $this->request->get('local-settings-action');
+                    if ($action === 'post-comments-modern') {
+                        $user->guest->setSetting('postCommentStyle', 'modern');
+                    }
+                    if ($action === 'post-comments-legacy') {
+                        $user->guest->setSetting('postCommentStyle', 'legacy');
+                    }
                     $user->guest->save();
+                    if ($action === 'survey-none') {
+                        $survey->setState('survey-none');
+                    }
+                    if ($action === 'survey-invited') {
+                        $survey->setState('survey-invited');
+                    }
                 }
             }
         });
