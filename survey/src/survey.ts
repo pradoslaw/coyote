@@ -7,9 +7,12 @@ import {type Experiment} from "./screen/screen";
 import {ExperimentOpt} from "./screen/steps/participate";
 import SurveyTally, {type State} from "./tally";
 
-const survey = JSON.parse(document.getElementById('survey')!.textContent!);
-const surveyState: State = survey['surveyState'];
-const postCommentStyle: ExperimentOpt = survey['surveyChoice'];
+const survey: Survey = JSON.parse(document.getElementById('survey')!.textContent!);
+
+interface Survey {
+  surveyState: State;
+  surveyChoice: ExperimentOpt;
+}
 
 interface Data {
   state: State,
@@ -28,10 +31,10 @@ new Vue({
       @change="change"/>`,
   data(): Data {
     return {
-      state: surveyState,
+      state: survey.surveyState,
       experiment: {
         ...experiment,
-        optedIn: postCommentStyle,
+        optedIn: survey.surveyChoice,
       },
     };
   },
