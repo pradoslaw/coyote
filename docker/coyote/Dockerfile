@@ -10,6 +10,8 @@ COPY webpack.common.js webpack.dev.js webpack.prod.js /app/
 RUN true
 COPY resources /app/resources
 RUN true
+COPY survey /app/survey
+RUN true
 COPY public /app/public
 RUN true
 COPY neon /app/neon

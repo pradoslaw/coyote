@@ -1,0 +1,283 @@
+@import "../../resources/sass/components/floaters";
+
+.survey {
+  &.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1040;
+    backdrop-filter: blur(4px);
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  section {
+    position: absolute;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100vw;
+
+    body.theme-light & {
+      background-color: white;
+    }
+
+    body.theme-dark & {
+      background-color: black;
+    }
+
+    h3 {
+      font-weight: 600;
+      font-size: 1.3em;
+    }
+
+    &.enroll {
+      display: flex;
+
+      .image-container {
+        height: 350px;
+        width: 350px;
+        background-color: #174808;
+        background-image: url('/img/survey/survey.svg');
+        background-size: cover;
+        background-position: center;
+      }
+
+      .main-container {
+        width: 290px;
+        height: 350px;
+        padding: 24px;
+      }
+    }
+
+    &.participate {
+      padding: 24px;
+
+      .content-container {
+        width: 235px;
+      }
+
+      .preview-container {
+        width: 712px;
+      }
+
+      .preview-container {
+        border-radius: 10px;
+        padding: 0 2em 2em;
+
+        text-align: center;
+
+        &:before {
+          content: 'Aktualny wybór';
+          display: inline-block;
+          border-radius: 0 0 3px 3px;
+          padding: 5px 9px;
+          visibility: hidden;
+          background-color: #80a41a;
+
+          body.theme-light & {
+            color: white;
+          }
+
+          body.theme-dark & {
+            color: black;
+          }
+        }
+
+        img {
+          margin-top: 4em;
+          margin-bottom: 4em;
+          max-width: 660px;
+          max-height: 320px;
+        }
+
+        body.theme-light &,
+        body.theme-dark & {
+          &.highlight {
+            border: 1px solid #80a41a;
+
+            &:before {
+              visibility: visible;
+            }
+          }
+        }
+
+        body.theme-light & {
+          border: 1px solid #ddd;
+          background-color: #f6f6f6;
+        }
+
+        body.theme-dark & {
+          border: 1px solid #2f2f2f;
+          background-color: #111;
+        }
+      }
+
+      h3 {
+        font-weight: 600;
+      }
+
+      .timer {
+        font-size: 0.9em;
+        color: #777777;
+        text-align: right;
+
+        body.theme-light & {
+          color: #777;
+        }
+
+        body.theme-dark & {
+          color: #999;
+        }
+
+        span {
+          border-radius: 32px;
+          padding: 4px;
+
+          body.theme-light & {
+            color: #435b00;
+            background: #f3f7e6;
+          }
+
+          body.theme-dark & {
+            color: #f3f7e6;
+            background: #435b00;
+          }
+        }
+      }
+    }
+  }
+
+  .badge {
+    @include floater;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 32px;
+    padding: 8px 8px 8px 16px;
+    font-weight: 400;
+    font-size: 12px;
+
+    button.btn {
+      background-color: #80a41a;
+      border-radius: 32px;
+    }
+
+    body.theme-light & {
+      color: #435b00;
+    }
+
+    body.theme-dark & {
+      color: #bbb;
+    }
+  }
+
+  .survey-toggle {
+    border-radius: 32px;
+    padding: 8px;
+
+    span {
+      cursor: pointer;
+      border-radius: 32px;
+      padding: 8px 16px;
+      display: inline-block;
+
+      &.active {
+        padding: 8px 16px;
+      }
+
+      &.first.active {
+        margin-right: -8px;
+      }
+
+      &.second.active {
+        margin-left: -8px;
+      }
+    }
+
+    body.theme-light & {
+      background: white;
+
+      span {
+        color: #777;
+      }
+
+      span.active {
+        color: #435b00;
+        background: #f3f7e6;
+      }
+    }
+
+    body.theme-dark & {
+      background-color: black;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.125);
+
+      span {
+        color: #bbb;
+      }
+
+      span.active {
+        color: #789b17;
+        background: #141414;
+      }
+    }
+  }
+
+  .survey-tooltip-container {
+    .survey-tooltip {
+      bottom: -18px;
+      right: 40px;
+
+      width: 230px;
+
+      text-wrap: wrap;
+      border-radius: 4px;
+      text-align: left;
+      line-height: 1.25em;
+
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-top: 6px solid transparent;
+        border-bottom: 6px solid transparent;
+        border-left-width: 10px;
+        border-left-style: solid;
+        position: absolute;
+        right: -6px;
+        bottom: 16px;
+        z-index: 2;
+      }
+
+      .btn-notice {
+        border-radius: 4px;
+      }
+
+      body.theme-light & {
+        color: #17181c;
+        background: white;
+
+        &::before {
+          border-left-color: white;
+        }
+      }
+
+      body.theme-dark & {
+        color: #ddd;
+        background: black;
+
+        &::before {
+          border-left-color: black;
+        }
+
+        hr {
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+  }
+}

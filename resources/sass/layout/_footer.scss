@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@import "../components/floaters";
+
 footer {
   .footer-top {
     padding: 10px 0;
@@ -120,35 +122,18 @@ footer {
   }
 
   #scroll-to-top {
+    @include floater;
     box-sizing: content-box;
     font-size: 16px;
     display: none;
     width: 48px;
     height: 48px;
-    border-radius: 32px;
     line-height: 48px;
     position: fixed;
-    z-index: 999;
     right: 32px;
     bottom: 32px;
     text-align: center;
     cursor: pointer;
-
-    body.theme-light & {
-      color: #80a41a;
-      background: #f3f7e6;
-      border: 8px solid white;
-      box-shadow: 0 0 16px rgb(0, 0, 0, 0.15);
-    }
-
-    body.theme-dark & {
-      color: #f3f7e6;
-      background: #80a41a;
-      border: 8px solid transparent;
-      box-shadow: 0 0 16px rgb(255, 255, 255, 0.15);
-      width: 32px;
-      height: 32px;
-      line-height: 32px;
-    }
+    color: #80a41a;
   }
 }

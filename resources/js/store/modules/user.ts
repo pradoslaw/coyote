@@ -26,7 +26,11 @@ const mutations = {
 
   REMOVE_RELATION(state, {userId, isBlocked}) {
     state.followers.splice(state.followers.findIndex(follower => follower.user_id === userId && follower.is_blocked === isBlocked), 1);
-  }
+  },
+
+  changePostStyle(state, style): void {
+    state.user = Object.assign(state.user, {postCommentStyle: style});
+  },
 };
 
 const actions = {

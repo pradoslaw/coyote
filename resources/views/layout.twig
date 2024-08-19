@@ -57,6 +57,7 @@
   {% include 'components.gdpr' %}
 
   <script type="application/json" id="survey">{{ survey|json_encode|raw }}</script>
+  <div id="js-survey"></div>
 
   <header class="{{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }}">
     <div class="navbar-border-top"></div>
