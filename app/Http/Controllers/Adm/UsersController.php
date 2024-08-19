@@ -110,6 +110,9 @@ class UsersController extends BaseController
                     if ($action === 'post-comments-legacy') {
                         $user->guest->setSetting('postCommentStyle', 'legacy');
                     }
+                    if ($action === 'post-comments-none') {
+                        $user->guest->setSetting('postCommentStyle', 'none');
+                    }
                     $user->guest->save();
                     if ($action === 'survey-none') {
                         $survey->setState('survey-none');
