@@ -35,31 +35,31 @@ describe('survey', () => {
 
       describe('user actions', () => {
         test('decline invitation', async () =>
-          assertScreen(await tallyWithEnrollAction('enrollOptOut'), 'none'));
+          assertScreen(await tallyWithInvitedAction('enrollOptOut'), 'none'));
         test('accept invitation', async () =>
-          assertScreen(await tallyWithEnrollAction('enrollOptIn'), 'participate'));
+          assertScreen(await tallyWithInvitedAction('enrollOptIn'), 'participate'));
 
         test('decline invitation, see notification', async () =>
           assertNotification(
-            await tallyWithEnrollAction('enrollOptOut'),
+            await tallyWithInvitedAction('enrollOptOut'),
             'Zmieniaj forum na lepsze!',
             '<i class="fa-solid fa-bug-slash"></i> Wypisano z udziału w testach.'));
 
         test('accept invitation, see notification', async () =>
           assertNotification(
-            await tallyWithEnrollAction('enrollOptIn'),
+            await tallyWithInvitedAction('enrollOptIn'),
             'Zmieniaj forum na lepsze!',
             '<i class="fa-solid fa-flask"></i> Dołączyłeś do testów forum!'));
 
         describe('close participate', () => {
           test('when user is uninstructed', async () =>
             assertScreen(
-              await tallyWithParticipateAction('experimentClose'),
+              await tallyOnParticipateScreen('experimentClose'),
               'badge-tooltip'));
 
           test('when user is instructed', async () =>
             assertScreen(
-              await tallyWithParticipateAction('experimentClose', {}, 'survey-instructed'),
+              await tallyWithInstructedAction('experimentClose'),
               'badge'));
         });
 
@@ -77,28 +77,28 @@ describe('survey', () => {
 
         test('experiment opt-in', async () =>
           assertScreen(
-            await tallyWithParticipateAction('experimentOptIn'),
+            await tallyOnParticipateScreen('experimentOptIn'),
             'badge-tooltip'));
 
         test('experiment opt-out', async () =>
           assertScreen(
-            await tallyWithParticipateAction('experimentOptOut'),
+            await tallyOnParticipateScreen('experimentOptOut'),
             'badge-tooltip'));
 
         test('experiment opt-out, when instructed', async () =>
           assertScreen(
-            await tallyWithParticipateAction('experimentOptOut', {}, 'survey-instructed'),
+            await tallyWithInstructedAction('experimentOptOut'),
             'badge'));
 
         test('experiment opt-in, see notification', async () =>
           assertNotification(
-            await tallyWithParticipateAction('experimentOptIn', {title: 'Foo'}),
+            await tallyOnParticipateScreen('experimentOptIn', {title: 'Foo'}),
             'Foo',
             '<i class="fa-solid fa-toggle-on"></i> Uruchomiono nową wersję.'));
 
         test('experiment opt-out, see notification', async () =>
           assertNotification(
-            await tallyWithParticipateAction('experimentOptOut', {title: 'Foo'}),
+            await tallyOnParticipateScreen('experimentOptOut', {title: 'Foo'}),
             'Foo',
             '<i class="fa-solid fa-toggle-off"></i> Przywrócono pierwotną wersję.'));
       });
@@ -106,34 +106,34 @@ describe('survey', () => {
       describe('notify backend', () => {
         describe('experiment opt', () => {
           test('emit event', async () => {
-            const tally = await tallyWithParticipateAction('experimentOptOut');
+            const tally = await tallyOnParticipateScreen('experimentOptOut');
             assertTrue(tally.emitted('experimentOpt'));
           });
           test("closing doesn't notify", async () => {
-            const tally = await tallyWithParticipateAction('experimentClose');
+            const tally = await tallyOnParticipateScreen('experimentClose');
             assertFalse(tally.emitted('experimentOpt'));
           });
           test('notify experiment opt-out', async () => {
-            const tally = await tallyWithParticipateAction('experimentOptOut');
+            const tally = await tallyOnParticipateScreen('experimentOptOut');
             assertEquals(tally.emittedValue('experimentOpt'), false);
           });
           test('notify experiment opt-in', async () => {
-            const tally = await tallyWithParticipateAction('experimentOptIn');
+            const tally = await tallyOnParticipateScreen('experimentOptIn');
             assertEquals(tally.emittedValue('experimentOpt'), true);
           });
         });
 
         describe('survey state change', () => {
           test('emit event', async () => {
-            const tally = await tallyWithEnrollAction('enrollOptOut');
+            const tally = await tallyWithInvitedAction('enrollOptOut');
             assertTrue(tally.emitted('change'));
           });
           test('decline survey', async () => {
-            const tally = await tallyWithEnrollAction('enrollOptOut');
+            const tally = await tallyWithInvitedAction('enrollOptOut');
             assertEquals(tally.emittedValue('change'), 'survey-declined');
           });
           test('accept survey', async () => {
-            const tally = await tallyWithEnrollAction('enrollOptIn');
+            const tally = await tallyWithInvitedAction('enrollOptIn');
             assertEquals(tally.emittedValue('change'), 'survey-accepted');
           });
           test('notice badge', async () => {
@@ -164,21 +164,28 @@ describe('survey', () => {
         return tally.emitFrom(SurveyScreen, eventName);
       }
 
-      async function tallyWithParticipateAction(eventName: string, experiment?: object, state?: State): Promise<Component> {
-        const tally = await tallyWithEnrollAction('enrollOptIn', experiment, state);
-        await userAction(tally, eventName);
-        return tally;
+      function tallyWithInvitedAction(eventName: string, experiment?: object): Promise<Component> {
+        return tallyWithAction('survey-invited', [eventName], experiment);
       }
 
-      async function tallyWithEnrollAction(eventName: string, experiment?: object, state?: State): Promise<Component> {
-        const tally = renderTally(state || 'survey-invited', experiment);
-        await userAction(tally, eventName);
+      function tallyOnParticipateScreen(eventName: string, experiment?: object): Promise<Component> {
+        return tallyWithAction('survey-invited', ['enrollOptIn', eventName], experiment);
+      }
+
+      function tallyWithInstructedAction(eventName: string): Promise<Component> {
+        return tallyWithAction('survey-instructed', ['badgeEngage', eventName]);
+      }
+
+      async function tallyWithAction(state: State, eventNames: string[], experiment?: object): Promise<Component> {
+        const tally = renderTally(state, experiment);
+        for (const eventName of eventNames) {
+          await userAction(tally, eventName);
+        }
         return tally;
       }
 
       function assertNotification(tally: Component, expectedTitle: string, expectedText: string): void {
         assertEquals(tally.notifications.title(), expectedTitle);
-        assertEquals(tally.notifications.content(), expectedText);
         assertEquals(tally.notifications.content(), expectedText);
       }
     });
