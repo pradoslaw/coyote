@@ -8,7 +8,7 @@ interface Participate extends Vue, Data {
 
 export interface Experiment {
   title: string;
-  optedIn: boolean | null;
+  optedIn: ExperimentOpt;
   dueTime: string;
   reason: string;
   solution: string;
@@ -16,11 +16,11 @@ export interface Experiment {
   imageModern: string;
 }
 
+export type ExperimentOpt = 'none' | 'legacy' | 'modern';
+
 interface Data {
   selected: ToggleValue;
 }
-
-type ExperimentOptValue = ToggleValue | 'none';
 
 export default {
   props: {experiment: {type: Object}},
@@ -74,7 +74,7 @@ export default {
   `,
   data(this: Participate): Data {
     return {
-      selected: selected(this.experiment),
+      selected: this.experiment.optedIn === 'modern' ? 'second' : 'first',
     };
   },
   methods: {
@@ -90,18 +90,17 @@ export default {
   },
   computed: {
     isInitialSelection(this: Participate): boolean {
-      return this.selected === experimentOptedIn(this.experiment);
+      return isPreviewActive(this.experiment.optedIn, this.selected);
     },
   },
 };
 
-function selected(experiment: Experiment): ToggleValue {
-  return experiment.optedIn ? 'second' : 'first';
-}
-
-function experimentOptedIn(experiment: Experiment): ExperimentOptValue {
-  if (experiment.optedIn === null) {
-    return 'none';
+export function isPreviewActive(opt: ExperimentOpt, selected: ToggleValue): boolean {
+  if (opt === 'none') {
+    return false;
   }
-  return experiment.optedIn ? 'second' : 'first';
+  if (opt === 'modern') {
+    return selected === 'second';
+  }
+  return selected === 'first';
 }

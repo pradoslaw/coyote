@@ -115,11 +115,11 @@ describe('survey', () => {
           });
           test('notify experiment opt-out', async () => {
             const tally = await tallyOnParticipateScreen('experimentOptOut');
-            assertEquals(tally.emittedValue('experimentOpt'), false);
+            assertEquals(tally.emittedValue('experimentOpt'), 'legacy');
           });
           test('notify experiment opt-in', async () => {
             const tally = await tallyOnParticipateScreen('experimentOptIn');
-            assertEquals(tally.emittedValue('experimentOpt'), true);
+            assertEquals(tally.emittedValue('experimentOpt'), 'modern');
           });
         });
 

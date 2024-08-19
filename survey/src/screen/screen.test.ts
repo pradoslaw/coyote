@@ -49,14 +49,14 @@ describe('survey screen', () => {
 
     describe('participate', () => {
       test('opt in', async () => {
-        const screen = renderScreen('participate', {optedIn: false});
+        const screen = renderScreen('participate', {optedIn: 'legacy'});
         await screen.click('.survey-toggle span.second');
         await screen.click('button.btn-primary');
         assertTrue(screen.emitted('experimentOptIn'));
       });
 
       test('opt out', async () => {
-        const screen = renderScreen('participate', {optedIn: true});
+        const screen = renderScreen('participate', {optedIn: 'modern'});
         await screen.click('.survey-toggle span.first');
         await screen.click('button.btn-primary');
         assertTrue(screen.emitted('experimentOptOut'));

@@ -1,7 +1,7 @@
 import {describe, test} from '@jest/globals';
 import {assertEquals, assertFalse, assertMatch, assertTrue} from "../../../test/assert";
 import {Component, render} from "../../../test/render";
-import SurveyParticipate from "./participate";
+import SurveyParticipate, {ExperimentOpt, isPreviewActive} from "./participate";
 
 describe('participate step', () => {
   test('render participate title', () => {
@@ -31,12 +31,12 @@ describe('participate step', () => {
     });
 
     test('experiment legacy image', () => {
-      const participate: Component = renderParticipate({imageLegacy: 'foo.png'});
+      const participate: Component = renderParticipate({imageLegacy: 'foo.png', optedIn: 'legacy'});
       assertEquals(participate.attributeOf('img', 'src'), 'foo.png');
     });
 
     test('experiment modern image', async () => {
-      const participate: Component = renderParticipate({imageModern: 'bar.png', optedIn: true});
+      const participate: Component = renderParticipate({imageModern: 'bar.png', optedIn: 'modern'});
       assertEquals(participate.attributeOf('img', 'src'), 'bar.png');
     });
 
@@ -52,25 +52,25 @@ describe('participate step', () => {
 
     describe('experiment opted', () => {
       test('opted in', () => {
-        const participate = renderParticipate({optedIn: true});
+        const participate = renderParticipate({optedIn: 'modern'});
         assertTrue(participate.exists('.survey-toggle .second.active'));
       });
       test('opted out', () => {
-        const participate = renderParticipate({optedIn: false});
+        const participate = renderParticipate({optedIn: 'legacy'});
         assertTrue(participate.exists('.survey-toggle .first.active'));
       });
     });
 
     describe('experiment opt', () => {
       test('emit event with optIn', async () => {
-        const participate = renderParticipate({optedIn: false});
+        const participate = renderParticipate({optedIn: 'legacy'});
         await toggleExperimentOptIn(participate);
         await participate.click('button.btn-primary');
         assertEquals(participate.emittedValue('experimentOpt'), 'in');
       });
 
       test('emit event with optOut', async () => {
-        const participate = renderParticipate({optedIn: true});
+        const participate = renderParticipate({optedIn: 'modern'});
         await toggleExperimentOptOut(participate);
         await participate.click('button.btn-primary');
         assertEquals(participate.emittedValue('experimentOpt'), 'out');
@@ -79,35 +79,35 @@ describe('participate step', () => {
 
     describe('active selection', () => {
       test('opted out, select is active', () =>
-        assertTrue(isSelectionActive(renderParticipate({optedIn: false}))));
+        assertTrue(isSelectionActive(renderParticipate({optedIn: 'legacy'}))));
       test('opted in, select is active', () =>
-        assertTrue(isSelectionActive(renderParticipate({optedIn: true}))));
+        assertTrue(isSelectionActive(renderParticipate({optedIn: 'modern'}))));
 
       test('after opting in, active disappears', async () => {
-        const participate = renderParticipate({optedIn: false});
+        const participate = renderParticipate({optedIn: 'legacy'});
         await toggleExperimentOptIn(participate);
         assertFalse(isSelectionActive(participate));
       });
 
       test('after opting out, active disappears', async () => {
-        const participate = renderParticipate({optedIn: true});
+        const participate = renderParticipate({optedIn: 'modern'});
         await toggleExperimentOptOut(participate);
         assertFalse(isSelectionActive(participate));
       });
 
       test('when opted nothing', () => {
-        const participate = renderParticipate({optedIn: null});
+        const participate = renderParticipate({optedIn: 'none'});
         assertFalse(isSelectionActive(participate));
       });
 
       test('when opted nothing, after opting in', async () => {
-        const participate = renderParticipate({optedIn: null});
+        const participate = renderParticipate({optedIn: 'none'});
         await toggleExperimentOptIn(participate);
         assertFalse(isSelectionActive(participate));
       });
 
       test('when opted nothing, after opting and out', async () => {
-        const participate = renderParticipate({optedIn: null});
+        const participate = renderParticipate({optedIn: 'none'});
         await toggleExperimentOptIn(participate);
         await toggleExperimentOptOut(participate);
         assertFalse(isSelectionActive(participate));
@@ -116,6 +116,17 @@ describe('participate step', () => {
       function isSelectionActive(component: Component) {
         return component.classesOf('.preview-container').includes('active');
       }
+    });
+  });
+
+  describe('isPreviewActive()', () => {
+    test('choice legacy is active with first option', () => assertTrue(isPreviewActive("legacy", 'first')));
+    test('choice legacy is not active with first option', () => assertFalse(isPreviewActive("legacy", 'second')));
+    test('choice modern is active with second option', () => assertTrue(isPreviewActive("modern", 'second')));
+    test('choice modern is not active with first option', () => assertFalse(isPreviewActive("modern", 'first')));
+    test('choice none is not active with first or second option', () => {
+      assertFalse(isPreviewActive("none", 'first'));
+      assertFalse(isPreviewActive("none", 'second'));
     });
   });
 
@@ -134,7 +145,7 @@ describe('participate step', () => {
                                dueTime = '',
                                imageLegacy = '',
                                imageModern = '',
-                               optedIn = false,
+                               optedIn = 'legacy',
                              }: ExperimentBuilder = {}): Component {
     return render(SurveyParticipate, {
       experiment: {title, optedIn, reason, solution, dueTime, imageLegacy, imageModern},
@@ -149,5 +160,5 @@ interface ExperimentBuilder {
   dueTime?: string;
   imageLegacy?: string;
   imageModern?: string;
-  optedIn?: boolean | null;
+  optedIn?: ExperimentOpt;
 }

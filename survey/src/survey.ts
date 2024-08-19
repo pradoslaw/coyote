@@ -4,13 +4,12 @@ import Vue from "vue";
 import store from "../../resources/js/store/index";
 import {experiment} from "./experiment";
 import {type Experiment} from "./screen/screen";
+import {ExperimentOpt} from "./screen/steps/participate";
 import SurveyTally, {type State} from "./tally";
-
-type PostStyle = 'modern' | 'legacy';
 
 const survey = JSON.parse(document.getElementById('survey')!.textContent!);
 const surveyState: State = survey['surveyState'];
-const postCommentStyle: PostStyle | 'none' = survey['surveyChoice'];
+const postCommentStyle: ExperimentOpt = survey['surveyChoice'];
 
 interface Data {
   state: State,
@@ -32,12 +31,12 @@ new Vue({
       state: surveyState,
       experiment: {
         ...experiment,
-        optedIn: postCommentStyle === 'modern',
+        optedIn: postCommentStyle,
       },
     };
   },
   methods: {
-    experimentOpt(optIn: boolean): void {
+    experimentOpt(optIn: ExperimentOpt): void {
       this.experiment.optedIn = optIn;
       experimentChangeStyle(optIn ? 'modern' : 'legacy');
     },
@@ -48,7 +47,7 @@ new Vue({
   },
 });
 
-function experimentChangeStyle(style: PostStyle): void {
+function experimentChangeStyle(style: ExperimentOpt): void {
   store.commit('user/changePostStyle', style);
   axios.post('/User/Settings/Ajax', {postCommentStyle: style});
 }

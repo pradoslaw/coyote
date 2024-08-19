@@ -58,7 +58,7 @@ export default {
     },
     experimentOpt(this: Instance, optIn: boolean): void {
       this.experimentClose();
-      this.$emit('experimentOpt', optIn);
+      this.$emit('experimentOpt', optIn ? 'modern' : 'legacy');
       if (optIn) {
         this.notifyExperiment('Uruchomiono nową wersję.', 'fa-toggle-on');
       } else {
