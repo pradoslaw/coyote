@@ -1,5 +1,5 @@
 import {describe, test} from '@jest/globals';
-import {assertEquals, assertFalse, assertMatch, assertTrue} from "../../../test/assert";
+import {assertEquals, assertMatch, assertTrue} from "../../../test/assert";
 import {Component, render} from "../../../test/render";
 import SurveyParticipate from "./participate";
 
@@ -28,6 +28,16 @@ describe('participate step', () => {
     test('experiment solution', () => {
       const participate: Component = renderParticipate({solution: 'dolor sit'});
       assertEquals(participate.textBy('p.solution span'), 'dolor sit');
+    });
+
+    test('experiment legacy image', () => {
+      const participate: Component = renderParticipate({imageLegacy: 'foo.png'});
+      assertEquals(participate.attributeOf('img', 'src'), 'foo.png');
+    });
+
+    test('experiment modern image', async () => {
+      const participate: Component = renderParticipate({imageModern: 'bar.png', optedIn: true});
+      assertEquals(participate.attributeOf('img', 'src'), 'bar.png');
     });
 
     test('experiment due time', () => {
@@ -73,10 +83,12 @@ describe('participate step', () => {
                                reason = '',
                                solution = '',
                                dueTime = '',
+                               imageLegacy = '',
+                               imageModern = '',
                                optedIn = false,
                              } = {}): Component {
     return render(SurveyParticipate, {
-      experiment: {title, optedIn, reason, solution, dueTime},
+      experiment: {title, optedIn, reason, solution, dueTime, imageLegacy, imageModern},
     });
   }
 });

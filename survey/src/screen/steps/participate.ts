@@ -12,6 +12,8 @@ export interface Experiment {
   dueTime: string;
   reason: string;
   solution: string;
+  imageLegacy: string;
+  imageModern: string;
 }
 
 interface Data {
@@ -33,8 +35,8 @@ export default {
             </span>
           </div>
           <div class="d-flex justify-content-center">
-            <img src="/img/survey/postCommentStyleLegacy.png?v3" alt="Legacy post comment style" v-if="selected === 'first'"/>
-            <img src="/img/survey/postCommentStyleModern.png?v5" alt="Modern post comment style" v-else/>
+            <img :src="experiment.imageLegacy" alt="Legacy post comment style" v-if="selected === 'first'"/>
+            <img :src="experiment.imageModern" alt="Modern post comment style" v-else/>
           </div>
           <div class="d-flex justify-content-center">
             <vue-toggle

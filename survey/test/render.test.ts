@@ -27,6 +27,11 @@ describe('render', () => {
     assertEquals(component.textBy('div p'), 'bar');
   });
 
+  test('find attribute by selector', async () => {
+    const component = render({template: '<a href="foo"/>'});
+    assertEquals(component.attributeOf('a', 'href'), 'foo');
+  });
+  
   test('find html by selector', async () => {
     const component = render({template: '<div>foo<p>bar</p></div>'});
     assertEquals(component.innerHtml('div'), 'foo<p>bar</p>');

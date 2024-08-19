@@ -38,6 +38,10 @@ export class Component {
     return this.wrapper.find(cssSelector).text();
   }
 
+  attributeOf(cssSelector: string, attribute: string): string {
+    return this.wrapper.find(cssSelector).attributes()[attribute];
+  }
+
   innerHtml(cssSelector: string): string {
     return this.wrapper.find(cssSelector).element.innerHTML;
   }
