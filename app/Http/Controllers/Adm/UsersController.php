@@ -97,7 +97,7 @@ class UsersController extends BaseController
         ]);
     }
 
-    private function formatJson(array $object): string
+    private function formatJson(?array $object): string
     {
         return \json_encode($object, \JSON_PRETTY_PRINT);
     }
