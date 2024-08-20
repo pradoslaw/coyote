@@ -7,6 +7,7 @@ import {ExperimentOpt} from "./screen/steps/participate";
 import SurveyTally, {type State} from "./tally";
 import {trial} from "./trial";
 
+const darkTheme: boolean = document.body.classList.contains('theme-dark');
 const survey: Survey = JSON.parse(document.getElementById('survey')!.textContent!);
 
 interface Survey {
@@ -34,6 +35,7 @@ new Vue({
   data(): Data {
     const experiment: Experiment = {
       ...trial,
+      ...darkTheme ? trial.dark : trial.light,
       optedIn: survey.surveyChoice,
     };
     return {

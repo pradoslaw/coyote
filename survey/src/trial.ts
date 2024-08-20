@@ -14,8 +14,14 @@ export const trial = {
   reason,
   solution,
   dueTime: diffFormat(secondsUntil('2024-08-20 14:00:00')),
-  imageLegacy: '/img/survey/postCommentStyle/legacy.png',
-  imageModern: '/img/survey/postCommentStyle/modern.png',
+  light: {
+    imageLegacy: '/img/survey/postCommentStyle/legacy.light.png',
+    imageModern: '/img/survey/postCommentStyle/modern.light.png',
+  },
+  dark: {
+    imageLegacy: '/img/survey/postCommentStyle/legacy.dark.png',
+    imageModern: '/img/survey/postCommentStyle/modern.dark.png',
+  },
 };
 
 function secondsUntil(dateFormat: string): number {
