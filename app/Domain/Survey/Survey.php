@@ -5,7 +5,7 @@ use Coyote\Services\Guest;
 
 readonly class Survey
 {
-    public function __construct(private Guest $guest)
+    public function __construct(private Guest $guest, private Clock $clock)
     {
     }
 
@@ -62,7 +62,7 @@ readonly class Survey
         $this->guest->setSetting($setting, $value);
         $this->guest->setSetting('surveyLog', [
             ...$this->guest->getSettings()['surveyLog'] ?? [],
-            $value,
+            [$this->clock->time(), $value],
         ]);
     }
 }

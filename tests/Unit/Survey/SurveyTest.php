@@ -17,6 +17,7 @@ class SurveyTest extends TestCase
     private string $guestId;
     private Guest $guest;
     private Survey $survey;
+    private MemoryClock $clock;
 
     #[Before]
     public function createGuestForSurvey(): void
@@ -24,7 +25,8 @@ class SurveyTest extends TestCase
         $this->guestId = $this->randomUuid();
         $this->guest = new Guest($this->guestId);
         $this->laravel->app->instance(Guest::class, $this->guest);
-        $this->survey = new Survey($this->guest);
+        $this->clock = new MemoryClock();
+        $this->survey = new Survey($this->guest, $this->clock);
     }
 
     private function randomUuid(): string
@@ -77,12 +79,6 @@ class SurveyTest extends TestCase
     public function scriptJsonHasSurveyId(): void
     {
         $this->assertSame('survey', $this->viewDom()->findString('//script[@type="application/json"]/@id'));
-    }
-
-    private function assertGuestSetting(string|array $expectedValue, string $settingName): void
-    {
-        $guestSettings = $this->guestSettings();
-        $this->assertSame($expectedValue, $guestSettings[$settingName]);
     }
 
     private function surveyViewInput(): array
@@ -184,7 +180,7 @@ class SurveyTest extends TestCase
     public function logStateChange(): void
     {
         $this->survey->setState('survey-accepted');
-        $this->assertGuestSetting(['survey-accepted'], 'surveyLog');
+        $this->assertSurveyLogValues(['survey-accepted']);
     }
 
     #[Test]
@@ -192,15 +188,33 @@ class SurveyTest extends TestCase
     {
         $this->survey->setState('survey-accepted');
         $this->survey->setState('survey-declined');
-        $this->assertGuestSetting(['survey-accepted', 'survey-declined'], 'surveyLog');
+        $this->assertSurveyLogValues(['survey-accepted', 'survey-declined']);
     }
 
-    private function guestSettings(): array
+    private function assertSurveyLogValues(array $expectedValue): void
+    {
+        $this->assertSame($expectedValue, \array_column($this->guestSettings('surveyLog'), 1));
+    }
+
+    #[Test]
+    public function logTime(): void
+    {
+        $this->clock->setTime('2024');
+        $this->survey->setState('survey-accepted');
+        $this->assertGuestSetting([['2024', 'survey-accepted']], 'surveyLog');
+    }
+
+    private function assertGuestSetting(string|array $expectedValue, string $settingName): void
+    {
+        $this->assertSame($expectedValue, $this->guestSettings($settingName));
+    }
+
+    private function guestSettings(string $key): array|string
     {
         $jsonSettings = $this->laravel->databaseTable('guests')
             ->where('id', $this->guestId)
             ->first('settings')
             ->settings;
-        return \json_decode($jsonSettings, associative:true);
+        return \json_decode($jsonSettings, associative:true)[$key];
     }
 }
