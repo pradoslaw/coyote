@@ -95,7 +95,7 @@ export default {
   },
 };
 
-export function isPreviewActive(opt: ExperimentOpt, selected: ToggleValue): boolean {
+function isPreviewActive(opt: ExperimentOpt, selected: ToggleValue): boolean {
   if (opt === 'none') {
     return false;
   }

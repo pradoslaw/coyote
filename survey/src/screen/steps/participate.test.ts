@@ -1,7 +1,9 @@
 import {describe, test} from '@jest/globals';
+
 import {assertEquals, assertFalse, assertMatch, assertTrue} from "../../../test/assert";
 import {Component, render} from "../../../test/render";
-import SurveyParticipate, {ExperimentOpt, isPreviewActive} from "./participate";
+import type {ToggleValue} from "../toggle";
+import SurveyParticipate, {ExperimentOpt} from "./participate";
 
 describe('participate step', () => {
   test('render participate title', () => {
@@ -113,22 +115,41 @@ describe('participate step', () => {
         assertFalse(isSelectionActive(participate));
       });
 
-      function isSelectionActive(component: Component) {
-        return component.classesOf('.preview-container').includes('active');
-      }
     });
   });
 
   describe('isPreviewActive()', () => {
-    test('choice legacy is active with first option', () => assertTrue(isPreviewActive("legacy", 'first')));
-    test('choice legacy is not active with first option', () => assertFalse(isPreviewActive("legacy", 'second')));
-    test('choice modern is active with second option', () => assertTrue(isPreviewActive("modern", 'second')));
-    test('choice modern is not active with first option', () => assertFalse(isPreviewActive("modern", 'first')));
-    test('choice none is not active with first or second option', () => {
-      assertFalse(isPreviewActive("none", 'first'));
-      assertFalse(isPreviewActive("none", 'second'));
+    test('choice legacy is active with first option', async () =>
+      assertTrue(await isPreviewActive("legacy", 'first')));
+
+    test('choice legacy is not active with first option', async () =>
+      assertFalse(await isPreviewActive("legacy", 'second')));
+
+    test('choice modern is active with second option', async () =>
+      assertTrue(await isPreviewActive("modern", 'second')));
+
+    test('choice modern is not active with first option', async () =>
+      assertFalse(await isPreviewActive("modern", 'first')));
+
+    test('choice none is not active with first or second option', async () => {
+      assertFalse(await isPreviewActive("none", 'first'));
+      assertFalse(await isPreviewActive("none", 'second'));
     });
+
+    async function isPreviewActive(opt: ExperimentOpt, selected: ToggleValue): Promise<boolean> {
+      const participate = renderParticipate({optedIn: opt});
+      if (selected === 'first') {
+        await toggleExperimentOptOut(participate);
+      } else {
+        await toggleExperimentOptIn(participate);
+      }
+      return isSelectionActive(participate);
+    }
   });
+
+  function isSelectionActive(component: Component): boolean {
+    return component.classesOf('.preview-container').includes('active');
+  }
 
   async function toggleExperimentOptIn(participate: Component): Promise<void> {
     await participate.click('.survey-toggle span.second');
