@@ -86,6 +86,7 @@ export default {
     },
     toggleChange(this: Participate, value: ToggleValue): void {
       this.selected = value;
+      this.$emit('experimentPreview', this.selected === 'second' ? 'in' : 'out');
     },
   },
   computed: {

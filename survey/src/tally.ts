@@ -37,6 +37,7 @@ export default {
       @experimentClose="experimentClose"
       @experimentOptIn="experimentOpt(true)"
       @experimentOptOut="experimentOpt(false)"
+      @experimentPreview="experimentPreview"
       @badgeEngage="badgeEngage"
       @badgeNotice="badgeNotice"
     />`,
@@ -64,6 +65,9 @@ export default {
       } else {
         this.notifyExperiment('Przywrócono pierwotną wersję.', 'fa-toggle-off');
       }
+    },
+    experimentPreview(this: Vue): void {
+      this.$emit('experimentPreview');
     },
     experimentClose(this: Instance): void {
       if (this.state === 'survey-instructed') {

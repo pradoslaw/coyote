@@ -24,6 +24,7 @@ export default {
         v-if="screen === 'participate'"
         :experiment="experiment"
         @experimentOpt="experimentOpt"
+        @experimentPreview="experimentPreview"
         @close="experimentClose"
       />
       <vue-survey-badge
@@ -52,6 +53,9 @@ export default {
       } else {
         this.$emit('experimentOptOut');
       }
+    },
+    experimentPreview(this: Vue, opt: string): void {
+      this.$emit('experimentPreview', opt);
     },
     experimentClose(this: Vue): void {
       this.$emit('experimentClose');

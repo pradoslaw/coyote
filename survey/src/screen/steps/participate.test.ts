@@ -114,7 +114,6 @@ describe('participate step', () => {
         await toggleExperimentOptOut(participate);
         assertFalse(isSelectionActive(participate));
       });
-
     });
   });
 
@@ -145,6 +144,19 @@ describe('participate step', () => {
       }
       return isSelectionActive(participate);
     }
+  });
+
+  describe('notify about choice preview', () => {
+    test('preview modern', async () => {
+      const participate = renderParticipate({optedIn: 'modern'});
+      await toggleExperimentOptOut(participate);
+      assertEquals(participate.emittedValue('experimentPreview'), 'out');
+    });
+    test('preview legacy', async () => {
+      const participate = renderParticipate({optedIn: 'legacy'});
+      await toggleExperimentOptIn(participate);
+      assertEquals(participate.emittedValue('experimentPreview'), 'in');
+    });
   });
 
   function isSelectionActive(component: Component): boolean {

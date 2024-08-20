@@ -123,6 +123,13 @@ describe('survey', () => {
           });
         });
 
+        describe('experiment preview', () => {
+          test('notify about experiment preview', async () => {
+            const tally = await tallyOnParticipateScreen('experimentPreview');
+            assertTrue(tally.emitted('experimentPreview'));
+          });
+        });
+
         describe('survey state change', () => {
           test('emit event', async () => {
             const tally = await tallyWithInvitedAction('enrollOptOut');

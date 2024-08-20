@@ -62,6 +62,13 @@ describe('survey screen', () => {
         assertTrue(screen.emitted('experimentOptOut'));
       });
 
+      test('preview', async () => {
+        const screen = renderScreen('participate', {optedIn: 'modern'});
+        await screen.click('.survey-toggle span.first');
+        assertTrue(screen.emitted('experimentPreview'));
+        assertEquals(screen.emittedValue('experimentPreview'), 'out');
+      });
+
       test('close', async () => {
         const screen = renderScreen('participate');
         await screen.click('button.btn.btn-secondary');
