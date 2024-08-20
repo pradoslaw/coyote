@@ -57,9 +57,19 @@ readonly class Survey
         return 'none';
     }
 
+    public function preview(string $value): void
+    {
+        $this->logValue("preview-$value");
+    }
+
     private function setSetting(string $setting, string $value): void
     {
         $this->guest->setSetting($setting, $value);
+        $this->logValue($value);
+    }
+
+    private function logValue(string $value): void
+    {
         $this->guest->setSetting('surveyLog', [
             ...$this->guest->getSettings()['surveyLog'] ?? [],
             [$this->clock->time(), $value],

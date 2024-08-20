@@ -66,8 +66,8 @@ export default {
         this.notifyExperiment('Przywrócono pierwotną wersję.', 'fa-toggle-off');
       }
     },
-    experimentPreview(this: Vue): void {
-      this.$emit('experimentPreview');
+    experimentPreview(this: Vue, opt: string): void {
+      this.$emit('experimentPreview', opt === 'out' ? 'legacy' : 'modern');
     },
     experimentClose(this: Instance): void {
       if (this.state === 'survey-instructed') {

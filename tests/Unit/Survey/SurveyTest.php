@@ -204,6 +204,20 @@ class SurveyTest extends TestCase
         $this->assertGuestSetting([['2024', 'survey-accepted']], 'surveyLog');
     }
 
+    #[Test]
+    public function logPreviewModern(): void
+    {
+        $this->laravel->post('/survey', ['surveyChoicePreview' => 'modern'])->assertSuccessful();
+        $this->assertSurveyLogValues(['preview-modern']);
+    }
+
+    #[Test]
+    public function logPreviewLegacy(): void
+    {
+        $this->laravel->post('/survey', ['surveyChoicePreview' => 'legacy'])->assertSuccessful();
+        $this->assertSurveyLogValues(['preview-legacy']);
+    }
+
     private function assertGuestSetting(string|array $expectedValue, string $settingName): void
     {
         $this->assertSame($expectedValue, $this->guestSettings($settingName));

@@ -17,6 +17,10 @@ class HomeController extends Controller
             $survey->setChoice($this->request->get('surveyChoice'));
             return null;
         }
+        if ($this->request->has('surveyChoicePreview')) {
+            $survey->preview($this->request->get('surveyChoicePreview'));
+            return null;
+        }
         return response(status:422);
     }
 }

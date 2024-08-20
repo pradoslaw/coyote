@@ -28,6 +28,7 @@ new Vue({
       :state="state"
       :experiment="experiment"
       @experimentOpt="experimentOpt"
+      @experimentPreview="experimentPreview"
       @change="change"/>
   `,
   data(): Data {
@@ -45,6 +46,9 @@ new Vue({
       this.experiment.optedIn = optIn;
       experimentChangeStyle(optIn ? 'modern' : 'legacy');
     },
+    experimentPreview(opt: ExperimentOpt): void {
+      storeSurveyPreview(opt);
+    },
     change(state: State): void {
       storeSurveyState(state);
       this.state = state;
@@ -59,4 +63,8 @@ function experimentChangeStyle(style: ExperimentOpt): void {
 
 function storeSurveyState(surveyState: State): void {
   axios.post('/survey', {surveyState});
+}
+
+function storeSurveyPreview(surveyChoicePreview: ExperimentOpt): void {
+  axios.post('/survey', {surveyChoicePreview});
 }

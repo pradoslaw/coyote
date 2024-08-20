@@ -99,12 +99,12 @@ export class Component {
     return this.wrapper.findComponent(child);
   }
 
-  async emitFrom(child: object, eventName: string): Promise<void> {
-    await this.emit(this.child(child).vm, eventName);
+  async emitFrom(child: object, eventName: string, args: any[] = []): Promise<void> {
+    await this.emit(this.child(child).vm, eventName, args);
   }
 
-  private async emit(child: Vue, eventName: string): Promise<void> {
-    child.$emit(eventName);
+  private async emit(child: Vue, eventName: string, args: any[]): Promise<void> {
+    child.$emit(eventName, ...args);
     await child.$nextTick();
   }
 }

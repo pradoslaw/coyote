@@ -125,9 +125,20 @@ describe('survey', () => {
 
         describe('experiment preview', () => {
           test('notify about experiment preview', async () => {
-            const tally = await tallyOnParticipateScreen('experimentPreview');
-            assertTrue(tally.emitted('experimentPreview'));
+            const tally = await tallyWithExperimentPreview('in');
+            assertEquals(tally.emittedValue('experimentPreview'), 'modern');
           });
+          test('notify about experiment preview', async () => {
+            const tally = await tallyWithExperimentPreview('out');
+            assertEquals(tally.emittedValue('experimentPreview'), 'legacy');
+          });
+
+          async function tallyWithExperimentPreview(arg: string): Promise<Component> {
+            const tally = renderTally('survey-invited');
+            await userAction(tally, 'enrollOptIn');
+            await userAction(tally, 'experimentPreview', [arg]);
+            return tally;
+          }
         });
 
         describe('survey state change', () => {
@@ -167,8 +178,8 @@ describe('survey', () => {
         return render(VueTally, {state, experiment: experiment || {}});
       }
 
-      function userAction(tally: Component, eventName: string): Promise<void> {
-        return tally.emitFrom(SurveyScreen, eventName);
+      function userAction(tally: Component, eventName: string, args: any[] = []): Promise<void> {
+        return tally.emitFrom(SurveyScreen, eventName, args);
       }
 
       function tallyWithInvitedAction(eventName: string, experiment?: object): Promise<Component> {

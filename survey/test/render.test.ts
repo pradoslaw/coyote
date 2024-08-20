@@ -105,7 +105,7 @@ describe('render', () => {
       assertEquals(parent.passedTo(inner, 'foo'), 'bar');
     });
 
-    test('emit properties from children', () => {
+    test('emit events from children', () => {
       const inner = {template: '<div/>'};
       let received = false;
       const parent = render({
@@ -136,6 +136,22 @@ describe('render', () => {
       });
       await parent.emitFrom(inner, 'foo');
       assertEquals(parent.text(), 'after');
+    });
+
+    test('emit properties from children', () => {
+      const inner = {template: '<div/>'};
+      let received = null;
+      const parent = render({
+        components: {inner},
+        template: '<inner @foo="received"/>',
+        methods: {
+          received(argument): void {
+            received = argument;
+          },
+        },
+      });
+      parent.emitFrom(inner, 'foo', ['bar']);
+      assertEquals(received, 'bar');
     });
   });
 
