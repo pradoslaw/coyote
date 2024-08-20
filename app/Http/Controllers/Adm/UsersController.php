@@ -74,11 +74,32 @@ class UsersController extends BaseController
     {
         $this->breadcrumb->push("@$user->name", route('adm.users.show', [$user->id]));
         $this->breadcrumb->push('Ustawienia konta', route('adm.users.save', [$user->id]));
+        [$userSettings, $surveyLog] = $this->userSettings($user);
         return $this->view('adm.users.save', [
             'user'         => $user,
             'form'         => $this->getForm($user),
-            'userSettings' => \json_encode($user->guest?->settings, \JSON_PRETTY_PRINT),
+            'userSettings' => $this->formatJson($userSettings),
+            'surveyLog'    => $this->formatJson($surveyLog),
         ]);
+    }
+
+    private function userSettings(User $user): array
+    {
+        $userSettings = \array_diff_key($user->guest?->settings, ['surveyLog' => null]);
+        $surveyLog = $user->guest?->settings['surveyLog'] ?? null;
+        return [$userSettings, $surveyLog];
+    }
+
+    protected function getForm(User $user): Form
+    {
+        return $this->createForm(AdminForm::class, $user, [
+            'url' => route('adm.users.save', [$user->id]),
+        ]);
+    }
+
+    private function formatJson(array $object): string
+    {
+        return \json_encode($object, \JSON_PRETTY_PRINT);
     }
 
     public function save(User $user, Survey $survey): RedirectResponse
@@ -128,12 +149,5 @@ class UsersController extends BaseController
         });
 
         return back()->with('success', 'Zmiany zostały poprawie zapisane');
-    }
-
-    protected function getForm(User $user): Form
-    {
-        return $this->createForm(AdminForm::class, $user, [
-            'url' => route('adm.users.save', [$user->id]),
-        ]);
     }
 }
