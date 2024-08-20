@@ -5,6 +5,7 @@ use Coyote\Domain\Github\GithubStars;
 use Illuminate\Config;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Bootstrap\LoadConfiguration;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
@@ -77,5 +78,10 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
     public function assertSeeInDatabase(string $table, array $data): void
     {
         $this->assertDatabaseHas($table, $data);
+    }
+
+    public function databaseTable(string $table): Builder
+    {
+        return $this->getConnection(null, $table)->table($table);
     }
 }

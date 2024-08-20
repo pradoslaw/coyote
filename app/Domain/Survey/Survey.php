@@ -11,12 +11,12 @@ readonly class Survey
 
     public function setState(string $state): void
     {
-        $this->guest->setSetting('surveyState', $state);
+        $this->setSetting('surveyState', $state);
     }
 
     public function setChoice(string $choice): void
     {
-        $this->guest->setSetting('postCommentStyle', $choice);
+        $this->setSetting('postCommentStyle', $choice);
     }
 
     public function state(): string
@@ -55,5 +55,14 @@ readonly class Survey
             return $style;
         }
         return 'none';
+    }
+
+    private function setSetting(string $setting, string $value): void
+    {
+        $this->guest->setSetting($setting, $value);
+        $this->guest->setSetting('surveyLog', [
+            ...$this->guest->getSettings()['surveyLog'] ?? [],
+            $value,
+        ]);
     }
 }

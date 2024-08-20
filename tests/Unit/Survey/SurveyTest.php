@@ -57,7 +57,7 @@ class SurveyTest extends TestCase
     public function storeInvitation_inGuestSettings(): void
     {
         $this->survey->setState('survey-invited');
-        $this->assertGuestSettings(['surveyState' => 'survey-invited']);
+        $this->assertGuestSetting('survey-invited', 'surveyState');
     }
 
     #[Test]
@@ -79,12 +79,10 @@ class SurveyTest extends TestCase
         $this->assertSame('survey', $this->viewDom()->findString('//script[@type="application/json"]/@id'));
     }
 
-    private function assertGuestSettings(array $expectedSettings): void
+    private function assertGuestSetting(string|array $expectedValue, string $settingName): void
     {
-        $this->laravel->assertSeeInDatabase('guests', [
-            'id'       => $this->guestId,
-            'settings' => \json_encode($expectedSettings),
-        ]);
+        $guestSettings = $this->guestSettings();
+        $this->assertSame($expectedValue, $guestSettings[$settingName]);
     }
 
     private function surveyViewInput(): array
@@ -147,7 +145,7 @@ class SurveyTest extends TestCase
     public function storeInvalidStateInSettings_forFutureReuse(): void
     {
         $this->survey->setState('foo-bar');
-        $this->assertGuestSettings(['surveyState' => 'foo-bar']);
+        $this->assertGuestSetting('foo-bar', 'surveyState');
     }
 
     #[Test]
@@ -180,5 +178,29 @@ class SurveyTest extends TestCase
     {
         $response = $this->laravel->post('/survey');
         $this->assertSame(422, $response->status());
+    }
+
+    #[Test]
+    public function logStateChange(): void
+    {
+        $this->survey->setState('survey-accepted');
+        $this->assertGuestSetting(['survey-accepted'], 'surveyLog');
+    }
+
+    #[Test]
+    public function logMultipleStateChanges(): void
+    {
+        $this->survey->setState('survey-accepted');
+        $this->survey->setState('survey-declined');
+        $this->assertGuestSetting(['survey-accepted', 'survey-declined'], 'surveyLog');
+    }
+
+    private function guestSettings(): array
+    {
+        $jsonSettings = $this->laravel->databaseTable('guests')
+            ->where('id', $this->guestId)
+            ->first('settings')
+            ->settings;
+        return \json_decode($jsonSettings, associative:true);
     }
 }
