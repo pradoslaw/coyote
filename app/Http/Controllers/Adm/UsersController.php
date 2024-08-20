@@ -7,6 +7,7 @@ use Coyote\Domain\Administrator\User\Store\UserStore;
 use Coyote\Domain\Administrator\User\View\Activity;
 use Coyote\Domain\Administrator\User\View\Navigation;
 use Coyote\Domain\Administrator\View\Date;
+use Coyote\Domain\Survey\Clock;
 use Coyote\Domain\Survey\Survey;
 use Coyote\Events\UserDeleted;
 use Coyote\Events\UserSaved;
@@ -15,6 +16,7 @@ use Coyote\Http\Grids\Adm\UsersGrid;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Services\FormBuilder\Form;
+use Coyote\Services\Guest;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
 use Coyote\User;
@@ -102,12 +104,12 @@ class UsersController extends BaseController
         return \json_encode($object, \JSON_PRETTY_PRINT);
     }
 
-    public function save(User $user, Survey $survey): RedirectResponse
+    public function save(User $user, Clock $clock): RedirectResponse
     {
         $form = $this->getForm($user);
         $form->validate();
 
-        $this->transaction(function () use ($survey, $user, $form) {
+        $this->transaction(function () use ($clock, $user, $form) {
             $data = $form->all();
             if ($form->get('delete_photo')->isChecked()) {
                 $data['photo'] = null;
@@ -125,19 +127,19 @@ class UsersController extends BaseController
             if ($user->guest) {
                 if ($this->request->has('local-settings-action')) {
                     $action = $this->request->get('local-settings-action');
+                    $survey = new Survey(new Guest($user->guest->id), $clock);
                     if ($action === 'post-comments-modern') {
-                        $user->guest->setSetting('postCommentStyle', 'modern');
+                        $survey->setChoice('modern');
                     }
                     if ($action === 'post-comments-legacy') {
-                        $user->guest->setSetting('postCommentStyle', 'legacy');
+                        $survey->setChoice('legacy');
                     }
                     if ($action === 'post-comments-none-legacy') {
-                        $user->guest->setSetting('postCommentStyle', 'none-legacy');
+                        $survey->setChoice('none-legacy');
                     }
                     if ($action === 'post-comments-none-modern') {
-                        $user->guest->setSetting('postCommentStyle', 'none-modern');
+                        $survey->setChoice('none-modern');
                     }
-                    $user->guest->save();
                     if ($action === 'survey-none') {
                         $survey->setState('survey-none');
                     }
