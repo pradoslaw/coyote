@@ -231,4 +231,17 @@ class SurveyTest extends TestCase
             ->settings;
         return \json_decode($jsonSettings, associative:true)[$key];
     }
+
+    #[Test]
+    public function clearLog(): void
+    {
+        $this->log('survey-declined');
+        $this->survey->clearLog();
+        $this->assertSurveyLogValues([]);
+    }
+
+    private function log(string $state): void
+    {
+        $this->survey->setState($state);
+    }
 }

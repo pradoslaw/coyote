@@ -68,6 +68,11 @@ readonly class Survey
         $this->logValue($value);
     }
 
+    public function clearLog(): void
+    {
+        $this->guest->setSetting('surveyLog', []);
+    }
+
     private function logValue(string $value): void
     {
         $this->guest->setSetting('surveyLog', [

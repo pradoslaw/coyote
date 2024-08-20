@@ -68,12 +68,13 @@
       <div class="mb-2">
         <input class="btn btn-primary" type="submit" name="local-settings-action" value="survey-none">
         <input class="btn btn-primary" type="submit" name="local-settings-action" value="survey-invited">
+        <input class="btn btn-primary" type="submit" name="local-settings-action" value="survey-clear-log">
       </div>
     </div>
   </div>
 
   {{ form_end(form) }}
-  
+
   <script>
     window.addEventListener('load', () => {
       jQuery('.nav-tabs a[href="' + window.location.hash + '"]').tab('show');

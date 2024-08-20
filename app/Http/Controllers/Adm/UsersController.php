@@ -120,6 +120,9 @@ class UsersController extends BaseController
                     if ($action === 'survey-invited') {
                         $survey->setState('survey-invited');
                     }
+                    if ($action === 'survey-clear-log') {
+                        $survey->clearLog();
+                    }
                 }
             }
         });
