@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueSurveyBadge from "./steps/badge";
 import VueSurveyEnroll from "./steps/enroll";
-import VueSurveyParticipate from "./steps/participate";
+import VueSurveyParticipate, {ExperimentChoice} from "./steps/participate";
 
 export {type Experiment} from "./steps/participate";
 
@@ -47,14 +47,14 @@ export default {
         this.$emit('enrollOptOut');
       }
     },
-    experimentOpt(this: Vue, opt: string): void {
+    experimentOpt(this: Vue, opt: ExperimentChoice): void {
       if (opt === 'in') {
         this.$emit('experimentOptIn');
       } else {
         this.$emit('experimentOptOut');
       }
     },
-    experimentPreview(this: Vue, opt: string): void {
+    experimentPreview(this: Vue, opt: ExperimentChoice): void {
       this.$emit('experimentPreview', opt);
     },
     experimentClose(this: Vue): void {

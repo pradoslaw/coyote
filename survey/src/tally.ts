@@ -1,5 +1,6 @@
 import Vue from "vue";
 import SurveyScreen, {Experiment, type Screen} from "./screen/screen";
+import {ExperimentChoice} from "./screen/steps/participate";
 
 export {type Screen};
 
@@ -35,8 +36,8 @@ export default {
       @enrollOptIn="enrollOptIn"
       @enrollOptOut="enrollOptOut"
       @experimentClose="experimentClose"
-      @experimentOptIn="experimentOpt(true)"
-      @experimentOptOut="experimentOpt(false)"
+      @experimentOptIn="experimentOpt('in')"
+      @experimentOptOut="experimentOpt('out')"
       @experimentPreview="experimentPreview"
       @badgeEngage="badgeEngage"
       @badgeNotice="badgeNotice"
@@ -57,8 +58,9 @@ export default {
       this.notifyEnroll('Wypisano z udziału w testach.', 'fa-bug-slash');
       this.changeSurveyState('survey-declined');
     },
-    experimentOpt(this: Instance, optIn: boolean): void {
+    experimentOpt(this: Instance, choice: ExperimentChoice): void {
       this.experimentClose();
+      const optIn = choice === 'in';
       this.$emit('experimentOpt', optIn ? 'modern' : 'legacy');
       if (optIn) {
         this.notifyExperiment('Uruchomiono nową wersję.', 'fa-toggle-on');
@@ -66,8 +68,8 @@ export default {
         this.notifyExperiment('Przywrócono pierwotną wersję.', 'fa-toggle-off');
       }
     },
-    experimentPreview(this: Vue, opt: string): void {
-      this.$emit('experimentPreview', opt === 'out' ? 'legacy' : 'modern');
+    experimentPreview(this: Vue, choice: ExperimentChoice): void {
+      this.$emit('experimentPreview', choice === 'out' ? 'legacy' : 'modern');
     },
     experimentClose(this: Instance): void {
       if (this.state === 'survey-instructed') {

@@ -4,6 +4,7 @@ import VueToggle, {type ToggleValue} from "../toggle";
 interface Participate extends Vue, Data {
   experiment: Experiment;
   optedIn: boolean;
+  choice: ExperimentChoice;
 }
 
 export interface Experiment {
@@ -17,6 +18,7 @@ export interface Experiment {
 }
 
 export type ExperimentOpt = 'none' | 'legacy' | 'modern';
+export type ExperimentChoice = 'in' | 'out';
 
 interface Data {
   selected: ToggleValue;
@@ -82,16 +84,19 @@ export default {
       this.$emit('close');
     },
     experimentOpt(this: Participate): void {
-      this.$emit('experimentOpt', this.selected === 'second' ? 'in' : 'out');
+      this.$emit('experimentOpt', this.choice);
     },
     toggleChange(this: Participate, value: ToggleValue): void {
       this.selected = value;
-      this.$emit('experimentPreview', this.selected === 'second' ? 'in' : 'out');
+      this.$emit('experimentPreview', this.choice);
     },
   },
   computed: {
     isInitialSelection(this: Participate): boolean {
       return isPreviewActive(this.experiment.optedIn, this.selected);
+    },
+    choice(this: Participate): ExperimentChoice {
+      return this.selected === 'second' ? 'in' : 'out';
     },
   },
 };
