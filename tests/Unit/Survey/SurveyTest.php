@@ -50,6 +50,20 @@ class SurveyTest extends TestCase
     }
 
     #[Test]
+    public function changeSurveyNoneSplitterModern(): void
+    {
+        $this->survey->setChoice('none-modern');
+        $this->assertSame('none-modern', $this->survey->choice());
+    }
+
+    #[Test]
+    public function changeSurveyNoneSplitterLegacy(): void
+    {
+        $this->survey->setChoice('none-legacy');
+        $this->assertSame('none-legacy', $this->survey->choice());
+    }
+
+    #[Test]
     public function initialSurveyState(): void
     {
         $this->assertSame('survey-none', $this->survey->state());
@@ -99,7 +113,7 @@ class SurveyTest extends TestCase
     #[Test]
     public function initiallyUserChoiceIsNone(): void
     {
-        $this->assertSame('none', $this->survey->choice());
+        $this->assertSame('none-legacy', $this->survey->choice());
     }
 
     #[Test]
@@ -120,7 +134,7 @@ class SurveyTest extends TestCase
     public function rejectMalformedValue(): void
     {
         $this->guest->setSetting('postCommentStyle', 'boo hoo');
-        $this->assertSame('none', $this->survey->choice());
+        $this->assertSame('none-legacy', $this->survey->choice());
     }
 
     #[Test]

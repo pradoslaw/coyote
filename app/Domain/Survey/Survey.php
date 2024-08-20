@@ -51,10 +51,10 @@ readonly class Survey
 
     private function normalizedChoice(?string $style): string
     {
-        if (\in_array($style, ['modern', 'legacy'])) {
+        if (\in_array($style, ['modern', 'legacy', 'none-legacy', 'none-modern'])) {
             return $style;
         }
-        return 'none';
+        return 'none-legacy';
     }
 
     public function preview(string $value): void

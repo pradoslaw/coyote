@@ -53,6 +53,14 @@ describe('participate step', () => {
     });
 
     describe('experiment opted', () => {
+      test('splitter, opted in', () => {
+        const participate = renderParticipate({optedIn: 'none-modern'});
+        assertTrue(participate.exists('.survey-toggle .second.active'));
+      });
+      test('splitter, opted out', () => {
+        const participate = renderParticipate({optedIn: 'none-legacy'});
+        assertTrue(participate.exists('.survey-toggle .first.active'));
+      });
       test('opted in', () => {
         const participate = renderParticipate({optedIn: 'modern'});
         assertTrue(participate.exists('.survey-toggle .second.active'));
@@ -61,9 +69,7 @@ describe('participate step', () => {
         const participate = renderParticipate({optedIn: 'legacy'});
         assertTrue(participate.exists('.survey-toggle .first.active'));
       });
-    });
 
-    describe('experiment opt', () => {
       test('emit event with optIn', async () => {
         const participate = renderParticipate({optedIn: 'legacy'});
         await toggleExperimentOptIn(participate);
@@ -97,19 +103,21 @@ describe('participate step', () => {
         assertFalse(isSelectionActive(participate));
       });
 
-      test('when opted nothing', () => {
-        const participate = renderParticipate({optedIn: 'none'});
+      test('when opted nothing, modern', () => {
+        const participate = renderParticipate({optedIn: 'none-modern'});
         assertFalse(isSelectionActive(participate));
       });
-
+      test('when opted nothing, legacy', () => {
+        const participate = renderParticipate({optedIn: 'none-legacy'});
+        assertFalse(isSelectionActive(participate));
+      });
       test('when opted nothing, after opting in', async () => {
-        const participate = renderParticipate({optedIn: 'none'});
+        const participate = renderParticipate({optedIn: 'none-legacy'});
         await toggleExperimentOptIn(participate);
         assertFalse(isSelectionActive(participate));
       });
-
       test('when opted nothing, after opting and out', async () => {
-        const participate = renderParticipate({optedIn: 'none'});
+        const participate = renderParticipate({optedIn: 'none-legacy'});
         await toggleExperimentOptIn(participate);
         await toggleExperimentOptOut(participate);
         assertFalse(isSelectionActive(participate));
@@ -131,8 +139,10 @@ describe('participate step', () => {
       assertFalse(await isPreviewActive("modern", 'first')));
 
     test('choice none is not active with first or second option', async () => {
-      assertFalse(await isPreviewActive("none", 'first'));
-      assertFalse(await isPreviewActive("none", 'second'));
+      assertFalse(await isPreviewActive("none-modern", 'first'));
+      assertFalse(await isPreviewActive("none-modern", 'second'));
+      assertFalse(await isPreviewActive("none-legacy", 'first'));
+      assertFalse(await isPreviewActive("none-legacy", 'second'));
     });
 
     async function isPreviewActive(opt: ExperimentOpt, selected: ToggleValue): Promise<boolean> {

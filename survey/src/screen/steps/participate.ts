@@ -17,7 +17,7 @@ export interface Experiment {
   imageModern: string;
 }
 
-export type ExperimentOpt = 'none' | 'legacy' | 'modern';
+export type ExperimentOpt = 'none-modern' | 'none-legacy' | 'legacy' | 'modern';
 export type ExperimentChoice = 'in' | 'out';
 
 interface Data {
@@ -76,7 +76,7 @@ export default {
   `,
   data(this: Participate): Data {
     return {
-      selected: this.experiment.optedIn === 'modern' ? 'second' : 'first',
+      selected: initiallySelected(this.experiment.optedIn),
     };
   },
   methods: {
@@ -101,8 +101,15 @@ export default {
   },
 };
 
+function initiallySelected(opt: ExperimentOpt): ToggleValue {
+  if (opt === 'modern' || opt === 'none-modern') {
+    return 'second';
+  }
+  return 'first';
+}
+
 function isPreviewActive(opt: ExperimentOpt, selected: ToggleValue): boolean {
-  if (opt === 'none') {
+  if (opt === 'none-legacy' || opt === 'none-modern') {
     return false;
   }
   if (opt === 'modern') {
