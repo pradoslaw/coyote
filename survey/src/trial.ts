@@ -13,7 +13,7 @@ export const trial = {
   title,
   reason,
   solution,
-  dueTime: diffFormat(secondsUntil('2024-08-20 14:00:00')),
+  dueTime: diffFormat(secondsUntil('2024-08-27 16:00:00')),
   light: {
     imageLegacy: '/img/survey/postCommentStyle/legacy.light.png',
     imageModern: '/img/survey/postCommentStyle/modern.light.png',
