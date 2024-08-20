@@ -6,6 +6,7 @@ use Coyote\Services\Guest;
 use Neon\Test\BaseFixture\View\ViewDom;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel\Application;
 
@@ -37,6 +38,13 @@ class SurveyTest extends TestCase
     {
         $this->survey->setState('survey-invited');
         $this->assertSame('survey-invited', $this->survey->state());
+    }
+
+    #[Test]
+    public function changeSurveyChoice(): void
+    {
+        $this->survey->setChoice('modern');
+        $this->assertSame('modern', $this->survey->choice());
     }
 
     #[Test]
@@ -126,5 +134,51 @@ class SurveyTest extends TestCase
     {
         $this->guest->setSetting('postCommentStyle', 'modern');
         $this->assertSame('modern', $this->surveyViewInput()['surveyChoice']);
+    }
+
+    #[Test]
+    public function returnOnlyValidStates(): void
+    {
+        $this->survey->setState('foo-bar');
+        $this->assertSame('survey-none', $this->survey->state());
+    }
+
+    #[Test]
+    public function storeInvalidStateInSettings_forFutureReuse(): void
+    {
+        $this->survey->setState('foo-bar');
+        $this->assertGuestSettings(['surveyState' => 'foo-bar']);
+    }
+
+    #[Test]
+    #[TestWith([
+        'survey-none', 'survey-invited', 'survey-declined',
+        'survey-accepted', 'survey-instructed', 'survey-gone',
+    ])]
+    public function acceptValidSurveyStates(string $state): void
+    {
+        $this->survey->setState($state);
+        $this->assertSame($state, $this->survey->state());
+    }
+
+    #[Test]
+    public function storeSurveyStateByHttp(): void
+    {
+        $this->laravel->post('/survey', ['surveyState' => 'survey-accepted'])->assertSuccessful();
+        $this->assertSame('survey-accepted', $this->survey->state());
+    }
+
+    #[Test]
+    public function storeSurveyChoiceByHttp(): void
+    {
+        $this->laravel->post('/survey', ['surveyChoice' => 'modern'])->assertSuccessful();
+        $this->assertSame('modern', $this->survey->choice());
+    }
+
+    #[Test]
+    public function rejectRequestWithoutArguments(): void
+    {
+        $response = $this->laravel->post('/survey');
+        $this->assertSame(422, $response->status());
     }
 }

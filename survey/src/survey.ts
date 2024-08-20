@@ -54,9 +54,9 @@ new Vue({
 
 function experimentChangeStyle(style: ExperimentOpt): void {
   store.commit('user/changePostStyle', style);
-  axios.post('/User/Settings/Ajax', {postCommentStyle: style});
+  axios.post('/survey', {surveyChoice: style});
 }
 
 function storeSurveyState(surveyState: State): void {
-  axios.post('/User/Settings/Ajax', {surveyState});
+  axios.post('/survey', {surveyState});
 }

@@ -14,14 +14,43 @@ readonly class Survey
         $this->guest->setSetting('surveyState', $state);
     }
 
+    public function setChoice(string $choice): void
+    {
+        $this->guest->setSetting('postCommentStyle', $choice);
+    }
+
     public function state(): string
     {
-        return $this->guest->getSetting('surveyState', 'survey-none');
+        return $this->normalizedState($this->guest->getSetting('surveyState'));
     }
 
     public function choice(): string
     {
-        $style = $this->guest->getSetting('postCommentStyle', 'none');
+        return $this->normalizedChoice($this->guest->getSetting('postCommentStyle'));
+    }
+
+    private function normalizedState(?string $state): string
+    {
+        if ($this->isState($state)) {
+            return $state;
+        }
+        return 'survey-none';
+    }
+
+    private function isState(?string $state): bool
+    {
+        return \in_array($state, [
+            'survey-none',
+            'survey-invited',
+            'survey-declined',
+            'survey-accepted',
+            'survey-instructed',
+            'survey-gone',
+        ]);
+    }
+
+    private function normalizedChoice(?string $style): string
+    {
         if (\in_array($style, ['modern', 'legacy'])) {
             return $style;
         }
