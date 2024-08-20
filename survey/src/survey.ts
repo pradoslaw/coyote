@@ -46,7 +46,7 @@ const app = new Vue({
   methods: {
     experimentOpt(optIn: ExperimentOpt): void {
       this.experiment.optedIn = optIn;
-      experimentChangeStyle(optIn ? 'modern' : 'legacy');
+      experimentChangeStyle(optIn);
     },
     experimentPreview(opt: ExperimentOpt): void {
       storeSurveyPreview(opt);
