@@ -1,23 +1,21 @@
 <?php
 namespace Tests\Unit\BaseFixture\Server\Laravel;
 
+use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\Before;
 use Tests\Unit\BaseFixture\Server\Laravel;
 
 trait Application
 {
     var ?Laravel\TestCase $laravel = null;
 
-    /**
-     * @before
-     */
+    #[Before]
     function initializeLaravel(): void
     {
         $this->laravel = StaticLaravel::get($this);
     }
 
-    /**
-     * @after
-     */
+    #[After]
     function finalizeLaravel(): void
     {
         StaticLaravel::destroy();
