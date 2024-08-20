@@ -87,7 +87,7 @@ class UsersController extends BaseController
 
     private function userSettings(User $user): array
     {
-        $userSettings = \array_diff_key($user->guest?->settings, ['surveyLog' => null]);
+        $userSettings = \array_diff_key($user->guest?->settings ?? [], ['surveyLog' => null]);
         $surveyLog = $user->guest?->settings['surveyLog'] ?? null;
         return [$userSettings, $surveyLog];
     }
