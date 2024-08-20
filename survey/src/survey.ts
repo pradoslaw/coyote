@@ -20,7 +20,7 @@ interface Data {
   experiment: Experiment;
 }
 
-new Vue({
+const app = new Vue({
   name: 'Survey',
   el: '#js-survey',
   components: {'vue-survey-tally': SurveyTally},
@@ -55,7 +55,19 @@ new Vue({
       storeSurveyState(state);
       this.state = state;
     },
+    setTheme(dark: boolean): void {
+      const theme = dark ? trial.dark : trial.light;
+      this.experiment.imageLegacy = theme.imageLegacy;
+      this.experiment.imageModern = theme.imageModern;
+    },
   },
+});
+
+store.subscribe((mutation, state) => {
+  if (mutation.type === 'theme/CHANGE_THEME') {
+    const dark = state.theme.darkTheme;
+    app.setTheme(dark)
+  }
 });
 
 function experimentChangeStyle(style: ExperimentOpt): void {
