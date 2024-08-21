@@ -6,8 +6,12 @@
   <div class="container d-flex administrator-panel">
     <aside class="flex-shrink-0 navbar-default me-4 pb-4" id="adm-menu">
       <div id="box-user">
-        <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail"/>
-        <h3>{{ user('name') }}</h3>
+        <a href="{{ route('adm.users.show', user('id')) }}">
+          <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail"/>
+        </a>
+        <a href="{{ route('adm.users.show', user('id')) }}">
+          <h3>{{ user('name') }}</h3>
+        </a>
         <ol class="list-inline">
           <li class="list-inline-item">
             <a href="{{ route('adm.exit') }}">Wyloguj z panelu</a>
