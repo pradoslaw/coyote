@@ -4,29 +4,8 @@
 @import "@fortawesome/fontawesome-free/scss/functions";
 @import "@fortawesome/fontawesome-free/scss/variables";
 
-html {
-  // relative is required to contain the absolute sidebar
-  min-height: 100%;
-  // minimum height make sure that if the content is below 100% of viewport, it will still allow the sidebar to be at 100%,
-  // and if the content is greater than 100% of viewport, it will allow stretching
-  position: relative;
-}
-
 body.padding-top {
   padding-top: 0;
-}
-
-#wrapper {
-  padding: 0 15px 0 15px;
-  margin-left: 222px;
-}
-
-#adm-header {
-  border-bottom: 1px solid $card-border-color;
-
-  > .col-12 {
-    padding: 10px 15px;
-  }
 }
 
 abbr {
@@ -56,9 +35,7 @@ body.theme-dark {
     }
   }
 
-  #adm-menu,
-  #box-user,
-  #adm-header {
+  #box-user {
     border-bottom: 1px solid #444;
   }
 

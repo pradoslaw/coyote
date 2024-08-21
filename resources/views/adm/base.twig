@@ -3,57 +3,35 @@
 {% import 'components.modals' as modals %}
 
 {% block body %}
-  <div id="container-fluid" class="administrator-panel">
-    <div id="navbar-border-top" class="navbar-fixed-top"></div>
-
-    <aside id="adm-menu" class="navbar-default">
-      <div class="clearfix"></div>
-
+  <div class="container d-flex administrator-panel">
+    <aside class="flex-shrink-0 navbar-default me-4 pb-4" id="adm-menu">
       <div id="box-user">
-        <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail">
-
+        <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail"/>
         <h3>{{ user('name') }}</h3>
-
         <ol class="list-inline">
-          <li class="list-inline-item"><a href="{{ route('adm.exit') }}">Wyloguj z panelu</a></li>
+          <li class="list-inline-item">
+            <a href="{{ route('adm.exit') }}">Wyloguj z panelu</a>
+          </li>
         </ol>
       </div>
-
       {{ menu.asUl({class: 'list-unstyled navbar-nav'})|raw }}
     </aside>
-
-    <main id="wrapper">
-      <div id="adm-header" class="row">
-        <div class="col-12">
-          <a id="sidebar-toggle" href="javascript:" class="btn btn-secondary" rel="nofollow">
-            <i class="fas fa-bars"></i>
-          </a>
-        </div>
-      </div>
-
-      <div class="container">
-        {{ breadcrumb|raw }}
-      </div>
-
+    <main class="flex-grow-1 mt-4">
+      {{ breadcrumb|raw }}
       {% if session_has('success') %}
-        <div class="container">
-          <div class="alert alert-success">
-            <i class="fas fa-check"></i>
-            {{ session_get('success') }}
-          </div>
+        <div class="alert alert-success">
+          <i class="fas fa-check"></i>
+          {{ session_get('success') }}
         </div>
       {% endif %}
-
-      <div class="container">
-        {% block container %}
-          <div class="card card-default">
-            <div class="card-body">
-              {% block card %}
-              {% endblock %}
-            </div>
+      {% block container %}
+        <div class="card card-default">
+          <div class="card-body">
+            {% block card %}
+            {% endblock %}
           </div>
-        {% endblock %}
-      </div>
+        </div>
+      {% endblock %}
     </main>
   </div>
 
@@ -72,35 +50,15 @@
 
   <script type="text/javascript">
     $(function () {
-      $('#sidebar-toggle').click(function () {
-        var obj = $('#adm-menu');
-        var direction = parseInt(obj.css('left')) < 0 ? 'right' : 'left';
-
-        // pokazujemy pasek boczny
-        if (direction == 'right') {
-          obj.animate({'left': '+=220'});
-          $('#wrapper').animate({'margin-left': '+=220'});
-        }
-        // chowamy pasek boczny
-        else {
-          obj.animate({'left': '-=220'});
-          $('#wrapper').animate({'margin-left': '-=220'});
-        }
-      });
-
-      var confirmModal = document.getElementById('modal-delete')
-
+      var confirmModal = document.getElementById('modal-delete');
       confirmModal.addEventListener('shown.bs.modal', function () {
         $(this).parent().attr('action', $('button[data-bs-toggle="modal"]').data('delete-url'));
-      })
+      });
     });
   </script>
-
-
 {% endblock %}
 
 {% block head %}
   {{ parent() }}
-
   <link rel="stylesheet" href="{{ cdn('css/adm.css') }}">
 {% endblock %}

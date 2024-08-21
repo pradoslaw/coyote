@@ -1,9 +1,7 @@
+@import "../../helpers/variables";
+
 #adm-menu {
   border-right: 1px solid lighten($card-border-color, 2%);
-  position: absolute;
-  left: 0;
-  top: 5px;
-  height: 100%;
   width: 222px;
 
   ul {
