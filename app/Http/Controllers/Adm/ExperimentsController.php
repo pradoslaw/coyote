@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Http\Controllers\Adm;
 
+use Coyote\Models\Survey;
 use Illuminate\View\View;
 
 class ExperimentsController extends BaseController
@@ -15,7 +16,13 @@ class ExperimentsController extends BaseController
     {
         return $this->view('adm.experiments.home', [
             'experimentNewUrl' => route('adm.experiments.edit'),
+            'experiments'      => $this->experiments(),
         ]);
+    }
+
+    private function experiments(): array
+    {
+        return Survey::query()->get()->pluck('title')->toArray();
     }
 
     public function edit(): View

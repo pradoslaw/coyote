@@ -1,15 +1,19 @@
 <?php
 namespace Tests\Unit\Survey;
 
+use Coyote\Models\Survey;
+use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\Test\BaseFixture\View\ViewDom;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\Administration\Fixture\AdministratorPanel;
+use Tests\Unit\BaseFixture\Server\Laravel\Transactional;
 
 class AdmTest extends TestCase
 {
     use AdministratorPanel;
+    use Transactional;
 
     #[Before]
     public function administratorDashboard(): void
@@ -120,5 +124,26 @@ class AdmTest extends TestCase
     private function dom(string $uri): ViewDom
     {
         return new ViewDom($this->server->get($uri)->assertSuccessful()->content());
+    }
+
+    #[Test]
+    public function listSurveysNone(): void
+    {
+        $this->assertSame(['Nie ma jeszcze żadnych eksperymentów.'],
+            $this->experimentsListText());
+    }
+
+    #[Test]
+    public function listSurveysMany(): void
+    {
+        Survey::query()->create(['title' => 'Foo']);
+        Survey::query()->create(['title' => 'Bar']);
+        $this->assertSame(['Foo', 'Bar'], $this->experimentsListText());
+    }
+
+    private function experimentsListText(): array
+    {
+        $texts = new Selector('article', '.card-body', '*', 'text()');
+        return \array_map(\trim(...), $this->experimentsDom()->findStrings($texts->xPath()));
     }
 }
