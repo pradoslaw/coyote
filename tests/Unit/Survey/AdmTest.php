@@ -57,10 +57,34 @@ class AdmTest extends TestCase
     #[Test]
     public function experimentsBreadcrumbs(): void
     {
-        $view = $this->experimentsDom();
-        $this->assertContains(
-            'Eksperymenty',
-            $view->findStrings("//ul[@class='breadcrumb']/li/span/text()"));
+        $this->assertContains('Eksperymenty', $this->breadcrumbs($this->experimentsDom()));
+    }
+
+    #[Test]
+    public function newExperimentBreadcrumbs(): void
+    {
+        $breadcrumbs = $this->breadcrumbs($this->newExperimentDom());
+        $this->assertContains('Eksperymenty', $breadcrumbs);
+        $this->assertContains('Nowy', $breadcrumbs);
+    }
+
+    #[Test]
+    public function addLinkToNewExperiment(): void
+    {
+        $link = $this->experimentsDom()->findString('//main/article//a/@href');
+        $this->assertStringEndsWith('/Adm/Experiments/Save', $link);
+    }
+
+    #[Test]
+    public function addLinkBackToExperiments(): void
+    {
+        $link = $this->newExperimentDom()->findString('//main/article//a/@href');
+        $this->assertStringEndsWith('/Adm/Experiments', $link);
+    }
+
+    private function breadcrumbs(ViewDom $view): array
+    {
+        return \array_map(\trim(...), $view->findStrings("//ul[@class='breadcrumb']/li/*/text()"));
     }
 
     private function sidemenuIconByLabel(string $label): string
@@ -86,6 +110,11 @@ class AdmTest extends TestCase
     private function experimentsDom(): ViewDom
     {
         return $this->dom('/Adm/Experiments');
+    }
+
+    private function newExperimentDom(): ViewDom
+    {
+        return $this->dom('/Adm/Experiments/Save');
     }
 
     private function dom(string $uri): ViewDom

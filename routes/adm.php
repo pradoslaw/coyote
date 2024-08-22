@@ -144,5 +144,6 @@ $this->group(
         $this->post('Tags/Delete/{tag?}', 'TagsController@delete')->name('tags.delete');
 
         $this->get('Experiments', ['uses' => 'ExperimentsController@index'])->name('experiments');
+        $this->get('Experiments/Save', ['uses' => 'ExperimentsController@edit'])->name('experiments.edit');
     },
 );

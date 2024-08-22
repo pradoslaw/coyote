@@ -28,14 +28,16 @@
           {{ session_get('success') }}
         </div>
       {% endif %}
-      {% block container %}
-        <div class="card card-default">
-          <div class="card-body">
-            {% block card %}
-            {% endblock %}
+      <article>
+        {% block container %}
+          <div class="card card-default">
+            <div class="card-body">
+              {% block card %}
+              {% endblock %}
+            </div>
           </div>
-        </div>
-      {% endblock %}
+        {% endblock %}
+      </article>
     </main>
   </div>
 

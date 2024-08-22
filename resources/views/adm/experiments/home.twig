@@ -3,9 +3,19 @@
 
 {% block container %}
   <div class="card card-default">
-    <div class="card-header">Eksperymenty</div>
-    <div class="card-body">
-      
+    <div class="card-header">
+      Eksperymenty
     </div>
+    <div class="card-body">
+      <div class="text-center">
+        Nie ma jeszcze żadnych eksperymentów.
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end">
+    <a class="btn btn-primary" href="{{ experimentNewUrl }}">
+      <i class="fa-solid fa-plus"></i>
+      Nowy eksperyment
+    </a>
   </div>
 {% endblock %}

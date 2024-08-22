@@ -1,0 +1,17 @@
+{% extends 'adm.base' %}
+{% block title %}Eksperymenty{{ parent() }}{% endblock %}
+
+{% block container %}
+  <div class="card card-default">
+    <div class="card-header">Eksperyment</div>
+    <div class="card-body">
+      <i class="fa-solid fa-screwdriver-wrench"></i>
+      This feature is under construction.
+    </div>
+  </div>
+  <div class="d-flex justify-content-end">
+    <a class="btn btn-secondary" href="{{ experimentsBackUrl }}">
+      Powrót
+    </a>
+  </div>
+{% endblock %}
