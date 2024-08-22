@@ -22,7 +22,12 @@ class ExperimentsController extends BaseController
 
     private function experiments(): array
     {
-        return Survey::query()->get()->pluck('title')->toArray();
+        return Survey::query()->get()
+            ->map(fn(Survey $survey) => [
+                'title' => $survey->title,
+                'url'   => route('adm.experiments.show', $survey->id),
+            ])
+            ->toArray();
     }
 
     public function edit(): View
@@ -30,6 +35,14 @@ class ExperimentsController extends BaseController
         $this->breadcrumb->push('Nowy', '');
         return $this->view('adm.experiments.edit', [
             'experimentsBackUrl' => route('adm.experiments'),
+        ]);
+    }
+
+    public function show(Survey $survey): View
+    {
+        return $this->view('adm.experiments.show', [
+            'experimentsBackUrl' => route('adm.experiments'),
+            'experiment'         => $survey->title,
         ]);
     }
 }

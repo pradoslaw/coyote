@@ -10,7 +10,9 @@
       <div class="list-group list-group-flush">
         {% for experiment in experiments %}
           <div class="list-group-item">
-            {{ experiment }}
+            <a href="{{ experiment.url }}">
+              {{ experiment.title }}
+            </a>
           </div>
         {% endfor %}
       </div>

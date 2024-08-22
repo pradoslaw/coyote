@@ -130,6 +130,26 @@ class SelectorTest extends TestCase
     /**
      * @test
      */
+    public function cssClassStandalone(): void
+    {
+        $fooClass = new Css('.foo');
+        $dom = new ViewDom('<div class="bar">Green</div><div class="foo">Blue</div>');
+        $this->assertSame(['Blue'],
+            $dom->findStrings("/html/body/$fooClass/text()"));
+    }
+
+    /**
+     * @test
+     */
+    public function throwForMalformedCssSelector(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        new Css('foo');
+    }
+
+    /**
+     * @test
+     */
     public function cssClassMany(): void
     {
         $content = $this->find(

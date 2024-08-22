@@ -1,0 +1,16 @@
+{% extends 'adm.base' %}
+{% block title %}Eksperymenty{{ parent() }}{% endblock %}
+
+{% block container %}
+  <div class="card card-default">
+    <div class="card-header">Eksperyment: {{ experiment }}</div>
+    <div class="card-body">
+      Tytuł: {{ experiment }}
+    </div>
+  </div>
+  <div class="d-flex justify-content-end">
+    <a class="btn btn-secondary" href="{{ experimentsBackUrl }}">
+      Powrót
+    </a>
+  </div>
+{% endblock %}

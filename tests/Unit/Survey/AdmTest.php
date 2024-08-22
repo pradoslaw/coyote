@@ -2,7 +2,7 @@
 namespace Tests\Unit\Survey;
 
 use Coyote\Models\Survey;
-use Neon\Test\BaseFixture\Selector\Selector;
+use Neon\Test\BaseFixture\Selector\Css;
 use Neon\Test\BaseFixture\View\ViewDom;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
@@ -19,6 +19,12 @@ class AdmTest extends TestCase
     public function administratorDashboard(): void
     {
         $this->userInAdministratorDashboard();
+    }
+
+    #[Before]
+    public function assumeDatabaseIsEmpty(): void
+    {
+        Survey::query()->delete();
     }
 
     #[Test]
@@ -136,14 +142,58 @@ class AdmTest extends TestCase
     #[Test]
     public function listSurveysMany(): void
     {
-        Survey::query()->create(['title' => 'Foo']);
-        Survey::query()->create(['title' => 'Bar']);
+        $this->newSurvey('Foo');
+        $this->newSurvey('Bar');
         $this->assertSame(['Foo', 'Bar'], $this->experimentsListText());
+    }
+
+    #[Test]
+    public function showSurvey(): void
+    {
+        $id = $this->newSurveyReturnId('Foo');
+        $this->assertSame('Eksperyment: Foo', $this->experimentTitle($id));
+    }
+
+    #[Test]
+    public function showSurveyWithLink(): void
+    {
+        $id = $this->newSurveyReturnId('Foo');
+        $this->assertStringEndsWith("/Adm/Experiments/$id", $this->experimentsListHref());
     }
 
     private function experimentsListText(): array
     {
-        $texts = new Selector('article', '.card-body', '*', 'text()');
-        return \array_map(\trim(...), $this->experimentsDom()->findStrings($texts->xPath()));
+        $card = new Css('.card');
+        return $this->normalized($this->experimentsDom()->findStrings("//article/$card/div[2]//text()"));
+    }
+
+    private function experimentsListHref(): string
+    {
+        $card = new Css('.card');
+        return \trim($this->experimentsDom()->findString("//article/$card//a/@href"));
+    }
+
+    private function experimentTitle(int $id): string
+    {
+        $card = new Css('.card');
+        $header = new Css('.card-header');
+        return $this->dom("/Adm/Experiments/$id")->findString("//article/$card/$header/text()");
+    }
+
+    private function newSurvey(string $title): void
+    {
+        Survey::query()->create(['title' => $title]);
+    }
+
+    private function newSurveyReturnId(string $str): int
+    {
+        /** @var Survey $survey */
+        $survey = Survey::query()->create(['title' => $str]);
+        return $survey->id;
+    }
+
+    private function normalized(array $strings): array
+    {
+        return \array_values(\array_filter(\array_map(\trim(...), $strings), strLen(...)));
     }
 }
