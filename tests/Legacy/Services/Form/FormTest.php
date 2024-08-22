@@ -1,118 +1,9 @@
 <?php
-
-namespace Tests\Legacy\Services;
+namespace Tests\Legacy\Services\Form;
 
 use Faker\Factory;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Routing\Redirector;
 use Tests\Legacy\TestCase;
-
-class TestForm extends \Coyote\Services\FormBuilder\Form
-{
-    public function buildForm()
-    {
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        // don't throw validate exception
-    }
-}
-
-class SampleForm extends \Coyote\Services\FormBuilder\Form
-{
-    public function buildForm()
-    {
-        $this
-            ->add('name', 'text')
-            ->add('email', 'text')
-            ->add('group_id', 'select', [
-                'choices' => [
-                    1 => 'Admin',
-                    2 => 'Moderator',
-                ],
-            ])
-            ->add('bio', 'textarea')
-            ->add('groups', 'choice', [
-                'choices' => [
-                    2 => 'Admin',
-                    4 => 'Moderator',
-                    8 => 'Unassigned Group',
-                ],
-            ]);
-    }
-}
-
-class PollForm extends \Coyote\Services\FormBuilder\Form
-{
-    public function buildForm()
-    {
-        $this
-            ->add('title', 'text')
-            ->add('items', 'text')
-            ->add('length', 'text');
-    }
-}
-
-class SkillsForm extends \Coyote\Services\FormBuilder\Form
-{
-    public function buildForm()
-    {
-        $this
-            ->add('name', 'text', [
-                'label' => 'Nazwa',
-                'rules' => 'required|string|max:100',
-                'attr'  => [
-                    'placeholder' => 'Np. java, c#',
-                ],
-            ])
-            ->add('rate', 'text', [
-                'label' => 'Ocena',
-                'rules' => 'required|integer|min:1|max:6',
-            ])
-            ->add('order', 'hidden');
-    }
-}
-
-class Model
-{
-    public $name;
-    public $email;
-    public $bio;
-    public $group_id;
-
-    public function __construct()
-    {
-        $faker = Factory::create();
-
-        $this->name = $faker->name;
-        $this->email = $faker->email;
-        $this->bio = $faker->text();
-        $this->group_id = 1;
-    }
-
-    public function groups()
-    {
-        return collect([
-            ['id' => 2, 'name' => 'Admin'],
-            ['id' => 8, 'name' => 'Unassigned Group'],
-        ]);
-    }
-
-    public function __isset($name)
-    {
-        return true;
-    }
-
-    public function __get($name)
-    {
-        if ($name == 'groups') {
-            return $this->groups();
-        } else {
-            return $this->$name;
-        }
-    }
-}
 
 class FormTest extends TestCase
 {
@@ -151,7 +42,6 @@ class FormTest extends TestCase
         $this->assertEquals('GET', $form->getMethod());
     }
 
-    // tests
     public function testBuildFormWithDefaultValues()
     {
         $form = $this->createForm(TestForm::class);
