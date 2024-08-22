@@ -8,12 +8,21 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\Administration\Fixture\AdministratorPanel;
+use Tests\Unit\BaseFixture\Forum\ModelsDsl;
 use Tests\Unit\BaseFixture\Server\Laravel\Transactional;
 
 class AdmTest extends TestCase
 {
     use AdministratorPanel;
     use Transactional;
+
+    private ModelsDsl $dsl;
+
+    #[Before]
+    public function initialize(): void
+    {
+        $this->dsl = new ModelsDsl();
+    }
 
     #[Before]
     public function administratorDashboard(): void
@@ -180,20 +189,43 @@ class AdmTest extends TestCase
         return $this->dom("/Adm/Experiments/$id")->findString("//article/$card/$header/text()");
     }
 
+    private function experimentUsers(int $id): string
+    {
+        $usersCountLine = new Css('.user-count');
+        return $this->dom("/Adm/Experiments/$id")
+            ->findString("//article//$usersCountLine/span/text()");
+    }
+
     private function newSurvey(string $title): void
     {
         Survey::query()->create(['title' => $title]);
     }
 
-    private function newSurveyReturnId(string $str): int
+    private function newSurveyReturnId(string $surveyTitle, array $usersId = null): int
     {
         /** @var Survey $survey */
-        $survey = Survey::query()->create(['title' => $str]);
+        $survey = Survey::query()->create(['title' => $surveyTitle]);
+        $survey->users()->sync($usersId);
         return $survey->id;
     }
 
     private function normalized(array $strings): array
     {
         return \array_values(\array_filter(\array_map(\trim(...), $strings), strLen(...)));
+    }
+
+    #[Test]
+    public function showUsersAssignedToSurveyNone(): void
+    {
+        $this->assertSame('0', $this->experimentUsers($this->newSurveyReturnId('Foo')));
+    }
+
+    #[Test]
+    public function showUsersAssignedToSurveyMany(): void
+    {
+        $firstId = $this->dsl->newUserReturnId();
+        $secondId = $this->dsl->newUserReturnId();
+        $id = $this->newSurveyReturnId('Foo', usersId:[$firstId, $secondId]);
+        $this->assertSame('2', $this->experimentUsers($id));
     }
 }
