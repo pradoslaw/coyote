@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\Survey;
 
+use Carbon\Carbon;
 use Coyote\Models\Survey;
 use Neon\Test\BaseFixture\Selector\Css;
 use Neon\Test\BaseFixture\View\ViewDom;
@@ -182,29 +183,18 @@ class AdmTest extends TestCase
         return \trim($this->experimentsDom()->findString("//article/$card//a/@href"));
     }
 
-    private function experimentTitle(int $id): string
-    {
-        $card = new Css('.card');
-        $header = new Css('.card-header');
-        return $this->dom("/Adm/Experiments/$id")->findString("//article/$card/$header/text()");
-    }
-
-    private function experimentUsers(int $id): string
-    {
-        $usersCountLine = new Css('.user-count');
-        return $this->dom("/Adm/Experiments/$id")
-            ->findString("//article//$usersCountLine/span/text()");
-    }
-
     private function newSurvey(string $title): void
     {
         Survey::query()->create(['title' => $title]);
     }
 
-    private function newSurveyReturnId(string $surveyTitle, array $usersId = null): int
+    private function newSurveyReturnId(string $surveyTitle = null, Carbon $createdAt = null, array $usersId = null): int
     {
         /** @var Survey $survey */
-        $survey = Survey::query()->create(['title' => $surveyTitle]);
+        $survey = Survey::query()->create([
+            'title'      => $surveyTitle ?? '',
+            'created_at' => $createdAt,
+        ]);
         $survey->users()->sync($usersId);
         return $survey->id;
     }
@@ -221,11 +211,39 @@ class AdmTest extends TestCase
     }
 
     #[Test]
+    public function showSurveyCreationDate(): void
+    {
+        $id = $this->newSurveyReturnId(createdAt:new Carbon('2024-01-01'));
+        $this->assertSame('2024-01-01 00:00:00', $this->experimentCreationDate($id));
+    }
+
+    #[Test]
     public function showUsersAssignedToSurveyMany(): void
     {
         $firstId = $this->dsl->newUserReturnId();
         $secondId = $this->dsl->newUserReturnId();
         $id = $this->newSurveyReturnId('Foo', usersId:[$firstId, $secondId]);
         $this->assertSame('2', $this->experimentUsers($id));
+    }
+
+    private function experimentTitle(int $id): string
+    {
+        $card = new Css('.card');
+        $header = new Css('.card-header');
+        return $this->dom("/Adm/Experiments/$id")->findString("//article/$card/$header/text()");
+    }
+
+    private function experimentUsers(int $id): string
+    {
+        $usersCountLine = new Css('.user-count');
+        return $this->dom("/Adm/Experiments/$id")
+            ->findString("//article//$usersCountLine/span/text()");
+    }
+
+    private function experimentCreationDate(int $id): string
+    {
+        $usersCountLine = new Css('.creation-date');
+        return $this->dom("/Adm/Experiments/$id")
+            ->findString("//article//$usersCountLine/span/text()");
     }
 }

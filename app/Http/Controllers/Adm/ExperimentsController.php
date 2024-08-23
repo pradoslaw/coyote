@@ -41,9 +41,12 @@ class ExperimentsController extends BaseController
     public function show(Survey $survey): View
     {
         return $this->view('adm.experiments.show', [
-            'experimentsBackUrl'  => route('adm.experiments'),
-            'experiment'          => $survey->title,
-            'experimentUserCount' => $survey->users()->count(),
+            'experimentsBackUrl' => route('adm.experiments'),
+            'experiment'         => [
+                'title'        => $survey->title,
+                'creationDate' => "$survey->created_at",
+                'userCount'    => $survey->users()->count(),
+            ],
         ]);
     }
 }

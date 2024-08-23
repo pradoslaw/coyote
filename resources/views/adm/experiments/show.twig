@@ -3,16 +3,18 @@
 
 {% block container %}
   <div class="card card-default">
-    <div class="card-header">Eksperyment: {{ experiment }}</div>
-    <div class="card-body">
-      Tytuł: {{ experiment }}
+    <div class="card-header">Eksperyment: {{ experiment.title }}</div>
     <div class="list-group list-group-flush">
       <div class="list-group-item">
-        Tytuł: {{ experiment }}
+        Tytuł: {{ experiment.title }}
+      </div>
+      <div class="list-group-item creation-date">
+        Data utworzenia:
+        <span>{{ experiment.creationDate }}</span>
       </div>
       <div class="list-group-item user-count">
         Ilość użytkowników:
-        <span>{{ experimentUserCount }}</span>
+        <span>{{ experiment.userCount }}</span>
       </div>
     </div>
   </div>
