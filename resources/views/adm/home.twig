@@ -11,8 +11,15 @@
 
   <link rel="apple-touch-icon" href="{{ cdn('img/apple-touch.png') }}">
   <link rel="shortcut icon" href="{{ cdn('img/favicon.png') }}" type="image/png">
+  <style>
+      body.theme-dark {
+          input.form-control {
+              background-color: #1a1a1a;
+          }
+      }
+  </style>
 </head>
-<body>
+<body class="{{ darkTheme ? 'theme-dark' : 'theme-light' }}">
 <div id="container">
   {% import 'components/forms.twig' as forms %}
 

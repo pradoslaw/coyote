@@ -32,6 +32,9 @@ class ViewServiceProvider extends ServiceProvider
         /** @var Factory $view */
         $view = $this->app['view'];
         $view->composer(['layout', 'adm.home'], InitialStateComposer::class);
+        $view->composer(['layout', 'adm.home'], function (View $view) {
+            $view->with(['darkTheme' => $this->initialDarkTheme()]);
+        });
         $view->composer('layout', function (View $view) use ($clock, $cache) {
             $view->with([
                 '__master_menu'  => $this->buildMasterMenu(),
