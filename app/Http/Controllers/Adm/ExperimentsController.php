@@ -10,7 +10,7 @@ class ExperimentsController extends BaseController
     public function __construct()
     {
         parent::__construct();
-        $this->breadcrumb->push('Eksperymenty', '');
+        $this->breadcrumb->push('Eksperymenty', route('adm.experiments'));
     }
 
     public function index(): View
@@ -51,6 +51,7 @@ class ExperimentsController extends BaseController
 
     public function show(Survey $survey): View
     {
+        $this->breadcrumb->push($survey->title, '');
         return $this->view('adm.experiments.show', [
             'experimentsBackUrl' => route('adm.experiments'),
             'experiment'         => [

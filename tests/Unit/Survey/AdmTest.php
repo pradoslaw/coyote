@@ -90,6 +90,23 @@ class AdmTest extends TestCase
     }
 
     #[Test]
+    public function existingExperimentBreadcrumbs(): void
+    {
+        $id = $this->newSurveyReturnId(surveyTitle:'foo');
+        $breadcrumbs = $this->breadcrumbs($this->experimentDom($id));
+        $this->assertContains('Eksperymenty', $breadcrumbs);
+        $this->assertContains('foo', $breadcrumbs);
+    }
+
+    #[Test]
+    public function experimentBreadcrumbUrl(): void
+    {
+        $view = $this->experimentDom($this->newSurveyReturnId());
+        $this->assertStringEndsWith('/Adm/Experiments',
+            $this->breadcrumbsUrl($view, $this->breadcrumbsIndexOf($view, 'Eksperymenty')));
+    }
+
+    #[Test]
     public function addLinkToNewExperiment(): void
     {
         $link = $this->experimentsDom()->findString('//main/article//a/@href');
@@ -105,7 +122,17 @@ class AdmTest extends TestCase
 
     private function breadcrumbs(ViewDom $view): array
     {
-        return \array_map(\trim(...), $view->findStrings("//ul[@class='breadcrumb']/li/*/text()"));
+        return \array_map(\trim(...), $view->findStrings("//ul[@class='breadcrumb']/li/*[1]/text()"));
+    }
+
+    private function breadcrumbsIndexOf(ViewDom $view, string $title): int
+    {
+        return \array_search($title, $this->breadcrumbs($view));
+    }
+
+    private function breadcrumbsUrl(ViewDom $view, int $index): string
+    {
+        return $view->findStrings("//ul[@class='breadcrumb']/li/a[1]/@href")[$index];
     }
 
     private function sidemenuIconByLabel(string $label): string
@@ -323,5 +350,10 @@ class AdmTest extends TestCase
     private function lastSurveyExists(): bool
     {
         return Survey::query()->exists();
+    }
+
+    private function experimentDom(int $surveyId): ViewDom
+    {
+        return $this->dom("/Adm/Experiments/$surveyId");
     }
 }
