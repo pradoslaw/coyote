@@ -34,6 +34,10 @@ body.theme-dark {
   .card {
     --bs-card-color: #acacac;
   }
+
+  .form-control {
+    --bs-secondary-color: gray;
+  }
 }
 
 a {
@@ -65,10 +69,6 @@ hr {
 .form-control {
   &, &:focus {
     background-color: white;
-  }
-
-  &::placeholder {
-    color: unset;
   }
 }
 
