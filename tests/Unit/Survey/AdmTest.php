@@ -3,6 +3,7 @@ namespace Tests\Unit\Survey;
 
 use Carbon\Carbon;
 use Coyote\Models\Survey;
+use Illuminate\Contracts\Session\Session;
 use Neon\Test\BaseFixture\Selector\Css;
 use Neon\Test\BaseFixture\View\ViewDom;
 use PHPUnit\Framework\Attributes\Before;
@@ -213,6 +214,7 @@ class AdmTest extends TestCase
     #[Test]
     public function showSurveyCreationDate(): void
     {
+        // make sure showing survey also displays creation date
         $id = $this->newSurveyReturnId(createdAt:new Carbon('2024-01-01'));
         $this->assertSame('2024-01-01 00:00:00', $this->experimentCreationDate($id));
     }
@@ -220,6 +222,7 @@ class AdmTest extends TestCase
     #[Test]
     public function showUsersAssignedToSurveyMany(): void
     {
+        // make sure that survey can have users assigned and display them
         $firstId = $this->dsl->newUserReturnId();
         $secondId = $this->dsl->newUserReturnId();
         $id = $this->newSurveyReturnId('Foo', usersId:[$firstId, $secondId]);
@@ -245,5 +248,80 @@ class AdmTest extends TestCase
         $usersCountLine = new Css('.creation-date');
         return $this->dom("/Adm/Experiments/$id")
             ->findString("//article//$usersCountLine/span/text()");
+    }
+
+    #[Test]
+    public function newSurveyTitleInputInNew(): void
+    {
+        // make sure that the new form screen has "tytuł" input
+        $surveyInput = \trim($this->dom('/Adm/Experiments/Save')
+            ->findString('//article//form//label/text()'));
+        $this->assertSame('Tytuł', $surveyInput);
+    }
+
+    #[Test]
+    public function newSurveyFormAction(): void
+    {
+        $surveyCreateUrl = $this->dom('/Adm/Experiments/Save')->findString('//article//form/@action');
+        $this->assertStringEndsWith('/Adm/Experiments/Save', $surveyCreateUrl);
+    }
+
+    #[Test]
+    public function createSurvey(): void
+    {
+        $response = $this->laravel->post('/Adm/Experiments/Save', ['title' => 'Foo']);
+        $this->assertSame(302, $response->status());
+        $this->assertSame('Foo', $this->lastSurvey()->title);
+    }
+
+    #[Test]
+    public function createSurveyRequireTitle(): void
+    {
+        $response = $this->laravel->post('/Adm/Experiments/Save', ['title' => '']);
+        $this->assertSame(302, $response->status());
+        $this->assertFalse($this->lastSurveyExists());
+    }
+
+    #[Test]
+    public function includeCsrfTokenInSurvey(): void
+    {
+        $this->setApplicationCsrfToken('abc123');
+        $viewDom = $this->dom('/Adm/Experiments/Save');
+        $this->assertSame('_token', $viewDom->findString("//article//form/input[@type='hidden']/@name"));
+        $this->assertSame('abc123', $viewDom->findString("//article//form/input[@type='hidden']/@value"));
+    }
+
+    #[Test]
+    public function showSurveyAfterCreatingIt(): void
+    {
+        $response = $this->laravel->post('/Adm/Experiments/Save', ['title' => 'work']);
+        $this->assertTrue($response->isRedirect());
+        $this->assertStringEndsWith(
+            "/Adm/Experiments/{$this->lastSurveyId()}",
+            $response->headers->get('Location'));
+    }
+
+    private function lastSurveyId(): int
+    {
+        return $this->lastSurvey()->id;
+    }
+
+    private function lastSurvey(): Survey
+    {
+        /** @var Survey $survey */
+        $survey = Survey::query()->firstOrFail();
+        return $survey;
+    }
+
+    private function setApplicationCsrfToken(string $value): void
+    {
+        /** @var Session $session */
+        $session = $this->laravel->app->get(Session::class);
+        $session->put('_token', $value);
+    }
+
+    private function lastSurveyExists(): bool
+    {
+        return Survey::query()->exists();
     }
 }

@@ -2,6 +2,7 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Models\Survey;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class ExperimentsController extends BaseController
@@ -34,8 +35,18 @@ class ExperimentsController extends BaseController
     {
         $this->breadcrumb->push('Nowy', '');
         return $this->view('adm.experiments.edit', [
-            'experimentsBackUrl' => route('adm.experiments'),
+            'experimentsBackUrl'  => route('adm.experiments'),
+            'experimentCreateUrl' => route('adm.experiments.create'),
+            'experimentCsrfField' => '_token',
+            'experimentCsrfToken' => $this->request->session()->token(),
         ]);
+    }
+
+    public function create(): RedirectResponse
+    {
+        $this->request->validate(['title' => 'required']);
+        $survey = $this->newSurvey($this->request->get('title'));
+        return redirect(route('adm.experiments.show', [$survey->id]));
     }
 
     public function show(Survey $survey): View
@@ -48,5 +59,12 @@ class ExperimentsController extends BaseController
                 'userCount'    => $survey->users()->count(),
             ],
         ]);
+    }
+
+    private function newSurvey(string $title): Survey
+    {
+        /** @var Survey $survey */
+        $survey = Survey::query()->create(['title' => $title]);
+        return $survey;
     }
 }
