@@ -32,66 +32,55 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class TopicResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
-        $only = $this->resource->only(['id', 'title', 'slug', 'score', 'views', 'is_sticky', 'is_subscribed', 'is_locked', 'first_post_id', 'last_post_id', 'accepted_id', 'is_voted', 'is_replied', 'user_name', 'user_post_id']);
-
+        $only = $this->resource->only([
+            'id', 'title', 'slug', 'score', 'views', 'is_sticky', 'is_subscribed', 'is_locked',
+            'first_post_id', 'last_post_id', 'accepted_id', 'is_voted', 'is_replied',
+            'user_name', 'user_post_id',
+        ]);
         return array_merge(
             $only,
             [
-                'created_at'            => $this->created_at->toIso8601String(),
-                'last_post_created_at'  => $this->last_post_created_at->toIso8601String(),
-                'url'                   => url(UrlBuilder::topic($this->resource->getModel())),
-                'is_read'               => $this->isRead(),
-                'replies'               => $this->replies($request),
-                'forum'         => [
-                    'id'        => $this->forum->id,
-                    'name'      => $this->forum->name,
-                    'slug'      => $this->forum->slug,
-                    'url'       => UrlBuilder::forum($this->forum)
+                'created_at'           => $this->created_at->toIso8601String(),
+                'last_post_created_at' => $this->last_post_created_at->toIso8601String(),
+                'url'                  => url(UrlBuilder::topic($this->resource->getModel())),
+                'is_read'              => $this->isRead(),
+                'replies'              => $this->replies($request),
+                'forum'                => [
+                    'id'   => $this->forum->id,
+                    'name' => $this->forum->name,
+                    'slug' => $this->forum->slug,
+                    'url'  => UrlBuilder::forum($this->forum),
                 ],
-                'tags'                  => TagResource::collection($this->whenLoaded('tags')),
-                'is_subscribed'         => $this->isSubscribed($request),
-                'user'                  => new UserResource($this->whenLoaded('user')),
-
-                'owner_id'              => $this->whenLoaded('firstPost', function () {
-                    return $this->firstPost->user_id;
-                }),
-
-                'last_post'             => $this->whenLoaded('lastPost', function () {
+                'tags'                 => TagResource::collection($this->whenLoaded('tags')),
+                'is_subscribed'        => $this->isSubscribed($request),
+                'user'                 => new UserResource($this->whenLoaded('user')),
+                'owner_id'             => $this->whenLoaded('firstPost', fn() => $this->firstPost->user_id),
+                'last_post'            => $this->whenLoaded('lastPost', function () {
                     $this->lastPost->setRelation('forum', $this->forum)->setRelation('topic', $this->resource);
-
                     return new PostResource($this->lastPost);
-                })
-            ]
+                }),
+            ],
         );
     }
 
-    /**
-     * @param  Request  $request
-     * @return int
-     */
     private function replies(Request $request): int
     {
-        return $request->user() && $request->user()->can('delete', $this->forum) ? $this->replies_real : $this->replies;
+        if ($request->user() && $request->user()->can('delete', $this->forum)) {
+            return $this->replies_real;
+        }
+        return $this->replies;
     }
 
-    /**
-     * @param Request $request
-     * @return bool
-     */
     private function isSubscribed(Request $request): bool
     {
         if ($this->resource->is_subscribed !== null) {
             return $this->resource->is_subscribed;
         }
-
-        return $request->user() ? $this->subscribers()->forUser($request->user()->id)->exists() : false;
+        if ($request->user()) {
+            return $this->subscribers()->forUser($request->user()->id)->exists();
+        }
+        return false;
     }
 }
