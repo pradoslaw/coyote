@@ -53,11 +53,15 @@ class ExperimentsController extends BaseController
     {
         $this->breadcrumb->push($survey->title, '');
         return $this->view('adm.experiments.show', [
-            'experimentsBackUrl' => route('adm.experiments'),
-            'experiment'         => [
+            'experimentsBackUrl'         => route('adm.experiments'),
+            'experimentUpdateMembersUrl' => route('adm.experiments.updateMembers', ['survey' => $survey]),
+            'experimentCsrfField'        => '_token',
+            'experimentCsrfToken'        => $this->request->session()->token(),
+            'experiment'                 => [
                 'title'        => $survey->title,
                 'creationDate' => "$survey->created_at",
                 'userCount'    => $survey->users()->count(),
+                'members'      => $survey->users()->pluck('id')->toArray(),
             ],
         ]);
     }
@@ -67,5 +71,11 @@ class ExperimentsController extends BaseController
         /** @var Survey $survey */
         $survey = Survey::query()->create(['title' => $title]);
         return $survey;
+    }
+
+    public function updateMembers(Survey $survey): RedirectResponse
+    {
+        $survey->users()->sync(\array_filter($this->request->get('members')));
+        return redirect(route('adm.experiments.show', [$survey->id]));
     }
 }

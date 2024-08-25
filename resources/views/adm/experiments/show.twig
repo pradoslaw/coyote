@@ -3,23 +3,47 @@
 
 {% block container %}
   <div class="card card-default">
-    <div class="card-header">Eksperyment: {{ experiment.title }}</div>
+    <div class="card-header">
+      <i class="fa-solid fa-chart-simple"></i>
+      Szczegóły eksperymentu
+    </div>
     <div class="list-group list-group-flush">
-      <div class="list-group-item">
-        Tytuł: {{ experiment.title }}
+      <div class="list-group-item experiment-title">
+        <b>Tytuł:</b>
+        <span>{{ experiment.title }}</span>
       </div>
       <div class="list-group-item creation-date">
-        Data utworzenia:
+        <b>Data utworzenia:</b>
         <span>{{ experiment.creationDate }}</span>
       </div>
       <div class="list-group-item user-count">
-        Ilość użytkowników:
+        <b>Ilość użytkowników:</b>
         <span>{{ experiment.userCount }}</span>
       </div>
     </div>
   </div>
+  <form class="card card-default" action="{{ experimentUpdateMembersUrl }}" method="POST">
+    <div class="card-header">
+      <i class="fa-solid fa-users"></i>
+      Uczestnicy
+    </div>
+    <div class="card-body">
+      <input type="hidden" name="{{ experimentCsrfField }}" value="{{ experimentCsrfToken }}">
+      {% for member in experiment.members %}
+        <input class="form-control mb-2" name="members[]" value="{{ member }}" style="width:auto;" placeholder="ID użytkownika"/>
+      {% endfor %}
+      <input class="form-control" name="members[]" value="" style="width:auto;" placeholder="Dodaj ID uzytkownika"/>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+      <button class="btn btn-primary">
+        <i class="fa-solid fa-check"></i>
+        Zapisz
+      </button>
+    </div>
+  </form>
   <div class="d-flex justify-content-end">
     <a class="btn btn-secondary" href="{{ experimentsBackUrl }}">
+      <i class="fa-solid fa-arrow-left"></i>
       Powrót
     </a>
   </div>

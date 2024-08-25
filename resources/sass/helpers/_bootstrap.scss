@@ -30,6 +30,10 @@ html {
   scroll-behavior: auto !important;
 }
 
+.list-group {
+  --bs-list-group-bg: white;
+}
+
 body.theme-dark {
   .card {
     --bs-card-color: #acacac;

@@ -22,9 +22,9 @@ readonly class ModelsDsl
         $this->models->newUserReturn(name:$name, deleted:true);
     }
 
-    public function newUserReturnId(string $permissionName = null): int
+    public function newUserReturnId(string $name = null, string $permissionName = null): int
     {
-        $user = $this->models->newUserReturn();
+        $user = $this->models->newUserReturn(name:$name);
         if ($permissionName) {
             $this->models->assignToGroupWithPermission($user, $permissionName);
         }

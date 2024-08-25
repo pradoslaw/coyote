@@ -188,8 +188,7 @@ class AdmTest extends TestCase
     #[Test]
     public function showSurvey(): void
     {
-        $id = $this->newSurveyReturnId('Foo');
-        $this->assertSame('Eksperyment: Foo', $this->experimentTitle($id));
+        $this->assertSame('Foo', $this->experimentTitle($this->newSurveyReturnId('Foo')));
     }
 
     #[Test]
@@ -258,9 +257,9 @@ class AdmTest extends TestCase
 
     private function experimentTitle(int $id): string
     {
-        $card = new Css('.card');
-        $header = new Css('.card-header');
-        return $this->dom("/Adm/Experiments/$id")->findString("//article/$card/$header/text()");
+        $usersCountLine = new Css('.experiment-title');
+        return $this->dom("/Adm/Experiments/$id")
+            ->findString("//article//$usersCountLine//span/text()");
     }
 
     private function experimentUsers(int $id): string
@@ -274,7 +273,7 @@ class AdmTest extends TestCase
     {
         $usersCountLine = new Css('.creation-date');
         return $this->dom("/Adm/Experiments/$id")
-            ->findString("//article//$usersCountLine/span/text()");
+            ->findString("//article//$usersCountLine//span/text()");
     }
 
     #[Test]
@@ -355,5 +354,48 @@ class AdmTest extends TestCase
     private function experimentDom(int $surveyId): ViewDom
     {
         return $this->dom("/Adm/Experiments/$surveyId");
+    }
+
+    #[Test]
+    public function updateSurveyMembersById(): void
+    {
+        // given
+        $surveyId = $this->newSurveyReturnId();
+        $userId = $this->dsl->newUserReturnId(name:'Mark');
+        // when
+        $this->laravel->post("/Adm/Experiments/$surveyId/Members", ['members' => [$userId]]);
+        // then
+        $this->assertSame(['Mark'], $this->lastSurveyMembers());
+    }
+
+    #[Test]
+    public function showSurveyAfterUpdatingMembers(): void
+    {
+        $surveyId = $this->newSurveyReturnId();
+        $response = $this->laravel->post("/Adm/Experiments/$surveyId/Members", ['members' => []]);
+        $this->assertTrue($response->isRedirect());
+        $this->assertStringEndsWith("/Adm/Experiments/$surveyId", $response->headers->get('Location'));
+    }
+
+    #[Test]
+    public function formForUpdatingMembers(): void
+    {
+        $id = $this->newSurveyReturnId();
+        $dom = $this->dom("/Adm/Experiments/{$id}");
+        $this->assertStringEndsWith("/Adm/Experiments/{$id}/Members", $dom->findString('//article//form/@action'));
+    }
+
+    #[Test]
+    public function ignoreUpdateMembersEmptyString(): void
+    {
+        $surveyId = $this->newSurveyReturnId();
+        $userId = $this->dsl->newUserReturnId(name:'Mark');
+        $this->laravel->post("/Adm/Experiments/$surveyId/Members", ['members' => ['', $userId]]);
+        $this->assertSame(['Mark'], $this->lastSurveyMembers());
+    }
+
+    private function lastSurveyMembers(): array
+    {
+        return $this->lastSurvey()->users()->pluck('name')->toArray();
     }
 }

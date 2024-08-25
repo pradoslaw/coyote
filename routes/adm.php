@@ -147,5 +147,6 @@ $this->group(
         $this->get('Experiments/Save', ['uses' => 'ExperimentsController@edit'])->name('experiments.edit');
         $this->get('Experiments/{survey}', ['uses' => 'ExperimentsController@show'])->name('experiments.show');
         $this->post('Experiments/Save', ['uses' => 'ExperimentsController@create'])->name('experiments.create');
+        $this->post('Experiments/{survey}/Members', ['uses' => 'ExperimentsController@updateMembers'])->name('experiments.updateMembers');
     },
 );
