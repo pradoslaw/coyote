@@ -2,7 +2,6 @@
 namespace Coyote\Domain\Survey;
 
 use Coyote\Models\Survey;
-use Illuminate\Database\Query\JoinClause;
 
 class AdministratorSurvey
 {
@@ -36,11 +35,7 @@ class AdministratorSurvey
     public function membersStatistic(Survey $survey): array
     {
         return $survey->users()
-            ->join('guests', function (JoinClause $join): void {
-                $join
-                    ->on('guests.user_id', '=', 'users.id')
-                    ->orOn('guests.id', '=', 'users.guest_id');
-            })
+            ->join('guests', 'guests.id', '=', 'users.guest_id')
             ->selectRaw("guests.settings->>'surveyState' as survey_state, COUNT(*) as count")
             ->groupBy('survey_state')
             ->pluck('count', 'survey_state')
