@@ -46,6 +46,7 @@ class AdministratorSurvey
     {
         return $this->surveyGuestsQuery($survey)
             ->selectRaw("guests.settings->>'postCommentStyle' as survey_choice, COUNT(*) as count")
+            ->whereRaw("guests.settings->>'surveyState' = ?", ['survey-instructed'])
             ->groupBy('survey_choice')
             ->pluck('count', 'survey_choice')
             ->toArray();

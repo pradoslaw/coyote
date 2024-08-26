@@ -85,14 +85,29 @@ class AdministratorSurveyTest extends TestCase
     {
         // given
         $survey = $this->newSurveyWithMembers([
-            $this->newUserReturnId(choice:'modern'),
-            $this->newUserReturnId(choice:'modern'),
-            $this->newUserReturnId(choice:'legacy'),
+            $this->newUserReturnId(choice:'modern', state:'survey-instructed'),
+            $this->newUserReturnId(choice:'modern', state:'survey-instructed'),
+            $this->newUserReturnId(choice:'legacy', state:'survey-instructed'),
         ]);
         // when
         $statistic = $this->admin->surveyResults($survey);
         // then
         $this->assertSame(['legacy' => 1, 'modern' => 2], $statistic);
+    }
+
+    #[Test]
+    public function surveyResultsIgnoreUninstructed(): void
+    {
+        // given
+        $survey = $this->newSurveyWithMembers([
+            $this->newUserReturnId(choice:'modern', state:'survey-instructed'),
+            $this->newUserReturnId(choice:'modern', state:'survey-instructed'),
+            $this->newUserReturnId(choice:'modern', state:'survey-accepted'),
+        ]);
+        // when
+        $statistic = $this->admin->surveyResults($survey);
+        // then
+        $this->assertSame(['modern' => 2], $statistic);
     }
 
     private function newSurveyWithMembers(array $memberIds): Survey
