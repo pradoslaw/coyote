@@ -394,6 +394,13 @@ class AdmTest extends TestCase
         $this->assertSame(['Mark'], $this->lastSurveyMembers());
     }
 
+    #[Test]
+    public function ignoreUpdateMembersMissingField(): void
+    {
+        $response = $this->laravel->post("/Adm/Experiments/{$this->newSurveyReturnId()}/Members");
+        $this->assertNotEquals(500, $response->status());
+    }
+
     private function lastSurveyMembers(): array
     {
         return $this->lastSurvey()->users()->pluck('name')->toArray();

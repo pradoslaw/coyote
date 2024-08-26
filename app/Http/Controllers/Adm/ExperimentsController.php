@@ -75,7 +75,7 @@ class ExperimentsController extends BaseController
 
     public function updateMembers(Survey $survey): RedirectResponse
     {
-        $survey->users()->sync(\array_filter($this->request->get('members')));
+        $survey->users()->sync(\array_filter($this->request->get('members', [])));
         return redirect(route('adm.experiments.show', [$survey->id]));
     }
 }

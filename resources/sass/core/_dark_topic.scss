@@ -485,6 +485,12 @@ body.theme-dark {
         border-top-color: #d7661c;
       }
     }
+
+    &.card-header-tabs {
+      .nav-item .nav-link {
+        background: #1a1a1a;
+      }
+    }
   }
 
   .btn.btn-primary {
