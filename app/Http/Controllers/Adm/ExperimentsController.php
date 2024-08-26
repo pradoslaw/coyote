@@ -54,6 +54,7 @@ class ExperimentsController extends BaseController
                 'userCount'    => $adminSurvey->membersCount($survey),
                 'members'      => $survey->users()->pluck('id')->toArray(),
                 'statistics'   => $adminSurvey->membersStatistic($survey),
+                'results'      => $adminSurvey->surveyResults($survey),
             ],
         ]);
     }

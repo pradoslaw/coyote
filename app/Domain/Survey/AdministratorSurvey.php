@@ -2,6 +2,7 @@
 namespace Coyote\Domain\Survey;
 
 use Coyote\Models\Survey;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class AdministratorSurvey
 {
@@ -34,12 +35,26 @@ class AdministratorSurvey
 
     public function membersStatistic(Survey $survey): array
     {
-        return $survey->users()
-            ->join('guests', 'guests.id', '=', 'users.guest_id')
+        return $this->surveyGuestsQuery($survey)
             ->selectRaw("guests.settings->>'surveyState' as survey_state, COUNT(*) as count")
             ->groupBy('survey_state')
             ->pluck('count', 'survey_state')
             ->toArray();
+    }
+
+    public function surveyResults(Survey $survey): array
+    {
+        return $this->surveyGuestsQuery($survey)
+            ->selectRaw("guests.settings->>'postCommentStyle' as survey_choice, COUNT(*) as count")
+            ->groupBy('survey_choice')
+            ->pluck('count', 'survey_choice')
+            ->toArray();
+    }
+
+    private function surveyGuestsQuery(Survey $survey): BelongsToMany
+    {
+        return $survey->users()
+            ->join('guests', 'guests.id', '=', 'users.guest_id');
     }
 
     public function membersCountOfState(Survey $survey, string $string): int

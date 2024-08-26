@@ -28,7 +28,10 @@
       Przebieg eksperymentu
     </div>
     <div class="card-body">
+      Lead values:
       <pre><code>{{ experiment.statistics|json_encode|raw }}</code></pre>
+      Result values:
+      <pre><code>{{ experiment.results|json_encode|raw }}</code></pre>
     </div>
   </div>
 

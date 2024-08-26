@@ -80,6 +80,21 @@ class AdministratorSurveyTest extends TestCase
             $statistic);
     }
 
+    #[Test]
+    public function surveyResults(): void
+    {
+        // given
+        $survey = $this->newSurveyWithMembers([
+            $this->newUserReturnId(choice:'modern'),
+            $this->newUserReturnId(choice:'modern'),
+            $this->newUserReturnId(choice:'legacy'),
+        ]);
+        // when
+        $statistic = $this->admin->surveyResults($survey);
+        // then
+        $this->assertSame(['legacy' => 1, 'modern' => 2], $statistic);
+    }
+
     private function newSurveyWithMembers(array $memberIds): Survey
     {
         $survey = $this->admin->newSurvey('irrelevant');
@@ -87,18 +102,35 @@ class AdministratorSurveyTest extends TestCase
         return $survey;
     }
 
-    private function newUserReturnId(string $state): int
+    private function newUserReturnId(string $state = null, string $choice = null): int
     {
         $userId = $this->dsl->newUserReturnId();
-        $this->setUserState($userId, $state);
+        $this->setGuestSurvey($userId, $state, $choice);
         return $userId;
     }
 
-    private function setUserState(int $userId, string $state): void
+    private function guestSurvey(int $userId): GuestSurvey
+    {
+        return new GuestSurvey(
+            new Guest($this->userGuestId($userId)),
+            new MemoryClock());
+    }
+
+    private function setGuestSurvey(int $userId, ?string $state, ?string $choice): void
+    {
+        $guestSurvey = $this->guestSurvey($userId);
+        if ($state) {
+            $guestSurvey->setState($state);
+        }
+        if ($choice) {
+            $guestSurvey->setChoice($choice);
+        }
+    }
+
+    private function userGuestId(int $userId): string
     {
         /** @var User $user */
         $user = User::query()->findOrFail($userId);
-        $survey = new GuestSurvey(new Guest($user->guest_id), new MemoryClock());
-        $survey->setState($state);
+        return $user->guest_id;
     }
 }
