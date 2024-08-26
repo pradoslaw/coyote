@@ -53,6 +53,7 @@ class ExperimentsController extends BaseController
                 'creationDate' => "$survey->created_at",
                 'userCount'    => $adminSurvey->membersCount($survey),
                 'members'      => $survey->users()->pluck('id')->toArray(),
+                'statistics'   => $adminSurvey->membersStatistic($survey),
             ],
         ]);
     }
