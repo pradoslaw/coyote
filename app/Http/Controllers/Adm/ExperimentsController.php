@@ -36,11 +36,11 @@ class ExperimentsController extends BaseController
     public function create(AdministratorSurvey $survey): RedirectResponse
     {
         $this->request->validate(['title' => 'required']);
-        $surveyId = $survey->newSurvey($this->request->get('title'));
-        return redirect(route('adm.experiments.show', [$surveyId]));
+        $survey = $survey->newSurvey($this->request->get('title'));
+        return redirect(route('adm.experiments.show', [$survey->id]));
     }
 
-    public function show(Survey $survey): View
+    public function show(Survey $survey, AdministratorSurvey $adminSurvey): View
     {
         $this->breadcrumb->push($survey->title, '');
         return $this->view('adm.experiments.show', [
@@ -51,7 +51,7 @@ class ExperimentsController extends BaseController
             'experiment'                 => [
                 'title'        => $survey->title,
                 'creationDate' => "$survey->created_at",
-                'userCount'    => $survey->users()->count(),
+                'userCount'    => $adminSurvey->membersCount($survey),
                 'members'      => $survey->users()->pluck('id')->toArray(),
             ],
         ]);
