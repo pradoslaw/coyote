@@ -8,7 +8,7 @@ use Coyote\Domain\Administrator\User\View\Activity;
 use Coyote\Domain\Administrator\User\View\Navigation;
 use Coyote\Domain\Administrator\View\Date;
 use Coyote\Domain\Survey\Clock;
-use Coyote\Domain\Survey\Survey;
+use Coyote\Domain\Survey\GuestSurvey;
 use Coyote\Events\UserDeleted;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Forms\User\AdminForm;
@@ -127,7 +127,7 @@ class UsersController extends BaseController
             if ($user->guest) {
                 if ($this->request->has('local-settings-action')) {
                     $action = $this->request->get('local-settings-action');
-                    $survey = new Survey(new Guest($user->guest->id), $clock);
+                    $survey = new GuestSurvey(new Guest($user->guest->id), $clock);
                     if ($action === 'post-comments-modern') {
                         $survey->setChoice('modern');
                     }

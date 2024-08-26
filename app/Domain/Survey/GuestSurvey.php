@@ -3,7 +3,7 @@ namespace Coyote\Domain\Survey;
 
 use Coyote\Services\Guest;
 
-readonly class Survey
+readonly class GuestSurvey
 {
     public function __construct(private Guest $guest, private Clock $clock)
     {

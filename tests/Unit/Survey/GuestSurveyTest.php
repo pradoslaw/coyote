@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\Survey;
 
-use Coyote\Domain\Survey\Survey;
+use Coyote\Domain\Survey\GuestSurvey;
 use Coyote\Services\Guest;
 use Neon\Test\BaseFixture\View\ViewDom;
 use PHPUnit\Framework\Attributes\Before;
@@ -10,13 +10,13 @@ use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel\Application;
 
-class SurveyTest extends TestCase
+class GuestSurveyTest extends TestCase
 {
     use Application;
 
     private string $guestId;
     private Guest $guest;
-    private Survey $survey;
+    private GuestSurvey $survey;
     private MemoryClock $clock;
 
     #[Before]
@@ -26,7 +26,7 @@ class SurveyTest extends TestCase
         $this->guest = new Guest($this->guestId);
         $this->laravel->app->instance(Guest::class, $this->guest);
         $this->clock = new MemoryClock();
-        $this->survey = new Survey($this->guest, $this->clock);
+        $this->survey = new GuestSurvey($this->guest, $this->clock);
     }
 
     private function randomUuid(): string
