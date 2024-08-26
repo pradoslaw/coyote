@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Http\Controllers\Adm;
 
+use Coyote\Domain\Survey\AdministratorSurvey;
 use Coyote\Models\Survey;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -13,22 +14,12 @@ class ExperimentsController extends BaseController
         $this->breadcrumb->push('Eksperymenty', route('adm.experiments'));
     }
 
-    public function index(): View
+    public function index(AdministratorSurvey $survey): View
     {
         return $this->view('adm.experiments.home', [
             'experimentNewUrl' => route('adm.experiments.edit'),
-            'experiments'      => $this->experiments(),
+            'experiments'      => $survey->experiments(),
         ]);
-    }
-
-    private function experiments(): array
-    {
-        return Survey::query()->get()
-            ->map(fn(Survey $survey) => [
-                'title' => $survey->title,
-                'url'   => route('adm.experiments.show', $survey->id),
-            ])
-            ->toArray();
     }
 
     public function edit(): View
@@ -42,11 +33,11 @@ class ExperimentsController extends BaseController
         ]);
     }
 
-    public function create(): RedirectResponse
+    public function create(AdministratorSurvey $survey): RedirectResponse
     {
         $this->request->validate(['title' => 'required']);
-        $survey = $this->newSurvey($this->request->get('title'));
-        return redirect(route('adm.experiments.show', [$survey->id]));
+        $surveyId = $survey->newSurvey($this->request->get('title'));
+        return redirect(route('adm.experiments.show', [$surveyId]));
     }
 
     public function show(Survey $survey): View
@@ -66,16 +57,9 @@ class ExperimentsController extends BaseController
         ]);
     }
 
-    private function newSurvey(string $title): Survey
+    public function updateMembers(Survey $survey, AdministratorSurvey $admSurvey): RedirectResponse
     {
-        /** @var Survey $survey */
-        $survey = Survey::query()->create(['title' => $title]);
-        return $survey;
-    }
-
-    public function updateMembers(Survey $survey): RedirectResponse
-    {
-        $survey->users()->sync(\array_filter($this->request->get('members', [])));
+        $admSurvey->updateMembers($survey, \array_filter($this->request->get('members', [])));
         return redirect(route('adm.experiments.show', [$survey->id]));
     }
 }
