@@ -1,42 +1,45 @@
 <?php
-
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use Coyote\Country;
+use Illuminate\Database\Seeder;
 
 class CountriesTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        Country::forceCreate(['name' => 'Austria', 'code' => 'AT', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Belgia', 'code' => 'BE', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Czechy', 'code' => 'CZ', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Dania', 'code' => 'DK', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Francja', 'code' => 'FR', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Hiszpania', 'code' => 'ES', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Irlandia', 'code' => 'IE', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Islandia', 'code' => 'IS', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Liechtenstein', 'code' => 'LI', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Luksemburg', 'code' => 'LU', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Malta', 'code' => 'MT', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Niemcy', 'code' => 'DE', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Norwegia', 'code' => 'NO', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Polska', 'code' => 'PL', 'vat_rate' => 1.23]);
-        Country::forceCreate(['name' => 'Finlandia', 'code' => 'FI', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Portugalia', 'code' => 'PT', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Szwajcaria', 'code' => 'CH', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Szwecja', 'code' => 'SE', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Wielka Brytania', 'code' => 'GB', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'USA', 'code' => 'US', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Włochy', 'code' => 'IT', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Anglia', 'code' => 'EN', 'vat_rate' => 1]); // <-- wielka brytania powinna wystarczyc
-        Country::forceCreate(['name' => 'Holandia', 'code' => 'NL', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Singapur', 'code' => 'SG', 'vat_rate' => 1]);
+        $this->createCountry('AT', 'Austria', 1);
+        $this->createCountry('BE', 'Belgia', 1);
+        $this->createCountry('CZ', 'Czechy', 1);
+        $this->createCountry('DK', 'Dania', 1);
+        $this->createCountry('FR', 'Francja', 1);
+        $this->createCountry('ES', 'Hiszpania', 1);
+        $this->createCountry('IE', 'Irlandia', 1);
+        $this->createCountry('IS', 'Islandia', 1);
+        $this->createCountry('LI', 'Liechtenstein', 1);
+        $this->createCountry('LU', 'Luksemburg', 1);
+        $this->createCountry('MT', 'Malta', 1);
+        $this->createCountry('DE', 'Niemcy', 1);
+        $this->createCountry('NO', 'Norwegia', 1);
+        $this->createCountry('PL', 'Polska', 1.23);
+        $this->createCountry('FI', 'Finlandia', 1);
+        $this->createCountry('PT', 'Portugalia', 1);
+        $this->createCountry('CH', 'Szwajcaria', 1);
+        $this->createCountry('SE', 'Szwecja', 1);
+        $this->createCountry('GB', 'Wielka Brytania', 1);
+        $this->createCountry('US', 'USA', 1);
+        $this->createCountry('IT', 'Włochy', 1);
+        $this->createCountry('EN', 'Anglia', 1); // <-- wielka brytania powinna wystarczyc
+        $this->createCountry('NL', 'Holandia', 1);
+        $this->createCountry('SG', 'Singapur', 1);
+    }
+
+    private function createCountry(string $countryCode, string $name, float|int $vatRate): void
+    {
+        Country::query()->forceCreate([
+            'name'     => $name,
+            'code'     => $countryCode,
+            'vat_rate' => $vatRate,
+        ]);
     }
 }

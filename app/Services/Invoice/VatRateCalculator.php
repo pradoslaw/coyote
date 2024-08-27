@@ -1,10 +1,9 @@
 <?php
-
 namespace Coyote\Services\Invoice;
 
 use Coyote\Country;
 
-class VatRateCalculator
+readonly class VatRateCalculator
 {
     private float $defaultVatRate;
 
@@ -15,10 +14,9 @@ class VatRateCalculator
 
     public function vatRate(?Country $country, ?string $vatId): float
     {
-        if (!$vatId || !$country) {
-            return $this->defaultVatRate;
+        if ($vatId && $country) {
+            return $country->vat_rate ?? $this->defaultVatRate;
         }
-
-        return $country->vat_rate ?? $this->defaultVatRate;
+        return $this->defaultVatRate;
     }
 }
