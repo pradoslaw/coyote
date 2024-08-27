@@ -124,31 +124,29 @@ class UsersController extends BaseController
             stream(Update::class, new Person($user));
             event($user->deleted_at ? new UserDeleted($user) : new UserSaved($user));
 
-            if ($user->guest) {
-                if ($this->request->has('local-settings-action')) {
-                    $action = $this->request->get('local-settings-action');
-                    $survey = new GuestSurvey(new Guest($user->guest->id), $clock);
-                    if ($action === 'post-comments-modern') {
-                        $survey->setChoice('modern');
-                    }
-                    if ($action === 'post-comments-legacy') {
-                        $survey->setChoice('legacy');
-                    }
-                    if ($action === 'post-comments-none-legacy') {
-                        $survey->setChoice('none-legacy');
-                    }
-                    if ($action === 'post-comments-none-modern') {
-                        $survey->setChoice('none-modern');
-                    }
-                    if ($action === 'survey-none') {
-                        $survey->setState('survey-none');
-                    }
-                    if ($action === 'survey-invited') {
-                        $survey->setState('survey-invited');
-                    }
-                    if ($action === 'survey-clear-log') {
-                        $survey->clearLog();
-                    }
+            if ($this->request->has('local-settings-action')) {
+                $action = $this->request->get('local-settings-action');
+                $survey = new GuestSurvey(new Guest($user->guest_id), $clock);
+                if ($action === 'post-comments-modern') {
+                    $survey->setChoice('modern');
+                }
+                if ($action === 'post-comments-legacy') {
+                    $survey->setChoice('legacy');
+                }
+                if ($action === 'post-comments-none-legacy') {
+                    $survey->setChoice('none-legacy');
+                }
+                if ($action === 'post-comments-none-modern') {
+                    $survey->setChoice('none-modern');
+                }
+                if ($action === 'survey-none') {
+                    $survey->setState('survey-none');
+                }
+                if ($action === 'survey-invited') {
+                    $survey->setState('survey-invited');
+                }
+                if ($action === 'survey-clear-log') {
+                    $survey->clearLog();
                 }
             }
         });
