@@ -138,7 +138,9 @@ class ModelsFactory
 
     private function flagTypeId(): int
     {
-        return Flag\Type::query()->first()->id;
+        /** @var Flag\Type $type */
+        $type = Flag\Type::query()->firstOrFail();
+        return $type->id;
     }
 
     public function newCommentReturn(string $content = null): Post\Comment

@@ -1,20 +1,22 @@
 <?php
 
+use Coyote\Notification;
+use Coyote\User;
 use Faker\Generator as Faker;
 
-$factory->define(\Coyote\Notification::class, function (Faker $faker) {
+$factory->define(Notification::class, function (Faker $faker): array {
     return [
-        'id' => $faker->uuid,
-        'type_id' => \Coyote\Notification\Type::first()->id,
-        'user_id' => factory(\Coyote\User::class),
+        'id'         => $faker->uuid,
+        'type_id'    => Notification\Type::query()->firstOrFail()->id,
+        'user_id'    => factory(User::class),
         'created_at' => now(),
-        'subject' => $faker->text(50),
-        'excerpt' => $faker->text(200),
-        'url' => $faker->url,
-        'object_id' => $faker->randomDigit
+        'subject'    => $faker->text(50),
+        'excerpt'    => $faker->text(200),
+        'url'        => $faker->url,
+        'object_id'  => $faker->randomDigit,
     ];
 });
 
-$factory->state(\Coyote\Notification::class, 'headline', [
-    'headline' => '{sender} dodał odpowiedź w wątku'
+$factory->state(Notification::class, 'headline', [
+    'headline' => '{sender} dodał odpowiedź w wątku',
 ]);
