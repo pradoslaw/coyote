@@ -4,6 +4,7 @@ namespace Tests\Unit\Legacy;
 use Coyote\Flag;
 use Coyote\Microblog;
 use Coyote\Services\Flags;
+use Database\Seeders\FlagTypesTableSeeder;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Test;
@@ -27,6 +28,12 @@ class FlagsTest extends TestCase
     public function removeFlags(): void
     {
         Flag::query()->delete();
+    }
+
+    #[Before]
+    public function seedFlagTypes(): void
+    {
+        $this->laravel->app->make(FlagTypesTableSeeder::class)->run();
     }
 
     #[Test]
