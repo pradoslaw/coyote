@@ -296,4 +296,16 @@
       }
     }
   }
+
+  .collapse-toggle {
+    cursor: pointer;
+    color: #80a41a;
+  }
+
+  button.narrow {
+    width: 36px;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+  }
 }

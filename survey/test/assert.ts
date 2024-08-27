@@ -16,8 +16,14 @@ export function assertMatch(string: string, regexp: RegExp): void {
   assert.match(string, regexp);
 }
 
-export function assertContains(array: any[], expected: any): void {
-  assertTrue(array.includes(expected));
+export function assertContains(array: any[], value: any): void {
+  if (!array.includes(value)) {
+    assert.fail(containsMessage(array, value));
+  }
+}
+
+function containsMessage(array: any[], value: any): string {
+  return `Failed to assert that array ${JSON.stringify(array)} contains ${JSON.stringify(value)}.`;
 }
 
 export function assertNotContains(array: any[], expected: any): void {

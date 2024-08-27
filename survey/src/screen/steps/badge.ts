@@ -3,6 +3,7 @@ import Vue from "vue";
 export default {
   props: {
     tooltip: {type: Boolean},
+    long: {type: Boolean},
   },
   template: `
     <div :class="{survey:true, overlay:tooltip}">
@@ -19,10 +20,13 @@ export default {
             </div>
           </div>
         </div>
-        <span>Zmieniaj forum na lepsze!</span>
-        <button class="btn btn-primary btn-engage ms-2" @click="engage">
+        <div class="collapse-toggle" @click="collapse">
+          <i :class="['fa-solid', long ? 'fa-chevron-right' : 'fa-chevron-left']"/>
+        </div>
+        <span v-if="long" class="ms-2">Zmieniaj forum na lepsze!</span>
+        <button class="btn btn-primary btn-engage ms-2" :class="{narrow:!long}" @click="engage">
           <i class="fa-solid fa-toggle-off"/>
-          Testuj
+          <template v-if="long">Testuj</template>
         </button>
       </div>
     </div>
@@ -33,6 +37,9 @@ export default {
     },
     notice(this: Vue): void {
       this.$emit('notice');
+    },
+    collapse(this: Vue): void {
+      this.$emit('collapse', !this.$props.long);
     },
   },
 };

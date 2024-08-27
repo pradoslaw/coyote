@@ -29,7 +29,7 @@ describe('assert', () => {
 
   describe('assertContains', () => {
     test('pass', () => passes(() => assertContains(['foo', 'bar'], 'bar')));
-    test('fail', () => fails(() => assertContains(['foo'], 'bar')));
+    test('fail', () => failMessage(() => assertContains([], 0), 'Failed to assert that array [] contains 0.'));
   });
 
   describe('assertNotContains', () => {
@@ -43,5 +43,12 @@ describe('assert', () => {
 
   function fails(operation: () => void): void {
     assert.throws(operation, assert.AssertionError);
+  }
+
+  function failMessage(block: () => void, expected: string): void {
+    assert.throws(block, (error: Error) => {
+      assert.strictEqual(error.message, expected);
+      return true;
+    });
   }
 });

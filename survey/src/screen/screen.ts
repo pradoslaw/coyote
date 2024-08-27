@@ -29,16 +29,25 @@ export default {
       />
       <vue-survey-badge
         v-if="screen === 'badge'"
+        :long="badgeLong"
         @engage="badgeEngage"
+        @collapse="badgeCollapse"
       />
       <vue-survey-badge
         v-if="screen === 'badge-tooltip'"
+        :long="badgeLong"
         tooltip
+        @collapse="badgeCollapse"
         @engage="badgeEngage"
         @notice="badgeNotice"
       />
     </div>
   `,
+  data() {
+    return {
+      badgeLong: true,
+    };
+  },
   methods: {
     enrollOpt(this: Vue, opt: string): void {
       if (opt === 'in') {
@@ -65,6 +74,9 @@ export default {
     },
     badgeNotice(this: Vue): void {
       this.$emit('badgeNotice');
+    },
+    badgeCollapse(this: Vue, long: boolean): void {
+      this.$data.badgeLong = long;
     },
   },
 };
