@@ -170,9 +170,6 @@
   .badge {
     @include floater;
     position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 32px;
     padding: 8px 8px 8px 16px;
     font-weight: 400;
     font-size: 12px;

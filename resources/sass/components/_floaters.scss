@@ -1,6 +1,8 @@
 @mixin floater {
   z-index: 50;
   border-radius: 32px;
+  bottom: 32px;
+  right: 32px;
   
   body.theme-light & {
     background: #f3f7e6;
