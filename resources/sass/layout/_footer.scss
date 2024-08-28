@@ -133,5 +133,9 @@ footer {
     text-align: center;
     cursor: pointer;
     color: #80a41a;
+
+    body.scrolled-down & {
+      display: block;
+    }
   }
 }

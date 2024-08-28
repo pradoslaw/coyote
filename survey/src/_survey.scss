@@ -186,6 +186,10 @@
     body.theme-dark & {
       color: #bbb;
     }
+
+    body.scrolled-down & {
+      right: 64px + 32px + 16px;
+    }
   }
 
   .survey-toggle {

@@ -1,15 +1,11 @@
 const scrollButton = document.getElementById('scroll-to-top');
 
 function handleScroll() {
-  if (document.documentElement.scrollTop > 300) {
-    scrollButton.style.display = 'block';
-  } else {
-    scrollButton.style.display = 'none';
-  }
+  document.body.classList.toggle('scrolled-down', document.documentElement.scrollTop > 300);
 }
 
 function scrollToTop() {
-  document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+  document.documentElement.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 if (scrollButton) {
