@@ -1,8 +1,5 @@
 <template>
-  <div v-if="isBlocked()" class="card card-post is-deleted">
-    <div class="post-delete card-body">Treść posta została ukryta ponieważ autorem jest zablokowany przez Ciebie użytkownik.</div>
-  </div>
-  <vue-post v-else :post="post" @reply="reply"></vue-post>
+  <vue-post :post="post" @reply="reply"/>
 </template>
 
 <script lang="ts">
@@ -19,9 +16,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    isBlocked() {
-      return this.post.user_id && this.$store.getters['user/isBlocked'](this.post.user_id);
-    },
     reply() {
       this.$emit('reply', ...arguments);
     },

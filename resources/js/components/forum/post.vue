@@ -1,23 +1,21 @@
 <template>
-  <div :id="anchor" :class="{'is-deleted': post.deleted_at, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed':isCollapsed}"
-       class="card card-post">
-    <a v-if="post.deleted_at" @click="isCollapsed = !isCollapsed" href="javascript:"
-       class="post-delete card-body text-decoration-none">
-      <i class="fas fa-warning"></i>
-
+  <div :id="anchor"
+       class="card card-post"
+       :class="{'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed':isCollapsed}">
+    <div v-if="post.deleted_at"
+         @click="isCollapsed = !isCollapsed"
+         class="post-delete card-body text-decoration-none">
+      <i class="fa-solid fa-trash-can fa-fw"/>
       Post usunięty
-      <vue-timeago :datetime="post.deleted_at"></vue-timeago>
-
-      <template v-if="post.deleter_name">
-        przez {{ post.deleter_name }}
-      </template>
-      .
-
-      <template v-if="post.delete_reason">
-        Powód: {{ post.delete_reason }}.
-      </template>
-    </a>
-
+      <vue-timeago :datetime="post.deleted_at"/>
+      <template v-if="post.deleter_name">przez {{ post.deleter_name }}.</template>
+      <template v-else>.</template>
+      <template v-if="post.delete_reason">Powód: {{ post.delete_reason }}.</template>
+    </div>
+    <div v-else-if="authorBlocked" class="post-delete card-body text-decoration-none" @click="isCollapsed = !isCollapsed">
+      <i class="fa-fw fa-solid fa-user-slash"/>
+      Treść posta została ukryta, ponieważ autorem jest zablokowany przez Ciebie użytkownik.
+    </div>
     <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed}" class="card-header d-none ">
       <div class="row">
         <div class="col-2">
@@ -123,7 +121,7 @@
             <strong class="vote-count" title="Ocena posta">{{ post.score }}</strong>
 
             <a
-              v-if="!post.deleted_at"
+              v-if="!hidden"
               :class="{'on': post.is_voted}"
               :aria-label="voters"
               @click="checkAuth(vote, post)"
@@ -137,7 +135,7 @@
               <i class="fas fa-thumbs-up fa-fw"></i>
             </a>
 
-            <a v-if="!post.deleted_at && post.permissions.accept"
+            <a v-if="!hidden && post.permissions.accept"
                :class="{'on': post.is_accepted}"
                @click="accept(post)"
                class="vote-accept"
@@ -229,7 +227,7 @@
       </div>
     </div>
 
-    <div :class="{'collapse': isCollapsed}" class="card-footer">
+    <div :class="{'collapse': isCollapsed}" class="card-footer" v-if="!authorBlocked">
       <div class="row">
         <div class="d-none d-lg-block col-lg-2"></div>
         <div class="col-12 d-flex col-lg-10">
@@ -361,10 +359,13 @@ export default Vue.extend({
   data() {
     return {
       isProcessing: false,
-      isCollapsed: this.post.deleted_at != null,
+      isCollapsed: false,
       isCommenting: false,
       commentDefault: {text: '', post_id: this.post.id},
-    }
+    };
+  },
+  created() {
+    this.isCollapsed = this.hidden;
   },
   methods: {
     ...mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments', 'loadVoters']),
@@ -439,6 +440,12 @@ export default Vue.extend({
     },
     flags() {
       return store.getters['flags/filter'](this.post.id, 'Coyote\\Post');
+    },
+    hidden(): boolean {
+      return this.post.deleted_at || this.authorBlocked;
+    },
+    authorBlocked(): boolean {
+      return this.post.user_id && this.$store.getters['user/isBlocked'](this.post.user_id);
     },
   },
 });

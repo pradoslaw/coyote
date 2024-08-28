@@ -49,12 +49,7 @@
   background-color: $alert-warning-background;
   font-size: 11px;
   border-bottom: 1px solid $alert-warning-border;
-
-  a {
-    display: block;
-    color: inherit;
-    text-decoration: none;
-  }
+  cursor: pointer;
 }
 
 .post-avatar {
