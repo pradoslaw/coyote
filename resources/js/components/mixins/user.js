@@ -10,8 +10,8 @@ export default {
 
         el.href = `/Profile/${binding.value}`;
         el.dataset.userId = binding.value;
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -20,13 +20,19 @@ export default {
     },
 
     number(value) {
-      return Math.abs(value) > 999 ? Math.sign(value) * ((Math.abs(value)/1000).toFixed(1)) + 'k' : Math.sign(value) * Math.abs(value);
+      if (Math.abs(value) >= 1000000) {
+        return (value / 1000000).toFixed(1) + 'm';
+      }
+      if (Math.abs(value) >= 1000) {
+        return (value / 1000).toFixed(1) + 'k';
+      }
+      return value.toString();
     },
 
     size(size) {
       return size > 1024 * 1024 ? Math.round(size / 1024 / 1024) + ' MB' : Math.round(size / 1024) + ' KB';
     },
-    
+
     checkAuth(cb, ...args) {
       if (!this.isAuthorized) {
         this.$notify({
@@ -34,13 +40,13 @@ export default {
           // @ts-ignore
           width: '400px',
           title: 'Logowanie wymagane',
-          text: '<a href="/Login">Zaloguj się</a>, aby skorzystać z tej funkcjonalności.'
+          text: '<a href="/Login">Zaloguj się</a>, aby skorzystać z tej funkcjonalności.',
         });
 
         return;
       }
 
       cb(...args);
-    }
-  }
+    },
+  },
 };
