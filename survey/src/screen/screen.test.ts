@@ -1,7 +1,8 @@
 import {describe, test} from '@jest/globals';
-import {assertEquals, assertMatch, assertTrue} from "../../test/assert";
+import {assertEquals, assertFalse, assertMatch, assertTrue} from "../../test/assert";
 import {Component, render} from "../../test/render";
 import VueScreen, {Experiment, Screen} from "./screen";
+import VueSurveyBadge from "./steps/badge";
 
 describe('survey screen', () => {
   describe('screens', () => {
@@ -16,10 +17,24 @@ describe('survey screen', () => {
       assertMatch(screen.text(), /Pierwotna wersja/);
     });
 
-    test('badge', () => {
-      assertMatch(
-        renderScreen('badge').text(),
-        /Testuj/);
+    describe('badge', () => {
+      test('badge expanded', () => {
+        assertMatch(renderScreen('badge').text(), /Testuj/);
+      });
+      test('badge collapsed', () => {
+        assertEquals(renderScreen('badge', {}, false).text(), '');
+      });
+      test('badge emit collapse', () => {
+        const screens = renderScreen('badge');
+        screens.emitFrom(VueSurveyBadge, 'collapse', [false]);
+        assertTrue(screens.emitted('badgeCollapse'));
+        assertFalse(screens.emittedValue('badgeCollapse'));
+      });
+      test('badge emit collapse open', () => {
+        const screens = renderScreen('badge');
+        screens.emitFrom(VueSurveyBadge, 'collapse', [true]);
+        assertTrue(screens.emittedValue('badgeCollapse'));
+      });
     });
 
     test('badge tooltip', () => {
@@ -95,7 +110,11 @@ describe('survey screen', () => {
     });
   });
 
-  function renderScreen(screen: Screen, experiment: Experiment | object = {}): Component {
-    return render(VueScreen, {screen, experiment});
+  function renderScreen(
+    screen: Screen,
+    experiment: Experiment | object = {},
+    badgeLong: boolean = true,
+  ): Component {
+    return render(VueScreen, {screen, experiment, badgeLong});
   }
 });

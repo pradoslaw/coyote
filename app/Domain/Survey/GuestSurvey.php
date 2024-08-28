@@ -80,4 +80,14 @@ readonly class GuestSurvey
             [$this->clock->time(), $value],
         ]);
     }
+
+    public function badgeState(bool $badgeLong): void
+    {
+        $this->setSetting('badgeLong', $badgeLong ? 'true' : 'false');
+    }
+
+    public function badgeLong(): bool
+    {
+        return $this->guest->getSetting('badgeLong', 'true') === 'true';
+    }
 }

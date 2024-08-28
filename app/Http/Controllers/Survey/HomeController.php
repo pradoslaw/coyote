@@ -21,6 +21,10 @@ class HomeController extends Controller
             $survey->preview($this->request->get('surveyChoicePreview'));
             return null;
         }
+        if ($this->request->has('surveyBadgeState')) {
+            $survey->badgeState($this->request->get('surveyBadgeState'));
+            return null;
+        }
         return response(status:422);
     }
 }

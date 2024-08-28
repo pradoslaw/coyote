@@ -13,7 +13,7 @@ export default {
     'vue-survey-participate': VueSurveyParticipate,
     'vue-survey-badge': VueSurveyBadge,
   },
-  props: ['screen', 'experiment'],
+  props: ['screen', 'experiment', 'badgeLong'],
   template: `
     <div>
       <vue-survey-enroll
@@ -35,7 +35,6 @@ export default {
       />
       <vue-survey-badge
         v-if="screen === 'badge-tooltip'"
-        :long="badgeLong"
         tooltip
         @collapse="badgeCollapse"
         @engage="badgeEngage"
@@ -43,11 +42,6 @@ export default {
       />
     </div>
   `,
-  data() {
-    return {
-      badgeLong: true,
-    };
-  },
   methods: {
     enrollOpt(this: Vue, opt: string): void {
       if (opt === 'in') {
@@ -76,7 +70,7 @@ export default {
       this.$emit('badgeNotice');
     },
     badgeCollapse(this: Vue, long: boolean): void {
-      this.$data.badgeLong = long;
+      this.$emit('badgeCollapse', long);
     },
   },
 };

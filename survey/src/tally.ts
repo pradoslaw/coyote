@@ -27,12 +27,13 @@ interface Data {
 }
 
 export default {
-  props: ['state', 'experiment'],
+  props: ['state', 'experiment', 'badgeLong'],
   components: {'vue-survey-screen': SurveyScreen},
   template: `
     <vue-survey-screen
       :screen="screen"
       :experiment="experiment"
+      :badge-long="badgeLong"
       @enrollOptIn="enrollOptIn"
       @enrollOptOut="enrollOptOut"
       @experimentClose="experimentClose"
@@ -41,6 +42,7 @@ export default {
       @experimentPreview="experimentPreview"
       @badgeEngage="badgeEngage"
       @badgeNotice="badgeNotice"
+      @badgeCollapse="badgeCollapse"
     />`,
   data(this: Instance): Data {
     return {
@@ -84,6 +86,9 @@ export default {
     badgeNotice(this: Instance): void {
       this.screen = 'badge';
       this.changeSurveyState('survey-instructed');
+    },
+    badgeCollapse(this: Vue, long: boolean): void {
+      this.$emit('badgeCollapse', long);
     },
     changeSurveyState(this: Vue, state: State): void {
       this.$emit('change', state);

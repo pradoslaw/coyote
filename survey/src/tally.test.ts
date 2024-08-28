@@ -159,6 +159,16 @@ describe('survey', () => {
             await userAction(tally, 'badgeNotice');
             assertEquals(tally.emittedValue('change'), 'survey-instructed');
           });
+          test('collapse badge', async () => {
+            const tally = renderTally('survey-instructed');
+            await userAction(tally, 'badgeCollapse', [true]);
+            assertEquals(tally.emittedValue('badgeCollapse'), true);
+          });
+
+          test('pass badge collapsed to screen', () => {
+            const tally = renderTally('survey-instructed', {}, false);
+            assertEquals(tally.passedTo(SurveyScreen, 'badgeLong'), false);
+          });
         });
       });
 
@@ -174,8 +184,8 @@ describe('survey', () => {
         assertEquals(tally.passedTo(SurveyScreen, 'screen'), expected);
       }
 
-      function renderTally(state: State, experiment?: object): Component {
-        return render(VueTally, {state, experiment: experiment || {}});
+      function renderTally(state: State, experiment?: object, badgeLong?: boolean): Component {
+        return render(VueTally, {state, experiment: experiment || {}, badgeLong: badgeLong || false});
       }
 
       function userAction(tally: Component, eventName: string, args: any[] = []): Promise<void> {

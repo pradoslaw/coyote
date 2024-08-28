@@ -14,11 +14,13 @@ window.addEventListener('load', () => {
   interface Survey {
     surveyState: State;
     surveyChoice: ExperimentOpt;
+    surveyBadgeLong: boolean;
   }
 
   interface Data {
     state: State,
     experiment: Experiment;
+    badgeLong: boolean;
   }
 
   const app = new Vue({
@@ -29,9 +31,12 @@ window.addEventListener('load', () => {
       <vue-survey-tally
         :state="state"
         :experiment="experiment"
+        :badge-long="badgeLong"
         @experimentOpt="experimentOpt"
         @experimentPreview="experimentPreview"
-        @change="change"/>
+        @change="change"
+        @badgeCollapse="badgeCollapse"
+      />
     `,
     data(): Data {
       const experiment: Experiment = {
@@ -42,6 +47,7 @@ window.addEventListener('load', () => {
       return {
         state: survey.surveyState,
         experiment,
+        badgeLong: survey.surveyBadgeLong,
       };
     },
     methods: {
@@ -60,6 +66,10 @@ window.addEventListener('load', () => {
         const theme = dark ? trial.dark : trial.light;
         this.experiment.imageLegacy = theme.imageLegacy;
         this.experiment.imageModern = theme.imageModern;
+      },
+      badgeCollapse(long: boolean): void {
+        this.$data.badgeLong = long;
+        storeSurveyBadgeState(long);
       },
     },
   });
@@ -82,5 +92,9 @@ window.addEventListener('load', () => {
 
   function storeSurveyPreview(surveyChoicePreview: ExperimentOpt): void {
     axios.post('/survey', {surveyChoicePreview});
+  }
+
+  function storeSurveyBadgeState(badgeLong: boolean): void {
+    axios.post('/survey', {surveyBadgeState: badgeLong});
   }
 });

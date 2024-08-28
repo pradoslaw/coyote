@@ -84,6 +84,20 @@ class GuestSurveyTest extends TestCase
     }
 
     #[Test]
+    public function passSurveyStateToView_surveyBadgeLong(): void
+    {
+        $this->survey->badgeState(true);
+        $this->assertTrue($this->surveyViewInput()['surveyBadgeLong']);
+    }
+
+    #[Test]
+    public function passSurveyStateToView_surveyBadgeShort(): void
+    {
+        $this->survey->badgeState(false);
+        $this->assertFalse($this->surveyViewInput()['surveyBadgeLong']);
+    }
+
+    #[Test]
     public function inLayoutExistsScriptJson(): void
     {
         $this->assertTrue($this->viewDom()->exists('//script[@type="application/json"]'));
@@ -257,5 +271,25 @@ class GuestSurveyTest extends TestCase
     private function log(string $state): void
     {
         $this->survey->setState($state);
+    }
+
+    #[Test]
+    public function storeSurveyBadgeStateLong(): void
+    {
+        $this->laravel->post('/survey', ['surveyBadgeState' => true])->assertSuccessful();
+        $this->assertTrue($this->survey->badgeLong());
+    }
+
+    #[Test]
+    public function storeSurveyBadgeStateShort(): void
+    {
+        $this->laravel->post('/survey', ['surveyBadgeState' => false])->assertSuccessful();
+        $this->assertFalse($this->survey->badgeLong());
+    }
+
+    #[Test]
+    public function getBadgeLongDefaultsToLong(): void
+    {
+        $this->assertTrue($this->survey->badgeLong());
     }
 }
