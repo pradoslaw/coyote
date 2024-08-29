@@ -5,9 +5,9 @@ function confirmModal(options: ModalOptions) {
   const modalRef = Math.random().toString(36).substring(5);
 
   const ModalWrapper = Vue.extend({
-    data: () => ({...options, ...{ modalRef }}),
+    data: () => ({...options, ...{modalRef}}),
     props: {
-      resolver: Function
+      resolver: Function,
     },
     components: {'vue-modal': VueModal},
     mounted() {
@@ -22,28 +22,23 @@ function confirmModal(options: ModalOptions) {
       destroy(): void {
         (this.$refs[modalRef] as VueModal).close();
         this.$destroy();
-
-        // remove the element from the DOM
         this.$el.parentNode!.removeChild(this.$el);
-      }
+      },
     },
     template: `
-        <vue-modal :ref="modalRef">
-          <template slot="title">{{ title }}</template>
-
-          <div v-html="message"></div>
-
-          <template slot="buttons">
-            <button @click="destroy" type="button" class="btn btn-secondary">Anuluj</button>
-            <button @click="resolve" type="submit" class="btn btn-danger danger">{{ okLabel || 'Ok' }}</button>
-          </template>
-        </vue-modal>
-      `
+      <vue-modal :ref="modalRef">
+        <template v-slot:title>{{ title }}</template>
+        <div v-html="message"></div>
+        <template v-slot:buttons>
+          <button @click="destroy" type="button" class="btn btn-secondary">Anuluj</button>
+          <button @click="resolve" type="submit" class="btn btn-danger danger">{{ okLabel || 'Ok' }}</button>
+        </template>
+      </vue-modal>
+    `,
   });
 
   return new Promise(resolve => {
     const wrapper = new ModalWrapper({propsData: {resolver: resolve}}).$mount();
-
     document.body.append(wrapper.$el);
   });
 }
@@ -51,5 +46,5 @@ function confirmModal(options: ModalOptions) {
 export default {
   install(Vue) {
     Vue.prototype.$confirm = confirmModal;
-  }
+  },
 };

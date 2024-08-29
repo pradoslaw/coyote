@@ -1,6 +1,6 @@
 <template>
   <vue-modal ref="modal">
-    <template slot="title">
+    <template v-slot:title>
       Usunąć wpis?
     </template>
 
@@ -10,7 +10,7 @@
       <vue-select name="reason_id" :options="reasons" v-model="reasonId" class="form-control-sm" placeholder="-- wybierz --"/>
     </p>
 
-    <template slot="buttons">
+    <template v-slot:buttons>
       <button @click="close" type="button" class="btn btn-secondary" data-dismiss="modal">
         Anuluj
       </button>
@@ -42,10 +42,10 @@ export default Vue.extend({
   },
   methods: {
     open() {
-      (this.$refs.modal as VueModal).open();
+      this.$refs.modal.open();
     },
     close() {
-      (this.$refs.modal as VueModal).close();
+      this.$refs.modal.close();
     },
     deletePost() {
       this.$emit('delete', this.reasonId);
