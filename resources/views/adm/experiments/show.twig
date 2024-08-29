@@ -104,10 +104,10 @@
       name: 'Survey members',
       el: '#survey-form',
       delimiters: ['${', '}'],
-      data: {
+      data: () => ({
         memberIds: experimentMembers,
         membersBatch: experimentMembers.join(','),
-      },
+      }),
       watch: {
         membersBatch() {
           this.memberIds.length = 0;

@@ -8,8 +8,8 @@ new Vue({
   components: {
     'vue-form': VueForm,
   },
-  data: {
+  data: () => ({
     application: window.application,
     job: window.job,
-  },
+  }),
 });

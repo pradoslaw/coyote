@@ -1,16 +1,16 @@
-import Vue from 'vue';
-import VuePricing from '@/components/job/pricing.vue';
-import VueJobForm from '@/components/job/form.vue';
-import VueFirmForm from '@/components/job/firm-form.vue';
 import VueButton from '@/components/forms/button.vue';
+import VueFirmForm from '@/components/job/firm-form.vue';
+import VueJobForm from '@/components/job/form.vue';
+import VuePricing from '@/components/job/pricing.vue';
 import VueTabs from '@/components/tabs.vue';
 import store from '@/store';
+import Vue from 'vue';
 
 new Vue({
   el: '#js-submit-form',
   store,
   delimiters: ['${', '}'],
-  data: {
+  data: () => ({
     plans,
     currencies,
     job,
@@ -20,14 +20,14 @@ new Vue({
     errors: {},
     isSubmitting: false,
     currentTab: 0,
-    tabs: ['Oferta pracy', 'Informacje o firmie']
-  },
+    tabs: ['Oferta pracy', 'Informacje o firmie'],
+  }),
   components: {
     'vue-job-form': VueJobForm,
     'vue-firm-form': VueFirmForm,
     'vue-button': VueButton,
     'vue-pricing': VuePricing,
-    'vue-tabs': VueTabs
+    'vue-tabs': VueTabs,
   },
   created() {
     store.commit('jobs/INIT_FORM', window.job);
@@ -56,6 +56,6 @@ new Vue({
           this.errors = err.response.data.errors;
         })
         .finally(() => this.isSubmitting = false);
-    }
-  }
+    },
+  },
 });

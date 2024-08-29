@@ -8,10 +8,10 @@ new Vue({
   components: {
     'vue-pricing': VuePricing,
   },
-  data: {
+  data: () => ({
     plans,
     plan,
-  },
+  }),
   computed: {
     submitUrl() {
       return `/Praca/Submit?default_plan=${this.plan.id}`;

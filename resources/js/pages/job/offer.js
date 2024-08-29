@@ -15,7 +15,7 @@ new Vue({
   name: 'Flags',
   el: '#js-flags',
   delimiters: ['${', '}'],
-  data: {job: window.job},
+  data: () => ({job: window.job}),
   components: {'vue-flag': VueFlag},
   store,
   created() {
@@ -40,7 +40,7 @@ new Vue({
 new Vue({
   el: '#js-sidemenu',
   delimiters: ['${', '}'],
-  data: {job: window.job},
+  data: () => ({job: window.job}),
   store,
   mixins: [mixins],
   created() {

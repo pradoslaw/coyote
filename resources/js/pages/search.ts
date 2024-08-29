@@ -106,7 +106,7 @@ new Vue({
   name: 'Search',
   el: '#js-search',
   delimiters: ['${', '}'],
-  data: {
+  data: () => ({
     hits: window.hits,
     model: window.model,
     query: window.query,
@@ -122,7 +122,7 @@ new Vue({
     user: window.user,
     isDropdownVisible: false,
     pageLimit: window.pageLimit,
-  },
+  }),
   components: {'vue-pagination': VuePagination, 'perfect-scrollbar': PerfectScrollbar, 'vue-autocomplete': VueAutocomplete, 'vue-dropdown-menu': VueDropdownMenu},
   store,
   created() {

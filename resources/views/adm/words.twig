@@ -48,9 +48,9 @@
       name: 'Words',
       el: '#app',
       delimiters: ['${', '}'],
-      data: {
+      data: () => ({
         rows: {{ words|json_encode|raw }}
-      },
+      }),
       methods: {
         addRow: function () {
           this.rows.unshift({word: "", replacement: ""});

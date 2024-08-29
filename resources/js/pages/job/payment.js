@@ -19,7 +19,7 @@ new Vue({
     'vue-checkbox': VueCheckbox,
     'vue-button': VueButton,
   },
-  data: {
+  data: () => ({
     countries: window.countries,
     netPrice: window.netPrice,
     vatRate: window.vatRate,
@@ -34,7 +34,7 @@ new Vue({
     errors: {},
     hasPaymentError: false,
     isProcessing: false,
-  },
+  }),
   mounted() {
     this.stripe = Stripe(window.stripeKey);
     const elements = this.stripe.elements();
