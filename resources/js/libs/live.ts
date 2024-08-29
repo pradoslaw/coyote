@@ -1,10 +1,10 @@
-import { Microblog, Post, PostComment, MicroblogVoters, PostVoters } from "@/types/models";
-import { default as ws } from "./realtime";
-import Prism from "prismjs";
-import store from '../store';
-import Vue from 'vue';
 import Channel from "@/libs/websocket/channel";
-import { getPost, getPostComment } from '@/api';
+import {Microblog, MicroblogVoters, Post, PostComment, PostVoters} from "@/types/models";
+import Prism from "prismjs";
+import Vue from 'vue';
+import {getPost, getPostComment} from '../api/posts';
+import store from '../store';
+import {default as ws} from "./realtime";
 
 export type Payload = Microblog | Post | PostComment | MicroblogVoters | PostVoters;
 
@@ -44,7 +44,7 @@ export class MicroblogVoted extends MicroblogObserver implements Observer {
       return;
     }
 
-    store.dispatch('microblogs/updateVoters', { microblog: existing, users: payload.users });
+    store.dispatch('microblogs/updateVoters', {microblog: existing, users: payload.users});
   }
 }
 
@@ -65,7 +65,7 @@ export class MicroblogCommentSaved extends MicroblogObserver implements Observer
       payload.is_read = false;
     }
 
-    store.commit(`microblogs/${payload.id! in parent.comments ? 'UPDATE_COMMENT' : 'ADD_COMMENT'}`, { parent, comment: payload });
+    store.commit(`microblogs/${payload.id! in parent.comments ? 'UPDATE_COMMENT' : 'ADD_COMMENT'}`, {parent, comment: payload});
   }
 }
 
@@ -81,14 +81,14 @@ export class PostCommentSaved implements Observer {
     if (!existing) {
       payload.is_read = false;
 
-      getPostComment(payload.id).then(({ data }) => {
-        store.commit('posts/addComment', { post, comment: data });
+      getPostComment(payload.id).then(({data}) => {
+        store.commit('posts/addComment', {post, comment: data});
       });
 
       return;
     }
 
-    store.commit('posts/updateComment', { post, comment: payload });
+    store.commit('posts/updateComment', {post, comment: payload});
   }
 }
 
@@ -108,10 +108,10 @@ export class PostSaved implements Observer {
     if (!existing) {
       const topic = store.getters['topics/topic'];
 
-      getPost(payload.id).then(({ data }) => {
+      getPost(payload.id).then(({data}) => {
         store.commit(`posts/add`, data);
 
-        Vue.nextTick(() => document.getElementById(`id${payload.id}`)!.addEventListener('mouseover', () => store.dispatch('topics/mark', topic), {once: true}))
+        Vue.nextTick(() => document.getElementById(`id${payload.id}`)!.addEventListener('mouseover', () => store.dispatch('topics/mark', topic), {once: true}));
       });
 
       return;
@@ -129,7 +129,7 @@ export class PostVoted extends PostObserver implements Observer {
       return;
     }
 
-    store.dispatch('posts/updateVoters', { post: existing, users: payload.users });
+    store.dispatch('posts/updateVoters', {post: existing, users: payload.users});
   }
 }
 

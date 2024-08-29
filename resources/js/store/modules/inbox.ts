@@ -1,12 +1,12 @@
-import { getInbox } from '@/api';
+import {getInbox} from '../../api/messages';
 
 const state = {
   messages: null, // initial value must be null to show fa-spinner
-  count: 0
+  count: 0,
 };
 
 const getters = {
-  isEmpty: state => state.messages === null
+  isEmpty: state => state.messages === null,
 };
 
 const mutations = {
@@ -25,15 +25,14 @@ const mutations = {
   MARK(state, message) {
     const date = new Date();
     date.setSeconds(date.getSeconds() - 1); // subtract one seconds so we can display "1 seconds ago" instade of "0 seconds ago"
-
     message.read_at = date;
   },
 };
 
 const actions = {
-  get({ commit }) {
+  get({commit}) {
     return getInbox().then(result => commit('SET_MESSAGES', result.data));
-  }
+  },
 };
 
 export default {
@@ -41,5 +40,5 @@ export default {
   state,
   getters,
   mutations,
-  actions
+  actions,
 };
