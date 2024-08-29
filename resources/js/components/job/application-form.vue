@@ -49,24 +49,26 @@
     </div>
 
     <div class="form-group">
-      <vue-button :disabled="isProcessing" @click.native.prevent="submitForm" class="btn btn-primary">Wyślij</vue-button>
+      <vue-button :disabled="isProcessing" @click.native.prevent="submitForm" class="btn btn-primary">
+        Wyślij
+      </vue-button>
     </div>
   </form>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import VueFormGroup from '@/components/forms/form-group.vue';
-import VueText from '@/components/forms/text.vue';
-import VueSelect from '@/components/forms/select.vue';
-import VueCheckbox from '@/components/forms/checkbox.vue';
 import VueButton from '@/components/forms/button.vue';
+import VueCheckbox from '@/components/forms/checkbox.vue';
 import VueError from '@/components/forms/error.vue';
+import VueFormGroup from '@/components/forms/form-group.vue';
+import VueSelect from '@/components/forms/select.vue';
+import VueText from '@/components/forms/text.vue';
 import VueThumbnail from "@/components/thumbnail.vue";
-import VueTinyMce from '@tinymce/tinymce-vue';
-import { Application, Job, Asset } from '@/types/models';
 import TinyMceOptions from '@/libs/tinymce';
+import {Asset} from '@/types/models';
+import VueTinyMce from '@tinymce/tinymce-vue';
 import axios from 'axios';
+import Vue from 'vue';
 
 export default Vue.extend({
   name: 'VueApplicationForm',

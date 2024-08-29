@@ -1,8 +1,7 @@
 <template>
   <button :disabled="disabled">
-    <i v-if="disabled" class="fa fa-spinner fa-spin fa-fw"></i>
-
-    <slot></slot>
+    <i v-if="disabled" class="fa fa-spinner fa-spin fa-fw"/>
+    <slot/>
   </button>
 </template>
 
@@ -11,8 +10,8 @@ export default {
   props: {
     disabled: {
       type: Boolean,
-      default: false
-    }
-  }
-}
+      default: false,
+    },
+  },
+};
 </script>

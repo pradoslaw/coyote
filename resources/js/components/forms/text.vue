@@ -3,26 +3,26 @@
 </template>
 
 <script>
-  import {default as mixins} from '../mixins/form';
+import {default as mixins} from '../mixins/form';
 
-  export default {
-    props: {
-      name: {
-        type: String,
-        require: true
-      },
-      value: {
-        type: [String, Number]
-      },
-      isInvalid: {
-        type: Boolean,
-        default: false
-      },
-      type: {
-        type: String,
-        default: 'text'
-      }
+export default {
+  props: {
+    name: {
+      type: String,
+      require: true,
     },
-    mixins: [mixins]
-  };
+    value: {
+      type: [String, Number],
+    },
+    isInvalid: {
+      type: Boolean,
+      default: false,
+    },
+    type: {
+      type: String,
+      default: 'text',
+    },
+  },
+  mixins: [mixins],
+};
 </script>

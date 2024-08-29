@@ -92,7 +92,7 @@ export default {
             showSubcategoriesOnIdle(current + 1);
           });
         }
-      }
+      };
       showSubcategoriesOnIdle(this.visibleCategories + 1);
     },
     subcategoryVisible(name) {

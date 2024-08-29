@@ -75,15 +75,13 @@
                 <p class="text-truncate mb-1">
                   <a :href="getUrl(category)" class="category-last-topic">{{ category.topic.title }}</a>
                 </p>
-
-                <span class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></span>,
-
+                <span class="text-muted">
+                  <vue-timeago :datetime="category.post.created_at"/>
+                </span>,
                 <vue-username v-if="category.post.user" :user="category.post.user"></vue-username>
                 <span v-else>{{ category.post.user_name }}</span>
-
                 <div class="toolbox">
                   <a href="javascript:" title="Oznacz jako przeczytane" @click="mark(category)"><i class="far fa-eye"></i></a>
-
                   <a v-if="isAuthorized" :class="{'disabled': isBeginning(index)}" title="Przesuń w górę" @click="up(category)"><i class="fas fa-caret-up"></i></a>
                   <a v-if="isAuthorized" :class="{'disabled': isEnding(index)}" title="Przesuń w dół" @click="down(category)"><i class="fas fa-caret-down"></i></a>
                 </div>
@@ -97,13 +95,13 @@
 </template>
 
 <script>
-import {default as mixins} from '../mixins/user';
-import {mixin as clickaway} from 'vue-clickaway';
-import store from '../../store';
-import {mapGetters, mapActions} from "vuex";
-import VueAvatar from '../avatar.vue';
-import VueUsername from '../user-name.vue';
 import VueTags from '@/components/tags.vue';
+import {mixin as clickaway} from 'vue-clickaway';
+import {mapActions, mapGetters} from "vuex";
+import store from '../../store';
+import VueAvatar from '../avatar.vue';
+import {default as mixins} from '../mixins/user';
+import VueUsername from '../user-name.vue';
 
 export default {
   mixins: [mixins, clickaway],
@@ -112,24 +110,24 @@ export default {
   props: {
     name: {
       type: String,
-      required: false // <-- subcategories might not have section name
+      required: false, // <-- subcategories might not have section name
     },
     order: {
       type: Number,
-      required: true
+      required: true,
     },
     categories: {
-      type: Array
+      type: Array,
     },
     isCollapse: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      isDropdown: false
-    }
+      isDropdown: false,
+    };
   },
   methods: {
     collapse() {
@@ -174,8 +172,8 @@ export default {
       return category.topic.is_read ? `${category.topic.url}?p=${category.post.id}#id${category.post.id}` : category.topic.url;
     },
 
-    ...mapActions('forums', ['mark', 'toggle', 'up', 'down'])
+    ...mapActions('forums', ['mark', 'toggle', 'up', 'down']),
   },
-  computed: mapGetters('user', ['isAuthorized'])
-}
+  computed: mapGetters('user', ['isAuthorized']),
+};
 </script>

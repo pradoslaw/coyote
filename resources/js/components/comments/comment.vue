@@ -120,7 +120,7 @@ export default {
         text: '',
         parent_id: this.comment.parent_id ? this.comment.parent_id : this.comment.id,
       },
-    }
+    };
   },
   methods: {
     edit() {
@@ -176,5 +176,5 @@ export default {
       ];
     },
   },
-}
+};
 </script>

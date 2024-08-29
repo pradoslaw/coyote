@@ -100,8 +100,7 @@
       </vue-form-group>
 
       <vue-form-group :errors="errors['firm.founded']" label="Rok powstania" class="border-bottom">
-        <vue-select :options="founded" v-model="firm.founded" placeholder="--" name="firm[founded]"></vue-select>
-
+        <vue-select :options="founded" v-model="firm.founded" placeholder="--" name="firm[founded]"/>
         <span class="form-text text-muted">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
       </vue-form-group>
 
@@ -119,7 +118,8 @@
 
       <div class="form-group border-bottom" v-show="firm.is_agency === false">
         <label class="col-form-label">Benefity</label>
-        <span class="form-text text-muted">Kliknij na wybraną pozycję, aby zaznaczyć benefity jakie oferuje Twoja firma. Jeżeli nie ma go na liście, możesz dodać nową pozycję wpisując ją w polu poniżej.</span>
+        <span class="form-text text-muted">Kliknij na wybraną pozycję, aby zaznaczyć benefity jakie oferuje Twoja firma. Jeżeli nie ma go na liście, możesz dodać nową pozycję wpisując ją w
+          polu poniżej.</span>
 
         <ol class="benefits list-group list-group-horizontal d-flex flex-row flex-wrap">
 
@@ -142,7 +142,8 @@
           <li class="list-group-item w-50 checked">
             <i class="fas fa-fw fa-check"></i>
 
-            <input v-model="benefit" type="text" maxlength="100" class="form-control form-control-sm" @keydown.enter.prevent="addBenefit" placeholder="Wpisz tekst i naciśnij Enter, aby dodać">
+            <input v-model="benefit" type="text" maxlength="100" class="form-control form-control-sm" @keydown.enter.prevent="addBenefit"
+                   placeholder="Wpisz tekst i naciśnij Enter, aby dodać">
           </li>
         </ol>
 
@@ -153,18 +154,18 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import VueFormGroup from '@/components/forms/form-group.vue';
-import VueText from '@/components/forms/text.vue';
-import VueSelect from '@/components/forms/select.vue';
 import VueButton from '@/components/forms/button.vue';
 import VueError from '@/components/forms/error.vue';
-import VueTinyMce from '@tinymce/tinymce-vue';
+import VueFormGroup from '@/components/forms/form-group.vue';
+import VueSelect from '@/components/forms/select.vue';
+import VueText from '@/components/forms/text.vue';
 import VueMap from '@/components/google-maps/map.vue';
 import VueMarker from '@/components/google-maps/marker.vue';
 import VueThumbnail from '@/components/thumbnail.vue';
-import { Firm, Asset } from '@/types/models';
-import { mapMutations } from 'vuex';
+import {Asset} from '@/types/models';
+import VueTinyMce from '@tinymce/tinymce-vue';
+import Vue from 'vue';
+import {mapMutations} from 'vuex';
 import Geocoder from '../../libs/geocoder.js';
 import TinyMceOptions from '../../libs/tinymce.js';
 import store from '../../store';

@@ -32,7 +32,6 @@
           type="submit">
           Zapisz
         </vue-button>
-
         <button v-if="microblog.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger float-end me-2" tabindex="3">
           Anuluj
         </button>
