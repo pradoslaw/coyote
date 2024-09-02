@@ -137,13 +137,6 @@
           </li>
 
           <li class="nav-item">
-            <a title="Zobacz rozkład postów użytkownika" href="{{ route('profile', [user.id, 'Post']) }}"
-               class="nav-link {{ tab == 'post' ? 'active' }}" role="tab">
-              Statystyki postów
-            </a>
-          </li>
-
-          <li class="nav-item">
             <a title="Zobacz wpisy opublikowane na mikroblogu użytkownika"
                href="{{ route('profile', [user.id, 'Microblog']) }}"
                class="nav-link {{ tab == 'microblog' ? 'active' }}" role="tab">

@@ -55,7 +55,7 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
         $this->router->pattern('tag_name', '([a-ząęśżźćółń0-9\-\.\#\+])+');
         $this->router->pattern('slug', '.*');
         $this->router->pattern('path', '.*'); // being used on wiki routes
-        $this->router->pattern('tab', 'Reputation|Post|Microblog'); // user's profile tabs
+        $this->router->pattern('tab', 'Reputation|Microblog'); // user's profile tabs
 
         $this->router->model('user', UserRepositoryInterface::class);
         $this->router->model('post', PostRepositoryInterface::class);
