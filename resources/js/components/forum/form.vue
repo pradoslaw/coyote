@@ -120,16 +120,14 @@
       </div>
     </div>
 
-    <div class="row mt-2">
-      <div class="col-12">
-        <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm" @click.native.prevent="save">
-          Zapisz
-        </vue-button>
-
-        <button v-if="post.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-danger me-2">
-          Anuluj
-        </button>
-      </div>
+    <div class="mt-2">
+      <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm" @click.native.prevent="save">
+        <template v-if="post.id">Zapisz</template>
+        <template v-else>Dodaj post</template>
+      </vue-button>
+      <button v-if="post.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-danger me-2">
+        Anuluj
+      </button>
     </div>
   </form>
 </template>
