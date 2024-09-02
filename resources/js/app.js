@@ -1,4 +1,3 @@
-import '@popperjs/core'; // must be imported before bootstrap
 import Prism from 'prismjs';
 import Vue from 'vue';
 import 'bootstrap/js/dist/tooltip.js';
@@ -38,9 +37,6 @@ new Router()
   .on(['/'], () => require('./pages/homepage'))
   .on(['/Search'], () => require('./pages/search'))
   .resolve();
-
-// must be at the end so other vue components can render
-require('./plugins/popover');
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker

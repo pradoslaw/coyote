@@ -8,8 +8,7 @@
       @save="saveMicroblog"
       @cancel="cancel"
       ref="markdown"
-      preview-url="/Mikroblogi/Preview"
-    >
+      preview-url="/Mikroblogi/Preview">
       <template v-slot:bottom>
         <div class="p-1">
           <vue-tags-inline
@@ -17,8 +16,7 @@
             placeholder="...inny? kliknij, aby wybrać tag"
             @change="toggleTag"
             :popular-tags="popularTags"
-            data-popover='{"message": "Sugerowane tagi, które możesz przypisać do tego wpisu.", "placement": "bottom-start"}'
-          ></vue-tags-inline>
+          />
         </div>
       </template>
     </vue-markdown>
