@@ -123,24 +123,21 @@
             </div>
           </div>
         </div>
-
         <vue-notifications position="bottom right"/>
       </div>
-
       {% if user.posts > 0 %}
         <ul class="nav nav-pills">
-          <li class="nav-item">
-            <a title="Sprawdź wykres reputacji użytkownika" href="{{ route('profile', [user.id]) }}"
-               class="nav-link {{ tab == 'reputation' ? 'active"' }}" role="tab">
-              Reputacja
-            </a>
-          </li>
-
           <li class="nav-item">
             <a title="Zobacz wpisy opublikowane na mikroblogu użytkownika"
                href="{{ route('profile', [user.id, 'Microblog']) }}"
                class="nav-link {{ tab == 'microblog' ? 'active' }}" role="tab">
               Mikroblog
+            </a>
+          </li>
+          <li class="nav-item">
+            <a title="Sprawdź wykres reputacji użytkownika" href="{{ route('profile', [user.id, 'Reputation']) }}"
+               class="nav-link {{ tab == 'reputation' ? 'active"' }}" role="tab">
+              Reputacja
             </a>
           </li>
         </ul>

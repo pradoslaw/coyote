@@ -32,8 +32,12 @@ new Router()
   .on(['/Register', '/Login'], () => require('./pages/auth'))
   .on(['/Adm/Mailing'], () => require('./libs/tinymce').default())
   .on(['/User/Pm/Submit', '/User/Pm/Show/*', '/User/Pm'], () => require('./pages/pm'))
-  .on(['/Mikroblogi', '/Mikroblogi/*', '/Profile/*/Microblog'], () => require('./pages/microblog'))
-  .on(['/Profile/*'], () => require('./pages/profile'))
+  .on(['/Profile/*/Reputation'], () => require('./pages/profile'))
+  .on(['/Profile/*', '/Profile/*/Microblog'], () => {
+    require('./pages/profile');
+    require('./pages/microblog');
+  })
+  .on(['/Mikroblogi', '/Mikroblogi/*'], () => require('./pages/microblog'))
   .on(['/'], () => require('./pages/homepage'))
   .on(['/Search'], () => require('./pages/search'))
   .resolve();

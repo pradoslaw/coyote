@@ -32,7 +32,7 @@ class HomeController extends Controller
         });
     }
 
-    public function index(User $user, string $tab = 'reputation'): View
+    public function index(User $user, string $tab = 'microblog'): View
     {
         $this->breadcrumb->push($user->name, route('profile', ['user_trashed' => $user->id]));
 
