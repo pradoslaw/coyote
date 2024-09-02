@@ -1,4 +1,6 @@
 @charset "UTF-8";
+@import "@fortawesome/fontawesome-free/scss/variables";
+@import "../../helpers/mixins";
 
 .card-post {
   .card-body {
@@ -145,11 +147,11 @@
     max-width: 100%;
     object-fit: contain;
   }
-  
+
   img.img-smile {
     height: 1em;
   }
-  
+
   table {
     @extend .table-responsive-sm;
   }
@@ -256,9 +258,11 @@ blockquote {
     font-size: .8rem;
 
     &:before {
-      @include font-awesome($fa-var-up-right-from-square);
-      left: 0;
+      @include font-awesome($fa-var-reply);
       font-weight: 900;
+      top: 0;
+      left: 0;
+      opacity: 0.8;
     }
   }
 }
