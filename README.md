@@ -213,6 +213,14 @@ docker-compose exec php php vendor/bin/phpunit
    Pamiętaj, że uruchomienie `docker compose up` (bez przekazania `-f`) domyślnie
    skorzysta z plików `docker-compose.yaml` **oraz** `docker-compose.override.yaml`.
 
+8. Running `yarn watch` causes SPA view not to render at all.
+
+   If in developer console there are errors concerning loading `.js` files, then the most likely problem an outdated
+   `manifest.json` file. Webpack normally rebuilds it live when working with `yarn watch`, but that happens
+   as the very last step. If there is any error during building (e.g. incorrect unix permissions) then the building
+   doesn't proceed, the file `manifest.json` is not updated, view is attempted to be shown with outdated `manifest.json`
+   which fails.
+
 ### Zadania uruchomiane w tle
 
 Na serwerze produkcyjnym niektóre zadanie wykonywane są w tle. Dodawane są one do kolejki oraz wykonywane przez proces działający w tle.
