@@ -308,16 +308,17 @@
   </div>
 </template>
 <script lang="ts">
-import VueTags from '@/components/tags.vue';
-import VueClipboard from '@/plugins/clipboard';
-import store from "@/store";
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import pl from 'date-fns/locale/pl';
 import Vue from 'vue';
 import {mapActions, mapGetters, mapState} from "vuex";
+
+import VueClipboard from '../../plugins/clipboard';
+import store from "../../store/index";
 import VueAvatar from '../avatar.vue';
 import VueDeleteModal from "../delete-modal.vue";
 import {default as mixins} from '../mixins/user.js';
+import VueTags from '../tags.vue';
 import VueUserName from "../user-name.vue";
 import VueFlag from './../flags/flag.vue';
 import VueButton from './../forms/button.vue';
