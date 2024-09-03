@@ -32,7 +32,7 @@ class HomeController extends Controller
         });
     }
 
-    public function index(User $user, string $tab = 'microblog'): View
+    public function index(User $user): View
     {
         $this->breadcrumb->push($user->name, route('profile', ['user_trashed' => $user->id]));
 
@@ -40,16 +40,22 @@ class HomeController extends Controller
             'user'               => new UserResource($user),
             'skills'             => TagResource::collection($user->skills->load('category')),
             'rate_labels'        => SkillsRequest::RATE_LABELS,
-            'tab'                => strtolower($tab),
-            'module'             => $this->$tab($user),
+            'tab'                => 'microblog',
             'chartLibraryScript' => Chart::librarySourceHtml(),
+            'microblogModule'    => $this->microblog($user),
+            'reputationModule'   => $this->reputation($user),
         ]);
     }
 
-    public function history(User $user, Request $request): View
+    private function microblog(User $user): View
     {
-        return view('profile.partials.reputation_list', [
-            'reputation' => $this->reputation->history($user->id, $request->input('offset')),
+        /** @var Builder $builder */
+        $builder = app(Builder::class);
+        $paginator = $builder->orderById()->onlyUsers($user)->paginate();
+        return view('profile.partials.microblog', [
+            'user'       => $user,
+            'pagination' => new MicroblogCollection($paginator),
+            'emojis'     => Emoji::all(),
         ]);
     }
 
@@ -75,15 +81,10 @@ class HomeController extends Controller
         );
     }
 
-    private function microblog(User $user): View
+    public function history(User $user, Request $request): View
     {
-        /** @var Builder $builder */
-        $builder = app(Builder::class);
-        $paginator = $builder->orderById()->onlyUsers($user)->paginate();
-        return view('profile.partials.microblog', [
-            'user'       => $user,
-            'pagination' => new MicroblogCollection($paginator),
-            'emojis'     => Emoji::all(),
+        return view('profile.partials.reputation_list', [
+            'reputation' => $this->reputation->history($user->id, $request->input('offset')),
         ]);
     }
 }

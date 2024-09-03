@@ -125,76 +125,63 @@
         </div>
         <vue-notifications position="bottom right"/>
       </div>
-      {% if user.posts > 0 %}
-        <ul class="nav nav-pills">
-          <li class="nav-item">
-            <a title="Zobacz wpisy opublikowane na mikroblogu użytkownika"
-               href="{{ route('profile', [user.id, 'Microblog']) }}"
-               class="nav-link {{ tab == 'microblog' ? 'active' }}" role="tab">
-              Mikroblog
-            </a>
-          </li>
-          <li class="nav-item">
-            <a title="Sprawdź wykres reputacji użytkownika" href="{{ route('profile', [user.id, 'Reputation']) }}"
-               class="nav-link {{ tab == 'reputation' ? 'active"' }}" role="tab">
-              Reputacja
-            </a>
-          </li>
-        </ul>
-      {% endif %}
 
       {{ chartLibraryScript }}
 
-      {{ module|raw }}
+      {{ microblogModule|raw }}
     </div>
     <div class="col-md-3">
-      <ul class="side-menu">
-        {% if user.id != user('id') %}
-          <li>
-            <a href="{{ route('user.pm.submit', {to: user.name}) }}">
-              <i class="fas fa-fw fa-envelope"></i>
-              Wyślij wiadomość
-            </a>
-          </li>
-        {% endif %}
+      <div class="box">
+        <h4 class="heading">
+          <i class="fa-solid fa-people-arrows"></i>
+          Poznaj
+        </h4>
 
-        <li>
-          <a href="{{ route('forum.user', [user.id]) }}">
-            <i class="fas fa-fw fa-magnifying-glass"></i>
-            Znajdź posty użytkownika
-          </a>
-        </li>
-
-        {% if can('adm-access') %}
-          {% if not user.is_blocked and user.id != user('id') %}
+        <ul class="side-menu">
+          {% if user.id != user('id') %}
             <li>
-              <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}">
-                <i class="fas fa-user-lock fa-fw"></i>
-                Zbanuj tego użytkownika</a>
+              <a href="{{ route('user.pm.submit', {to: user.name}) }}">
+                <i class="fas fa-fw fa-envelope"></i>
+                Wyślij wiadomość
+              </a>
             </li>
           {% endif %}
 
           <li>
-            <a href="{{ route('adm.users.show', [user.id]) }}">
-              <i class="fas fa-eye fa-fw"></i>
-              Pokaż w panelu administracyjnym
+            <a href="{{ route('forum.user', [user.id]) }}">
+              <i class="fas fa-fw fa-magnifying-glass"></i>
+              Znajdź posty użytkownika
             </a>
           </li>
-        {% endif %}
-      </ul>
 
-      <div class="box">
+          {% if can('adm-access') %}
+            {% if not user.is_blocked and user.id != user('id') %}
+              <li>
+                <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}">
+                  <i class="fas fa-user-lock fa-fw"></i>
+                  Zbanuj tego użytkownika</a>
+              </li>
+            {% endif %}
+
+            <li>
+              <a href="{{ route('adm.users.show', [user.id]) }}">
+                <i class="fas fa-eye fa-fw"></i>
+                Pokaż w panelu administracyjnym
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+
+      {{ render_block('job_ads') }}
+
+      {{ reputationModule|raw }}
+
+      <div class="box mb-4">
         <h4 class="heading">
           <i class="fa fa-medal"></i>
           Uprawnienia
         </h4>
-
-        <p class="mt-4">
-          <a href="/Pomoc/Konto/Reputacja" class="small text-muted">
-            <u>Sprawdź czym są punkty reputacji i jak możesz je zdobyć</u>
-          </a>
-        </p>
-
         <ul class="list-unstyled">
           {% for name, text in trans('privileges') %}
             {% set value = constant('Coyote\\Reputation::' ~ name|upper) %}
@@ -212,9 +199,12 @@
             </li>
           {% endfor %}
         </ul>
+        <p>
+          <a href="/Pomoc/Konto/Reputacja" class="small text-muted">
+            <u>Sprawdź czym są punkty reputacji i jak możesz je zdobyć</u>
+          </a>
+        </p>
       </div>
-
-      {{ render_block('job_ads') }}
     </div>
   </div>
 {% endblock %}
