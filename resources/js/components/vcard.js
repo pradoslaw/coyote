@@ -23,7 +23,6 @@ function showVCard(event) {
   const handler = () => {
     axios.get(`/User/Vcard/${userId}`).then(result => {
       removeVCard();
-
       const container = document.createElement('div');
       container.innerHTML = result.data;
 
@@ -41,7 +40,7 @@ function showVCard(event) {
     });
   };
 
-  tooltipTimer = setTimeout(handler, 800);
+  tooltipTimer = setTimeout(handler, 250);
 }
 
 function hideVCard() {
