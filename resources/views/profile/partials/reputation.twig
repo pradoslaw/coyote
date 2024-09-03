@@ -1,5 +1,4 @@
 <section class="box mt-4">
-
   <div class="card card-default">
     <div class="card-body">
       <div class="row">
@@ -8,21 +7,23 @@
             <div style="height:280px;">
               {{ chart }}
             </div>
-
             <div class="chart-bar">
               <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;">
                 </div>
-
-                <span class="rep"><strong>{{ user.reputation }}</strong> <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small></span>
-
+                <span class="rep">
+                  <strong>{{ user.reputation }}</strong>
+                  <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small>
+                </span>
                 {% if total_users > 0 %}
-                  <span class="rank" title="Miejsce w rankingu"><strong>#{{ rank.rank }}</strong> <small>/ {{ total_users }}</small></span>
+                  <span class="rank" title="Miejsce w rankingu">
+                    <strong>#{{ rank.rank }}</strong> 
+                    <small>/ {{ total_users }}</small>
+                  </span>
                 {% endif %}
               </div>
             </div>
           </div>
-
           <div class="col-sm-6">
             <div id="wrap">
               <div id="reputation">
