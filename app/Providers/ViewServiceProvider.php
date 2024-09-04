@@ -2,7 +2,6 @@
 namespace Coyote\Providers;
 
 use Coyote\Domain\Clock;
-use Coyote\Domain\Github\GithubStars;
 use Coyote\Domain\Survey\GuestSurvey;
 use Coyote\Domain\User\UserSettings;
 use Coyote\Http\Composers\InitialStateComposer;
@@ -40,7 +39,6 @@ class ViewServiceProvider extends ServiceProvider
                 '__master_menu'  => $this->buildMasterMenu(),
                 '__dark_theme'   => $this->initialDarkTheme(),
                 '__color_scheme' => $this->colorScheme(),
-                'github_stars'   => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
                 'gdpr'           => [
                     'content'  => (new UserSettings)->cookieAgreement(),
                     'accepted' => $this->gdprAccepted(),
@@ -96,13 +94,6 @@ class ViewServiceProvider extends ServiceProvider
             $sections[$category['section']][] = $category;
         }
         return $sections;
-    }
-
-    private function githubStars(): ?int
-    {
-        /** @var GithubStars $github */
-        $github = $this->app->make(GithubStars::class);
-        return $github->fetchStars();
     }
 
     private function initialDarkTheme(): bool

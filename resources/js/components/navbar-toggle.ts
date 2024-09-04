@@ -3,7 +3,6 @@ import Vue, {CreateElement, VNode} from 'vue';
 import VueClickAway from "vue-clickaway";
 
 import store from "../store/index";
-import GithubButton from './github-button.vue';
 
 Array
   .from(document.querySelectorAll('.disable-theme-notice'))
@@ -104,7 +103,6 @@ const controls = new Vue({
   name: 'NonAlertControls',
   el: '#non-alert-controls',
   components: {
-    'vue-github-button': GithubButton,
     'vue-icon': VueIcon,
   },
   data() {
@@ -159,9 +157,6 @@ const controls = new Vue({
   },
   template: `
     <div :class="['d-flex', 'align-items-center', 'h-100']" v-away="close">
-      <div class="d-none d-xl-flex me-2">
-        <vue-github-button size="large" :theme="dark ? 'dark' : 'light'"/>
-      </div>
       <span :class="['position-relative', 'px-2', 'py-2', 'btn-toggle-theme', {open}]" @click="toggleOpen" v-if="toggleEnabled" style="cursor:pointer;">
         <vue-icon :icon="oppositeIcon"/>
         <div class="dropdown-menu dropdown-menu-end" style="display:block" v-show="open">
