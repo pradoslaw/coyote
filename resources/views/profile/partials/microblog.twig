@@ -3,7 +3,7 @@
   var emojis = {{ emojis|json_encode|raw }};
 </script>
 
-<section id="js-microblog" class="mt-4">
+<section>
   <template v-if="microblogs.length > 0">
     <vue-microblog v-for="microblog in microblogs" :key="microblog.id" :microblog="microblog" :wrap="true"></vue-microblog>
   </template>
@@ -14,7 +14,11 @@
         <div class="col-12">
           <div class="card card-body bg-light p-2">
             <p class="text-center mb-0">
-              Użytkownik nie opublikował żadnego wpisu na mikroblogu.
+              {% if user.id == user('id') %}
+                Dodaj swój pierwszy wpis na mikroblogu!
+              {% else %}
+                Użytkownik nie opublikował żadnego wpisu na mikroblogu.
+              {% endif %}
             </p>
           </div>
         </div>

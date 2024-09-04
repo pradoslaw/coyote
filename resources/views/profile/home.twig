@@ -5,6 +5,8 @@
   <script>
     var user = {{ user|json_encode|raw }};
     var skills = {{ skills|json_encode|raw }};
+    var popularTags = {{ popular_tags|json_encode|raw }};
+    var emojis = {{ emojis|json_encode|raw }};
   </script>
 
   <div class="row">
@@ -130,10 +132,29 @@
       <div class="box">
         <h4 class="heading mb-4">
           <i class="fa-regular fa-address-book"></i>
-          Wpisy {{ user.name }} na mikroblogu
+          {% if user.id == user('id') %}
+            Twoje wpisy na mikroblogu
+          {% else %}
+            Wpisy {{ user.name }} na mikroblogu
+          {% endif %}
         </h4>
       </div>
-      {{ microblogModule|raw }}
+
+      <div id="js-microblog" class="row mt-3">
+        {% if user.id == user('id') %}
+          <div class="media mb-3">
+            <div class="me-3 d-none d-sm-block">
+              <a href="{{ route('profile', [user('id')]) }}">
+                <img class="img-thumbnail" src="{{ user_photo(user('photo')) }}" style="max-width: 50px; max-height: 50px;" alt="">
+              </a>
+            </div>
+            <div class="media-body">
+              <vue-form @save="scrollToMicroblog" :popular-tags="popularTags"></vue-form>
+            </div>
+          </div>
+        {% endif %}
+        {{ microblogModule|raw }}
+      </div>
     </div>
     <div class="col-md-3">
       <div class="box">

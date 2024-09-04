@@ -50,6 +50,7 @@ class HomeController extends BaseController
             'tags'              => $this->tags(),
             'render_params'     => $renderParams,
             'emojis'            => Emoji::all(),
+            'microblogNewUrl'   => $this->microblogNewUrl(),
         ]);
     }
 
@@ -90,5 +91,13 @@ class HomeController extends BaseController
             'tech'   => $tech,
             'others' => $others->splice(0, 10),
         ];
+    }
+
+    private function microblogNewUrl(): ?string
+    {
+        if ($this->userId) {
+            return route('profile', [$this->userId]);
+        }
+        return null;
     }
 }

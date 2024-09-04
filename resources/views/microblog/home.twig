@@ -22,18 +22,14 @@
       <h1>Mikroblogi</h1>
     </div>
   </div>
-  <div id="js-microblog" class="row mt-3">
+  <div id="js-microblog" class="row">
     <div class="col-md-9">
       {% if auth_check() %}
-        <div class="media mb-3">
-          <div class="me-3 d-none d-sm-block">
-            <a href="{{ route('profile', [user('id')]) }}">
-              <img class="img-thumbnail" src="{{ user_photo(user('photo')) }}" style="max-width: 50px; max-height: 50px;" alt="">
-            </a>
-          </div>
-          <div class="media-body">
-            <vue-form @save="scrollToMicroblog" :popular-tags="popularTags"></vue-form>
-          </div>
+        <div class="d-flex justify-content-end mb-4">
+          <a class="btn btn-primary btn-sm" href="{{ microblogNewUrl }}">
+            <i class="fa-solid fa-plus"></i>
+            Nowy wpis
+          </a>
         </div>
       {% endif %}
 

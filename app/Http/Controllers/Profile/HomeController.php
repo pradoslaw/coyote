@@ -7,6 +7,7 @@ use Coyote\Http\Requests\SkillsRequest;
 use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Http\Resources\UserResource;
+use Coyote\Repositories\Eloquent\MicroblogRepository;
 use Coyote\Repositories\Eloquent\ReputationRepository;
 use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Services\Microblogs\Builder;
@@ -20,6 +21,7 @@ class HomeController extends Controller
     public function __construct(
         private UserRepository       $user,
         private ReputationRepository $reputation,
+        private MicroblogRepository  $microblog,
     )
     {
         parent::__construct();
@@ -44,6 +46,8 @@ class HomeController extends Controller
             'chartLibraryScript' => Chart::librarySourceHtml(),
             'microblogModule'    => $this->microblog($user),
             'reputationModule'   => $this->reputation($user),
+            'popular_tags'       => $this->microblog->popularTags($this->userId),
+            'emojis'             => Emoji::all(),
         ]);
     }
 
