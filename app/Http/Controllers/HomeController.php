@@ -16,7 +16,6 @@ use Coyote\Services\Flags;
 use Coyote\Services\Microblogs\Builder;
 use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\Services\Session\Renderer;
-use Coyote\Services\Widgets\WhatsNew;
 use Illuminate\Contracts\Cache;
 use Illuminate\View\View;
 use Neon\Domain;
@@ -58,8 +57,7 @@ class HomeController extends Controller
                 (new StaticEvents())->fetchEvents(),
             ),
         ])
-            ->with('settings', $this->getSettings())
-            ->with('whats_new', resolve(WhatsNew::class)->render());
+            ->with('settings', $this->getSettings());
     }
 
     private function getMicroblogs(): array
