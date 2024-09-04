@@ -34,7 +34,7 @@ class PurifierTest extends \Tests\Legacy\TestCase
 
     public function testAllowIframeInsideSpan()
     {
-        $this->assertIdentity('<p><span><iframe src="https://youtube.com/embed/enOjqwOE1ec" class="embed-responsive-item"></iframe></span></p>');
+        $this->assertIdentity('<p><span><iframe src="https://youtube.com/embed/enOjqwOE1ec" class="youtube-player"></iframe></span></p>');
     }
 
     private function assertIdentity(string $input): void

@@ -174,7 +174,7 @@
             {% if job.firm.youtube_url and assets|length > 0 %}
               <div class="yt">
                 <div class="embed-responsive embed-responsive-16by9">
-                  <iframe class="embed-responsive-item" src="{{ job.firm.youtube_url }}" frameborder="0" allowfullscreen></iframe>
+                  <iframe class="youtube-player" src="{{ job.firm.youtube_url }}" frameborder="0" allowfullscreen></iframe>
                 </div>
               </div>
             {% endif %}
@@ -182,7 +182,7 @@
 
           {% if job.firm.youtube_url and not assets|length %}
             <div class="embed-responsive embed-responsive-16by9">
-              <iframe class="embed-responsive-item" src="{{ job.firm.youtube_url }}" frameborder="0" allowfullscreen></iframe>
+              <iframe class="youtube-player" src="{{ job.firm.youtube_url }}" frameborder="0" allowfullscreen></iframe>
             </div>
           {% endif %}
         </section>

@@ -73,7 +73,7 @@ class YoutubeLinkProcessor
     {
         $iframe = new Iframe();
         $iframe->data->set('src', 'https://youtube.com/embed/' . $videoId . ($start !== null ? "?start=$start" : ''));
-        $iframe->data->set('class', 'embed-responsive-item');
+        $iframe->data->set('class', 'youtube-player');
         $iframe->data->set('allowfullscreen', 'allowfullscreen');
 
         return $iframe;
