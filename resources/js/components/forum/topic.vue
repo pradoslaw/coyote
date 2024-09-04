@@ -3,9 +3,9 @@
     <div class="row">
       <div :class="{'col-xl-9 col-lg-10': showCategoryName, 'col-xl-10 col-lg-10': ! showCategoryName}" class="col-md-12 d-flex align-items-center">
         <a @click.left="mark" :href="getUrl()" :class="{'not-read': !topic.is_read}" class="topic-icon me-2 d-none d-md-flex">
-          <i v-if="topic.is_sticky" class="fas fa-info"></i>
-          <i v-else-if="topic.is_locked" class="fas fa-lock"></i>
-          <i v-else class="far fa-comment"></i>
+          <i v-if="topic.is_sticky" class="fa-solid fa-thumbtack"/>
+          <i v-else-if="topic.is_locked" class="fas fa-lock"/>
+          <i v-else class="far fa-comments"/>
         </a>
 
         <div class="topic-container">
