@@ -25,23 +25,6 @@
 
   <div class="box mt-2">
     <h4 class="heading">
-      <i class="fas fa-tag fa-fw"></i>
-      Popularne na mikroblogu
-    </h4>
-    <div class="pt-2 pb-2">
-      <ul class="tag-clouds">
-        {% for tag in tags.others %}
-          <li class="d-block mb-1">
-            <a href="{{ route('microblog.tag', [tag.name]) }}">{{ tag.name }}</a>
-            <small>&times; {{ tag.count }}</small>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
-
-  <div class="box mt-2">
-    <h4 class="heading">
       <i class="fas fa-wrench fa-fw"></i>
       Technologie
     </h4>
