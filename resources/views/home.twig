@@ -170,17 +170,17 @@
           </h4>
 
           <div id="reputation-tabs" class="nav nav-panel card-tabs">
+            <a role="tab" data-bs-toggle="tab" href="#week"
+               class="nav-item {{ settings.reputationMode == 'week' ? 'active' }}">
+              <span>W tym tygodniu</span>
+            </a>
             <a role="tab" data-bs-toggle="tab" href="#month"
                class="nav-item {{ settings.reputationMode == 'month' ? 'active' }}">
               <span>W tym miesiącu</span>
             </a>
-            <a role="tab" data-bs-toggle="tab" href="#year"
-               class="nav-item {{ settings.reputationMode == 'year' ? 'active' }}">
-              <span>W tym roku</span>
-            </a>
-            <a role="tab" data-bs-toggle="tab" href="#total"
-               class="nav-item {{ settings.reputationMode == 'total' ? 'active' }}">
-              <span>Ogólnie</span>
+            <a role="tab" data-bs-toggle="tab" href="#quarter"
+               class="nav-item {{ settings.reputationMode == 'quarter' ? 'active' }}">
+              <span>W tym kwartale</span>
             </a>
           </div>
 

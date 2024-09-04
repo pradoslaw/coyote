@@ -1,17 +1,18 @@
 <?php
 namespace Coyote\Http\Controllers;
 
+use Coyote\Domain\DiscreetDate;
 use Coyote\Http\Resources\ActivityResource as ActivityResource;
 use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Microblog;
 use Coyote\Repositories\Contracts\ActivityRepositoryInterface as ActivityRepository;
-use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess as OnlyThoseForumsWithAccess;
 use Coyote\Repositories\Criteria\Forum\SkipHiddenCategories;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess as OnlyThoseTopicsWithAccess;
+use Coyote\Repositories\Eloquent\ReputationRepository;
 use Coyote\Services\Flags;
 use Coyote\Services\Microblogs\Builder;
 use Coyote\Services\Parser\Extensions\Emoji;
@@ -39,6 +40,7 @@ class HomeController extends Controller
         $cache = app(Cache\Repository::class);
         $this->topic->pushCriteria(new OnlyThoseTopicsWithAccess());
         $this->topic->pushCriteria(new SkipHiddenCategories($this->userId));
+        $date = new DiscreetDate(date('Y-m-d H:i:s'));
         return $this->view('home', [
             'flags'       => $this->flags(),
             'microblogs'  => $this->getMicroblogs(),
@@ -47,9 +49,9 @@ class HomeController extends Controller
             'viewers'     => $this->getViewers(),
             'activities'  => $this->getActivities(),
             'reputation'  => $cache->remember('homepage:reputation', 30 * 60, fn() => [
-                'month' => $this->reputation->monthly(),
-                'year'  => $this->reputation->yearly(),
-                'total' => $this->reputation->total(),
+                'week'    => $this->reputation->reputationSince($date->startOfThisWeek(), limit:5),
+                'month'   => $this->reputation->reputationSince($date->startOfThisMonth(), limit:5),
+                'quarter' => $this->reputation->reputationSince($date->startOfThisQuarter(), limit:5),
             ]),
             'emojis'      => Emoji::all(),
             'events'      => \array_map(

@@ -1,25 +1,17 @@
 <?php
-
 namespace Coyote\Repositories\Eloquent;
 
 use Carbon\Carbon;
-use Coyote\Repositories\Contracts\ReputationRepositoryInterface;
 use Coyote\Reputation\Type;
-use Coyote\User;
+use Illuminate\Database\Eloquent;
 
-class ReputationRepository extends Repository implements ReputationRepositoryInterface
+class ReputationRepository extends Repository
 {
-    /**
-     * @return string
-     */
-    public function model()
+    public function model(): string
     {
         return \Coyote\Reputation::class;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getDefaultValue($typeId)
     {
         return Type::find($typeId, ['points'])['points'];
@@ -89,45 +81,7 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
         return $rowset;
     }
 
-    /**
-     * Gets total reputation ranking
-     *
-     * @param int $limit
-     * @return mixed
-     */
-    public function total($limit = 3)
-    {
-        return $this->percentage(User::orderBy('reputation', 'DESC')->take($limit)->get());
-    }
-
-    /**
-     * Gets monthly reputation ranking
-     *
-     * @param int $limit
-     * @return mixed
-     */
-    public function monthly($limit = 3)
-    {
-        return $this->getReputation(date('Y-m-1 00:00:00'), $limit);
-    }
-
-    /**
-     * Gets yearly reputation ranking
-     *
-     * @param int $limit
-     * @return mixed
-     */
-    public function yearly($limit = 3)
-    {
-        return $this->getReputation(date('Y-1-1 00:00:00'), $limit);
-    }
-
-    /**
-     * @param string $dateTime
-     * @param integer $limit
-     * @return mixed
-     */
-    private function getReputation($dateTime, $limit)
+    public function reputationSince(string $dateTime, int $limit): Eloquent\Collection
     {
         $from = $this
             ->model
@@ -137,31 +91,21 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
             ->limit($limit)
             ->groupBy('user_id')
             ->toSql();
-
         $result = $this
             ->model
             ->select(['users.id', 'name', 'photo', 't.reputation'])
             ->from($this->raw("($from) AS t"))
             ->join('users', 'users.id', '=', 'user_id')
             ->get();
-
         return $this->percentage($result);
     }
 
-    /**
-     * Calculates percentage value of user ranking
-     *
-     * @param $result
-     * @return mixed
-     */
-    private function percentage($result)
+    private function percentage(Eloquent\Collection $result): Eloquent\Collection
     {
         $max = $result->count() > 0 ? $result->first()->reputation : 0;
-
         foreach ($result as $row) {
             $row->percentage = $max > 0 ? ($row->reputation * 1.0 / $max) * 100 : 0;
         }
-
         return $result;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Coyote\Services\Reputation;
 
-use Coyote\Repositories\Contracts\ReputationRepositoryInterface;
+use Coyote\Repositories\Eloquent\ReputationRepository;
 
 abstract class Reputation implements ReputationInterface
 {
@@ -14,10 +14,7 @@ abstract class Reputation implements ReputationInterface
     protected $isPositive = true;
     protected $metadata = null;
 
-    /**
-     * @param ReputationRepositoryInterface $reputation
-     */
-    public function __construct(ReputationRepositoryInterface $reputation)
+    public function __construct(ReputationRepository $reputation)
     {
         $this->reputation = $reputation;
         $this->typeId = static::ID;

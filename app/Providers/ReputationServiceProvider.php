@@ -2,8 +2,8 @@
 
 namespace Coyote\Providers;
 
+use Coyote\Repositories\Eloquent\ReputationRepository;
 use Illuminate\Support\ServiceProvider;
-use Coyote\Repositories\Contracts\ReputationRepositoryInterface;
 
 class ReputationServiceProvider extends ServiceProvider
 {
@@ -39,7 +39,7 @@ class ReputationServiceProvider extends ServiceProvider
 
             $this->app->bind($provider, function ($app) use ($class) {
                 return new $class(
-                    $app[ReputationRepositoryInterface::class]
+                    $app[ReputationRepository::class]
                 );
             });
         }
