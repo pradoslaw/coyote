@@ -33,12 +33,8 @@
       }
     }
 
-    // Tag counter
-    // --------------------
-
     > a + small,
     > span + small {
-      margin-left: 2px;
       font-size: 10px;
       color: $tag-counter-color;
     }

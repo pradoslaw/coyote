@@ -23,23 +23,25 @@
     </div>
   </div>
 
-  <div class="box mt-2">
-    <h4 class="heading">
-      <i class="fas fa-wrench fa-fw"></i>
-      Technologie
-    </h4>
-    <ul class="tag-clouds tag-clouds-md">
-      {% for tag in tags.tech %}
-        <li class="d-block mb-1">
-          <a href="{{ route('microblog.tag', [tag.name]) }}">
-            {% if tag.logo.filename %}
-              <img alt="{{ tag.name }}" src="{{ logo(tag.logo) }}"/>
-            {% endif %}
-            {{ tag.name }}
-          </a>
-          <small>&times; {{ tag.count }}</small>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
+  {% if tags.tech is not empty %}
+    <div class="box mt-2">
+      <h4 class="heading">
+        <i class="fas fa-wrench fa-fw"></i>
+        Technologie
+      </h4>
+      <ul class="tag-clouds tag-clouds-md">
+        {% for tag in tags.tech %}
+          <li class="d-block mb-1">
+            <a href="{{ route('microblog.tag', [tag.name]) }}">
+              {% if tag.logo.filename %}
+                <img alt="{{ tag.name }}" src="{{ logo(tag.logo) }}"/>
+              {% endif %}
+              {{ tag.name }}
+            </a>
+            <small>&times; {{ tag.count }}</small>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
 </aside>

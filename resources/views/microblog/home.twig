@@ -17,7 +17,7 @@
 {% import 'components.modals' as modal %}
 
 {% block container %}
-  <div class="row">
+  <div class="row mb-2">
     <div class="col-md-12">
       <h1>Mikroblogi</h1>
     </div>
@@ -25,7 +25,7 @@
   <div id="js-microblog" class="row">
     <div class="col-md-9">
       {% if auth_check() %}
-        <div class="d-flex justify-content-end mb-2">
+        <div class="d-flex justify-content-end">
           <a class="btn btn-primary btn-sm" href="{{ microblogNewUrl }}">
             <i class="fa-solid fa-plus"></i>
             Nowy wpis
@@ -34,7 +34,7 @@
       {% endif %}
 
       {% if tags.others is not empty %}
-        <div class="box mt-2 mb-2">
+        <div class="box mb-2">
           <h4 class="heading">
             <i class="fas fa-tag fa-fw"></i>
             Popularne na mikroblogu
@@ -42,7 +42,7 @@
           <div class="pt-2 pb-2">
             <ul class="tag-clouds">
               {% for tag in tags.others %}
-                <li class="mb-1">
+                <li class="mb-1 me-1">
                   <a href="{{ route('microblog.tag', [tag.name]) }}">
                     {{ tag.name }}
                   </a>
