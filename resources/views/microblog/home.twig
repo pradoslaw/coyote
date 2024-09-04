@@ -19,29 +19,11 @@
 {% block container %}
   <div class="row">
     <div class="col-md-12">
-      <h1>Mikroblog</h1>
+      <h1>Mikroblogi</h1>
     </div>
   </div>
   <div id="js-microblog" class="row mt-3">
     <div class="col-md-9">
-      <ul class="nav nav-tabs mb-4">
-        <li class="nav-item">
-          <a class="nav-link {{ route != 'microblog.mine' ? 'active' }}" href="{{ route('microblog.home') }}">
-            Wszystkie wpisy
-            <small>({{ count }})</small>
-          </a>
-        </li>
-
-        {% if auth_check() %}
-          <li role="presentation" class="nav-item" title="Kliknij, aby zobaczyć swoje wpisy">
-            <a class="nav-link {{ route == 'microblog.mine' ? 'active' }}" href="{{ route('microblog.mine') }}">
-              Moje
-              <small>({{ count_user }})</small>
-            </a>
-          </li>
-        {% endif %}
-      </ul>
-
       {% if auth_check() %}
         <div class="media mb-3">
           <div class="me-3 d-none d-sm-block">

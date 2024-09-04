@@ -22,7 +22,7 @@ class HomeController extends BaseController
         private Microblogs\Builder  $builder)
     {
         parent::__construct();
-        $this->breadcrumb->push('Mikroblog', route('microblog.home'));
+        $this->breadcrumb->push('Mikroblogi', route('microblog.home'));
     }
 
     public function index(): View
@@ -35,13 +35,6 @@ class HomeController extends BaseController
         $this->breadcrumb->push('Wpisy z tagiem: ' . $tag, route('microblog.tag', [$tag]));
         $this->builder->withTag($tag);
         return $this->list(new RenderParams($tag));
-    }
-
-    public function mine(): View
-    {
-        $this->breadcrumb->push('Moje wpisy', route('microblog.mine'));
-        $this->builder->onlyUsers($this->auth);
-        return $this->list(null);
     }
 
     private function list(?RenderParams $renderParams): View
