@@ -1,5 +1,8 @@
 <template>
   <div ref="editor" class="tag-editor dropup">
+    <span class="align-self-center mx-2 text-muted">
+      <i class="fa-solid fa-tag"/>
+    </span>
     <ul ref="cloud" class="tag-clouds">
       <li v-for="tag in popularTags.slice(0, 3)">
         <a @click="toggleTag({ name: tag.name })" class="suggest" :aria-label="tag.text" data-balloon-pos="up">
