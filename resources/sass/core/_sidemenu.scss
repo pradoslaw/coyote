@@ -53,31 +53,11 @@
       opacity: 1;
     }
   }
-
-  //.on:hover {
-  //  i {
-  //    color: lighten($alt-link-hover-color, 5%);
-  //  }
-  //}
 }
 
-// Favorite icon can be shown in multiple places
-// ------------------------------------------------
-
 .btn-subscribe {
-  .fas.fa-star {
-    display: none;
-  }
-
-  &.on {
-    .far.fa-star {
-      display: none;
-    }
-
-    .fas.fa-star {
-      display: inline-block;
-      color: lighten($alt-link-hover-color, 5%);
-    }
+  &.on .fa-bell {
+    color: lighten($alt-link-hover-color, 5%);
   }
 
   small {

@@ -71,7 +71,7 @@ abstract class BaseController extends Controller
                     'Powiadomienia',
                     'user.notifications',
                     htmlId:'btn-notifies',
-                    htmlIcon:'far fa-bell'),
+                    htmlIcon:'fas fa-bell'),
                 new MenuItem(
                     'Oceny moich postów',
                     'user.rates',
@@ -93,7 +93,7 @@ abstract class BaseController extends Controller
                     'Obserwowane strony',
                     'user.favorites',
                     htmlId:'btn-favorites',
-                    htmlIcon:'far fa-star'),
+                    htmlIcon:'far fa-bell'),
                 new MenuItem('Zablokowani oraz obserwowani',
                     'user.relations',
                     htmlId:'btn-favorites',

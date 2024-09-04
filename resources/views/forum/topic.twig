@@ -183,7 +183,8 @@
         <ul class="side-menu mt-2">
           <li v-if="isAuthorized" :class="{'on': topic.is_subscribed}" class="btn-subscribe" @click="subscribe(topic)">
             <a>
-              <i :class="{'fas': topic.is_subscribed, 'far': !topic.is_subscribed}" class="fa-star fa-fw"></i>
+              <i class="fa-solid fa-bell fa-fw" v-if="topic.is_subscribed"></i>
+              <i class="fa-regular fa-bell fa-fw" v-else></i>
               <span v-if="topic.is_subscribed">Zakończ obserwację</span>
               <span v-else>Obserwuj wątek</span>
             </a>

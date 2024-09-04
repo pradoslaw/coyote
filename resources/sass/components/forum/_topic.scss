@@ -93,7 +93,6 @@
     }
   }
 
-  // mobile
   @include media-breakpoint-down(md) {
     .not-read {
       @include not-read-border();
@@ -112,7 +111,7 @@
     }
   }
 
-  .fa-star {
+  i.fa-bell {
     font-size: .75rem;
 
     &.on {

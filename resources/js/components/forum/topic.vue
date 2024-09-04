@@ -12,7 +12,8 @@
           <div class="topic-row">
             <h5 class="topic-subject text-truncate m-0">
               <a v-if="isAuthorized" @click="subscribe(topic)" href="javascript:" title="Kliknij aby wł/wył obserwowanie wątku">
-                <i class="fa-star fa-fw" :class="{'fas on': topic.is_subscribed, 'far': !topic.is_subscribed}"></i>
+                <i class="fa-solid fa-bell fa-fw on" v-if="topic.is_subscribed"/>
+                <i class="fa-regular fa-bell fa-fw" v-else/>
               </a>
 
               <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}`"><i class="fas fa-check"></i></a>
@@ -46,17 +47,17 @@
 
             <ul class="topic-statistic list-inline small mt-1 mt-sm-0 mb-0 d-block d-sm-inline ms-sm-auto flex-sm-shrink-0">
               <li class="list-inline-item small" title="Liczba odpowiedzi">
-                <i :class="{'fas topic-has-reply': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i> 
+                <i :class="{'fas topic-has-reply': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i>
                 {{ number(topic.replies) }}
               </li>
 
               <li class="list-inline-item small" title="Liczba wyświetleń">
-                <i class="far fa-fw fa-eye"></i> 
+                <i class="far fa-fw fa-eye"></i>
                 {{ number(topic.views) }}
               </li>
 
               <li v-if="topic.score > 0" class="list-inline-item small" title="Liczba głosów oddanych na ten wątek">
-                <i :class="{'fas text-primary': topic.is_voted, 'far': !topic.is_voted}" class="fa-fw fa-thumbs-up"></i> 
+                <i :class="{'fas text-primary': topic.is_voted, 'far': !topic.is_voted}" class="fa-fw fa-thumbs-up"></i>
                 {{ number(topic.score) }}
               </li>
             </ul>
@@ -64,7 +65,7 @@
 
           <div class="d-flex mt-1">
             <div class="d-none d-lg-inline small text-truncate">
-              <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`" 
+              <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`"
                  class="text-muted topic-date">
                 <vue-timeago :datetime="topic.created_at"></vue-timeago>
               </a>,
@@ -179,5 +180,5 @@ export default {
 
     ...mapGetters('user', ['isAuthorized']),
   },
-}
+};
 </script>

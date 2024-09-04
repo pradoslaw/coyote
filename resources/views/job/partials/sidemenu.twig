@@ -32,11 +32,14 @@
 <ul v-cloak id="js-sidemenu" class="side-menu">
   <li>
     <a @click="checkAuth(subscribe)" :class="{'on': isSubscribed(job)}" class="btn-subscribe" href="javascript:" rel="nofollow">
-      <i class="far fa-fw fa-star"></i>
-      <i class="fas fa-fw fa-star"></i>
-
-      <span v-if="isSubscribed(job)">Usuń z ulubionych</span>
-      <span v-else>Dodaj do ulubionych</span>
+      <span v-if="isSubscribed(job)">
+        Usuń z ulubionych
+        <i class="fa-solid fa-bell fa-fw"></i>
+      </span>
+      <span v-else>
+        <i class="fa-regular fa-bell fa-fw"></i>
+        Dodaj do ulubionych
+      </span>
     </a>
   </li>
 
@@ -61,10 +64,10 @@
 
   {% if auth_check() %}
     <li>
-      <a class="btn-report" 
+      <a class="btn-report"
          href="javascript:"
          rel="nofollow"
-         data-url="{{ route('job.offer', [job.id, job.slug], false) }}" 
+         data-url="{{ route('job.offer', [job.id, job.slug], false) }}"
          data-metadata="{{ {"Coyote\\Job": job.id}|encrypt }}">
         <i class="fas fa-fw fa-flag"></i>
         Zgłoś naruszenie</a>
