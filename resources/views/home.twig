@@ -161,8 +161,6 @@
           {{ viewers|raw }}
         </div>
 
-        {{ render_block('job_ads') }}
-
         <section class="box mt-4">
           <h4>
             <i class="fas fa-star fa-fw"></i>
@@ -228,7 +226,7 @@
           </div>
         </section>
 
-        {{ whats_new|raw }}
+        {{ render_block('job_ads') }}
       </aside>
     </div>
     <style>
