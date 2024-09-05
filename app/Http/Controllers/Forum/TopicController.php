@@ -125,7 +125,6 @@ class TopicController extends BaseController
                 'reasons'  => $reasons,
             ])
             ->with([
-                'mlt'          => $this->moreLikeThis($topic),
                 'model'        => $topic, // we need eloquent model in twig to show information about locked/moved topic
                 'topic'        => (new TopicResource($tracker))->toResponse($request)->getData(true),
                 'poll'         => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
@@ -153,19 +152,6 @@ class TopicController extends BaseController
             $topic->views,
             $topic->created_at,
         ));
-    }
-
-    private function moreLikeThis(Topic $topic)
-    {
-        // build "more like this" block. it's important to send elasticsearch query before
-        // send SQL query to database because search() method exists only in Model and not Builder class.
-        return $this
-            ->getCacheFactory()
-            ->remember("mlt-post:$topic->id", now()->addDay(), function () use ($topic) {
-                $this->forum->resetCriteria();
-                $this->forum->pushCriteria(new OnlyThoseWithAccess());
-                return $this->topic->search(new MoreLikeThisBuilder($topic, $this->forum->pluck('id')));
-            });
     }
 
     private function flags(Forum $forum): array
