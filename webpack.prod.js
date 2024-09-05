@@ -75,6 +75,7 @@ const plugins = [
         /^tag/,
         /:not/,
         /^pre/,
+        /^popover/,
         /revive/,
         /^fa-/,
       ],

@@ -239,8 +239,9 @@
               <span class="d-none d-sm-inline">Obserwuj</span>
             </button>
 
-            <button @click="copy" class="btn btn-sm">
-              <i class="fas fa-fw fa-share-nodes"></i> <span class="d-none d-sm-inline">Udostępnij</span>
+            <button class="btn btn-sm" ref="shareButton">
+              <i class="fas fa-fw fa-share-nodes"/>
+              <span class="d-none d-sm-inline">Udostępnij</span>
             </button>
 
             <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
@@ -308,6 +309,7 @@
   </div>
 </template>
 <script lang="ts">
+import Popover from 'bootstrap/js/dist/popover';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import pl from 'date-fns/locale/pl';
 import Vue from 'vue';
@@ -368,17 +370,17 @@ export default Vue.extend({
   created() {
     this.isCollapsed = this.hidden;
   },
+  mounted() {
+    initializeSharePopover(
+      this.$refs.shareButton,
+      baseUrl(this.post.url),
+      this.post.url,
+      this.post.user.name);
+  },
   methods: {
     ...mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments', 'loadVoters']),
     formatDistanceToNow(date) {
       return formatDistanceToNow(new Date(date), {locale: pl});
-    },
-    copy() {
-      if (this.$copy(this.post.url)) {
-        this.$notify({type: 'success', text: 'Link prawidłowo skopiowany do schowka.'});
-      } else {
-        this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
-      }
     },
     edit() {
       store.commit('posts/edit', this.post);
@@ -450,4 +452,49 @@ export default Vue.extend({
     },
   },
 });
+
+function initializeSharePopover(button: HTMLButtonElement, threadUrl: string, postUrl: string, authorName: string): void {
+  new Popover(button, {
+    container: button,
+    placement: 'top',
+    trigger: 'focus',
+    title: 'Udostępnij',
+    html: true,
+    content: sharePopover(threadUrl, postUrl, authorName),
+  });
+}
+
+function sharePopover(threadUrl: string, postUrl: string, authorName: string): Element {
+  return vueElement({
+    data() {
+      return {threadUrl, postUrl, authorName};
+    },
+    template: `
+      <div class="share-container">
+        <div class="form-group mb-2">
+          <label>Odnośnik do wątku:</label>
+          <input class="form-control" :value="threadUrl" @click="select"/>
+        </div>
+        <div class="form-group mb-2">
+          <label>Odnośnik do postu <b>{{ authorName }}</b>:</label>
+          <input class="form-control" :value="postUrl" @click="select"/>
+        </div>
+      </div>
+    `,
+    methods: {
+      select(event) {
+        event.target.select();
+      },
+    },
+  });
+
+  function vueElement(component): Element {
+    return new Vue(component).$mount().$el;
+  }
+}
+
+function baseUrl(longUrl) {
+  const url = new URL(longUrl);
+  return url.origin + url.pathname;
+}
 </script>

@@ -1,0 +1,22 @@
+@import "bootstrap/scss/variables";
+
+.popover {
+  --#{$prefix}popover-max-width: 420px;
+  cursor: default;
+
+  input {
+    width: 1000px;
+    max-width: 100%;
+  }
+
+  body.theme-dark & {
+    --bs-popover-bg: #1a1a1a;
+    --bs-popover-border-color: #2f2f2f;
+    --bs-popover-header-bg: #212121;
+    --bs-popover-header-color: #acacac;
+
+    label {
+      color: #6c757d;
+    }
+  }
+}
