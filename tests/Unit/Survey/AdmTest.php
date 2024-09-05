@@ -103,7 +103,7 @@ class AdmTest extends TestCase
     {
         $view = $this->experimentDom($this->newSurveyReturnId());
         $this->assertStringEndsWith('/Adm/Experiments',
-            $this->breadcrumbsUrl($view, $this->breadcrumbsIndexOf($view, 'Eksperymenty')));
+            $this->breadcrumbsUrlOfTitle($view, 'Eksperymenty'));
     }
 
     #[Test]
@@ -122,17 +122,22 @@ class AdmTest extends TestCase
 
     private function breadcrumbs(ViewDom $view): array
     {
-        return \array_map(\trim(...), $view->findStrings("//ul[@class='breadcrumb']/li/*[1]/text()"));
+        return \array_column($this->structuredDataBreadcrumbs($view), 'name');
     }
 
-    private function breadcrumbsIndexOf(ViewDom $view, string $title): int
+    private function breadcrumbsUrlOfTitle(ViewDom $view, string $title): string
     {
-        return \array_search($title, $this->breadcrumbs($view));
+        return $this->structuredDataBreadcrumbs($view)[\array_search($title, $this->breadcrumbs($view))]['item'];
     }
 
-    private function breadcrumbsUrl(ViewDom $view, int $index): string
+    private function structuredDataBreadcrumbs(ViewDom $view): array
     {
-        return $view->findStrings("//ul[@class='breadcrumb']/li/a[1]/@href")[$index];
+        return $this->structuredData($view)['itemListElement'];
+    }
+
+    private function structuredData(ViewDom $view): array
+    {
+        return \json_decode($view->findString('//script[@type="application/ld+json"]/text()'), true);
     }
 
     private function sidemenuIconByLabel(string $label): string
