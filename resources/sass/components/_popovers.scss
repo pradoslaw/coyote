@@ -4,9 +4,22 @@
   --#{$prefix}popover-max-width: 420px;
   cursor: default;
 
-  input {
+  .input-group {
     width: 1000px;
     max-width: 100%;
+
+    .btn {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+
+      body.theme-light & {
+        border: var(--bs-border-width) solid #ccc;
+      }
+
+      body.theme-dark & {
+        border: var(--bs-border-width) solid #242a30;
+      }
+    }
   }
 
   body.theme-dark & {
