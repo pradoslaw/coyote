@@ -475,7 +475,9 @@ function initializeSharePopover(
     trigger: 'focus',
     title: 'Udostępnij',
     html: true,
-    content: sharePopover(threadUrl, postUrl, authorName, copy),
+    content() {
+      return sharePopover(threadUrl, postUrl, authorName, copy);
+    },
   });
 }
 
