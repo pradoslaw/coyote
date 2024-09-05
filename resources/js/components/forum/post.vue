@@ -375,7 +375,7 @@ export default Vue.extend({
       this.$refs.shareButton,
       baseUrl(this.post.url),
       this.post.url,
-      this.post.user.name,
+      this.post.user?.name || this.post.user_name,
       this.copy,
     );
   },
