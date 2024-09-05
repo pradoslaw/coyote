@@ -16,11 +16,17 @@
     padding: .25rem;
 
     .btn.btn-sm {
-      opacity: 0.85;
       transition: none;
 
+      body.theme-light & {
+        color: #505050;
+      }
+
+      body.theme-dark & {
+        color: #979797;
+      }
+
       &:hover {
-        opacity: 1.0;
         border: 1px solid rgb(224, 224, 224);
         background-color: white;
       }
