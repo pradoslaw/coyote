@@ -27,17 +27,17 @@ class HomeController extends BaseController
 
     public function index(): View
     {
-        return $this->list(null);
+        return $this->list(null, 'Mikroblogi');
     }
 
     public function tag(string $tag): View
     {
-        $this->breadcrumb->push('Wpisy z tagiem: ' . $tag, route('microblog.tag', [$tag]));
+        $this->breadcrumb->push("Wpisy z tagiem: $tag", route('microblog.tag', [$tag]));
         $this->builder->withTag($tag);
-        return $this->list(new RenderParams($tag));
+        return $this->list(new RenderParams($tag), "Wpisy z tagiem: $tag");
     }
 
-    private function list(?RenderParams $renderParams): View
+    private function list(?RenderParams $renderParams, string $headingTitle): View
     {
         return $this->view('microblog.home', [
             'flags'             => $this->flags(),
@@ -51,6 +51,7 @@ class HomeController extends BaseController
             'render_params'     => $renderParams,
             'emojis'            => Emoji::all(),
             'microblogNewUrl'   => $this->microblogNewUrl(),
+            'headingTitle'      => $headingTitle,
         ]);
     }
 
