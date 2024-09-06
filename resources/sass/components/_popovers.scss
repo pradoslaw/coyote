@@ -3,6 +3,7 @@
 .popover {
   --#{$prefix}popover-max-width: 420px;
   cursor: default;
+  width: 100%;
 
   .input-group {
     width: 1000px;
