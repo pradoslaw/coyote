@@ -1,5 +1,5 @@
 <div class="container-3xl">
-  <ul class="breadcrumb">
+  <ul class="breadcrumb pb-0">
     <li class="breadcrumb-item">
       <a href="{{ root_href }}" class="d-none d-sm-inline-block">
         {{ root_name }}
@@ -11,8 +11,8 @@
 
     {% for breadcrumb in breadcrumbs %}
       <li class="breadcrumb-item">
-        {% if loop.last %}
-          <span>{{ breadcrumb.name }}</span>
+        {% if breadcrumb.leaf %}
+          <span class="leaf">{{ breadcrumb.name }}</span>
         {% else %}
           <a href="{{ breadcrumb.url }}">
             {{ breadcrumb.name }}

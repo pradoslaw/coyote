@@ -19,7 +19,7 @@ class Breadcrumbs
 
     public function push(string $name, string $url): void
     {
-        $this->breadcrumbs[] = new Breadcrumb($name, $url);
+        $this->breadcrumbs[] = new Breadcrumb($name, $url, false);
     }
 
     public function render(): ?View
@@ -30,8 +30,28 @@ class Breadcrumbs
         return view('components/breadcrumb', [
             'root_name'         => config('app.name'),
             'root_href'         => route('home'),
-            'breadcrumbs'       => $this->breadcrumbs,
+            'breadcrumbs'       => $this->breadcrumbsWithLeaf(),
             'schema_breadcrumb' => new Seo\Schema(new BreadcrumbList($this->breadcrumbs)),
         ]);
+    }
+
+    private function breadcrumbsWithLeaf(): array
+    {
+        return $this->lastBreadcrumbIsLeaf($this->breadcrumbs);
+    }
+
+    private function lastBreadcrumbIsLeaf(array $breadcrumbs): array
+    {
+        return [
+            ...\array_slice($breadcrumbs, 0, -1),
+            $this->last($breadcrumbs)->leaf(),
+        ];
+    }
+
+    private function last(array $breadcrumbs): Breadcrumb
+    {
+        /** @var Breadcrumb $last */
+        $last = \end($breadcrumbs);
+        return $last;
     }
 }

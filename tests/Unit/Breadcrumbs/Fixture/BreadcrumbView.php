@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\Breadcrumbs\Fixture;
 
+use Neon\Test\BaseFixture\Selector\Selector;
 use Tests\Unit\BaseFixture\View;
 use Tests\Unit\BaseFixture\View\ViewDom;
 
@@ -43,8 +44,9 @@ trait BreadcrumbView
     function breadcrumbsContainerVisible(string $uri): bool
     {
         $dom = new ViewDom($this->htmlView($uri));
+        $selector = new Selector('div', 'div', 'ul.breadcrumb');
         /** @var \DOMElement $breadcrumb */
-        foreach ($dom->elements(xPath:"//div/div/ul[@class='breadcrumb']") as $container) {
+        foreach ($dom->elements($selector->xPath()) as $container) {
             return true;
         }
         return false;

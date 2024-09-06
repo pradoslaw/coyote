@@ -1,16 +1,29 @@
-.breadcrumb-item {
-  a, span {
-    color: $gray;
-  }
+@import "../helpers/variables";
 
-  + .breadcrumb-item {
-    &::before {
-      content: "»";
+ul.breadcrumb {
+  font-size: 0.95em;
+
+  .breadcrumb-item {
+    a, span {
+      color: $gray;
+    }
+
+    + .breadcrumb-item {
+      &::before {
+        content: "»";
+      }
+    }
+
+    .leaf {
+      display: none;
     }
   }
 
-  &:last-child:not(:first-child) {
-    a, span {
+  &#breadcrumb-fixed,
+  .footer-top &,
+  {
+    .leaf {
+      display: inline;
       font-weight: bold;
     }
   }
