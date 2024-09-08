@@ -51,6 +51,7 @@ class HomeController extends BaseController
             'render_params'     => $renderParams,
             'emojis'            => Emoji::all(),
             'microblogNewUrl'   => $this->microblogNewUrl(),
+            'microblogMineUrl'  => $this->microblogMineUrl(),
             'headingTitle'      => $headingTitle,
         ]);
     }
@@ -95,6 +96,14 @@ class HomeController extends BaseController
     }
 
     private function microblogNewUrl(): ?string
+    {
+        if ($this->userId) {
+            return route('profile', [$this->userId]);
+        }
+        return null;
+    }
+
+    private function microblogMineUrl(): ?string
     {
         if ($this->userId) {
             return route('profile', [$this->userId]);
