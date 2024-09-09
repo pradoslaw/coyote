@@ -19,9 +19,13 @@
 
     <div class="row">
       <div class="col-12">
-        <p class="text-muted float-start">Pozostało <strong>{{ maxLength - comment.text.length }}</strong> znaków</p>
-
-        <vue-button :disabled="isProcessing" @click.native.prevent="saveComment" class="btn btn-sm btn-primary float-end" title="Kliknij, aby wysłać (Ctrl+Enter)">Zapisz</vue-button>
+        <p class="text-muted float-start">
+          Pozostało <strong>{{ maxLength - comment.text.length }}</strong> znaków
+        </p>
+        <vue-button :disabled="isProcessing" @click.native.prevent="saveComment" class="btn btn-sm btn-primary float-end" title="Kliknij, aby wysłać (Ctrl+Enter)">
+          <template v-if="newComment">Komentuj</template>
+          <template v-else>Zapisz</template>
+        </vue-button>
         <button @click.prevent="cancel" class="btn btn-sm btn-danger float-end me-2">Anuluj</button>
       </div>
     </div>
@@ -77,5 +81,10 @@ export default Vue.extend({
       this.$emit('cancel');
     },
   },
+  computed: {
+    newComment(): boolean {
+      return typeof this.comment.id === 'undefined';
+    },
+  }
 });
 </script>
