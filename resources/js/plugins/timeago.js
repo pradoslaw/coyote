@@ -1,7 +1,8 @@
-import timeago from '../libs/timeago';
-import store from '../store';
 import format from 'date-fns/format';
 import pl from 'date-fns/locale/pl';
+
+import timeago from '../libs/timeago';
+import store from '../store';
 
 export const createTimeago = (options = {}) => {
   return {
@@ -9,17 +10,17 @@ export const createTimeago = (options = {}) => {
     store,
     props: {
       datetime: {
-        required: true
+        required: true,
       },
 
       autoUpdate: {
-        default: 60
+        default: 60,
       },
 
       format: {
         type: String,
-        default: store.getters['user/dateFormat']('yyyy-MM-dd HH:mm')
-      }
+        default: store.getters['user/dateFormat']('yyyy-MM-dd HH:mm'),
+      },
     },
 
     data() {
@@ -41,15 +42,15 @@ export const createTimeago = (options = {}) => {
         'time',
         {
           attrs: {
-            title: this.datetime === null ? '' : format(new Date(this.datetime), this.format, { locale: pl })
-          }
+            title: this.datetime === null ? '' : format(new Date(this.datetime), this.format, {locale: pl}),
+          },
         },
-        [this.timeago]
+        [this.timeago],
       );
     },
 
     methods: {
-      getTimeago () {
+      getTimeago() {
         if (!this.datetime) {
           return;
         }
@@ -57,7 +58,7 @@ export const createTimeago = (options = {}) => {
         const date = new Date(this.datetime);
         const value = timeago(date.getTime() / 1000);
 
-        return value ? value : format(date, this.format, { locale: pl });
+        return value ? value : format(date, this.format, {locale: pl});
       },
 
       startUpdater() {
@@ -76,14 +77,14 @@ export const createTimeago = (options = {}) => {
 
       update() {
         this.timeago = this.getTimeago();
-      }
+      },
     },
 
     watch: {
       datetime() {
         this.update();
-      }
-    }
+      },
+    },
   };
 };
 

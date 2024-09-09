@@ -10,9 +10,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapGetters } from 'vuex';
-import { default as mixin } from '@/components/mixins/user';
-import store from '@/store';
+import {mapGetters} from 'vuex';
+
+import store from '../../store/index';
+import {default as mixin} from '../mixins/user.js';
 
 export default Vue.extend({
   name: 'VueFollowButton',

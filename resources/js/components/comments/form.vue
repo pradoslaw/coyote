@@ -26,9 +26,10 @@
 </template>
 
 <script lang="ts">
-import {Emojis} from '@/types/models';
 import Vue from 'vue';
 import {mapState} from 'vuex';
+
+import {Emojis} from '../../types/models';
 import VueAvatar from '../avatar.vue';
 import VueButton from '../forms/button.vue';
 import VueMarkdown from '../forms/markdown.vue';

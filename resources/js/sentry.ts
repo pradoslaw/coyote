@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/browser";
-import environment from '@/environment';
+import environment from './environment';
 
 Sentry.init({
   dsn: environment.sentryDsn,

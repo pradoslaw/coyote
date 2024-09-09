@@ -1,8 +1,7 @@
-import {Hit, Hits, SearchOptions, Sort} from "@/types/hit";
-import {Model, User} from "@/types/models";
 import axios from 'axios';
 import Vue, {VNode} from "vue";
 import VueNotifications from "vue-notification";
+
 import VueDropdownMenu from '../components/dropdown-menu.vue';
 import VueAutocomplete from '../components/forms/autocomplete.vue';
 import VueTopic from '../components/forum/topic.vue';
@@ -11,6 +10,8 @@ import PerfectScrollbar from '../components/perfect-scrollbar';
 import {default as axiosErrorHandler} from '../libs/axios-error-handler';
 import VueTimeago from '../plugins/timeago';
 import store from "../store";
+import {Hit, Hits, SearchOptions, Sort} from "../types/hit";
+import {Model, User} from "../types/models";
 import {Models as ModelsDict} from "../types/search";
 
 interface ForumItem {

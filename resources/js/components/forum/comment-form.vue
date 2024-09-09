@@ -33,10 +33,11 @@
 </template>
 
 <script lang="ts">
-import {PostComment} from "@/types/models";
 import Vue from 'vue';
+
 import VueAutosize from '../../plugins/autosize.js';
-import store from "../../store";
+import store from "../../store/index";
+import {PostComment} from "../../types/models";
 import VueButton from '../forms/button.vue';
 import VuePrompt from '../forms/prompt.vue';
 
@@ -85,6 +86,6 @@ export default Vue.extend({
     newComment(): boolean {
       return typeof this.comment.id === 'undefined';
     },
-  }
+  },
 });
 </script>

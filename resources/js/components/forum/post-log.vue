@@ -64,9 +64,9 @@
 </template>
 
 <script lang="ts">
-import VueModal from "@/components/delete-modal.vue";
-import VueUserName from "@/components/user-name.vue";
 import Vue from 'vue';
+import VueModal from "../delete-modal.vue";
+import VueUserName from "../user-name.vue";
 
 export default Vue.extend({
   name: 'VuePostLog',

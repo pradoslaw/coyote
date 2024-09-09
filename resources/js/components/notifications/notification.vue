@@ -8,7 +8,9 @@
       <a @mousedown="markAsRead(notification)" @touchstart="markAsRead(notification)" :href="notification.url" class="media-body text-truncate">
         <header class="notification-header">
           <h4 class="text-truncate">{{ notification.headline }}</h4>
-          <small><vue-timeago :datetime="notification.created_at"></vue-timeago></small>
+          <small>
+            <vue-timeago :datetime="notification.created_at"></vue-timeago>
+          </small>
         </header>
 
         <h3 class="notification-subject text-truncate">{{ notification.subject }}</h3>
@@ -23,31 +25,31 @@
 </template>
 
 <script>
-  import Vue from 'vue';
-  import store from '@/store';
-  import VueTimeago from '@/plugins/timeago';
-  import VueAvatar from '../avatar.vue';
+import Vue from 'vue';
+import VueTimeago from '../../plugins/timeago';
+import store from '../../store';
+import VueAvatar from '../avatar.vue';
 
-  Vue.use(VueTimeago);
+Vue.use(VueTimeago);
 
-  export default {
-    components: { 'vue-avatar': VueAvatar },
-    props: {
-      notification: {
-        type: Object
-      }
+export default {
+  components: {'vue-avatar': VueAvatar},
+  props: {
+    notification: {
+      type: Object,
     },
-    store,
-    methods: {
-      markAsRead(notification) {
-        notification.url = `/notification/${notification.id}`;
+  },
+  store,
+  methods: {
+    markAsRead(notification) {
+      notification.url = `/notification/${notification.id}`;
 
-        this.$store.commit('notifications/mark', notification);
-      },
+      this.$store.commit('notifications/mark', notification);
+    },
 
-      deleteNotification(notification) {
-        this.$store.dispatch('notifications/remove', notification);
-      }
-    }
-  }
+    deleteNotification(notification) {
+      this.$store.dispatch('notifications/remove', notification);
+    },
+  },
+};
 </script>

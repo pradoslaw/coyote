@@ -23,9 +23,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import IsImage from "@/libs/assets";
-import Textarea from '@/libs/textarea';
-import store from "@/store";
+
+import IsImage from "../../libs/assets";
+import Textarea from '../../libs/textarea';
+import store from "../../store/index";
 import VuePrompt from '../forms/prompt.vue';
 import {MicroblogFormMixin} from '../mixins/microblog';
 

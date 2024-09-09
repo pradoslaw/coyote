@@ -1,13 +1,14 @@
-import VueComment from '@/components/comments/comment.vue';
-import VueFlag from '@/components/flags/flag.vue';
-import VueMap from '@/components/google-maps/map.vue';
-import VueMarker from '@/components/google-maps/marker.vue';
-import {default as mixins} from '@/components/mixins/user';
-import VueAutosize from '@/plugins/autosize';
-import store from '@/store';
 import Vue from 'vue';
 import {mapGetters, mapState} from 'vuex';
+
+import VueComment from '../../components/comments/comment.vue';
 import VueCommentForm from "../../components/comments/form.vue";
+import VueFlag from '../../components/flags/flag.vue';
+import VueMap from '../../components/google-maps/map.vue';
+import VueMarker from '../../components/google-maps/marker.vue';
+import {default as mixins} from '../../components/mixins/user';
+import VueAutosize from '../../plugins/autosize';
+import store from '../../store';
 
 Vue.use(VueAutosize);
 

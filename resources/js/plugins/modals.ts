@@ -1,5 +1,5 @@
-import VueModal from "@/components/modal.vue";
 import Vue from 'vue';
+import VueModal from "../components/modal.vue";
 
 function confirmModal(options: ModalOptions) {
   const modalRef = Math.random().toString(36).substring(5);

@@ -1,11 +1,12 @@
-import {Forum} from '@/types/models';
 import Vue from "vue";
 import {mapGetters} from "vuex";
+
 import VueButton from "../../components/forms/button.vue";
 import VueSelect from "../../components/forms/select.vue";
 import {default as mixin} from '../../components/mixins/user';
 import VueModal from "../../components/modal.vue";
 import store from "../../store";
+import {Forum} from '../../types/models';
 
 new Vue({
   name: 'Sidebar',

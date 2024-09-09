@@ -1,17 +1,18 @@
-import VueAvatar from '@/components/avatar';
-import VueFollowButton from '@/components/forms/follow-button';
-import VueTagsInline from '@/components/forms/tags-inline.vue';
-import {default as SkillsMixin} from '@/components/mixins/skills';
-import VueModal from '@/components/modal';
-import VueTags from '@/components/tags.vue';
-import VueUserName from '@/components/user-name';
 import axios from 'axios';
 import Vue from "vue";
 import VueNotifications from 'vue-notification';
 import {mapActions, mapGetters, mapState} from 'vuex';
-import VueThumbnail from '../components/thumbnail';
-import {default as axiosErrorHandler} from '../libs/axios-error-handler';
-import store from '../store';
+
+import VueAvatar from '../components/avatar.vue';
+import VueFollowButton from '../components/forms/follow-button.vue';
+import VueTagsInline from '../components/forms/tags-inline.vue';
+import {default as SkillsMixin} from '../components/mixins/skills.js';
+import VueModal from '../components/modal.vue';
+import VueTags from '../components/tags.vue';
+import VueThumbnail from '../components/thumbnail.vue';
+import VueUserName from '../components/user-name.vue';
+import {default as axiosErrorHandler} from '../libs/axios-error-handler.js';
+import store from '../store/index';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 

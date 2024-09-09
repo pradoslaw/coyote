@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts">
-import VuePost from '@/components/forum/post.vue';
 import Vue from 'vue';
+import VuePost from '../forum/post.vue';
 
 export default Vue.extend({
   name: 'PostWrapper',

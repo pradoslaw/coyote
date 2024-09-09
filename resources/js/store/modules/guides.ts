@@ -1,19 +1,19 @@
-import { Guide, Tag, Seniority } from "@/types/models";
 import axios from 'axios';
 import Vue from 'vue';
+import {Guide, Seniority, Tag} from "../../types/models";
 
 const state = {
   pagination: {},
-  guide: null
-}
+  guide: null,
+};
 
 const getters = {
   currentPage: state => state.pagination.meta.current_page,
-  totalPages: state => state.pagination.meta.last_page
-}
+  totalPages: state => state.pagination.meta.last_page,
+};
 
 const mutations = {
-  INIT(state, { guide }) {
+  INIT(state, {guide}) {
     state.guide = guide;
   },
 
@@ -45,17 +45,17 @@ const mutations = {
     guide.subscribers += (guide.is_subscribed ? 1 : -1);
   },
 
-  SET_COMMENTS_COUNT(state, { guide, count} ) {
+  SET_COMMENTS_COUNT(state, {guide, count}) {
     guide.comments_count = count;
   },
 
-  SET_ROLE(state, { guide, role }: { guide: Guide, role: Seniority }) {
+  SET_ROLE(state, {guide, role}: { guide: Guide, role: Seniority }) {
     guide.role = role;
-  }
-}
+  },
+};
 
 const actions = {
-  save({ state, commit }) {
+  save({state, commit}) {
     return axios.post(`/Guide/Submit/${state.guide.id || ''}`, state.guide).then(response => {
       commit('EDIT');
       commit('SAVE', response.data);
@@ -64,31 +64,31 @@ const actions = {
     });
   },
 
-  delete({ state }, guide: Guide) {
+  delete({state}, guide: Guide) {
     return axios.delete(`/Guide/Delete/${guide.id}`);
   },
 
-  vote({ commit, dispatch }, guide: Guide) {
+  vote({commit, dispatch}, guide: Guide) {
     commit('VOTE', guide);
 
     return axios.post(`/Guide/Vote/${guide.id}`).catch(() => commit('VOTE', guide));
   },
 
-  subscribe({ commit }, guide: Guide) {
+  subscribe({commit}, guide: Guide) {
     commit('SUBSCRIBE', guide);
 
     axios.post(`/Guide/Subscribe/${guide.id}`).catch(() => commit('SUBSCRIBE', guide));
   },
 
-  setRole({ commit }, { guide, role }: { guide: Guide, role: Seniority }) {
-    return axios.post(`/Guide/Role/${guide.id}`, { role }).then(response => commit('SET_ROLE', { guide, role: response.data }));
-  }
-}
+  setRole({commit}, {guide, role}: { guide: Guide, role: Seniority }) {
+    return axios.post(`/Guide/Role/${guide.id}`, {role}).then(response => commit('SET_ROLE', {guide, role: response.data}));
+  },
+};
 
 export default {
   namespaced: true,
   state,
   getters,
   mutations,
-  actions
+  actions,
 };

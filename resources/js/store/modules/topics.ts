@@ -1,13 +1,13 @@
 import axios from "axios";
-import { Tag, Topic } from '@/types/models';
+import {Tag, Topic} from '../../types/models';
 
 const state = {
   topics: [],
-  reasons: []
+  reasons: [],
 };
 
 const getters = {
-  topic: state => state.topics[0]
+  topic: state => state.topics[0],
 };
 
 const mutations = {
@@ -30,8 +30,7 @@ const mutations = {
   subscribe(state, topic: Topic) {
     if (topic.is_subscribed) {
       topic.subscribers!--;
-    }
-    else {
+    } else {
       topic.subscribers!++;
     }
 
@@ -42,45 +41,45 @@ const mutations = {
     topic.is_locked = !topic.is_locked;
   },
 
-  toggleTag(state, { topic, tag }: { topic: Topic, tag: Tag }) {
+  toggleTag(state, {topic, tag}: { topic: Topic, tag: Tag }) {
     const index = topic.tags!.findIndex(item => item.name === tag.name);
 
     index > -1 ? topic.tags!.splice(index, 1) : topic.tags!.push(tag);
-  }
+  },
 };
 
 const actions = {
-  mark({ commit }, topic) {
+  mark({commit}, topic) {
     commit('mark', topic);
 
     axios.post(`/Forum/Topic/Mark/${topic.id}`);
   },
 
-  markAll({ state, commit }) {
+  markAll({state, commit}) {
     commit('markAll');
 
     axios.post(`/Forum/${state.topics[0].forum.slug}/Mark`);
   },
 
-  subscribe({ commit }, topic) {
+  subscribe({commit}, topic) {
     commit('subscribe', topic);
 
     axios.post(`/Forum/Topic/Subscribe/${topic.id}`);
   },
 
-  lock({ commit }, topic) {
+  lock({commit}, topic) {
     commit('lock', topic);
 
     axios.post(`/Forum/Topic/Lock/${topic.id}`);
   },
 
-  move({ commit }, { topic, forumId, reasonId }) {
-    return axios.post(`/Forum/Topic/Move/${topic.id}`, { id: forumId, reason_id: reasonId });
+  move({commit}, {topic, forumId, reasonId}) {
+    return axios.post(`/Forum/Topic/Move/${topic.id}`, {id: forumId, reason_id: reasonId});
   },
 
-  changeTitle({ commit }, { topic }) {
-    return axios.post(`/Forum/Topic/Subject/${topic.id}`, { title: topic.title });
-  }
+  changeTitle({commit}, {topic}) {
+    return axios.post(`/Forum/Topic/Subject/${topic.id}`, {title: topic.title});
+  },
 };
 
 export default {
@@ -88,5 +87,5 @@ export default {
   state,
   getters,
   mutations,
-  actions
+  actions,
 };

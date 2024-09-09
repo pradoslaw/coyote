@@ -33,12 +33,13 @@
 </template>
 
 <script lang="ts">
-import VueUserName from '@/components/user-name.vue';
-import VueTimeago from '@/plugins/timeago.js';
-import {MessageFolder} from '@/types/models';
 import Vue from 'vue';
+
+import VueTimeago from '../../plugins/timeago.js';
+import {MessageFolder} from '../../types/models';
 import VueAvatar from '../avatar.vue';
 import {default as mixins} from '../mixins/user.js';
+import VueUserName from '../user-name.vue';
 
 Vue.use(VueTimeago);
 

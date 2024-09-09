@@ -1,10 +1,12 @@
-import Channel from "@/libs/websocket/channel";
-import {Microblog, MicroblogVoters, Post, PostComment, PostVoters} from "@/types/models";
 import Prism from "prismjs";
 import Vue from 'vue';
+
 import {getPost, getPostComment} from '../api/posts';
 import store from '../store';
+import {Microblog, MicroblogVoters, Post, PostComment, PostVoters} from "../types/models";
+
 import {default as ws} from "./realtime";
+import Channel from "./websocket/channel";
 
 export type Payload = Microblog | Post | PostComment | MicroblogVoters | PostVoters;
 

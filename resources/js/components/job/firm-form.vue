@@ -154,21 +154,22 @@
 </template>
 
 <script lang="ts">
-import VueButton from '@/components/forms/button.vue';
-import VueError from '@/components/forms/error.vue';
-import VueFormGroup from '@/components/forms/form-group.vue';
-import VueSelect from '@/components/forms/select.vue';
-import VueText from '@/components/forms/text.vue';
-import VueMap from '@/components/google-maps/map.vue';
-import VueMarker from '@/components/google-maps/marker.vue';
-import VueThumbnail from '@/components/thumbnail.vue';
-import {Asset} from '@/types/models';
 import VueTinyMce from '@tinymce/tinymce-vue';
 import Vue from 'vue';
 import {mapMutations} from 'vuex';
+
 import Geocoder from '../../libs/geocoder.js';
 import TinyMceOptions from '../../libs/tinymce.js';
-import store from '../../store';
+import store from '../../store/index';
+import {Asset} from '../../types/models';
+import VueButton from '../forms/button.vue';
+import VueError from '../forms/error.vue';
+import VueFormGroup from '../forms/form-group.vue';
+import VueSelect from '../forms/select.vue';
+import VueText from '../forms/text.vue';
+import VueMap from '../google-maps/map.vue';
+import VueMarker from '../google-maps/marker.vue';
+import VueThumbnail from '../thumbnail.vue';
 
 export default Vue.extend({
   name: 'VueFirmForm',

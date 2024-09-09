@@ -1,6 +1,6 @@
-import VueFollowButton from '@/components/forms/follow-button';
 import axios from 'axios';
 import Vue from 'vue';
+import VueFollowButton from './forms/follow-button';
 
 let tooltipTimer;
 let vm;

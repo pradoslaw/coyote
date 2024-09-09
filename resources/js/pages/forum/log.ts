@@ -1,6 +1,7 @@
 import Vue from "vue";
-import VuePostLog from "@/components/forum/post-log.vue";
-import store from '@/store';
+
+import VuePostLog from "../../components/forum/post-log.vue";
+import store from '../../store/index';
 
 export default Vue.extend({
   delimiters: ['${', '}'],
@@ -16,6 +17,6 @@ export default Vue.extend({
         return null;
       }
       return logs[index + 1].text;
-    }
-  }
+    },
+  },
 });

@@ -1,12 +1,13 @@
-import VueForm from "@/components/forum/form.vue";
-import VuePoll from "@/components/forum/poll.vue";
-import VuePostWrapper from "@/components/forum/post-wrapper.vue";
-import VuePagination from "@/components/pagination.vue";
-import {PostCommentSaved, PostSaved, PostVoted, Subscriber} from "@/libs/live";
-import store from "@/store";
-import {Post} from "@/types/models";
 import Vue from "vue";
 import {mapGetters, mapState} from "vuex";
+
+import VueForm from "../../components/forum/form.vue";
+import VuePoll from "../../components/forum/poll.vue";
+import VuePostWrapper from "../../components/forum/post-wrapper.vue";
+import VuePagination from "../../components/pagination.vue";
+import {PostCommentSaved, PostSaved, PostVoted, Subscriber} from "../../libs/live";
+import store from "../../store/index";
+import {Post} from "../../types/models";
 
 export default Vue.extend({
   name: 'Posts',

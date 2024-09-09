@@ -67,9 +67,10 @@
 </template>
 
 <script lang="ts">
-import {Tag} from '@/types/models';
 import axios, {AxiosResponse} from 'axios';
 import Vue from "vue";
+
+import {Tag} from '../../types/models';
 import VueDropdown from '../forms/dropdown.vue';
 
 export default Vue.extend({

@@ -57,18 +57,19 @@
 </template>
 
 <script lang="ts">
-import VueButton from '@/components/forms/button.vue';
-import VueCheckbox from '@/components/forms/checkbox.vue';
-import VueError from '@/components/forms/error.vue';
-import VueFormGroup from '@/components/forms/form-group.vue';
-import VueSelect from '@/components/forms/select.vue';
-import VueText from '@/components/forms/text.vue';
-import VueThumbnail from "@/components/thumbnail.vue";
-import TinyMceOptions from '@/libs/tinymce';
-import {Asset} from '@/types/models';
 import VueTinyMce from '@tinymce/tinymce-vue';
 import axios from 'axios';
 import Vue from 'vue';
+
+import TinyMceOptions from '../../libs/tinymce.js';
+import {Asset} from '../../types/models';
+import VueButton from '../forms/button.vue';
+import VueCheckbox from '../forms/checkbox.vue';
+import VueError from '../forms/error.vue';
+import VueFormGroup from '../forms/form-group.vue';
+import VueSelect from '../forms/select.vue';
+import VueText from '../forms/text.vue';
+import VueThumbnail from "../thumbnail.vue";
 
 export default Vue.extend({
   name: 'VueApplicationForm',

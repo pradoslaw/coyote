@@ -107,12 +107,13 @@
 </template>
 
 <script lang="ts">
-import declination from '@/libs/declination';
-import VueTimeago from '@/plugins/timeago';
-import store from "@/store";
 import Vue from 'vue';
 import {mixin as clickaway} from "vue-clickaway";
 import {mapActions, mapGetters, mapState} from "vuex";
+
+import declination from '../../libs/declination.js';
+import VueTimeago from '../../plugins/timeago.js';
+import store from "../../store/index";
 import VueAvatar from '../avatar.vue';
 import VueFlag from '../flags/flag.vue';
 import {MicroblogMixin} from "../mixins/microblog";

@@ -1,6 +1,6 @@
 import '../legacy/subscribe';
 import Dialog from '../legacy/dialog';
-import Textarea from "@/libs/textarea";
+import Textarea from "../libs/textarea";
 
 $(() => {
   'use strict';
@@ -88,7 +88,7 @@ $(() => {
       },
       complete: function () {
         $('#btn-upload').removeAttr('disabled').text('Dodaj załącznik');
-      }
+      },
     }, 'json');
 
     return false;

@@ -1,9 +1,10 @@
-import client from './client';
 import axios from "axios";
-import * as models from '@/types/models';
+
+import * as models from '../types/models';
+import client from './client';
 
 export async function getInbox() {
-  return client.get('/User/Pm/Inbox')
+  return client.get('/User/Pm/Inbox');
 }
 
 export async function submitMessage(message: models.Message) {

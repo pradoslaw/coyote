@@ -170,22 +170,24 @@
 </template>
 
 <script lang="ts">
-import IsImage from '@/libs/assets';
-import useBrackets from "@/libs/prompt";
-import {User} from '@/types/models';
 import Vue from 'vue';
 import {mixin as clickaway} from "vue-clickaway";
 import VueLightbox from 'vue-cool-lightbox';
 import {mapActions, mapGetters, mapState} from "vuex";
+
+import IsImage from '../../libs/assets';
+import useBrackets from "../../libs/prompt";
 import VueClipboard from '../../plugins/clipboard';
 import VueTimeago from '../../plugins/timeago.js';
 import store from "../../store";
+import {User} from '../../types/models';
 import VueAvatar from '../avatar.vue';
 import VueFlag from '../flags/flag.vue';
 import {MicroblogMixin} from "../mixins/microblog";
 import {default as mixins} from '../mixins/user.js';
 import VueTags from '../tags.vue';
 import VueUserName from "../user-name.vue";
+
 import VueCommentForm from './comment-form.vue';
 import VueComment from "./comment.vue";
 import VueForm from './form.vue';
@@ -214,7 +216,7 @@ export default Vue.extend({
     return {
       index: null,
       commentDefault: {parent_id: this.microblog.id, text: '', assets: []},
-    }
+    };
   },
   mounted() {
     if (this.wrap && this.$refs['microblog-text'].clientHeight > 300) {
@@ -232,7 +234,7 @@ export default Vue.extend({
       }
 
       return false;
-    }
+    };
 
     if (!pageHitHandler()) {
       document.addEventListener('scroll', pageHitHandler);
@@ -292,7 +294,7 @@ export default Vue.extend({
       return this
         .microblog
         .assets
-        .find(asset => asset.metadata !== null)
+        .find(asset => asset.metadata !== null);
     },
 
     flags() {

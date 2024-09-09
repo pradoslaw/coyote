@@ -176,23 +176,24 @@
 </template>
 
 <script lang="ts">
-import VueButton from '@/components/forms/button.vue';
-import VueCheckbox from '@/components/forms/checkbox.vue';
-import VueError from '@/components/forms/error.vue';
-import VueFormGroup from '@/components/forms/form-group.vue';
-import VueRadio from '@/components/forms/radio.vue';
-import VueSelect from '@/components/forms/select.vue';
-import VueTagsInline from '@/components/forms/tags-inline.vue';
-import VueText from '@/components/forms/text.vue';
-import VueGooglePlace from '@/components/google-maps/place.vue';
-import VueTags from '@/components/tags.vue';
-import TinyMceOptions from '@/libs/tinymce';
-import store from '@/store';
-import {Employment, Rate, Seniority, Tag} from '@/types/models';
 import VueTinyMce from '@tinymce/tinymce-vue';
 import axios, {AxiosResponse} from 'axios';
 import Vue from 'vue';
 import {mapMutations} from 'vuex';
+
+import TinyMceOptions from '../../libs/tinymce.js';
+import store from '../../store/index';
+import {Employment, Rate, Seniority, Tag} from '../../types/models';
+import VueButton from '../forms/button.vue';
+import VueCheckbox from '../forms/checkbox.vue';
+import VueError from '../forms/error.vue';
+import VueFormGroup from '../forms/form-group.vue';
+import VueRadio from '../forms/radio.vue';
+import VueSelect from '../forms/select.vue';
+import VueTagsInline from '../forms/tags-inline.vue';
+import VueText from '../forms/text.vue';
+import VueGooglePlace from '../google-maps/place.vue';
+import VueTags from '../tags.vue';
 
 export default Vue.extend({
   name: 'VueForm',

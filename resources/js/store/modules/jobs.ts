@@ -1,18 +1,18 @@
-import Vue from 'vue';
-import {Job, Firm, JobFeature, Tag} from '@/types/models';
 import axios from "axios";
+import Vue from 'vue';
+import {Firm, Job, JobFeature, Tag} from '../../types/models';
 
 const state = {
   data: [],
   links: [],
   meta: [],
   form: {},
-  subscriptions: []
-}
+  subscriptions: [],
+};
 
 const getters = {
-  isSubscribed: state => (job: Job) => state.subscriptions.findIndex(item => item.id === job.id) > -1
-}
+  isSubscribed: state => (job: Job) => state.subscriptions.findIndex(item => item.id === job.id) > -1,
+};
 
 const mutations = {
   INIT_FORM(state, job: Job) {
@@ -31,12 +31,12 @@ const mutations = {
     state.form.locations.splice(state.form.locations.indexOf(location), 1);
   },
 
-  SET_LOCATION(state, { index, location }) {
+  SET_LOCATION(state, {index, location}) {
     Vue.set(state.form.locations, index, location);
   },
 
   ADD_TAG(state, name) {
-    state.form.tags.push({ name: name, priority: 2 });
+    state.form.tags.push({name: name, priority: 2});
   },
 
   REMOVE_TAG(state, tag: Tag) {
@@ -73,26 +73,26 @@ const mutations = {
     const index = state.subscriptions.findIndex(item => item.id === job.id);
 
     state.subscriptions.splice(index, 1);
-  }
-}
+  },
+};
 
 const actions = {
-  save({ state }) {
+  save({state}) {
     return axios.post(`/Praca/Submit/${state.form.id ?? ''}`, state.form);
   },
 
-  subscribe({ commit, getters }, job: Job) {
+  subscribe({commit, getters}, job: Job) {
     getters.isSubscribed(job) ? commit('UNSUBSCRIBE', job) : commit('SUBSCRIBE', job);
 
     return axios.post(`/Praca/Subscribe/${job.id}`);
-  }
-}
+  },
+};
 
 export default {
   namespaced: true,
   state,
   getters,
   mutations,
-  actions
+  actions,
 };
 

@@ -95,12 +95,13 @@
 </template>
 
 <script>
-import VueTags from '@/components/tags.vue';
 import {mixin as clickaway} from 'vue-clickaway';
 import {mapActions, mapGetters} from "vuex";
-import store from '../../store';
+
+import store from '../../store/index';
 import VueAvatar from '../avatar.vue';
-import {default as mixins} from '../mixins/user';
+import {default as mixins} from '../mixins/user.js';
+import VueTags from '../tags.vue';
 import VueUsername from '../user-name.vue';
 
 export default {

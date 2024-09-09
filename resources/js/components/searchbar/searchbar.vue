@@ -74,14 +74,15 @@
 </template>
 
 <script lang="ts">
-import {Hit} from '@/types/hit';
-import {SpecialKeys} from '@/types/keys';
-import {Contexts, HitCategory, Models} from '@/types/search';
 import axios, {AxiosResponse} from 'axios';
 import Vue from 'vue';
 import {mixin as clickaway} from 'vue-clickaway';
 import {mapGetters} from 'vuex';
-import store from '../../store';
+
+import store from '../../store/index';
+import {Hit} from '../../types/hit';
+import {SpecialKeys} from '../../types/keys';
+import {Contexts, HitCategory, Models} from '../../types/search';
 import VueJobDecorator from './decorators/job';
 import VueMicroblogDecorator from './decorators/microblog';
 import VueTopicDecorator from './decorators/topic.vue';
@@ -128,7 +129,7 @@ export default Vue.extend({
     history.onpushstate = window.onpopstate = () => {
       // wait for location to really change before setting up new url
       setTimeout(() => this.makeParams(), 0);
-    }
+    };
   },
   beforeDestroy() {
     document.removeEventListener('keydown', this.shortcutSupport);
@@ -262,7 +263,7 @@ export default Vue.extend({
         ({model, context} = item);
 
         if (!result[key]) {
-          result[key] = {children: [], model, context}
+          result[key] = {children: [], model, context};
         }
 
         result[key].children.push(item);

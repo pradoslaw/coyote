@@ -1,9 +1,10 @@
-import {Forum, Topic} from '@/types/models';
 import Vue from "vue";
 import {mapState} from "vuex";
+
 import VueSection from '../../components/forum/section.vue';
 import VueTopic from "../../components/forum/topic.vue";
 import store from "../../store";
+import {Forum, Topic} from '../../types/models';
 
 type ForumGroup = {
   [key in number]: Forum;

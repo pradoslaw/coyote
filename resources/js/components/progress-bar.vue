@@ -13,8 +13,8 @@
 </template>
 
 <script lang="ts">
-import {default as mixin} from '@/components/mixins/form.js';
 import Vue from 'vue';
+import {default as mixin} from './mixins/form.js';
 
 export default Vue.extend({
   name: 'VueProgressBar',

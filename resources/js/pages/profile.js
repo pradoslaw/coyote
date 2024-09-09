@@ -1,13 +1,14 @@
-import VueFollowButton from "@/components/forms/follow-button.vue";
-import {default as SkillsMixin} from "@/components/mixins/skills";
-import VueTags from "@/components/tags.vue";
-import VueModals from "@/plugins/modals";
-import store from "@/store";
 import axios from 'axios';
 import PerfectScrollbar from 'perfect-scrollbar';
 import Vue from "vue";
 import VueNotifications from "vue-notification";
 import {mapActions, mapGetters} from "vuex";
+
+import VueFollowButton from "../components/forms/follow-button.vue";
+import {default as SkillsMixin} from "../components/mixins/skills.js";
+import VueTags from "../components/tags.vue";
+import VueModals from "../plugins/modals";
+import store from "../store/index";
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);

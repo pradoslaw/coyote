@@ -1,6 +1,6 @@
-import {Forum, Paginator, Post, PostComment, PostLog, Topic, User} from "@/types/models";
 import axios from "axios";
 import Vue from "vue";
+import {Forum, Paginator, Post, PostComment, PostLog, Topic, User} from "../../types/models";
 
 type ParentChild = { post: Post, comment: PostComment };
 
@@ -12,15 +12,15 @@ const state: Paginator = {
   path: "",
   per_page: 0,
   to: 0,
-  total: 0
+  total: 0,
 };
 
 const getters = {
   posts: state => Object.values(state.data).sort((a, b) => ((a as Post).created_at! > (b as Post).created_at!) ? 1 : -1),
   exists: state => (id: number) => id in state.data,
   currentPage: state => state.current_page,
-  totalPages: state => state.last_page
-}
+  totalPages: state => state.last_page,
+};
 
 const mutations = {
   init(state, pagination) {
@@ -35,7 +35,7 @@ const mutations = {
     // fields to update
     const {text, html, assets, editor, updated_at, edit_count, score} = post;
 
-    Vue.set(state.data, post.id, {...state.data[post.id], ...{text, html, assets, editor, updated_at, edit_count, score}})
+    Vue.set(state.data, post.id, {...state.data[post.id], ...{text, html, assets, editor, updated_at, edit_count, score}});
   },
 
   delete(state, post: Post) {
@@ -122,8 +122,8 @@ const mutations = {
 
     post.score = users.length;
     post.is_voted = users.includes(<string>user?.name);
-  }
-}
+  },
+};
 
 function savePostUrl(forum: Forum, topic: Topic, post: Post) {
   if (post.id) {
@@ -164,7 +164,7 @@ const actions = {
       is_sticky: topic.is_sticky,
       assets: post.assets,
       tags: topic.tags!.map(o => o['name']),
-      poll: rootState.poll.poll
+      poll: rootState.poll.poll,
     };
     return axios.post<any>(savePostUrl(forum, topic, post), payload).then(result => {
       commit(getters.exists(result.data.id) ? 'update' : 'add', result.data);
@@ -215,7 +215,7 @@ const actions = {
   loadComments({commit}, post: Post) {
     axios.get(`/Forum/Comment/Show/${post.id}`).then(result => {
       commit('setComments', {post, comments: result.data});
-    })
+    });
   },
 
   changePage({commit, rootGetters}, page: number) {
@@ -241,14 +241,14 @@ const actions = {
 
   updateVoters({commit, rootState}, {post, users}: { post: Post, users: string[] }) {
     commit('updateVoters', {post, users, user: rootState.user.user});
-  }
-}
+  },
+};
 
 export default {
   namespaced: true,
   state,
   getters,
   mutations,
-  actions
+  actions,
 };
 

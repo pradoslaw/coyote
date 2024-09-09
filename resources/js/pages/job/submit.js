@@ -1,10 +1,11 @@
-import VueButton from '@/components/forms/button.vue';
-import VueFirmForm from '@/components/job/firm-form.vue';
-import VueJobForm from '@/components/job/form.vue';
-import VuePricing from '@/components/job/pricing.vue';
-import VueTabs from '@/components/tabs.vue';
-import store from '@/store';
 import Vue from 'vue';
+
+import VueButton from '../../components/forms/button.vue';
+import VueFirmForm from '../../components/job/firm-form.vue';
+import VueJobForm from '../../components/job/form.vue';
+import VuePricing from '../../components/job/pricing.vue';
+import VueTabs from '../../components/tabs.vue';
+import store from '../../store/index';
 
 new Vue({
   el: '#js-submit-form',

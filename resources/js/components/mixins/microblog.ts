@@ -1,7 +1,8 @@
-import store from "@/store";
-import {Microblog, User} from "@/types/models";
 import Prism from 'prismjs';
 import Vue from 'vue';
+
+import store from "../../store/index";
+import {Microblog, User} from "../../types/models";
 
 export const MicroblogMixin = Vue.extend({
   data() {
@@ -41,7 +42,7 @@ export const MicroblogMixin = Vue.extend({
         .then(() => {
           store.dispatch('user/block', user.id);
 
-          this.$notify({type: 'success', duration: 5000, title: 'Gotowe!', text: '<a href="javascript:" onclick="window.location.reload();">Przeładuj stronę, aby odświeżyć wyniki</a>.'})
+          this.$notify({type: 'success', duration: 5000, title: 'Gotowe!', text: '<a href="javascript:" onclick="window.location.reload();">Przeładuj stronę, aby odświeżyć wyniki</a>.'});
         });
     },
     splice(users?: string[]): null | string {

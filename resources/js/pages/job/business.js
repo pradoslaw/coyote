@@ -1,5 +1,5 @@
-import VuePricing from '@/components/job/pricing.vue';
 import Vue from 'vue';
+import VuePricing from '../../components/job/pricing.vue';
 
 new Vue({
   name: 'Business',

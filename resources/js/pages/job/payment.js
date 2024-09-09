@@ -1,10 +1,11 @@
-import VueButton from '@/components/forms/button.vue';
-import VueCheckbox from '@/components/forms/checkbox.vue';
-import VueFormGroup from '@/components/forms/form-group.vue';
-import VueSelect from '@/components/forms/select.vue';
-import VueText from '@/components/forms/text.vue';
 import axios from 'axios';
 import Vue from 'vue';
+
+import VueButton from '../../components/forms/button.vue';
+import VueCheckbox from '../../components/forms/checkbox.vue';
+import VueFormGroup from '../../components/forms/form-group.vue';
+import VueSelect from '../../components/forms/select.vue';
+import VueText from '../../components/forms/text.vue';
 
 const VAT_RATE = 1.23;
 
