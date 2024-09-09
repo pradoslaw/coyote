@@ -10,11 +10,6 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "noImplicitAny": false,
-    "paths": {
-      "@/*": [
-        "./resources/js/*"
-      ]
-    }
+    "noImplicitAny": false
   }
 }

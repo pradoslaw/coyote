@@ -109,7 +109,6 @@ module.exports = {
     mainFields: ['main', 'module'],
     extensions: ['.ts', '.tsx', '.js', '.vue'],
     alias: {
-      '@': path.join(__dirname, 'resources/js'),
       vue: 'vue/dist/vue.esm.js',
     },
   },
