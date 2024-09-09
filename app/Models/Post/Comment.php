@@ -40,7 +40,7 @@ class Comment extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)
-            ->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at', 'reputation'])
+            ->select(['id', 'name', 'photo', 'is_blocked', 'is_online', 'deleted_at', 'reputation'])
             ->withTrashed();
     }
 
