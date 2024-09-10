@@ -1,7 +1,12 @@
+@import "bootstrap/scss/mixins/breakpoints";
+
 .post-comments {
-  margin: 15px 0 5px 15px;
+  margin: 15px 0 5px;
   font-size: .75rem;
-  padding-right: 50px;
+
+  @include media-breakpoint-up(sm) {
+    padding-right: 50px;
+  }
 
   .badge {
     font-weight: 400;
