@@ -483,38 +483,35 @@ function initializeSharePopover(
 }
 
 function sharePopover(postUrl: string, postId: number, authorName: string, copy: (text: string) => void): Element {
-  const input = {
-    props: ['value'],
-    template: `
-      <div class="input-group">
-        <input class="form-control" readonly :value="value" @click="select"/>
-        <div class="input-group-append">
-          <button type="button" class="btn" @click="$emit('copy', value)">
-            <i class="fa-solid fa-copy"/>
-          </button>
-        </div>
-      </div>
-    `,
-    methods: {
-      select(event) {
-        event.target.select();
-      },
-    },
-  };
   return vueElement({
     data() {
       return {postUrl, postId, authorName};
     },
-    components: {'vue-input': input},
     template: `
       <div class="share-container">
-        <div class="form-group mb-2">
+        <div class="form-group mb-1">
           <label>Post <b>#{{ postId }}</b> od <b>{{ authorName }}</b>:</label>
-          <vue-input :value="postUrl" @copy="copy"/>
+          <div class="input-group">
+            <input class="form-control" readonly :value="postUrl" @click="select"/>
+            <div class="input-group-append">
+              <button type="button" class="btn" @click="copy(postUrl)">
+                <i class="fa-solid fa-copy"/>
+              </button>
+            </div>
+          </div>
         </div>
+        <button type="button" class="btn btn-secondary mt-1 w-100" @click="copy(postUrl)">
+          <i class="fa-solid fa-copy"/>
+          Skopiuj link do postu <b>{{ authorName }}</b>
+        </button>
       </div>
     `,
-    methods: {copy},
+    methods: {
+      copy,
+      select(event) {
+        event.target.select();
+      },
+    },
   });
 
   function vueElement(component): Element {
