@@ -239,14 +239,14 @@
               <span class="d-none d-sm-inline">Obserwuj</span>
             </button>
 
-            <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
-              <i :class="{'fas text-primary': isCommenting, 'far': !isCommenting}" class="fa-fw fa-comment"></i>
-              <span class="d-none d-sm-inline">Komentuj</span>
-            </button>
-            
             <button class="btn btn-sm" ref="shareButton">
               <i class="fas fa-fw fa-share-nodes"/>
               <span class="d-none d-sm-inline">Udostępnij</span>
+            </button>
+
+            <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
+              <i :class="{'fas text-primary': isCommenting, 'far': !isCommenting}" class="fa-fw fa-comment"></i>
+              <span class="d-none d-sm-inline">Komentuj</span>
             </button>
           </div>
 
