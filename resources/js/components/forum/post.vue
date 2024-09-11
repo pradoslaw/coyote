@@ -373,7 +373,6 @@ export default Vue.extend({
   mounted() {
     initializeSharePopover(
       this.$refs.shareButton,
-      baseUrl(this.post.url),
       this.post.url,
       this.post.user?.name || this.post.user_name,
       this.copy,
@@ -464,7 +463,6 @@ export default Vue.extend({
 
 function initializeSharePopover(
   button: HTMLButtonElement,
-  threadUrl: string,
   postUrl: string,
   authorName: string,
   copy: (text: string) => void,
@@ -477,12 +475,12 @@ function initializeSharePopover(
     html: true,
     animation: false,
     content() {
-      return sharePopover(threadUrl, postUrl, authorName, copy);
+      return sharePopover(postUrl, authorName, copy);
     },
   });
 }
 
-function sharePopover(threadUrl: string, postUrl: string, authorName: string, copy: (text: string) => void): Element {
+function sharePopover(postUrl: string, authorName: string, copy: (text: string) => void): Element {
   const input = {
     props: ['value'],
     template: `
@@ -503,15 +501,11 @@ function sharePopover(threadUrl: string, postUrl: string, authorName: string, co
   };
   return vueElement({
     data() {
-      return {threadUrl, postUrl, authorName};
+      return {postUrl, authorName};
     },
     components: {'vue-input': input},
     template: `
       <div class="share-container">
-        <div class="form-group mb-2">
-          <label>Odnośnik do wątku:</label>
-          <vue-input :value="threadUrl" @copy="copy"/>
-        </div>
         <div class="form-group mb-2">
           <label>Odnośnik do postu <b>{{ authorName }}</b>:</label>
           <vue-input :value="postUrl" @copy="copy"/>
@@ -524,10 +518,5 @@ function sharePopover(threadUrl: string, postUrl: string, authorName: string, co
   function vueElement(component): Element {
     return new Vue(component).$mount().$el;
   }
-}
-
-function baseUrl(longUrl) {
-  const url = new URL(longUrl);
-  return url.origin + url.pathname;
 }
 </script>

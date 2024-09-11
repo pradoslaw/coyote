@@ -10,11 +10,9 @@ use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\PollResource;
 use Coyote\Http\Resources\PostCollection;
 use Coyote\Http\Resources\TopicResource;
-use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithSubscribers;
 use Coyote\Repositories\Criteria\Post\WithTrashedInfo;
 use Coyote\Repositories\Criteria\WithTrashed;
-use Coyote\Services\Elasticsearch\Builders\Forum\MoreLikeThisBuilder;
 use Coyote\Services\Flags;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\TreeBuilder\Builder;
@@ -119,22 +117,21 @@ class TopicController extends BaseController
         $post = array_first($posts['data']);
         return $this
             ->view('forum.topic', [
-                'posts'    => $posts,
-                'forum'    => $forum,
-                'paginate' => $paginate,
-                'reasons'  => $reasons,
-            ])
-            ->with([
-                'model'        => $topic, // we need eloquent model in twig to show information about locked/moved topic
-                'topic'        => (new TopicResource($tracker))->toResponse($request)->getData(true),
-                'poll'         => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
-                'is_writeable' => $gate->allows('write', $forum) && $gate->allows('write', $topic),
-                'all_forums'   => $allForums,
-                'emojis'       => Emoji::all(),
-                'user_forums'  => $userForums,
-                'description'  => excerpt($post['text'], 100),
-                'flags'        => $this->flags($forum),
-                'schema_topic' => $this->discussionForumPosting($topic, $post['html']),
+                'threadStartUrl' => route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
+                'posts'          => $posts,
+                'forum'          => $forum,
+                'paginate'       => $paginate,
+                'reasons'        => $reasons,
+                'model'          => $topic, // we need eloquent model in twig to show information about locked/moved topic
+                'topic'          => (new TopicResource($tracker))->toResponse($request)->getData(true),
+                'poll'           => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
+                'is_writeable'   => $gate->allows('write', $forum) && $gate->allows('write', $topic),
+                'all_forums'     => $allForums,
+                'emojis'         => Emoji::all(),
+                'user_forums'    => $userForums,
+                'description'    => excerpt($post['text'], 100),
+                'flags'          => $this->flags($forum),
+                'schema_topic'   => $this->discussionForumPosting($topic, $post['html']),
             ]);
     }
 

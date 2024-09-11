@@ -193,7 +193,12 @@
               <span v-else>Obserwuj wątek</span>
             </a>
           </li>
-
+          <li>
+            <a href="{{ threadStartUrl }}">
+              <i class="fa-solid fa-backward-fast fa-fw"></i>
+              Pokaż początek wątku
+            </a>
+          </li>
           {% if can('update', forum) %}
             <li>
               <a href="{{ route('forum.stream', [model.id]) }}" title="Zobacz dziennik zdarzeń">
