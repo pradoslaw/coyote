@@ -21,6 +21,7 @@ import './plugins/sociale.js';
 import './sentry.ts';
 import './store/index.ts';
 import './gdpr.ts';
+import '../feature/stickyAside/sticky-aside.js';
 
 import '../../survey/src/survey';
 

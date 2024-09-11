@@ -225,50 +225,9 @@
             {% endfor %}
           </div>
         </section>
-
         {{ render_block('job_ads') }}
       </aside>
     </div>
-    <style>
-        .sticky-aside {
-            position: sticky;
-            padding: 15px 0;
-            margin: -15px 0;
-            transition: top .15s;
-        }
-    </style>
-    <script>
-      (function () {
-        const stickyAside = document.querySelector(".sticky-aside");
-        const navbar = document.querySelector("nav.navbar");
-        const header = document.querySelector("header");
-
-        function reposition() {
-          const hasNavbar = header.classList.contains("fixed-top");
-          const elementHeight = stickyAside.getBoundingClientRect().height;
-          const viewportHeight = window.innerHeight;
-          let navbarHeight;
-          if (hasNavbar) {
-            // if navbar is fixed, then `.bottom` will always be bigger
-            // than 0, but we add Math.max() in case styles are changed
-            // or something gets renamed
-            navbarHeight = Math.max(navbar.getBoundingClientRect().bottom, 0);
-          } else {
-            navbarHeight = 0;
-          }
-          if (elementHeight > (viewportHeight - navbarHeight)) {
-            stickyAside.style.top = -(elementHeight - viewportHeight) + "px";
-          } else {
-            stickyAside.style.top = navbarHeight + "px";
-          }
-        }
-
-        window.addEventListener("resize", reposition, {passive: true});
-        reposition();
-        window.stickyAsideReposition = reposition;
-        [0, 1000, 4000, 6000, 10000].forEach(time => setTimeout(reposition, time));
-      })();
-    </script>
   </div>
 
   <script type="text/javascript">
