@@ -475,6 +475,7 @@ function initializeSharePopover(
     trigger: 'focus',
     title: 'Udostępnij',
     html: true,
+    animation: false,
     content() {
       return sharePopover(threadUrl, postUrl, authorName, copy);
     },
