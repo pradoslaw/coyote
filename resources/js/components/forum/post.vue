@@ -374,6 +374,7 @@ export default Vue.extend({
     initializeSharePopover(
       this.$refs.shareButton,
       this.post.url,
+      this.post.id,
       this.post.user?.name || this.post.user_name,
       this.copy,
     );
@@ -464,6 +465,7 @@ export default Vue.extend({
 function initializeSharePopover(
   button: HTMLButtonElement,
   postUrl: string,
+  postId: number,
   authorName: string,
   copy: (text: string) => void,
 ): void {
@@ -475,12 +477,12 @@ function initializeSharePopover(
     html: true,
     animation: false,
     content() {
-      return sharePopover(postUrl, authorName, copy);
+      return sharePopover(postUrl, postId, authorName, copy);
     },
   });
 }
 
-function sharePopover(postUrl: string, authorName: string, copy: (text: string) => void): Element {
+function sharePopover(postUrl: string, postId: number, authorName: string, copy: (text: string) => void): Element {
   const input = {
     props: ['value'],
     template: `
@@ -501,13 +503,13 @@ function sharePopover(postUrl: string, authorName: string, copy: (text: string) 
   };
   return vueElement({
     data() {
-      return {postUrl, authorName};
+      return {postUrl, postId, authorName};
     },
     components: {'vue-input': input},
     template: `
       <div class="share-container">
         <div class="form-group mb-2">
-          <label>Odnośnik do postu <b>{{ authorName }}</b>:</label>
+          <label>Post <b>#{{ postId }}</b> od <b>{{ authorName }}</b>:</label>
           <vue-input :value="postUrl" @copy="copy"/>
         </div>
       </div>
