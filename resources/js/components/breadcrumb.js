@@ -27,6 +27,14 @@ function handleScroll() {
   }
 }
 
+function handleResize() {
+  const breadcrumb = document.getElementById('breadcrumb-fixed');
+  if (breadcrumb) {
+    const logo = getElementByClass('navbar-brand');
+    breadcrumb.style.left = `${logo.offsetLeft}px`;
+  }
+}
+
 function adjustHashOffset() {
   window.scrollTo(window.scrollX, window.scrollY - 60);
 }
@@ -42,5 +50,6 @@ if (!isMobile && getElementByClass('fixed-top')) {
     }
   });
 
-  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('scroll', handleScroll, {passive: true});
+  window.addEventListener('resize', handleResize, {passive: true});
 }
