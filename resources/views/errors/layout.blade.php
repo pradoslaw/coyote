@@ -19,7 +19,7 @@
     .container {
         max-width: 1280px;
         margin: 0 auto;
-        padding: 0 64px;
+        padding: 0 24px;
     }
 
     h1 {
@@ -27,15 +27,23 @@
         font-weight: 700;
     }
 
-    h2 {
+    .subtitle {
         font-size: 24px;
         font-weight: 500;
         color: #7e7f7e;
     }
 
+    .subtitle p {
+        margin: 0;
+    }
+
+    .desktop {
+        display: none;
+    }
+
     img.logo {
-        width: 200px;
-        margin: 96px 0;
+        margin: 32px 0;
+        width: 224px;
     }
 
     a.button {
@@ -47,15 +55,42 @@
         text-decoration: none;
         background: #00a538;
     }
+
+    @media (min-width: 640px) {
+        body {
+            background-position: right top, right bottom;
+            background-size: contain;
+        }
+
+        .container {
+            padding: 0 64px;
+        }
+
+        img.logo {
+            margin: 96px 0;
+        }
+
+        .desktop {
+            display: block;
+        }
+
+        .mobile {
+            display: none;
+        }
+    }
 </style>
 </head>
 <body>
 <div class="container">
   <img class="logo" src="{{$logo}}">
-  <h2>
-    HTTP 1.1/500 Internal Server Error <br>
-    Content-Type: text/html; charset=UTF-8 <br>
-    Date: {{date("D, j M Y H:i:s T")}}
+  <h2 class="subtitle mobile">
+    <p>HTTP 1.1/500 Server Error</p>
+    <p>Content-Type: text/html;</p>
+  </h2>
+  <h2 class="subtitle desktop">
+    <p>HTTP 1.1/500 Internal Server Error</p>
+    <p>Content-Type: text/html; charset=UTF-8</p>
+    <p>Date: {{date("D, j M Y H:i:s T")}}</p>
   </h2>
   <h1>Ups, coś poszło <br> nie tak!</h1>
   <a href="/" class="button">
