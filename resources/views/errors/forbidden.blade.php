@@ -1,59 +1,93 @@
-@extends('errors.layout')
-@section('title')
-  You are banned
-@endsection
-@section('content')
+@extends('errors.layout', ['title' => 'Zostałeś zbanowany'])
+
+@section('head')
   <style>
-      #panel {
-          border: 1px solid #B0BEC5;
-          padding: 10px;
-          text-align: left;
-          color: #666;
-          font-family: Arial, sans-serif;
-          border-radius: 5px;
-          margin: auto;
-          max-width: 80%;
+      h1 {
+          font-size: 52px;
       }
 
-      #panel > ul {
-          list-style-type: none;
+      ul.details {
+          border: 1px solid #00a538;
+          border-radius: 8px;
+          padding: 16px;
+          display: block;
+          margin: 48px 0;
       }
 
-      #panel > ul li {
-          margin: 10px 0;
+      ul.details li {
+          list-style: none;
+          font-size: 16px;
+          display: flex;
+          justify-content: space-between;
+          margin: 16px 0;
       }
 
-      #panel > ul li strong {
-          display: inline-block;
-          width: 30%;
+      ul.details li strong {
+          font-size: 18px;
+          font-weight: 500;
       }
 
-      #contact {
-          margin-top: 20px;
-          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-          color: #B0BEC5;
+      ul.details li span {
+          opacity: 0.5;
       }
 
+      .light {
+          opacity: 0.5;
+      }
+
+      a {
+          font-size: 14px;
+          color: #00a538;
+      }
+
+      .contact-us {
+          line-height: 24px;
+      }
+
+      @media (min-width: 640px) {
+          h1 {
+              font-size: 72px;
+              margin-top: 72px;
+          }
+
+          ul.details {
+              display: inline-block;
+              margin: 16px 0;
+          }
+
+          ul.details li span {
+              text-align: right;
+              min-width: 224px;
+          }
+      }
   </style>
+@endsection
 
-  <div id="panel">
-    <ul>
-      <li>
-        <strong>Ban ID:</strong>
-        <span>{{ $id }}</span>
-      </li>
-      <li>
-        <strong>Reason:</strong>
-        <span>{{ $reason ?? '--' }}</span>
-      </li>
-      <li>
-        <strong>Expiration date:</strong>
-        <span>{{ $expire_at ?? '--' }}</span>
-      </li>
-    </ul>
-  </div>
+@section('content')
+  <h1>
+    Zostałeś<br>
+    zbanowany
+  </h1>
 
-  <div id="contact">
-    You can contact us by e-mail: <a href="mailto:support@4programmers.net?subject=Ban ID:{{ $id }}">support@4programmers.net</a>
-  </div>
+  <ul class="details">
+    <li>
+      <strong>Numer referencyjny:</strong>
+      <span>#{{ $id }}</span>
+    </li>
+    <li>
+      <strong>Powód:</strong>
+      <span>{{ $reason ?? '--' }}</span>
+    </li>
+    <li>
+      <strong>Data wygaśnięcia:</strong>
+      <span>{{ $expire_at ?? '--' }}</span>
+    </li>
+  </ul>
+
+  <p class="contact-us">
+    <span class="light">Możesz się z nami skontaktować na:</span>
+    <a href="mailto:support@4programmers.net?subject=Ban ID:{{ $id }}">
+      support@4programmers.net
+    </a>
+  </p>
 @endsection

@@ -4,9 +4,11 @@
 @endphp
 <html>
 <head>
-<title>4programmers.net</title>
+<title>{{$title}} - 4programmers.net</title>
 <link href="//fonts.googleapis.com/css?family=Inter:500,700" rel="stylesheet" type="text/css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="apple-touch-icon" href="/img/apple-touch.png?v2">
+<link rel="shortcut icon" href="/img/favicon.png?v3" type="image/png">
 <style>
     body {
         font-family: 'Inter', Arial, sans-serif;
@@ -27,33 +29,9 @@
         font-weight: 700;
     }
 
-    .subtitle {
-        font-size: 24px;
-        font-weight: 500;
-        color: #7e7f7e;
-    }
-
-    .subtitle p {
-        margin: 0;
-    }
-
-    .desktop {
-        display: none;
-    }
-
     img.logo {
         margin: 32px 0;
         width: 224px;
-    }
-
-    a.button {
-        display: inline-block;
-        font-size: 14px;
-        color: white;
-        border-radius: 4px;
-        padding: 16px 32px;
-        text-decoration: none;
-        background: #00a538;
     }
 
     @media (min-width: 640px) {
@@ -69,33 +47,14 @@
         img.logo {
             margin: 96px 0;
         }
-
-        .desktop {
-            display: block;
-        }
-
-        .mobile {
-            display: none;
-        }
     }
 </style>
+@yield('head')
 </head>
 <body>
 <div class="container">
   <img class="logo" src="{{$logo}}">
-  <h2 class="subtitle mobile">
-    <p>HTTP 1.1/500 Server Error</p>
-    <p>Content-Type: text/html;</p>
-  </h2>
-  <h2 class="subtitle desktop">
-    <p>HTTP 1.1/500 Internal Server Error</p>
-    <p>Content-Type: text/html; charset=UTF-8</p>
-    <p>Date: {{date("D, j M Y H:i:s T")}}</p>
-  </h2>
-  <h1>Ups, coś poszło <br> nie tak!</h1>
-  <a href="/" class="button">
-    Strona Główna
-  </a>
+  @yield('content')
 </div>
 </body>
 </html>
