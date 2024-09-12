@@ -2,16 +2,12 @@
 {% block title %}404{{ parent() }}{% endblock %}
 
 {% block container %}
-    <div id="page-404" class="row" style="margin-top: 20px">
-        <div class="col-12">
-            <img class="float-end" style="width: 25%" src="/img/404.png">
-
-            <h1>404</h1>
-
-            <h4>Uuups. Strona nie istnieje lub została usunięta.</h4>
-
-            {% include 'errors/tips.twig' %}
-        </div>
+  <div id="page-404" class="row" style="margin-top: 20px">
+    <div class="col-12">
+      <img class="float-end" style="width: 25%" src="/img/404.png">
+      <h1>404</h1>
+      <h4>Uuups. Strona nie istnieje lub została usunięta.</h4>
+      {% include 'errors/tips.twig' %}
     </div>
-
+  </div>
 {% endblock %}
