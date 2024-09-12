@@ -1,4 +1,4 @@
-@extends('errors.503')
+@extends('errors.layout')
 @section('title')
   You are banned
 @endsection
