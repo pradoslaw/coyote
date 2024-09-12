@@ -177,7 +177,7 @@ module.exports = {
       },
       styles: {
         format: 'fragment',
-        filename: path.join(__dirname, 'resources/sass/helpers/_sprites.scss'),
+        filename: path.join(__dirname, 'resources/sass/generated/_sprites.scss'),
       },
     }),
 
