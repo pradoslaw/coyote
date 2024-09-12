@@ -19,11 +19,9 @@
       <div class="row">
         <div class="col-2">
           {% if post.author.displayAvatar %}
-            <img
-                class="post-avatar img-thumbnail"
-                src="{{ post.author.avatarUrl }}"
-                alt="{{ post.author.name }}"
-            />
+            <div class="post-avatar img-thumbnail">
+              {{ user_avatar(post.author.avatar, post.author.name) }}
+            </div>
           {% endif %}
         </div>
         <div class="col-10 post-content">

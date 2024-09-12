@@ -21,7 +21,9 @@
         <div class="card-body">
           <div class="media">
             <div class="me-3">
-              <img src="{{ user_photo(user.photo) }}" class="img-thumbnail" style="min-width:128px; max-height:128px;">
+              <div class="img-thumbnail" style="min-width:128px; max-height:128px;">
+                {{ user_avatar(user.photo, user.name) }}
+              </div>
               <div>
                 {% if user.id != user('id') %}
                   <a class="btn btn-secondary mt-2 w-100" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
@@ -145,7 +147,9 @@
           <div class="media mb-3">
             <div class="me-3 d-none d-sm-block">
               <a href="{{ route('profile', [user('id')]) }}">
-                <img class="img-thumbnail" src="{{ user_photo(user('photo')) }}" style="max-width: 50px; max-height: 50px;" alt="">
+                <div class="img-thumbnail" style="width: 50px; height: 50px;">
+                  {{ user_avatar(currentUser.photo, currentUser.name) }}
+                </div>
               </a>
             </div>
             <div class="media-body">

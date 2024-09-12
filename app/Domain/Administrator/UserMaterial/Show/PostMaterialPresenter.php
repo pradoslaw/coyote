@@ -38,7 +38,7 @@ class PostMaterialPresenter
             $author = new UserPerson(
                 $post->user_id,
                 $post->user->name,
-                $this->cdn->avatar($post->user->photo->getFilename()));
+                $post->user->photo);
         }
 
         $topicTitle = $post->topic->title;

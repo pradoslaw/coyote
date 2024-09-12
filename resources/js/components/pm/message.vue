@@ -1,7 +1,11 @@
 <template>
   <div :class="{'sequential': message.sequential, 'unread': ! isRead}" class="media">
     <a v-if="!message.sequential" v-profile="message.user.id" class="i-45 me-2 d-none d-sm-block flex-shrink-0">
-      <vue-avatar :photo="message.user.photo" :name="message.user.name" class="mw-100 img-thumbnail media-object"/>
+      <vue-avatar 
+        :photo="message.user.photo"
+        :name="message.user.name"
+        :initials="message.user.initials"
+        class="mw-100 img-thumbnail media-object"/>
     </a>
 
     <div class="media-body">

@@ -120,8 +120,13 @@
           <ul id="nav-auth" class="nav-auth navbar-nav order-2"></ul>
 
           <div class="dropdown nav-avatar order-2">
-            <a href="#" class="dropdown-toggle img-thumbnail d-block i-35" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              <img alt="{{ user('name') }}" src="{{ user_photo(user('photo')) }}" style="width: 100%"/>
+            <a href="#"
+               class="dropdown-toggle img-thumbnail d-block i-35"
+               data-bs-toggle="dropdown"
+               role="button"
+               aria-haspopup="true"
+               aria-expanded="false">
+              {{ user_avatar(currentUser.photo, currentUser.name) }}
             </a>
 
             <div class="dropdown-menu dropdown-menu-end">

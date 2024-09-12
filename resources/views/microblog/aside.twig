@@ -11,7 +11,11 @@
 
       <div v-cloak class="card card-body mt-2">
         <div v-for="user in recommendedUsers" class="media">
-          <vue-avatar :id="user.id" :photo="user.photo" :name="user.name" class="d-none d-xl-block i-45 me-2">
+          <vue-avatar
+              :name="user.name"
+              :photo="user.photo"
+              :initials="user.initials"
+              class="d-none d-xl-block i-45 me-2">
           </vue-avatar>
 
           <div class="media-body">

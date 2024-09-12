@@ -7,7 +7,9 @@
     <div class="row">
       <div class="col-sm-1 d-none d-sm-block">
         <a href="{{ route('profile', [user('id')]) }}">
-          <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail">
+          <div class="img-thumbnail">
+            {{ user_avatar(currentUser.photo, currentUser.name) }}
+          </div>
         </a>
       </div>
       <div class="col-sm-11">

@@ -30,7 +30,9 @@
       {% endif %}
 
       <div class="d-flex flex-column align-items-center mb-4">
-        <img class="img-thumbnail" src="{{ user.avatar }}" alt="User avatar" style="width:75px; height:75px;">
+        <div class="img-thumbnail" style="width:75px; height:75px;">
+          {{ user_avatar(user.photo, user.name) }}
+        </div>
         <b>{{ user.name }}</b>
       </div>
 

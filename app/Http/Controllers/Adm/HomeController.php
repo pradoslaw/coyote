@@ -27,8 +27,8 @@ class HomeController extends Controller
         }
         return view('adm.home', [
             'user' => [
-                'name'   => $user->name,
-                'avatar' => $user->photo->getFilename() ? $user->photo->url() : cdn('/img/avatar.png'),
+                'name'  => $user->name,
+                'photo' => $user->photo,
             ],
         ]);
     }

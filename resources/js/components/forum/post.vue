@@ -47,10 +47,10 @@
         <div class="media-left me-2">
           <vue-avatar
             v-if="post.user"
-            :id="post.user.id"
             :name="post.user.name"
             :photo="post.user.photo"
             :is-online="post.user.is_online"
+            :initials="post.user.initials"
             class="d-block i-35 img-thumbnail"
           ></vue-avatar>
         </div>
@@ -76,9 +76,9 @@
           <template v-if="post.user">
             <vue-avatar
               v-if="post.user"
-              :id="post.user.id"
               :name="post.user.name"
               :photo="post.user.photo"
+              :initials="post.user.initials"
               :is-online="post.user.is_online"
               class="post-avatar img-thumbnail"
             ></vue-avatar>

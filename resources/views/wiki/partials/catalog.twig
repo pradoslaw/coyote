@@ -29,7 +29,9 @@
                   <div class="media">
                     <div class="me-2">
                       <a href="{{ route('profile', [child.user_id]) }}" title="Autor: {{ child.user_name }}">
-                        <img class="img-thumbnail" src="{{ user_photo(child.photo) }}" style="max-width: 45px;" alt="">
+                        <div class="img-thumbnail" style="max-width: 45px;">
+                          {{ user_avatar(child.photo, child.user_name) }}
+                        </div>
                       </a>
                     </div>
                     <div class="media-body">

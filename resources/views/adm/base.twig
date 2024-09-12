@@ -7,7 +7,9 @@
     <aside class="flex-shrink-0 navbar-default me-4 pb-4" id="adm-menu">
       <div id="box-user">
         <a href="{{ route('adm.users.show', user('id')) }}">
-          <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail"/>
+          <div class="img-thumbnail">
+            {{ user_avatar(user('photo'), user('name')) }}
+          </div>
         </a>
         <a href="{{ route('adm.users.show', user('id')) }}">
           <h3>{{ user('name') }}</h3>

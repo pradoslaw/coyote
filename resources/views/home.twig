@@ -112,7 +112,9 @@
 
                         <div class="d-none d-sm-block me-2">
                           <a href="{{ route('profile', [activity.user_id]) }}">
-                            <img class="media-object" src="{{ user_photo(activity.user.photo) }}" style="width: 38px; height: 38px;" alt="activity.user.name">
+                            <div class="media-object">
+                              {{ user_avatar(activity.user.photo, activity.user.name) }}
+                            </div>
                           </a>
                         </div>
                         <div class="media-body">
@@ -189,7 +191,8 @@
                   <div class="media">
                     <div class="me-2">
                       <a href="{{ route('profile', [item.id]) }}">
-                        <img src="{{ user_photo(item.photo) }}" alt="{{ item.name }}">
+                        {{ user_avatar(item.photo, item.name,item) }}
+
                       </a>
                     </div>
 

@@ -3,7 +3,9 @@
 <div class="row" id="comment-{{ comment.id }}">
   <div class="col-sm-1 d-none d-sm-block">
     <a href="{{ route('profile', [comment.user.id]) }}">
-      <img src="{{ user_photo(comment.user.photo) }}" class="img-thumbnail">
+      <div class="img-thumbnail">
+        {{ user_avatar(comment.user.photo, comment.user.name) }}
+      </div>
     </a>
   </div>
   <div class="col-sm-11 comment-holder">

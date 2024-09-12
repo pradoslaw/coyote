@@ -158,9 +158,9 @@ class NavigationViewTest extends TestCase
      */
     public function userAvatar(): void
     {
-        $view = $this->navigation(['loggedInAvatarUrl' => '/avatar.png']);
+        $view = $this->navigation(['loggedInAvatarUrl' => '/image.png']);
         $this->assertSame(
-            '/avatar.png',
+            '/image.png',
             $view->find('header', '#userAvatar', '@src'));
     }
 

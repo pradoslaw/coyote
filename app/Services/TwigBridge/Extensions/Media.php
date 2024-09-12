@@ -1,6 +1,10 @@
 <?php
 namespace Coyote\Services\TwigBridge\Extensions;
 
+use Coyote\Domain\Html;
+use Coyote\Domain\Initials;
+use Coyote\Domain\InitialsSvg;
+use Coyote\Domain\StringHtml;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Services\Media\File;
 use Twig\Extension\AbstractExtension;
@@ -13,14 +17,20 @@ class Media extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('user_photo', $this->userPhoto(...)),
             new TwigFunction('logo', $this->logo(...)),
+            new TwigFunction('user_avatar', $this->userAvatar(...)),
         ];
     }
 
-    public function userPhoto($filename): string
+    public function userAvatar(?string $photo, string $name): Html
     {
-        return $this->getMediaUrl('photo', $filename, 'img/avatar.png');
+        if ($photo === null || $photo === '') {
+            $initials = (new Initials())->of($name);
+            return new StringHtml((new InitialsSvg($initials))->imageSvg());
+        }
+        $photoUrl = $this->photo($photo);
+        $htmlUsername = \htmlSpecialChars($name);
+        return new StringHtml('<img class="mw-100" src="' . $photoUrl . '" alt="' . $htmlUsername . '">');
     }
 
     public function logo($filename, $secure = null): string
@@ -43,5 +53,10 @@ class Media extends AbstractExtension
             return cdn($placeholder, $secure);
         }
         throw new \Exception('Parameter needs to be either string or MediaInterface object.');
+    }
+
+    private function photo(string $filename): string
+    {
+        return $this->getMediaFactory()->make('photo', ['file_name' => $filename])->url();
     }
 }

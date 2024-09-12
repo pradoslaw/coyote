@@ -104,6 +104,10 @@ body.padding-top {
     &:hover {
       text-decoration: none;
     }
+
+    img, svg {
+      max-width: 100%;
+    }
   }
 
   .dropdown-toggle:after {

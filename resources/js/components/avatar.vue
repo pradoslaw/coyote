@@ -1,33 +1,29 @@
 <template>
   <div class="position-relative user-avatar">
-    <img :src="url" :alt="name" class="d-block mw-100" loading="lazy">
-
-    <div v-if="isOnline" class="is-online"></div>
+    <img :src="photo" :alt="name" class="d-block mw-100" loading="lazy" v-if="hasAvatar">
+    <div class="default-avatar" v-else>
+      <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+        <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" fill="currentColor">
+          {{ initials }}
+        </text>
+      </svg>
+    </div>
+    <div v-if="isOnline" class="is-online"/>
   </div>
 </template>
 
-<script lang="js">
-  export default {
-    props: {
-      name: {
-        type: String
-      },
-      id: {
-        type: Number
-      },
-      photo: {
-        type: String,
-        default: '/img/avatar.png'
-      },
-      isOnline: {
-        type: Boolean
-      }
+<script lang="ts">
+export default {
+  props: {
+    name: {type: String},
+    photo: {type: String},
+    initials: {type: String},
+    isOnline: {type: Boolean},
+  },
+  computed: {
+    hasAvatar(): boolean {
+      return !!this.photo;
     },
-    computed: {
-      url() {
-        return this.photo ||  '/img/avatar.png';
-      }
-    }
-  }
+  },
+};
 </script>
-

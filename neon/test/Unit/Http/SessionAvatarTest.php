@@ -67,7 +67,7 @@ class SessionAvatarTest extends TestCase
     private function loggedInUserWithAvatar(string $avatarUrl = null): User
     {
         $user = $this->loggedInUser();
-        $user->photo->setFilename($avatarUrl ?? 'avatar.png');
+        $user->photo->setFilename($avatarUrl ?? '');
         return $user;
     }
 

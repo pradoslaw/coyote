@@ -34,6 +34,7 @@ class ActivityResource extends JsonResource
             'object'     => strtolower(class_basename($this->content_type)),
             'type'       => strtolower(class_basename($this->content_type)),
             'user'       => [
+                'name'  => $this->user->name,
                 'photo' => $this->user_id ? $this->user->photo : '',
             ],
         ];

@@ -2,7 +2,10 @@
   <div :title="message.excerpt" :class="{'unread': ! isRead}" class="notification">
     <div class="media">
       <a :href="`/Profile/${message.user.id}`" title="Kliknij, aby wyświetlić profil użytkownika">
-        <vue-avatar :photo="message.user.photo" class="i-35 me-2"></vue-avatar>
+        <vue-avatar 
+          :photo="message.user.photo"
+          :initials="message.user.initials"
+          class="i-35 me-2"/>
       </a>
 
       <a :href="message.url" class="media-body">

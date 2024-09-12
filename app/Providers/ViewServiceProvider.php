@@ -45,6 +45,7 @@ class ViewServiceProvider extends ServiceProvider
                 ],
                 'year'           => $clock->year(),
                 'survey'         => $this->survey($this->app[GuestSurvey::class]),
+                'currentUser'    => $this->currentUser(),
             ]);
         });
     }
@@ -132,6 +133,19 @@ class ViewServiceProvider extends ServiceProvider
             'surveyState'     => $survey->state(),
             'surveyChoice'    => $survey->choice(),
             'surveyBadgeLong' => $survey->badgeLong(),
+        ];
+    }
+
+    function currentUser(): ?array
+    {
+        if (auth()->guest()) {
+            return null;
+        }
+        /** @var User $user */
+        $user = auth()->user();
+        return [
+            'photo' => $user->photo,
+            'name'  => $user->name,
         ];
     }
 }

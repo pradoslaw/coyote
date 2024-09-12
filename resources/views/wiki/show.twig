@@ -59,9 +59,10 @@
 
           <div class="media">
             <a href="{{ route('profile', [author.id]) }}" class="me-2">
-              <img class="media-object img-thumbnail" src="{{ user_photo(author.photo) }}" style="width: 45px; height: 45px;" alt="{{ author.name }}">
+              <div class="media-object img-thumbnail" style="width: 45px; height: 45px;">
+                {{ user_avatar(author.photo, author.name) }}
+              </div>
             </a>
-
             <div class="media-body">
               <blockquote>
                 {{ author.bio }}
@@ -83,9 +84,9 @@
               <li>
                 <a title="Udział w procesie tworzenia strony: {{ author.share }}%" href="{{ route('profile', [author.user_id]) }}" data-user-id="{{ author.user_id }}">
                   <small>{{ author.share|round(1) }}%</small>
-
-                  <img src="{{ user_photo(author.photo) }}" width="24" height="24">
-
+                  <span style="display:inline-block; width:24px; height:24px;">
+                    {{ user_avatar(author.photo, author.name) }}
+                  </span>
                   {{ author.name }}
                 </a>
               </li>
