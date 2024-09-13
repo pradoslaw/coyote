@@ -2,7 +2,7 @@
 namespace Coyote\Http\Controllers;
 
 use Coyote\Domain\DiscreetDate;
-use Coyote\Http\Resources\ActivityResource as ActivityResource;
+use Coyote\Http\Resources\ActivityResource;
 use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\MicroblogCollection;
