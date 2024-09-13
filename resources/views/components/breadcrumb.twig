@@ -12,7 +12,11 @@
     {% for breadcrumb in breadcrumbs %}
       <li class="breadcrumb-item">
         {% if breadcrumb.leaf %}
-          <span class="leaf">{{ breadcrumb.name }}</span>
+          {% if breadcrumb.leafWithLink %}
+            <a class="leaf" href="{{ breadcrumb.url }}">{{ breadcrumb.name }}</a>
+          {% else %}
+            <span class="leaf">{{ breadcrumb.name }}</span>
+          {% endif %}
         {% else %}
           <a href="{{ breadcrumb.url }}">
             {{ breadcrumb.name }}

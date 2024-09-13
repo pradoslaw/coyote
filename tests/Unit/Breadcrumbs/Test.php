@@ -43,7 +43,8 @@ class Test extends TestCase
                     $this->abs('/Forum/water-cat')),
                 new Breadcrumb(
                     'Watermelon topic',
-                    false),
+                    true,
+                    $this->abs($url)),
             ]));
     }
 

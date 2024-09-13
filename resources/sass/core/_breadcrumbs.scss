@@ -24,6 +24,9 @@ ul.breadcrumb {
   {
     .leaf {
       display: inline;
+    }
+
+    span.leaf {
       font-weight: bold;
     }
   }

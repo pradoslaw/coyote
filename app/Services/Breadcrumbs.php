@@ -17,9 +17,9 @@ class Breadcrumbs
         }
     }
 
-    public function push(string $name, string $url): void
+    public function push(string $name, string $url, bool $leafWithLink = false): void
     {
-        $this->breadcrumbs[] = new Breadcrumb($name, $url, false);
+        $this->breadcrumbs[] = new Breadcrumb($name, $url, false, $leafWithLink);
     }
 
     public function render(): ?View

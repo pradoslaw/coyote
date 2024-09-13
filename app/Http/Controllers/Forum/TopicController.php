@@ -31,7 +31,8 @@ class TopicController extends BaseController
 
     public function index(Request $request, Forum $forum, Topic $topic): Collection|View|array
     {
-        $this->breadcrumb->push($topic->title, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
+        $this->breadcrumb->push($topic->title, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
+            leafWithLink:true);
 
         // get the topic (and forum) mark time value from middleware
         $markTime = $request->attributes->get('mark_time');
