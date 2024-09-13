@@ -13,42 +13,22 @@ class Media extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            // funkcja generuje URL do zdjecia usera lub domyslny avatar jezeli brak
-            new TwigFunction('user_photo', [$this, 'userPhoto']),
-            new TwigFunction('logo', [$this, 'logo']),
+            new TwigFunction('user_photo', $this->userPhoto(...)),
+            new TwigFunction('logo', $this->logo(...)),
         ];
     }
 
-    /**
-     * @param string $filename
-     * @return string
-     * @throws \Exception
-     */
-    public function userPhoto($filename)
+    public function userPhoto($filename): string
     {
-        return (string)$this->getMediaUrl('photo', $filename, 'img/avatar.png');
+        return $this->getMediaUrl('photo', $filename, 'img/avatar.png');
     }
 
-    /**
-     * @param string $filename
-     * @param bool|null $secure
-     * @return string
-     * @throws \Exception
-     */
-    public function logo($filename, $secure = null)
+    public function logo($filename, $secure = null): string
     {
-        return (string)$this->getMediaUrl('logo', $filename, 'img/logo-gray.png', $secure);
+        return $this->getMediaUrl('logo', $filename, 'img/logo-gray.png', $secure);
     }
 
-    /**
-     * @param string $factory
-     * @param string $filename
-     * @param string $placeholder
-     * @param bool|null $secure
-     * @return string
-     * @throws \Exception
-     */
-    private function getMediaUrl($factory, $filename, $placeholder, $secure = null)
+    private function getMediaUrl($factory, $filename, $placeholder, $secure = null): string
     {
         if (!$filename) {
             return cdn($placeholder, $secure);
