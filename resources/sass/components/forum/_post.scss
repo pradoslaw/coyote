@@ -53,11 +53,16 @@
   }
 }
 
-.post-delete {
+.post-delete,
+.comment-delete,
+{
   color: $alert-warning-color;
   background-color: $alert-warning-background;
   font-size: 11px;
   border-bottom: 1px solid $alert-warning-border;
+}
+
+.post-delete {
   cursor: pointer;
 }
 

@@ -1,5 +1,8 @@
 <template>
-  <div :id="anchor" :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false}" class="post-comment">
+  <div :id="anchor"
+       :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false}" 
+       class="post-comment"
+       v-if="!authorBlocked">
     <vue-flag v-for="flag in flags" :key="flag.id" :flag.sync="flag"/>
     <vue-comment-form
       v-if="comment.is_editing"
@@ -34,6 +37,10 @@
         </div>
       </div>
     </template>
+  </div>
+  <div class="post-comment comment-delete" v-else>
+    <i class="fa-solid fa-user-slash"/>
+    Treść komentarza została ukryta, ponieważ autorem jest zablokowany przez Ciebie użytkownik.
   </div>
 </template>
 
@@ -81,6 +88,9 @@ export default Vue.extend({
         ...store.getters['flags/filter'](this.comment.id, 'Coyote\\Comment'),
         ...store.getters['flags/filter'](this.comment.id, 'Coyote\\Post\\Comment'),
       ];
+    },
+    authorBlocked(): boolean {
+      return this.$store.getters['user/isBlocked'](this.comment.user.id);
     },
   },
   methods: {
