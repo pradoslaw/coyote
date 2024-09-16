@@ -1,12 +1,9 @@
 <template>
   <ol v-on-clickaway="hideDropdown" ref="dropdown" class="auto-complete" v-show="isDropdownVisible">
     <li v-for="(item, index) in items" :key="index" :class="{'hover': index === selectedIndex}" @click="selectItem" @mouseover="hoverItem(index)">
-
       <slot name="item" :item="item">
-        <vue-avatar :photo="item.photo" :name="item.name" class="d-inline-block"></vue-avatar>
-
+        <vue-avatar :photo="item.photo" :name="item.name" class="d-inline-block"/>
         <span>{{ item.name }}</span>
-
         <small v-if="item.group" class="badge badge-secondary">{{ item.group }}</small>
       </slot>
     </li>
@@ -14,98 +11,94 @@
 </template>
 
 <script>
-  import VueAvatar from '../avatar.vue';
-  import { mixin as clickaway } from 'vue-clickaway';
+import {mixin as clickaway} from 'vue-clickaway';
+import VueAvatar from '../avatar.vue';
 
-  export default {
-    components: { 'vue-avatar': VueAvatar },
-    mixins: [ clickaway ],
-    props: {
-      items: {
-        type: Array,
-        default: () => []
-      },
-      defaultIndex: {
-        type: Number,
-        default: 0
-      }
+export default {
+  components: {'vue-avatar': VueAvatar},
+  mixins: [clickaway],
+  props: {
+    items: {
+      type: Array,
+      default: () => [],
     },
-    data() {
-      return {
-        isDropdownVisible: false,
-        selectedIndex: this.defaultIndex
-      }
+    defaultIndex: {
+      type: Number,
+      default: 0,
     },
-    methods: {
-      goDown() {
-        this.isDropdownVisible = true;
+  },
+  data() {
+    return {
+      isDropdownVisible: false,
+      selectedIndex: this.defaultIndex,
+    };
+  },
+  methods: {
+    goDown() {
+      this.isDropdownVisible = true;
+      this.changeIndex(++this.selectedIndex);
+    },
 
-        this.changeIndex(++this.selectedIndex);
-      },
+    goUp() {
+      this.changeIndex(--this.selectedIndex);
+    },
 
-      goUp() {
-        this.changeIndex(--this.selectedIndex);
-      },
+    changeIndex(index) {
+      const length = this.items.length;
 
-      changeIndex(index) {
-        const length = this.items.length;
-
-        if (length > 0) {
-          if (index >= length) {
-            index = 0;
-          }
-          else if (index < 0) {
-            index = length - 1;
-          }
-
-          this.selectedIndex = index;
-          this.adjustScrollbar();
-        }
-      },
-
-      adjustScrollbar() {
-        let dropdown = this.$refs['dropdown'];
-
-        if (dropdown.children.length) {
-          dropdown.scrollTop = this.selectedIndex * dropdown.children[0].offsetHeight;
-        }
-      },
-
-      selectItem() {
-        const selected = this.getSelected();
-
-        if (selected) {
-          this.$emit('select', selected);
+      if (length > 0) {
+        if (index >= length) {
+          index = 0;
+        } else if (index < 0) {
+          index = length - 1;
         }
 
-        this.hideDropdown();
-      },
-
-      hoverItem(index) {
         this.selectedIndex = index;
-      },
-
-      toggleDropdown(flag) {
-        this.isDropdownVisible = flag;
-      },
-
-      hideDropdown() {
-        this.toggleDropdown(false);
-        this.selectedIndex = -1;
-      },
-
-      getSelected() {
-        return this.selectedIndex > -1 ? this.items[this.selectedIndex] : null;
-      }
-    },
-    watch: {
-      items(newItems, oldItems) {
-        this.toggleDropdown(Boolean(newItems.length));
-
-        // reset position and set scrollbar
-        this.selectedIndex = this.defaultIndex;
         this.adjustScrollbar();
       }
-    }
-  }
+    },
+
+    adjustScrollbar() {
+      let dropdown = this.$refs['dropdown'];
+
+      if (dropdown.children.length) {
+        dropdown.scrollTop = this.selectedIndex * dropdown.children[0].offsetHeight;
+      }
+    },
+
+    selectItem() {
+      const selected = this.getSelected();
+      if (selected) {
+        this.$emit('select', selected);
+      }
+      this.hideDropdown();
+    },
+
+    hoverItem(index) {
+      this.selectedIndex = index;
+    },
+
+    toggleDropdown(flag) {
+      this.isDropdownVisible = flag;
+    },
+
+    hideDropdown() {
+      this.toggleDropdown(false);
+      this.selectedIndex = -1;
+    },
+
+    getSelected() {
+      return this.selectedIndex > -1 ? this.items[this.selectedIndex] : null;
+    },
+  },
+  watch: {
+    items(newItems, oldItems) {
+      this.toggleDropdown(Boolean(newItems.length));
+
+      // reset position and set scrollbar
+      this.selectedIndex = this.defaultIndex;
+      this.adjustScrollbar();
+    },
+  },
+};
 </script>
