@@ -1,55 +1,67 @@
 <?php
-
 namespace Tests\Legacy\Resources;
 
+use Carbon\Carbon;
 use Coyote\Http\Resources\NotificationResource;
 use Coyote\Notification;
-use Faker\Factory;
+use Coyote\Notification\Sender;
+use Illuminate\Database\Eloquent\Collection;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Legacy\TestCase;
 
 class NotificationResourceTest extends TestCase
 {
-    public function testNotificationSendersCount()
+    private Notification $notification;
+
+    #[Before]
+    public function initialize(): void
     {
-        $faker = Factory::create();
+        $this->notification = new Notification();
+        $this->notification->forceFill([
+            'created_at' => Carbon::now(),
+            'headline'   => '{sender} dodał odpowiedź w wątku',
+        ]);
+    }
 
-        /** @var Notification $notification */
-        $notification = factory(Notification::class)->state('headline')->make();
+    #[Test]
+    public function manyNotifiers(): void
+    {
+        $this->notificationSenders([
+            new Sender(['name' => 'Mark']),
+            new Sender(['name' => 'George']),
+            new Sender(['name' => 'Steven']),
+        ]);
+        $this->assertStringContainsString('Mark (oraz 2 osoby)', $this->headline());
+    }
 
-        $senders = [
-            new \Coyote\Notification\Sender(['user_id' => factory(\Coyote\User::class)->make(), 'name' => $faker->userName]),
-            new \Coyote\Notification\Sender(['user_id' => factory(\Coyote\User::class)->make(), 'name' => $faker->userName]),
-            new \Coyote\Notification\Sender(['user_id' => factory(\Coyote\User::class)->make(), 'name' => $faker->userName]),
-        ];
+    #[Test]
+    public function twoNotifiers(): void
+    {
+        $this->notificationSenders([
+            new Sender(['name' => 'Daniel']),
+            new Sender(['name' => 'Peter']),
+        ]);
+        $this->assertStringContainsString('Daniel (oraz Peter)', $this->headline());
+    }
 
-        $notification->setRelation('senders', collect($senders));
+    #[Test]
+    public function singleNotifier()
+    {
+        $this->notificationSenders([
+            new Sender(['name' => 'Joey']),
+        ]);
+        $this->assertStringContainsString('Joey', $this->headline());
+    }
 
-        $resource = new NotificationResource($notification);
-        $result = $resource->toArray(request());
+    private function headline(): string
+    {
+        $resource = new NotificationResource($this->notification);
+        return $resource->toArray(app('request'))['headline'];
+    }
 
-        $this->assertStringContainsString($senders[0]->name . ' (oraz 2 osoby)', $result['headline']);
-
-        $senders = [
-            new \Coyote\Notification\Sender(['user_id' => factory(\Coyote\User::class)->make(), 'name' => $faker->userName]),
-            new \Coyote\Notification\Sender(['user_id' => factory(\Coyote\User::class)->make(), 'name' => $faker->userName]),
-        ];
-
-        $notification->setRelation('senders', collect($senders));
-
-        $resource = new NotificationResource($notification);
-        $result = $resource->toArray(request());
-
-        $this->assertStringContainsString($senders[0]->name . ' (oraz ' . $senders[1]->name . ')', $result['headline']);
-
-        $senders = [
-            new \Coyote\Notification\Sender(['user_id' => factory(\Coyote\User::class)->make(), 'name' => $faker->userName])
-        ];
-
-        $notification->setRelation('senders', collect($senders));
-
-        $resource = new NotificationResource($notification);
-        $result = $resource->toArray(request());
-
-        $this->assertStringContainsString($senders[0]->name, $result['headline']);
+    private function notificationSenders(array $senders): void
+    {
+        $this->notification->setRelation('senders', Collection::make($senders));
     }
 }

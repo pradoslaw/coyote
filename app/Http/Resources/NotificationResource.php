@@ -2,12 +2,13 @@
 namespace Coyote\Http\Resources;
 
 use Carbon\Carbon;
+use Coyote\Notification\Sender;
 use Coyote\Services\Declination;
 use Coyote\Services\Media\Factory;
 use Coyote\User;
+use Illuminate\Database\Eloquent;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 /**
  * @property Carbon $read_at
@@ -21,15 +22,15 @@ class NotificationResource extends JsonResource
         $senders = $this->resource->senders->unique('name');
         $user = $senders->first();
 
-        $only = $this->resource->only(['subject', 'excerpt', 'id', 'url']);
-
-        return \array_merge($only, [
-            'is_read'    => $this->is_clicked && $this->read_at,
-            'headline'   => $this->getHeadline($user, $senders),
-            'created_at' => $this->resource->created_at->toIso8601String(),
-            'photo'      => $this->getMediaUrl($user ? $user->photo : null),
-            'user_id'    => $senders->first()->user_id,
-        ]);
+        return \array_merge(
+            $this->resource->only(['subject', 'excerpt', 'id', 'url']),
+            [
+                'is_read'    => $this->is_clicked && $this->read_at,
+                'headline'   => $this->getHeadline($user, $senders),
+                'created_at' => $this->resource->created_at->toIso8601String(),
+                'photo'      => $this->getMediaUrl($user ? $user->photo : null),
+                'user_id'    => $user->user_id,
+            ]);
     }
 
     private function getMediaUrl(?string $filename): string
@@ -40,12 +41,7 @@ class NotificationResource extends JsonResource
         return '';
     }
 
-    /**
-     * @param mixed $user
-     * @param Collection $senders
-     * @return string
-     */
-    private function getHeadline($user, $senders): string
+    private function getHeadline(Sender $user, Eloquent\Collection $senders): string
     {
         $count = $senders->count();
         if ($count === 0) {
@@ -57,7 +53,7 @@ class NotificationResource extends JsonResource
             $this->resource->headline);
     }
 
-    private function sender(int $count, mixed $user, Collection $senders): mixed
+    private function sender(int $count, Sender $user, Eloquent\Collection $senders): string
     {
         if ($count === 2) {
             return $user->name . ' (oraz ' . $senders->last()->name . ')';
