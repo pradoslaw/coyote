@@ -1,69 +1,69 @@
 {% import 'components.modals' as modals %}
 
 <div class="row" id="comment-{{ comment.id }}">
-    <div class="col-sm-1 d-none d-sm-block">
-        <a href="{{ route('profile', [comment.user.id]) }}">
-            <img src="{{ user_photo(comment.user.photo) }}" class="img-thumbnail">
-        </a>
-    </div>
-    <div class="col-sm-11 comment-holder">
-        <div class="card card-transparent">
-            <div class="card-body comment">
-                {% if can('wiki-admin') or comment.user_id == user('id') %}
-                    <div class="dropdown float-end">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="comment-menu-{{ comment.id }}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+  <div class="col-sm-1 d-none d-sm-block">
+    <a href="{{ route('profile', [comment.user.id]) }}">
+      <img src="{{ user_photo(comment.user.photo) }}" class="img-thumbnail">
+    </a>
+  </div>
+  <div class="col-sm-11 comment-holder">
+    <div class="card card-transparent">
+      <div class="card-body comment">
+        {% if can('wiki-admin') or comment.user_id == user('id') %}
+          <div class="dropdown float-end">
+            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="comment-menu-{{ comment.id }}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="comment-menu-{{ comment.id }}">
-                            <a class="dropdown-item btn-edit" href="javascript:" data-id="{{ comment.id }}" rel="nofollow">
-                              <i class="fas fa-pen-to-square fa-fw"></i>
-                              Edytuj
-                            </a>
-                            <a class="dropdown-item" href="javascript:" data-bs-target="#modal-confirm-{{ comment.id }}" data-bs-toggle="modal" rel="nofollow">
-                              <i class="fas fa-trash-can fa-fw"></i> 
-                              Usuń
-                            </a>
-                        </div>
-                    </div>
-                {% endif %}
-
-                <ul class="list-inline">
-                    <li class="list-inline-item text-muted">
-                        {{ link_to_profile(comment.user) }}
-                    </li>
-                    <li class="list-inline-item comment-date" style="display:none">
-                        &#x2022;
-                        <a href="#comment-{{ comment.id }}"
-                           class="timestamp text-muted"
-                           data-time-ago="{{ comment.created_at }}">
-                          {{ comment.created_at|format_date }}
-                        </a>
-                    </li>
-                </ul>
-
-                <div class="comment-content">
-                    {{ comment.html|raw }}
-                </div>
-
-                {% if can('wiki-admin') or comment.user_id == user('id') %}
-                    {{ form_open({url: route('wiki.comment.save', [wiki.id, comment.id]), class: 'comment-form'}) }}
-                    {{ form_hidden('comment_id', comment.id) }}
-
-                    <div class="form-group">
-                        {{ form_widget(form.text, {value: comment.text}) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_widget(form.submit) }}
-                        {{ form_widget(form.cancel) }}
-
-                        <div class="clearfix"></div>
-                    </div>
-                    {{ form_close() }}
-
-                    {{ form_open({url: route('wiki.comment.delete', [wiki.id, comment.id])}) }}
-                    {{ modals.confirm('Czy chcesz usunąć ten komentarz?', 'Czy chcesz usunąć?', 'modal-confirm-' ~ comment.id) }}
-                    {{ form_close() }}
-                {% endif %}
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="comment-menu-{{ comment.id }}">
+              <a class="dropdown-item btn-edit" href="javascript:" data-id="{{ comment.id }}" rel="nofollow">
+                <i class="fas fa-pen-to-square fa-fw"></i>
+                Edytuj
+              </a>
+              <a class="dropdown-item" href="javascript:" data-bs-target="#modal-confirm-{{ comment.id }}" data-bs-toggle="modal" rel="nofollow">
+                <i class="fas fa-trash-can fa-fw"></i>
+                Usuń
+              </a>
             </div>
+          </div>
+        {% endif %}
+
+        <ul class="list-inline">
+          <li class="list-inline-item text-muted">
+            {{ link_to_profile(comment.user) }}
+          </li>
+          <li class="list-inline-item comment-date" style="display:none">
+            &#x2022;
+            <a href="#comment-{{ comment.id }}"
+               class="timestamp text-muted"
+               data-time-ago="{{ comment.created_at }}">
+              {{ comment.created_at|format_date }}
+            </a>
+          </li>
+        </ul>
+
+        <div class="comment-content">
+          {{ comment.html|raw }}
         </div>
+
+        {% if can('wiki-admin') or comment.user_id == user('id') %}
+          {{ form_open({url: route('wiki.comment.save', [wiki.id, comment.id]), class: 'comment-form'}) }}
+          {{ form_hidden('comment_id', comment.id) }}
+
+          <div class="form-group">
+            {{ form_widget(form.text, {value: comment.text}) }}
+          </div>
+          <div class="form-group">
+            {{ form_widget(form.submit) }}
+            {{ form_widget(form.cancel) }}
+
+            <div class="clearfix"></div>
+          </div>
+          {{ form_close() }}
+
+          {{ form_open({url: route('wiki.comment.delete', [wiki.id, comment.id])}) }}
+          {{ modals.confirm('Czy chcesz usunąć ten komentarz?', 'Czy chcesz usunąć?', 'modal-confirm-' ~ comment.id) }}
+          {{ form_close() }}
+        {% endif %}
+      </div>
     </div>
+  </div>
 </div>
