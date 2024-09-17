@@ -20,7 +20,7 @@
             <input :value="inlineTags" @keyup.esc="isEditing = false" ref="input" class="form-control form-control-sm">
           </div>
           <div class="col-2">
-            <vue-button :disabled="isProcessing" @click.native="saveTags" class="btn btn-primary btn-sm">Zapisz</vue-button>
+            <vue-button :disabled="isProcessing" @click="saveTags" class="btn btn-primary btn-sm">Zapisz</vue-button>
           </div>
         </div>
       </form>

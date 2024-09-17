@@ -46,7 +46,7 @@
 
           <div class="d-flex mt-2 justify-content-end">
             <button type="button" class="btn btn-danger btn-sm me-1" @click="isEditing = false">Anuluj</button>
-            <vue-button :disabled="isSubmitting" @click.native="saveComment(comment)" class="btn btn-primary btn-sm">Zapisz</vue-button>
+            <vue-button :disabled="isSubmitting" @click="saveComment(comment)" class="btn btn-primary btn-sm">Zapisz</vue-button>
           </div>
         </div>
 
@@ -73,7 +73,7 @@
         <div class="d-flex mt-2 justify-content-end">
           <button type="button" class="btn btn-danger btn-sm me-1" @click="isReplying = false">Anuluj</button>
 
-          <vue-button @click.native="saveComment(replyForm)" :disabled="isSubmitting" type="submit" class="btn btn-primary btn-sm" title="Ctrl+Enter aby opublikować">
+          <vue-button @click="saveComment(replyForm)" :disabled="isSubmitting" type="submit" class="btn btn-primary btn-sm" title="Ctrl+Enter aby opublikować">
             Zapisz
           </vue-button>
         </div>

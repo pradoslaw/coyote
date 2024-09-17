@@ -241,7 +241,7 @@
 
             <template v-slot:buttons>
               <button @click="$refs['forum-modal'].close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-              <vue-button @click.native="move" :disabled="isProcessing" class="btn btn-danger danger">Tak, przenieś</vue-button>
+              <vue-button @click="move" :disabled="isProcessing" class="btn btn-danger danger">Tak, przenieś</vue-button>
             </template>
 
             <p>Czy na pewno chcesz przenieść wątek do innej kategorii?</p>
@@ -264,7 +264,7 @@
 
             <template v-slot:buttons>
               <button @click="$refs['update-modal'].close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-              <vue-button @click.native="changeTitle" :disabled="isProcessing" class="btn btn-danger danger">Zmień tytuł</vue-button>
+              <vue-button @click="changeTitle" :disabled="isProcessing" class="btn btn-danger danger">Zmień tytuł</vue-button>
             </template>
 
             <input type="text" name="title" v-model="topic.title" @keydown.enter="changeTitle" class="form-control">

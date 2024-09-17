@@ -17,7 +17,7 @@
             preview-url="/Mikroblogi/Preview"/>
 
           <div class="d-flex mt-2 justify-content-end">
-            <vue-button :disabled="isSubmitting" @click.native="saveComment" class="btn btn-primary btn-sm" tabindex="3" title="Ctrl+Enter aby opublikować">Zapisz</vue-button>
+            <vue-button :disabled="isSubmitting" @click="saveComment" class="btn btn-primary btn-sm" tabindex="3" title="Ctrl+Enter aby opublikować">Zapisz</vue-button>
           </div>
         </div>
       </div>

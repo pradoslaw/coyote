@@ -1,5 +1,5 @@
 <template>
-  <button :disabled="disabled">
+  <button :disabled="disabled" @click="click" type="button">
     <i v-if="disabled" class="fa fa-spinner fa-spin fa-fw"/>
     <slot/>
   </button>
@@ -11,6 +11,11 @@ export default {
     disabled: {
       type: Boolean,
       default: false,
+    },
+  },
+  methods: {
+    click(event) {
+      this.$emit('click', event);
     },
   },
 };

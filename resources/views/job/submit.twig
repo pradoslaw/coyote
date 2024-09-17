@@ -36,14 +36,14 @@
           <div class="container-3xl">
             <div class="row">
               <div class="col-12 col-lg-9 d-flex justify-content-end">
-                <vue-button v-if="currentTab > 0" @click.native="switchTab(currentTab - 1)" :disabled="isSubmitting" class="btn btn-outline-primary next-tab">
+                <vue-button v-if="currentTab > 0" @click="switchTab(currentTab - 1)" :disabled="isSubmitting" class="btn btn-outline-primary next-tab">
                   <i class="fas fa-angle-left"></i>
                   ${ tabs[currentTab - 1] }
                 </vue-button>
 
                 <vue-button
                     v-if="currentTab < 1"
-                    @click.native="switchTab(currentTab + 1)"
+                    @click="switchTab(currentTab + 1)"
                     :disabled="isSubmitting"
                     class="btn btn-outline-primary next-tab">
                   ${ tabs[currentTab + 1] }
@@ -53,7 +53,7 @@
                 <vue-button
                     v-if="job.firm.name || currentTab === 1"
                     :disabled="isSubmitting"
-                    @click.native="submitForm"
+                    @click="submitForm"
                     class="btn btn-primary btn-save ms-2"
                     title="Zapisz tę ofertę">
                   <i class="fas fa-floppy-disk"></i>

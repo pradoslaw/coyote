@@ -25,7 +25,7 @@
       <div class="col-12">
         <vue-button
           :disabled="isProcessing"
-          @click.native.prevent="saveMicroblog"
+          @click="saveMicroblog"
           title="Kliknij, aby wysłać (Ctrl+Enter)"
           class="btn btn-sm btn-primary float-end"
           tabindex="2"

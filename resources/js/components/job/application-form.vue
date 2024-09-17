@@ -49,7 +49,7 @@
     </div>
 
     <div class="form-group">
-      <vue-button :disabled="isProcessing" @click.native.prevent="submitForm" class="btn btn-primary">
+      <vue-button :disabled="isProcessing" @click="submitForm" class="btn btn-primary">
         Wyślij
       </vue-button>
     </div>

@@ -57,7 +57,7 @@
 
     <div v-if="isVoteable" class="row">
       <div class="col-12">
-        <vue-button :disabled="isProcessing" @click.native="vote" class="btn btn-sm btn-primary">Głosuj</vue-button>
+        <vue-button :disabled="isProcessing" @click="vote" class="btn btn-sm btn-primary">Głosuj</vue-button>
       </div>
     </div>
 

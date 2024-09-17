@@ -1,5 +1,11 @@
 <template>
-  <input :type="type" :name="name" v-model="valueLocal" class="form-control" :class="{'is-invalid': isInvalid}">
+  <input
+    :type="type"
+    :name="name"
+    v-model="valueLocal"
+    class="form-control" :class="{'is-invalid': isInvalid}"
+    @keydown.enter="accept"
+    @blur="leave"/>
 </template>
 
 <script>
@@ -24,5 +30,14 @@ export default {
     },
   },
   mixins: [mixins],
+  methods: {
+    accept(event) {
+      event.preventDefault();
+      this.$emit('accept');
+    },
+    leave() {
+      this.$emit('leave');
+    },
+  },
 };
 </script>

@@ -105,7 +105,7 @@
       </vue-form-group>
 
       <vue-form-group label="Adres" class="border-bottom" v-show="firm.is_agency === false">
-        <vue-text autocomplete="off" v-model="address" @keydown.native.enter.prevent="changeAddress" name="address"></vue-text>
+        <vue-text autocomplete="off" v-model="address" @accept="changeAddress" name="address"></vue-text>
 
         <span class="form-text text-muted">Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.</span>
 

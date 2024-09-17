@@ -3,7 +3,7 @@
     <div v-if="showTitleInput" class="form-group">
       <label class="col-form-label">Temat <em>*</em></label>
 
-      <vue-text v-model="topic.title" :is-invalid="'title' in errors" @keydown.enter.native="save" @blur.native="findSimilar" name="title" tabindex="1" autofocus="autofocus"></vue-text>
+      <vue-text v-model="topic.title" :is-invalid="'title' in errors" @accept="save" @leave="findSimilar" name="title" tabindex="1" autofocus="autofocus"></vue-text>
       <vue-error :message="errors['title']"></vue-error>
 
       <small v-if="!('title' in errors)" class="text-muted form-text">Bądź rzeczowy. Nie nadawaj wątkom jednowyrazowych tytułów.</small>
@@ -61,9 +61,8 @@
                   :is-invalid="`poll.items.${index}.text` in errors"
                   ref="poll-items"
                   class="input-sm"
-                  @keydown.enter.native.prevent="addItem"
+                  @accept="addItem"
                   placeholder="Naciśnij Enter, aby dodać kolejną pozycję"/>
-
                 <vue-error :message="errors[`poll.items.${index}.text`]"></vue-error>
               </div>
             </div>
@@ -121,7 +120,7 @@
     </div>
 
     <div class="mt-2">
-      <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm" @click.native.prevent="save">
+      <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm" @click="save">
         <template v-if="post.id">Zapisz</template>
         <template v-else>Dodaj post</template>
       </vue-button>
