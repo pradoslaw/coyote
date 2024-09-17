@@ -45,7 +45,6 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import {mapGetters} from "vuex";
 import store from "../../store/index";
 import VueAvatar from "../avatar.vue";
@@ -54,7 +53,7 @@ import {default as mixins} from '../mixins/user.js';
 import VueUserName from '../user-name.vue';
 import VueCommentForm from "./comment-form.vue";
 
-export default Vue.extend({
+export default {
   name: 'comment',
   mixins: [mixins],
   components: {
@@ -121,5 +120,5 @@ export default Vue.extend({
         });
     },
   },
-});
+};
 </script>

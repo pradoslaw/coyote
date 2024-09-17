@@ -37,7 +37,6 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import {mapGetters, mapState} from 'vuex';
 
 import clickAway from "../../clickAway.js";
@@ -63,7 +62,7 @@ function urlBase64ToUint8Array(base64String) {
   return outputArray;
 }
 
-export default Vue.extend({
+export default {
   name: 'VueNotifications',
   directives: {clickAway},
   components: {
@@ -187,5 +186,5 @@ export default Vue.extend({
       }
     },
   },
-});
+};
 </script>

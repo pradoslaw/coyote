@@ -71,7 +71,7 @@ import VueSelect from '../forms/select.vue';
 import VueText from '../forms/text.vue';
 import VueThumbnail from "../thumbnail.vue";
 
-export default Vue.extend({
+export default {
   name: 'VueApplicationForm',
   components: {
     'vue-form-group': VueFormGroup,
@@ -164,5 +164,5 @@ export default Vue.extend({
       this.applicationSync.cv = null;
     },
   },
-});
+};
 </script>

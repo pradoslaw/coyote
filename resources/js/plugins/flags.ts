@@ -1,3 +1,4 @@
+import Vue from "vue";
 import axios from 'axios';
 import VueFlagModal from "../components/flags/modal.vue";
 
@@ -6,7 +7,7 @@ function openModal(event) {
 
   axios.get('/Flag').then(result => {
     const propsData = {url: el.dataset.url, metadata: el.dataset.metadata, types: result.data};
-    const wrapper = new VueFlagModal({propsData}).$mount();
+    const wrapper = new (Vue.extend(VueFlagModal))({propsData}).$mount();
 
     document.body.append(wrapper.$el);
   });

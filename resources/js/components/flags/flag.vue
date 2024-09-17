@@ -25,11 +25,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import VueModal from '../modal.vue';
 import VueUserName from "../user-name.vue";
 
-export default Vue.extend({
+export default {
   name: 'flag',
   components: {
     'vue-username': VueUserName,
@@ -79,5 +78,5 @@ export default Vue.extend({
   mounted() {
     this.modal = this.$refs.modal;
   },
-});
+};
 </script>

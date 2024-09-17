@@ -64,11 +64,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import VueModal from "../delete-modal.vue";
 import VueUserName from "../user-name.vue";
 
-export default Vue.extend({
+export default {
   name: 'VuePostLog',
   components: {
     'vue-username': VueUserName,
@@ -138,7 +137,7 @@ export default Vue.extend({
       }, '');
     },
   },
-});
+};
 
 const tmp = document.createElement("div");
 

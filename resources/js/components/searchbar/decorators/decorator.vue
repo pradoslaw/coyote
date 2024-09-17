@@ -5,10 +5,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import DecoratorMixin from '../mixin';
 
-export default Vue.extend({
+export default {
   mixins: [DecoratorMixin],
   props: {
     item: {
@@ -16,5 +15,5 @@ export default Vue.extend({
       required: true,
     },
   },
-});
+};
 </script>

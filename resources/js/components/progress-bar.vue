@@ -13,10 +13,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import {default as mixin} from './mixins/form.js';
 
-export default Vue.extend({
+export default {
   name: 'VueProgressBar',
   mixins: [mixin],
   props: {
@@ -45,5 +44,5 @@ export default Vue.extend({
       this.$emit('click', value);
     },
   },
-});
+};
 </script>

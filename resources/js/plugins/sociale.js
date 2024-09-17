@@ -18,8 +18,8 @@ if (el !== null) {
   store.commit('inbox/SET_COUNT', store.state.user.user.pm_unread);
   store.commit('notifications/init', {notifications: null, count: store.state.user.user.notifications_unread});
 
-  el.appendChild(new VueNotification({store}).$mount().$el);
-  el.appendChild(new VuePm({store}).$mount().$el);
+  el.appendChild(new (Vue.extend(VueNotification))({store}).$mount().$el);
+  el.appendChild(new (Vue.extend(VuePm))({store}).$mount().$el);
 }
 
 /**

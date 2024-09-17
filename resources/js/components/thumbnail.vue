@@ -30,10 +30,9 @@
 
 <script lang="ts">
 import axios from 'axios';
-import Vue from 'vue';
 import IsImage from '../libs/assets';
 
-export default Vue.extend({
+export default {
   name: 'VueThumbnail',
   props: {
     url: {
@@ -95,7 +94,7 @@ export default Vue.extend({
       return this.onlyImage ? 'image/jpeg,image/png,image/gif' : '';
     },
   },
-});
+};
 
 </script>
 

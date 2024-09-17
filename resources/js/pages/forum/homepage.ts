@@ -1,4 +1,3 @@
-import Vue from "vue";
 import {mapState} from "vuex";
 
 import VueSection from '../../components/forum/section.vue';
@@ -10,7 +9,7 @@ type ForumGroup = {
   [key in number]: Forum;
 };
 
-export default Vue.extend({
+export default {
   name: 'Homepage',
   delimiters: ['${', '}'],
   store,
@@ -28,12 +27,12 @@ export default Vue.extend({
   },
   created() {
     store.commit('forums/init', window.forums || []);
-    store.commit('topics/init', (window.topics?.data) || []);
+    store.commit('topics/init', window.topics?.data || []);
     store.commit('flags/init', window.flags);
   },
   methods: {
     changeCollapse(id: number): void {
-      this.$set(this.collapse, id, !(!!(this.collapse[id])));
+      this.$set(this.collapse, id, !(!!this.collapse[id]));
     },
 
     containsUserTags(topic: Topic): boolean {
@@ -58,7 +57,7 @@ export default Vue.extend({
             .sort((a, b) => a.order < b.order ? -1 : 1)
             .reduce((acc, forum) => {
               if (!acc[forum.section]) {
-                acc[forum.section] = {name: forum.section, order: forum.order, categories: [], isCollapse: !!(this.collapse[forum.id])};
+                acc[forum.section] = {name: forum.section, order: forum.order, categories: [], isCollapse: !!this.collapse[forum.id]};
               }
 
               acc[forum.section].categories.push(forum);
@@ -71,7 +70,7 @@ export default Vue.extend({
     groups(): ForumGroup {
       // @ts-ignore
       return this.topics.reduce((acc, item) => {
-        let index = this.groupStickyTopics ? (+!item.is_sticky) : 0;
+        let index = this.groupStickyTopics ? +!item.is_sticky : 0;
 
         if (!acc[index]) {
           acc[index] = [];
@@ -89,4 +88,4 @@ export default Vue.extend({
 
     ...mapState('topics', ['topics']),
   },
-});
+};

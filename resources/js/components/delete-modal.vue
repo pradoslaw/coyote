@@ -22,11 +22,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import VueSelect from './forms/select.vue';
 import VueModal from './modal.vue';
 
-export default Vue.extend({
+export default {
   name: 'VueDeleteModal',
   components: {
     'vue-modal': VueModal,
@@ -52,5 +51,5 @@ export default Vue.extend({
       this.close();
     },
   },
-});
+};
 </script>

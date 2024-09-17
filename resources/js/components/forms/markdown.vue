@@ -96,10 +96,10 @@
 </template>
 
 <script lang="ts">
+import Vue from "vue";
 import {link} from "@riddled/4play/index.js";
 import axios from 'axios';
 import Prism from 'prismjs';
-import Vue from 'vue';
 import isImage from '../../libs/assets';
 import store from '../../store';
 import VueError from '../forms/error.vue';
@@ -114,7 +114,7 @@ import VueHelp from './help.vue';
 const CONTENT = 'Treść';
 const PREVIEW = 'Podgląd';
 
-export default Vue.extend({
+export default {
   name: 'VueMarkdown',
   mixins: [formMixin],
   components: {
@@ -393,7 +393,7 @@ export default Vue.extend({
       this.assets.splice(this.assets.indexOf(asset), 1);
     },
     chooseFile() {
-      const Thumbnail = new VueThumbnail({propsData: {name: 'asset'}}).$mount();
+      const Thumbnail = new (Vue.extend(VueThumbnail))({propsData: {name: 'asset'}}).$mount();
 
       this.progress = 0;
 
@@ -494,5 +494,5 @@ export default Vue.extend({
   mounted() {
     this.$nextTick(() => Prism.highlightAll());
   },
-});
+};
 </script>

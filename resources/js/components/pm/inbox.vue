@@ -31,7 +31,6 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import clickAway from "../../clickAway.js";
 import DesktopNotifications from '../../libs/notifications';
@@ -39,7 +38,7 @@ import {default as ws} from '../../libs/realtime';
 import {default as PerfectScrollbar} from '../perfect-scrollbar.js';
 import VueMessage from './message-compact.vue';
 
-export default Vue.extend({
+export default {
   name: 'VueInbox',
   directives: {clickAway},
   components: {
@@ -154,5 +153,5 @@ export default Vue.extend({
     this.listenForMessages();
     this.listenForVisibilityChange();
   },
-});
+};
 </script>

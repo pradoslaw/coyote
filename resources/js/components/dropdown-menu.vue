@@ -5,10 +5,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import clickAway from "../clickAway.js";
 
-export default Vue.extend({
+export default {
   name: 'VueDropdownMenu',
   directives: {clickAway},
   data() {
@@ -26,5 +25,5 @@ export default Vue.extend({
       this.isDropdownVisible = !this.isDropdownVisible;
     },
   },
-});
+};
 </script>

@@ -45,7 +45,7 @@ const boot = {'js-forum': VueForum, 'js-post': VuePosts, 'js-log': VueLog};
 
 for (const el in boot) {
   if (document.getElementById(el)) {
-    new boot[el]().$mount('#' + el);
+    new (Vue.extend(boot[el]))().$mount('#' + el);
   }
 }
 

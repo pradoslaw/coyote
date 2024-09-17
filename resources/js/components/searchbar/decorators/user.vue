@@ -13,14 +13,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import VueAvatar from '../../avatar.vue';
 import DecoratorMixin from '../mixin';
 
-export default Vue.extend({
+export default {
   mixins: [DecoratorMixin],
   components: {
     'vue-avatar': VueAvatar,
   },
-});
+};
 </script>

@@ -194,7 +194,7 @@ import VueForm from './form.vue';
 Vue.use(VueTimeago);
 Vue.use(VueClipboard);
 
-export default Vue.extend({
+export default {
   name: 'microblog',
   mixins: [mixins, MicroblogMixin],
   store,
@@ -300,5 +300,5 @@ export default Vue.extend({
       return store.getters['flags/filter'](this.microblog.id, 'Coyote\\Microblog');
     },
   },
-});
+};
 </script>

@@ -1,6 +1,4 @@
-import Vue from 'vue';
-
-export default Vue.extend({
+export default {
   props: {
     value: {
       type: String,
@@ -22,4 +20,4 @@ export default Vue.extend({
       return text.replace(re, "<strong>$1</strong>");
     },
   },
-});
+};

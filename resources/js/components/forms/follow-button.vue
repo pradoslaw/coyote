@@ -9,13 +9,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import {mapGetters} from 'vuex';
 
 import store from '../../store/index';
 import {default as mixin} from '../mixins/user.js';
 
-export default Vue.extend({
+export default {
   name: 'VueFollowButton',
   mixins: [mixin],
   props: {
@@ -38,6 +37,6 @@ export default Vue.extend({
       this.follows ? store.dispatch('user/unfollow', this.userId) : store.dispatch('user/follow', this.userId);
     },
   },
-});
+};
 </script>
 

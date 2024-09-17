@@ -122,7 +122,7 @@ import VueCommentForm from "./comment-form.vue";
 
 Vue.use(VueTimeago);
 
-export default Vue.extend({
+export default {
   name: 'comment',
   mixins: [mixins, MicroblogMixin],
   store,
@@ -169,5 +169,5 @@ export default Vue.extend({
       return store.getters['flags/filter'](this.comment.id, 'Coyote\\Microblog');
     },
   },
-});
+};
 </script>

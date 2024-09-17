@@ -72,14 +72,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import {mapGetters} from "vuex";
 import store from "../../store";
 import {Poll, PollItem} from '../../types/models';
 import VueButton from "../forms/button.vue";
 import mixins from '../mixins/user.js';
 
-export default Vue.extend({
+export default {
   name: 'forum-poll',
   mixins: [mixins],
   store,
@@ -123,5 +122,5 @@ export default Vue.extend({
         .finally(() => this.isProcessing = false);
     },
   },
-});
+};
 </script>

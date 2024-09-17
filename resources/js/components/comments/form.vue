@@ -26,7 +26,6 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import {mapState} from 'vuex';
 
 import {Emojis} from '../../types/models';
@@ -36,7 +35,7 @@ import VueMarkdown from '../forms/markdown.vue';
 import VuePrompt from '../forms/prompt.vue';
 import mixins from '../mixins/user.js';
 
-export default Vue.extend({
+export default {
   name: 'VueForm',
   components: {
     'vue-avatar': VueAvatar,
@@ -80,5 +79,5 @@ export default Vue.extend({
       });
     },
   },
-});
+};
 </script>

@@ -178,7 +178,6 @@
 <script lang="ts">
 import VueTinyMce from '@tinymce/tinymce-vue';
 import axios, {AxiosResponse} from 'axios';
-import Vue from 'vue';
 import {mapMutations} from 'vuex';
 
 import TinyMceOptions from '../../libs/tinymce.js';
@@ -195,7 +194,7 @@ import VueText from '../forms/text.vue';
 import VueGooglePlace from '../google-maps/place.vue';
 import VueTags from '../tags.vue';
 
-export default Vue.extend({
+export default {
   name: 'VueForm',
   components: {
     'vue-form-group': VueFormGroup,
@@ -294,6 +293,5 @@ export default Vue.extend({
       deep: true,
     },
   },
-});
-
+};
 </script>

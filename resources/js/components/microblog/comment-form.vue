@@ -22,15 +22,13 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-
 import IsImage from "../../libs/assets";
 import Textarea from '../../libs/textarea';
 import store from "../../store/index";
 import VuePrompt from '../forms/prompt.vue';
 import {MicroblogFormMixin} from '../mixins/microblog';
 
-export default Vue.extend({
+export default {
   name: 'microblog-comment-form',
   store,
   components: {
@@ -58,5 +56,5 @@ export default Vue.extend({
       this.markdown.dispatchEvent(new Event('input', {'bubbles': true}));
     },
   },
-});
+};
 </script>

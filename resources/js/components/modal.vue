@@ -25,9 +25,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-
-export default Vue.extend({
+export default {
   name: 'VueModal',
   data() {
     return {
@@ -55,5 +53,5 @@ export default Vue.extend({
       document.body.style.overflow = this.bodyOverflow;
     },
   },
-});
+};
 </script>

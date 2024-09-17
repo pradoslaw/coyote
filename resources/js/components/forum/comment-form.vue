@@ -43,7 +43,7 @@ import VuePrompt from '../forms/prompt.vue';
 
 Vue.use(VueAutosize);
 
-export default Vue.extend({
+export default {
   name: 'post-comment-form',
   props: {
     comment: {
@@ -87,5 +87,5 @@ export default Vue.extend({
       return typeof this.comment.id === 'undefined';
     },
   },
-});
+};
 </script>

@@ -42,7 +42,6 @@
 
 <script lang="ts">
 import axios from 'axios';
-import Vue from 'vue';
 import store from "../../store";
 import {Tag} from "../../types/models";
 import VueButton from '../forms/button.vue';
@@ -53,7 +52,7 @@ import {MicroblogFormMixin} from '../mixins/microblog';
 
 const DRAFT_KEY = 'microblog';
 
-export default Vue.extend({
+export default {
   name: 'microblog-form',
   store,
   components: {
@@ -120,5 +119,5 @@ export default Vue.extend({
       this.urlDetector = this.$watch('microblog.text', this.detectUrl);
     },
   },
-});
+};
 </script>

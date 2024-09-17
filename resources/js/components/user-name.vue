@@ -9,10 +9,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import {default as mixins} from './mixins/user.js';
 
-export default Vue.extend({
+export default {
   name: 'user-name',
   mixins: [mixins],
   props: {
@@ -30,5 +29,5 @@ export default Vue.extend({
       return this.user.deleted_at ? 'del' : 'a';
     },
   },
-});
+};
 </script>

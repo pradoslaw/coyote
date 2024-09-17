@@ -68,12 +68,11 @@
 
 <script lang="ts">
 import axios, {AxiosResponse} from 'axios';
-import Vue from "vue";
 
 import {Tag} from '../../types/models';
 import VueDropdown from '../forms/dropdown.vue';
 
-export default Vue.extend({
+export default {
   name: 'tags-inline',
   components: {
     'vue-dropdown': VueDropdown,
@@ -146,5 +145,5 @@ export default Vue.extend({
       this.$refs.dropdown.hideDropdown();
     },
   },
-});
+};
 </script>

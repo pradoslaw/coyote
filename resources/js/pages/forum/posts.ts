@@ -1,4 +1,3 @@
-import Vue from "vue";
 import {mapGetters, mapState} from "vuex";
 
 import VueForm from "../../components/forum/form.vue";
@@ -9,7 +8,7 @@ import {PostCommentSaved, PostSaved, PostVoted, Subscriber} from "../../libs/liv
 import store from "../../store/index";
 import {Post} from "../../types/models";
 
-export default Vue.extend({
+export default {
   name: 'Posts',
   delimiters: ['${', '}'],
   components: {
@@ -108,4 +107,4 @@ export default Vue.extend({
     ...mapGetters('user', ['isAuthorized']),
     ...mapState('poll', ['poll']),
   },
-});
+};

@@ -331,7 +331,7 @@ import VueForm from './form.vue';
 
 Vue.use(VueClipboard);
 
-export default Vue.extend({
+export default {
   name: 'post',
   mixins: [mixins],
   components: {
@@ -460,7 +460,7 @@ export default Vue.extend({
       return this.post.user_id && this.$store.getters['user/isBlocked'](this.post.user_id);
     },
   },
-});
+};
 
 function initializeSharePopover(
   button: HTMLButtonElement,

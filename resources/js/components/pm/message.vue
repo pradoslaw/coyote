@@ -43,7 +43,7 @@ import VueUserName from '../user-name.vue';
 
 Vue.use(VueTimeago);
 
-export default Vue.extend({
+export default {
   name: 'VueMessage',
   mixins: [mixins],
   components: {
@@ -88,5 +88,5 @@ export default Vue.extend({
       return this.clickableText ? (this.message.excerpt ? this.message.excerpt : '(kliknij, aby przeczytać)') : this.message.text;
     },
   },
-});
+};
 </script>

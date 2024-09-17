@@ -5,9 +5,8 @@
 
 <script lang="ts">
 import {CodeBlockLanguages, Editor4Play, EditorState} from "@riddled/4play";
-import Vue from 'vue';
 
-export default Vue.extend({
+export default {
   name: 'VueEditor',
   props: {
     value: String,
@@ -228,5 +227,5 @@ export default Vue.extend({
       return this.$store.state.theme.darkTheme;
     },
   },
-});
+};
 </script>

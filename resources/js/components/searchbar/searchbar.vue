@@ -75,7 +75,6 @@
 
 <script lang="ts">
 import axios, {AxiosResponse} from 'axios';
-import Vue from 'vue';
 import {mapGetters} from 'vuex';
 
 import clickAway from "../../clickAway.js";
@@ -89,7 +88,7 @@ import VueTopicDecorator from './decorators/topic.vue';
 import VueUserDecorator from './decorators/user.vue';
 import VueWikiDecorator from './decorators/wiki';
 
-export default Vue.extend({
+export default {
   directives: {clickAway},
   store,
   components: {
@@ -275,5 +274,5 @@ export default Vue.extend({
       });
     },
   },
-});
+};
 </script>

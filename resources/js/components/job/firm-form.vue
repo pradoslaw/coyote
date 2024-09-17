@@ -156,7 +156,6 @@
 
 <script lang="ts">
 import VueTinyMce from '@tinymce/tinymce-vue';
-import Vue from 'vue';
 import {mapMutations} from 'vuex';
 
 import Geocoder from '../../libs/geocoder.js';
@@ -172,7 +171,7 @@ import VueMap from '../google-maps/map.vue';
 import VueMarker from '../google-maps/marker.vue';
 import VueThumbnail from '../thumbnail.vue';
 
-export default Vue.extend({
+export default {
   name: 'VueFirmForm',
   components: {
     'vue-form-group': VueFormGroup,
@@ -316,5 +315,5 @@ export default Vue.extend({
       },
     },
   },
-});
+};
 </script>

@@ -22,11 +22,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import {Tag} from "../types/models";
 import VueProgressBar from "./progress-bar.vue";
 
-export default Vue.extend({
+export default {
   name: 'VueTags',
   components: {'vue-progress-bar': VueProgressBar},
   props: {
@@ -53,5 +52,5 @@ export default Vue.extend({
       return this.editable ? 'span' : 'a';
     },
   },
-});
+};
 </script>

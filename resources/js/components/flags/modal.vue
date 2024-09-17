@@ -32,11 +32,10 @@
 
 <script lang="ts">
 import axios from 'axios';
-import Vue from 'vue';
 import VueRadio from '../forms/radio.vue';
 import VueModal from '../modal.vue';
 
-export default Vue.extend({
+export default {
   name: 'FlagModal',
   components: {
     'vue-modal': VueModal,
@@ -101,5 +100,5 @@ export default Vue.extend({
       return icons[name];
     },
   },
-});
+};
 </script>

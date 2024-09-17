@@ -134,7 +134,6 @@
 <script lang="ts">
 import axios from 'axios';
 import Prism from 'prismjs';
-import Vue from 'vue';
 import {mapGetters, mapMutations, mapState} from "vuex";
 import VueMarkdown from '../../components/forms/markdown.vue';
 import store from "../../store";
@@ -144,7 +143,7 @@ import VueTagsInline from '../forms/tags-inline.vue';
 import VueText from '../forms/text.vue';
 import PerfectScrollbar from '../perfect-scrollbar.js';
 
-export default Vue.extend({
+export default {
   name: 'forum-form',
   store,
   components: {
@@ -298,5 +297,5 @@ export default Vue.extend({
       return this.post.id !== undefined;
     },
   },
-});
+};
 </script>
