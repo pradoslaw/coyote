@@ -24,11 +24,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class ActivityResource extends JsonResource
 {
-    /**
-     * @param Request $request
-     * @return array
-     */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'excerpt'    => $this->excerpt,
@@ -45,8 +41,9 @@ class ActivityResource extends JsonResource
 
     public function headline(): string
     {
-        return trans('activity.headline.' . strtolower(class_basename($this->content_type)), [
+        return trans('activity.headline', [
             'user'  => $this->user(),
+            'item'  => $this->item(),
             'topic' => $this->topic(),
         ]);
     }
@@ -59,16 +56,21 @@ class ActivityResource extends JsonResource
         return $this->user_name;
     }
 
-    public function topic(): string
+    public function item(): string
     {
         if ($this->content_type === Post::class) {
             $this->content->setRelations(['topic' => $this->topic, 'forum' => $this->forum]);
-            return link_to(UrlBuilder::post($this->content), $this->topic->title);
+            return link_to(UrlBuilder::post($this->content), 'post');
         }
         $post = (new Post)
             ->forceFill(['id' => $this->content->post_id])
             ->setRelations(['topic' => $this->topic, 'forum' => $this->forum]);
         $this->content->setRelations(['post' => $post]);
-        return link_to(UrlBuilder::postComment($this->content), $post->topic->title);
+        return link_to(UrlBuilder::postComment($this->content), 'komentarz');
+    }
+
+    public function topic(): string
+    {
+        return link_to(UrlBuilder::topic($this->topic), $this->topic->title);
     }
 }

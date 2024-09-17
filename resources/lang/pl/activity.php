@@ -1,8 +1,3 @@
 <?php
 
-return [
-    'headline' => [
-        'post' => ':user dodał post w :topic',
-        'comment' => ':user dodał komentarz w :topic',
-    ]
-];
+return ['headline' => ':user dodał :item w :topic'];
