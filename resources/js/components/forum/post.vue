@@ -115,7 +115,7 @@
         </div>
 
         <div v-show="!post.is_editing" class="col-12 col-lg-10">
-          <vue-flag v-for="flag in flags" :key="flag.id" :flag.sync="flag"></vue-flag>
+          <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
 
           <div class="post-vote">
             <strong class="vote-count" title="Ocena posta">{{ post.score }}</strong>

@@ -3,7 +3,7 @@
        :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false}" 
        class="post-comment"
        v-if="!authorBlocked">
-    <vue-flag v-for="flag in flags" :key="flag.id" :flag.sync="flag"/>
+    <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"/>
     <vue-comment-form
       v-if="comment.is_editing"
       :comment="comment"
