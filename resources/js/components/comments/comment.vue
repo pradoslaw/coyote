@@ -91,6 +91,7 @@
 
 <script>
 import {mapGetters} from 'vuex';
+import store from '../../store/index';
 import VueAvatar from '../avatar.vue';
 import VueFlag from '../flags/flag.vue';
 import VueButton from '../forms/button.vue';
@@ -171,8 +172,8 @@ export default {
 
     flags() {
       return [
-        ...this.store.getters['flags/filter'](this.comment.id, 'Coyote\\Comment'),
-        ...this.store.getters['flags/filter'](this.comment.id, 'Coyote\\Post\\Comment'),
+        ...store.getters['flags/filter'](this.comment.id, 'Coyote\\Comment'),
+        ...store.getters['flags/filter'](this.comment.id, 'Coyote\\Post\\Comment'),
       ];
     },
   },
