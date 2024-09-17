@@ -49,14 +49,8 @@ export default Vue.extend({
     ...mapState('user', ['user']),
   },
   props: {
-    resource: {
-      type: Object,
-      required: true,
-    },
-    resourceId: {
-      type: Number,
-      required: true,
-    },
+    resource: {required: true},
+    resourceId: {required: true},
   },
   data() {
     return {
