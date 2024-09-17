@@ -9,7 +9,11 @@ import {trial} from "./trial";
 
 window.addEventListener('load', () => {
   const darkTheme: boolean = document.body.classList.contains('theme-dark');
-  const survey: Survey = JSON.parse(document.getElementById('survey')!.textContent!);
+  const surveyElement = document.getElementById('survey');
+  if (!surveyElement) {
+    return;
+  }
+  const survey: Survey = JSON.parse(surveyElement!.textContent!);
 
   interface Survey {
     surveyState: State;
