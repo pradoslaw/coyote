@@ -22,74 +22,76 @@
     </div>
 
     <section v-if="!isCollapse" class="card card-default card-categories mb-0">
-      <div v-for="(category, index) in categories" v-if="!category.is_hidden" :class="{'not-read': !category.is_read}" class="card-body">
-        <div class="row">
-          <div class="col-6 col-md-12 col-lg-5 d-flex align-items-center">
-            <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative me-2">
-              <i v-if="category.is_locked" class="logo fas fa-lock "></i>
+      <template v-for="(category, index) in categories">
+        <div  v-if="!category.is_hidden" :class="{'not-read': !category.is_read}" class="card-body">
+          <div class="row">
+            <div class="col-6 col-md-12 col-lg-5 d-flex align-items-center">
+              <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative me-2">
+                <i v-if="category.is_locked" class="logo fas fa-lock "></i>
 
-              <i v-else :class="[className(category.name)]" class="logo far fa-comments"></i>
-            </a>
+                <i v-else :class="[className(category.name)]" class="logo far fa-comments"></i>
+              </a>
 
-            <div class="overflow-hidden">
-              <h3><a :href="category.url">{{ category.name }}</a></h3>
+              <div class="overflow-hidden">
+                <h3><a :href="category.url">{{ category.name }}</a></h3>
 
-              <vue-tags v-if="category.enable_tags && !category.children" :tags="category.tags" class="tag-clouds-sm"></vue-tags>
+                <vue-tags v-if="category.enable_tags && !category.children" :tags="category.tags" class="tag-clouds-sm"></vue-tags>
 
-              <ul v-if="category.children" class="list-inline list-sub d-md-block d-lg-block">
-                <li v-for="children in category.children" class="list-inline-item">
-                  <i v-if="children.is_read" class="far fa-file"></i>
-                  <i v-else class="not-read" title="Nowe posty w tej kategorii"></i>
+                <ul v-if="category.children" class="list-inline list-sub d-md-block d-lg-block">
+                  <li v-for="children in category.children" class="list-inline-item">
+                    <i v-if="children.is_read" class="far fa-file"></i>
+                    <i v-else class="not-read" title="Nowe posty w tej kategorii"></i>
 
-                  <a :href="children.url">{{ children.name }}</a>
+                    <a :href="children.url">{{ children.name }}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div v-if="!category.is_redirected" class="col-6 col-md-12 col-lg-2 d-flex align-items-center">
+              <ul class="list-inline mb-0 mt-1">
+                <li class="list-inline-item">
+                  <strong>{{ number(category.topics) }}</strong>
+                  <small class="text-muted text-wide-spacing">{{ declination(category.topics, ['wątek', 'wątków', 'wątków']) }}</small>
+                </li>
+
+                <li class="list-inline-item">
+                  <strong>{{ number(category.posts) }}</strong>
+                  <small class="text-muted text-wide-spacing">{{ declination(category.posts, ['post', 'postów', 'postów']) }}</small>
                 </li>
               </ul>
             </div>
-          </div>
 
-          <div v-if="!category.is_redirected" class="col-6 col-md-12 col-lg-2 d-flex align-items-center">
-            <ul class="list-inline mb-0 mt-1">
-              <li class="list-inline-item">
-                <strong>{{ number(category.topics) }}</strong>
-                <small class="text-muted text-wide-spacing">{{ declination(category.topics, ['wątek', 'wątków', 'wątków']) }}</small>
-              </li>
+            <div v-else class="col-12 col-lg-7 text-center">
+              Liczba przekierowań: {{ category.redirects }}
+            </div>
 
-              <li class="list-inline-item">
-                <strong>{{ number(category.posts) }}</strong>
-                <small class="text-muted text-wide-spacing">{{ declination(category.posts, ['post', 'postów', 'postów']) }}</small>
-              </li>
-            </ul>
-          </div>
+            <div v-if="!category.is_redirected" class="col-12 col-lg-5">
+              <div v-if="category.post" class="media">
+                <a v-profile="category.post.user ? category.post.user.id : null">
+                  <vue-avatar v-bind="category.post.user" class="i-38 me-2 d-none d-sm-block img-thumbnail"></vue-avatar>
+                </a>
 
-          <div v-else class="col-12 col-lg-7 text-center">
-            Liczba przekierowań: {{ category.redirects }}
-          </div>
-
-          <div v-if="!category.is_redirected" class="col-12 col-lg-5">
-            <div v-if="category.post" class="media">
-              <a v-profile="category.post.user ? category.post.user.id : null">
-                <vue-avatar v-bind="category.post.user" class="i-38 me-2 d-none d-sm-block img-thumbnail"></vue-avatar>
-              </a>
-
-              <div class="media-body overflow-hidden">
-                <p class="text-truncate mb-1">
-                  <a :href="getUrl(category)" class="category-last-topic">{{ category.topic.title }}</a>
-                </p>
-                <span class="text-muted">
-                  <vue-timeago :datetime="category.post.created_at"/>
-                </span>,
-                <vue-username v-if="category.post.user" :user="category.post.user"></vue-username>
-                <span v-else>{{ category.post.user_name }}</span>
-                <div class="toolbox">
-                  <a href="javascript:" title="Oznacz jako przeczytane" @click="mark(category)"><i class="far fa-eye"></i></a>
-                  <a v-if="isAuthorized" :class="{'disabled': isBeginning(index)}" title="Przesuń w górę" @click="up(category)"><i class="fas fa-caret-up"></i></a>
-                  <a v-if="isAuthorized" :class="{'disabled': isEnding(index)}" title="Przesuń w dół" @click="down(category)"><i class="fas fa-caret-down"></i></a>
+                <div class="media-body overflow-hidden">
+                  <p class="text-truncate mb-1">
+                    <a :href="getUrl(category)" class="category-last-topic">{{ category.topic.title }}</a>
+                  </p>
+                  <span class="text-muted">
+                    <vue-timeago :datetime="category.post.created_at"/>
+                  </span>,
+                  <vue-username v-if="category.post.user" :user="category.post.user"></vue-username>
+                  <span v-else>{{ category.post.user_name }}</span>
+                  <div class="toolbox">
+                    <a href="javascript:" title="Oznacz jako przeczytane" @click="mark(category)"><i class="far fa-eye"></i></a>
+                    <a v-if="isAuthorized" :class="{'disabled': isBeginning(index)}" title="Przesuń w górę" @click="up(category)"><i class="fas fa-caret-up"></i></a>
+                    <a v-if="isAuthorized" :class="{'disabled': isEnding(index)}" title="Przesuń w dół" @click="down(category)"><i class="fas fa-caret-down"></i></a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </template>
     </section>
   </div>
 </template>

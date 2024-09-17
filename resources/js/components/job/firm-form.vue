@@ -131,13 +131,14 @@
           >
             <i class="fas fa-fw " :class="{'fa-check': firm.benefits.includes(benefit), 'fa-xmark': !firm.benefits.includes(benefit)}"></i> {{ benefit }}
           </li>
+          <template v-for="benefit in firm.benefits">
+            <li class="list-group-item w-50 checked" v-if="!defaultBenefits.includes(benefit)">
+              <i class="fas fa-fw fa-check"></i>
 
-          <li class="list-group-item w-50 checked" v-for="benefit in firm.benefits" v-if="!defaultBenefits.includes(benefit)">
-            <i class="fas fa-fw fa-check"></i>
-
-            <input type="text" maxlength="100" :value="benefit" class="form-control form-control-sm" @keydown.enter.prevent="">
-            <button class="btn btn-sm btn-delete" title="Usuń tę pozycję" @click.prevent="REMOVE_BENEFIT(benefit)"><i class="fas fa-circle-minus text-danger"></i></button>
-          </li>
+              <input type="text" maxlength="100" :value="benefit" class="form-control form-control-sm" @keydown.enter.prevent="">
+              <button class="btn btn-sm btn-delete" title="Usuń tę pozycję" @click.prevent="REMOVE_BENEFIT(benefit)"><i class="fas fa-circle-minus text-danger"></i></button>
+            </li>
+          </template>
 
           <li class="list-group-item w-50 checked">
             <i class="fas fa-fw fa-check"></i>

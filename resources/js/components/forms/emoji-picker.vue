@@ -8,16 +8,18 @@
             <div class="category" v-for="category in emojis.categories">
               <h5>{{ category.name }}</h5>
               <div class="category-emojis">
-                <template v-for="name in category.subcategories" v-if="subcategoryVisible(name)">
-                  <img
-                    v-for="code in emojis.subcategories[name]"
-                    v-show="visible(emojis.emoticons[code])"
-                    class="emoji"
-                    :src="url(emojis.emoticons[code])"
-                    :title="emojis.emoticons[code].name"
-                    :alt="emojis.emoticons[code].native"
-                    @mouseover="mouseOver(emojis.emoticons[code])"
-                    @click="select(code)"/>
+                <template v-for="name in category.subcategories">
+                  <template v-if="subcategoryVisible(name)">
+                    <img
+                      v-for="code in emojis.subcategories[name]"
+                      v-show="visible(emojis.emoticons[code])"
+                      class="emoji"
+                      :src="url(emojis.emoticons[code])"
+                      :title="emojis.emoticons[code].name"
+                      :alt="emojis.emoticons[code].native"
+                      @mouseover="mouseOver(emojis.emoticons[code])"
+                      @click="select(code)"/>
+                  </template>
                 </template>
               </div>
             </div>

@@ -8,15 +8,16 @@
     {{ link_to_route('forum.topic', topic.title, [forum.slug, topic.id, topic.slug]) }}
   </h1>
   <main id="js-log" class="mainbar">
-    <vue-log
-        v-for="(log, index) in logs"
-        v-if="log.text !== oldStr(logs, index)"
-        :log="log"
-        :key="log.id"
-        :topic-link="topicLink"
-        :is-rollback-enabled="index > 0"
-        :old-str="oldStr(logs, index)"
-    />
+    <template v-for="(log, index) in logs">
+      <vue-log
+          v-if="log.text !== oldStr(logs, index)"
+          :log="log"
+          :key="log.id"
+          :topic-link="topicLink"
+          :is-rollback-enabled="index > 0"
+          :old-str="oldStr(logs, index)"
+      />
+    </template>
   </main>
   <script>
     var logs = {{ logs|json_encode|raw }};
