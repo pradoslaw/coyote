@@ -15,7 +15,7 @@
           @keyup.down.prevent="down"
           @keydown.enter.prevent="changeUrl"
           @search="clearInput"
-          v-model="value"
+          v-model="innerValue"
           type="search"
           name="q"
           autocomplete="off"
@@ -58,7 +58,7 @@
             <li class="title"><span>{{ categoryLabel(category) }}</span></li>
 
             <li v-for="child in category.children" :class="{'hover': child.index === selectedIndex}" @mouseover="hoverItem(child.index)">
-              <component :is="makeDecorator(child)" :item="child" :value="value"></component>
+              <component :is="makeDecorator(child)" :item="child" :value="innerValue"></component>
             </li>
           </template>
         </ul>
@@ -110,17 +110,19 @@ export default {
       items: [] as Hit[],
       selectedIndex: -1,
       params: undefined,
+      innerValue: '',
     };
   },
   watch: {
-    value(val: string) {
+    innerValue(val: string) {
       if (val === '') {
         this.items = [];
       }
     },
   },
-  created() {
+  created(this: Vue): void {
     this.makeParams();
+    this.$data.innerValue = this.$props.value!;
   },
   mounted() {
     document.addEventListener('keydown', this.shortcutSupport);
@@ -149,14 +151,14 @@ export default {
       if (this.isDropdownVisible) {
         this.isDropdownVisible = false;
       } else {
-        this.value = '';
+        this.innerValue = '';
       }
     },
     blurInput() {
       this.isActive = false;
     },
     clearInput() {
-      this.value = '';
+      this.innerValue = '';
       this.loadItems();
     },
     down() {
@@ -186,7 +188,7 @@ export default {
       return category.context !== undefined ? Contexts[category.model][category.context] : Models[category.model];
     },
     completion(event: KeyboardEvent): void {
-      this.isHelpEnabled = this.value === '?';
+      this.isHelpEnabled = this.innerValue === '?';
 
       if (this.isHelpEnabled || Object.values(SpecialKeys).includes(event.keyCode)) {
         return;
@@ -205,7 +207,7 @@ export default {
         return;
       }
 
-      axios.get<any>(this.endpoint, {params: {q: this.value || null}, headers}).then((response: AxiosResponse<any>) => {
+      axios.get<any>(this.endpoint, {params: {q: this.innerValue || null}, headers}).then((response: AxiosResponse<any>) => {
         this.items = response.data;
         this.isDropdownVisible = true;
       });
@@ -249,7 +251,7 @@ export default {
   computed: {
     ...mapGetters('user', ['isAuthorized']),
     endpoint(): string | null {
-      return this.value.trim() === '' ? (this.isAuthorized ? '/completion/hub/' : null) : '/completion/';
+      return this.innerValue.trim() === '' ? (this.isAuthorized ? '/completion/hub/' : null) : '/completion/';
     },
     categories() {
       let counter = 0;
