@@ -100,7 +100,6 @@ import {link} from "@riddled/4play/index.js";
 import axios from 'axios';
 import Prism from 'prismjs';
 import Vue from 'vue';
-import {mixin as clickAway} from 'vue-clickaway';
 import isImage from '../../libs/assets';
 import store from '../../store';
 import VueError from '../forms/error.vue';
@@ -117,7 +116,7 @@ const PREVIEW = 'Podgląd';
 
 export default Vue.extend({
   name: 'VueMarkdown',
-  mixins: [clickAway, formMixin],
+  mixins: [formMixin],
   components: {
     'vue-prompt': VuePrompt,
     'vue-tabs': VueTabs,

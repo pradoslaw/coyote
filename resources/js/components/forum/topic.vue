@@ -108,14 +108,13 @@
 </template>
 
 <script>
-import {mixin as clickaway} from 'vue-clickaway';
 import {mapActions, mapGetters} from "vuex";
 import VueAvatar from '../avatar.vue';
 import {default as mixins} from '../mixins/user';
 import VueUserName from '../user-name.vue';
 
 export default {
-  mixins: [mixins, clickaway],
+  mixins: [mixins],
   components: {'vue-avatar': VueAvatar, 'vue-username': VueUserName},
   props: {
     topic: {

@@ -171,7 +171,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {mixin as clickaway} from "vue-clickaway";
 import VueLightbox from 'vue-cool-lightbox';
 import {mapActions, mapGetters, mapState} from "vuex";
 
@@ -197,7 +196,7 @@ Vue.use(VueClipboard);
 
 export default Vue.extend({
   name: 'microblog',
-  mixins: [clickaway, mixins, MicroblogMixin],
+  mixins: [mixins, MicroblogMixin],
   store,
   components: {
     'vue-avatar': VueAvatar,

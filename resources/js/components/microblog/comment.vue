@@ -108,7 +108,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {mixin as clickaway} from "vue-clickaway";
 import {mapActions, mapGetters, mapState} from "vuex";
 
 import declination from '../../libs/declination.js';
@@ -125,7 +124,7 @@ Vue.use(VueTimeago);
 
 export default Vue.extend({
   name: 'comment',
-  mixins: [clickaway, mixins, MicroblogMixin],
+  mixins: [mixins, MicroblogMixin],
   store,
   components: {
     'vue-avatar': VueAvatar,

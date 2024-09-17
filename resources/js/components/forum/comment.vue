@@ -1,6 +1,6 @@
 <template>
   <div :id="anchor"
-       :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false}" 
+       :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false}"
        class="post-comment"
        v-if="!authorBlocked">
     <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"/>
@@ -46,7 +46,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {mixin as clickaway} from "vue-clickaway";
 import {mapGetters} from "vuex";
 import store from "../../store/index";
 import VueAvatar from "../avatar.vue";
@@ -57,7 +56,7 @@ import VueCommentForm from "./comment-form.vue";
 
 export default Vue.extend({
   name: 'comment',
-  mixins: [clickaway, mixins],
+  mixins: [mixins],
   components: {
     'vue-username': VueUserName,
     'vue-avatar': VueAvatar,
