@@ -21,7 +21,7 @@ export const MicroblogMixin = Vue.extend({
       store.commit('microblogs/TOGGLE_EDIT', microblog);
 
       if (microblog.is_editing) {
-        this.$nextTick(() => this.$refs.form.markdown.focus());
+        this.$nextTick(() => this.$refs.form.$refs.markdown.focus());
         this.isWrapped = false;
       }
     },

@@ -394,7 +394,7 @@ export default Vue.extend({
     edit() {
       store.commit('posts/edit', this.post);
       if (this.post.is_editing) {
-        this.$nextTick(() => (this.$refs.form as VueForm).markdown.focus());
+        this.$nextTick(() => (this.$refs.form as VueForm).$refs.markdown.focus());
       }
     },
     comment() {
