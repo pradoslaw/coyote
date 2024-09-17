@@ -42,6 +42,7 @@
             @save="saveComment(comment)"
             ref="submitText"
             preview-url="/Mikroblogi/Preview"
+            :emojis="emojis"
           />
 
           <div class="d-flex mt-2 justify-content-end">
@@ -66,6 +67,7 @@
         <vue-markdown
           v-model="replyForm.text"
           @save="saveComment(replyForm)"
+          :emojis="emojis"
           ref="replyText"
           preview-url="/Mikroblogi/Preview"
         />
@@ -121,7 +123,11 @@ export default {
         text: '',
         parent_id: this.comment.parent_id ? this.comment.parent_id : this.comment.id,
       },
+      emojis: {},
     };
+  },
+  created() {
+    this.emojis = window.emojis;
   },
   methods: {
     edit() {
