@@ -1,5 +1,5 @@
 <template>
-  <div class="emoji-picker" v-on-clickaway="blur">
+  <div class="emoji-picker" v-click-away="blur">
     <div class="card card-body">
       <div class="triangle"/>
       <div style="display:flex; flex-direction:column;">
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import {mixin as clickAway} from 'vue-clickaway';
+import clickAway from '../../clickAway.js';
 
 function onIdle(callback) {
   if ("requestIdleCallback" in window) {
@@ -63,7 +63,7 @@ function onIdle(callback) {
 }
 
 export default {
-  mixins: [clickAway],
+  directives: {clickAway},
   props: {
     emojis: {require: true},
     open: {require: true},

@@ -1,5 +1,5 @@
 <template>
-  <li :class="{'open': isOpen}" v-on-clickaway="hideDropdown" class="nav-item">
+  <li :class="{'open': isOpen}" v-click-away="hideDropdown" class="nav-item">
     <a @click.prevent="loadMessages" href="/User/Pm" class="nav-link" role="button" aria-haspopup="true" aria-expanded="false">
       <span v-show="count > 0" class="badge">{{ count }}</span>
 
@@ -32,8 +32,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {mixin as clickaway} from 'vue-clickaway';
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+import clickAway from "../../clickAway.js";
 import DesktopNotifications from '../../libs/notifications';
 import {default as ws} from '../../libs/realtime';
 import {default as PerfectScrollbar} from '../perfect-scrollbar.js';
@@ -41,7 +41,7 @@ import VueMessage from './message-compact.vue';
 
 export default Vue.extend({
   name: 'VueInbox',
-  mixins: [clickaway],
+  directives: {clickAway},
   components: {
     'perfect-scrollbar': PerfectScrollbar,
     'vue-message': VueMessage,

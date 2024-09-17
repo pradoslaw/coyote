@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Vue, {CreateElement, VNode} from 'vue';
-import VueClickAway from "vue-clickaway";
 
+import clickAway from "../clickAway.js";
 import store from "../store/index";
 
 Array
@@ -118,9 +118,7 @@ const controls = new Vue({
       },
     };
   },
-  directives: {
-    'away': VueClickAway.directive,
-  },
+  directives: {clickAway},
   computed: {
     dark(): boolean {
       if (this.theme === 'system') {
@@ -156,7 +154,7 @@ const controls = new Vue({
     },
   },
   template: `
-    <div :class="['d-flex', 'align-items-center', 'h-100']" v-away="close">
+    <div :class="['d-flex', 'align-items-center', 'h-100']" v-click-away="close">
       <span :class="['position-relative', 'px-2', 'py-2', 'btn-toggle-theme', {open}]" @click="toggleOpen" v-if="toggleEnabled" style="cursor:pointer;">
         <vue-icon :icon="oppositeIcon"/>
         <div class="dropdown-menu dropdown-menu-end" style="display:block" v-show="open">

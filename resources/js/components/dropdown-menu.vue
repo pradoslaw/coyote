@@ -1,16 +1,16 @@
 <template>
-  <div :class="{'show': isDropdownVisible}" v-on-clickaway="hideDropdown" class="dropdown-menu">
+  <div :class="{'show': isDropdownVisible}" v-click-away="hideDropdown" class="dropdown-menu">
     <slot></slot>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { mixin as clickaway } from 'vue-clickaway';
+import clickAway from "../clickAway.js";
 
 export default Vue.extend({
   name: 'VueDropdownMenu',
-  mixins: [clickaway],
+  directives: {clickAway},
   data() {
     return {
       isDropdownVisible: false,
@@ -28,4 +28,3 @@ export default Vue.extend({
   },
 });
 </script>
-

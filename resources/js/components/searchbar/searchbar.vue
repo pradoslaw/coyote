@@ -1,5 +1,5 @@
 <template>
-  <div v-on-clickaway="blurInput" :class="{'nav-search-mobile': isMobile}" class="nav-search">
+  <div v-click-away="blurInput" :class="{'nav-search-mobile': isMobile}" class="nav-search">
     <div :class="{'active': isActive}" class="search-bar ms-md-4 me-md-4">
       <i class="fas fa-magnifying-glass ms-2 me-2"></i>
 
@@ -76,9 +76,9 @@
 <script lang="ts">
 import axios, {AxiosResponse} from 'axios';
 import Vue from 'vue';
-import {mixin as clickaway} from 'vue-clickaway';
 import {mapGetters} from 'vuex';
 
+import clickAway from "../../clickAway.js";
 import store from '../../store/index';
 import {Hit} from '../../types/hit';
 import {SpecialKeys} from '../../types/keys';
@@ -90,7 +90,7 @@ import VueUserDecorator from './decorators/user.vue';
 import VueWikiDecorator from './decorators/wiki';
 
 export default Vue.extend({
-  mixins: [clickaway],
+  directives: {clickAway},
   store,
   components: {
     'vue-topic-decorator': VueTopicDecorator,

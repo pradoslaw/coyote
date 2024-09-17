@@ -1,5 +1,5 @@
 <template>
-  <ol v-on-clickaway="hideDropdown" ref="dropdown" class="auto-complete" v-show="isDropdownVisible">
+  <ol v-click-away="hideDropdown" ref="dropdown" class="auto-complete" v-show="isDropdownVisible">
     <li v-for="(item, index) in items" :key="index" :class="{'hover': index === selectedIndex}" @click="selectItem" @mouseover="hoverItem(index)">
       <slot name="item" :item="item">
         <vue-avatar :photo="item.photo" :name="item.name" class="d-inline-block"/>
@@ -11,12 +11,12 @@
 </template>
 
 <script>
-import {mixin as clickaway} from 'vue-clickaway';
+import clickAway from '../../clickAway.js';
 import VueAvatar from '../avatar.vue';
 
 export default {
   components: {'vue-avatar': VueAvatar},
-  mixins: [clickaway],
+  directives: {clickAway},
   props: {
     items: {
       type: Array,

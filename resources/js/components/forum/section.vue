@@ -6,7 +6,7 @@
         <template v-else>{{ name }}</template>
       </h2>
 
-      <div v-if="isAuthorized && !categories[0].parent_id" :class="{'open': isDropdown}" v-on-clickaway="hideDropdown" class="dropdown float-end dropleft">
+      <div v-if="isAuthorized && !categories[0].parent_id" :class="{'open': isDropdown}" v-click-away="hideDropdown" class="dropdown float-end dropleft">
         <a href="javascript:" @click="isDropdown = ! isDropdown" class="card-cog mt-2 me-2"><i class="fas fa-gears"></i></a>
 
         <div :class="{'d-block': isDropdown}" class="dropdown-menu">
@@ -23,7 +23,7 @@
 
     <section v-if="!isCollapse" class="card card-default card-categories mb-0">
       <template v-for="(category, index) in categories">
-        <div  v-if="!category.is_hidden" :class="{'not-read': !category.is_read}" class="card-body">
+        <div v-if="!category.is_hidden" :class="{'not-read': !category.is_read}" class="card-body">
           <div class="row">
             <div class="col-6 col-md-12 col-lg-5 d-flex align-items-center">
               <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative me-2">
@@ -97,9 +97,9 @@
 </template>
 
 <script>
-import {mixin as clickaway} from 'vue-clickaway';
 import {mapActions, mapGetters} from "vuex";
 
+import clickAway from '../../clickAway.js';
 import store from '../../store/index';
 import VueAvatar from '../avatar.vue';
 import {default as mixins} from '../mixins/user.js';
@@ -107,7 +107,8 @@ import VueTags from '../tags.vue';
 import VueUsername from '../user-name.vue';
 
 export default {
-  mixins: [mixins, clickaway],
+  mixins: [mixins],
+  directives: {clickAway},
   components: {'vue-avatar': VueAvatar, 'vue-username': VueUsername, 'vue-tags': VueTags},
   store,
   props: {

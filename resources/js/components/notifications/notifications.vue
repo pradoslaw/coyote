@@ -1,5 +1,5 @@
 <template>
-  <li :class="{'open': isOpen}" v-on-clickaway="hideDropdown">
+  <li :class="{'open': isOpen}" v-click-away="hideDropdown">
     <a @click.prevent="toggleDropdown" href="/User/Notifications" class="nav-link" role="button" aria-haspopup="true" aria-expanded="false">
       <span v-show="count > 0" class="badge">{{ count }}</span>
 
@@ -38,9 +38,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {mixin as clickaway} from 'vue-clickaway';
 import {mapGetters, mapState} from 'vuex';
 
+import clickAway from "../../clickAway.js";
 import environment from '../../environment';
 import DesktopNotifications from '../../libs/notifications';
 import {default as ws} from '../../libs/realtime';
@@ -65,7 +65,7 @@ function urlBase64ToUint8Array(base64String) {
 
 export default Vue.extend({
   name: 'VueNotifications',
-  mixins: [clickaway],
+  directives: {clickAway},
   components: {
     'perfect-scrollbar': PerfectScrollbar,
     'vue-notification': VueNotification,
