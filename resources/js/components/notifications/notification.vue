@@ -25,15 +25,15 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import VueTimeago from '../../plugins/timeago';
+import {VueTimeAgo} from '../../plugins/timeago';
 import store from '../../store';
 import VueAvatar from '../avatar.vue';
 
-Vue.use(VueTimeago);
-
 export default {
-  components: {'vue-avatar': VueAvatar},
+  components: {
+    'vue-avatar': VueAvatar,
+    'vue-timeago': VueTimeAgo,
+  },
   props: {
     notification: {
       type: Object,

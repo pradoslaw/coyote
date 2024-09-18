@@ -9,7 +9,7 @@
         <header class="text-truncate notification-header">
           <h4>{{ message.user.name }}</h4>
           <small>
-            <vue-timeago :datetime="message.created_at"></vue-timeago>
+            <vue-timeago :datetime="message.created_at"/>
           </small>
         </header>
 
@@ -31,14 +31,14 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import VueTimeago from '../../plugins/timeago';
+import {VueTimeAgo} from '../../plugins/timeago';
 import VueAvatar from '../avatar.vue';
 
-Vue.use(VueTimeago);
-
 export default {
-  components: {'vue-avatar': VueAvatar},
+  components: {
+    'vue-avatar': VueAvatar,
+    'vue-timeago': VueTimeAgo,
+  },
   props: {
     message: {
       type: Object,

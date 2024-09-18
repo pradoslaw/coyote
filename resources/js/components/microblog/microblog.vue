@@ -177,7 +177,7 @@ import {mapActions, mapGetters, mapState} from "vuex";
 import IsImage from '../../libs/assets';
 import useBrackets from "../../libs/prompt";
 import VueClipboard from '../../plugins/clipboard';
-import VueTimeago from '../../plugins/timeago.js';
+import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from "../../store";
 import {User} from '../../types/models';
 import VueAvatar from '../avatar.vue';
@@ -191,7 +191,6 @@ import VueCommentForm from './comment-form.vue';
 import VueComment from "./comment.vue";
 import VueForm from './form.vue';
 
-Vue.use(VueTimeago);
 Vue.use(VueClipboard);
 
 export default {
@@ -207,6 +206,7 @@ export default {
     'vue-gallery': VueLightbox,
     'vue-flag': VueFlag,
     'vue-tags': VueTags,
+    'vue-timeago': VueTimeAgo,
   },
   props: {
     wrap: {type: Boolean},

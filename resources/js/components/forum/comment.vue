@@ -18,7 +18,7 @@
           <div>
             <vue-username :user="comment.user" :owner="comment.user.id === topic.owner_id"></vue-username>
             <a :href="comment.url">
-              <vue-timeago :datetime="comment.created_at" class="text-muted small"></vue-timeago>
+              <vue-timeago :datetime="comment.created_at" class="text-muted small"/>
             </a>
             <a v-if="comment.editable" @click="edit" href="javascript:" title="Edytuj ten komentarz" class="btn-comment">
               <i class="fas fa-pencil"></i>
@@ -46,6 +46,7 @@
 
 <script lang="ts">
 import {mapGetters} from "vuex";
+import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
 import VueAvatar from "../avatar.vue";
 import VueFlag from "../flags/flag.vue";
@@ -61,6 +62,7 @@ export default {
     'vue-avatar': VueAvatar,
     'vue-comment-form': VueCommentForm,
     'vue-flag': VueFlag,
+    'vue-timeago': VueTimeAgo,
   },
   props: {
     comment: {

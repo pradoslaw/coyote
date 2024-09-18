@@ -30,7 +30,7 @@
           <i v-else title="Nowy post" class="not-read"></i>
 
           <a :href="post.url" class="small text-body">
-            <vue-timeago :datetime="post.created_at"></vue-timeago>
+            <vue-timeago :datetime="post.created_at"/>
           </a>
 
           <a v-if="post.ip" :href="`/Adm/Stream?ip=${post.ip}`" :title="post.ip" class="text-muted small">
@@ -61,7 +61,7 @@
           </h5>
 
           <a :href="post.url" class="text-muted small">
-            <vue-timeago :datetime="post.created_at"></vue-timeago>
+            <vue-timeago :datetime="post.created_at"/>
           </a>
 
           <a v-if="post.ip" :href="`/Adm/Stream?ip=${post.ip}`" :title="post.ip" class="text-muted small">
@@ -179,7 +179,7 @@
               ostatnio:
               <vue-username :user="post.editor"></vue-username>
             </strong>
-            <vue-timeago :datetime="post.updated_at"></vue-timeago>
+            <vue-timeago :datetime="post.updated_at"/>
           </div>
 
           <div class="post-comments">
@@ -316,6 +316,7 @@ import Vue from 'vue';
 import {mapActions, mapGetters, mapState} from "vuex";
 
 import VueClipboard from '../../plugins/clipboard';
+import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
 import VueAvatar from '../avatar.vue';
 import VueDeleteModal from "../delete-modal.vue";
@@ -345,6 +346,7 @@ export default {
     'vue-button': VueButton,
     'vue-flag': VueFlag,
     'vue-tags': VueTags,
+    'vue-timeago': VueTimeAgo,
   },
   props: {
     post: {

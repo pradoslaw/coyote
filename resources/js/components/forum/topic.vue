@@ -67,7 +67,7 @@
             <div class="d-none d-lg-inline small text-truncate">
               <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`"
                  class="text-muted topic-date">
-                <vue-timeago :datetime="topic.created_at"></vue-timeago>
+                <vue-timeago :datetime="topic.created_at"/>
               </a>,
 
               <vue-username v-if="topic.user" :user="topic.user" class="mt-1 topic-username"></vue-username>
@@ -98,7 +98,7 @@
             </p>
 
             <a :href="topic.url + `?p=${topic.last_post.id}#id${topic.last_post.id}`" title="Zobacz ostatni post" class="text-muted">
-              <vue-timeago :datetime="topic.last_post.created_at"></vue-timeago>
+              <vue-timeago :datetime="topic.last_post.created_at"/>
             </a>
           </div>
         </div>
@@ -109,13 +109,18 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import {VueTimeAgo} from '../../plugins/timeago.js';
 import VueAvatar from '../avatar.vue';
 import {default as mixins} from '../mixins/user';
 import VueUserName from '../user-name.vue';
 
 export default {
   mixins: [mixins],
-  components: {'vue-avatar': VueAvatar, 'vue-username': VueUserName},
+  components: {
+    'vue-avatar': VueAvatar,
+    'vue-username': VueUserName,
+    'vue-timeago': VueTimeAgo,
+  },
   props: {
     topic: {
       type: Object,

@@ -55,7 +55,7 @@
         <ul class="d-sm-none list-inline text-muted small m-0">
           <li class="list-inline-item">
             <a :href="comment.url" class="text-muted">
-              <vue-timeago :datetime="comment.created_at"></vue-timeago>
+              <vue-timeago :datetime="comment.created_at"/>
             </a>
           </li>
 
@@ -107,11 +107,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import {mapActions, mapGetters, mapState} from "vuex";
 
 import declination from '../../libs/declination.js';
-import VueTimeago from '../../plugins/timeago.js';
+import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from "../../store/index";
 import VueAvatar from '../avatar.vue';
 import VueFlag from '../flags/flag.vue';
@@ -119,8 +118,6 @@ import {MicroblogMixin} from "../mixins/microblog";
 import mixins from '../mixins/user.js';
 import VueUserName from '../user-name.vue';
 import VueCommentForm from "./comment-form.vue";
-
-Vue.use(VueTimeago);
 
 export default {
   name: 'comment',
@@ -131,6 +128,7 @@ export default {
     'vue-username': VueUserName,
     'vue-comment-form': VueCommentForm,
     'vue-flag': VueFlag,
+    'vue-timeago': VueTimeAgo,
   },
   props: {
     comment: {

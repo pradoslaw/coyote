@@ -12,6 +12,7 @@ import VueTags from '../components/tags.vue';
 import VueThumbnail from '../components/thumbnail.vue';
 import VueUserName from '../components/user-name.vue';
 import {default as axiosErrorHandler} from '../libs/axios-error-handler.js';
+import {VueTimeAgo} from '../plugins/timeago.js';
 import store from '../store/index';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
@@ -105,7 +106,10 @@ new Vue({
   name: 'Tokens',
   el: '#js-tokens',
   delimiters: ['${', '}'],
-  components: {'vue-modal': VueModal},
+  components: {
+    'vue-modal': VueModal,
+    'vue-timeago': VueTimeAgo,
+  },
   data() {
     return {
       tokens: [],

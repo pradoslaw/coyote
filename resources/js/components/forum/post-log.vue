@@ -64,6 +64,7 @@
 </template>
 
 <script lang="ts">
+import {VueTimeAgo} from "../../plugins/timeago.js";
 import VueModal from "../delete-modal.vue";
 import VueUserName from "../user-name.vue";
 
@@ -72,6 +73,7 @@ export default {
   components: {
     'vue-username': VueUserName,
     'vue-modal': VueModal,
+    'vue-timeago': VueTimeAgo,
   },
   props: {
     log: {

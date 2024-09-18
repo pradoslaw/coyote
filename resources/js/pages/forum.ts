@@ -5,7 +5,6 @@ import {default as axiosErrorHandler} from '../libs/axios-error-handler.js';
 import VueAutosave from "../plugins/autosave";
 import VueModals from "../plugins/modals";
 import VuePaste from "../plugins/paste.js";
-import VueTimeago from '../plugins/timeago.js';
 import * as Models from "../types/models";
 
 import VueForum from './forum/homepage';
@@ -14,7 +13,6 @@ import VuePosts from './forum/posts';
 import './forum/sidebar';
 import './forum/tags';
 
-Vue.use(VueTimeago);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);
 Vue.use(VuePaste, {url: '/assets'});

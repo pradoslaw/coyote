@@ -7,7 +7,7 @@
     <div class="media-body">
       <template v-if="!message.sequential">
         <small class="float-end text-muted">
-          <vue-timeago :datetime="message.created_at"></vue-timeago>
+          <vue-timeago :datetime="message.created_at"/>
         </small>
 
         <h3>
@@ -26,22 +26,18 @@
       <small v-if="last && message.folder === SENTBOX && message.read_at" class="text-muted">
         <i class="fas fa-check"></i>
         Przeczytano,
-        <vue-timeago :datetime="message.read_at"></vue-timeago>
+        <vue-timeago :datetime="message.read_at"/>
       </small>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-
-import VueTimeago from '../../plugins/timeago.js';
+import {VueTimeAgo} from '../../plugins/timeago.js';
 import {MessageFolder} from '../../types/models';
 import VueAvatar from '../avatar.vue';
 import {default as mixins} from '../mixins/user.js';
 import VueUserName from '../user-name.vue';
-
-Vue.use(VueTimeago);
 
 export default {
   name: 'VueMessage',
@@ -49,6 +45,7 @@ export default {
   components: {
     'vue-avatar': VueAvatar,
     'vue-username': VueUserName,
+    'vue-timeago': VueTimeAgo,
   },
   props: {
     message: {

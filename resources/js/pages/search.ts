@@ -8,7 +8,7 @@ import VueTopic from '../components/forum/topic.vue';
 import VuePagination from '../components/pagination.vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import {default as axiosErrorHandler} from '../libs/axios-error-handler';
-import VueTimeago from '../plugins/timeago';
+import {VueTimeAgo} from '../plugins/timeago';
 import store from "../store";
 import {Hit, Hits, SearchOptions, Sort} from "../types/hit";
 import {Model, User} from "../types/models";
@@ -41,11 +41,13 @@ declare global {
 }
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-Vue.use(VueTimeago);
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 Vue.component('vue-result-common', {
+  components: {
+    'vue-timeago': VueTimeAgo,
+  },
   props: {
     hits: {
       type: Array,
@@ -55,33 +57,38 @@ Vue.component('vue-result-common', {
     title(hit: Hit) {
       if (hit.title) {
         return hit.title;
-      } else if (hit.name) {
+      }
+      if (hit.name) {
         return hit.name;
       }
-
       return hit.text;
     },
   },
   template: `
     <ul id="search-results" class="list-unstyled">
       <li v-for="hit in hits">
-        <h2 class="mt-4 mb-2 text-truncate"><a :href="hit.url" v-html="title(hit)"></a></h2>
+        <h2 class="mt-4 mb-2 text-truncate">
+          <a :href="hit.url" v-html="title(hit)"/>
+        </h2>
 
         <div class="mb-2">
           <span class="text-muted">
-            <vue-timeago :datetime="hit.created_at"></vue-timeago>
-          </span> <span v-html="hit.text"></span>
+            <vue-timeago :datetime="hit.created_at"/>
+          </span>
+          <span v-html="hit.text"/>
         </div>
 
         <ul v-if="hit.children.length" class="children mt-2 mb-2">
           <li v-for="child in hit.children">
             <a :href="child.url" class="text-truncate" v-html="child.text"></a>
-            <vue-timeago :datetime="child.created_at" class="text-muted"></vue-timeago>
+            <vue-timeago :datetime="child.created_at" class="text-muted"/>
           </li>
         </ul>
 
         <ul class="breadcrumb d-inline-flex p-0">
-          <li v-for="breadcrumb in hit.breadcrumbs" class="breadcrumb-item"><a :href="breadcrumb.url">{{ breadcrumb.name }}</a></li>
+          <li v-for="breadcrumb in hit.breadcrumbs" class="breadcrumb-item">
+            <a :href="breadcrumb.url">{{ breadcrumb.name }}</a>
+          </li>
         </ul>
       </li>
     </ul>`,

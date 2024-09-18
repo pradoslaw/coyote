@@ -100,6 +100,7 @@
 import {mapActions, mapGetters} from "vuex";
 
 import clickAway from '../../clickAway.js';
+import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from '../../store/index';
 import VueAvatar from '../avatar.vue';
 import {default as mixins} from '../mixins/user.js';
@@ -109,7 +110,12 @@ import VueUsername from '../user-name.vue';
 export default {
   mixins: [mixins],
   directives: {clickAway},
-  components: {'vue-avatar': VueAvatar, 'vue-username': VueUsername, 'vue-tags': VueTags},
+  components: {
+    'vue-avatar': VueAvatar,
+    'vue-username': VueUsername,
+    'vue-tags': VueTags,
+    'vue-timeago': VueTimeAgo,
+  },
   store,
   props: {
     name: {

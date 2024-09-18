@@ -29,7 +29,7 @@
         </h5>
 
         <h6><a :href="'#comment-' + comment.id" class="text-muted">
-          <vue-timeago :datetime="comment.created_at"></vue-timeago>
+          <vue-timeago :datetime="comment.created_at"/>
         </a></h6>
 
         <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
@@ -93,6 +93,7 @@
 
 <script>
 import {mapGetters} from 'vuex';
+import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from '../../store/index';
 import VueAvatar from '../avatar.vue';
 import VueFlag from '../flags/flag.vue';
@@ -112,6 +113,7 @@ export default {
     'vue-button': VueButton,
     'vue-flag': VueFlag,
     'vue-markdown': VueMarkdown,
+    'vue-timeago': VueTimeAgo,
   },
   mixins: [mixins],
   data() {

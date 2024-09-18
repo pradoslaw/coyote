@@ -64,7 +64,7 @@
     <div v-if="pollSync.expired" class="row">
       <div class="col-12">
         <p><em>Ankieta wygasła
-          <vue-timeago :datetime="pollSync.expired_at"></vue-timeago>
+          <vue-timeago :datetime="pollSync.expired_at"/>
         </em></p>
       </div>
     </div>
@@ -73,6 +73,7 @@
 
 <script lang="ts">
 import {mapGetters} from "vuex";
+import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store";
 import {Poll, PollItem} from '../../types/models';
 import VueButton from "../forms/button.vue";
@@ -82,7 +83,10 @@ export default {
   name: 'forum-poll',
   mixins: [mixins],
   store,
-  components: {'vue-button': VueButton},
+  components: {
+    'vue-button': VueButton,
+    'vue-timeago': VueTimeAgo,
+  },
   props: {
     poll: {
       type: Object,

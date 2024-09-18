@@ -136,6 +136,7 @@ import axios from 'axios';
 import Prism from 'prismjs';
 import {mapGetters, mapMutations, mapState} from "vuex";
 import VueMarkdown from '../../components/forms/markdown.vue';
+import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store";
 import VueButton from '../forms/button.vue';
 import VueError from '../forms/error.vue';
@@ -153,6 +154,7 @@ export default {
     'vue-error': VueError,
     'vue-text': VueText,
     'perfect-scrollbar': PerfectScrollbar,
+    'vue-timeago': VueTimeAgo,
   },
   props: {
     showTitleInput: {
