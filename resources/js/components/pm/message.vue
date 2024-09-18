@@ -33,6 +33,7 @@
 </template>
 
 <script lang="ts">
+import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from '../../plugins/timeago.js';
 import {MessageFolder} from '../../types/models';
 import VueAvatar from '../avatar.vue';
@@ -68,7 +69,7 @@ export default {
   },
   methods: {
     deleteMessage() {
-      this.$confirm({
+      confirmModal({
         message: 'Tej operacji nie będzie można cofnąć.',
         title: 'Usunąć tę wiadomość?',
         okLabel: 'Tak, usuń',

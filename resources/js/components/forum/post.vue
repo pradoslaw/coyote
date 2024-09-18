@@ -316,6 +316,7 @@ import Vue from 'vue';
 import {mapActions, mapGetters, mapState} from "vuex";
 
 import {copyToClipboard} from '../../plugins/clipboard';
+import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
 import VueAvatar from '../avatar.vue';
@@ -412,7 +413,7 @@ export default {
       }
     },
     merge() {
-      this.$confirm({
+      confirmModal({
         message: 'Czy chcesz połaczyć ten post z poprzednim?',
         title: 'Połączyć posty?',
         okLabel: 'Tak, połącz',

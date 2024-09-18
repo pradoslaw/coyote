@@ -64,6 +64,7 @@
 </template>
 
 <script lang="ts">
+import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import VueModal from "../delete-modal.vue";
 import VueUserName from "../user-name.vue";
@@ -107,7 +108,7 @@ export default {
   },
   methods: {
     async rollback() {
-      await this.$confirm({
+      await confirmModal({
         message: 'Treść posta zostanie zastąpiona. Czy chcesz kontynuować?',
         title: 'Potwierdź operację',
         okLabel: 'Tak, przywróć',

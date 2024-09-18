@@ -136,6 +136,7 @@ import axios from 'axios';
 import Prism from 'prismjs';
 import {mapGetters, mapMutations, mapState} from "vuex";
 import VueMarkdown from '../../components/forms/markdown.vue';
+import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store";
 import VueButton from '../forms/button.vue';
@@ -280,7 +281,7 @@ export default {
         return;
       }
 
-      await this.$confirm({message: response.data.message, title: 'Czy to tag techniczny?', okLabel: 'Tak, jestem pewien'});
+      await confirmModal({message: response.data.message, title: 'Czy to tag techniczny?', okLabel: 'Tak, jestem pewien'});
 
       return true;
     },

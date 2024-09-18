@@ -3,7 +3,6 @@ import VueNotifications from 'vue-notification';
 
 import {default as axiosErrorHandler} from '../libs/axios-error-handler.js';
 import VueAutosave from "../plugins/autosave";
-import VueModals from "../plugins/modals";
 import VuePaste from "../plugins/paste.js";
 import * as Models from "../types/models";
 
@@ -14,7 +13,6 @@ import './forum/sidebar';
 import './forum/tags';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-Vue.use(VueModals);
 Vue.use(VuePaste, {url: '/assets'});
 Vue.use(VueAutosave);
 

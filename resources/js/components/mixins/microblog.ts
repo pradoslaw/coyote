@@ -1,6 +1,7 @@
 import Prism from 'prismjs';
 import Vue from 'vue';
 
+import {confirmModal} from "../../plugins/modals";
 import store from "../../store/index";
 import {Microblog, User} from "../../types/models";
 
@@ -26,7 +27,7 @@ export const MicroblogMixin = Vue.extend({
       }
     },
     delete(action: string, microblog: Microblog) {
-      this.$confirm({
+      confirmModal({
         message: 'Tej operacji nie będzie można cofnąć.',
         title: 'Usunąć wpis?',
         okLabel: 'Tak, usuń',
@@ -34,7 +35,7 @@ export const MicroblogMixin = Vue.extend({
         .then(() => store.dispatch(action, microblog));
     },
     block(user: User) {
-      this.$confirm({
+      confirmModal({
         message: 'Nie będziesz widział komentarzy ani wpisów tego użytkownika',
         title: 'Zablokować użytkownika?',
         okLabel: 'Tak, zablokuj',

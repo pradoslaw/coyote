@@ -46,6 +46,7 @@
 
 <script lang="ts">
 import {mapGetters} from "vuex";
+import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
 import VueAvatar from "../avatar.vue";
@@ -102,7 +103,7 @@ export default {
       }
     },
     deleteComment() {
-      this.$confirm({
+      confirmModal({
         message: 'Tej operacji nie będzie można cofnąć.',
         title: 'Usunąć komentarz?',
         okLabel: 'Tak, usuń',
@@ -110,7 +111,7 @@ export default {
         .then(() => this.$store.dispatch('posts/deleteComment', this.comment));
     },
     migrate() {
-      this.$confirm({
+      confirmModal({
         message: 'Tej operacji nie będzie można cofnąć.',
         title: 'Zamienić na post?',
         okLabel: 'Tak, zamień',

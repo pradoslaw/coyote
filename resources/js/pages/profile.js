@@ -7,11 +7,10 @@ import {mapActions, mapGetters} from "vuex";
 import VueFollowButton from "../components/forms/follow-button.vue";
 import {default as SkillsMixin} from "../components/mixins/skills.js";
 import VueTags from "../components/tags.vue";
-import VueModals from "../plugins/modals";
+import {confirmModal} from "../plugins/modals";
 import store from "../store/index";
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-Vue.use(VueModals);
 
 new Vue({
   name: 'Profile',
@@ -28,7 +27,7 @@ new Vue({
   },
   methods: {
     block() {
-      this.$confirm({
+      confirmModal({
         message: 'Nie będziesz widział komentarzy ani wpisów tego użytkownika',
         title: 'Zablokować użytkownika?',
         okLabel: 'Tak, zablokuj',

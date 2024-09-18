@@ -1,11 +1,17 @@
 import Vue from 'vue';
 import VueModal from "../components/modal.vue";
 
-function confirmModal(options: ModalOptions) {
+interface ModalOptions {
+  message: string;
+  title: string;
+  okLabel: string;
+}
+
+export function confirmModal(options: ModalOptions): Promise<void> {
   const modalRef = Math.random().toString(36).substring(5);
 
   const ModalWrapper = Vue.extend({
-    data: () => ({...options, ...{modalRef}}),
+    data: () => ({...options, modalRef}),
     props: {
       resolver: Function,
     },
@@ -18,7 +24,6 @@ function confirmModal(options: ModalOptions) {
         this.resolver();
         this.destroy();
       },
-
       destroy(): void {
         (this.$refs[modalRef] as VueModal).close();
         this.$destroy();
@@ -42,9 +47,3 @@ function confirmModal(options: ModalOptions) {
     document.body.append(wrapper.$el);
   });
 }
-
-export default {
-  install(Vue) {
-    Vue.prototype.$confirm = confirmModal;
-  },
-};

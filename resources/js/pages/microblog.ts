@@ -10,14 +10,12 @@ import VuePagination from '../components/pagination.vue';
 import VueUserName from "../components/user-name.vue";
 import {default as axiosErrorHandler} from '../libs/axios-error-handler.js';
 import VueAutosave from "../plugins/autosave";
-import VueModals from '../plugins/modals';
 import VuePaste from '../plugins/paste.js';
 import store from '../store';
 import {Flag, Microblog, Paginator, User} from "../types/models";
 import {default as LiveMixin} from './microblog/live';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-Vue.use(VueModals);
 Vue.use(VuePaste, {url: '/assets'});
 Vue.use(VueAutosave);
 
