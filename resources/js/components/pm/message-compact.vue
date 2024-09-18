@@ -8,7 +8,9 @@
       <a :href="message.url" class="media-body">
         <header class="text-truncate notification-header">
           <h4>{{ message.user.name }}</h4>
-          <small><vue-timeago :datetime="message.created_at"></vue-timeago></small>
+          <small>
+            <vue-timeago :datetime="message.created_at"></vue-timeago>
+          </small>
         </header>
 
         <p class="text-truncate notification-content">
@@ -29,33 +31,33 @@
 </template>
 
 <script>
-  import Vue from 'vue';
-  import VueTimeago from '../../plugins/timeago';
-  import VueAvatar from '../avatar.vue';
+import Vue from 'vue';
+import VueTimeago from '../../plugins/timeago';
+import VueAvatar from '../avatar.vue';
 
-  Vue.use(VueTimeago);
+Vue.use(VueTimeago);
 
-  export default {
-    components: { 'vue-avatar': VueAvatar },
-    props: {
-      message: {
-        type: Object
-      }
+export default {
+  components: {'vue-avatar': VueAvatar},
+  props: {
+    message: {
+      type: Object,
     },
-    data() {
-      return {
-        SENTBOX: 2
-      }
+  },
+  data() {
+    return {
+      SENTBOX: 2,
+    };
+  },
+  methods: {
+    mark() {
+      this.$store.dispatch('messages/mark', this.message);
     },
-    methods: {
-      mark() {
-        this.$store.dispatch('messages/mark', this.message);
-      }
+  },
+  computed: {
+    isRead() {
+      return this.message.folder !== this.SENTBOX ? (this.message.read_at !== null) : true;
     },
-    computed: {
-      isRead() {
-        return this.message.folder !== this.SENTBOX ? (this.message.read_at !== null) : true;
-      }
-    }
-  }
+  },
+};
 </script>

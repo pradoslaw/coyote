@@ -1,14 +1,16 @@
 import Vue from "vue";
-import VueTimeago from '../plugins/timeago.js';
 import VueNotifications from 'vue-notification';
-import VuePaste from "../plugins/paste.js";
-import VueModals from "../plugins/modals";
-import VueAutosave from "../plugins/autosave";
-import VueForum from './forum/homepage';
-import VuePosts from './forum/posts';
-import VueLog from './forum/log';
-import * as Models from "../types/models";
+
 import {default as axiosErrorHandler} from '../libs/axios-error-handler.js';
+import VueAutosave from "../plugins/autosave";
+import VueModals from "../plugins/modals";
+import VuePaste from "../plugins/paste.js";
+import VueTimeago from '../plugins/timeago.js';
+import * as Models from "../types/models";
+
+import VueForum from './forum/homepage';
+import VueLog from './forum/log';
+import VuePosts from './forum/posts';
 import './forum/sidebar';
 import './forum/tags';
 
