@@ -96,11 +96,13 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
 import {link} from "@riddled/4play/index.js";
 import axios from 'axios';
 import Prism from 'prismjs';
+import Vue from "vue";
+
 import isImage from '../../libs/assets';
+import {pasteDirective} from "../../plugins/paste.js";
 import store from '../../store';
 import VueError from '../forms/error.vue';
 import VuePrompt from '../forms/prompt.vue';
@@ -125,6 +127,9 @@ export default {
     'vue-editor': VueEditor,
     'vue-help': VueHelp,
     'vue-emoji-picker': VueEmojiPicker,
+  },
+  directives: {
+    paste: pasteDirective('/assets'),
   },
   props: {
     value: String,

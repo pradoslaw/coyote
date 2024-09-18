@@ -5,12 +5,10 @@ import VueNotifications from "vue-notification";
 import {mapGetters} from "vuex";
 
 import VueMicroblog from "../components/microblog/microblog";
-import VuePaste from '../plugins/paste.js';
 import store from "../store/index.ts";
 import {default as LiveMixin} from './microblog/live';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-Vue.use(VuePaste, {url: '/assets'});
 
 new Vue({
   name: 'Microblog',

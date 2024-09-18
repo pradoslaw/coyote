@@ -55,31 +55,22 @@ function handler(event) {
   }
 }
 
-export default {
-  install(Vue, options) {
-    if (!options.url) {
-      throw Error('No clipboard URL was provided.');
-    }
-
-    Vue.directive('paste', {
-      bind(el, binding) {
-        switch (binding.arg) {
-          case 'success':
-            el.addEventListener('paste', handler);
-            el.successCallback = binding.value;
-            el.uploadUrl = options.url;
-
-            break;
-
-          case 'error':
-            el.errorCallback = binding.value;
-            break;
-        }
-      },
-
-      unbind(el) {
-        el.removeEventListener('paste', handler);
+export function pasteDirective(url) {
+  return {
+    bind(el, binding) {
+      switch (binding.arg) {
+        case 'success':
+          el.addEventListener('paste', handler);
+          el.successCallback = binding.value;
+          el.uploadUrl = url;
+          break;
+        case 'error':
+          el.errorCallback = binding.value;
+          break;
       }
-    });
-  }
-};
+    },
+    unbind(el) {
+      el.removeEventListener('paste', handler);
+    },
+  };
+}

@@ -15,12 +15,10 @@ import VuePm from '../components/pm/message.vue';
 import {default as axiosErrorHandler} from "../libs/axios-error-handler.js";
 import {default as ws} from '../libs/realtime.ts';
 import VueAutosave from '../plugins/autosave';
-import VuePaste from '../plugins/paste.js';
 import store from '../store';
 
 Vue.use(VueAutosave);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-Vue.use(VuePaste, {url: '/assets'});
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 

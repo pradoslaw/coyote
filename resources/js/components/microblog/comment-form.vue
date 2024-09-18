@@ -14,9 +14,10 @@
         @keydown.ctrl.enter="saveComment"
         @keydown.meta.enter="saveComment"
         @keydown.esc="cancel"
-      ></textarea>
-
-      <button type="submit" @click.prevent="saveComment" class="btn btn-sm btn-comment-submit" title="Zapisz (Ctrl+Enter)"><i class="far fa-fw fa-share-from-square"></i></button>
+      />
+      <button type="submit" @click.prevent="saveComment" class="btn btn-sm btn-comment-submit" title="Zapisz (Ctrl+Enter)">
+        <i class="far fa-fw fa-share-from-square"/>
+      </button>
     </vue-prompt>
   </form>
 </template>
@@ -24,6 +25,7 @@
 <script lang="ts">
 import IsImage from "../../libs/assets";
 import Textarea from '../../libs/textarea';
+import {pasteDirective} from "../../plugins/paste.js";
 import store from "../../store/index";
 import VuePrompt from '../forms/prompt.vue';
 import {MicroblogFormMixin} from '../mixins/microblog';
@@ -33,6 +35,9 @@ export default {
   store,
   components: {
     'vue-prompt': VuePrompt,
+  },
+  directives: {
+    'paste': pasteDirective('/assets'),
   },
   mixins: [MicroblogFormMixin],
   data() {
