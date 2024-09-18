@@ -42,6 +42,7 @@
 
 <script lang="ts">
 import axios from 'axios';
+import {loadDraft, removeDraft, saveDraft} from "../../plugins/autosave";
 import store from "../../store";
 import {Tag} from "../../types/models";
 import VueButton from '../forms/button.vue';
@@ -81,8 +82,8 @@ export default {
     if (this.microblog.id) {
       return;
     }
-    this.$set(this.microblog, 'text', this.$loadDraft(DRAFT_KEY));
-    this.$watch('microblog.text', newValue => this.$saveDraft(DRAFT_KEY, newValue));
+    this.$set(this.microblog, 'text', loadDraft(DRAFT_KEY));
+    this.$watch('microblog.text', newValue => saveDraft(DRAFT_KEY, newValue));
     this.startUrlDetector();
   },
   methods: {
@@ -110,7 +111,7 @@ export default {
       if (this.cancelTokenSource) {
         this.cancelTokenSource.cancel();
       }
-      this.save('microblogs/save').then(() => this.$removeDraft(DRAFT_KEY));
+      this.save('microblogs/save').then(() => removeDraft(DRAFT_KEY));
     },
     toggleTag(tag: Tag) {
       store.commit('microblogs/TOGGLE_TAG', {microblog: this.microblog, tag});

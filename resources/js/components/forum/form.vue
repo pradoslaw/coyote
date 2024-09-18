@@ -135,7 +135,9 @@
 import axios from 'axios';
 import Prism from 'prismjs';
 import {mapGetters, mapMutations, mapState} from "vuex";
+
 import VueMarkdown from '../../components/forms/markdown.vue';
+import {loadDraft, removeDraft, saveDraft} from "../../plugins/autosave";
 import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store";
@@ -204,8 +206,8 @@ export default {
   created() {
     this.emojis = window.emojis;
     if (!this.exists) {
-      this.post.text = this.$loadDraft(this.draftKey) as string;
-      this.$watch('post.text', newValue => this.$saveDraft(this.draftKey, newValue));
+      this.post.text = loadDraft(this.draftKey) as string;
+      this.$watch('post.text', newValue => saveDraft(this.draftKey, newValue));
     }
     this.originalText = this.post.text;
   },
@@ -229,8 +231,7 @@ export default {
           this.$emit('save', result.data);
 
           this.$nextTick(() => {
-            // remove local storage data after clearing input
-            this.$removeDraft(this.draftKey);
+            removeDraft(this.draftKey);
             Prism.highlightAll();
           });
         })

@@ -14,10 +14,9 @@ import PerfectScrollbar from '../components/perfect-scrollbar';
 import VuePm from '../components/pm/message.vue';
 import {default as axiosErrorHandler} from "../libs/axios-error-handler.js";
 import {default as ws} from '../libs/realtime.ts';
-import VueAutosave from '../plugins/autosave';
+import {loadDraft, removeDraft, saveDraft} from '../plugins/autosave';
 import store from '../store';
 
-Vue.use(VueAutosave);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
@@ -57,8 +56,8 @@ new Vue({
     // fill vuex with data passed from controller to view
     store.commit('messages/init', {messages: window.data.messages, total: window.data.total, perPage: window.data.per_page, currentPage: window.data.current_page});
 
-    this.text = this.$loadDraft(DRAFT_KEY);
-    this.$watch('text', newValue => this.$saveDraft(DRAFT_KEY, newValue));
+    this.text = loadDraft(DRAFT_KEY);
+    this.$watch('text', newValue => saveDraft(DRAFT_KEY, newValue));
   },
   mounted() {
     this.listenForMessage();
@@ -99,7 +98,7 @@ new Vue({
 
           this.$nextTick(() => this.scrollToBottom());
 
-          this.$removeDraft(DRAFT_KEY);
+          removeDraft(DRAFT_KEY);
         })
         .catch(err => this.errors = err.response.data.errors)
         .finally(() => this.isProcessing = false);
