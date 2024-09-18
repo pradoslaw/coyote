@@ -25,6 +25,10 @@
       font-size: 10px;
     }
 
+    .media-body {
+      min-width: 0;
+    }
+
     @include media-breakpoint-up('sm') {
       &.sequential {
         padding-left: 58px;
