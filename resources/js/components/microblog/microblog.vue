@@ -258,7 +258,7 @@ export default {
 
     copy() {
       if (copyToClipboard(this.microblog.url)) {
-        this.$notify({type: 'success', text: 'Link prawidłowo skopiowany do schowka.'});
+        this.$notify({type: 'success', text: 'Link skopiowany do schowka.'});
       } else {
         this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
       }
