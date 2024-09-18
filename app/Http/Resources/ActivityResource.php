@@ -59,18 +59,31 @@ class ActivityResource extends JsonResource
     public function item(): string
     {
         if ($this->content_type === Post::class) {
-            $this->content->setRelations(['topic' => $this->topic, 'forum' => $this->forum]);
-            return link_to(UrlBuilder::post($this->content), 'post');
+            return $this->postUrl('post');
         }
-        $post = (new Post)
-            ->forceFill(['id' => $this->content->post_id])
-            ->setRelations(['topic' => $this->topic, 'forum' => $this->forum]);
-        $this->content->setRelations(['post' => $post]);
-        return link_to(UrlBuilder::postComment($this->content), 'komentarz');
+        return $this->postCommentUrl('komentarz');
     }
 
     public function topic(): string
     {
-        return link_to(UrlBuilder::topic($this->topic), $this->topic->title);
+        if ($this->content_type === Post::class) {
+            return $this->postUrl($this->topic->title);
+        }
+        return $this->postCommentUrl($this->topic->title);
+    }
+
+    private function postUrl(string $title): string
+    {
+        $this->content->setRelations(['topic' => $this->topic, 'forum' => $this->forum]);
+        return link_to(UrlBuilder::post($this->content), $title);
+    }
+
+    private function postCommentUrl(string $title): string
+    {
+        $post = (new Post)
+            ->forceFill(['id' => $this->content->post_id])
+            ->setRelations(['topic' => $this->topic, 'forum' => $this->forum]);
+        $this->content->setRelations(['post' => $post]);
+        return link_to(UrlBuilder::postComment($this->content), $title);
     }
 }
