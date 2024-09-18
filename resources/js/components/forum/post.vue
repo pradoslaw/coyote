@@ -315,7 +315,7 @@ import pl from 'date-fns/locale/pl';
 import Vue from 'vue';
 import {mapActions, mapGetters, mapState} from "vuex";
 
-import VueClipboard from '../../plugins/clipboard';
+import {copyToClipboard} from '../../plugins/clipboard';
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
 import VueAvatar from '../avatar.vue';
@@ -329,8 +329,6 @@ import VueSelect from './../forms/select.vue';
 import VueCommentForm from "./comment-form.vue";
 import VueComment from './comment.vue';
 import VueForm from './form.vue';
-
-Vue.use(VueClipboard);
 
 export default {
   name: 'post',
@@ -387,7 +385,7 @@ export default {
       return formatDistanceToNow(new Date(date), {locale: pl});
     },
     copy(text: string): void {
-      if (this.$copy(text)) {
+      if (copyToClipboard(text)) {
         this.$notify({type: 'success', text: 'Skopiowano link do schowka.'});
       } else {
         this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});

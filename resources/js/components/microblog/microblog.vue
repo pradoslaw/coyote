@@ -170,13 +170,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import VueLightbox from 'vue-cool-lightbox';
 import {mapActions, mapGetters, mapState} from "vuex";
 
 import IsImage from '../../libs/assets';
 import useBrackets from "../../libs/prompt";
-import VueClipboard from '../../plugins/clipboard';
+import {copyToClipboard} from '../../plugins/clipboard';
 import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from "../../store";
 import {User} from '../../types/models';
@@ -190,8 +189,6 @@ import VueUserName from "../user-name.vue";
 import VueCommentForm from './comment-form.vue';
 import VueComment from "./comment.vue";
 import VueForm from './form.vue';
-
-Vue.use(VueClipboard);
 
 export default {
   name: 'microblog',
@@ -260,7 +257,7 @@ export default {
     },
 
     copy() {
-      if (this.$copy(this.microblog.url)) {
+      if (copyToClipboard(this.microblog.url)) {
         this.$notify({type: 'success', text: 'Link prawidłowo skopiowany do schowka.'});
       } else {
         this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});

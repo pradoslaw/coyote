@@ -1,8 +1,5 @@
-
-
-function copyToClipboard(message: string): boolean {
+export function copyToClipboard(message: string): boolean {
   const input = document.createElement('input');
-  let success = false;
 
   input.value = message;
   input.style.border = 'none';
@@ -12,20 +9,9 @@ function copyToClipboard(message: string): boolean {
 
   try {
     document.body.appendChild(input);
-
     input.select();
-
-    success = document.execCommand('copy');
-  }
-  finally {
+    return document.execCommand('copy');
+  } finally {
     document.body.removeChild(input);
   }
-
-  return success;
 }
-
-export default {
-  install(Vue) {
-    Vue.prototype.$copy = copyToClipboard;
-  }
-};
