@@ -7,10 +7,7 @@ import VueFlag from '../../components/flags/flag.vue';
 import VueMap from '../../components/google-maps/map.vue';
 import VueMarker from '../../components/google-maps/marker.vue';
 import {default as mixins} from '../../components/mixins/user';
-import VueAutosize from '../../plugins/autosize';
 import store from '../../store';
-
-Vue.use(VueAutosize);
 
 new Vue({
   name: 'Flags',

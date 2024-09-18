@@ -25,6 +25,7 @@
 <script lang="ts">
 import IsImage from "../../libs/assets";
 import Textarea from '../../libs/textarea';
+import {autosizeDirective} from "../../plugins/autosize.js";
 import {pasteDirective} from "../../plugins/paste.js";
 import store from "../../store/index";
 import VuePrompt from '../forms/prompt.vue';
@@ -38,6 +39,7 @@ export default {
   },
   directives: {
     'paste': pasteDirective('/assets'),
+    autosize: autosizeDirective,
   },
   mixins: [MicroblogFormMixin],
   data() {

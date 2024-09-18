@@ -1,5 +1,4 @@
 import Prism from 'prismjs';
-import Vue from 'vue';
 import 'bootstrap/js/dist/tooltip.js';
 import 'bootstrap/js/dist/collapse.js';
 import 'bootstrap/js/dist/dropdown.js';
@@ -15,7 +14,6 @@ import './libs/axios-throttle.ts';
 import './libs/csrf.js'; // setup CSRF token
 import Router from './libs/router.js';
 import './libs/timeago.js';
-import VueAutosize from './plugins/autosize.js';
 import './plugins/flags.ts';
 import './plugins/sociale.js';
 import './sentry.ts';
@@ -26,7 +24,6 @@ import '../feature/stickyAside/sticky-aside.js';
 import '../../survey/src/survey';
 
 Prism.highlightAll();
-Vue.use(VueAutosize);
 
 new Router()
   .on(['/User', '/User/Skills', '/User/Relations', '/User/Tokens'], () => require('./pages/user'))

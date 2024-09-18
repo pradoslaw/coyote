@@ -33,15 +33,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-
-import VueAutosize from '../../plugins/autosize.js';
+import {autosizeDirective} from '../../plugins/autosize.js';
 import store from "../../store/index";
 import {PostComment} from "../../types/models";
 import VueButton from '../forms/button.vue';
 import VuePrompt from '../forms/prompt.vue';
-
-Vue.use(VueAutosize);
 
 export default {
   name: 'post-comment-form',
@@ -50,6 +46,9 @@ export default {
       type: Object as () => PostComment,
       required: true,
     },
+  },
+  directives: {
+    autosize: autosizeDirective,
   },
   components: {
     'vue-prompt': VuePrompt,
