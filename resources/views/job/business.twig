@@ -44,7 +44,7 @@
         Dajemy Ci do dyspozycji 3 atrakcyjne plany taryfowe.
       </h2>
 
-      <vue-pricing :plans="plans" :value.sync="plan.id" email="{{ config('mail.from.address') }}"></vue-pricing>
+      <vue-pricing :plans="plans" v-model="plan.id" email="{{ config('mail.from.address') }}"></vue-pricing>
 
       <h2 class="text-center mt-4 mb-4">Co zyskujesz dodając ogłoszenie na 4programmers.net?</h2>
 

@@ -60,7 +60,7 @@
           </li>
 
           <li class="list-inline-item">
-            <vue-autocomplete :value.sync="user" placeholder="Autor" @select="setUser"></vue-autocomplete>
+            <vue-autocomplete v-model="user" placeholder="Autor" @select="setUser"></vue-autocomplete>
           </li>
         </ul>
 

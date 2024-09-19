@@ -7,7 +7,7 @@
       <vue-autocomplete
           ref="autocomplete"
           :tabindex="1"
-          :value.sync="recipient.name"
+          v-model="recipient.name"
           :errors="errors.recipient"
           placeholder="Odbiorca..."
           @select="selectName">
