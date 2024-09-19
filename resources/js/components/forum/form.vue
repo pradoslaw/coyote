@@ -31,7 +31,7 @@
         v-model="post.text"
         :prompt-url="`/completion/prompt/users/${topic.id || ''}`"
         :error="errors['text']"
-        :assets.sync="post.assets"
+        :assets="post.assets"
         :emojis="emojis"
         preview-url="/Forum/Preview"
         @save="save"

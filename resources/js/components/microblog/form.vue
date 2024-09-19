@@ -2,7 +2,7 @@
   <form @submit.prevent="saveMicroblog">
     <vue-markdown
       v-model="microblog.text"
-      :assets.sync="microblog.assets"
+      :assets="microblog.assets"
       :emojis="emojis"
       :auto-insert-assets="false"
       @save="saveMicroblog"

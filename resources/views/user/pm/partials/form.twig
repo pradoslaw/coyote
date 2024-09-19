@@ -2,7 +2,7 @@
   <div class="col-12">
     <vue-markdown
       v-model="text"
-      :assets.sync="assets"
+      :assets="assets"
       :error="errors.text"
       :emojis="emojis"
       @save="sendMessage"
@@ -15,6 +15,8 @@
 
 <div v-if="!recipient.deleted_at" class="row">
   <div class="col-12">
-    <vue-button :disabled="isProcessing" @click="sendMessage" class="btn btn-primary btn-sm">Wyślij</vue-button>
+    <vue-button :disabled="isProcessing" @click="sendMessage" class="btn btn-primary btn-sm">
+      Wyślij
+    </vue-button>
   </div>
 </div>
