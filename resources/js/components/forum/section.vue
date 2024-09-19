@@ -2,7 +2,7 @@
   <div class="card-section card pt-1">
     <div class="section-name pb-2 ps-lg-3 pt-lg-2 pe-lg-2">
       <h2 class="float-start">
-        <a v-if="$listeners.collapse" href="javascript:" @click="collapse">
+        <a v-if="collapsable" href="javascript:" @click="collapse">
           <i class="far" :class="[isCollapse ? 'fa-square-plus': 'fa-square-minus']"/>
           {{ name }}
         </a>
@@ -120,6 +120,7 @@ export default {
     },
     order: {type: Number, required: true},
     categories: {type: Array},
+    collapsable: {type: Boolean, default: false},
     isCollapse: {type: Boolean, default: false},
   },
   data() {
