@@ -2,23 +2,25 @@
   <div class="card-section card pt-1">
     <div class="section-name pb-2 ps-lg-3 pt-lg-2 pe-lg-2">
       <h2 class="float-start">
-        <a v-if="$listeners.collapse" href="javascript:" @click="collapse"><i :class="[isCollapse ? 'fa-square-plus': 'fa-square-minus']" class="far"></i> {{ name }}</a>
+        <a v-if="$listeners.collapse" href="javascript:" @click="collapse">
+          <i class="far" :class="[isCollapse ? 'fa-square-plus': 'fa-square-minus']"/>
+          {{ name }}
+        </a>
         <template v-else>{{ name }}</template>
       </h2>
 
       <div v-if="isAuthorized && !categories[0].parent_id" :class="{'open': isDropdown}" v-click-away="hideDropdown" class="dropdown float-end dropleft">
-        <a href="javascript:" @click="isDropdown = ! isDropdown" class="card-cog mt-2 me-2"><i class="fas fa-gears"></i></a>
-
+        <a href="javascript:" @click="isDropdown = ! isDropdown" class="card-cog mt-2 me-2">
+          <i class="fas fa-gears"/>
+        </a>
         <div :class="{'d-block': isDropdown}" class="dropdown-menu">
           <a v-for="category in categories" href="javascript:" class="dropdown-item" @click="toggle(category)">
-            <i :class="{'fa-check': !category.is_hidden}" class="fa"></i>
-
+            <i class="fa" :class="{'fa-check': !category.is_hidden}"/>
             {{ category.name }}
           </a>
         </div>
       </div>
-
-      <div class="clearfix"></div>
+      <div class="clearfix"/>
     </div>
 
     <section v-if="!isCollapse" class="card card-default card-categories mb-0">
@@ -27,21 +29,17 @@
           <div class="row">
             <div class="col-6 col-md-12 col-lg-5 d-flex align-items-center">
               <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative me-2">
-                <i v-if="category.is_locked" class="logo fas fa-lock "></i>
-
-                <i v-else :class="[className(category.name)]" class="logo far fa-comments"></i>
+                <i v-if="category.is_locked" class="logo fas fa-lock "/>
+                <i v-else :class="[className(category.name)]" class="logo far fa-comments"/>
               </a>
 
               <div class="overflow-hidden">
                 <h3><a :href="category.url">{{ category.name }}</a></h3>
-
                 <vue-tags v-if="category.enable_tags && !category.children" :tags="category.tags" class="tag-clouds-sm"></vue-tags>
-
                 <ul v-if="category.children" class="list-inline list-sub d-md-block d-lg-block">
                   <li v-for="children in category.children" class="list-inline-item">
                     <i v-if="children.is_read" class="far fa-file"></i>
                     <i v-else class="not-read" title="Nowe posty w tej kategorii"></i>
-
                     <a :href="children.url">{{ children.name }}</a>
                   </li>
                 </ul>
@@ -54,7 +52,6 @@
                   <strong>{{ number(category.topics) }}</strong>
                   <small class="text-muted text-wide-spacing">{{ declination(category.topics, ['wątek', 'wątków', 'wątków']) }}</small>
                 </li>
-
                 <li class="list-inline-item">
                   <strong>{{ number(category.posts) }}</strong>
                   <small class="text-muted text-wide-spacing">{{ declination(category.posts, ['post', 'postów', 'postów']) }}</small>
@@ -69,9 +66,8 @@
             <div v-if="!category.is_redirected" class="col-12 col-lg-5">
               <div v-if="category.post" class="media">
                 <a v-profile="category.post.user ? category.post.user.id : null">
-                  <vue-avatar v-bind="category.post.user" class="i-38 me-2 d-none d-sm-block img-thumbnail"></vue-avatar>
+                  <vue-avatar v-bind="category.post.user" class="i-38 me-2 d-none d-sm-block img-thumbnail"/>
                 </a>
-
                 <div class="media-body overflow-hidden">
                   <p class="text-truncate mb-1">
                     <a :href="getUrl(category)" class="category-last-topic">{{ category.topic.title }}</a>
@@ -122,17 +118,9 @@ export default {
       type: String,
       required: false, // <-- subcategories might not have section name
     },
-    order: {
-      type: Number,
-      required: true,
-    },
-    categories: {
-      type: Array,
-    },
-    isCollapse: {
-      type: Boolean,
-      default: false,
-    },
+    order: {type: Number, required: true},
+    categories: {type: Array},
+    isCollapse: {type: Boolean, default: false},
   },
   data() {
     return {
@@ -144,44 +132,34 @@ export default {
       store.dispatch('forums/collapse', this.categories[0]);
       this.$emit('collapse', this.categories[0].id);
     },
-
     hideDropdown() {
       this.isDropdown = false;
     },
-
     isBeginning(index) {
       let result = true;
-
       while (index > 0) {
         if (!this.categories[--index].is_hidden) {
           result = false;
         }
       }
-
       return result;
     },
-
     isEnding(index) {
       let result = true;
       const length = this.categories.length - 1;
-
       while (index < length) {
         if (!this.categories[++index].is_hidden) {
           result = false;
         }
       }
-
       return result;
     },
-
     className(name) {
       return 'logo-' + name.toLowerCase().replace(/[^a-z]/g, "");
     },
-
     getUrl(category) {
       return category.topic.is_read ? `${category.topic.url}?p=${category.post.id}#id${category.post.id}` : category.topic.url;
     },
-
     ...mapActions('forums', ['mark', 'toggle', 'up', 'down']),
   },
   computed: mapGetters('user', ['isAuthorized']),
