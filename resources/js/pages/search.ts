@@ -44,14 +44,12 @@ Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
-Vue.component('vue-result-common', {
+const VueResultCommon = {
   components: {
     'vue-timeago': VueTimeAgo,
   },
   props: {
-    hits: {
-      type: Array,
-    },
+    hits: {type: Array},
   },
   methods: {
     title(hit: Hit) {
@@ -70,21 +68,18 @@ Vue.component('vue-result-common', {
         <h2 class="mt-4 mb-2 text-truncate">
           <a :href="hit.url" v-html="title(hit)"/>
         </h2>
-
         <div class="mb-2">
           <span class="text-muted">
             <vue-timeago :datetime="hit.created_at"/>
           </span>
           <span v-html="hit.text"/>
         </div>
-
         <ul v-if="hit.children.length" class="children mt-2 mb-2">
           <li v-for="child in hit.children">
             <a :href="child.url" class="text-truncate" v-html="child.text"></a>
             <vue-timeago :datetime="child.created_at" class="text-muted"/>
           </li>
         </ul>
-
         <ul class="breadcrumb d-inline-flex p-0">
           <li v-for="breadcrumb in hit.breadcrumbs" class="breadcrumb-item">
             <a :href="breadcrumb.url">{{ breadcrumb.name }}</a>
@@ -92,23 +87,19 @@ Vue.component('vue-result-common', {
         </ul>
       </li>
     </ul>`,
-});
+};
 
-Vue.component('vue-result-topic', {
+const VueResultTopic = {
   props: {
-    hits: {
-      type: Array,
-    },
+    hits: {type: Array},
   },
   components: {'vue-topic': VueTopic},
-  render: function (createElement) {
+  render(createElement) {
     let items: VNode[] = [];
-
     this.hits.forEach(hit => items.push(createElement('vue-topic', {props: {topic: hit, postsPerPage: window.postsPerPage, showCategoryName: true}})));
-
     return createElement('div', {class: 'card card-default card-topics'}, items);
   },
-});
+};
 
 new Vue({
   name: 'Search',
@@ -122,16 +113,21 @@ new Vue({
     page: window.page,
     categories: window.categories,
     forums: window.forums,
-    defaults: {
-      sort: 'score',
-    },
+    defaults: {sort: 'score'},
     sortOptions: SortOptions,
     modelOptions: ModelsDict,
     user: window.user,
     isDropdownVisible: false,
     pageLimit: window.pageLimit,
   }),
-  components: {'vue-pagination': VuePagination, 'perfect-scrollbar': PerfectScrollbar, 'vue-autocomplete': VueAutocomplete, 'vue-dropdown-menu': VueDropdownMenu},
+  components: {
+    'vue-pagination': VuePagination,
+    'perfect-scrollbar': PerfectScrollbar,
+    'vue-autocomplete': VueAutocomplete,
+    'vue-dropdown-menu': VueDropdownMenu,
+    'vue-result-topic': VueResultTopic,
+    'vue-result-common': VueResultCommon,
+  },
   store,
   created() {
     store.commit('topics/init', window.hits.data || []);
@@ -144,7 +140,7 @@ new Vue({
 
   methods: {
     getComponent() {
-      return this.model === Model.Topic ? `vue-result-${this.model.toLowerCase()}` : 'vue-result-common';
+      return this.model === Model.Topic ? `vue-result-topic` : 'vue-result-common';
     },
 
     setSort(sort: Sort) {
