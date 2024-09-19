@@ -6,7 +6,6 @@
       class="form-control"
       autofocus
       :class="{'is-invalid': errors.length}"
-      :id="id"
       :placeholder="placeholder"
       :tabindex="tabindex"
       autocomplete="off"
@@ -35,16 +34,9 @@ export default {
   components: {'vue-dropdown': VueDropdown, 'vue-error': VueError},
   props: {
     placeholder: {type: String},
-    id: {type: String},
     value: {type: String, default: ''},
     tabindex: {type: Number},
     errors: {type: Array, default: () => []},
-    handler: {
-      type: Function,
-      default: (value) => {
-        return store.dispatch('prompt/request', {value, source: '/completion/prompt/users'});
-      },
-    },
   },
   data: () => ({
     items: [],
@@ -66,6 +58,9 @@ export default {
     },
     toggleDropdown(flag) {
       this.$refs.dropdown.toggleDropdown(flag);
+    },
+    handler(value) {
+      return store.dispatch('prompt/request', {value, source: '/completion/prompt/users'});
     },
   },
   watch: {
