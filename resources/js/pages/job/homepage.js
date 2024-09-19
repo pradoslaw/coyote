@@ -23,22 +23,18 @@ new Vue({
     'vue-notification': VueNotifications,
     'vue-tabs': VueTabs,
   },
-  data: window.data,
+  data: () => window.data,
   store,
   created() {
     store.state.jobs.subscriptions = window.data.subscribed;
   },
   mounted() {
     window.history.pushState({jobs: window.data.jobs, input: window.data.input}, '', window.location.href);
-
     window.onpopstate = e => {
       this.jobs = e.state?.jobs || this.jobs;
       this.input = e.state?.input || this.input;
     };
-
     this.initYScrollbar(document.querySelector('#js-published'));
-    // this.initYScrollbar(document.querySelector('#js-subscribed'));
-    //
     this.initXScrollbar(document.querySelector('#js-filter-location'));
     this.initXScrollbar(document.querySelector('#js-filter-tech'));
   },
