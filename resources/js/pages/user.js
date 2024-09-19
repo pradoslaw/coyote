@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Vue from "vue";
-import VueNotifications from 'vue-notification';
 import {mapActions, mapGetters, mapState} from 'vuex';
 
 import VueAvatar from '../components/avatar.vue';
@@ -15,8 +14,6 @@ import {default as axiosErrorHandler} from '../libs/axios-error-handler.js';
 import {VueTimeAgo} from '../plugins/timeago.js';
 import store from '../store/index';
 
-Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 new Vue({
@@ -28,10 +25,8 @@ new Vue({
     setPhoto(data) {
       store.commit('user/update', {photo: data.url});
     },
-
     deletePhoto() {
       axios.delete('/User/Photo/Delete');
-
       store.commit('user/update', {photo: null});
     },
   },
@@ -60,7 +55,6 @@ new Vue({
   methods: {
     addSkill(tag) {
       const defaultRate = 2;
-
       axios.post('/User/Skills', {name: tag.name, priority: defaultRate}).then(response => {
         this.skills.push(Object.assign(response.data, {priority: defaultRate}));
       });
@@ -72,7 +66,6 @@ new Vue({
 
     deleteSkill(tag) {
       this.skills.splice(this.skills.findIndex(skill => skill.id === tag.id), 1);
-
       axios.delete(`/User/Skills/${tag.id}`);
     },
   },
@@ -93,7 +86,6 @@ new Vue({
     user(userId) {
       return this.users.find(user => user.id === userId);
     },
-
     ...mapActions('user', ['unfollow']),
   },
   computed: {
@@ -124,21 +116,17 @@ new Vue({
     loadTokens() {
       axios.get('/oauth/personal-access-tokens').then(response => this.tokens = response.data);
     },
-
     addToken() {
       axios.post('/oauth/personal-access-tokens', {name: this.tokenName})
         .then(response => {
           this.tokenId = response.data.accessToken;
           this.loadTokens();
-
           this.$refs.modal.open();
           this.tokenName = null;
         });
     },
-
     deleteToken(tokenId) {
       axios.delete(`/oauth/personal-access-tokens/${tokenId}`);
-
       this.loadTokens();
     },
   },
