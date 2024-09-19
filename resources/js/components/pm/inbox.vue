@@ -35,7 +35,7 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import clickAway from "../../clickAway.js";
 import DesktopNotifications from '../../libs/notifications';
 import {default as ws} from '../../libs/realtime';
-import {default as PerfectScrollbar} from '../perfect-scrollbar.js';
+import PerfectScrollbar from '../perfect-scrollbar.js';
 import VueMessage from './message-compact.vue';
 
 export default {

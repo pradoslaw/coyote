@@ -7,17 +7,13 @@ export default {
       type: Object,
       required: false,
       default: () => {
-      }
+      },
     },
-    tag: {
-      type: String,
-      required: false,
-      default: 'div'
-    }
+    tag: {type: String, default: 'div'},
   },
   data() {
     return {
-      ps: null
+      ps: null,
     };
   },
   mounted() {
@@ -42,9 +38,9 @@ export default {
         this.ps.destroy();
         this.ps = null;
       }
-    }
+    },
   },
   render(h) {
-    return h(this.tag, {ref: 'container', class: 'ps', on: this.$listeners}, this.$slots.default);
-  }
+    return h(this.tag, {ref: 'container', class: 'ps'}, this.$slots.default);
+  },
 };

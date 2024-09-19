@@ -45,7 +45,7 @@ import DesktopNotifications from '../../libs/notifications';
 import {default as ws} from '../../libs/realtime';
 import Session from '../../libs/session.js';
 import store from '../../store';
-import {default as PerfectScrollbar} from '../perfect-scrollbar.js';
+import PerfectScrollbar from '../perfect-scrollbar.js';
 
 import VueNotification from './notification.vue';
 
