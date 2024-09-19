@@ -33,8 +33,7 @@
     </vue-form-group>
 
     <vue-form-group :errors="errors['text']" label="Wiadomość dla pracodawcy/zleceniodawcy" help="Taką wiadomość otrzyma osoba, która wystawiła ogłoszenie">
-      <vue-tinymce v-model="applicationSync.text" :init="tinyMceOptions"></vue-tinymce>
-
+      <vue-rich-editor v-model="applicationSync.text"/>
       <input type="hidden" name="text" v-model="applicationSync.text">
     </vue-form-group>
 
@@ -57,11 +56,8 @@
 </template>
 
 <script lang="ts">
-import VueTinyMce from '@tinymce/tinymce-vue';
 import axios from 'axios';
 import Vue from 'vue';
-
-import TinyMceOptions from '../../libs/tinymce.js';
 import {Asset} from '../../types/models';
 import VueButton from '../forms/button.vue';
 import VueCheckbox from '../forms/checkbox.vue';
@@ -70,6 +66,7 @@ import VueFormGroup from '../forms/form-group.vue';
 import VueSelect from '../forms/select.vue';
 import VueText from '../forms/text.vue';
 import VueThumbnail from "../thumbnail.vue";
+import VueRichEditor from "./rich-editor.vue";
 
 export default {
   name: 'VueApplicationForm',
@@ -80,7 +77,7 @@ export default {
     'vue-checkbox': VueCheckbox,
     'vue-button': VueButton,
     'vue-error': VueError,
-    'vue-tinymce': VueTinyMce,
+    'vue-rich-editor': VueRichEditor,
     'vue-thumbnail': VueThumbnail,
   },
   props: {
@@ -107,9 +104,6 @@ export default {
       set(value) {
         this.$emit('update:application', value);
       },
-    },
-    tinyMceOptions() {
-      return TinyMceOptions;
     },
     dismissalPeriod() {
       return [

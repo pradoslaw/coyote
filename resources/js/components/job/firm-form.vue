@@ -63,8 +63,7 @@
       </vue-form-group>
 
       <vue-form-group label="Opis firmy" class="border-bottom">
-        <vue-tinymce v-model="firm.description" :init="tinyMceOptions"></vue-tinymce>
-
+        <vue-rich-editor v-model="firm.description"/>
         <span class="form-text text-muted">Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?</span>
       </vue-form-group>
 
@@ -155,11 +154,9 @@
 </template>
 
 <script lang="ts">
-import VueTinyMce from '@tinymce/tinymce-vue';
 import {mapMutations} from 'vuex';
 
 import Geocoder from '../../libs/geocoder.js';
-import TinyMceOptions from '../../libs/tinymce.js';
 import store from '../../store/index';
 import {Asset} from '../../types/models';
 import VueButton from '../forms/button.vue';
@@ -170,6 +167,7 @@ import VueText from '../forms/text.vue';
 import VueMap from '../google-maps/map.vue';
 import VueMarker from '../google-maps/marker.vue';
 import VueThumbnail from '../thumbnail.vue';
+import VueRichEditor from "./rich-editor.vue";
 
 export default {
   name: 'VueFirmForm',
@@ -179,10 +177,10 @@ export default {
     'vue-select': VueSelect,
     'vue-button': VueButton,
     'vue-error': VueError,
-    'vue-tinymce': VueTinyMce,
     'vue-map': VueMap,
     'vue-marker': VueMarker,
     'vue-thumbnail': VueThumbnail,
+    'vue-rich-editor': VueRichEditor,
   },
   props: {
     firm: {
@@ -292,9 +290,6 @@ export default {
       }
 
       return result;
-    },
-    tinyMceOptions() {
-      return TinyMceOptions;
     },
     firmsSelect() {
       return this.firms.reduce((acc, curr) => {

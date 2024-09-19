@@ -104,7 +104,7 @@
         <div class="border-bottom form-group">
           <label class="col-form-label">Opis oferty (opcjonalnie)</label>
 
-          <vue-tinymce v-model="job.description" :init="tinyMceOptions"></vue-tinymce>
+          <vue-rich-editor v-model="job.description"/>
           <span class="form-text text-muted">Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.</span>
 
           <input type="hidden" name="description" v-model="job.description">
@@ -163,11 +163,9 @@
           </div>
 
           <div v-show="job.enable_apply === false">
-            <vue-tinymce v-model="job.recruitment" :init="tinyMceOptions"></vue-tinymce>
-
+            <vue-rich-editor v-model="job.recruitment"/>
             <input type="hidden" name="recruitment" v-model="job.recruitment">
-
-            <vue-error :message="errors.recruitment"></vue-error>
+            <vue-error :message="errors.recruitment"/>
           </div>
         </div>
       </div>
@@ -176,11 +174,9 @@
 </template>
 
 <script lang="ts">
-import VueTinyMce from '@tinymce/tinymce-vue';
 import axios, {AxiosResponse} from 'axios';
 import {mapMutations} from 'vuex';
 
-import TinyMceOptions from '../../libs/tinymce.js';
 import store from '../../store/index';
 import {Employment, Rate, Seniority, Tag} from '../../types/models';
 import VueButton from '../forms/button.vue';
@@ -193,6 +189,7 @@ import VueTagsInline from '../forms/tags-inline.vue';
 import VueText from '../forms/text.vue';
 import VueGooglePlace from '../google-maps/place.vue';
 import VueTags from '../tags.vue';
+import VueRichEditor from "./rich-editor.vue";
 
 export default {
   name: 'VueForm',
@@ -207,7 +204,7 @@ export default {
     'vue-tags-inline': VueTagsInline,
     'vue-tags': VueTags,
     'vue-google-place': VueGooglePlace,
-    'vue-tinymce': VueTinyMce,
+    'vue-rich-editor': VueRichEditor,
   },
   props: {
     job: {
@@ -248,9 +245,6 @@ export default {
   computed: {
     jobTitleCharactersRemaining(): number {
       return this.titleMaxLength - String(this.job.title ?? '').length;
-    },
-    tinyMceOptions() {
-      return TinyMceOptions;
     },
     remoteRange() {
       let result = {};
