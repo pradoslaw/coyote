@@ -1,4 +1,3 @@
-import Vue from "vue";
 import {mapGetters} from "vuex";
 
 import VueButton from "../../components/forms/button.vue";
@@ -8,9 +7,7 @@ import VueModal from "../../components/modal.vue";
 import store from "../../store";
 import {Forum} from '../../types/models';
 
-new Vue({
-  name: 'Sidebar',
-  el: '#js-sidebar',
+export default {
   delimiters: ['${', '}'],
   mixins: [mixin],
   components: {'vue-modal': VueModal, 'vue-button': VueButton, 'vue-select': VueSelect},
@@ -71,4 +68,4 @@ new Vue({
       });
     },
   },
-});
+};

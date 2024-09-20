@@ -1,10 +1,7 @@
 import axios from "axios";
-import Vue from "vue";
 import VueButton from "../../components/forms/button.vue";
 
-new Vue({
-  name: 'Tags',
-  el: '#js-tags',
+export default {
   delimiters: ['${', '}'],
   components: {'vue-button': VueButton},
   data: () => ({
@@ -39,4 +36,4 @@ new Vue({
       return this.tags.map(tag => tag.name).join(', ');
     },
   },
-});
+};

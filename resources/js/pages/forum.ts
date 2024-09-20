@@ -7,8 +7,8 @@ import * as Models from "../types/models";
 import VueForum from './forum/homepage';
 import VueLog from './forum/log';
 import VuePosts from './forum/posts';
-import './forum/sidebar';
-import './forum/tags';
+import VueSidebar from './forum/sidebar';
+import VueTags from './forum/tags';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
@@ -38,6 +38,8 @@ declare global {
 createVueApp(VueForum, '#js-forum');
 createVueApp(VuePosts, '#js-post');
 createVueApp(VueLog, '#js-log');
+createVueApp(VueSidebar, '#js-sidebar');
+createVueApp(VueTags, '#js-tags');
 
 function createVueApp(component: object, selector: string): void {
   if (document.querySelector(selector)) {
