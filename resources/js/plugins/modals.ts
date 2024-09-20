@@ -10,7 +10,7 @@ interface ModalOptions {
 export function confirmModal(options: ModalOptions): Promise<void> {
   const modalRef = Math.random().toString(36).substring(5);
 
-  const ModalWrapper = Vue.extend({
+  const ModalWrapper = {
     data: () => ({...options, modalRef}),
     props: {
       resolver: Function,
@@ -40,10 +40,10 @@ export function confirmModal(options: ModalOptions): Promise<void> {
         </template>
       </vue-modal>
     `,
-  });
+  };
 
   return new Promise(resolve => {
-    const wrapper = new ModalWrapper({propsData: {resolver: resolve}}).$mount();
+    const wrapper = new (Vue.extend(ModalWrapper))({propsData: {resolver: resolve}}).$mount();
     document.body.append(wrapper.$el);
   });
 }

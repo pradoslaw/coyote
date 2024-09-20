@@ -1,11 +1,10 @@
 import Prism from 'prismjs';
-import Vue from 'vue';
 
 import {confirmModal} from "../../plugins/modals";
 import store from "../../store/index";
 import {Microblog, User} from "../../types/models";
 
-export const MicroblogMixin = Vue.extend({
+export const MicroblogMixin = {
   data() {
     return {
       isWrapped: false,
@@ -54,9 +53,9 @@ export const MicroblogMixin = Vue.extend({
       return users.length > 10 ? users.splice(0, 10).concat('...').join("\n") : users.join("\n");
     },
   },
-});
+};
 
-export const MicroblogFormMixin = Vue.extend({
+export const MicroblogFormMixin = {
   data() {
     return {
       isProcessing: false,
@@ -96,4 +95,4 @@ export const MicroblogFormMixin = Vue.extend({
         .finally(() => this.isProcessing = false);
     },
   },
-});
+};
