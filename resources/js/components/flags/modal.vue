@@ -47,7 +47,7 @@ export default {
       required: true,
     },
     metadata: {
-      type: Object,
+      type: String,
       required: true,
     },
     types: {
