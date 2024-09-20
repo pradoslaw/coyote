@@ -59,12 +59,12 @@ const icons = {
 };
 type Icon = keyof typeof icons;
 
-const VueIcon = Vue.component('vue-icon', {
+const VueIcon = {
   props: ['icon', 'className'],
   render(h: CreateElement): VNode {
     return h('i', {class: ['fa-fw', icons[this.icon], this.className]});
   },
-});
+};
 
 function systemColorSchemeDark(): boolean {
   return window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches;
