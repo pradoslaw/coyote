@@ -35,11 +35,13 @@ declare global {
   }
 }
 
-const boot = {'js-forum': VueForum, 'js-post': VuePosts, 'js-log': VueLog};
+createVueApp(VueForum, '#js-forum');
+createVueApp(VuePosts, '#js-post');
+createVueApp(VueLog, '#js-log');
 
-for (const el in boot) {
-  if (document.getElementById(el)) {
-    new (Vue.extend(boot[el]))().$mount('#' + el);
+function createVueApp(component: object, selector: string): void {
+  if (document.querySelector(selector)) {
+    new (Vue.extend(component))().$mount(selector);
   }
 }
 
