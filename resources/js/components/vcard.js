@@ -26,7 +26,7 @@ function showVCard(event) {
       const container = document.createElement('div');
       container.innerHTML = result.data;
 
-      document.getElementsByTagName('body')[0].appendChild(container);
+      document.body.appendChild(container);
 
       vm = new Vue({name: 'VCard', el: '#vcard', components: {'vue-follow-button': VueFollowButton}});
 
