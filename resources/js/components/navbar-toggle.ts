@@ -3,6 +3,7 @@ import Vue from 'vue';
 
 import clickAway from "../clickAway.js";
 import store from "../store/index";
+import {createVueApp} from "../vue";
 
 Array
   .from(document.querySelectorAll('.disable-theme-notice'))
@@ -99,9 +100,7 @@ if (!isDarkThemeWip) {
 
 type Theme = 'light' | 'dark' | 'system';
 
-const controls = new Vue({
-  name: 'NonAlertControls',
-  el: '#non-alert-controls',
+const controls = createVueApp('NonAlertControls', '#non-alert-controls', {
   components: {
     'vue-icon': VueIcon,
   },

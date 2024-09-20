@@ -1,7 +1,5 @@
 import axios from 'axios';
 import PerfectScrollbar from 'perfect-scrollbar';
-import Vue from 'vue';
-import VueNotifications from "vue-notification";
 import {mapState} from 'vuex';
 
 import VueJobTiny from '../../components/job/job-tiny.vue';
@@ -9,18 +7,14 @@ import VueJob from '../../components/job/job.vue';
 import VuePagination from '../../components/pagination.vue';
 import VueTabs from '../../components/tabs.vue';
 import store from '../../store/index';
+import {createVueApp} from '../../vue';
 
-Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-
-new Vue({
-  name: 'Job',
-  el: '#js-job',
+createVueApp('Job', '#js-job', {
   delimiters: ['${', '}'],
   components: {
     'vue-job': VueJob,
     'vue-pagination': VuePagination,
     'vue-job-tiny': VueJobTiny,
-    'vue-notification': VueNotifications,
     'vue-tabs': VueTabs,
   },
   data: () => window.data,

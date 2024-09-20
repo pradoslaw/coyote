@@ -1,7 +1,7 @@
 import axios from "axios";
-import Vue from "vue";
 
 import store from "../../resources/js/store/index";
+import {createVueApp} from "../../resources/js/vue";
 import {type Experiment} from "./screen/screen";
 import {ExperimentOpt} from "./screen/steps/participate";
 import SurveyTally, {type State} from "./tally";
@@ -28,9 +28,7 @@ window.addEventListener('load', () => {
     badgeLong: boolean;
   }
 
-  const app = new Vue({
-    name: 'Survey',
-    el: '#js-survey',
+  const app = createVueApp('Survey', '#js-survey', {
     components: {'vue-survey-tally': SurveyTally},
     template: `
       <vue-survey-tally

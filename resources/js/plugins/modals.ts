@@ -1,5 +1,5 @@
-import Vue from 'vue';
 import VueModal from "../components/modal.vue";
+import {createVueAppGhost} from "../vue";
 
 interface ModalOptions {
   message: string;
@@ -9,7 +9,7 @@ interface ModalOptions {
 
 export function confirmModal(options: ModalOptions): Promise<void> {
   const modalRef = Math.random().toString(36).substring(5);
-  let domElement;
+  let vueApp, domElement;
 
   const ModalWrapper = {
     data: () => ({...options, modalRef}),
@@ -27,7 +27,7 @@ export function confirmModal(options: ModalOptions): Promise<void> {
       },
       destroy(): void {
         this.$refs[modalRef].close();
-        this.$destroy();
+        vueApp.$destroy();
         domElement.parentNode!.removeChild(domElement);
       },
     },
@@ -44,8 +44,7 @@ export function confirmModal(options: ModalOptions): Promise<void> {
   };
 
   return new Promise(resolve => {
-    const wrapper = new (Vue.extend(ModalWrapper))({propsData: {resolver: resolve}}).$mount();
-    domElement = wrapper.$el;
+    [vueApp, domElement] = createVueAppGhost(ModalWrapper, {resolver: resolve}, {});
     document.body.append(domElement);
   });
 }

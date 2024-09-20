@@ -314,7 +314,6 @@
 import Popover from 'bootstrap/js/dist/popover';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import pl from 'date-fns/locale/pl';
-import Vue from 'vue';
 import {mapActions, mapGetters, mapState} from "vuex";
 
 import {copyToClipboard} from '../../plugins/clipboard';
@@ -322,7 +321,7 @@ import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
 import {notify} from "../../toast";
-import {nextTick} from "../../vue";
+import {createVueAppPhantom, nextTick} from "../../vue";
 import VueAvatar from '../avatar.vue';
 import VueDeleteModal from "../delete-modal.vue";
 import {default as mixins} from '../mixins/user.js';
@@ -490,7 +489,7 @@ function initializeSharePopover(
 }
 
 function sharePopover(postUrl: string, postId: number, authorName: string, copy: (text: string) => void): Element {
-  return vueElement({
+  return createVueAppPhantom({
     data() {
       return {postUrl, postId, authorName};
     },
@@ -519,10 +518,6 @@ function sharePopover(postUrl: string, postId: number, authorName: string, copy:
         event.target.select();
       },
     },
-  });
-
-  function vueElement(component): Element {
-    return new Vue(component).$mount().$el;
-  }
+  }, {});
 }
 </script>

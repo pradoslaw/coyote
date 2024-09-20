@@ -1,9 +1,7 @@
-import Vue from 'vue';
 import VuePricing from '../../components/job/pricing.vue';
+import {createVueApp} from '../../vue';
 
-new Vue({
-  name: 'Business',
-  el: '#js-business',
+createVueApp('Business', '#js-business', {
   delimiters: ['${', '}'],
   components: {
     'vue-pricing': VuePricing,

@@ -1,17 +1,11 @@
 import axios from 'axios';
-import Vue from 'vue';
+import {createVueApp} from '../vue';
 import VueFollowButton from './forms/follow-button';
 
 let tooltipTimer;
-let vm;
 
 function removeVCard() {
-  const vcard = document.getElementById('vcard');
-
-  if (vcard) {
-    vm.$destroy();
-    vcard.remove();
-  }
+  document.getElementById('vcard')?.remove();
 }
 
 function showVCard(event) {
@@ -28,7 +22,7 @@ function showVCard(event) {
 
       document.body.appendChild(container);
 
-      vm = new Vue({name: 'VCard', el: '#vcard', components: {'vue-follow-button': VueFollowButton}});
+      createVueApp('VCard', '#vcard', {components: {'vue-follow-button': VueFollowButton}});
 
       const vcard = document.getElementById('vcard');
 

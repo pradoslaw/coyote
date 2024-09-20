@@ -1,19 +1,20 @@
 import axios from 'axios';
-import Vue from "vue";
 import VueFlagModal from "../components/flags/modal.vue";
+import {createVueAppGhost} from "../vue";
 
 function openModal(event) {
   const el = event.currentTarget;
-
   axios.get('/Flag').then(result => {
-    const propsData = {url: el.dataset.url, metadata: el.dataset.metadata, types: result.data};
-    const flagModal = new (Vue.extend(VueFlagModal))({propsData});
-    flagModal.$on('close', () => {
-      flagModal.$destroy();
-      document.body.removeChild(domElement);
+    const [app, domElement] = createVueAppGhost(VueFlagModal, {
+      url: el.dataset.url,
+      metadata: el.dataset.metadata,
+      types: result.data,
+    }, {
+      'close': () => {
+        app.$destroy();
+        document.body.removeChild(domElement);
+      },
     });
-    const wrapper = flagModal.$mount();
-    let domElement = wrapper.$el;
     document.body.append(domElement);
   });
 

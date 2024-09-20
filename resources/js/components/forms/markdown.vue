@@ -100,12 +100,11 @@
 import {link} from "@riddled/4play/index.js";
 import axios from 'axios';
 import Prism from 'prismjs';
-import Vue from "vue";
 
 import isImage from '../../libs/assets';
 import {pasteDirective} from "../../plugins/paste.js";
 import store from '../../store';
-import {nextTick} from "../../vue";
+import {createVueAppGhost, nextTick} from "../../vue";
 import VueError from '../forms/error.vue';
 import {default as formMixin} from '../mixins/form.js';
 import VueTabs from '../tabs.vue';
@@ -399,11 +398,12 @@ export default {
     },
     chooseFile() {
       this.progress = 0;
-      const app = new (Vue.extend(VueThumbnail))({propsData: {name: 'asset', openOnMount: true}}).$mount();
-      app.$on('upload', this.addAsset);
-      app.$on('progress', progress => {
-        this.progress = progress;
-        this.isProcessing = progress > 0 && progress < 100;
+      createVueAppGhost(VueThumbnail, {name: 'asset', openOnMount: true}, {
+        upload: this.addAsset,
+        progress: progress => {
+          this.progress = progress;
+          this.isProcessing = progress > 0 && progress < 100;
+        },
       });
     },
     autocomplete(nick) {

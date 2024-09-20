@@ -1,7 +1,5 @@
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import parseISO from 'date-fns/parseISO';
-import Vue from 'vue';
-import VueNotifications from "vue-notification";
 import {mapState} from 'vuex';
 
 import VueAutocomplete from '../components/forms/autocomplete.vue';
@@ -11,22 +9,17 @@ import VueMarkdown from '../components/forms/markdown.vue';
 import VuePagination from '../components/pagination.vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import VuePm from '../components/pm/message.vue';
-import {default as axiosErrorHandler} from "../libs/axios-error-handler.js";
 import {default as ws} from '../libs/realtime.ts';
 import {loadDraft, removeDraft, saveDraft} from '../plugins/autosave';
 import store from '../store';
-import {nextTick} from '../vue';
+import {createVueAppNotifications, nextTick, setAxiosErrorVueNotification} from '../vue';
 
-Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-
-axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
+setAxiosErrorVueNotification();
 
 const DRAFT_KEY = 'pm';
 const INBOX = 1;
 
-new Vue({
-  name: 'Pm',
-  el: '#app-pm',
+createVueAppNotifications('Pm', '#app-pm', {
   delimiters: ['${', '}'],
   components: {
     'perfect-scrollbar': PerfectScrollbar,

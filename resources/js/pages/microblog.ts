@@ -1,5 +1,3 @@
-import Vue from 'vue';
-import VueNotifications from 'vue-notification';
 import {mapGetters} from 'vuex';
 
 import VueAvatar from '../components/avatar.vue';
@@ -8,14 +6,12 @@ import VueForm from '../components/microblog/form.vue';
 import VueMicroblog from "../components/microblog/microblog.vue";
 import VuePagination from '../components/pagination.vue';
 import VueUserName from "../components/user-name.vue";
-import {default as axiosErrorHandler} from '../libs/axios-error-handler.js';
 import store from '../store';
 import {Flag, Microblog, Paginator, User} from "../types/models";
+import {createVueAppNotifications, setAxiosErrorVueNotification} from "../vue";
 import {default as LiveMixin} from './microblog/live';
 
-Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-
-axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
+setAxiosErrorVueNotification();
 
 declare global {
   interface Window {
@@ -27,9 +23,7 @@ declare global {
   }
 }
 
-new Vue({
-  name: 'Microblog',
-  el: '#js-microblog',
+createVueAppNotifications('Microblog', '#js-microblog', {
   delimiters: ['${', '}'],
   mixins: [LiveMixin],
   components: {

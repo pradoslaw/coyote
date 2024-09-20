@@ -1,9 +1,7 @@
-import Vue from 'vue';
 import VueForm from '../../components/job/application-form.vue';
+import {createVueApp} from '../../vue';
 
-new Vue({
-  name: 'Job',
-  el: '#js-application',
+createVueApp('Job', '#js-application', {
   delimiters: ['${', '}'],
   components: {
     'vue-form': VueForm,

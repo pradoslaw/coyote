@@ -1,18 +1,13 @@
 import axios from 'axios';
 import PerfectScrollbar from 'perfect-scrollbar';
-import Vue from "vue";
-import VueNotifications from "vue-notification";
 import {mapGetters} from "vuex";
 
 import VueMicroblog from "../components/microblog/microblog";
 import store from "../store/index.ts";
+import {createVueAppNotifications} from '../vue';
 import {default as LiveMixin} from './microblog/live';
 
-Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-
-new Vue({
-  name: 'Microblog',
-  el: '#js-microblog',
+createVueAppNotifications('Microblog', '#js-microblog', {
   delimiters: ['${', '}'],
   mixins: [LiveMixin],
   components: {'vue-microblog': VueMicroblog},

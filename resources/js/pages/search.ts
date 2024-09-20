@@ -1,18 +1,17 @@
 import axios from 'axios';
-import Vue, {VNode} from "vue";
-import VueNotifications from "vue-notification";
+import {VNode} from "vue";
 
 import VueDropdownMenu from '../components/dropdown-menu.vue';
 import VueAutocomplete from '../components/forms/autocomplete.vue';
 import VueTopic from '../components/forum/topic.vue';
 import VuePagination from '../components/pagination.vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
-import {default as axiosErrorHandler} from '../libs/axios-error-handler';
 import {VueTimeAgo} from '../plugins/timeago';
 import store from "../store";
 import {Hit, Hits, SearchOptions, Sort} from "../types/hit";
 import {Model, User} from "../types/models";
 import {Models as ModelsDict} from "../types/search";
+import {createVueApp, setAxiosErrorVueNotification} from "../vue";
 
 interface ForumItem {
   id: number;
@@ -40,9 +39,7 @@ declare global {
   }
 }
 
-Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-
-axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
+setAxiosErrorVueNotification();
 
 const VueResultCommon = {
   components: {
@@ -101,9 +98,7 @@ const VueResultTopic = {
   },
 };
 
-new Vue({
-  name: 'Search',
-  el: '#js-search',
+createVueApp('Search', '#js-search', {
   delimiters: ['${', '}'],
   data: () => ({
     hits: window.hits,

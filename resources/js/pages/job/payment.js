@@ -1,18 +1,16 @@
 import axios from 'axios';
-import Vue from 'vue';
 
 import VueButton from '../../components/forms/button.vue';
 import VueCheckbox from '../../components/forms/checkbox.vue';
 import VueFormGroup from '../../components/forms/form-group.vue';
 import VueSelect from '../../components/forms/select.vue';
 import VueText from '../../components/forms/text.vue';
+import {createVueAppNotifications} from '../../vue';
 import {notify} from '../../toast';
 
 const VAT_RATE = 1.23;
 
-new Vue({
-  name: 'Payment',
-  el: '#js-payment',
+createVueAppNotifications('Payment', '#js-payment', {
   delimiters: ['${', '}'],
   components: {
     'vue-form-group': VueFormGroup,

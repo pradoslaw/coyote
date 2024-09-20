@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import {mapGetters, mapState} from 'vuex';
 
 import VueComment from '../../components/comments/comment.vue';
@@ -8,10 +7,9 @@ import VueMap from '../../components/google-maps/map.vue';
 import VueMarker from '../../components/google-maps/marker.vue';
 import {default as mixins} from '../../components/mixins/user';
 import store from '../../store';
+import {createVueApp} from '../../vue';
 
-new Vue({
-  name: 'Flags',
-  el: '#js-flags',
+createVueApp('Flags', '#js-flags', {
   delimiters: ['${', '}'],
   data: () => ({job: window.job}),
   components: {'vue-flag': VueFlag},
@@ -26,8 +24,7 @@ new Vue({
   },
 });
 
-new Vue({
-  el: '#map',
+createVueApp('Map', '#map', {
   delimiters: ['${', '}'],
   components: {
     'vue-map': VueMap,
@@ -35,8 +32,7 @@ new Vue({
   },
 });
 
-new Vue({
-  el: '#js-sidemenu',
+createVueApp('Sidemenu', '#js-sidemenu', {
   delimiters: ['${', '}'],
   data: () => ({job: window.job}),
   store,
@@ -55,8 +51,7 @@ new Vue({
   },
 });
 
-new Vue({
-  el: '#js-comments',
+createVueApp('Comments', '#js-comments', {
   delimiters: ['${', '}'],
   mixins: [mixins],
   components: {

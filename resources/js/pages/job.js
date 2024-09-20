@@ -1,11 +1,4 @@
-import Vue from "vue";
-import VueNotifications from "vue-notification";
-import {default as axiosErrorHandler} from "../libs/axios-error-handler.js";
 import Router from '../libs/router.js';
-
-Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-
-axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 new Router()
   .on(['/Praca/Application/*'], () => require('./job/application'))

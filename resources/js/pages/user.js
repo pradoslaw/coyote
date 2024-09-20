@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Vue from "vue";
 import {mapActions, mapGetters, mapState} from 'vuex';
 
 import VueAvatar from '../components/avatar.vue';
@@ -10,15 +9,13 @@ import VueModal from '../components/modal.vue';
 import VueTags from '../components/tags.vue';
 import VueThumbnail from '../components/thumbnail.vue';
 import VueUserName from '../components/user-name.vue';
-import {default as axiosErrorHandler} from '../libs/axios-error-handler.js';
 import {VueTimeAgo} from '../plugins/timeago.js';
 import store from '../store/index';
+import {createVueApp, setAxiosErrorVueNotification} from '../vue';
 
-axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
+setAxiosErrorVueNotification();
 
-new Vue({
-  name: 'User',
-  el: '#js-user',
+createVueApp('User', '#js-user', {
   delimiters: ['${', '}'],
   components: {'vue-thumbnail': VueThumbnail},
   methods: {
@@ -37,9 +34,7 @@ new Vue({
   },
 });
 
-new Vue({
-  name: 'Skills',
-  el: '#js-skills',
+createVueApp('Skills', '#js-skills', {
   delimiters: ['${', '}'],
   mixins: [SkillsMixin],
   components: {
@@ -71,9 +66,7 @@ new Vue({
   },
 });
 
-new Vue({
-  name: 'Followers',
-  el: '#js-followers',
+createVueApp('Followers', '#js-followers', {
   delimiters: ['${', '}'],
   store,
   components: {'vue-avatar': VueAvatar, 'vue-username': VueUserName, 'vue-follow-button': VueFollowButton},
@@ -94,9 +87,7 @@ new Vue({
   },
 });
 
-new Vue({
-  name: 'Tokens',
-  el: '#js-tokens',
+createVueApp('Tokens', '#js-tokens', {
   delimiters: ['${', '}'],
   components: {
     'vue-modal': VueModal,

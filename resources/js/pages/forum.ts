@@ -1,18 +1,11 @@
-import Vue from "vue";
-import VueNotifications from 'vue-notification';
-
-import {default as axiosErrorHandler} from '../libs/axios-error-handler.js';
 import * as Models from "../types/models";
+import {createVueApp, createVueAppNotifications, setAxiosErrorVueNotification} from "../vue";
 
 import VueForum from './forum/homepage';
 import VueLog from './forum/log';
 import VuePosts from './forum/posts';
 import VueSidebar from './forum/sidebar';
 import VueTags from './forum/tags';
-
-Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-
-axiosErrorHandler((message: string) => Vue.notify({type: 'error', text: message}));
 
 declare global {
   interface Window {
@@ -35,16 +28,16 @@ declare global {
   }
 }
 
-createVueApp(VueForum, '#js-forum');
-createVueApp(VuePosts, '#js-post');
-createVueApp(VueLog, '#js-log');
-createVueApp(VueSidebar, '#js-sidebar');
-createVueApp(VueTags, '#js-tags');
+setAxiosErrorVueNotification();
 
-function createVueApp(component: object, selector: string): void {
-  if (document.querySelector(selector)) {
-    new (Vue.extend(component))().$mount(selector);
-  }
+exists('#js-forum') && createVueAppNotifications('Forum', '#js-forum', VueForum);
+exists('#js-post') && createVueAppNotifications('Posts', '#js-post', VuePosts);
+exists('#js-log') && createVueApp('Log', '#js-log', VueLog);
+createVueApp('Sidebar', '#js-sidebar', VueSidebar);
+createVueApp('Tags', '#js-tags', VueTags);
+
+function exists(selector: string): boolean {
+  return !!document.querySelector(selector);
 }
 
 document.getElementById('js-forum-list')

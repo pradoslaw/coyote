@@ -1,13 +1,11 @@
 import axios from "axios";
-import Vue from 'vue';
 import NavAuth from '../components/nav-auth.vue';
 import VueSearchbar from '../components/searchbar/searchbar.vue';
 import {default as setToken} from "../libs/csrf";
 import store from '../store';
+import {createVueApp} from '../vue';
 
-new Vue({
-  name: 'Searchbar',
-  el: '#js-searchbar',
+createVueApp('Searchbar', '#js-searchbar', {
   components: {'vue-searchbar': VueSearchbar},
 });
 
@@ -16,8 +14,7 @@ const el = document.getElementById('nav-auth');
 if (el !== null) {
   store.commit('inbox/SET_COUNT', store.state.user.user.pm_unread);
   store.commit('notifications/init', {notifications: null, count: store.state.user.user.notifications_unread});
-
-  new (Vue.extend(NavAuth))({store}).$mount(el);
+  createVueApp('NavAuth', '#nav-auth', NavAuth);
 }
 
 /**
