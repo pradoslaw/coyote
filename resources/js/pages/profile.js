@@ -32,13 +32,9 @@ new Vue({
         title: 'Zablokować użytkownika?',
         okLabel: 'Tak, zablokuj',
       })
-        .then(() => {
-          store.dispatch('user/block', this.user.id);
-
-          this.$notify({type: 'success', duration: 5000, title: 'Gotowe!', text: 'Użytkownik został zablokowany.'});
-        });
+        .then(() => store.dispatch('user/block', this.user.id))
+        .then(() => this.$notify({type: 'success', duration: 5000, title: 'Gotowe!', text: 'Użytkownik został zablokowany.'}));
     },
-
     ...mapActions('user', ['unblock']),
   },
   computed: {
