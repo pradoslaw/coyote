@@ -45,6 +45,11 @@ class Server
         $this->laravel->actingAs($user);
     }
 
+    public function loginById(int $userId): void
+    {
+        $this->laravel->actingAs(User::query()->findOrFail($userId));
+    }
+
     public function post(string $uri, array $body): TestResponse
     {
         return $this->laravel->json(
