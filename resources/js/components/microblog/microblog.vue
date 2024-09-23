@@ -93,7 +93,7 @@
                 class="col-6 col-md-3"
               >
                 <a @click.prevent="index = imageIndex" :href="image.url">
-                  <img :alt="`Załącznik ${imageIndex}`" class="img-thumbnail" :src="image.thumb">
+                  <img :alt="`Załącznik ${imageIndex}`" class="img-thumbnail" :src="image.thumbnail">
                 </a>
               </div>
             </div>
@@ -165,12 +165,11 @@
       </div>
     </div>
 
-    <vue-gallery :items="images" :index="index" @close="index = null"></vue-gallery>
+    <vue-gallery :images="images" :index="index" @close="index = null"/>
   </div>
 </template>
 
 <script lang="ts">
-import VueLightbox from 'vue-cool-lightbox';
 import {mapActions, mapGetters, mapState} from "vuex";
 
 import IsImage from '../../libs/assets';
@@ -189,6 +188,7 @@ import VueUserName from "../user-name.vue";
 import VueCommentForm from './comment-form.vue';
 import VueComment from "./comment.vue";
 import VueForm from './form.vue';
+import VueGallery from "./gallery.vue";
 
 export default {
   name: 'microblog',
@@ -200,7 +200,7 @@ export default {
     'vue-comment': VueComment,
     'vue-form': VueForm,
     'vue-comment-form': VueCommentForm,
-    'vue-gallery': VueLightbox,
+    'vue-gallery': VueGallery,
     'vue-flag': VueFlag,
     'vue-tags': VueTags,
     'vue-timeago': VueTimeAgo,
@@ -210,7 +210,7 @@ export default {
   },
   data() {
     return {
-      index: null,
+      index: null as number | null,
       commentDefault: {parent_id: this.microblog.id, text: '', assets: []},
     };
   },
@@ -280,10 +280,7 @@ export default {
       return this
         .microblog
         .assets
-        .filter(asset => IsImage(asset.name!) && !asset.metadata)
-        .map(asset => {
-          return {src: asset.url, thumb: asset.thumbnail, url: asset.url};
-        });
+        .filter(asset => IsImage(asset.name!) && !asset.metadata);
     },
 
     opg() {
