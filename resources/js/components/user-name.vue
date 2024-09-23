@@ -4,8 +4,8 @@
     v-profile="user.id"
     :class="[{'badge badge-primary': owner}, 'username']"
     :style="{textDecoration: this.user.is_blocked ? 'line-through' : ''}"
-  >{{ user.name }}
-  </component>
+    v-text="user.name"
+  />
 </template>
 
 <script lang="ts">
