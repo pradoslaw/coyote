@@ -229,11 +229,10 @@ export default {
   methods: {
     ...mapMutations('jobs', ['ADD_LOCATION', 'REMOVE_LOCATION', 'SET_LABEL', 'ADD_TAG', 'REMOVE_TAG', 'TOGGLE_FEATURE']),
     setLocation(index, location) {
-      this.$store.commit('jobs/SET_LOCATION', {index, location});
+      store.commit('jobs/SET_LOCATION', {index, location});
     },
     addTag(tag: Tag) {
-      this.$store.commit('jobs/ADD_TAG', tag.name);
-
+      store.commit('jobs/ADD_TAG', tag.name);
       // fetch only tag name
       let pluck = this.job.tags.map(item => item.name);
 

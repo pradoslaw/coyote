@@ -32,6 +32,7 @@
 
 <script>
 import {VueTimeAgo} from '../../plugins/timeago';
+import store from "../../store/index";
 import VueAvatar from '../avatar.vue';
 
 export default {
@@ -51,7 +52,7 @@ export default {
   },
   methods: {
     mark() {
-      this.$store.dispatch('messages/mark', this.message);
+      store.dispatch('messages/mark', this.message);
     },
   },
   computed: {

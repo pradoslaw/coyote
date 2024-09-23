@@ -35,6 +35,7 @@
 <script lang="ts">
 import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from '../../plugins/timeago.js';
+import store from "../../store/index";
 import {MessageFolder} from '../../types/models';
 import VueAvatar from '../avatar.vue';
 import {default as mixins} from '../mixins/user.js';
@@ -74,7 +75,7 @@ export default {
         title: 'Usunąć tę wiadomość?',
         okLabel: 'Tak, usuń',
       }).then(() =>
-        this.$store.dispatch(`messages/${this.clickableText ? 'trash' : 'remove'}`, this.message),
+        store.dispatch(`messages/${this.clickableText ? 'trash' : 'remove'}`, this.message),
       );
     },
   },

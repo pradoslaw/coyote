@@ -26,6 +26,7 @@
 
 <script lang="ts">
 import {VueTimeAgo} from "../../plugins/timeago.js";
+import store from "../../store/index";
 import VueModal from '../modal.vue';
 import VueUserName from "../user-name.vue";
 
@@ -50,7 +51,7 @@ export default {
   methods: {
     closeFlag() {
       this.modal.close();
-      this.$store.dispatch('flags/delete', this.flag);
+      store.dispatch('flags/delete', this.flag);
     },
   },
   computed: {

@@ -249,7 +249,7 @@ export default {
       gallery.splice(gallery.findIndex(asset => asset.url === url), 1);
     },
     addFirm() {
-      this.$store.commit('jobs/SET_FIRM', {
+      store.commit('jobs/SET_FIRM', {
         id: null,
         name: '',
         logo: null,
@@ -306,7 +306,7 @@ export default {
           this.addFirm();
           return;
         }
-        this.$store.commit('jobs/SET_FIRM', this.firms.find(firm => firm.id == id));
+        store.commit('jobs/SET_FIRM', this.firms.find(firm => firm.id == id));
       },
     },
   },

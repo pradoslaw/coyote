@@ -27,6 +27,7 @@
 
 <script lang="ts">
 import {mapState} from 'vuex';
+import store from "../../store/index";
 
 import {Emojis} from '../../types/models';
 import VueAvatar from '../avatar.vue';
@@ -62,7 +63,7 @@ export default {
   methods: {
     saveComment() {
       this.isSubmitting = true;
-      this.$store.dispatch('comments/save', {text: this.defaultText, resource_type: this.resource, resource_id: this.resourceId})
+      store.dispatch('comments/save', {text: this.defaultText, resource_type: this.resource, resource_id: this.resourceId})
         .then(response => {
           this.defaultText = '';
           this.scrollIntoView(response.data);

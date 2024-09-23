@@ -420,12 +420,12 @@ export default {
         title: 'Połączyć posty?',
         okLabel: 'Tak, połącz',
       }).then(() => {
-        this.$store.dispatch('posts/merge', this.post);
+        store.dispatch('posts/merge', this.post);
       });
     },
     restore() {
       this.$data.isCollapsed = false;
-      this.$store.dispatch('posts/restore', this.post);
+      store.dispatch('posts/restore', this.post);
     },
   },
   computed: {
@@ -460,7 +460,7 @@ export default {
       return this.post.deleted_at || this.authorBlocked;
     },
     authorBlocked(): boolean {
-      return this.post.user_id && this.$store.getters['user/isBlocked'](this.post.user_id);
+      return this.post.user_id && store.getters['user/isBlocked'](this.post.user_id);
     },
   },
 };

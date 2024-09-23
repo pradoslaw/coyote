@@ -200,9 +200,8 @@ export default {
     loadItems(): void {
       const headers: Record<string, string> = {};
       if (this.isAuthorized) {
-        headers.Authorization = `Bearer ${this.$store.state.user.user.token}`;
+        headers.Authorization = 'Bearer ' + store.state.user.user.token;
       }
-
       if (!this.endpoint) {
         return;
       }

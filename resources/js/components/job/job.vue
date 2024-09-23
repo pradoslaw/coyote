@@ -56,8 +56,8 @@
             </li>
             <li class="list-inline-item">
               <a :href="job.url + '#comments'">
-                <i class="far fa-fw fa-comment"></i> 
-                {{ job.comments_count }} 
+                <i class="far fa-fw fa-comment"></i>
+                {{ job.comments_count }}
                 {{ declination(job.comments_count, ['komentarz', 'komentarze', 'komentarzy']) }}
               </a>
             </li>
@@ -69,38 +69,38 @@
 </template>
 
 <script>
-  import VueSalary from './salary.vue';
-  import VueLocation from './location.vue';
-  import { mapGetters } from 'vuex';
-  import { default as mixins } from '../mixins/user';
+import {mapGetters} from 'vuex';
+import store from '../../store/index';
+import {default as mixins} from '../mixins/user';
+import VueLocation from './location.vue';
+import VueSalary from './salary.vue';
 
-  export default {
-    props: {
-      job: {
-        type: Object,
-        required: true
-      },
-      order: {
-        type: Number
-      }
+export default {
+  props: {
+    job: {
+      type: Object,
+      required: true,
     },
-    mixins: [ mixins ],
-    components: {
-      'vue-salary': VueSalary,
-      'vue-location': VueLocation
+    order: {
+      type: Number,
     },
-    methods: {
-      subscribe() {
-        this.$store.dispatch('jobs/subscribe', this.job);
-      }
+  },
+  mixins: [mixins],
+  components: {
+    'vue-salary': VueSalary,
+    'vue-location': VueLocation,
+  },
+  methods: {
+    subscribe() {
+      store.dispatch('jobs/subscribe', this.job);
     },
-    computed: {
-      limitedTags: function () {
-        return this.job.tags.slice(0, 5);
-      },
-
-      ...mapGetters('jobs', ['isSubscribed']),
-      ...mapGetters('user', ['isAuthorized'])
-    }
-  }
+  },
+  computed: {
+    limitedTags: function () {
+      return this.job.tags.slice(0, 5);
+    },
+    ...mapGetters('jobs', ['isSubscribed']),
+    ...mapGetters('user', ['isAuthorized']),
+  },
+};
 </script>

@@ -91,13 +91,12 @@ export default {
       ];
     },
     authorBlocked(): boolean {
-      return this.$store.getters['user/isBlocked'](this.comment.user.id);
+      return store.getters['user/isBlocked'](this.comment.user.id);
     },
   },
   methods: {
     edit() {
-      this.$store.commit('posts/edit', this.comment);
-
+      store.commit('posts/edit', this.comment);
       if (this.comment.is_editing) {
         this.$nextTick(() => this.$refs['comment-form'].focus());
       }
@@ -108,7 +107,7 @@ export default {
         title: 'Usunąć komentarz?',
         okLabel: 'Tak, usuń',
       })
-        .then(() => this.$store.dispatch('posts/deleteComment', this.comment));
+        .then(() => store.dispatch('posts/deleteComment', this.comment));
     },
     migrate() {
       confirmModal({
@@ -117,7 +116,7 @@ export default {
         okLabel: 'Tak, zamień',
       })
         .then(() => {
-          this.$store
+          store
             .dispatch('posts/migrateComment', this.comment)
             .then(response => window.location.href = response.data.url);
         });

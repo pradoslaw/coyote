@@ -110,6 +110,7 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import {VueTimeAgo} from '../../plugins/timeago.js';
+import store from '../../store/index';
 import VueAvatar from '../avatar.vue';
 import {default as mixins} from '../mixins/user';
 import VueUserName from '../user-name.vue';
@@ -147,15 +148,14 @@ export default {
       }
 
       // redirect to last post if topic has been read by registered user.
-      return (this.topic.is_read && (this.isAuthorized && this.topic.last_post_created_at > this.$store.state.user.user.created_at) ? urlFragment(this.topic.last_post.id) : this.topic.url);
+      return (this.topic.is_read && (this.isAuthorized && this.topic.last_post_created_at > store.state.user.user.created_at) ? urlFragment(this.topic.last_post.id) : this.topic.url);
     },
 
     mark(event) {
       if (this.topic.is_read) {
         return;
       }
-
-      this.$store.dispatch('topics/mark', this.topic);
+      store.dispatch('topics/mark', this.topic);
       event.preventDefault();
     },
 
@@ -177,8 +177,7 @@ export default {
     },
 
     flag() {
-      const flags = this.$store.getters['flags/filter'](this.topic.id, 'Coyote\\Topic');
-
+      const flags = store.getters['flags/filter'](this.topic.id, 'Coyote\\Topic');
       return flags.length ? flags[0].url : null;
     },
 

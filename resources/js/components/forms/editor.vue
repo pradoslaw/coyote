@@ -5,6 +5,7 @@
 
 <script lang="ts">
 import {CodeBlockLanguages, Editor4Play, EditorState} from "@riddled/4play";
+import store from "../../store/index";
 
 export default {
   name: 'VueEditor',
@@ -216,7 +217,7 @@ export default {
     },
   },
   created() {
-    this.$store.subscribe((mutation, state) => {
+    store.subscribe((mutation, state) => {
       if (mutation.type === 'theme/CHANGE_THEME') {
         this.editor!.changeTheme(state.theme.darkTheme);
       }
@@ -224,7 +225,7 @@ export default {
   },
   computed: {
     dark() {
-      return this.$store.state.theme.darkTheme;
+      return store.state.theme.darkTheme;
     },
   },
 };

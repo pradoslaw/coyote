@@ -66,6 +66,7 @@
 <script lang="ts">
 import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
+import store from "../../store/index";
 import VueModal from "../delete-modal.vue";
 import VueUserName from "../user-name.vue";
 
@@ -113,9 +114,7 @@ export default {
         title: 'Potwierdź operację',
         okLabel: 'Tak, przywróć',
       });
-
-      const {data} = await this.$store.dispatch('posts/rollback', this.log);
-
+      const {data} = await store.dispatch('posts/rollback', this.log);
       window.location.href = data.url;
     },
   },

@@ -43,12 +43,10 @@ export default {
   methods: {
     markAsRead(notification) {
       notification.url = `/notification/${notification.id}`;
-
-      this.$store.commit('notifications/mark', notification);
+      store.commit('notifications/mark', notification);
     },
-
     deleteNotification(notification) {
-      this.$store.dispatch('notifications/remove', notification);
+      store.dispatch('notifications/remove', notification);
     },
   },
 };

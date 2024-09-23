@@ -155,13 +155,12 @@ export default {
         title: 'Usunąć komentarz?',
         okLabel: 'Tak, usuń',
       })
-        .then(() => this.$store.dispatch('comments/delete', this.comment));
+        .then(() => store.dispatch('comments/delete', this.comment));
     },
 
     saveComment(comment) {
       this.isSubmitting = true;
-
-      this.$store.dispatch('comments/save', comment)
+      store.dispatch('comments/save', comment)
         .then(response => {
           this.isEditing = false;
           this.isReplying = false;
