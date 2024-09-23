@@ -40,7 +40,5 @@ export default {
       }
     },
   },
-  render(h) {
-    return h(this.tag, {ref: 'container', class: 'ps'}, this.$slots.default);
-  },
+  template: '<component :is="tag" ref="container" class="ps"><slot/></component>',
 };
