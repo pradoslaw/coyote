@@ -16,10 +16,7 @@ export default {
   components: {'vue-dropdown': VueDropdown},
   store,
   props: {
-    source: {
-      type: String,
-      default: '/completion/prompt/users',
-    },
+    source: {type: String},
   },
   data() {
     return {

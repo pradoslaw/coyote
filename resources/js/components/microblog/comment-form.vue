@@ -1,6 +1,6 @@
 <template>
   <form>
-    <vue-prompt>
+    <vue-prompt source="/completion/prompt/users">
       <textarea
         v-autosize
         v-paste:success="addAsset"
