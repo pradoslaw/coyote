@@ -32,7 +32,6 @@ import {Emojis} from '../../types/models';
 import VueAvatar from '../avatar.vue';
 import VueButton from '../forms/button.vue';
 import VueMarkdown from '../forms/markdown.vue';
-import VuePrompt from '../forms/prompt.vue';
 import mixins from '../mixins/user.js';
 
 export default {
@@ -40,7 +39,6 @@ export default {
   components: {
     'vue-avatar': VueAvatar,
     'vue-button': VueButton,
-    'vue-prompt': VuePrompt,
     'vue-markdown': VueMarkdown,
   },
   mixins: [mixins],

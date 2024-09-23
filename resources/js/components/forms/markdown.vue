@@ -105,7 +105,6 @@ import isImage from '../../libs/assets';
 import {pasteDirective} from "../../plugins/paste.js";
 import store from '../../store';
 import VueError from '../forms/error.vue';
-import VuePrompt from '../forms/prompt.vue';
 import {default as formMixin} from '../mixins/form.js';
 import VueTabs from '../tabs.vue';
 import VueThumbnail from "../thumbnail.vue";
@@ -120,7 +119,6 @@ export default {
   name: 'VueMarkdown',
   mixins: [formMixin],
   components: {
-    'vue-prompt': VuePrompt,
     'vue-tabs': VueTabs,
     'vue-thumbnail': VueThumbnail,
     'vue-error': VueError,

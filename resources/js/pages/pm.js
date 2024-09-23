@@ -8,7 +8,6 @@ import VueAutocomplete from '../components/forms/autocomplete.vue';
 import VueButton from '../components/forms/button.vue';
 import VueError from '../components/forms/error.vue';
 import VueMarkdown from '../components/forms/markdown.vue';
-import VuePrompt from '../components/forms/prompt.vue';
 import VuePagination from '../components/pagination.vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import VuePm from '../components/pm/message.vue';
@@ -31,7 +30,6 @@ new Vue({
   components: {
     'perfect-scrollbar': PerfectScrollbar,
     'vue-pm': VuePm,
-    'vue-prompt': VuePrompt,
     'vue-button': VueButton,
     'vue-markdown': VueMarkdown,
     'vue-pagination': VuePagination,

@@ -47,7 +47,6 @@ import store from "../../store";
 import {Tag} from "../../types/models";
 import VueButton from '../forms/button.vue';
 import VueMarkdown from '../forms/markdown.vue';
-import VuePrompt from '../forms/prompt.vue';
 import VueTagsInline from '../forms/tags-inline.vue';
 import {MicroblogFormMixin} from '../mixins/microblog';
 
@@ -58,7 +57,6 @@ export default {
   store,
   components: {
     'vue-button': VueButton,
-    'vue-prompt': VuePrompt,
     'vue-markdown': VueMarkdown,
     'vue-tags-inline': VueTagsInline,
   },
