@@ -10,7 +10,7 @@ function openModal(event) {
       metadata: el.dataset.metadata,
       types: result.data,
       onClose: () => {
-        app.$destroy();
+        app.unmount();
         document.body.removeChild(domElement);
       },
     });

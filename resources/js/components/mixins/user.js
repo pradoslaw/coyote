@@ -4,7 +4,7 @@ import {notify} from '../../toast';
 export default {
   directives: {
     profile: {
-      bind(el, binding) {
+      beforeMount(el, binding) {
         if (!binding.value) {
           return;
         }

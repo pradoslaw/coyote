@@ -27,7 +27,7 @@ export function confirmModal(options: ModalOptions): Promise<void> {
       },
       destroy(): void {
         this.$refs[modalRef].close();
-        vueApp.$destroy();
+        vueApp.unmount();
         domElement.parentNode!.removeChild(domElement);
       },
     },

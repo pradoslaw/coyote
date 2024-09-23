@@ -24,7 +24,7 @@ export default {
   updated() {
     this.update();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.destroy();
   },
   methods: {

@@ -133,7 +133,7 @@ export default {
       setTimeout(() => this.makeParams(), 0);
     };
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('keydown', this.shortcutSupport);
   },
   methods: {

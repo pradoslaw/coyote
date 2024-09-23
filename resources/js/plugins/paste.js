@@ -57,7 +57,7 @@ function handler(event) {
 
 export function pasteDirective(url) {
   return {
-    bind(el, binding) {
+    beforeMount(el, binding) {
       switch (binding.arg) {
         case 'success':
           if (binding.value) {
@@ -71,7 +71,7 @@ export function pasteDirective(url) {
           break;
       }
     },
-    unbind(el) {
+    unmounted(el) {
       el.removeEventListener('paste', handler);
     },
   };

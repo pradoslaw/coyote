@@ -22,10 +22,10 @@ function unbind(el) {
 }
 
 export default {
-  bind,
-  update: function (el, binding) {
+  beforeMount: bind,
+  updated(el, binding) {
     if (binding.value === binding.oldValue) return;
     bind(el, binding);
   },
-  unbind,
+  unmounted: unbind,
 };

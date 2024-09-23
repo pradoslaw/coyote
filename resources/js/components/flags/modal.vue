@@ -66,7 +66,7 @@ export default {
   mounted() {
     this.$refs.modal.open();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$refs.modal.close();
   },
   methods: {

@@ -21,7 +21,7 @@ export const VueTimeAgo = {
   mounted() {
     this.startUpdater();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.stopUpdater();
   },
   template: '<time :title="title" v-text="this.timeago"/>',
