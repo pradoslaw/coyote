@@ -372,13 +372,15 @@ export default {
     this.isCollapsed = this.hidden;
   },
   mounted() {
-    initializeSharePopover(
-      this.$refs.shareButton,
-      this.post.url,
-      this.post.id,
-      this.post.user?.name || this.post.user_name,
-      this.copy,
-    );
+    if (this.$refs.shareButton) {
+      initializeSharePopover(
+        this.$refs.shareButton,
+        this.post.url,
+        this.post.id,
+        this.post.user?.name || this.post.user_name,
+        this.copy,
+      );
+    }
   },
   methods: {
     ...mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments', 'loadVoters']),
