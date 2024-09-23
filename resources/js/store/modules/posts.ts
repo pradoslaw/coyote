@@ -1,5 +1,4 @@
 import axios from "axios";
-import Vue from "vue";
 import {Forum, Paginator, Post, PostComment, PostLog, Topic, User} from "../../types/models";
 
 type ParentChild = { post: Post, comment: PostComment };
@@ -28,14 +27,12 @@ const mutations = {
   },
 
   add(state, post: Post) {
-    Vue.set(state.data, post.id!, post);
+    state.data[post.id!] = post;
   },
 
   update(state, post: Post) {
-    // fields to update
     const {text, html, assets, editor, updated_at, edit_count, score} = post;
-
-    Vue.set(state.data, post.id, {...state.data[post.id], ...{text, html, assets, editor, updated_at, edit_count, score}});
+    state.data[post.id] = {...state.data[post.id], ...{text, html, assets, editor, updated_at, edit_count, score}};
   },
 
   delete(state, post: Post) {
@@ -43,30 +40,26 @@ const mutations = {
   },
 
   edit(state, editable: Post | PostComment) {
-    // we must use set() because is_editing can be undefined
-    Vue.set(editable, 'is_editing', !editable.is_editing);
+    editable.is_editing = !editable.is_editing;
   },
 
   addComment(state, {post, comment}: ParentChild) {
     if (Array.isArray(post.comments)) {
-      Vue.set(post, "comments", {});
+      post.comments = {};
     }
-
-    Vue.set(post.comments, comment.id!, comment);
-
+    post.comments[comment.id!] = comment;
     post.comments_count! += 1;
   },
 
   updateComment(state, {post, comment}: ParentChild) {
     let {text, html} = comment; // update only text and html version
 
-    Vue.set(post.comments, comment.id, {...post.comments[comment.id], ...{text, html}});
+    post.comments[comment.id] = {...post.comments[comment.id], ...{text, html}};
   },
 
   deleteComment(state, comment: PostComment) {
     const post = state.data[comment.post_id];
-
-    Vue.delete(post.comments, comment.id!);
+    delete post.comments[comment.id!];
     post.comments_count! -= 1;
   },
 
@@ -118,8 +111,7 @@ const mutations = {
   },
 
   updateVoters(state, {post, users, user}: { post: Post, users: string[], user?: User }) {
-    Vue.set(post, 'voters', users);
-
+    post.voters = users;
     post.score = users.length;
     post.is_voted = users.includes(<string>user?.name);
   },
@@ -251,4 +243,3 @@ export default {
   mutations,
   actions,
 };
-

@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     changeCollapse(id: number): void {
-      this.$set(this.collapse, id, !(!!this.collapse[id]));
+      this.collapse[id] = !this.collapse[id];
     },
     containsUserTags(topic: Topic): boolean {
       if (topic.tags) {

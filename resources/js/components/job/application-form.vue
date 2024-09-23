@@ -152,7 +152,7 @@ export default {
         .finally(() => this.isProcessing = false);
     },
     addAsset(asset: Asset) {
-      Vue.set(this.applicationSync, 'cv', asset.filename);
+      this.applicationSync.cv = asset.filename;
     },
     deleteAsset() {
       this.applicationSync.cv = null;

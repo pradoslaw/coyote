@@ -80,7 +80,7 @@ export default {
     if (this.microblog.id) {
       return;
     }
-    this.$set(this.microblog, 'text', loadDraft(DRAFT_KEY));
+    this.microblog.text = loadDraft(DRAFT_KEY);
     this.$watch('microblog.text', newValue => saveDraft(DRAFT_KEY, newValue));
     this.startUrlDetector();
   },

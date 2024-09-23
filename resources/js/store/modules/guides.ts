@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Vue from 'vue';
 import {Guide, Seniority, Tag} from "../../types/models";
 
 const state = {
@@ -22,7 +21,7 @@ const mutations = {
   },
 
   EDIT(state) {
-    Vue.set(state.guide, 'is_editing', !state.guide.is_editing);
+    state.guide.is_editing = !state.guide.is_editing;
   },
 
   SAVE(state, guide: Guide) {

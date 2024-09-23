@@ -1,5 +1,4 @@
 import axios from "axios";
-import Vue from 'vue';
 
 import {Microblog, Paginator, Tag, User} from "../../types/models";
 
@@ -46,17 +45,17 @@ const mutations = {
   },
 
   ADD(state, microblog: Microblog) {
-    Vue.set(state.data, microblog.id!, microblog);
+    state.data[microblog.id!] = microblog;
   },
 
   UPDATE(state, microblog: Microblog) {
     let {text, html, assets} = microblog; // update only text and html version
 
-    Vue.set(state.data, microblog.id!, {...state.data[microblog.id!], ...{text, html, assets}});
+    state.data[microblog.id!] = {...state.data[microblog.id!], ...{text, html, assets}};
   },
 
   DELETE(state, microblog: Microblog) {
-    Vue.delete(state.data, microblog.id!);
+    delete state.data[microblog.id!];
   },
 
   RESTORE(state, microblog: Microblog) {
@@ -65,29 +64,24 @@ const mutations = {
 
   ADD_COMMENT(state, {parent, comment}: ParentChild) {
     if (Array.isArray(parent.comments)) {
-      Vue.set(parent, "comments", {});
+      parent.comments = {};
     }
-
-    Vue.set(parent.comments, comment.id!, comment);
-
+    parent.comments[comment.id!] = comment;
     parent.comments_count! += 1;
   },
 
   UPDATE_COMMENT(state, {parent, comment}: ParentChild) {
     let {text, html} = comment; // update only text and html version
-
-    Vue.set(parent.comments, comment.id!, {...parent.comments[comment.id!], ...{text, html}});
+    parent.comments[comment.id!] = {...parent.comments[comment.id!], ...{text, html}};
   },
 
   DELETE_COMMENT(state, comment: Microblog) {
-    Vue.delete(state.data[comment.parent_id!].comments, comment.id!);
-
+    delete state.data[comment.parent_id!].comments[comment.id!];
     state.data[comment.parent_id!].comments_count -= 1;
   },
 
   RESTORE_COMMENT(state, comment: Microblog) {
     comment.deleted_at = null;
-
     state.data[comment.parent_id!].comments_count += 1;
   },
 
@@ -102,8 +96,7 @@ const mutations = {
   },
 
   UPDATE_VOTERS(state, {microblog, users, user}: { microblog: Microblog, users: string[], user?: User }) {
-    Vue.set(microblog, 'voters', users);
-
+    microblog.voters = users;
     microblog.votes = users.length;
     microblog.is_voted = users.includes(<string>user?.name);
   },
@@ -119,8 +112,7 @@ const mutations = {
   },
 
   TOGGLE_EDIT(state, microblog: Microblog) {
-    // we must use set() because is_editing can be undefined
-    Vue.set(microblog, 'is_editing', !microblog.is_editing);
+    microblog.is_editing = !microblog.is_editing;
   },
 
   TOGGLE_SUBSCRIBED(state, microblog: Microblog) {

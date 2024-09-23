@@ -1,5 +1,4 @@
 import axios from "axios";
-import Vue from 'vue';
 import {Firm, Job, JobFeature, Tag} from '../../types/models';
 
 const state = {
@@ -32,7 +31,7 @@ const mutations = {
   },
 
   SET_LOCATION(state, {index, location}) {
-    Vue.set(state.form.locations, index, location);
+    state.form.locations[index] = location;
   },
 
   ADD_TAG(state, name) {
