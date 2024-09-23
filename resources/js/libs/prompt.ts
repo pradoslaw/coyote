@@ -1,7 +1,6 @@
-export default function useBrackets(name) {
-  if (name.indexOf(' ') > -1 || name.indexOf('.') > -1) {
-    name = '{' + name + '}';
+export default function useBrackets(name: string): string {
+  if (name.includes(' ') || name.includes('.')) {
+    return '{' + name + '}';
   }
-
   return name;
 }
