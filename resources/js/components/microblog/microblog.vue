@@ -240,8 +240,8 @@ export default {
     ...mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments', 'toggleSponsored']),
 
     reply(user: User) {
-      this.$refs['comment-form'].markdown.value += `@${useBrackets(user.name)}: `;
-      this.$refs['comment-form'].markdown.focus();
+      this.$data.commentDefault.text += `@${useBrackets(user.name)}: `;
+      this.$refs['comment-form'].focus();
     },
 
     unwrap() {

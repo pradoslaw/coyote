@@ -1,23 +1,16 @@
 <template>
   <form>
-    <vue-prompt :source="`/completion/prompt/users/${$store.getters['topics/topic'].id}`" class="mb-2">
-      <textarea
-        v-autosize
-        placeholder="Drobne uwagi, sugestie. Nie odpowiadaj tutaj na pytania zawarte w poście."
-        class="form-control"
-        name="text"
-        ref="textarea"
-        rows="1"
-        :maxlength="maxLength"
-        v-model="comment.text"
-        :disabled="isProcessing"
-        @keydown.ctrl.enter="saveComment"
-        @keydown.meta.enter="saveComment"
-        @keydown.esc="cancel"
-      ></textarea>
-    </vue-prompt>
-
-    <div class="row">
+    <vue-comment-autocomplete
+      :source="`/completion/prompt/users/${$store.getters['topics/topic'].id}`"
+      :max-length="maxLength"
+      :disabled="isProcessing"
+      placeholder="Drobne uwagi, sugestie. Nie odpowiadaj tutaj na pytania zawarte w poście."
+      v-model="comment.text"
+      @save="saveComment"
+      @cancel="cancel"
+      ref="commentPrompt"
+    />
+    <div class="row mt-1">
       <div class="col-12">
         <p class="text-muted float-start">
           Pozostało <strong>{{ maxLength - comment.text.length }}</strong> znaków
@@ -33,11 +26,10 @@
 </template>
 
 <script lang="ts">
-import {autosizeDirective} from '../../plugins/autosize.js';
 import store from "../../store/index";
 import {PostComment} from "../../types/models";
+import VueCommentAutocomplete from '../CommentAutocomplete.vue';
 import VueButton from '../forms/button.vue';
-import VuePrompt from '../forms/prompt.vue';
 
 export default {
   name: 'post-comment-form',
@@ -47,11 +39,8 @@ export default {
       required: true,
     },
   },
-  directives: {
-    autosize: autosizeDirective,
-  },
   components: {
-    'vue-prompt': VuePrompt,
+    'vue-comment-autocomplete': VueCommentAutocomplete,
     'vue-button': VueButton,
   },
   data() {
@@ -63,19 +52,17 @@ export default {
   methods: {
     saveComment() {
       this.$data.isProcessing = true;
-
       store.dispatch('posts/saveComment', this.comment)
         .then(() => {
           this.$emit('save');
-
           if (!this.comment.id) {
             this.comment.text = '';
           }
         })
-        .finally(() => this.isProcessing = false);
+        .finally(() => this.$data.isProcessing = false);
     },
     focus() {
-      (this.$refs.textarea as HTMLTextAreaElement).focus();
+      this.$refs.commentPrompt.focus();
     },
     cancel() {
       this.$emit('cancel');

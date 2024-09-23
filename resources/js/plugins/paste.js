@@ -60,9 +60,11 @@ export function pasteDirective(url) {
     bind(el, binding) {
       switch (binding.arg) {
         case 'success':
-          el.addEventListener('paste', handler);
-          el.successCallback = binding.value;
-          el.uploadUrl = url;
+          if (binding.value) {
+            el.addEventListener('paste', handler);
+            el.successCallback = binding.value;
+            el.uploadUrl = url;
+          }
           break;
         case 'error':
           el.errorCallback = binding.value;

@@ -1,56 +1,42 @@
 <template>
   <form>
-    <vue-prompt source="/completion/prompt/users">
-      <textarea
-        v-autosize
-        v-paste:success="addAsset"
-        placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)"
-        class="form-control"
-        name="text"
-        ref="markdown"
-        rows="1"
-        v-model="microblog.text"
-        :disabled="isProcessing"
-        @keydown.ctrl.enter="saveComment"
-        @keydown.meta.enter="saveComment"
-        @keydown.esc="cancel"
-      />
-      <button type="submit" @click.prevent="saveComment" class="btn btn-sm btn-comment-submit" title="Zapisz (Ctrl+Enter)">
+    <vue-comment-autocomplete
+      source="/completion/prompt/users"
+      placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)"
+      v-model="microblog.text"
+
+      allow-paste 
+      @paste="addAsset"
+      @save="saveComment"
+      @cancel="cancel"
+
+      ref="commentPrompt"
+    >
+      <button type="button" @click="saveComment" class="btn btn-sm btn-comment-submit" title="Zapisz (Ctrl+Enter)">
         <i class="far fa-fw fa-share-from-square"/>
       </button>
-    </vue-prompt>
+    </vue-comment-autocomplete>
   </form>
 </template>
 
 <script lang="ts">
 import IsImage from "../../libs/assets";
 import Textarea from '../../libs/textarea';
-import {autosizeDirective} from "../../plugins/autosize.js";
-import {pasteDirective} from "../../plugins/paste.js";
 import store from "../../store/index";
-import VuePrompt from '../forms/prompt.vue';
+import VueCommentAutocomplete from '../CommentAutocomplete.vue';
 import {MicroblogFormMixin} from '../mixins/microblog';
 
 export default {
   name: 'microblog-comment-form',
   store,
   components: {
-    'vue-prompt': VuePrompt,
-  },
-  directives: {
-    'paste': pasteDirective('/assets'),
-    autosize: autosizeDirective,
+    'vue-comment-autocomplete': VueCommentAutocomplete,
   },
   mixins: [MicroblogFormMixin],
-  data() {
-    return {
-      markdown: null,
-    };
-  },
-  mounted() {
-    this.markdown = this.$refs.markdown;
-  },
   methods: {
+    focus() {
+      this.$refs.commentPrompt.focus();
+    },
     saveComment() {
       this.save('microblogs/saveComment');
     },
@@ -59,8 +45,10 @@ export default {
       this.insertAssetAtCaret(asset);
     },
     insertAssetAtCaret(asset) {
-      new Textarea(this.markdown).insertAtCaret((IsImage(asset.name) ? '!' : '') + '[' + asset.name + '](' + asset.url + ')', '', '');
-      this.markdown.dispatchEvent(new Event('input', {'bubbles': true}));
+      this.$refs.commentPrompt.inspect(textarea => {
+        new Textarea(textarea).insertAtCaret((IsImage(asset.name) ? '!' : '') + '[' + asset.name + '](' + asset.url + ')', '', '');
+        textarea.dispatchEvent(new Event('input', {'bubbles': true}));
+      });
     },
   },
 };
