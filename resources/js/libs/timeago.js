@@ -26,11 +26,11 @@ function getDiffSecond(remote) {
 
 const timeago = (timestamp) => {
   if (getDiffMinute(timestamp) < 60) {
-    if (getDiffSecond(timestamp) >= 60) {
-      return getDiffMinute(timestamp) + ' ' + declination(getDiffMinute(timestamp), ['minuta', 'minuty', 'minut']) + ' temu';
+    const diffSecond = getDiffSecond(timestamp);
+    if (diffSecond < 60) {
+      return diffSecond + ' ' + declination(diffSecond, ['sekunda', 'sekundy', 'sekund']) + ' temu';
     }
-
-    return getDiffSecond(timestamp) + ' ' + declination(getDiffSecond(timestamp), ['sekunda', 'sekundy', 'sekund']) + ' temu';
+    return getDiffMinute(timestamp) + ' ' + declination(getDiffMinute(timestamp), ['minuta', 'minuty', 'minut']) + ' temu';
   }
 
   let currDate = new Date();

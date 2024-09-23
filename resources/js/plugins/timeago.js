@@ -24,9 +24,14 @@ export const VueTimeAgo = {
   beforeDestroy() {
     this.stopUpdater();
   },
-  render(h) {
-    const title = this.datetime === null ? '' : format(new Date(this.datetime), this.format, {locale: pl});
-    return h('time', {attrs: {title}}, [this.timeago]);
+  template: '<time :title="title" v-text="this.timeago"/>',
+  computed: {
+    title() {
+      if (this.datetime === null) {
+        return '';
+      }
+      return format(new Date(this.datetime), this.format, {locale: pl});
+    },
   },
   methods: {
     getTimeago() {
@@ -35,7 +40,10 @@ export const VueTimeAgo = {
       }
       const date = new Date(this.datetime);
       const value = timeago(date.getTime() / 1000);
-      return value ? value : format(date, this.format, {locale: pl});
+      if (value) {
+        return value;
+      }
+      return format(date, this.format, {locale: pl});
     },
     startUpdater() {
       if (this.autoUpdate) {

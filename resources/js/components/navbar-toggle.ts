@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Vue, {CreateElement, VNode} from 'vue';
+import Vue from 'vue';
 
 import clickAway from "../clickAway.js";
 import store from "../store/index";
@@ -52,18 +52,18 @@ if (isDarkThemeWip) {
   colorScheme = 'light';
 }
 
-const icons = {
-  'dark-theme': 'fas fa-moon',
-  'light-theme': 'fas fa-sun',
-  'system-theme': 'fas fa-display',
-};
-type Icon = keyof typeof icons;
-
 const VueIcon = {
   props: ['icon', 'className'],
-  render(h: CreateElement): VNode {
-    return h('i', {class: ['fa-fw', icons[this.icon], this.className]});
+  data() {
+    return {
+      icons: {
+        'dark-theme': 'fas fa-moon',
+        'light-theme': 'fas fa-sun',
+        'system-theme': 'fas fa-display',
+      },
+    };
   },
+  template: `<i :class="['fa-fw', icons[this.$props.icon], this.$props.className]"/>`,
 };
 
 function systemColorSchemeDark(): boolean {
@@ -126,7 +126,7 @@ const controls = new Vue({
       }
       return this.theme === 'dark';
     },
-    oppositeIcon(): Icon {
+    oppositeIcon(): string {
       return this.dark ? 'light-theme' : 'dark-theme';
     },
     systemThemeTitle(): string {
