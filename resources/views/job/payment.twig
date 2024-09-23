@@ -55,10 +55,14 @@
         </div>
 
         <div class="card-body" v-show="!grossPrice">
-          <h1 class="text-center"><i class="fas fa-check text-primary"></i> Płatność nie jest wymagana</h1>
-
+          <h1 class="text-center">
+            <i class="fas fa-check text-primary"></i>
+            Płatność nie jest wymagana
+          </h1>
           <div class="d-flex justify-content-center mt-3">
-            <vue-button :disabled="isProcessing" class="btn btn-primary btn-lg">Zapisz i zakończ</vue-button>
+            <vue-button submit :disabled="isProcessing" class="btn btn-primary btn-lg">
+              Zapisz i zakończ
+            </vue-button>
           </div>
         </div>
       </div>
@@ -118,10 +122,10 @@
 
           <div>
             <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-start">
-              <i class="fas fa-angle-left"></i> 
+              <i class="fas fa-angle-left"></i>
               Powrót do ogłoszenia
             </a>
-            <vue-button :disabled="isProcessing" class="btn btn-primary float-end">
+            <vue-button submit :disabled="isProcessing" class="btn btn-primary float-end">
               Zapłać i zapisz
               <i class="fas fa-angle-right"></i>
             </vue-button>
@@ -225,8 +229,8 @@
         city: '{{ firm.city }}',
         vat_id: '{{ firm.vat_id }}',
         country_id: {{ firm.country_id|default('null') }},
-        email: '{{ user('email') }}'
-      }
+        email: '{{ user('email') }}',
+      },
     };
   </script>
 {% endblock %}
