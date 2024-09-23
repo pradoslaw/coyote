@@ -196,7 +196,7 @@ export default {
       required: true,
     },
     employees: {
-      type: Array,
+      type: Object,
       required: true,
     },
     firms: {
