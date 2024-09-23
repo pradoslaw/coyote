@@ -7,37 +7,41 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      name: {
-        type: String,
-        require: true
-      },
-      value: {
-        type: [String, Number, Array]
-      },
-      options: {
-        type: [Object, Array],
-        require: true
-      },
-      placeholder: {
-        type: [String],
-        require: false
-      },
-      isInvalid: {
-        type: Boolean,
-        default: false
-      }
+export default {
+  model: {
+    prop: 'modelValue',
+    event: 'update:modelValue',
+  },
+  props: {
+    name: {
+      type: String,
+      require: true,
     },
-    computed: {
-      valueLocal: {
-        get: function () {
-          return this.value !== undefined ? this.value : null;
-        },
-        set: function (value) {
-          this.$emit('input', value);
-        }
-      }
-    }
-  };
+    modelValue: {
+      type: [String, Number, Array],
+    },
+    options: {
+      type: [Object, Array],
+      require: true,
+    },
+    placeholder: {
+      type: [String],
+      require: false,
+    },
+    isInvalid: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    valueLocal: {
+      get() {
+        return this.modelValue !== undefined ? this.modelValue : null;
+      },
+      set(value) {
+        this.$emit('update:modelValue', value);
+      },
+    },
+  },
+};
 </script>

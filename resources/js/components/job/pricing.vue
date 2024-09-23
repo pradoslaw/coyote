@@ -79,21 +79,20 @@ import {default as mixins} from '../mixins/form';
 export default {
   props: {
     plans: {
-      type: Array
+      type: Array,
     },
-    value: {
-      type: Number
+    modelValue: {
+      type: Number,
     },
     email: {
-      type: String
-    }
+      type: String,
+    },
   },
   methods: {
     changePlan(planId) {
       this.valueLocal = planId;
-    }
+    },
   },
-  mixins: [mixins]
-}
-
+  mixins: [mixins],
+};
 </script>

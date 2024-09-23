@@ -17,7 +17,7 @@ export default {
       type: String,
       require: true,
     },
-    value: {
+    modelValue: {
       type: [String, Number],
     },
     isInvalid: {

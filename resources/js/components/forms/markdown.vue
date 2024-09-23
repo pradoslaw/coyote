@@ -130,7 +130,7 @@ export default {
     paste: pasteDirective('/assets'),
   },
   props: {
-    value: String,
+    modelValue: String,
     tabIndex: {
       type: Number,
       required: false,
@@ -434,7 +434,7 @@ export default {
       }
     },
     showPreview() {
-      axios.post<any>(this.previewUrl, {text: this.value}).then(response => {
+      axios.post<any>(this.previewUrl, {text: this.modelValue}).then(response => {
         this.previewHtml = response.data as string;
         this.$nextTick(() => Prism.highlightAll());
       });
@@ -461,7 +461,7 @@ export default {
     },
   },
   watch: {
-    value(newValue) {
+    modelValue(newValue) {
       if (!newValue) {
         this.previewHtml = '';
       }

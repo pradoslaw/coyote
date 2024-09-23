@@ -11,6 +11,9 @@ export default {
   components: {
     'vue-tinymce': VueTinyMce,
   },
+  props: {
+    modelValue: {type: String},
+  },
   data() {
     return {
       options: {

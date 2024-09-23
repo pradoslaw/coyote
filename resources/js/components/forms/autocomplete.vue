@@ -34,7 +34,7 @@ export default {
   components: {'vue-dropdown': VueDropdown, 'vue-error': VueError},
   props: {
     placeholder: {type: String},
-    value: {type: String, default: ''},
+    modelValue: {type: String, default: ''},
     tabindex: {type: Number},
     errors: {type: Array, default: () => []},
   },
@@ -53,7 +53,7 @@ export default {
       this.toggleDropdown(false);
     },
     changeItem() {
-      this.$emit('select', this.$refs.dropdown.getSelected() ?? {name: this.value});
+      this.$emit('select', this.$refs.dropdown.getSelected() ?? {name: this.modelValue});
       this.toggleDropdown(false);
     },
     toggleDropdown(flag) {
@@ -64,7 +64,7 @@ export default {
     },
   },
   watch: {
-    valueLocal: function (newValue, oldValue) {
+    valueLocal(newValue, oldValue) {
       if (newValue && oldValue && newValue.toLowerCase() === oldValue.toLowerCase()) {
         return;
       }

@@ -19,7 +19,7 @@ export default {
   name: 'VueProgressBar',
   mixins: [mixin],
   props: {
-    value: {
+    modelValue: {
       type: Number,
       required: true,
     },

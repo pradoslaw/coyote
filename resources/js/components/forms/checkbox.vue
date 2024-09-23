@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import {default as mixins} from '../mixins/form';
+import {default as mixins} from '../mixins/form.js';
 
 export default {
   props: {
@@ -11,7 +11,7 @@ export default {
       type: String,
       require: true,
     },
-    value: {
+    modelValue: {
       type: [String, Number, Boolean],
     },
     checkedValue: {

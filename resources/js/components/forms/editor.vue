@@ -9,8 +9,12 @@ import store from "../../store/index";
 
 export default {
   name: 'VueEditor',
+  model: {
+    prop: 'modelValue',
+    event: 'update:modelValue',
+  },
   props: {
-    value: String,
+    modelValue: String,
     placeholder: String,
     autocompleteSource: Function,
     emojiUrl: Function,
@@ -25,7 +29,7 @@ export default {
     this.editor = new Editor4Play(
       this.$refs.view,
       this.placeholder,
-      this.value,
+      this.modelValue,
       {onChange: this.input, onSubmit: this.submit, onCancel: this.cancel, onStateChange: this.state},
       username => this.autocompleteSource(username),
       'Brak kolorowania',
@@ -67,7 +71,7 @@ export default {
   },
   methods: {
     input(content: string) {
-      this.$emit('input', content);
+      this.$emit('update:modelValue', content);
     },
     submit(content: string) {
       this.$emit('submit', content);
@@ -210,7 +214,7 @@ export default {
     },
   },
   watch: {
-    value(newValue: string, oldValue: string) {
+    modelValue(newValue: string, oldValue: string) {
       if (newValue === '') {
         this.editor!.clear();
       }

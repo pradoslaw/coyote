@@ -8,7 +8,7 @@
       :disabled="disabled"
       rows="1"
 
-      :value="value"
+      :value="modelValue"
       @input="input"
 
       v-paste:success="allowPaste ? paste : null"
@@ -38,8 +38,12 @@ import VueDropdown from "./forms/dropdown.vue";
 
 export default {
   store,
+  model: {
+    prop: 'modelValue',
+    event: 'update:modelValue',
+  },
   props: {
-    value: {type: String},
+    modelValue: {type: String},
     source: {type: String, required: true},
     maxLength: {type: Number},
     placeholder: {type: String},
@@ -65,7 +69,7 @@ export default {
   },
   methods: {
     input(event: InputEvent): void {
-      this.$emit('input', event.target.value);
+      this.$emit('update:modelValue', event.target.value);
     },
     focus(): void {
       this.$refs.textarea.focus();

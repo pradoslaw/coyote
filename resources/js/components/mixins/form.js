@@ -1,13 +1,16 @@
 export default {
+  model: {
+    prop: 'modelValue',
+    event: 'update:modelValue',
+  },
   computed: {
     valueLocal: {
-      get: function () {
-        return this.value;
+      get() {
+        return this.modelValue;
       },
-      set: function (value) {
-        this.$emit('update:value', value); // deprecated
-        this.$emit('input', value);
-      }
-    }
-  }
+      set(value) {
+        this.$emit('update:modelValue', value);
+      },
+    },
+  },
 };
