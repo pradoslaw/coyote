@@ -7,7 +7,7 @@ export function render(component: any, props: object = {}): Component {
 
   return new Component(
     mount(component, {propsData: props, localVue}),
-    mount({template: '<vue-notifications/>'}, {localVue}),
+    mount({template: '<vue-library-notifications/>'}, {localVue}),
   );
 }
 
@@ -15,7 +15,7 @@ function vueWithNotifications(): VueConstructor<Vue> {
   Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
   const vue: VueConstructor<Vue> = createLocalVue();
-  vue.use(VueNotifications, {componentName: 'vue-notifications'});
+  vue.use(VueNotifications, {componentName: 'vue-library-notifications'});
   return vue;
 }
 

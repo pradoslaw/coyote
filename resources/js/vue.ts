@@ -13,7 +13,12 @@ export function createVueApp(name: string, selector: string, component: object):
 }
 
 export function createVueAppNotifications(name: string, selector: string, component: object): void {
-  Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+  Vue.use(VueNotifications, {componentName: 'vue-library-notifications'});
+  Vue.component('vue-notifications', {
+    template: `
+      <vue-library-notifications position="bottom right"/>
+    `
+  })
   new Vue({...component, name, el: selector});
 }
 

@@ -73,8 +73,7 @@
         </div>
 
         <vue-pagination :current-page="hits.meta.current_page" :total-pages="Math.min(pageLimit, hits.meta.last_page)" @change="setPage"></vue-pagination>
-
-        <vue-notifications position="bottom right"/>
+        <vue-notifications></vue-notifications>
       </div>
     </div>
   </div>
