@@ -55,24 +55,24 @@ window.addEventListener('load', () => {
       };
     },
     methods: {
-      experimentOpt(optIn: ExperimentOpt): void {
+      experimentOpt(this: Data, optIn: ExperimentOpt): void {
         this.experiment.optedIn = optIn;
         experimentChangeStyle(optIn);
       },
       experimentPreview(opt: ExperimentOpt): void {
         storeSurveyPreview(opt);
       },
-      change(state: State): void {
+      change(this: Data, state: State): void {
         storeSurveyState(state);
         this.state = state;
       },
-      setTheme(dark: boolean): void {
+      setTheme(this: Data, dark: boolean): void {
         const theme = dark ? trial.dark : trial.light;
         this.experiment.imageLegacy = theme.imageLegacy;
         this.experiment.imageModern = theme.imageModern;
       },
-      badgeCollapse(long: boolean): void {
-        this.$data.badgeLong = long;
+      badgeCollapse(this: Vue, long: boolean): void {
+        this.$data['badgeLong'] = long;
         storeSurveyBadgeState(long);
       },
     },
