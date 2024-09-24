@@ -1,4 +1,4 @@
-import Vue from "vue";
+import {VueInstance} from "../../vue";
 
 export default {
   template: `
@@ -27,10 +27,10 @@ export default {
     </div>
   `,
   methods: {
-    enrollOptIn(this: Vue): void {
+    enrollOptIn(this: VueInstance): void {
       this.$emit('enrollOpt', 'in');
     },
-    enrollOptOut(this: Vue): void {
+    enrollOptOut(this: VueInstance): void {
       this.$emit('enrollOpt', 'out');
     },
   },

@@ -1,4 +1,4 @@
-import Vue from "vue";
+import {VueInstance} from "../vue";
 import VueSurveyBadge from "./steps/badge";
 import VueSurveyEnroll from "./steps/enroll";
 import VueSurveyParticipate, {ExperimentChoice} from "./steps/participate";
@@ -43,33 +43,33 @@ export default {
     </div>
   `,
   methods: {
-    enrollOpt(this: Vue, opt: string): void {
+    enrollOpt(this: VueInstance, opt: string): void {
       if (opt === 'in') {
         this.$emit('enrollOptIn');
       } else {
         this.$emit('enrollOptOut');
       }
     },
-    experimentOpt(this: Vue, opt: ExperimentChoice): void {
+    experimentOpt(this: VueInstance, opt: ExperimentChoice): void {
       if (opt === 'in') {
         this.$emit('experimentOptIn');
       } else {
         this.$emit('experimentOptOut');
       }
     },
-    experimentPreview(this: Vue, opt: ExperimentChoice): void {
+    experimentPreview(this: VueInstance, opt: ExperimentChoice): void {
       this.$emit('experimentPreview', opt);
     },
-    experimentClose(this: Vue): void {
+    experimentClose(this: VueInstance): void {
       this.$emit('experimentClose');
     },
-    badgeEngage(this: Vue): void {
+    badgeEngage(this: VueInstance): void {
       this.$emit('badgeEngage');
     },
-    badgeNotice(this: Vue): void {
+    badgeNotice(this: VueInstance): void {
       this.$emit('badgeNotice');
     },
-    badgeCollapse(this: Vue, long: boolean): void {
+    badgeCollapse(this: VueInstance, long: boolean): void {
       this.$emit('badgeCollapse', long);
     },
   },

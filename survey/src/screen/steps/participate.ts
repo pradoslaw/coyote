@@ -1,7 +1,7 @@
-import Vue from "vue";
+import {VueInstance} from "../../vue";
 import VueToggle, {type ToggleValue} from "../toggle";
 
-interface Participate extends Vue, Data {
+interface Participate extends VueInstance, Data {
   experiment: Experiment;
   optedIn: boolean;
   choice: ExperimentChoice;

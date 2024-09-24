@@ -1,5 +1,6 @@
 import {describe, test} from '@jest/globals';
 import Vue from "vue";
+import {VueInstance} from "../src/vue";
 import {assertEquals, assertFalse, assertMatch, assertTrue} from "./assert";
 import {render} from "./render";
 
@@ -64,7 +65,7 @@ describe('render', () => {
     test('emitted', () => {
       const emitter = render({
         template: '<div/>',
-        created(this: Vue): void {
+        created(this: VueInstance): void {
           this.$emit('input');
         },
       });
@@ -75,7 +76,7 @@ describe('render', () => {
   test('inspect emitted value', () => {
     const emitter = render({
       template: '<div/>',
-      created(this: Vue): void {
+      created(this: VueInstance): void {
         this.$emit('input', 'foo');
       },
     });

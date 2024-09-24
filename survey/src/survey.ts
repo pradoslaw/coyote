@@ -6,6 +6,7 @@ import {type Experiment} from "./screen/screen";
 import {ExperimentOpt} from "./screen/steps/participate";
 import SurveyTally, {type State} from "./tally";
 import {trial} from "./trial";
+import {VueInstance} from "./vue";
 
 window.addEventListener('load', () => {
   const darkTheme: boolean = document.body.classList.contains('theme-dark');
@@ -71,7 +72,7 @@ window.addEventListener('load', () => {
         this.experiment.imageLegacy = theme.imageLegacy;
         this.experiment.imageModern = theme.imageModern;
       },
-      badgeCollapse(this: Vue, long: boolean): void {
+      badgeCollapse(this: VueInstance, long: boolean): void {
         this.$data['badgeLong'] = long;
         storeSurveyBadgeState(long);
       },
@@ -81,6 +82,7 @@ window.addEventListener('load', () => {
   store.subscribe((mutation, state) => {
     if (mutation.type === 'theme/CHANGE_THEME') {
       const dark = state.theme.darkTheme;
+      // @ts-ignore
       app.setTheme(dark);
     }
   });

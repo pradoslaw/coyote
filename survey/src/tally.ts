@@ -1,7 +1,7 @@
-import Vue from "vue";
 import {notify} from "../../resources/js/toast";
 import SurveyScreen, {Experiment, type Screen} from "./screen/screen";
 import {ExperimentChoice} from "./screen/steps/participate";
+import {VueInstance} from "./vue";
 
 export {type Screen};
 
@@ -13,7 +13,7 @@ export type State =
   | 'survey-instructed'
   | 'survey-gone';
 
-interface Instance extends Vue, Data {
+interface Instance extends VueInstance, Data {
   state: State;
   experiment: Experiment;
   changeSurveyState(state: State): void;
@@ -71,7 +71,7 @@ export default {
         this.notifyExperiment('Przywrócono pierwotną wersję.', 'fa-toggle-off');
       }
     },
-    experimentPreview(this: Vue, choice: ExperimentChoice): void {
+    experimentPreview(this: VueInstance, choice: ExperimentChoice): void {
       this.$emit('experimentPreview', choice === 'out' ? 'legacy' : 'modern');
     },
     experimentClose(this: Instance): void {
@@ -88,10 +88,10 @@ export default {
       this.screen = 'badge';
       this.changeSurveyState('survey-instructed');
     },
-    badgeCollapse(this: Vue, long: boolean): void {
+    badgeCollapse(this: VueInstance, long: boolean): void {
       this.$emit('badgeCollapse', long);
     },
-    changeSurveyState(this: Vue, state: State): void {
+    changeSurveyState(this: VueInstance, state: State): void {
       this.$emit('change', state);
     },
     notifyEnroll(this: Instance, text: string, fontAwesomeIcon: string): void {

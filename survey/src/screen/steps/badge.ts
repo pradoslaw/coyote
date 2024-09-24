@@ -1,4 +1,4 @@
-import Vue from "vue";
+import {VueInstance} from "../../vue";
 
 export default {
   props: {
@@ -32,13 +32,13 @@ export default {
     </div>
   `,
   methods: {
-    engage(this: Vue): void {
+    engage(this: VueInstance): void {
       this.$emit('engage');
     },
-    notice(this: Vue): void {
+    notice(this: VueInstance): void {
       this.$emit('notice');
     },
-    collapse(this: Vue): void {
+    collapse(this: VueInstance): void {
       this.$emit('collapse', !this.$props.long);
     },
   },
