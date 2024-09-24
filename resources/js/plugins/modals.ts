@@ -9,6 +9,7 @@ interface ModalOptions {
 
 export function confirmModal(options: ModalOptions): Promise<void> {
   const modalRef = Math.random().toString(36).substring(5);
+  let domElement;
 
   const ModalWrapper = {
     data: () => ({...options, modalRef}),
@@ -17,7 +18,7 @@ export function confirmModal(options: ModalOptions): Promise<void> {
     },
     components: {'vue-modal': VueModal},
     mounted() {
-      (this.$refs[modalRef] as VueModal).open();
+      this.$refs[modalRef].open();
     },
     methods: {
       resolve(): void {
@@ -25,9 +26,9 @@ export function confirmModal(options: ModalOptions): Promise<void> {
         this.destroy();
       },
       destroy(): void {
-        (this.$refs[modalRef] as VueModal).close();
+        this.$refs[modalRef].close();
         this.$destroy();
-        this.$el.parentNode!.removeChild(this.$el);
+        domElement.parentNode!.removeChild(domElement);
       },
     },
     template: `
@@ -44,6 +45,7 @@ export function confirmModal(options: ModalOptions): Promise<void> {
 
   return new Promise(resolve => {
     const wrapper = new (Vue.extend(ModalWrapper))({propsData: {resolver: resolve}}).$mount();
-    document.body.append(wrapper.$el);
+    domElement = wrapper.$el;
+    document.body.append(domElement);
   });
 }
