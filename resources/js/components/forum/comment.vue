@@ -16,7 +16,8 @@
         <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="img-thumbnail media-object i-35 flex-grow-0 flex-shrink-0"/>
         <div class="ms-2">
           <div>
-            <vue-username :user="comment.user" :owner="comment.user.id === topic.owner_id"></vue-username>
+            <vue-username :user="comment.user" :owner="comment.user.id === topic.owner_id"/>
+            {{ ' ' }}
             <a :href="comment.url">
               <vue-timeago :datetime="comment.created_at" class="text-muted small"/>
             </a>

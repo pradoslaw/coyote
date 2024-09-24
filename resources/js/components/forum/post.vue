@@ -26,16 +26,17 @@
         </div>
 
         <div class="col-10 text-truncate small">
-          <i v-if="post.is_read" class="far fa-file"></i>
-          <i v-else title="Nowy post" class="not-read"></i>
-
+          <i v-if="post.is_read" class="far fa-file"/>
+          <i v-else title="Nowy post" class="not-read"/>
+          {{ ' ' }}
           <a :href="post.url" class="small text-body">
             <vue-timeago :datetime="post.created_at"/>
           </a>
-
+          {{ ' ' }}
           <a v-if="post.ip" :href="`/Adm/Stream?ip=${post.ip}`" :title="post.ip" class="text-muted small">
             {{ post.ip }}
           </a>
+          {{ ' ' }}
           <small v-if="post.browser" :title="post.browser" class="text-muted">{{ post.browser }}</small>
         </div>
       </div>
@@ -177,8 +178,9 @@
               </a>
               edytowany {{ post.edit_count }}x,
               ostatnio:
-              <vue-username :user="post.editor"></vue-username>
+              <vue-username :user="post.editor"/>
             </strong>
+            {{ ' ' }}
             <vue-timeago :datetime="post.updated_at"/>
           </div>
 

@@ -41,6 +41,7 @@
                     <i v-if="children.is_read" class="far fa-file"></i>
                     <i v-else class="not-read" title="Nowe posty w tej kategorii"></i>
                     <a :href="children.url">{{ children.name }}</a>
+                    {{ ' ' }}
                   </li>
                 </ul>
               </div>
@@ -50,17 +51,21 @@
               <ul class="list-inline mb-0 mt-1">
                 <li class="list-inline-item">
                   <strong>{{ number(category.topics) }}</strong>
+                  {{ ' ' }}
                   <small class="text-muted text-wide-spacing">{{ declination(category.topics, ['wątek', 'wątków', 'wątków']) }}</small>
                 </li>
                 <li class="list-inline-item">
                   <strong>{{ number(category.posts) }}</strong>
+                  {{ ' ' }}
                   <small class="text-muted text-wide-spacing">{{ declination(category.posts, ['post', 'postów', 'postów']) }}</small>
                 </li>
               </ul>
             </div>
 
             <div v-else class="col-12 col-lg-7 text-center">
-              Liczba przekierowań: {{ category.redirects }}
+              Liczba przekierowań:
+              {{ ' ' }}
+              {{ category.redirects }}
             </div>
 
             <div v-if="!category.is_redirected" class="col-12 col-lg-5 position-relative">

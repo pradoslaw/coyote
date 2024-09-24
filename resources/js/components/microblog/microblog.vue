@@ -106,32 +106,28 @@
           <div class="microblog-actions">
             <a @click="checkAuth(vote, microblog)" @mouseenter.once="loadVoters(microblog)" :aria-label="voters" href="javascript:" class="btn btn-gradient" data-balloon-pos="up"
                data-balloon-break>
-              <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
-
+              <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"/>
+              {{ ' ' }}
               {{ microblog.votes }} {{ declination(microblog.votes, ['głos', 'głosy', 'głosów']) }}
             </a>
-
             <a @click="checkAuth(subscribe, microblog)" href="javascript:" class="btn btn-gradient" title="Wł/Wył obserwowanie tego wpisu">
-              <i :class="{'fas text-primary': microblog.is_subscribed, 'far': !microblog.is_subscribed}" class="fa-fw fa-bell"></i>
-
+              <i :class="{'fas text-primary': microblog.is_subscribed, 'far': !microblog.is_subscribed}" class="fa-fw fa-bell"/>
+              {{ ' ' }}
               <span class="d-none d-sm-inline">Obserwuj</span>
             </a>
-
             <a @click="checkAuth(reply, microblog.user)" href="javascript:" class="btn btn-gradient" title="Odpowiedz na ten wpis">
-              <i class="far fa-fw fa-comment"></i>
-
+              <i class="far fa-fw fa-comment"/>
+              {{ ' ' }}
               <span class="d-none d-sm-inline">Komentuj</span>
             </a>
-
             <a @click.prevent="copy" :href="microblog.url" class="btn btn-gradient" title="Kopiuj link do schowka">
-              <i class="fas fa-share-nodes"></i>
-
+              <i class="fas fa-share-nodes"/>
+              {{ ' ' }}
               <span class="d-none d-sm-inline">Udostępnij</span>
             </a>
-
             <a v-if="isAuthorized" href="javascript:" :data-metadata="microblog.metadata" :data-url="microblog.url" class="btn btn-gradient" title="Zgłoś ten wpis">
-              <i class="fas fa-flag"></i>
-
+              <i class="fas fa-flag"/>
+              {{ ' ' }}
               <span class="d-none d-sm-inline">Zgłoś</span>
             </a>
           </div>
@@ -174,10 +170,10 @@ import {mapActions, mapGetters, mapState} from "vuex";
 
 import IsImage from '../../libs/assets';
 import useBrackets from "../../libs/prompt";
-import {notify} from "../../toast";
 import {copyToClipboard} from '../../plugins/clipboard';
 import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from "../../store";
+import {notify} from "../../toast";
 import {User} from '../../types/models';
 import VueAvatar from '../avatar.vue';
 import VueFlag from '../flags/flag.vue';

@@ -124,6 +124,7 @@
         <template v-if="post.id">Zapisz</template>
         <template v-else>Dodaj post</template>
       </vue-button>
+      {{ ' ' }}
       <button v-if="post.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-danger me-2">
         Anuluj
       </button>

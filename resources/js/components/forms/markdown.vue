@@ -61,6 +61,7 @@
         <a v-else :aria-label="uploadTooltip" tabindex="-1" data-balloon-length="large" data-balloon-pos="up-left"
            data-balloon-nofocus href="javascript:" class="small text-muted" @click="chooseFile">
           <i class="far fa-image"/>
+          {{ ' ' }}
           <span class="d-none d-sm-inline">Kliknij, aby dodać załącznik lub wklej ze schowka.</span>
         </a>
 

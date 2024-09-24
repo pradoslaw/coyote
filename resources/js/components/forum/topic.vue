@@ -14,10 +14,12 @@
               <a v-if="isAuthorized" @click="subscribe(topic)" href="javascript:" title="Kliknij aby wł/wył obserwowanie wątku">
                 <i class="fa-solid fa-bell fa-fw on" v-if="topic.is_subscribed"/>
                 <i class="fa-regular fa-bell fa-fw" v-else/>
+                {{ ' ' }}
               </a>
-
-              <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}`"><i class="fas fa-check"></i></a>
-
+              <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}`">
+                <i class="fas fa-check"/>
+                {{ ' ' }}
+              </a>
               <a :href="getUrl()" :class="{'topic-unread': !topic.is_read}">{{ topic.title }}</a>
               <small v-if="showCategoryName" class="d-inline d-xl-none">
                 w
@@ -25,9 +27,9 @@
                   {{ topic.forum.name }}
                 </a>
               </small>
-
               <a v-if="flag != null" :href="flag" title="Przejdź do raportowanego posta">
-                <i class="fa fa-fire"></i>
+                {{ ' ' }}
+                <i class="fa fa-fire"/>
               </a>
             </h5>
 
