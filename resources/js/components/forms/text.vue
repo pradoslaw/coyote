@@ -4,6 +4,7 @@
     :name="name"
     v-model="valueLocal"
     class="form-control" :class="{'is-invalid': isInvalid}"
+    ref="input"
     @keydown.enter="accept"
     @blur="leave"/>
 </template>
@@ -37,6 +38,9 @@ export default {
     },
     leave() {
       this.$emit('leave');
+    },
+    focus() {
+      this.$refs.input.focus();
     },
   },
 };

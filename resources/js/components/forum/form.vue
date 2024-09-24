@@ -258,7 +258,7 @@ export default {
     },
     addItem() {
       store.commit('poll/addItem');
-      nextTick(() => this.$refs['poll-items'][this.$refs['poll-items'].length - 1].$el.focus());
+      nextTick(() => this.$refs['poll-items'][this.$refs['poll-items'].length - 1].focus());
     },
     async lastPage() {
       if (!this.exists && this.currentPage < this.totalPages) {
