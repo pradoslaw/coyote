@@ -34,14 +34,11 @@ export default {
     changeCollapse(id: number): void {
       this.$set(this.collapse, id, !(!!this.collapse[id]));
     },
-
     containsUserTags(topic: Topic): boolean {
-      if (!topic.tags) {
-        return false;
+      if (topic.tags) {
+        return topic.tags.filter(tag => this.tagNames.includes(tag.name)).length > 0;
       }
-
-      // @ts-ignore
-      return topic.tags.filter(tag => this.tagNames.includes(tag.name)).length > 0;
+      return false;
     },
   },
   computed: {
