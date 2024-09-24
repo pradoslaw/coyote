@@ -1,5 +1,5 @@
-import Vue from "vue";
 import axios from 'axios';
+import Vue from "vue";
 import VueFlagModal from "../components/flags/modal.vue";
 
 function openModal(event) {
@@ -7,9 +7,14 @@ function openModal(event) {
 
   axios.get('/Flag').then(result => {
     const propsData = {url: el.dataset.url, metadata: el.dataset.metadata, types: result.data};
-    const wrapper = new (Vue.extend(VueFlagModal))({propsData}).$mount();
-
-    document.body.append(wrapper.$el);
+    const flagModal = new (Vue.extend(VueFlagModal))({propsData});
+    flagModal.$on('close', () => {
+      flagModal.$destroy();
+      document.body.removeChild(domElement);
+    });
+    const wrapper = flagModal.$mount();
+    let domElement = wrapper.$el;
+    document.body.append(domElement);
   });
 
   return false;

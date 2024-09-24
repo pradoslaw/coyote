@@ -71,8 +71,7 @@ export default {
   },
   methods: {
     closeModal() {
-      this.$destroy();
-      this.$el.parentNode!.removeChild(this.$el);
+      this.$emit('close');
     },
     sendReport() {
       this.isProcessing = true;
