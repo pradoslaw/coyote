@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const {WebpackManifestPlugin} = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const {VueLoaderPlugin} = require('vue-loader');
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 const exec = require('child_process').exec;
 
@@ -109,7 +109,7 @@ module.exports = {
     mainFields: ['main', 'module'],
     extensions: ['.ts', '.tsx', '.js', '.vue'],
     alias: {
-      vue: 'vue/dist/vue.esm.js',
+      vue: 'vue/dist/vue.esm-bundler',
     },
   },
   context: path.join(__dirname, 'resources'),
@@ -124,6 +124,11 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
+    new webpack.DefinePlugin({
+      __VUE_OPTIONS_API__: true, // notifications library relies on optionsApi
+      __VUE_PROD_DEVTOOLS__: false,
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
+    }),
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: ['js/*.*', 'css/*.*', '!*/.gitignore'],
     }),

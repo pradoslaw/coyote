@@ -1,26 +1,42 @@
 <template>
-  <vue-lightbox :items="lightboxImages" :index="index" @close="close"/>
+  <vue-easy-lightbox
+    :visible="visible"
+    :imgs="lightboxImages"
+    :index="index"
+    :move-disabled="true"
+    :rotate-disabled="true"
+    :zoom-disabled="true"
+    :pinch-disabled="true"
+    :dblclick-disabled="true"
+    :mask-closable="false"
+    @hide="close"
+  >
+    <template v-slot:toolbar/>
+  </vue-easy-lightbox>
 </template>
 
-<script>
-import VueLightbox from 'vue-cool-lightbox';
+<script lang="ts">
+import VueEasyLightbox from 'vue-easy-lightbox';
 
 export default {
-  components: {
-    'vue-lightbox': VueLightbox,
-  },
   props: {
     images: {type: Array, required: true},
     index: {type: [Number, null]},
   },
+  components: {
+    'vue-easy-lightbox': VueEasyLightbox,
+  },
   methods: {
-    close() {
+    close(): void {
       this.$emit('close');
     },
   },
   computed: {
-    lightboxImages() {
-      return this.$props.images.map(image => ({src: image.url, thumb: image.thumbnail}));
+    visible(): boolean {
+      return this.$props.index !== null;
+    },
+    lightboxImages(): object[] {
+      return this.$props.images.map(image => ({src: image.url}));
     },
   },
 };
