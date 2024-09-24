@@ -1,5 +1,11 @@
 <template>
-  <ol v-click-away="hideDropdown" ref="dropdown" class="auto-complete" v-show="isDropdownVisible">
+  <ol
+    v-click-away="hideDropdown"
+    ref="dropdown"
+    class="auto-complete"
+    v-show="isDropdownVisible"
+    :style="containerStyle"
+  >
     <li v-for="(item, index) in items" :key="index" :class="{'hover': index === selectedIndex}" @click="selectItem" @mouseover="hoverItem(index)">
       <slot name="item" :item="item">
         <vue-avatar :photo="item.photo" :name="item.name" class="d-inline-block"/>
@@ -26,12 +32,26 @@ export default {
       type: Number,
       default: 0,
     },
+    rect: {
+      type: Object,
+    },
   },
   data() {
     return {
       isDropdownVisible: false,
       selectedIndex: this.defaultIndex,
     };
+  },
+  computed: {
+    containerStyle() {
+      if (this.$props.rect) {
+        return {
+          top: this.$props.rect.top + 'px',
+          left: this.$props.rect.left + 'px',
+        };
+      }
+      return {};
+    },
   },
   methods: {
     goDown() {

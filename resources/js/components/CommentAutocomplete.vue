@@ -23,7 +23,7 @@
       ref="textarea"
     />
     <slot/>
-    <vue-dropdown ref="dropdown" :items="items" @select="selectItem"/>
+    <vue-dropdown ref="dropdown" :items="items" @select="selectItem" :rect="rect"/>
   </div>
 </template>
 
@@ -60,6 +60,7 @@ export default {
   data() {
     return {
       items: [],
+      rect: {left: 0, top: 0},
     };
   },
   computed: {
@@ -159,21 +160,15 @@ export default {
 
         i--;
       }
-
       return result;
     },
-
     lookupName(name: string): void {
       store.dispatch('prompt/request', {source: this.source, value: name}).then(items => {
         this.items = items;
-
-        const rect = new Textarea(this.$refs.textarea).getCaretCoordinates();
-
-        this.$refs['dropdown'].$el.style.top = rect.top + 'px';
-        this.$refs['dropdown'].$el.style.left = rect.left + 'px';
+        const {top, left} = new Textarea(this.$refs.textarea).getCaretCoordinates();
+        this.rect = {top, left};
       });
     },
-
     applySelected(text: string, startIndex: number, caretPosition: number): void {
       if (!text.length) {
         this.items = [];
@@ -182,7 +177,7 @@ export default {
 
       const append = useBrackets(text) + (startIndex === 1 ? ': ' : ' '); // add space at the end
 
-      this.$refs.textarea.value = this.$refs.textarea.value.substr(0, startIndex) + append + this.$refs.textarea.value.substring(caretPosition);
+      this.$refs.textarea.value = this.$refs.textarea.value.substring(0, startIndex) + append + this.$refs.textarea.value.substring(caretPosition);
       this.$refs.textarea.focus(); // when user clicks the item, we must restore focus on input
       this.$refs.textarea.dispatchEvent(new Event('input', {'bubbles': true}));
       this.items = []; // setting to empty array will trigger dropdown watcher
