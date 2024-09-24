@@ -456,9 +456,6 @@ export default {
       this.buttons.indentLess.can = state.canIndent;
       this.buttons.insertEmoji.can = state.canEmoji;
     },
-    errorNotification(errorMessage) {
-      this.$notify({type: 'error', text: errorMessage});
-    },
   },
   watch: {
     modelValue(newValue) {

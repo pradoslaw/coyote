@@ -6,6 +6,7 @@ import VueCheckbox from '../../components/forms/checkbox.vue';
 import VueFormGroup from '../../components/forms/form-group.vue';
 import VueSelect from '../../components/forms/select.vue';
 import VueText from '../../components/forms/text.vue';
+import {notify} from '../../toast';
 
 const VAT_RATE = 1.23;
 
@@ -69,7 +70,7 @@ new Vue({
         },
       }).then(result => {
         if (result.error) {
-          this.$notify({type: 'error', text: result.error.message});
+          notify({type: 'error', text: result.error.message});
           this.isProcessing = false;
         } else {
           // The payment has been processed!
@@ -94,7 +95,7 @@ new Vue({
       );
 
       if (error) {
-        this.$notify({type: 'error', text: error});
+        notify({type: 'error', text: error});
         this.isProcessing = false;
       }
     },

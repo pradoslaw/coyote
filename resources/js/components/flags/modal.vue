@@ -32,6 +32,7 @@
 
 <script lang="ts">
 import axios from 'axios';
+import {notify} from "../../toast";
 import VueRadio from '../forms/radio.vue';
 import VueModal from '../modal.vue';
 
@@ -83,7 +84,7 @@ export default {
         text: this.text,
       })
         .then(() => {
-          this.$notify({type: 'success', text: 'Dziękujemy za wysłanie raportu.'});
+          notify({type: 'success', text: 'Dziękujemy za wysłanie raportu.'});
           this.closeModal();
         })
         .finally(() => this.isProcessing = false);

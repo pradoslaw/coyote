@@ -7,6 +7,7 @@ import VuePagination from "../../components/pagination.vue";
 import {PostCommentSaved, PostSaved, PostVoted, Subscriber} from "../../libs/live";
 import store from "../../store/index";
 import {Post} from "../../types/models";
+import {notify} from "../../toast";
 
 export default {
   name: 'Posts',
@@ -88,7 +89,7 @@ export default {
         document.getElementById('js-submit-form')!.scrollIntoView();
       } else {
         this.markdownRef.appendBlockQuote(username, post.id, post.text);
-        this.$notify({type: 'success', text: 'Cytat został dodany do formularza.'});
+        notify({type: 'success', text: 'Cytat został dodany do formularza.'});
       }
     },
 

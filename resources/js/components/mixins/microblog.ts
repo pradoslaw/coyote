@@ -1,5 +1,6 @@
 import Prism from 'prismjs';
 
+import {notify} from "../../toast";
 import {confirmModal} from "../../plugins/modals";
 import store from "../../store/index";
 import {Microblog, User} from "../../types/models";
@@ -41,8 +42,12 @@ export const MicroblogMixin = {
       })
         .then(() => {
           store.dispatch('user/block', user.id);
-
-          this.$notify({type: 'success', duration: 5000, title: 'Gotowe!', text: '<a href="javascript:" onclick="window.location.reload();">Przeładuj stronę, aby odświeżyć wyniki</a>.'});
+          notify({
+            type: 'success',
+            duration: 5000,
+            title: 'Gotowe!',
+            text: '<a href="javascript:" onclick="window.location.reload();">Przeładuj stronę, aby odświeżyć wyniki</a>.',
+          });
         });
     },
     splice(users?: string[]): null | string {

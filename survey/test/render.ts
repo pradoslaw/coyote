@@ -12,6 +12,8 @@ export function render(component: any, props: object = {}): Component {
 }
 
 function vueWithNotifications(): VueConstructor<Vue> {
+  Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+
   const vue: VueConstructor<Vue> = createLocalVue();
   vue.use(VueNotifications, {componentName: 'vue-notifications'});
   return vue;

@@ -1,4 +1,5 @@
 import declination from '../../libs/declination';
+import {notify} from '../../toast';
 
 export default {
   directives: {
@@ -35,10 +36,8 @@ export default {
 
     checkAuth(cb, ...args) {
       if (!this.isAuthorized) {
-        this.$notify({
+        notify({
           type: 'error',
-          // @ts-ignore
-          width: '400px',
           title: 'Logowanie wymagane',
           text: '<a href="/Login">Zaloguj się</a>, aby skorzystać z tej funkcjonalności.',
         });

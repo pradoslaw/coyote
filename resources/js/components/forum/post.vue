@@ -315,6 +315,7 @@ import pl from 'date-fns/locale/pl';
 import Vue from 'vue';
 import {mapActions, mapGetters, mapState} from "vuex";
 
+import {notify} from "../../toast";
 import {copyToClipboard} from '../../plugins/clipboard';
 import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
@@ -389,9 +390,9 @@ export default {
     },
     copy(text: string): void {
       if (copyToClipboard(text)) {
-        this.$notify({type: 'success', text: 'Skopiowano link do schowka.'});
+        notify({type: 'success', text: 'Skopiowano link do schowka.'});
       } else {
-        this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
+        notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
       }
     },
     edit() {

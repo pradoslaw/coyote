@@ -174,6 +174,7 @@ import {mapActions, mapGetters, mapState} from "vuex";
 
 import IsImage from '../../libs/assets';
 import useBrackets from "../../libs/prompt";
+import {notify} from "../../toast";
 import {copyToClipboard} from '../../plugins/clipboard';
 import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from "../../store";
@@ -258,9 +259,9 @@ export default {
 
     copy() {
       if (copyToClipboard(this.microblog.url)) {
-        this.$notify({type: 'success', text: 'Link skopiowany do schowka.'});
+        notify({type: 'success', text: 'Link skopiowany do schowka.'});
       } else {
-        this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
+        notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
       }
     },
   },

@@ -9,6 +9,7 @@ import {default as SkillsMixin} from "../components/mixins/skills.js";
 import VueTags from "../components/tags.vue";
 import {confirmModal} from "../plugins/modals";
 import store from "../store/index";
+import {notify} from '../toast';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
@@ -33,7 +34,7 @@ new Vue({
         okLabel: 'Tak, zablokuj',
       })
         .then(() => store.dispatch('user/block', this.user.id))
-        .then(() => this.$notify({type: 'success', duration: 5000, title: 'Gotowe!', text: 'Użytkownik został zablokowany.'}));
+        .then(() => notify({type: 'success', duration: 5000, title: 'Gotowe!', text: 'Użytkownik został zablokowany.'}));
     },
     ...mapActions('user', ['unblock']),
   },

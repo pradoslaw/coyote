@@ -1,4 +1,5 @@
 import Vue from "vue";
+import {notify} from "../../resources/js/toast";
 import SurveyScreen, {Experiment, type Screen} from "./screen/screen";
 import {ExperimentChoice} from "./screen/steps/participate";
 
@@ -100,8 +101,8 @@ export default {
       this.notify(this.experiment.title, text, fontAwesomeIcon);
     },
     notify(this: Instance, title: string, text: string, fontAwesomeIcon: string): void {
-      this.$notify({clean: true});
-      this.$notify({
+      notify({clean: true});
+      notify({
         type: 'success',
         title,
         text: `<i class="fa-solid ${fontAwesomeIcon}"></i> ` + text,
