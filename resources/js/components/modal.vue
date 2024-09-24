@@ -1,5 +1,13 @@
 <template>
-  <div tabindex="-1" class="modal fade background-darken" role="dialog" @click.self="close()" @keyup.esc="close()" v-show="isOpen" :class="{'d-block': isOpen, 'show': isOpen}">
+  <div tabindex="-1"
+       class="modal fade background-darken"
+       role="dialog"
+       @click.self="close()"
+       @keyup.esc="close()"
+       v-show="isOpen"
+       :class="{'d-block': isOpen, 'show': isOpen}"
+       ref="container"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -39,14 +47,9 @@ export default {
     open() {
       this.isOpen = true;
       nextTick(() => {
-        // firefox hack: set focus to make Esc button works
-        (this.$el as HTMLElement).focus();
-
+        this.$refs['container'].focus(); // firefox hack: set focus to make Esc button works
         this.bodyOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
-
-        // set focus on any first element
-        (this.$el.querySelectorAll('select,input')[0] as HTMLInputElement)?.focus();
       });
     },
     close() {
