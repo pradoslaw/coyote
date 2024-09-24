@@ -1,6 +1,6 @@
 <template>
   <div :class="{'is-invalid': isInvalid}" class="editor">
-    <vue-tabs @click="switchTab" :items="tabs" :current-tab="tabs.indexOf(currentTab)" type="pills" class="mb-2">
+    <vue-tabs @change="switchTab" :items="tabs" :current-tab="tabs.indexOf(currentTab)" type="pills" class="mb-2">
       <div v-if="isContent" class="btn-toolbar ms-auto">
         <div class="btn-group d-inline me-2 ms-2 mt-1" role="group" aria-label="...">
           <button
