@@ -34,9 +34,9 @@ describe('render', () => {
 
   test('find classes by selector', async () => {
     const component = render({template: '<a class="foo bar"/>'});
-    assertEquals(component.classesOf('a'), ['foo','bar']);
+    assertEquals(component.classesOf('a'), ['foo', 'bar']);
   });
-  
+
   test('find html by selector', async () => {
     const component = render({template: '<div>foo<p>bar</p></div>'});
     assertEquals(component.innerHtml('div'), 'foo<p>bar</p>');
