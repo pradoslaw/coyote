@@ -1,9 +1,9 @@
 import Prism from "prismjs";
-import Vue from 'vue';
 
 import {getPost, getPostComment} from '../api/posts';
 import store from '../store';
 import {Microblog, MicroblogVoters, Post, PostComment, PostVoters} from "../types/models";
+import {nextTick} from "../vue";
 
 import {default as ws} from "./realtime";
 import Channel from "./websocket/channel";
@@ -113,7 +113,7 @@ export class PostSaved implements Observer {
       getPost(payload.id).then(({data}) => {
         store.commit(`posts/add`, data);
 
-        Vue.nextTick(() => document.getElementById(`id${payload.id}`)!.addEventListener('mouseover', () => store.dispatch('topics/mark', topic), {once: true}));
+        nextTick(() => document.getElementById(`id${payload.id}`)!.addEventListener('mouseover', () => store.dispatch('topics/mark', topic), {once: true}));
       });
 
       return;
@@ -150,7 +150,7 @@ export class Subscriber {
 
       observer.update(payload);
 
-      Vue.nextTick(() => Prism.highlightAll());
+      nextTick(() => Prism.highlightAll());
     });
   }
 }

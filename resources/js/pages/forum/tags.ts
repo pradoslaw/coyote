@@ -1,5 +1,6 @@
 import axios from "axios";
 import VueButton from "../../components/forms/button.vue";
+import {nextTick} from "../../vue";
 
 export default {
   delimiters: ['${', '}'],
@@ -27,7 +28,7 @@ export default {
       this.isEditing = !this.isEditing;
 
       if (this.isEditing) {
-        this.$nextTick(() => (this.$refs.input as HTMLInputElement).focus());
+        nextTick(() => (this.$refs.input as HTMLInputElement).focus());
       }
     },
   },

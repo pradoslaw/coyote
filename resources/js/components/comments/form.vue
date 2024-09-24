@@ -30,6 +30,7 @@ import {mapState} from 'vuex';
 import store from "../../store/index";
 
 import {Emojis} from '../../types/models';
+import {nextTick} from "../../vue";
 import VueAvatar from '../avatar.vue';
 import VueButton from '../forms/button.vue';
 import VueMarkdown from '../forms/markdown.vue';
@@ -73,7 +74,7 @@ export default {
         });
     },
     scrollIntoView(comment) {
-      this.$nextTick(() => {
+      nextTick(() => {
         window.location.hash = `comment-${comment.id}`;
       });
     },

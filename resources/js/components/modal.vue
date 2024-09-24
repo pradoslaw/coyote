@@ -25,6 +25,8 @@
 </template>
 
 <script lang="ts">
+import {nextTick} from "../vue";
+
 export default {
   name: 'VueModal',
   data() {
@@ -36,8 +38,7 @@ export default {
   methods: {
     open() {
       this.isOpen = true;
-
-      this.$nextTick(() => {
+      nextTick(() => {
         // firefox hack: set focus to make Esc button works
         (this.$el as HTMLElement).focus();
 

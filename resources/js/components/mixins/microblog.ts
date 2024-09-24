@@ -4,6 +4,7 @@ import {notify} from "../../toast";
 import {confirmModal} from "../../plugins/modals";
 import store from "../../store/index";
 import {Microblog, User} from "../../types/models";
+import {nextTick} from "../../vue";
 
 export const MicroblogMixin = {
   data() {
@@ -22,7 +23,7 @@ export const MicroblogMixin = {
       store.commit('microblogs/TOGGLE_EDIT', microblog);
 
       if (microblog.is_editing) {
-        this.$nextTick(() => this.$refs.form.$refs.markdown.focus());
+        nextTick(() => this.$refs.form.$refs.markdown.focus());
         this.isWrapped = false;
       }
     },
@@ -95,7 +96,7 @@ export const MicroblogFormMixin = {
           }
 
           // highlight once again after saving
-          this.$nextTick(() => Prism.highlightAll());
+          nextTick(() => Prism.highlightAll());
         })
         .finally(() => this.isProcessing = false);
     },

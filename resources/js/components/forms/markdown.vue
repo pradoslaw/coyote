@@ -104,6 +104,7 @@ import Vue from "vue";
 import isImage from '../../libs/assets';
 import {pasteDirective} from "../../plugins/paste.js";
 import store from '../../store';
+import {nextTick} from "../../vue";
 import VueError from '../forms/error.vue';
 import {default as formMixin} from '../mixins/form.js';
 import VueTabs from '../tabs.vue';
@@ -346,7 +347,7 @@ export default {
     },
     toggleEmojiPicker() {
       this.emojiPickerOpen = !this.emojiPickerOpen;
-      this.$nextTick(() => {
+      nextTick(() => {
         if (this.$refs['emoji-picker']) {
           this.$refs['emoji-picker'].clearSearchPhrase();
         }
@@ -436,7 +437,7 @@ export default {
     showPreview() {
       axios.post<any>(this.previewUrl, {text: this.modelValue}).then(response => {
         this.previewHtml = response.data as string;
-        this.$nextTick(() => Prism.highlightAll());
+        nextTick(() => Prism.highlightAll());
       });
     },
     updateState(state) {
@@ -489,10 +490,10 @@ export default {
     },
   },
   updated() {
-    this.$nextTick(() => Prism.highlightAll());
+    nextTick(() => Prism.highlightAll());
   },
   mounted() {
-    this.$nextTick(() => Prism.highlightAll());
+    nextTick(() => Prism.highlightAll());
   },
 };
 </script>

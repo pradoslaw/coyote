@@ -315,11 +315,12 @@ import pl from 'date-fns/locale/pl';
 import Vue from 'vue';
 import {mapActions, mapGetters, mapState} from "vuex";
 
-import {notify} from "../../toast";
 import {copyToClipboard} from '../../plugins/clipboard';
 import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
+import {notify} from "../../toast";
+import {nextTick} from "../../vue";
 import VueAvatar from '../avatar.vue';
 import VueDeleteModal from "../delete-modal.vue";
 import {default as mixins} from '../mixins/user.js';
@@ -398,13 +399,13 @@ export default {
     edit() {
       store.commit('posts/edit', this.post);
       if (this.post.is_editing) {
-        this.$nextTick(() => (this.$refs.form as VueForm).$refs.markdown.focus());
+        nextTick(() => (this.$refs.form as VueForm).$refs.markdown.focus());
       }
     },
     comment() {
       this.$data.isCommenting = !this.$data.isCommenting;
       if (this.$data.isCommenting) {
-        this.$nextTick(() => (this.$refs['comment-form'] as typeof VueCommentForm).focus());
+        nextTick(() => (this.$refs['comment-form'] as typeof VueCommentForm).focus());
       }
     },
     deletePost(confirm = false, reasonId: number | null = null) {

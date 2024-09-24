@@ -141,6 +141,7 @@ import {loadDraft, removeDraft, saveDraft} from "../../plugins/autosave";
 import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store";
+import {nextTick} from "../../vue";
 import VueButton from '../forms/button.vue';
 import VueError from '../forms/error.vue';
 import VueTagsInline from '../forms/tags-inline.vue';
@@ -229,8 +230,7 @@ export default {
       store.dispatch('posts/save', this.post)
         .then(result => {
           this.$emit('save', result.data);
-
-          this.$nextTick(() => {
+          nextTick(() => {
             removeDraft(this.draftKey);
             Prism.highlightAll();
           });
@@ -257,9 +257,7 @@ export default {
     },
     addItem() {
       store.commit('poll/addItem');
-
-      // @ts-ignore
-      this.$nextTick(() => this.$refs['poll-items'][this.$refs['poll-items'].length - 1].$el.focus());
+      nextTick(() => this.$refs['poll-items'][this.$refs['poll-items'].length - 1].$el.focus());
     },
     async lastPage() {
       if (!this.exists && this.currentPage < this.totalPages) {

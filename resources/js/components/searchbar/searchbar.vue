@@ -82,6 +82,7 @@ import store from '../../store/index';
 import {Hit} from '../../types/hit';
 import {SpecialKeys} from '../../types/keys';
 import {Contexts, HitCategory, Models} from '../../types/search';
+import {nextTick} from "../../vue";
 import VueJobDecorator from './decorators/job';
 import VueMicroblogDecorator from './decorators/microblog';
 import VueTopicDecorator from './decorators/topic.vue';
@@ -139,7 +140,7 @@ export default {
     toggleMobile() {
       this.isMobile = !this.isMobile;
       if (this.isMobile) {
-        this.$nextTick(() => (this.$refs.input as HTMLInputElement).focus());
+        nextTick(() => (this.$refs.input as HTMLInputElement).focus());
       }
     },
     showDropdown() {

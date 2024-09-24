@@ -15,6 +15,7 @@ import {default as axiosErrorHandler} from "../libs/axios-error-handler.js";
 import {default as ws} from '../libs/realtime.ts';
 import {loadDraft, removeDraft, saveDraft} from '../plugins/autosave';
 import store from '../store';
+import {nextTick} from '../vue';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
@@ -94,7 +95,7 @@ new Vue({
           this.assets = [];
           this.text = '';
 
-          this.$nextTick(() => this.scrollToBottom());
+          nextTick(() => this.scrollToBottom());
 
           removeDraft(DRAFT_KEY);
         })
@@ -110,8 +111,7 @@ new Vue({
       this.channel().on('PmCreated', ({data}) => {
         if (data.user.id === this.recipient.id) {
           store.commit('messages/add', data);
-
-          this.$nextTick(() => {
+          nextTick(() => {
             this.scrollToBottom();
             this.markAllAsRead();
           });
@@ -182,7 +182,7 @@ new Vue({
       store.commit('messages/reset');
       this.removeScrollbarEvent();
 
-      this.loadMore().then(() => this.$nextTick(() => {
+      this.loadMore().then(() => nextTick(() => {
           this.scrollToBottom();
           this.addScrollbarEvent();
         }),

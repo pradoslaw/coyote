@@ -96,6 +96,7 @@ import {mapGetters} from 'vuex';
 import {confirmModal} from '../../plugins/modals';
 import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from '../../store/index';
+import {nextTick} from '../../vue';
 import VueAvatar from '../avatar.vue';
 import VueFlag from '../flags/flag.vue';
 import VueButton from '../forms/button.vue';
@@ -137,7 +138,7 @@ export default {
       this.isEditing = !this.isEditing;
 
       if (this.isEditing) {
-        this.$nextTick(() => this.$refs.submitText.focus());
+        nextTick(() => this.$refs.submitText.focus());
       }
     },
 
@@ -145,7 +146,7 @@ export default {
       this.isReplying = !this.isReplying;
 
       if (this.isReplying) {
-        this.$nextTick(() => this.$refs.replyText.focus());
+        nextTick(() => this.$refs.replyText.focus());
       }
     },
 
@@ -172,7 +173,7 @@ export default {
     },
 
     scrollIntoView(comment) {
-      this.$nextTick(() => window.location.hash = `comment-${comment.id}`);
+      nextTick(() => window.location.hash = `comment-${comment.id}`);
     },
   },
   computed: {

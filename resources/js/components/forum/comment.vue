@@ -49,6 +49,7 @@ import {mapGetters} from "vuex";
 import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
+import {nextTick} from "../../vue";
 import VueAvatar from "../avatar.vue";
 import VueFlag from "../flags/flag.vue";
 import {default as mixins} from '../mixins/user.js';
@@ -98,7 +99,7 @@ export default {
     edit() {
       store.commit('posts/edit', this.comment);
       if (this.comment.is_editing) {
-        this.$nextTick(() => this.$refs['comment-form'].focus());
+        nextTick(() => this.$refs['comment-form'].focus());
       }
     },
     deleteComment() {

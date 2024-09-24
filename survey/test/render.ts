@@ -107,7 +107,7 @@ export class Component {
 
   private async emit(child: Vue, eventName: string, args: any[]): Promise<void> {
     child.$emit(eventName, ...args);
-    await child.$nextTick();
+    await Vue.nextTick();
   }
 }
 
