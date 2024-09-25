@@ -398,17 +398,13 @@ export default {
       this.assets.splice(this.assets.indexOf(asset), 1);
     },
     chooseFile() {
-      const Thumbnail = new (Vue.extend(VueThumbnail))({propsData: {name: 'asset'}}).$mount();
-
       this.progress = 0;
-
-      Thumbnail.$on('upload', this.addAsset);
-      Thumbnail.$on('progress', progress => {
+      const app = new (Vue.extend(VueThumbnail))({propsData: {name: 'asset', openOnMount: true}}).$mount();
+      app.$on('upload', this.addAsset);
+      app.$on('progress', progress => {
         this.progress = progress;
         this.isProcessing = progress > 0 && progress < 100;
       });
-
-      Thumbnail.openDialog();
     },
     autocomplete(nick) {
       return store

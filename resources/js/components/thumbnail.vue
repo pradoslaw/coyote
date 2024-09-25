@@ -51,11 +51,20 @@ export default {
       type: Boolean,
       default: false,
     },
+    openOnMount: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       isProcessing: false,
     };
+  },
+  mounted() {
+    if (this.$props.openOnMount) {
+      this.openDialog();
+    }
   },
   methods: {
     upload() {
