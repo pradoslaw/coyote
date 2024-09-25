@@ -15,7 +15,7 @@
         v-if="editable || tag.priority"
         :editable="editable"
         v-model="tag.priority"
-        @click="setPriority(tag, ...arguments)"
+        @click="value => setPriority(tag, value)"
       ></vue-progress-bar>
     </li>
   </ul>

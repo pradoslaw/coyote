@@ -36,7 +36,7 @@
                 <a title="Usuń lokalizację" class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION(location)" v-if="job.locations.length > 1">
                   <i class="fas fa-fw fa-circle-minus text-danger"></i>
                 </a>
-                <vue-google-place @change="setLocation(index, ...arguments)" :label="location.label"></vue-google-place>
+                <vue-google-place @change="location => setLocation(index, location)" :label="location.label"></vue-google-place>
               </div>
             </div>
           </div>

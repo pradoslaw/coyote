@@ -15,8 +15,8 @@ export default {
     },
   },
   methods: {
-    reply() {
-      this.$emit('reply', ...arguments);
+    reply(post, scrollIntoForm) {
+      this.$emit('reply', post, scrollIntoForm);
     },
   },
 };

@@ -25,16 +25,12 @@
     },
     mounted() {
       const autocomplete = new google.maps.places.Autocomplete(this.$refs.autocomplete, {types: ['geocode']});
-
       autocomplete.addListener('place_changed', () => {
         let place = autocomplete.getPlace();
-
         if (!place.geometry) {
           return;
         }
-
         this.shouldGeocode = false;
-        console.log(this.shouldGeocode);
         this.$emit('change', this.map(place.geometry.location.lat(), place.geometry.location.lng(), place.address_components));
       });
     },
@@ -74,8 +70,6 @@
           if (!this.shouldGeocode) {
             return;
           }
-
-          console.log('geo');
 
           const geocoder = new google.maps.Geocoder();
 
