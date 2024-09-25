@@ -1,29 +1,30 @@
-import {createLocalVue, mount, type Wrapper} from "@vue/test-utils";
-import Vue, {VueConstructor} from "vue";
-import VueNotifications from "vue-notification";
+import VueNotifications from "@kyvg/vue3-notification";
+import {DOMWrapper, mount, VueWrapper} from "@vue/test-utils";
+import {GlobalMountOptions} from "@vue/test-utils/dist/types";
+import {ComponentPublicInstance, nextTick} from "vue";
+import {VueInstance} from "../src/vue";
 
-export function render(component: any, props: object = {}): Component {
-  const localVue = vueWithNotifications();
-
+export function render(component: any, props: Record<string, unknown> = {}): Component {
+  const global = vueWithNotifications();
   return new Component(
-    mount(component, {propsData: props, localVue}),
-    mount({template: '<vue-library-notifications/>'}, {localVue}),
+    mount(component, {props, global}),
+    mount({template: '<vue-library-notifications :dangerously-set-inner-html="true"/>'}, {global}),
   );
 }
 
-function vueWithNotifications(): VueConstructor<Vue> {
-  Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-
-  const vue: VueConstructor<Vue> = createLocalVue();
-  vue.use(VueNotifications, {componentName: 'vue-library-notifications'});
-  return vue;
+function vueWithNotifications(): GlobalMountOptions {
+  return {
+    plugins: [
+      [VueNotifications, {componentName: 'vue-library-notifications'}],
+    ],
+  };
 }
 
 export class Component {
   public readonly notifications: Notifications;
-  public readonly vm: Vue;
+  public readonly vm: VueInstance;
 
-  constructor(private wrapper: Wrapper<Vue>, notifications: Wrapper<Vue>) {
+  constructor(private wrapper: VueWrapper<ComponentPublicInstance>, notifications: VueWrapper<any>) {
     this.notifications = new Notifications(notifications);
     this.vm = wrapper.vm;
   }
@@ -66,15 +67,15 @@ export class Component {
   }
 
   emittedValue(eventName: string): any {
-    return this.eventsEmitted(eventName)[0][0];
+    return this.eventsEmitted<any>(eventName);
   }
 
-  private eventsEmitted(eventName: string): any[][] {
-    const emitted = this.wrapper.emitted();
+  private eventsEmitted<T>(eventName: string): T {
+    const emitted: Record<string, T[][]> = this.wrapper.emitted();
     if (emitted[eventName] === undefined) {
       throw new Error('Failed to assert event was emitted: ' + eventName);
     }
-    return emitted[eventName]!;
+    return emitted[eventName][0][0]!;
   }
 
   classes(): string[] {
@@ -85,7 +86,7 @@ export class Component {
     return this.elementClasses(this.wrapper.find(cssSelector));
   }
 
-  private elementClasses(wrapper: Wrapper<Vue>): string[] {
+  private elementClasses(wrapper: DOMWrapper<Element> | VueWrapper): string[] {
     return [...wrapper.element.classList.values()];
   }
 
@@ -97,7 +98,7 @@ export class Component {
     return this.child(child).props(property);
   }
 
-  private child(child: object): Wrapper<Vue> {
+  private child(child: object): VueWrapper<any> {
     return this.wrapper.findComponent(child);
   }
 
@@ -105,14 +106,14 @@ export class Component {
     await this.emit(this.child(child).vm, eventName, args);
   }
 
-  private async emit(child: Vue, eventName: string, args: any[]): Promise<void> {
+  private async emit<T>(child: ComponentPublicInstance, eventName: string, args: any[]): Promise<void> {
     child.$emit(eventName, ...args);
-    await Vue.nextTick();
+    await nextTick();
   }
 }
 
 class Notifications {
-  constructor(private notifications: Wrapper<Vue>) {
+  constructor(private notifications: VueWrapper<ComponentPublicInstance>) {
   }
 
   title(): string {

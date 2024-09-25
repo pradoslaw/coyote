@@ -9,8 +9,7 @@ function openModal(event) {
       url: el.dataset.url,
       metadata: el.dataset.metadata,
       types: result.data,
-    }, {
-      'close': () => {
+      onClose: () => {
         app.$destroy();
         document.body.removeChild(domElement);
       },

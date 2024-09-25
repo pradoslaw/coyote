@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import {createStore} from 'vuex';
 import comments from './modules/comments';
 import flags from './modules/flags';
 import forums from './modules/forums';
@@ -16,9 +15,7 @@ import theme from './modules/theme';
 import topics from './modules/topics';
 import user from './modules/user';
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
   modules: {
     messages,
     inbox,

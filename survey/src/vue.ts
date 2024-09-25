@@ -1,3 +1,3 @@
-import Vue from "vue";
+import {ComponentPublicInstance} from "vue";
 
-export type VueInstance = Vue;
+export type VueInstance = ComponentPublicInstance;

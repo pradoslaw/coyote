@@ -398,9 +398,11 @@ export default {
     },
     chooseFile() {
       this.progress = 0;
-      createVueAppGhost(VueThumbnail, {name: 'asset', openOnMount: true}, {
-        upload: this.addAsset,
-        progress: progress => {
+      createVueAppGhost(VueThumbnail, {
+        name: 'asset',
+        openOnMount: true,
+        onUpload: this.addAsset,
+        onProgress: progress => {
           this.progress = progress;
           this.isProcessing = progress > 0 && progress < 100;
         },

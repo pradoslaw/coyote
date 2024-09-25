@@ -44,7 +44,7 @@ export function confirmModal(options: ModalOptions): Promise<void> {
   };
 
   return new Promise(resolve => {
-    [vueApp, domElement] = createVueAppGhost(ModalWrapper, {resolver: resolve}, {});
+    [vueApp, domElement] = createVueAppGhost(ModalWrapper, {resolver: resolve});
     document.body.append(domElement);
   });
 }

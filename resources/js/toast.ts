@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import VueNotifications, {notify as libraryNotify} from "@kyvg/vue3-notification";
 
 interface ToastOptions {
   text?: string;
@@ -9,5 +9,12 @@ interface ToastOptions {
 }
 
 export function notify(options: ToastOptions): void {
-  Vue.notify(options);
+  libraryNotify(options);
+}
+
+export function install(app) {
+  app.use(VueNotifications, {componentName: 'vue-library-notifications'});
+  app.component('vue-notifications', {
+    template: '<vue-library-notifications :dangerously-set-inner-html="true" position="bottom right"/>',
+  });
 }

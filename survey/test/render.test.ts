@@ -1,5 +1,6 @@
 import {describe, test} from '@jest/globals';
-import Vue from "vue";
+import {nextTick} from 'vue';
+import {notify} from "../../resources/js/toast";
 import {VueInstance} from "../src/vue";
 import {assertEquals, assertFalse, assertMatch, assertTrue} from "./assert";
 import {render} from "./render";
@@ -159,8 +160,8 @@ describe('render', () => {
 
   test('read notification title', async () => {
     const component = render({template: '<div/>'});
-    component.vm.$notify({title: 'bar'});
-    await Vue.nextTick();
+    notify({title: 'bar'});
+    await nextTick();
     assertEquals(component.notifications.title(), 'bar');
   });
 });

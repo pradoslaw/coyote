@@ -1,8 +1,6 @@
 <template>
-  <ul class="nav-auth navbar-nav order-2">
-    <vue-notifications/>
-    <vue-pm/>
-  </ul>
+  <vue-notifications/>
+  <vue-pm/>
 </template>
 
 <script lang="ts">
