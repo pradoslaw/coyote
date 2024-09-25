@@ -59,13 +59,11 @@ export default {
   },
   computed: {
     ...mapGetters('user', ['isAuthorized']),
-
     sortedForums(): Forum[] {
-      return this.allForums.map(forum => {
-        forum.name = '&nbsp;'.repeat(forum.indent * 4) + forum.name;
-
-        return forum;
-      });
+      return this.allForums.map(forum => ({
+        ...forum,
+        name: '&nbsp;'.repeat(forum.indent * 4) + forum.name,
+      }));
     },
   },
 };
