@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Vue from 'vue';
 
 import clickAway from "../clickAway.js";
 import store from "../store/index";
@@ -71,17 +70,6 @@ function systemColorSchemeDark(): boolean {
   return window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches;
 }
 
-function systemThemeDarkListener(listener: (dark: boolean) => void) {
-  window.matchMedia('(prefers-color-scheme:dark)')
-    .addEventListener('change', (event: MediaQueryListEvent): void => {
-      listener(event.matches);
-    });
-}
-
-systemThemeDarkListener(function (dark: boolean): void {
-  controls.systemColorSchemeDark = dark;
-});
-
 function currentTheme(): boolean {
   if (colorScheme === 'system') {
     return systemColorSchemeDark();
@@ -100,7 +88,7 @@ if (!isDarkThemeWip) {
 
 type Theme = 'light' | 'dark' | 'system';
 
-const controls = createVueApp('NonAlertControls', '#non-alert-controls', {
+createVueApp('NonAlertControls', '#non-alert-controls', {
   components: {
     'vue-icon': VueIcon,
   },
@@ -116,6 +104,12 @@ const controls = createVueApp('NonAlertControls', '#non-alert-controls', {
         system: {title: 'Systemowy:', icon: 'system-theme'},
       },
     };
+  },
+  mounted() {
+    window.matchMedia('(prefers-color-scheme:dark)')
+      .addEventListener('change', (event: MediaQueryListEvent): void => {
+        this.$data.systemColorSchemeDark = event.matches;
+      });
   },
   directives: {clickAway},
   computed: {

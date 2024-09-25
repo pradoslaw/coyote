@@ -28,7 +28,7 @@ window.addEventListener('load', () => {
     badgeLong: boolean;
   }
 
-  const app = createVueApp('Survey', '#js-survey', {
+  createVueApp('Survey', '#js-survey', {
     components: {'vue-survey-tally': SurveyTally},
     template: `
       <vue-survey-tally
@@ -75,14 +75,6 @@ window.addEventListener('load', () => {
         storeSurveyBadgeState(long);
       },
     },
-  });
-
-  store.subscribe((mutation, state) => {
-    if (mutation.type === 'theme/CHANGE_THEME') {
-      const dark = state.theme.darkTheme;
-      // @ts-ignore
-      app.setTheme(dark);
-    }
   });
 
   function experimentChangeStyle(style: ExperimentOpt): void {
