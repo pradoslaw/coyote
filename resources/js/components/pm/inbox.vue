@@ -1,5 +1,5 @@
 <template>
-  <li :class="{'open': isOpen}" v-click-away="hideDropdown" class="nav-item">
+  <li :class="{'open': isOpen}" v-click-away="hideDropdown">
     <a @click.prevent="loadMessages" href="/User/Pm" class="nav-link" role="button" aria-haspopup="true" aria-expanded="false">
       <span v-show="count > 0" class="badge">{{ count }}</span>
 

@@ -1,7 +1,6 @@
 import axios from "axios";
 import Vue from 'vue';
-import VueNotification from '../components/notifications/notifications.vue';
-import VuePm from '../components/pm/inbox.vue';
+import NavAuth from '../components/nav-auth.vue';
 import VueSearchbar from '../components/searchbar/searchbar.vue';
 import {default as setToken} from "../libs/csrf";
 import store from '../store';
@@ -18,8 +17,7 @@ if (el !== null) {
   store.commit('inbox/SET_COUNT', store.state.user.user.pm_unread);
   store.commit('notifications/init', {notifications: null, count: store.state.user.user.notifications_unread});
 
-  el.appendChild(new (Vue.extend(VueNotification))({store}).$mount().$el);
-  el.appendChild(new (Vue.extend(VuePm))({store}).$mount().$el);
+  new (Vue.extend(NavAuth))({store}).$mount(el);
 }
 
 /**
