@@ -35,16 +35,18 @@
 
             <div v-if="totalPages > 1" class="d-none d-sm-inline ms-2 topic-pagination">
               <i class="far fa-file small"></i>
-
+              {{ ' ' }}
               <a :href="topic.url + '?page=1'">1</a>
-
+              {{ ' ' }}
               <template v-if="totalPages > 4">
                 ...
               </template>
-
+              {{ ' ' }}
               <a v-if="totalPages === 4" :href="topic.url + '?page=2'">2</a>
-
-              <template v-for="i in paginatorPages"><a :href="topic.url + '?page=' + i">{{ i }}</a>&nbsp;</template>
+              {{ ' ' }}
+              <template v-for="i in paginatorPages">
+                <a :href="topic.url + '?page=' + i">{{ i }}</a>&nbsp;
+              </template>
             </div>
 
             <ul class="topic-statistic list-inline small mt-1 mt-sm-0 mb-0 d-block d-sm-inline ms-sm-auto flex-sm-shrink-0">
