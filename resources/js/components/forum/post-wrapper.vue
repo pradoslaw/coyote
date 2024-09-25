@@ -6,8 +6,8 @@
 import VuePost from '../forum/post.vue';
 
 export default {
-  name: 'PostWrapper',
   components: {VuePost},
+  emits: ['reply'],
   props: {
     post: {
       type: Object,
