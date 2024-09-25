@@ -98,6 +98,9 @@ class Handler implements \SessionHandlerInterface
                 // we can't save "url" in session because laravel saves previous URL as url.intended
                 $payload['path'] = $path === '/' ? $path : ('/' . $path);
             }
+            if ($request->path() === 'ping') {
+                $payload['path'] = \parse_url($request->header('Referer'), \PHP_URL_PATH);
+            }
         }
 
         return $payload;
