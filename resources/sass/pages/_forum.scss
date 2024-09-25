@@ -58,6 +58,7 @@
     padding: 6px 10px;
     box-shadow: 5px 5px 6px #AAA;
     width: 45%; // na urzadzeniach mobilnych rozszerzamy to okno aby cokolwiek bylo tam widac
+    top: 48px !important; // funkcja sticky-aside zmieni {top}, myśląc że element jest sticky
   }
 
   @include media-breakpoint-down(sm) {
