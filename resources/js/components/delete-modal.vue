@@ -31,6 +31,7 @@ export default {
     'vue-modal': VueModal,
     'vue-select': VueSelect,
   },
+  emits: ['delete'],
   props: {
     reasons: {type: Object},
   },

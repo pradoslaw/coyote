@@ -307,7 +307,7 @@
       </div>
     </div>
 
-    <vue-modal ref="delete-modal" @delete="deletePost(false, ...arguments)" :reasons="reasons"></vue-modal>
+    <vue-modal ref="delete-modal" @delete="reasonId => deletePost(false, reasonId)" :reasons="reasons"></vue-modal>
   </div>
 </template>
 <script lang="ts">
