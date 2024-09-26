@@ -46,7 +46,6 @@ class HomeController extends Controller
             'microblogs'  => $this->getMicroblogs(),
             'interesting' => $this->topic->interesting(),
             'newest'      => $this->topic->newest(),
-            'viewers'     => $this->getViewers(),
             'activities'  => $this->getActivities(),
             'reputation'  => $cache->remember('homepage:reputation', 30 * 60, fn() => [
                 'week'    => $this->reputation->reputationSince($date->startOfThisWeek(), limit:5),
@@ -58,6 +57,8 @@ class HomeController extends Controller
                 fn(Domain\Event\Event $event) => new Components\Event\Event(new Polish(), $event),
                 (new StaticEvents())->fetchEvents(),
             ),
+
+            'globalViewers' => $this->globalViewers(),
         ])
             ->with('settings', $this->getSettings());
     }
@@ -79,11 +80,11 @@ class HomeController extends Controller
         return ActivityResource::collection($result)->toArray($this->request);
     }
 
-    private function getViewers(): View
+    private function globalViewers(): View
     {
         /** @var Renderer $viewers */
         $viewers = app(Renderer::class);
-        return $viewers->render(null);
+        return $viewers->render('Użytkownicy online', requestUri:null);
     }
 
     private function flags(): array

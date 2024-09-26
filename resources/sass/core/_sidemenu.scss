@@ -13,21 +13,25 @@
       border-bottom: 1px solid $card-border-color;
     }
 
+    .side-menu-item,
     > a {
       color: $gray-dark;
-      cursor: pointer;
       display: block;
-      padding: 8px 0 8px 5px;
+      padding: 6px 0;
       text-shadow: 1px 1px #fff;
       font-weight: bold;
       font-size: 12px;
       opacity: .8;
-      @include text-truncate();
+      @include text-truncate;
 
       i {
         font-size: 15px;
         margin-right: 5px;
       }
+    }
+
+    > a {
+      cursor: pointer;
 
       &:hover {
         color: $primary;

@@ -20,7 +20,7 @@ class Renderer
     {
     }
 
-    public function render(?string $requestUri): View
+    public function render(string $title, ?string $requestUri): View
     {
         $collection = $this->data($requestUri);
 
@@ -68,10 +68,12 @@ class Renderer
         ksort($groups);
 
         return view('components.viewers', [
-            'groups'     => $groups,
-            'total'      => $total,
-            'guests'     => $guests,
-            'registered' => $registered,
+            'isLocalViewers' => $requestUri !== null,
+            'title'          => $title,
+            'groups'         => $requestUri === null ? $groups : [],
+            'total'          => $total,
+            'guests'         => $guests,
+            'registered'     => $registered,
         ]);
     }
 

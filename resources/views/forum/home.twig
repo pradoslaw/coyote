@@ -29,14 +29,19 @@
       ></vue-section>
     {% endblock %}
 
-    {{ viewers|raw }}
     <vue-notifications></vue-notifications>
   </main>
 
   {% embed 'forum.partials.sidebar' %}
     {% block side_menu %}
       {% include 'forum.partials.post_count' %}
-      <div class="box">
+      <div class="mb-5 mt-5">
+        {{ globalViewers|raw }}
+      </div>
+      <div class="mb-5">
+        {{ localViewers|raw }}
+      </div>
+      <div class="box mb-5">
         <h4 class="heading">
           <i class="fa-solid fa-circle-dot fa-fw"></i>
           Akcje

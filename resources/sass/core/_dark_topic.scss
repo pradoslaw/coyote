@@ -346,14 +346,15 @@ body.theme-dark {
         border-bottom: 1px solid #2f2f2f;
       }
 
+      .side-menu-item,
       a {
         color: #acacac;
         text-shadow: none;
+      }
 
-        &:hover {
-          i {
-            color: #789b17;
-          }
+      a:hover {
+        i {
+          color: #789b17;
         }
       }
     }

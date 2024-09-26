@@ -1,15 +1,28 @@
-<section id="box-who-is-online" class="page-online-users box text-muted">
-    <h4 class="heading">
+<div class="box">
+  <h4 class="heading">
+    {% if isLocalViewers %}
+      <i class="fas fa-eye fa-fw"></i>
+    {% else %}
       <i class="fas fa-users fa-fw"></i>
-      {{ total }} użytkowników online, w tym zalogowanych: {{ registered }}, gości: {{ guests }}
-    </h4>
+    {% endif %}
+    {{ title }}
+  </h4>
+</div>
 
-    {% for name, group in groups %}
-        {% if group|length > 0 %}
-            <p class="mb-1">
-              <strong>{{ name }}:</strong>
-              {{ group|join(', ')|raw }}
-            </p>
-        {% endif %}
-    {% endfor %}
-</section>
+<ul class="side-menu">
+  <li>
+    <p class="side-menu-item mb-0">
+      {{ registered }} użytkowników, {{ guests }} gości
+    </p>
+  </li>
+  {% for name, group in groups %}
+    {% if group|length > 0 %}
+      <li>
+        <p class="side-menu-item mb-0">
+          {{ name }}:
+          {{ group|join(', ')|raw }}
+        </p>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>

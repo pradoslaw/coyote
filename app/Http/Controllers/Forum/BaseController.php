@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Forum;
@@ -59,12 +58,13 @@ abstract class BaseController extends Controller
     protected function view($view = null, $data = [])
     {
         return parent::view($view, $data)->with([
-            'tags'    => [
+            'tags'          => [
                 'popular' => $this->getTagClouds(),
                 'user'    => $this->getUserTags(),
             ],
-            'viewers' => $this->getViewers(),
-            'sidebar' => $this->getSetting('forum.sidebar', true),
+            'globalViewers' => $this->globalViewers(),
+            'localViewers'  => $this->localViewers(),
+            'sidebar'       => $this->getSetting('forum.sidebar', true),
         ]);
     }
 
@@ -80,12 +80,18 @@ abstract class BaseController extends Controller
         $this->forum->pushCriteria(new EagerLoading('tags'));
     }
 
-    protected function getViewers(): View
+    private function globalViewers(): View
     {
-        // create view with online users
         /** @var Renderer $renderer */
         $renderer = app('session.viewers');
-        return $renderer->render($this->request->getRequestUri());
+        return $renderer->render('Online w serwisie', requestUri:null);
+    }
+
+    private function localViewers(): View
+    {
+        /** @var Renderer $renderer */
+        $renderer = app('session.viewers');
+        return $renderer->render('Aktualnie na tej stronie', requestUri:$this->request->getRequestUri());
     }
 
     /**

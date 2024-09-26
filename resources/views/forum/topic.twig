@@ -170,13 +170,18 @@
       </section>
       <vue-notifications></vue-notifications>
     </div>
-
-    {{ viewers|raw }}
   </main>
 
   {% embed 'forum.partials.sidebar' %}
     {% block side_menu %}
-      <div id="js-sidebar" class="box" v-cloak>
+      <div class="mb-5">
+        {{ globalViewers|raw }}
+      </div>
+      <div class="mb-5">
+        {{ localViewers|raw }}
+      </div>
+
+      <div id="js-sidebar" class="box mb-5" v-cloak>
         <div class="box">
           <h4 class="heading">
             <i class="fa-solid fa-circle-dot fa-fw"></i>
