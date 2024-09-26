@@ -289,8 +289,10 @@ body.padding-top {
   max-width: 100%;
 }
 
-body.theme-light {
+body > header {
+  background-color: inherit;
+
   .navbar {
-    background-color: #eee;
+    background-color: inherit;
   }
 }

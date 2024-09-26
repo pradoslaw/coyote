@@ -12,15 +12,15 @@ body.theme-dark {
 
   header {
     nav.navbar {
-      border-bottom: none;
-      background-color: #333 !important;
+      border-bottom-color: #2f2f2f;
+      border-bottom-width: 2px;
 
       .nav-search {
         .search-bar {
-          background-color: #272727;
+          background-color: #2a2a2a;
 
           input {
-            background-color: #272727;
+            background-color: #2a2a2a;
           }
         }
       }
