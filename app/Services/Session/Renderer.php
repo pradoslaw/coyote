@@ -20,7 +20,7 @@ class Renderer
     {
     }
 
-    public function render(string $requestUri = null): View
+    public function render(?string $requestUri): View
     {
         $collection = $this->data($requestUri);
 

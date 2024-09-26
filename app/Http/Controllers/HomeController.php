@@ -83,7 +83,7 @@ class HomeController extends Controller
     {
         /** @var Renderer $viewers */
         $viewers = app(Renderer::class);
-        return $viewers->render();
+        return $viewers->render(null);
     }
 
     private function flags(): array
