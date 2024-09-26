@@ -100,7 +100,7 @@
               <vue-username v-if="topic.last_post.user" :user="topic.last_post.user" class="topic-username"></vue-username>
               <span class="topic-username" v-else>{{ topic.last_post.user_name }}</span>
             </p>
-
+            {{ ' ' }}
             <a :href="topic.url + `?p=${topic.last_post.id}#id${topic.last_post.id}`" title="Zobacz ostatni post" class="text-muted">
               <vue-timeago :datetime="topic.last_post.created_at"/>
             </a>

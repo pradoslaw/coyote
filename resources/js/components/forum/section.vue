@@ -40,6 +40,7 @@
                   <li v-for="children in category.children" class="list-inline-item">
                     <i v-if="children.is_read" class="far fa-file"></i>
                     <i v-else class="not-read" title="Nowe posty w tej kategorii"></i>
+                    {{ ' '}}
                     <a :href="children.url">{{ children.name }}</a>
                     {{ ' ' }}
                   </li>
