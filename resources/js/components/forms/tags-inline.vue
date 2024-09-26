@@ -77,6 +77,7 @@ export default {
   components: {
     'vue-dropdown': VueDropdown,
   },
+  emits: ['change'],
   props: {
     sourceUrl: {
       type: String,
