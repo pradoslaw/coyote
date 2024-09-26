@@ -23,7 +23,7 @@ export const MicroblogMixin = {
       store.commit('microblogs/TOGGLE_EDIT', microblog);
 
       if (microblog.is_editing) {
-        nextTick(() => this.$refs.form.$refs.markdown.focus());
+        nextTick(() => this.$refs.form.focus());
         this.isWrapped = false;
       }
     },

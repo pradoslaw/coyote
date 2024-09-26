@@ -260,6 +260,9 @@ export default {
         notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
       }
     },
+    focus() {
+      this.$refs['comment-form'].focus();
+    }
   },
   computed: {
     ...mapGetters('user', ['isAuthorized']),
