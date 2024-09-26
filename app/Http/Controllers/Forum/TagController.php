@@ -2,10 +2,9 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Http\Resources\TagResource;
+use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Reputation;
 use Illuminate\Http\Request;
-use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 
 class TagController extends BaseController
 {
@@ -26,7 +25,10 @@ class TagController extends BaseController
 
     public function validation(Request $request, TagRepository $repository)
     {
-        $this->validate($request, ['tags' => 'array']);
+        $this->validate($request, [
+            'tags'   => 'array',
+            'tags.*' => 'string',
+        ]);
 
         if ($this->auth->reputation < Reputation::CREATE_TAGS) {
             return response(['warning' => false]);
@@ -42,7 +44,7 @@ class TagController extends BaseController
 
         return response([
             'warning' => count($invalid) > 0,
-            'message' => trans('validation.tag_not_exist', ['value' => implode(', ', $invalid)])
+            'message' => trans('validation.tag_not_exist', ['value' => implode(', ', $invalid)]),
         ]);
     }
 }
