@@ -115,7 +115,10 @@
     <div v-if="showStickyCheckbox" class="form-group">
       <div class="custom-control custom-checkbox">
         <input v-model="topic.is_sticky" type="checkbox" class="custom-control-input" id="is-sticky">
-        <label class="custom-control-label" for="is-sticky">Przyklejony wątek</label>
+        {{ ' ' }}
+        <label class="custom-control-label" for="is-sticky">
+          Przyklejony wątek
+        </label>
       </div>
     </div>
 
