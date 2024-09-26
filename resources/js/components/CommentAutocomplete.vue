@@ -38,6 +38,7 @@ import VueDropdown from "./forms/dropdown.vue";
 
 export default {
   store,
+  emits: ['save', 'cancel', 'paste'],
   model: {
     prop: 'modelValue',
     event: 'update:modelValue',
