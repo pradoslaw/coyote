@@ -73,7 +73,7 @@ class HomeController extends BaseController
     /**
      * @param string $view
      * @param array $data
-     * @return \Illuminate\View\View
+     * @return View
      */
     protected function view($view = null, $data = [])
     {
@@ -94,7 +94,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function index()
     {
@@ -103,53 +103,39 @@ class HomeController extends BaseController
         return $this->{$tab}();
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function categories()
+    public function categories(): View
     {
-        // execute query: get all categories that user can has access
         $this->pushForumCriteria();
-
         $forums = $this
             ->forum
             ->categories($this->guestId)
             ->mapCategory();
-
         return $this->view('forum.home')
             ->with([
-                'forums'   => ForumCollection::factory($forums),
-                'collapse' => $this->collapse(),
+                'forums'      => ForumCollection::factory($forums),
+                'collapse'    => $this->collapse(),
+                'topicsTotal' => Topic::query()->count(),
             ]);
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function all()
+    public function all(): View
     {
         $this->topic->pushCriteria(new SkipLockedCategories());
-
         return $this->loadAndRender();
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function mine()
+    public function mine(): View
     {
         if ($this->userId) {
             $this->topic->pushCriteria(new OnlyMine($this->userId, false));
         }
-
         $topics = $this->load();
-
         return $this->render($topics)->with('user_id', $this->userId);
     }
 
     /**
      * @param int $userId
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function user(int $userId)
     {
@@ -170,7 +156,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function subscribes()
     {
@@ -199,7 +185,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function interesting()
     {
@@ -248,7 +234,7 @@ class HomeController extends BaseController
 
     /**
      * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $paginate
-     * @return \Illuminate\View\View
+     * @return View
      */
     private function render($paginate, RenderParams $renderParams = null)
     {
@@ -273,7 +259,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return \Illuminate\View\View
+     * @return View
      */
     private function loadAndRender(RenderParams $renderParams = null)
     {

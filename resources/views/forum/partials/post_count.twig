@@ -4,3 +4,10 @@
         <span>{{ declination(topics.total(), ['wątek', 'wątki', 'wątków'], true) }}</span>
     </div>
 {% endif %}
+
+{% if topicsTotal %}
+  <div id="box-count" class="box">
+    <strong>{{ topicsTotal|number_format(0, '', ' ') }}</strong>
+    <span>{{ declination(topicsTotal, ['wątek', 'wątki', 'wątków'], true) }}</span>
+  </div>
+{% endif %}
