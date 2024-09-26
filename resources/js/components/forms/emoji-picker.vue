@@ -68,6 +68,7 @@ export default {
     emojis: {require: true},
     open: {require: true},
   },
+  emits: ['input', 'blur', 'close'],
   data() {
     return {
       searchPhrase: '',
