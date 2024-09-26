@@ -36,7 +36,11 @@ createVueAppNotifications('Microblog', '#js-microblog', {
   },
   store,
   data() {
-    return {popularTags: window.popularTags, recommendedUsers: window.recommendedUsers};
+    return {
+      popularTags: window.popularTags,
+      recommendedUsers: window.recommendedUsers,
+      microblogDefault: {assets: [], tags: [], text: ''},
+    };
   },
   created() {
     if ('pagination' in window) {
