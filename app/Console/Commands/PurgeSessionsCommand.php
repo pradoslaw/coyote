@@ -4,9 +4,9 @@ namespace Coyote\Console\Commands;
 
 use Carbon\Carbon;
 use Coyote\Guest;
-use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\WithTrashed;
+use Coyote\Repositories\Eloquent\UserRepository;
+use Coyote\Repositories\Redis\SessionRepository;
 use Coyote\Services\Elasticsearch\Crawler;
 use Coyote\Session;
 use Illuminate\Console\Command;
@@ -139,7 +139,7 @@ class PurgeSessionsCommand extends Command
     private function storeSessionSnapshot(array $sessions): void
     {
         $lifetime = config('session.lifetime') * 60;
-        
+
         $guests = [];
         $users = [];
         foreach ($sessions as $session) {

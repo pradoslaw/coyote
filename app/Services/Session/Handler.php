@@ -1,31 +1,15 @@
 <?php
 namespace Coyote\Services\Session;
 
-use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
+use Coyote\Repositories\Redis\SessionRepository;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Guard;
 use Jenssegers\Agent\Agent;
 
 class Handler implements \SessionHandlerInterface
 {
-    /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
-     * @var SessionRepository
-     */
-    protected $repository;
-
-    /**
-     * @param SessionRepository $repository
-     * @param Container $container
-     */
-    public function __construct(SessionRepository $repository, Container $container)
+    public function __construct(protected SessionRepository $repository, protected Container $container)
     {
-        $this->repository = $repository;
-        $this->container = $container;
     }
 
     public function open(string $path, string $name): bool

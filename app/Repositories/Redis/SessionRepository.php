@@ -1,12 +1,10 @@
 <?php
-
 namespace Coyote\Repositories\Redis;
 
-use Coyote\Repositories\Contracts\SessionRepositoryInterface;
 use Coyote\Session;
 use Illuminate\Container\Container as App;
 
-class SessionRepository implements SessionRepositoryInterface
+class SessionRepository
 {
     const REDIS_KEY = 'sessions';
 

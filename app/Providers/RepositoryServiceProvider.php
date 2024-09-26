@@ -1,11 +1,9 @@
 <?php
-
 namespace Coyote\Providers;
 
-use Coyote\Repositories\Contracts\SessionRepositoryInterface;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Foundation\Application;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -36,25 +34,15 @@ class RepositoryServiceProvider extends ServiceProvider
         }
     }
 
-    /**
-     * Register the application services.
-     *
-     * @return void
-     */
-    public function register()
+    public function register(): void
     {
-        $this->app->singleton(
-            array_pull($this->provides, array_search(SessionRepositoryInterface::class, $this->provides)),
-            'Coyote\\Repositories\\Redis\\SessionRepository'
-        );
-
         foreach ($this->provides as $interface) {
             $segments = explode('\\', $interface);
-            $repository = substr((string) array_pop($segments), 0, -9);
+            $repository = substr((string)array_pop($segments), 0, -9);
 
             $this->app->singleton(
                 $interface,
-                implode('\\', array_merge(array_set($segments, 2, 'Eloquent'), [$repository]))
+                implode('\\', array_merge(array_set($segments, 2, 'Eloquent'), [$repository])),
             );
         }
     }
