@@ -101,4 +101,16 @@ class InitialsTest extends TestCase
     {
         $this->assertInitials('A9', 'A9');
     }
+
+    #[Test]
+    public function leadingDot(): void
+    {
+        $this->assertInitials('.FooOfBar.', 'FO');
+    }
+
+    #[Test]
+    public function singleLetterBeforeCamelCase(): void
+    {
+        $this->assertInitials('wElcome', 'WE');
+    }
 }

@@ -28,10 +28,15 @@ readonly class Initials
 
     public function usernameWords(string $username): array
     {
+        $tokens = $this->split('/[^0-9\pL]/u', $username);
+        if (count($tokens) === 1) {
+            $username = $tokens[0];
+        } else {
+            return $tokens;
+        }
         return $this->splitUntilMany($username, [
-            '/[^0-9\pL]/u', // split on any special character
             '/\p{Ll}(?=\p{Lu})/u', // split at camelCase
-            '/(?=[0-9])/u', // split at digit
+            '/(?=[0-9])/', // split at digit
         ]);
     }
 
