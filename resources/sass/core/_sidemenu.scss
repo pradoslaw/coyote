@@ -17,10 +17,6 @@
     > a {
       color: $gray-dark;
       display: block;
-      padding: 6px 0;
-      text-shadow: 1px 1px #fff;
-      font-weight: bold;
-      font-size: 12px;
       opacity: .8;
       @include text-truncate;
 
@@ -30,8 +26,13 @@
       }
     }
 
+    .side-menu-item {
+      padding: 3px 0;
+    }
+
     > a {
       cursor: pointer;
+      padding: 6px 0;
 
       &:hover {
         color: $primary;
