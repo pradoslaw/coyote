@@ -14,7 +14,7 @@
         @mouseover="hoverItem(index)"
     >
       <slot name="item" :item="item">
-        <vue-avatar :photo="item.photo" :name="item.name"/>
+        <vue-icon-avatar :user="item"/>
         <span>{{ item.name }}</span>
         <small v-if="item.group" class="badge badge-secondary ms-auto">
           {{ item.group }}
@@ -26,10 +26,10 @@
 
 <script>
 import clickAway from '../../clickAway.js';
-import VueAvatar from '../avatar.vue';
+import VueIconAvatar from '../icon-avatar.vue';
 
 export default {
-  components: {'vue-avatar': VueAvatar},
+  components: {'vue-icon-avatar': VueIconAvatar},
   directives: {clickAway},
   props: {
     items: {

@@ -1,6 +1,6 @@
 <template>
   <a :href="profileUrl" class="d-flex align-items-center text-truncate" tabindex="-1">
-    <vue-avatar :photo="item.photo" class="i-16 me-2"/>
+    <vue-icon-avatar :user="item"/>
     <span v-html="highlight(item.name)"/>
     <div class="item-options">
       <a class="ms-3" :href="profileUrl" title="Przejdź do profilu użytkownika">
@@ -17,13 +17,13 @@
 </template>
 
 <script lang="ts">
-import VueAvatar from '../../avatar.vue';
+import VueIconAvatar from '../../icon-avatar.vue';
 import DecoratorMixin from '../mixin';
 
 export default {
   mixins: [DecoratorMixin],
   components: {
-    'vue-avatar': VueAvatar,
+    'vue-icon-avatar': VueIconAvatar,
   },
   computed: {
     profileUrl() {
