@@ -169,7 +169,7 @@
 
         <ul class="side-menu">
           {% if user.id != user('id') %}
-            <li>
+            <li class="action-link">
               <a href="{{ route('user.pm.submit', {to: user.name}) }}">
                 <i class="fas fa-fw fa-envelope"></i>
                 Wyślij wiadomość
@@ -177,7 +177,7 @@
             </li>
           {% endif %}
 
-          <li>
+          <li class="action-link">
             <a href="{{ route('forum.user', [user.id]) }}">
               <i class="fas fa-fw fa-magnifying-glass"></i>
               Znajdź posty użytkownika
@@ -186,7 +186,7 @@
 
           {% if can('adm-access') %}
             {% if not user.is_blocked and user.id != user('id') %}
-              <li>
+              <li class="action-link">
                 <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}">
                   <i class="fas fa-user-lock fa-fw"></i>
                   Zbanuj tego użytkownika
@@ -194,7 +194,7 @@
               </li>
             {% endif %}
 
-            <li>
+            <li class="action-link">
               <a href="{{ route('adm.users.show', [user.id]) }}">
                 <i class="fas fa-eye fa-fw"></i>
                 Pokaż w panelu administracyjnym
