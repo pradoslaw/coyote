@@ -1,13 +1,17 @@
 <template>
-  <a :href="item.url" class="d-flex align-content-center text-truncate" tabindex="-1">
-    <vue-avatar :photo="item.photo" class="i-16 me-2"></vue-avatar>
-
-    <span v-html="highlight(item.name, value)"></span>
-
+  <a :href="profileUrl" class="d-flex align-content-center text-truncate" tabindex="-1">
+    <vue-avatar :photo="item.photo" class="i-16 me-2"/>
+    <span v-html="highlight(item.name)"/>
     <div class="item-options">
-      <a :href="item.url" class="ms-3" title="Przejdź do profilu użytkownika"><i class="fas fa-user"></i></a>
-      <a :href="'/User/Pm/Submit?to=' + item.name" class="ms-3" title="Napisz wiadomość"><i class="fas fa-comment"></i></a>
-      <a :href="'/Search?model=Topic&sort=date&user=' + item.name" class="ms-3" title="Znajdź posty użytkownika"><i class="fas fa-magnifying-glass"></i></a>
+      <a class="ms-3" :href="profileUrl" title="Przejdź do profilu użytkownika">
+        <i class="fas fa-user"/>
+      </a>
+      <a class="ms-3" :href="messageUrl" title="Napisz wiadomość">
+        <i class="fas fa-comment"/>
+      </a>
+      <a class="ms-3" :href="postsUrl" title="Znajdź posty użytkownika">
+        <i class="fas fa-magnifying-glass"/>
+      </a>
     </div>
   </a>
 </template>
@@ -20,6 +24,17 @@ export default {
   mixins: [DecoratorMixin],
   components: {
     'vue-avatar': VueAvatar,
+  },
+  computed: {
+    profileUrl() {
+      return this.$props.item.url;
+    },
+    messageUrl() {
+      return '/User/Pm/Submit?to=' + this.$props.item.name;
+    },
+    postsUrl() {
+      return '/Search?model=Topic&sort=date&user=' + this.$props.item.name;
+    },
   },
 };
 </script>
