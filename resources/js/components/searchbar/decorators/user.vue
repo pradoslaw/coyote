@@ -1,5 +1,5 @@
 <template>
-  <a :href="profileUrl" class="d-flex align-content-center text-truncate" tabindex="-1">
+  <a :href="profileUrl" class="d-flex align-items-center text-truncate" tabindex="-1">
     <vue-avatar :photo="item.photo" class="i-16 me-2"/>
     <span v-html="highlight(item.name)"/>
     <div class="item-options">

@@ -6,11 +6,19 @@
     v-show="isDropdownVisible"
     :style="containerStyle"
   >
-    <li v-for="(item, index) in items" :key="index" :class="{'hover': index === selectedIndex}" @click="selectItem" @mouseover="hoverItem(index)">
+    <li v-for="(item, index) in items"
+        :key="index"
+        class="d-flex align-items-center"
+        :class="{'hover': index === selectedIndex}"
+        @click="selectItem"
+        @mouseover="hoverItem(index)"
+    >
       <slot name="item" :item="item">
-        <vue-avatar :photo="item.photo" :name="item.name" class="d-inline-block"/>
+        <vue-avatar :photo="item.photo" :name="item.name"/>
         <span>{{ item.name }}</span>
-        <small v-if="item.group" class="badge badge-secondary">{{ item.group }}</small>
+        <small v-if="item.group" class="badge badge-secondary ms-auto">
+          {{ item.group }}
+        </small>
       </slot>
     </li>
   </ol>
