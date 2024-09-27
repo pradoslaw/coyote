@@ -154,13 +154,13 @@
 
             <ul v-if="post.assets.length" class="list-unstyled mb-1">
               <li v-for="asset in post.assets" class="small">
-                <i class="fas fa-download"></i>
-
+                <i class="fas fa-download"/>
+                {{ ' ' }}
                 <a :href="`/assets/${asset.id}/${asset.name}`">{{ asset.name }}</a>
+                {{ ' ' }}
                 <small>({{ size(asset.size) }}) - <em>ściągnięć: {{ asset.count }}</em></small>
               </li>
             </ul>
-
             <template v-if="post.user && post.user.sig">
               <hr>
               <footer v-html="post.user.sig"></footer>

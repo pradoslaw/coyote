@@ -40,12 +40,15 @@
               {{ ' ' }}
               <template v-if="totalPages > 4">
                 ...
+                {{ ' ' }}
               </template>
-              {{ ' ' }}
-              <a v-if="totalPages === 4" :href="topic.url + '?page=2'">2</a>
-              {{ ' ' }}
+              <a v-if="totalPages === 4" :href="topic.url + '?page=2'">
+                2
+                {{ ' ' }}
+              </a>
               <template v-for="i in paginatorPages">
-                <a :href="topic.url + '?page=' + i">{{ i }}</a>&nbsp;
+                <a :href="topic.url + '?page=' + i">{{ i }}</a>
+                {{ ' ' }}
               </template>
             </div>
 
