@@ -414,7 +414,7 @@ export default {
         .then(users => users.map(user => ({
           name: user.name,
           badge: user.group,
-          avatar: user.photo || '/img/avatar.png',
+          avatar: user.photo || avatarIcon(),
         })));
     },
     save() {
@@ -495,4 +495,15 @@ export default {
     nextTick(() => Prism.highlightAll());
   },
 };
+
+function avatarIcon() {
+  const icon = document.createElement('i');
+  icon.className = 'fa-solid fa-user';
+
+  const container = document.createElement('span');
+  container.style.display = 'inline-block';
+  container.className = "i-16 me-2 text-center";
+  container.appendChild(icon);
+  return container;
+}
 </script>
