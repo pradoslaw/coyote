@@ -32,7 +32,7 @@ abstract class BaseController extends Controller
                 foreach ($menuItems as $menuItem) {
                     $builder->add($menuItem->title, [
                         'id'        => $menuItem->htmlId,
-                        'class'     => $menuItem->htmlClass ?? '',
+                        'class'     => 'action-link ' . ($menuItem->htmlClass ?? ''),
                         'route'     => $menuItem->route,
                         'icon'      => $menuItem->htmlIcon,
                         'subscript' => $menuItem->subscript,

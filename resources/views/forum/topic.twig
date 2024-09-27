@@ -189,30 +189,30 @@
           </h4>
         </div>
         <ul class="side-menu mt-2">
-          <li :class="{'on': topic.is_subscribed}" class="btn-subscribe" @click="subscribe(topic)" v-if="isAuthorized">
-            <a>
+          <li :class="{'on': topic.is_subscribed}" class="btn-subscribe action-link" v-if="isAuthorized">
+            <a @click="subscribe(topic)" href="javascript:">
               <i class="fa-solid fa-bell fa-fw" v-if="topic.is_subscribed"></i>
               <i class="fa-regular fa-bell fa-fw" v-else></i>
               <span v-if="topic.is_subscribed">Zakończ obserwację</span>
               <span v-else>Obserwuj wątek</span>
             </a>
           </li>
-          <li>
+          <li class="action-link">
             <a href="{{ threadStartUrl }}">
               <i class="fa-solid fa-backward-fast fa-fw"></i>
               <span>Przejdź na początek wątku</span>
             </a>
           </li>
           {% if can('update', forum) %}
-            <li>
+            <li class="action-link">
               <a href="{{ route('forum.stream', [model.id]) }}" title="Zobacz dziennik zdarzeń">
                 <i class="fa fa-chart-pie fa-fw"></i>
                 <span>Dziennik zdarzeń</span>
               </a>
             </li>
 
-            <li>
-              <a @click="$refs['update-modal'].open()" href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" rel="nofollow">
+            <li class="action-link">
+              <a @click="$refs['update-modal'].open();" href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" rel="nofollow">
                 <i class="fa fa-pencil fa-fw"></i>
                 <span>Zmień tytuł</span>
               </a>
@@ -220,7 +220,7 @@
           {% endif %}
 
           {% if can('lock', forum) %}
-            <li>
+            <li class="action-link">
               <a @click="lock" href="javascript:" title="Kliknij, aby zablokować wątek" rel="nofollow">
                 <i :class="{'fa-lock': !topic.is_locked, 'fa-unlock': topic.is_locked}" class="fa fa-lock fa-fw"></i>
                 <span v-if="topic.is_locked">Odblokuj wątek</span>
@@ -230,7 +230,7 @@
           {% endif %}
 
           {% if can('move', forum) %}
-            <li>
+            <li class="action-link">
               <a @click="$refs['forum-modal'].open();" title="Przenieść ten temat do innej kategorii forum" href="javascript:" rel="nofollow">
                 <i class="fa fa-circle-arrow-right fa-fw"></i>
                 <span>Przenieś wątek</span>
