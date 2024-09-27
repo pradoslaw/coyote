@@ -79,8 +79,6 @@ $this->get('User/Privacy/Reset', [PrivacyController::class, 'reset']);
 
 // wizytowka usera. komponent ktory pojawia sie po naprowadzenia kursora nad login usera
 $this->get('User/Vcard/{user}', ['uses' => 'User\VcardController@index', 'as' => 'user.vcard']);
-// zadanie AJAX z lista loginow (podpowiedzi)
-$this->get('User/Prompt', ['uses' => 'User\PromptController@index', 'as' => 'user.prompt']);
 // zapis ustawien do tabeli settings. moga to byc np. niestandardowe ustawienia takie jak
 // np. domyslna zakladka na stronie glownej
 $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as' => 'user.settings.ajax']);

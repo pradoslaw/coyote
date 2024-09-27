@@ -15,25 +15,24 @@ class CommentForm extends Form
         $this
             ->add('text', 'textarea', [
                 'rules' => 'required|string|spam_foreign:1',
-                'attr' => [
+                'attr'  => [
                     'placeholder' => 'Kliknij, aby dodać nowy komentarz',
-                    'cols' => 5,
-                    'rows' => 3,
-                    'data-prompt-url' => route('user.prompt')
-                ]
+                    'cols'        => 5,
+                    'rows'        => 3,
+                ],
             ])
             ->add('cancel', 'button', [
                 'label' => 'Anuluj',
-                'attr' => [
-                    'class' => 'btn btn-sm float-end btn-danger btn-cancel'
-                ]
+                'attr'  => [
+                    'class' => 'btn btn-sm float-end btn-danger btn-cancel',
+                ],
             ])
             ->add('submit', 'submit', [
                 'label' => 'Zapisz',
-                'attr' => [
+                'attr'  => [
                     'data-submit-state' => 'Zapisywanie...',
-                    'class' => 'btn-sm float-end'
-                ]
+                    'class'             => 'btn-sm float-end',
+                ],
             ]);
     }
 }
