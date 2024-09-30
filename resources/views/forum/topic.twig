@@ -174,13 +174,6 @@
 
   {% embed 'forum.partials.sidebar' %}
     {% block side_menu %}
-      <div class="mb-5">
-        {{ globalViewers|raw }}
-      </div>
-      <div class="mb-5">
-        {{ localViewers|raw }}
-      </div>
-
       <div id="js-sidebar" class="box mb-5" v-cloak>
         <div class="box">
           <h4 class="heading">
@@ -274,6 +267,13 @@
             <input type="text" name="title" v-model="topic.title" @keydown.enter="changeTitle" class="form-control">
           </vue-modal>
         {% endif %}
+      </div>
+      
+      <div class="mb-5">
+        {{ globalViewers|raw }}
+      </div>
+      <div class="mb-5">
+        {{ localViewers|raw }}
       </div>
     {% endblock %}
   {% endembed %}
