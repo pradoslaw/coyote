@@ -14,6 +14,11 @@ readonly class UserRegistrations
         $this->weeks = new UniformWeeks();
     }
 
+    public function inRange(HistoryRange $range): array
+    {
+        return $this->inWeeks($range->startDate(), $range->endDate());
+    }
+
     public function inWeeks(string $startDate, string $endDate): array
     {
         if ($this->isStartOfWeek($startDate)) {

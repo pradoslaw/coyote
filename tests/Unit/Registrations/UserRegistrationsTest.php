@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\Registrations;
 
+use Coyote\Domain\HistoryRange;
 use Coyote\Domain\UserRegistrations;
 use Coyote\Post;
 use Coyote\User;
@@ -149,5 +150,18 @@ class UserRegistrationsTest extends TestCase
     private function registrations(string $from, string $to): array
     {
         return \array_values($this->registrations->inWeeks($from, $to));
+    }
+
+    #[Test]
+    public function acceptHistoryRangeAsArgument(): void
+    {
+        $this->assertArrayKeys(
+            ['2024-09-09', '2024-09-16', '2024-09-23'],
+            $this->registrations->inRange(new HistoryRange('2024-09-24', 2)));
+    }
+
+    private function assertArrayKeys(array $expectedKeys, array $actual): void
+    {
+        $this->assertSame($expectedKeys, \array_keys($actual));
     }
 }
