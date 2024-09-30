@@ -3,6 +3,10 @@
     font-weight: 400;
     font-size: 24px;
     user-select: none;
+
+    &::selection {
+      color: currentColor;
+    }
   }
 
   body.theme-light & {
