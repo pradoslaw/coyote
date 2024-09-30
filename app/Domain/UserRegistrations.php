@@ -3,7 +3,7 @@ namespace Coyote\Domain;
 
 use Coyote\User;
 
-class Registrations
+class UserRegistrations
 {
     public function registrations(string $from, string $to): array
     {

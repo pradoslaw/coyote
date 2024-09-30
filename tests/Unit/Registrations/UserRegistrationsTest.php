@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\Registrations;
 
-use Coyote\Domain\Registrations;
+use Coyote\Domain\UserRegistrations;
 use Coyote\Post;
 use Coyote\User;
 use Coyote\Wiki\Log;
@@ -10,17 +10,17 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
 
-class RegistrationsTest extends TestCase
+class UserRegistrationsTest extends TestCase
 {
     use BaseFixture\Server\Laravel\Transactional;
     use BaseFixture\Forum\Models;
 
-    private Registrations $registrations;
+    private UserRegistrations $registrations;
 
     #[Before]
     public function initialize(): void
     {
-        $this->registrations = new Registrations();
+        $this->registrations = new UserRegistrations();
     }
 
     #[Before]
