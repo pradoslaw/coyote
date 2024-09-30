@@ -66,6 +66,20 @@ class ModelsDslTest extends TestCase
     }
 
     #[Test]
+    public function newUserDeletedNamedArgumentTrue(): void
+    {
+        $this->models->newUser('Mark', deleted:true);
+        $this->assertSoftDeleted('users', ['name' => 'Mark']);
+    }
+
+    #[Test]
+    public function newUserDeletedNamedArgumentFalse(): void
+    {
+        $this->models->newUser('Mark', deleted:false); // default value in test by design
+        $this->assertDatabaseHas('users', ['name' => 'Mark']);
+    }
+
+    #[Test]
     public function newUserConfirmedEmail(): void
     {
         $this->models->newUserConfirmedEmail('mail');

@@ -27,7 +27,9 @@ class ModelsFactory
         $user->email = $email ?? 'irrelevant';
         $user->is_confirm = $emailConfirmed ?? false;
         $user->created_at = $createdAt;
-        $user->deleted_at = $deleted;
+        if ($deleted) {
+            $user->deleted_at = true;
+        }
         $user->photo = $photoUrl;
         $user->save();
         return $user;

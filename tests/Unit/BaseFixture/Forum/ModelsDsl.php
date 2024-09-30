@@ -12,14 +12,17 @@ readonly class ModelsDsl
         $this->models = new ModelsFactory();
     }
 
-    public function newUser(string $name = null, string $createdAt = null): void
+    public function newUser(string $name = null, string $createdAt = null, bool $deleted = false): void
     {
-        $this->models->newUserReturn(name:$name, createdAt:$createdAt);
+        $this->models->newUserReturn(name:$name, createdAt:$createdAt, deleted:$deleted);
     }
 
+    /**
+     * @deprecated
+     */
     public function newUserDeleted(string $name): void
     {
-        $this->models->newUserReturn(name:$name, deleted:true);
+        $this->newUser(name:$name, deleted:true);
     }
 
     public function newUserReturnId(string $name = null, string $permissionName = null): int
