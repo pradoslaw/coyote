@@ -19,12 +19,14 @@ class ModelsFactory
         string $photoUrl = null,
         bool   $emailConfirmed = null,
         bool   $deleted = null,
+        string $createdAt = null,
     ): User
     {
         $user = new User();
         $user->name = $name ?? 'irrelevant' . \uniqId();
         $user->email = $email ?? 'irrelevant';
         $user->is_confirm = $emailConfirmed ?? false;
+        $user->created_at = $createdAt;
         $user->deleted_at = $deleted;
         $user->photo = $photoUrl;
         $user->save();

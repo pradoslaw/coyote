@@ -365,4 +365,13 @@ class ModelsDslTest extends TestCase
         $query = Post::query()->whereHas($relation, fn(Builder $query) => $query->where($data));
         $this->assertTrue($query->exists());
     }
+
+    #[Test]
+    public function newUserCreatedAt(): void
+    {
+        $this->models->newUser(createdAt:'2005-04-02 21:37:00');
+        $this->assertDatabaseHas('users', [
+            'created_at' => '2005-04-02 21:37:00',
+        ]);
+    }
 }

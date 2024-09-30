@@ -12,9 +12,9 @@ readonly class ModelsDsl
         $this->models = new ModelsFactory();
     }
 
-    public function newUser(string $name = null): void
+    public function newUser(string $name = null, string $createdAt = null): void
     {
-        $this->models->newUserReturn(name:$name);
+        $this->models->newUserReturn(name:$name, createdAt:$createdAt);
     }
 
     public function newUserDeleted(string $name): void
