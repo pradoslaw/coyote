@@ -7,7 +7,7 @@ class Registrations
 {
     public function registrations(string $from, string $to): array
     {
-        $query = User::query();
+        $query = User::withTrashed();
 
         $query
             ->where('created_at', '>=', "$from 00:00:00")
