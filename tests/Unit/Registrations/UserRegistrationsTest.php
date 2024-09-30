@@ -34,21 +34,21 @@ class UserRegistrationsTest extends TestCase
     #[Test]
     public function noRegistrations(): void
     {
-        $this->assertEmpty($this->registrations('2126-01-23', '2126-01-23'));
+        $this->assertSame([0], $this->registrations('2126-01-21', '2126-01-23'));
     }
 
     #[Test]
     public function oneRegistration(): void
     {
         $this->models->newUser(createdAt:'2125-01-23 21:37:00');
-        $this->assertCount(1, $this->registrations('2125-01-22', '2125-01-24'));
+        $this->assertSame([1], $this->registrations('2125-01-22', '2125-01-24'));
     }
 
     #[Test]
     public function includeDateEdgeStart(): void
     {
-        $this->models->newUser(createdAt:'2125-01-23 21:37:00');
-        $this->assertCount(1, $this->registrations('2125-01-23', '2125-01-24'));
+        $this->models->newUser(createdAt:'2125-01-22 00:00:00');
+        $this->assertSame([1], $this->registrations('2125-01-22', '2125-01-22'));
     }
 
     #[Test]
@@ -75,11 +75,11 @@ class UserRegistrationsTest extends TestCase
     #[Test]
     public function countUsersGroupByWeek(): void
     {
-        $sunday = '2024-09-29 21:37:00';
-        $monday = '2024-09-30 21:37:00';
+        $sunday = '2124-09-24 21:37:00';
+        $monday = '2124-09-25 21:37:00';
         $this->models->newUser(createdAt:$sunday);
         $this->models->newUser(createdAt:$monday);
-        $this->assertSame([1, 1], $this->registrations('2024-09-29', '2024-09-30'));
+        $this->assertSame([1, 1], $this->registrations('2124-09-18', '2124-09-25'));
     }
 
     #[Test]
@@ -107,7 +107,43 @@ class UserRegistrationsTest extends TestCase
         $this->models->newUser(createdAt:"$tuesday 21:37:00", deleted:true);
         $this->assertSame(
             [$monday => 1],
-            $this->registrations->inWeeks('2024-10-01', '2024-10-01'));
+            $this->registrations->inWeeks('2024-09-30', '2024-10-01'));
+    }
+
+    #[Test]
+    public function fillWeekDatesWith0Users(): void
+    {
+        $mondayOfTheFirstWeek = "2124-09-04";
+        $mondayOfTheSecondWeek = "2124-09-18";
+        $this->models->newUser(createdAt:"$mondayOfTheFirstWeek 21:37:00");
+        $this->models->newUser(createdAt:"$mondayOfTheSecondWeek 21:37:00");
+        $this->assertSame(
+            [
+                $mondayOfTheFirstWeek  => 1,
+                '2124-09-11'           => 0,
+                $mondayOfTheSecondWeek => 1,
+            ],
+            $this->registrations->inWeeks('2124-09-04', '2124-09-18'));
+    }
+
+    #[Test]
+    public function fillWeekDatesWithoutUsers(): void
+    {
+        $this->assertSame([
+            '2124-09-04' => 0,
+            '2124-09-11' => 0,
+            '2124-09-18' => 0,
+        ],
+            $this->registrations->inWeeks('2124-09-04', '2124-09-18'));
+    }
+
+    #[Test]
+    public function throwForStartDateNotMonday(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid starting boundary, can only start on monday.');
+        $tuesday = '2000-01-04';
+        $this->registrations->inWeeks($tuesday, '');
     }
 
     private function registrations(string $from, string $to): array
