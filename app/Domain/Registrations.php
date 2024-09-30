@@ -18,6 +18,17 @@ class Registrations
             ->groupByRaw("date_trunc('week', created_at)")
             ->get(['created_at_week', 'total']);
 
-        return \array_column($collection->toArray(), 'count');
+        $array = $collection->toArray();
+        return \array_combine(
+            \array_map(
+                $this->datetimeToDate(...),
+                \array_column($array, 'created_at_week')),
+            \array_column($array, 'count'),
+        );
+    }
+
+    private function datetimeToDate(string $datetime): string
+    {
+        return \strStr($datetime, ' ', before_needle:true);
     }
 }
