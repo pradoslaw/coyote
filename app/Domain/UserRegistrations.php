@@ -5,7 +5,7 @@ use Coyote\User;
 
 class UserRegistrations
 {
-    public function registrations(string $from, string $to): array
+    public function inWeeks(string $from, string $to): array
     {
         $query = User::withTrashed();
 

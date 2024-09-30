@@ -107,11 +107,11 @@ class UserRegistrationsTest extends TestCase
         $this->models->newUser(createdAt:"$tuesday 21:37:00", deleted:true);
         $this->assertSame(
             [$monday => 1],
-            $this->registrations->registrations('2024-10-01', '2024-10-01'));
+            $this->registrations->inWeeks('2024-10-01', '2024-10-01'));
     }
 
     private function registrations(string $from, string $to): array
     {
-        return \array_values($this->registrations->registrations($from, $to));
+        return \array_values($this->registrations->inWeeks($from, $to));
     }
 }
