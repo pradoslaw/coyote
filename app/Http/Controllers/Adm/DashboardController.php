@@ -32,29 +32,29 @@ class DashboardController extends BaseController
                 ],
             ],
 
-            'registrationsChartWeeks'  => $this->historyChart($registrations, Period::Week),
-            'registrationsChartMonths' => $this->historyChart($registrations, Period::Month),
+            'registrationsChartWeeks'  => $this->historyChartHtml($registrations, Period::Week),
+            'registrationsChartMonths' => $this->historyChartHtml($registrations, Period::Month),
         ]);
     }
 
-    private function historyChart(UserRegistrations $registrations, Period $period): StringHtml
+    private function historyChartHtml(UserRegistrations $registrations, Period $period): StringHtml
     {
-        $chart = $this->chart($period->name,
-            $registrations->inRange($this->historyRange($period)));
         return new StringHtml($this->view('adm.registrations-chart', [
-            'chart'              => $chart,
+            'chart'              => $this->registrationsChart($registrations, $period),
             'chartTitle'         => 'Historia rejestracji (ostatnie 30 tygodni)',
             'chartLibrarySource' => Chart::librarySourceHtml(),
         ]));
     }
 
-    private function historyRange(Period $period): HistoryRange
+    private function registrationsChart(UserRegistrations $registrations, Period $period): Chart
     {
-        $endDate = Carbon::now()->toDateString();
-        return match ($period) {
-            Period::Week => new HistoryRange($endDate, weeks:30),
-            Period::Month => new HistoryRange($endDate, months:30),
-        };
+        $range = new HistoryRange($this->dateNow(), $period, 30);
+        return $this->chart($period->name, $registrations->inRange($range));
+    }
+
+    private function dateNow(): string
+    {
+        return Carbon::now()->toDateString();
     }
 
     private function chart(string $chartId, array $registeredUsers): Chart

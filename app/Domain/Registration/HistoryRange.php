@@ -6,18 +6,9 @@ use Carbon\CarbonImmutable;
 readonly class HistoryRange
 {
     private CarbonImmutable $endDate;
-    public Period $period;
 
-    public function __construct(
-        string       $endDate,
-        private ?int $weeks = null,
-        private ?int $months = null,
-    )
+    public function __construct(string $endDate, public Period $period, private int $value)
     {
-        if ($this->weeks === null && $this->months === null) {
-            throw new \Exception('Failed to create history range without period: week,month.');
-        }
-        $this->period = $this->weeks === null ? Period::Month : Period::Week;
         $this->endDate = CarbonImmutable::parse($endDate);
     }
 
@@ -28,14 +19,10 @@ readonly class HistoryRange
 
     private function periodStartDate(): CarbonImmutable
     {
-        if ($this->months === null) {
-            return $this->endDate
-                ->subWeeks($this->weeks)
-                ->subDays($this->excessWeekDays());
-        }
-        return $this->endDate
-            ->subMonths($this->months)
-            ->subDays($this->excessMonthDays());
+        return match ($this->period) {
+            Period::Week => $this->endDate->subWeeks($this->value)->subDays($this->excessWeekDays()),
+            Period::Month => $this->endDate->subMonths($this->value)->subDays($this->excessMonthDays())
+        };
     }
 
     private function excessWeekDays(): int

@@ -2,6 +2,7 @@
 namespace Tests\Unit\Registrations;
 
 use Coyote\Domain\Registration\HistoryRange;
+use Coyote\Domain\Registration\Period;
 use Coyote\Domain\Registration\UserRegistrations;
 use Coyote\Post;
 use Coyote\User;
@@ -80,7 +81,7 @@ class UserRegistrationsTest extends TestCase
         $monday = '2124-09-25 21:37:00';
         $this->models->newUser(createdAt:$sunday);
         $this->models->newUser(createdAt:$monday);
-        $this->assertSame([1, 1], $this->registrations(new HistoryRange('2124-09-25', weeks:1)));
+        $this->assertSame([1, 1], $this->registrations(new HistoryRange('2124-09-25', Period::Week, 1)));
     }
 
     #[Test]
@@ -108,7 +109,7 @@ class UserRegistrationsTest extends TestCase
         $this->models->newUser(createdAt:"$tuesday 21:37:00", deleted:true);
         $this->assertSame(
             [$monday => 1],
-            $this->registrations->inRange(new HistoryRange('2024-10-01', weeks:0)));
+            $this->registrations->inRange(new HistoryRange('2024-10-01', Period::Week, 0)));
     }
 
     #[Test]
@@ -124,7 +125,7 @@ class UserRegistrationsTest extends TestCase
                 '2124-09-11'           => 0,
                 $mondayOfTheSecondWeek => 1,
             ],
-            $this->registrations->inRange(new HistoryRange('2124-09-18', weeks:2)));
+            $this->registrations->inRange(new HistoryRange('2124-09-18', Period::Week, 2)));
     }
 
     #[Test]
@@ -135,7 +136,7 @@ class UserRegistrationsTest extends TestCase
             '2124-09-11' => 0,
             '2124-09-18' => 0,
         ],
-            $this->registrations->inRange(new HistoryRange('2124-09-18', weeks:2)));
+            $this->registrations->inRange(new HistoryRange('2124-09-18', Period::Week, 2)));
     }
 
     private function assertArrayKeys(array $expectedKeys, array $actual): void
@@ -145,7 +146,7 @@ class UserRegistrationsTest extends TestCase
 
     private function registrationsInWeek(string $from, string $to): array
     {
-        $range = new HistoryRange($to, weeks:0);
+        $range = new HistoryRange($to, Period::Week, 0);
         if ($range->startDate() === $from) {
             return $this->registrations($range);
         }
@@ -162,7 +163,7 @@ class UserRegistrationsTest extends TestCase
     {
         $this->assertArrayKeys(
             ['2024-07-01', '2024-08-01', '2024-09-01'],
-            $this->registrations->inRange(new HistoryRange('2024-09-24', months:2)));
+            $this->registrations->inRange(new HistoryRange('2024-09-24', Period::Month, 2)));
     }
 
     #[Test]
@@ -170,7 +171,7 @@ class UserRegistrationsTest extends TestCase
     {
         $this->assertArrayKeys(
             ['2024-09-30'],
-            $this->registrations->inRange(new HistoryRange('2024-10-01', weeks:0)));
+            $this->registrations->inRange(new HistoryRange('2024-10-01', Period::Week, 0)));
     }
 
     #[Test]
@@ -182,6 +183,6 @@ class UserRegistrationsTest extends TestCase
         $this->models->newUser(createdAt:$monday);
         $this->assertSame(
             ['2124-09-01' => 1, '2124-10-01' => 1],
-            $this->registrations->inRange(new HistoryRange('2124-10-01', months:1)));
+            $this->registrations->inRange(new HistoryRange('2124-10-01', Period::Month, 1)));
     }
 }
