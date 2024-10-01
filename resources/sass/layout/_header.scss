@@ -34,6 +34,22 @@ body.padding-top {
   border: 0;
   padding: $navbar-toggler-padding-y 0 $navbar-toggler-padding-y $navbar-toggler-padding-x;
   outline: none !important;
+  width: 28px;
+  text-align: center;
+
+  .button-close {
+    display: none;
+  }
+
+  &[aria-expanded="true"] {
+    .button-open {
+      display: none;
+    }
+
+    .button-close {
+      display: block;
+    }
+  }
 }
 
 .navbar {
