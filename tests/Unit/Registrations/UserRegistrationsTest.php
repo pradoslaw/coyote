@@ -138,14 +138,6 @@ class UserRegistrationsTest extends TestCase
             $this->registrations->inRange(new HistoryRange('2124-09-18', weeks:2)));
     }
 
-    #[Test]
-    public function acceptHistoryRangeAsArgument(): void
-    {
-        $this->assertArrayKeys(
-            ['2024-09-09', '2024-09-16', '2024-09-23'],
-            $this->registrations->inRange(new HistoryRange('2024-09-24', 2)));
-    }
-
     private function assertArrayKeys(array $expectedKeys, array $actual): void
     {
         $this->assertSame($expectedKeys, \array_keys($actual));
@@ -163,5 +155,33 @@ class UserRegistrationsTest extends TestCase
     private function registrations(HistoryRange $range): array
     {
         return \array_values($this->registrations->inRange($range));
+    }
+
+    #[Test]
+    public function presentMonthDates(): void
+    {
+        $this->assertArrayKeys(
+            ['2024-07-01', '2024-08-01', '2024-09-01'],
+            $this->registrations->inRange(new HistoryRange('2024-09-24', months:2)));
+    }
+
+    #[Test]
+    public function weekOfValueZeroShouldNotBeMistakenForNullWeeks(): void
+    {
+        $this->assertArrayKeys(
+            ['2024-09-30'],
+            $this->registrations->inRange(new HistoryRange('2024-10-01', weeks:0)));
+    }
+
+    #[Test]
+    public function countUsersGroupByMonth(): void
+    {
+        $sunday = '2124-09-30 21:37:00';
+        $monday = '2124-10-01 21:37:00';
+        $this->models->newUser(createdAt:$sunday);
+        $this->models->newUser(createdAt:$monday);
+        $this->assertSame(
+            ['2124-09-01' => 1, '2124-10-01' => 1],
+            $this->registrations->inRange(new HistoryRange('2124-10-01', months:1)));
     }
 }
