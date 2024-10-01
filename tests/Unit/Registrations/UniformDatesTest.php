@@ -1,12 +1,22 @@
 <?php
 namespace Tests\Unit\Registrations;
 
+use Coyote\Domain\Registration\Period;
 use Coyote\Domain\UniformDates;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class UniformDatesTest extends TestCase
 {
+    private UniformDates $dates;
+
+    #[Before]
+    public function initialize(): void
+    {
+        $this->dates = new UniformDates();
+    }
+
     #[Test]
     public function fillWeekDates(): void
     {
@@ -17,7 +27,7 @@ class UniformDatesTest extends TestCase
             '2124-09-11',
             '2124-09-18',
         ],
-            $this->uniformWeeks($mondayFirst, $mondayThird));
+            $this->dates->uniform(Period::Week, $mondayFirst, $mondayThird));
     }
 
     #[Test]
@@ -26,7 +36,7 @@ class UniformDatesTest extends TestCase
         $mondayFirst = '2124-09-04';
         $mondayThird = '2124-09-05';
         $this->assertSame(['2124-09-04'],
-            $this->uniformWeeks($mondayFirst, $mondayThird));
+            $this->dates->uniform(Period::Week, $mondayFirst, $mondayThird));
     }
 
     #[Test]
@@ -37,7 +47,7 @@ class UniformDatesTest extends TestCase
             '2124-08-04',
             '2124-09-04',
         ],
-            $this->uniformMonths('2124-07-04', '2124-09-04'));
+            $this->dates->uniform(Period::Month, '2124-07-04', '2124-09-04'));
     }
 
     #[Test]
@@ -48,21 +58,6 @@ class UniformDatesTest extends TestCase
             '2123-01-02',
             '2124-01-02',
         ],
-            $this->uniformYears('2122-01-02', '2124-03-04'));
-    }
-
-    private function uniformWeeks(string $startDate, string $endDate): array
-    {
-        return (new UniformDates())->uniformWeeks($startDate, $endDate);
-    }
-
-    private function uniformMonths(string $startDate, string $endDate): array
-    {
-        return (new UniformDates())->uniformMonths($startDate, $endDate);
-    }
-
-    private function uniformYears(string $startDate, string $endDate): array
-    {
-        return (new UniformDates())->uniformYears($startDate, $endDate);
+            $this->dates->uniform(Period::Year, '2122-01-02', '2124-03-04'));
     }
 }

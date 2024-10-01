@@ -47,11 +47,7 @@ readonly class UserRegistrations
 
     private function uniformDates(HistoryRange $range): array
     {
-        return match ($range->period) {
-            Period::Week => $this->uniformDates->uniformWeeks($range->startDate(), $range->endDate()),
-            Period::Month => $this->uniformDates->uniformMonths($range->startDate(), $range->endDate()),
-            Period::Year => $this->uniformDates->uniformYears($range->startDate(), $range->endDate()),
-        };
+        return $this->uniformDates->uniform($range->period, $range->startDate(), $range->endDate());
     }
 
     private function arrayFrom(array $keys, int $value): array
