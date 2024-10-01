@@ -28,6 +28,9 @@ class BaseController extends Controller
     private function buildMenu(Menu $menu): Builder
     {
         return $menu->make('adm', function (Builder $menu) {
+            if ($menu->all()->count() > 0) {
+                return;
+            }
             /** @var HtmlBuilder $html */
             $html = app('html');
             $fa = function ($icon) use ($html) {
