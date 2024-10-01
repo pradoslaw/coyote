@@ -35,42 +35,42 @@ class UserRegistrationsTest extends TestCase
     #[Test]
     public function noRegistrations(): void
     {
-        $this->assertSame([0], $this->registrations('2126-01-21', '2126-01-23'));
+        $this->assertSame([0], $this->registrationsInWeek('2126-01-21', '2126-01-23'));
     }
 
     #[Test]
     public function oneRegistration(): void
     {
         $this->models->newUser(createdAt:'2125-01-23 21:37:00');
-        $this->assertSame([1], $this->registrations('2125-01-22', '2125-01-24'));
+        $this->assertSame([1], $this->registrationsInWeek('2125-01-22', '2125-01-24'));
     }
 
     #[Test]
     public function includeDateEdgeStart(): void
     {
         $this->models->newUser(createdAt:'2125-01-22 00:00:00');
-        $this->assertSame([1], $this->registrations('2125-01-22', '2125-01-22'));
+        $this->assertSame([1], $this->registrationsInWeek('2125-01-22', '2125-01-22'));
     }
 
     #[Test]
     public function includeDateEdgeEnd(): void
     {
         $this->models->newUser(createdAt:'2125-01-23 21:37:00');
-        $this->assertCount(1, $this->registrations('2125-01-22', '2125-01-23'));
+        $this->assertCount(1, $this->registrationsInWeek('2125-01-22', '2125-01-23'));
     }
 
     #[Test]
     public function includeDateEdgeEndLastSecondOfTheDay(): void
     {
         $this->models->newUser(createdAt:'2125-01-23 23:59:59');
-        $this->assertCount(1, $this->registrations('2125-01-22', '2125-01-23'));
+        $this->assertCount(1, $this->registrationsInWeek('2125-01-22', '2125-01-23'));
     }
 
     #[Test]
     public function countUsersOne(): void
     {
         $this->models->newUser(createdAt:'2024-09-30 21:37:00');
-        $this->assertSame([1], $this->registrations('2024-09-30', '2024-10-01'));
+        $this->assertSame([1], $this->registrationsInWeek('2024-09-30', '2024-10-01'));
     }
 
     #[Test]
@@ -80,7 +80,7 @@ class UserRegistrationsTest extends TestCase
         $monday = '2124-09-25 21:37:00';
         $this->models->newUser(createdAt:$sunday);
         $this->models->newUser(createdAt:$monday);
-        $this->assertSame([1, 1], $this->registrations('2124-09-18', '2124-09-25'));
+        $this->assertSame([1, 1], $this->registrationsInWeek('2124-09-18', '2124-09-25'));
     }
 
     #[Test]
@@ -90,14 +90,14 @@ class UserRegistrationsTest extends TestCase
         $tuesday = '2024-10-01 21:37:00';
         $this->models->newUser(createdAt:$monday);
         $this->models->newUser(createdAt:$tuesday);
-        $this->assertSame([2], $this->registrations('2024-09-30', '2024-10-01'));
+        $this->assertSame([2], $this->registrationsInWeek('2024-09-30', '2024-10-01'));
     }
 
     #[Test]
     public function includeUsersWhoAreDeleted(): void
     {
         $this->models->newUser(createdAt:'2125-01-23 21:37:00', deleted:true);
-        $this->assertCount(1, $this->registrations('2125-01-22', '2125-01-24'));
+        $this->assertCount(1, $this->registrationsInWeek('2125-01-22', '2125-01-24'));
     }
 
     #[Test]
@@ -108,7 +108,7 @@ class UserRegistrationsTest extends TestCase
         $this->models->newUser(createdAt:"$tuesday 21:37:00", deleted:true);
         $this->assertSame(
             [$monday => 1],
-            $this->registrations->inWeeks('2024-09-30', '2024-10-01'));
+            $this->registrations->inRange(new HistoryRange('2024-10-01', weeks:0)));
     }
 
     #[Test]
@@ -124,7 +124,7 @@ class UserRegistrationsTest extends TestCase
                 '2124-09-11'           => 0,
                 $mondayOfTheSecondWeek => 1,
             ],
-            $this->registrations->inWeeks('2124-09-04', '2124-09-18'));
+            $this->registrations->inRange(new HistoryRange('2124-09-18', weeks:2)));
     }
 
     #[Test]
@@ -135,21 +135,7 @@ class UserRegistrationsTest extends TestCase
             '2124-09-11' => 0,
             '2124-09-18' => 0,
         ],
-            $this->registrations->inWeeks('2124-09-04', '2124-09-18'));
-    }
-
-    #[Test]
-    public function throwForStartDateNotMonday(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid starting boundary, can only start on monday.');
-        $tuesday = '2000-01-04';
-        $this->registrations->inWeeks($tuesday, '');
-    }
-
-    private function registrations(string $from, string $to): array
-    {
-        return \array_values($this->registrations->inWeeks($from, $to));
+            $this->registrations->inRange(new HistoryRange('2124-09-18', weeks:2)));
     }
 
     #[Test]
@@ -157,11 +143,27 @@ class UserRegistrationsTest extends TestCase
     {
         $this->assertArrayKeys(
             ['2024-09-09', '2024-09-16', '2024-09-23'],
-            $this->registrations->inRange(new HistoryRange('2024-09-24', weeks:2)));
+            $this->registrations->inRange(new HistoryRange('2024-09-24', 2)));
     }
 
     private function assertArrayKeys(array $expectedKeys, array $actual): void
     {
         $this->assertSame($expectedKeys, \array_keys($actual));
+    }
+
+    private function registrationsInWeek(string $from, string $to): array
+    {
+        foreach (range(0, 1) as $weeks) {
+            $range = new HistoryRange($to, weeks:$weeks);
+            if ($range->startDate() === $from) {
+                return $this->registrations($range);
+            }
+        }
+        throw new \Exception();
+    }
+
+    private function registrations(HistoryRange $range): array
+    {
+        return \array_values($this->registrations->inRange($range));
     }
 }

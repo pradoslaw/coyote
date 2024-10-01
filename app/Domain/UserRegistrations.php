@@ -1,8 +1,6 @@
 <?php
 namespace Coyote\Domain;
 
-use Carbon\Carbon;
-use Carbon\CarbonInterface;
 use Coyote\User;
 
 readonly class UserRegistrations
@@ -16,29 +14,10 @@ readonly class UserRegistrations
 
     public function inRange(HistoryRange $range): array
     {
-        return $this->inWeeks($range->startDate(), $range->endDate());
-    }
-
-    public function inWeeks(string $startDate, string $endDate): array
-    {
-        if ($this->isStartOfWeek($startDate)) {
-            return $this->registrationsByWeekDates($startDate, $endDate);
-        }
-        throw new \InvalidArgumentException('Invalid starting boundary, can only start on monday.');
-    }
-
-    private function isStartOfWeek(string $date): bool
-    {
-        $carbon = new Carbon($date);
-        return $carbon->dayOfWeek === CarbonInterface::MONDAY;
-    }
-
-    private function registrationsByWeekDates(string $startDate, string $endDate): array
-    {
         return $this->fillEmptyWeekDates(
-            $startDate,
-            $endDate,
-            $this->fetchRegistrationsByWeekDates($startDate, $endDate));
+            $range->startDate(),
+            $range->endDate(),
+            $this->fetchRegistrationsByWeekDates($range->startDate(), $range->endDate()));
     }
 
     private function fetchRegistrationsByWeekDates(string $from, string $to): array
