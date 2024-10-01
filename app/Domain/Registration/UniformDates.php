@@ -1,10 +1,8 @@
 <?php
-namespace Coyote\Domain;
+namespace Coyote\Domain\Registration;
 
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use Coyote\Domain\Registration\HistoryRange;
-use Coyote\Domain\Registration\Period;
 
 class UniformDates
 {

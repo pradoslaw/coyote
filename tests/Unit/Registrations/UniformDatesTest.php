@@ -3,7 +3,7 @@ namespace Tests\Unit\Registrations;
 
 use Coyote\Domain\Registration\HistoryRange;
 use Coyote\Domain\Registration\Period;
-use Coyote\Domain\UniformDates;
+use Coyote\Domain\Registration\UniformDates;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
