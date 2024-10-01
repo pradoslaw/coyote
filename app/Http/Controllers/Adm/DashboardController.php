@@ -31,24 +31,38 @@ class DashboardController extends BaseController
                 ],
             ],
 
-            'registrationsChartModule' => new StringHtml($this->view('adm.registrations-chart', [
-                'chart'              => $this->registrationHistoryChart($registrations),
-                'chartTitle'         => 'Historia rejestracji (ostatnie 30 tygodni)',
-                'chartLibrarySource' => Chart::librarySourceHtml(),
-            ])),
+            'registrationsChartWeeks'  => $this->historyChart($registrations, 'weeks'),
+            'registrationsChartMonths' => $this->historyChart($registrations, 'months'),
         ]);
     }
 
-    private function registrationHistoryChart(UserRegistrations $registrations): Chart
+    private function historyChart(UserRegistrations $registrations, string $period): StringHtml
     {
-        $last30Weeks = new HistoryRange(Carbon::now()->toDateString(), weeks:30);
-        $registeredUsers = $registrations->inRange($last30Weeks);
+        $chart = $this->chart($period,
+            $registrations->inRange($this->historyRange($period)));
+        return new StringHtml($this->view('adm.registrations-chart', [
+            'chart'              => $chart,
+            'chartTitle'         => 'Historia rejestracji (ostatnie 30 tygodni)',
+            'chartLibrarySource' => Chart::librarySourceHtml(),
+        ]));
+    }
+
+    private function historyRange(string $period): HistoryRange
+    {
+        $endDate = Carbon::now()->toDateString();
+        if ($period === 'weeks') {
+            return new HistoryRange($endDate, weeks:30);
+        }
+        return new HistoryRange($endDate, months:30);
+    }
+
+    private function chart(string $chartId, array $registeredUsers): Chart
+    {
         return new Chart(
             \array_keys($registeredUsers),
             \array_values($registeredUsers),
             ['#ff9f40'],
-            'registration-history-chart',
-            baseline:5,
+            "registration-history-chart-$chartId",
         );
     }
 

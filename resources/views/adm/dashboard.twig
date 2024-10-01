@@ -17,5 +17,21 @@
       {% endfor %}
     </ul>
   </div>
-  {{ registrationsChartModule }}
+
+  <ul class="nav nav-pills mb-3 justify-content-end">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pills-weeks" type="button">ostatnie 30 tygodni</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-months" type="button">ostatnie 30 miesięcy</button>
+    </li>
+  </ul>
+  <div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane show active" id="pills-weeks">
+      {{ registrationsChartWeeks }}
+    </div>
+    <div class="tab-pane" id="pills-months">
+      {{ registrationsChartMonths }}
+    </div>
+  </div>
 {% endblock %}
