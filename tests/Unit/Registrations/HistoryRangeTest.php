@@ -84,4 +84,25 @@ class HistoryRangeTest extends TestCase
         $range->startDate();
         $this->assertSame('2024-09-23', $range->endDate());
     }
+
+    #[Test]
+    public function historyRangeYearsFirstDay(): void
+    {
+        $range = new HistoryRange('2024-09-23', Period::Year, 0);
+        $this->assertSame('2024-01-01', $range->startDate());
+    }
+
+    #[Test]
+    public function historyRangeYearsPreviousYear(): void
+    {
+        $range = new HistoryRange('2023-09-23', Period::Year, 1);
+        $this->assertSame('2022-01-01', $range->startDate());
+    }
+
+    #[Test]
+    public function historyRangeYearsPreviousYearLeapYear(): void
+    {
+        $range = new HistoryRange('2024-09-23', Period::Year, 1);
+        $this->assertSame('2023-01-01', $range->startDate());
+    }
 }

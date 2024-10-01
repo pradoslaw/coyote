@@ -177,12 +177,20 @@ class UserRegistrationsTest extends TestCase
     #[Test]
     public function countUsersGroupByMonth(): void
     {
-        $sunday = '2124-09-30 21:37:00';
-        $monday = '2124-10-01 21:37:00';
-        $this->models->newUser(createdAt:$sunday);
-        $this->models->newUser(createdAt:$monday);
+        $this->models->newUser(createdAt:'2124-09-30 21:37:00');
+        $this->models->newUser(createdAt:'2124-10-01 21:37:00');
         $this->assertSame(
             ['2124-09-01' => 1, '2124-10-01' => 1],
             $this->registrations->inRange(new HistoryRange('2124-10-01', Period::Month, 1)));
+    }
+
+    #[Test]
+    public function countUsersGroupByYear(): void
+    {
+        $this->models->newUser(createdAt:'2123-12-31 21:37:00');
+        $this->models->newUser(createdAt:'2124-01-01 21:37:00');
+        $this->assertSame(
+            ['2123-01-01' => 1, '2124-01-01' => 1],
+            $this->registrations->inRange(new HistoryRange('2124-10-01', Period::Year, 1)));
     }
 }

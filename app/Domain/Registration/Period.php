@@ -5,4 +5,5 @@ enum Period
 {
     case Week;
     case Month;
+    case Year;
 }

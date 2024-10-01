@@ -41,6 +41,7 @@ readonly class UserRegistrations
         return match ($period) {
             Period::Week => "date_trunc('week', created_at)::date",
             Period::Month => "date_trunc('month', created_at)::date",
+            Period::Year => "date_trunc('year', created_at)::date",
         };
     }
 
@@ -49,6 +50,7 @@ readonly class UserRegistrations
         return match ($range->period) {
             Period::Week => $this->uniformDates->uniformWeeks($range->startDate(), $range->endDate()),
             Period::Month => $this->uniformDates->uniformMonths($range->startDate(), $range->endDate()),
+            Period::Year => $this->uniformDates->uniformYears($range->startDate(), $range->endDate()),
         };
     }
 

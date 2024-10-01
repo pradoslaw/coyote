@@ -16,6 +16,11 @@ class UniformDates
         return $this->uniformDates(CarbonPeriod::months(), $startDate, $endDate);
     }
 
+    public function uniformYears(string $startDate, string $endDate): array
+    {
+        return $this->uniformDates(CarbonPeriod::years(), $startDate, $endDate);
+    }
+
     private function uniformDates(CarbonPeriod $period, string $start, string $end): array
     {
         return \iterator_to_array($period

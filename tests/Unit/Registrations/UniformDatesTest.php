@@ -40,6 +40,17 @@ class UniformDatesTest extends TestCase
             $this->uniformMonths('2124-07-04', '2124-09-04'));
     }
 
+    #[Test]
+    public function fillYearDates(): void
+    {
+        $this->assertSame([
+            '2122-01-02',
+            '2123-01-02',
+            '2124-01-02',
+        ],
+            $this->uniformYears('2122-01-02', '2124-03-04'));
+    }
+
     private function uniformWeeks(string $startDate, string $endDate): array
     {
         return (new UniformDates())->uniformWeeks($startDate, $endDate);
@@ -48,5 +59,10 @@ class UniformDatesTest extends TestCase
     private function uniformMonths(string $startDate, string $endDate): array
     {
         return (new UniformDates())->uniformMonths($startDate, $endDate);
+    }
+
+    private function uniformYears(string $startDate, string $endDate): array
+    {
+        return (new UniformDates())->uniformYears($startDate, $endDate);
     }
 }

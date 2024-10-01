@@ -20,8 +20,9 @@ readonly class HistoryRange
     private function periodStartDate(): CarbonImmutable
     {
         return match ($this->period) {
-            Period::Week => $this->endDate->subWeeks($this->value)->subDays($this->excessWeekDays()),
-            Period::Month => $this->endDate->subMonths($this->value)->subDays($this->excessMonthDays())
+            Period::Week => $this->endDate->subDays($this->excessWeekDays())->subWeeks($this->value),
+            Period::Month => $this->endDate->subDays($this->excessMonthDays())->subMonths($this->value),
+            Period::Year => $this->endDate->subDays($this->excessYearDays())->subYears($this->value),
         };
     }
 
@@ -36,6 +37,11 @@ readonly class HistoryRange
     private function excessMonthDays(): int
     {
         return $this->endDate->dayOfMonth - 1;
+    }
+
+    private function excessYearDays(): int
+    {
+        return $this->endDate->dayOfYear - 1;
     }
 
     public function endDate(): string
