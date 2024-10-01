@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import "bootstrap/scss/mixins";
 
 $header-height: 56px;
 
@@ -24,6 +25,20 @@ body.padding-top {
   --header-group-link-color: #9d9d9d;
   --header-search-bg: #{$gray-light};
   --header-search-border: transparent;
+}
+
+@include media-breakpoint-down(lg) {
+  #mobile-menu {
+    .navbar-nav {
+      .nav-item {
+        text-align: right;
+
+        .dropdown-container {
+          display: none;
+        }
+      }
+    }
+  }
 }
 
 .navbar-brand {
