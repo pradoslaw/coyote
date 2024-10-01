@@ -83,4 +83,12 @@ class HistoryRangeTest extends TestCase
         $this->expectExceptionMessage('Failed to create history range without period: week,month.');
         new HistoryRange('2024-09-23');
     }
+
+    #[Test]
+    public function doesNotModifyInternalState(): void
+    {
+        $range = new HistoryRange('2024-09-23', weeks:2);
+        $range->startDate();
+        $this->assertSame('2024-09-23', $range->endDate());
+    }
 }

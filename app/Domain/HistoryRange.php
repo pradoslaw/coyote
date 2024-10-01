@@ -1,11 +1,11 @@
 <?php
 namespace Coyote\Domain;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 
 readonly class HistoryRange
 {
-    private Carbon $endDate;
+    private CarbonImmutable $endDate;
 
     public function __construct(
         string       $endDate,
@@ -16,7 +16,7 @@ readonly class HistoryRange
         if ($this->weeks === null && $this->months === null) {
             throw new \Exception('Failed to create history range without period: week,month.');
         }
-        $this->endDate = new Carbon($endDate);
+        $this->endDate = CarbonImmutable::parse($endDate);
     }
 
     public function startDate(): string
@@ -24,7 +24,7 @@ readonly class HistoryRange
         return $this->periodStartDate()->toDateString();
     }
 
-    private function periodStartDate(): Carbon
+    private function periodStartDate(): CarbonImmutable
     {
         if ($this->months === null) {
             return $this->endDate
