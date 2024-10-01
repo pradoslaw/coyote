@@ -1,5 +1,5 @@
 <?php
-namespace Coyote\Domain;
+namespace Coyote\Domain\Registration;
 
 use Carbon\CarbonImmutable;
 

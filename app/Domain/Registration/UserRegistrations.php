@@ -1,6 +1,7 @@
 <?php
-namespace Coyote\Domain;
+namespace Coyote\Domain\Registration;
 
+use Coyote\Domain\UniformDates;
 use Coyote\User;
 
 readonly class UserRegistrations

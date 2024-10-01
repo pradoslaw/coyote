@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\Registrations;
 
-use Coyote\Domain\HistoryRange;
+use Coyote\Domain\Registration\HistoryRange;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 

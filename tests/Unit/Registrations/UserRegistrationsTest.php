@@ -1,8 +1,8 @@
 <?php
 namespace Tests\Unit\Registrations;
 
-use Coyote\Domain\HistoryRange;
-use Coyote\Domain\UserRegistrations;
+use Coyote\Domain\Registration\HistoryRange;
+use Coyote\Domain\Registration\UserRegistrations;
 use Coyote\Post;
 use Coyote\User;
 use Coyote\Wiki\Log;

@@ -2,9 +2,9 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Carbon\Carbon;
-use Coyote\Domain\HistoryRange;
+use Coyote\Domain\Registration\HistoryRange;
+use Coyote\Domain\Registration\UserRegistrations;
 use Coyote\Domain\StringHtml;
-use Coyote\Domain\UserRegistrations;
 use Coyote\Domain\View\Chart;
 use Illuminate\Foundation\Application;
 use Illuminate\View\View;
