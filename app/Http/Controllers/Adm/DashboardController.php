@@ -33,6 +33,7 @@ class DashboardController extends BaseController
 
             'registrationsChartModule' => new StringHtml($this->view('adm.registrations-chart', [
                 'chart'              => $this->registrationHistoryChart($registrations),
+                'chartTitle'         => 'Historia rejestracji (ostatnie 30 tygodni)',
                 'chartLibrarySource' => Chart::librarySourceHtml(),
             ])),
         ]);
