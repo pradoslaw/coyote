@@ -64,10 +64,6 @@
 
     <nav class="navbar navbar-expand-lg {{ __dark_theme ? 'navbar-dark' : 'navbar-light' }}">
       <div class="container-3xl d-flex flex-wrap">
-        <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-menu">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
         <a rel="home" class="navbar-brand order-0" href="{{ route('home') }}" title="4programmers.net - Strona główna">
           <img
               class="logo"
@@ -79,7 +75,7 @@
           />
         </a>
 
-        <div class="collapse navbar-collapse flex-grow-0 order-3 order-lg-1 ms-2" id="mobile-menu">
+        <div class="collapse navbar-collapse flex-grow-0 order-4 order-lg-1 ms-2" id="mobile-menu">
           <ul class="navbar-nav">
             {% for item in __master_menu.roots() %}
               <li {{ forms.attr(item.attr) }}>
@@ -181,6 +177,10 @@
             </a>
           </div>
         {% endif %}
+
+        <button class="navbar-toggler shadow-none order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
       </div>
     </nav>
   </header>

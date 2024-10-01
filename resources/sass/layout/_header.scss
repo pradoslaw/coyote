@@ -27,12 +27,12 @@ body.padding-top {
 }
 
 .navbar-brand {
-  margin: 0; // no default margin
+  margin: 0;
 }
 
 .navbar-toggler {
   border: 0;
-  padding: $navbar-toggler-padding-y $navbar-toggler-padding-x $navbar-toggler-padding-y 0;
+  padding: $navbar-toggler-padding-y 0 $navbar-toggler-padding-y $navbar-toggler-padding-x;
   outline: none !important;
 }
 
