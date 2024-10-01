@@ -14,10 +14,12 @@ readonly class UserRegistrations
 
     public function inRange(HistoryRange $range): array
     {
-        return $this->fillEmptyWeekDates(
-            $range->startDate(),
-            $range->endDate(),
-            $this->fetchRegistrationsByWeekDates($range->startDate(), $range->endDate()));
+        return \array_merge(
+            $this->createArray(
+                keys:$this->uniformDates->uniformWeeks($range->startDate(), $range->endDate()),
+                value:0),
+            $this->fetchRegistrationsByWeekDates($range->startDate(), $range->endDate()),
+        );
     }
 
     private function fetchRegistrationsByWeekDates(string $from, string $to): array
@@ -30,21 +32,6 @@ readonly class UserRegistrations
             ->get()
             ->pluck(key:'created_at_group', value:'count')
             ->toArray();
-    }
-
-    private function fillEmptyWeekDates(string $startDate, string $endDate, array $registrationWeekDates): array
-    {
-        return \array_merge(
-            $this->emptyWeekDates($startDate, $endDate),
-            $registrationWeekDates,
-        );
-    }
-
-    private function emptyWeekDates(string $from, string $to): array
-    {
-        return $this->createArray(
-            keys:$this->uniformDates->uniformWeeks($from, $to),
-            value:0);
     }
 
     private function createArray(array $keys, int $value): array
