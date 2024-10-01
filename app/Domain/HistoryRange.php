@@ -5,33 +5,52 @@ use Carbon\Carbon;
 
 readonly class HistoryRange
 {
+    private Carbon $endDate;
+
     public function __construct(
-        private string $endDate,
-        private int    $weeks,
+        string       $endDate,
+        private ?int $weeks = null,
+        private ?int $months = null,
     )
     {
+        if ($this->weeks === null && $this->months === null) {
+            throw new \Exception('Failed to create history range without period: week,month.');
+        }
+        $this->endDate = new Carbon($endDate);
     }
 
     public function startDate(): string
     {
-        $endDate = new Carbon($this->endDate);
-        return $endDate
-            ->subWeeks($this->weeks)
-            ->subDays($this->excessDays($endDate))
-            ->toDateString();
+        return $this->periodStartDate()->toDateString();
     }
 
-    private function excessDays(Carbon $startDate): int
+    private function periodStartDate(): Carbon
     {
-        $dayOfWeek = $startDate->dayOfWeek;
-        if ($dayOfWeek === 0) {
+        if ($this->months === null) {
+            return $this->endDate
+                ->subWeeks($this->weeks)
+                ->subDays($this->excessWeekDays());
+        }
+        return $this->endDate
+            ->subMonths($this->months)
+            ->subDays($this->excessMonthDays());
+    }
+
+    private function excessWeekDays(): int
+    {
+        if ($this->endDate->dayOfWeek === 0) {
             return 6;
         }
-        return $dayOfWeek - 1;
+        return $this->endDate->dayOfWeek - 1;
+    }
+
+    private function excessMonthDays(): int
+    {
+        return $this->endDate->dayOfMonth - 1;
     }
 
     public function endDate(): string
     {
-        return $this->endDate;
+        return $this->endDate->toDateString();
     }
 }

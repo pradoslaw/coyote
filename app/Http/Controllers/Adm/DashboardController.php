@@ -41,7 +41,8 @@ class DashboardController extends BaseController
 
     private function registrationHistoryChart(UserRegistrations $registrations): Chart
     {
-        $registeredUsers = $registrations->inRange(new HistoryRange(Carbon::now()->toDateString(), weeks:30));
+        $last30Weeks = new HistoryRange(Carbon::now()->toDateString(), weeks:30);
+        $registeredUsers = $registrations->inRange($last30Weeks);
         return new Chart(
             \array_keys($registeredUsers),
             \array_values($registeredUsers),

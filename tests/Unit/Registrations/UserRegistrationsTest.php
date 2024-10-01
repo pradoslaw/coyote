@@ -157,7 +157,7 @@ class UserRegistrationsTest extends TestCase
     {
         $this->assertArrayKeys(
             ['2024-09-09', '2024-09-16', '2024-09-23'],
-            $this->registrations->inRange(new HistoryRange('2024-09-24', 2)));
+            $this->registrations->inRange(new HistoryRange('2024-09-24', weeks:2)));
     }
 
     private function assertArrayKeys(array $expectedKeys, array $actual): void
