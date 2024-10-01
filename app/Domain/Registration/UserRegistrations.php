@@ -17,7 +17,7 @@ readonly class UserRegistrations
     {
         return \array_merge(
             $this->arrayFrom(
-                keys:$this->uniformDates($range),
+                keys:$this->uniformDates->inRange($range),
                 value:0),
             $this->fetchRegistrationsByPeriod($range->startDate(), $range->endDate(), $range->period),
         );
@@ -43,11 +43,6 @@ readonly class UserRegistrations
             Period::Month => "date_trunc('month', created_at)::date",
             Period::Year => "date_trunc('year', created_at)::date",
         };
-    }
-
-    private function uniformDates(HistoryRange $range): array
-    {
-        return $this->uniformDates->uniform($range->period, $range->startDate(), $range->endDate());
     }
 
     private function arrayFrom(array $keys, int $value): array

@@ -3,19 +3,15 @@ namespace Coyote\Domain;
 
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Coyote\Domain\Registration\HistoryRange;
 use Coyote\Domain\Registration\Period;
 
 class UniformDates
 {
-    public function uniform(Period $period, string $startDate, string $endDate): array
+    public function inRange(HistoryRange $range): array
     {
-        return $this->uniformDates($this->carbonPeriod($period), $startDate, $endDate);
-    }
-
-    private function uniformDates(CarbonPeriod $period, string $start, string $end): array
-    {
-        return \iterator_to_array($period
-            ->setDates($start, $end)
+        return \iterator_to_array($this->carbonPeriod($range->period)
+            ->setDates($range->startDate(), $range->endDate())
             ->map(fn(Carbon $carbon) => $carbon->toDateString()));
     }
 
