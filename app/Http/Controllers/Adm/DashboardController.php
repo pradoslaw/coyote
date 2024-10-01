@@ -3,6 +3,7 @@ namespace Coyote\Http\Controllers\Adm;
 
 use Carbon\Carbon;
 use Coyote\Domain\Registration\HistoryRange;
+use Coyote\Domain\Registration\Period;
 use Coyote\Domain\Registration\UserRegistrations;
 use Coyote\Domain\StringHtml;
 use Coyote\Domain\View\Chart;
@@ -31,14 +32,14 @@ class DashboardController extends BaseController
                 ],
             ],
 
-            'registrationsChartWeeks'  => $this->historyChart($registrations, 'weeks'),
-            'registrationsChartMonths' => $this->historyChart($registrations, 'months'),
+            'registrationsChartWeeks'  => $this->historyChart($registrations, Period::Week),
+            'registrationsChartMonths' => $this->historyChart($registrations, Period::Month),
         ]);
     }
 
-    private function historyChart(UserRegistrations $registrations, string $period): StringHtml
+    private function historyChart(UserRegistrations $registrations, Period $period): StringHtml
     {
-        $chart = $this->chart($period,
+        $chart = $this->chart($period->name,
             $registrations->inRange($this->historyRange($period)));
         return new StringHtml($this->view('adm.registrations-chart', [
             'chart'              => $chart,
@@ -47,13 +48,13 @@ class DashboardController extends BaseController
         ]));
     }
 
-    private function historyRange(string $period): HistoryRange
+    private function historyRange(Period $period): HistoryRange
     {
         $endDate = Carbon::now()->toDateString();
-        if ($period === 'weeks') {
-            return new HistoryRange($endDate, weeks:30);
-        }
-        return new HistoryRange($endDate, months:30);
+        return match ($period) {
+            Period::Week => new HistoryRange($endDate, weeks:30),
+            Period::Month => new HistoryRange($endDate, months:30),
+        };
     }
 
     private function chart(string $chartId, array $registeredUsers): Chart

@@ -23,7 +23,7 @@ readonly class UserRegistrations
         );
     }
 
-    private function fetchRegistrationsByPeriod(string $from, string $to, string $period): array
+    private function fetchRegistrationsByPeriod(string $from, string $to, Period $period): array
     {
         $dateTruncSqlField = $this->dateTruncSqlField($period);
         return User::withTrashed()
@@ -36,20 +36,20 @@ readonly class UserRegistrations
             ->toArray();
     }
 
-    private function dateTruncSqlField(string $period): string
+    private function dateTruncSqlField(Period $period): string
     {
-        if ($period === 'weeks') {
-            return "date_trunc('week', created_at)::date";
-        }
-        return "date_trunc('month', created_at)::date";
+        return match ($period) {
+            Period::Week => "date_trunc('week', created_at)::date",
+            Period::Month => "date_trunc('month', created_at)::date",
+        };
     }
 
     private function uniformDates(HistoryRange $range): array
     {
-        if ($range->period === 'weeks') {
-            return $this->uniformDates->uniformWeeks($range->startDate(), $range->endDate());
-        }
-        return $this->uniformDates->uniformMonths($range->startDate(), $range->endDate());
+        return match ($range->period) {
+            Period::Week => $this->uniformDates->uniformWeeks($range->startDate(), $range->endDate()),
+            Period::Month => $this->uniformDates->uniformMonths($range->startDate(), $range->endDate()),
+        };
     }
 
     private function arrayFrom(array $keys, int $value): array

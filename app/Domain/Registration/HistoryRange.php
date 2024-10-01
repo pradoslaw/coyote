@@ -6,7 +6,7 @@ use Carbon\CarbonImmutable;
 readonly class HistoryRange
 {
     private CarbonImmutable $endDate;
-    public string $period;
+    public Period $period;
 
     public function __construct(
         string       $endDate,
@@ -17,7 +17,7 @@ readonly class HistoryRange
         if ($this->weeks === null && $this->months === null) {
             throw new \Exception('Failed to create history range without period: week,month.');
         }
-        $this->period = $this->weeks === null ? 'months' : 'weeks';
+        $this->period = $this->weeks === null ? Period::Month : Period::Week;
         $this->endDate = CarbonImmutable::parse($endDate);
     }
 
