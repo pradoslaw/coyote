@@ -80,7 +80,7 @@ class UserRegistrationsTest extends TestCase
         $monday = '2124-09-25 21:37:00';
         $this->models->newUser(createdAt:$sunday);
         $this->models->newUser(createdAt:$monday);
-        $this->assertSame([1, 1], $this->registrationsInWeek('2124-09-18', '2124-09-25'));
+        $this->assertSame([1, 1], $this->registrations(new HistoryRange('2124-09-25', weeks:1)));
     }
 
     #[Test]
@@ -153,11 +153,9 @@ class UserRegistrationsTest extends TestCase
 
     private function registrationsInWeek(string $from, string $to): array
     {
-        foreach (range(0, 1) as $weeks) {
-            $range = new HistoryRange($to, weeks:$weeks);
-            if ($range->startDate() === $from) {
-                return $this->registrations($range);
-            }
+        $range = new HistoryRange($to, weeks:0);
+        if ($range->startDate() === $from) {
+            return $this->registrations($range);
         }
         throw new \Exception();
     }
