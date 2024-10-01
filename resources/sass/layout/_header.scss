@@ -51,6 +51,7 @@ body.padding-top {
   outline: none !important;
   width: 28px;
   text-align: center;
+  box-sizing: content-box;
 
   .button-close {
     display: none;
