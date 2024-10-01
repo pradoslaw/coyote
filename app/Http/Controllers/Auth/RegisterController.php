@@ -2,7 +2,9 @@
 
 namespace Coyote\Http\Controllers\Auth;
 
+use Carbon\Carbon;
 use Coyote\Actkey;
+use Coyote\Domain\RouteVisits;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Auth\RegisterForm;
@@ -14,6 +16,7 @@ use Coyote\User;
 use Illuminate\Contracts\Mail\MailQueue;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Jenssegers\Agent\Agent;
 
 class RegisterController extends Controller
 {
@@ -23,9 +26,13 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    public function index(): View
+    public function index(RouteVisits $visits): View
     {
         $this->breadcrumb->push('Rejestracja', route('register'));
+        $agent = new Agent();
+        if (!$agent->isRobot($this->request->userAgent())) {
+            $visits->visit($this->request->path(), Carbon::now()->toDateString());
+        }
         return $this->view('auth.register', ['form' => $this->form()]);
     }
 
