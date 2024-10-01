@@ -29,8 +29,24 @@ class UniformDatesTest extends TestCase
             $this->uniformWeeks($mondayFirst, $mondayThird));
     }
 
+    #[Test]
+    public function fillMonthDates(): void
+    {
+        $this->assertSame([
+            '2124-07-04',
+            '2124-08-04',
+            '2124-09-04',
+        ],
+            $this->uniformMonths('2124-07-04', '2124-09-04'));
+    }
+
     private function uniformWeeks(string $startDate, string $endDate): array
     {
         return (new UniformDates())->uniformWeeks($startDate, $endDate);
+    }
+
+    private function uniformMonths(string $startDate, string $endDate): array
+    {
+        return (new UniformDates())->uniformMonths($startDate, $endDate);
     }
 }
