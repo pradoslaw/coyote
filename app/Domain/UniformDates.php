@@ -4,9 +4,9 @@ namespace Coyote\Domain;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
-class UniformWeeks
+class UniformDates
 {
-    public function uniformDates(string $startDate, string $endDate): array
+    public function uniformWeeks(string $startDate, string $endDate): array
     {
         return \iterator_to_array(CarbonPeriod::weeks()
             ->setDates($startDate, $endDate)

@@ -1,11 +1,11 @@
 <?php
 namespace Tests\Unit\Registrations;
 
-use Coyote\Domain\UniformWeeks;
+use Coyote\Domain\UniformDates;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-class UniformWeeksTest extends TestCase
+class UniformDatesTest extends TestCase
 {
     #[Test]
     public function fillWeekDates(): void
@@ -17,7 +17,7 @@ class UniformWeeksTest extends TestCase
             '2124-09-11',
             '2124-09-18',
         ],
-            $this->uniformDates($mondayFirst, $mondayThird));
+            $this->uniformWeeks($mondayFirst, $mondayThird));
     }
 
     #[Test]
@@ -26,11 +26,11 @@ class UniformWeeksTest extends TestCase
         $mondayFirst = '2124-09-04';
         $mondayThird = '2124-09-05';
         $this->assertSame(['2124-09-04'],
-            $this->uniformDates($mondayFirst, $mondayThird));
+            $this->uniformWeeks($mondayFirst, $mondayThird));
     }
 
-    private function uniformDates(string $startDate, string $endDate): array
+    private function uniformWeeks(string $startDate, string $endDate): array
     {
-        return (new UniformWeeks())->uniformDates($startDate, $endDate);
+        return (new UniformDates())->uniformWeeks($startDate, $endDate);
     }
 }

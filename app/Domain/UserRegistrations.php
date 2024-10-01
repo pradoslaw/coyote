@@ -7,11 +7,11 @@ use Coyote\User;
 
 readonly class UserRegistrations
 {
-    private UniformWeeks $weeks;
+    private UniformDates $uniformDates;
 
     public function __construct()
     {
-        $this->weeks = new UniformWeeks();
+        $this->uniformDates = new UniformDates();
     }
 
     public function inRange(HistoryRange $range): array
@@ -46,10 +46,10 @@ readonly class UserRegistrations
         return User::withTrashed()
             ->where('created_at', '>=', "$from 00:00:00")
             ->where('created_at', '<', "$to 24:00:00")
-            ->selectRaw("date_trunc('week', created_at)::date as created_at_week, Count(*) AS count")
+            ->selectRaw("date_trunc('week', created_at)::date as created_at_group, Count(*) AS count")
             ->groupByRaw("date_trunc('week', created_at)")
             ->get()
-            ->pluck(key:'created_at_week', value:'count')
+            ->pluck(key:'created_at_group', value:'count')
             ->toArray();
     }
 
@@ -64,7 +64,7 @@ readonly class UserRegistrations
     private function emptyWeekDates(string $from, string $to): array
     {
         return $this->createArray(
-            keys:$this->weeks->uniformDates($from, $to),
+            keys:$this->uniformDates->uniformWeeks($from, $to),
             value:0);
     }
 
