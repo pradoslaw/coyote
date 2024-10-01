@@ -15,7 +15,7 @@ readonly class UserRegistrations
     public function inRange(HistoryRange $range): array
     {
         return \array_merge(
-            $this->createArray(
+            $this->arrayFrom(
                 keys:$this->uniformDates->uniformWeeks($range->startDate(), $range->endDate()),
                 value:0),
             $this->fetchRegistrationsByWeekDates($range->startDate(), $range->endDate()),
@@ -34,7 +34,7 @@ readonly class UserRegistrations
             ->toArray();
     }
 
-    private function createArray(array $keys, int $value): array
+    private function arrayFrom(array $keys, int $value): array
     {
         $values = \array_fill(0, \count($keys), $value);
         return \array_combine($keys, $values);
