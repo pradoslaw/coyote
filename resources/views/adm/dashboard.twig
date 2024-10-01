@@ -25,6 +25,9 @@
     <li class="nav-item" role="presentation">
       <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-months" type="button">ostatnie 30 miesięcy</button>
     </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-years" type="button">ostatnie 30 lat</button>
+    </li>
   </ul>
   <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane show active" id="pills-weeks">
@@ -32,6 +35,9 @@
     </div>
     <div class="tab-pane" id="pills-months">
       {{ registrationsChartMonths }}
+    </div>
+    <div class="tab-pane" id="pills-years">
+      {{ registrationsChartYears }}
     </div>
   </div>
 {% endblock %}

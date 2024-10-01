@@ -34,6 +34,7 @@ class DashboardController extends BaseController
 
             'registrationsChartWeeks'  => $this->historyChartHtml($registrations, Period::Week),
             'registrationsChartMonths' => $this->historyChartHtml($registrations, Period::Month),
+            'registrationsChartYears'  => $this->historyChartHtml($registrations, Period::Year),
         ]);
     }
 
@@ -41,7 +42,6 @@ class DashboardController extends BaseController
     {
         return new StringHtml($this->view('adm.registrations-chart', [
             'chart'              => $this->registrationsChart($registrations, $period),
-            'chartTitle'         => 'Historia rejestracji (ostatnie 30 tygodni)',
             'chartLibrarySource' => Chart::librarySourceHtml(),
         ]));
     }
