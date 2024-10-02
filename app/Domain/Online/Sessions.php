@@ -2,6 +2,7 @@
 namespace Coyote\Domain\Online;
 
 use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Support;
 
 readonly class Sessions
@@ -12,19 +13,20 @@ readonly class Sessions
 
     public function viewersIn(string $prefixPath): Viewers
     {
-        $sessions = $this->fetchUserIdsAndGuestsNull($prefixPath);
-        $users = $sessions->filter(fn(?int $userId) => $userId !== null);
+        [$guests, $users] = $this->guestsAndUsersChunks($prefixPath);
         return new Viewers(
-            users:$users->unique()->toArray(),
-            guestsCount:$sessions->count() - $users->count(),
+            users:$users->pluck('user_id')->toArray(),
+            guestsCount:$guests->pluck('count')->first(default:0),
         );
     }
 
-    private function fetchUserIdsAndGuestsNull(string $prefixPath): Support\Collection
+    private function guestsAndUsersChunks(string $prefixPath): Support\Collection
     {
         return $this->connection->table('sessions')
             ->where('robot', '=', '')
             ->whereLike('path', "$prefixPath%")
-            ->pluck('user_id');
+            ->groupBy('user_id')
+            ->get(['user_id', new Expression('COUNT(*) AS count')])
+            ->partition('user_id', value:null);
     }
 }
