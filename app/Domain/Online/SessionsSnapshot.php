@@ -1,7 +1,7 @@
 <?php
 namespace Coyote\Domain\Online;
 
-readonly class Viewers
+readonly class SessionsSnapshot
 {
     public function __construct(public array $users, public int $guestsCount)
     {

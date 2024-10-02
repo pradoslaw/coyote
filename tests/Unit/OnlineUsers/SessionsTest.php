@@ -1,8 +1,8 @@
 <?php
 namespace Tests\Unit\OnlineUsers;
 
-use Coyote\Domain\Online\Sessions;
-use Coyote\Domain\Online\Viewers;
+use Coyote\Domain\Online\SessionRepository;
+use Coyote\Domain\Online\SessionsSnapshot;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -12,12 +12,12 @@ class SessionsTest extends TestCase
 {
     use Laravel\Transactional;
 
-    private Sessions $sessions;
+    private SessionRepository $sessions;
 
     #[Before]
     public function initialize(): void
     {
-        $this->sessions = $this->laravel->resolve(Sessions::class);
+        $this->sessions = $this->laravel->resolve(SessionRepository::class);
     }
 
     #[Test]
@@ -92,7 +92,7 @@ class SessionsTest extends TestCase
     {
         $this->viewAsUser(userId:44, path:'/foo/bar');
         $this->viewAsUser(userId:55, path:'/bar');
-        $snapshot = $this->sessions->viewersIn('/foo');
+        $snapshot = $this->sessions->sessionsIn('/foo');
         $this->assertSame([44], $snapshot->users);
     }
 
@@ -102,7 +102,7 @@ class SessionsTest extends TestCase
         $this->viewAsGuest(path:'/foo/bar');
         $this->viewAsGuest(path:'/foo/cat');
         $this->viewAsGuest(path:'/bar');
-        $snapshot = $this->sessions->viewersIn('/foo');
+        $snapshot = $this->sessions->sessionsIn('/foo');
         $this->assertSame(2, $snapshot->guestsCount);
     }
 
@@ -110,7 +110,7 @@ class SessionsTest extends TestCase
     public function filteringByPath_isCaseInsensitive(): void
     {
         $this->viewAsUser(userId:44, path:'/foo/bar');
-        $snapshot = $this->sessions->viewersIn('/FOO');
+        $snapshot = $this->sessions->sessionsIn('/FOO');
         $this->assertCount(1, $snapshot->users);
     }
 
@@ -119,7 +119,7 @@ class SessionsTest extends TestCase
     {
         $this->viewAsUser(userId:44, path:'/foo/bar');
         $this->viewAsUser(userId:44, path:'/foo/cat');
-        $snapshot = $this->sessions->viewersIn('/foo');
+        $snapshot = $this->sessions->sessionsIn('/foo');
         $this->assertCount(1, $snapshot->users);
     }
 
@@ -159,8 +159,8 @@ class SessionsTest extends TestCase
         ]);
     }
 
-    private function viewers(): Viewers
+    private function viewers(): SessionsSnapshot
     {
-        return $this->sessions->viewersIn('/');
+        return $this->sessions->sessionsIn('/');
     }
 }

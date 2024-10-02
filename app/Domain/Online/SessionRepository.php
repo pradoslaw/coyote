@@ -5,16 +5,16 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support;
 
-readonly class Sessions
+readonly class SessionRepository
 {
     public function __construct(private Connection $connection)
     {
     }
 
-    public function viewersIn(string $prefixPath): Viewers
+    public function sessionsIn(string $prefixPath): SessionsSnapshot
     {
         [$guests, $users] = $this->guestsAndUsersChunks($prefixPath);
-        return new Viewers(
+        return new SessionsSnapshot(
             users:$users->pluck('user_id')->toArray(),
             guestsCount:$guests->pluck('count')->first(default:0),
         );
