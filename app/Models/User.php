@@ -4,7 +4,7 @@ namespace Coyote;
 use Carbon\Carbon;
 use Coyote\Models\Scopes\ExcludeBlocked;
 use Coyote\Notifications\ResetPasswordNotification;
-use Coyote\Services\Media\Factory as MediaFactory;
+use Coyote\Services\Media;
 use Coyote\Services\Media\File;
 use Coyote\Services\Media\Photo;
 use Coyote\User\Relation;
@@ -243,8 +243,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getPhotoAttribute($value): File
     {
         if (!$value instanceof Photo) {
-            $photo = app(MediaFactory::class)->make('photo', ['file_name' => $value]);
-            $this->attributes['photo'] = $photo;
+            $this->attributes['photo'] = Media\Factory::get()->userAvatar($value);
         }
         return $this->attributes['photo'];
     }
