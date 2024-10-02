@@ -82,4 +82,9 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
     {
         return $this->getConnection(null, $table)->table($table);
     }
+
+    public function resolve(string $className): object
+    {
+        return $this->app->get($className);
+    }
 }
