@@ -84,7 +84,7 @@ class HomeController extends Controller
     {
         /** @var Renderer $renderer */
         $renderer = app(Renderer::class);
-        return $renderer->render('Użytkownicy online', requestUri:null);
+        return $renderer->render('/', local:false);
     }
 
     private function flags(): array

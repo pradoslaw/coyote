@@ -1,110 +1,63 @@
 <?php
 namespace Coyote\Services\Session;
 
-use Coyote\Session;
-use Illuminate\Database;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\Expression;
+use Coyote\Domain\Online\SessionRepository;
+use Coyote\Domain\Online\Viewers;
+use Coyote\Domain\Online\ViewersStore;
+use Coyote\Domain\Spacer;
 use Illuminate\Http\Request;
-use Illuminate\Support;
 use Illuminate\View\View;
 
 class Renderer
 {
-    const USER = 'Użytkownik';
+    private Spacer $spacer;
 
     public function __construct(
-        private Database\Connection $db,
-        private Registered          $registered,
-        private Request             $request)
+        private SessionRepository $session,
+        private ViewersStore      $store,
+        private Request           $request,
+    )
     {
+        $this->spacer = new Spacer(8);
     }
 
-    public function render(string $title, ?string $requestUri): View
+    public function render(string $requestUri, bool $local): View
     {
-        $collection = $this->data($requestUri);
+        $viewers = $this->sessionViewers($requestUri);
 
-        $total = $collection->sum('count');
-        $guests = $collection->where('user_id', null)->sum('count');
-        $registered = $total - $guests;
-        $robots = $collection->filter(fn($item) => $item->robot)->sum('count');
-
-        $guests -= $robots;
-        $total -= $robots;
-
-        $collection = $this->map($collection);
-
-        if ($this->request->user()) {
-            if (!$collection->contains('user_id', $this->request->user()->id)) {
-                $collection->push(new Session(['user_id' => $this->request->user()->id, 'path' => $requestUri]));
-                $total++;
-                $registered++;
-            }
-        } else if ($collection->count() === 0) {
-            // we keep session in redis but also  - list of online users - in postgres.
-            // we refresh table every 1 minute, so info about user's current page might be sometimes outdated.
-            $total++;
-            $guests++;
-        }
-
-        $collection = $this->unique($collection);
-        $collection = $this->registered->setup($collection);
-
-        $groups = [self::USER => []];
-        foreach ($collection->groupBy('group') as $name => $users) {
-            if ($name === '') {
-                $name = self::USER;
-            } else if (!isset($groups[$name])) {
-                $groups[$name] = [];
-            }
-            foreach ($users as $user) {
-                if ($user['user_id'] !== null) {
-                    $groups[$name][] = $this->makeProfileLink($user['user_id'], $user['name']);
-                }
-            }
-        }
-
-        unset($groups[self::USER]);
-        ksort($groups);
+        [$users, $superfluous] = $this->spacer->fitInSpace($viewers->usersWithoutGroup());
 
         return view('components.viewers', [
-            'isLocalViewers' => $requestUri !== null,
-            'title'          => $title,
-            'groups'         => $requestUri === null ? $groups : [],
-            'total'          => $total,
-            'guests'         => $guests,
-            'registered'     => $registered,
+            'local'             => $local,
+            'guestsCount'       => $viewers->guestsCount,
+            'usersCount'        => \count($viewers->users),
+            'title'             => $local
+                ? 'Aktualnie na tej stronie'
+                : "{$viewers->totalCount()} użytkowników online",
+            'usersWithGroup'    => $viewers->usersWithGroup(),
+            'usersWithoutGroup' => $users,
+            'superfluousCount'  => $superfluous,
         ]);
     }
 
-    private function data(?string $requestUri): Support\Collection
+    private function sessionViewers(string $requestUri): Viewers
     {
-        return $this
-            ->db
-            ->table('sessions')
-            ->when($requestUri !== null, fn(Builder $builder) => $builder
-                ->where('path', 'LIKE', \mb_strToLower(\strTok($requestUri, '?')) . '%'))
-            ->groupBy(['user_id', 'robot'])
-            ->get(['user_id', 'robot', new Expression('COUNT(*)')]);
+        $sessions = $this->session->sessionsIn($requestUri);
+        if ($this->isUserLogged()) {
+            $sessions = $sessions->coalesceUser($this->loggedUserId());
+        } else {
+            $sessions = $sessions->coalesceGuest();
+        }
+        return $this->store->viewers($sessions);
     }
 
-    private function map(Support\Collection $collection): Support\Collection
+    private function isUserLogged(): bool
     {
-        return $collection->map(fn($item) => new Session((array)$item));
+        return !!$this->request->user();
     }
 
-    private function makeProfileLink(int $userId, string $userName): string
+    private function loggedUserId()
     {
-        return link_to_route('profile', $userName, [$userId], ['data-user-id' => $userId]);
-    }
-
-    private function unique(Support\Collection $sessions): Support\Collection
-    {
-        $guests = $sessions->filter(fn(Session $item) => $item->userId === null);
-        $sessions
-            ->filter(fn(Session $item) => $item->userId !== null)
-            ->unique('user_id')
-            ->each(fn(Session $item) => $guests->push($item));
-        return $guests;
+        return $this->request->user()->id;
     }
 }
