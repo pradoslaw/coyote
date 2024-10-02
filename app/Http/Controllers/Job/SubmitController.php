@@ -1,43 +1,37 @@
 <?php
-
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Currency;
 use Coyote\Events\JobWasSaved;
 use Coyote\Firm;
 use Coyote\Firm\Benefit;
+use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\Job\JobRequest;
 use Coyote\Http\Resources\FirmFormResource as FirmResource;
 use Coyote\Http\Resources\JobFormResource;
 use Coyote\Job;
-use Coyote\Http\Controllers\Controller;
 use Coyote\Notifications\Job\CreatedNotification;
-use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
-use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
-use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
+use Coyote\Repositories\Eloquent\FirmRepository;
+use Coyote\Repositories\Eloquent\JobRepository;
+use Coyote\Repositories\Eloquent\PlanRepository;
 use Coyote\Services\Job\SubmitsJob;
 use Coyote\Services\UrlBuilder;
+use Illuminate\View\View;
 
 class SubmitController extends Controller
 {
     use SubmitsJob;
 
-    /**
-     * @param JobRepository $job
-     * @param FirmRepository $firm
-     * @param PlanRepository $plan
-     */
     public function __construct(JobRepository $job, FirmRepository $firm, PlanRepository $plan)
     {
         parent::__construct();
-
         $this->job = $job;
         $this->firm = $firm;
         $this->plan = $plan;
     }
 
-    public function renew(Job $job)
+    public function renew(Job $job): View
     {
         abort_unless($job->is_expired, 404);
 
@@ -54,12 +48,7 @@ class SubmitController extends Controller
         return $this->index($job);
     }
 
-    /**
-     * @param Job $job
-     * @return \Illuminate\View\View
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function index(Job $job)
+    public function index(Job $job): View
     {
         if (!$job->exists) {
             $job = $this->loadDefaults($job, $this->auth);
@@ -80,15 +69,15 @@ class SubmitController extends Controller
         $firms = FirmResource::collection($this->firm->findAllBy('user_id', $this->userId));
 
         return $this->view('job.submit', [
-            'job'               => new JobFormResource($job),
-            'firms'             => $firms,
+            'job'              => new JobFormResource($job),
+            'firms'            => $firms,
 
             // is plan is still going on?
-            'is_plan_ongoing'   => $job->is_publish,
-            'plans'             => $this->plan->active()->toJson(),
-            'currencies'        => Currency::all(),
-            'default_benefits'  => Benefit::getBenefitsList(), // default benefits,
-            'employees'         => Firm::getEmployeesList(),
+            'is_plan_ongoing'  => $job->is_publish,
+            'plans'            => $this->plan->active()->toJson(),
+            'currencies'       => Currency::all(),
+            'default_benefits' => Benefit::getBenefitsList(), // default benefits,
+            'employees'        => Firm::getEmployeesList(),
         ]);
     }
 
