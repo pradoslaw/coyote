@@ -52,6 +52,19 @@ class ModelsFactory
         return $group;
     }
 
+    public function assignToGroupWithNameReturnId(User $user, string $groupName): void
+    {
+        $groupId = $this->groupWithName($groupName)->id;
+        $user->groups()->sync([$groupId]);
+        $user->group_id = $groupId;
+        $user->save();
+    }
+
+    private function groupWithName(string $groupName): Group
+    {
+        return Group::query()->create(['name' => $groupName]);
+    }
+
     public function newPostReturn(
         string $content = null,
         Carbon $createdAt = null,

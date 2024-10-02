@@ -283,6 +283,23 @@ class ModelsDslTest extends TestCase
         $this->assertUserCan(false, $userId, 'forum-delete');
     }
 
+    #[Test]
+    public function newUserWithGroupName(): void
+    {
+        $userId = $this->models->newUserReturnId(groupName:'Writer');
+        $this->assertDatabaseHas('users', [
+            'id'         => $userId,
+            'group_name' => 'Writer',
+        ]);
+    }
+
+    #[Test]
+    public function newUserWithAvatar(): void
+    {
+        $userId = $this->models->newUserReturnId(photoUrl:'image.png');
+        $this->assertStringEndsWith('/image.png', (string)User::query()->findOrFail($userId)->photo->url());
+    }
+
     private function assertUserCan(bool $expected, int $userId, string $permission): void
     {
         /** @var User $user */
