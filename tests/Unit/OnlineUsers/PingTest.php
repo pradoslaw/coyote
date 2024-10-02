@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
 
-class OnlineUsersTest extends TestCase
+class PingTest extends TestCase
 {
     use BaseFixture\Server\Http;
 
