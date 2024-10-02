@@ -1,7 +1,9 @@
 <?php
 namespace Coyote\Http\Controllers\Job;
 
+use Carbon\Carbon;
 use Coyote\Currency;
+use Coyote\Domain\RouteVisits;
 use Coyote\Events\JobWasSaved;
 use Coyote\Firm;
 use Coyote\Firm\Benefit;
@@ -31,7 +33,7 @@ class SubmitController extends Controller
         $this->plan = $plan;
     }
 
-    public function renew(Job $job): View
+    public function renew(Job $job, RouteVisits $visits)
     {
         abort_unless($job->is_expired, 404);
 
@@ -45,13 +47,14 @@ class SubmitController extends Controller
         // reset views counter
         $job->views = 1;
 
-        return $this->index($job);
+        return $this->index($job, $visits);
     }
 
-    public function index(Job $job): View
+    public function index(Job $job, RouteVisits $visits): View
     {
         if (!$job->exists) {
             $job = $this->loadDefaults($job, $this->auth);
+            $visits->visit($this->request->path(), Carbon::now()->toDateString());
         }
 
         if (!count($job->locations)) {
