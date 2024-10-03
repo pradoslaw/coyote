@@ -83,14 +83,14 @@ abstract class BaseController extends Controller
     private function globalViewers(): View
     {
         /** @var Renderer $renderer */
-        $renderer = app('session.viewers');
+        $renderer = app(Renderer::class);
         return $renderer->render('Online w serwisie', requestUri:null);
     }
 
     private function localViewers(): View
     {
         /** @var Renderer $renderer */
-        $renderer = app('session.viewers');
+        $renderer = app(Renderer::class);
         return $renderer->render('Aktualnie na tej stronie', requestUri:$this->request->getRequestUri());
     }
 

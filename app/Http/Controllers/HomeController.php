@@ -82,9 +82,9 @@ class HomeController extends Controller
 
     private function globalViewers(): View
     {
-        /** @var Renderer $viewers */
-        $viewers = app(Renderer::class);
-        return $viewers->render('Użytkownicy online', requestUri:null);
+        /** @var Renderer $renderer */
+        $renderer = app(Renderer::class);
+        return $renderer->render('Użytkownicy online', requestUri:null);
     }
 
     private function flags(): array
