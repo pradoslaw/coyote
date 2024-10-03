@@ -43,7 +43,7 @@ class LoginForm extends Form
                 'label' => 'Hasło'
             ])
             ->add('submit', 'submit', [
-                'label' => 'Logowanie',
+                'label' => 'Zaloguj się',
                 'attr' => [
                     'data-submit-state' => 'Logowanie...'
                 ]
