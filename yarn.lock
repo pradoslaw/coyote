@@ -1478,7 +1478,7 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@riddled/4play@^1.18.7":
+"@riddled/4play@^1.18.8":
   version "1.18.8"
   resolved "https://registry.yarnpkg.com/@riddled/4play/-/4play-1.18.8.tgz#9bd0b73d14fe229fcb6327178db2285cf2fb0681"
   integrity sha512-jGD4FpeFRZYX10rY2kngV010ATjkKmDU/8xIYB8Vvi+NPg/n2Y+vCM+OUATf3XAt4RNnS1a2NXhDyqyGetuAgQ==
