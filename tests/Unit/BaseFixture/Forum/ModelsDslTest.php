@@ -405,4 +405,13 @@ class ModelsDslTest extends TestCase
             'created_at' => '2005-04-02 21:37:00',
         ]);
     }
+
+    #[Test]
+    public function newUserVisitedAt(): void
+    {
+        $this->models->newUserReturnId(visitedAt:'2005-04-02 21:37:00');
+        $this->assertDatabaseHas('users', [
+            'visited_at' => '2005-04-02 21:37:00',
+        ]);
+    }
 }

@@ -31,9 +31,10 @@ readonly class ModelsDsl
         string $groupName = null,
         string $photoUrl = null,
         bool   $deleted = false,
+        string $visitedAt = null,
     ): int
     {
-        $user = $this->models->newUserReturn(name:$name, photoUrl:$photoUrl, deleted:$deleted);
+        $user = $this->models->newUserReturn(name:$name, photoUrl:$photoUrl, deleted:$deleted, visitedAt:$visitedAt);
         if ($permissionName) {
             $this->models->assignToGroupWithPermission($user, $permissionName);
         }

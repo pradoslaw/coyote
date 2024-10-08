@@ -83,4 +83,23 @@ class ViewersStoreTest extends TestCase
         $viewer = $this->store->viewers($this->users([$id]));
         return $viewer->users;
     }
+
+    #[Test]
+    public function orderViewersByLastVisit(): void
+    {
+        $sessions = $this->users([
+            $this->models->newUserReturnId('Third', visitedAt:'2012-12-12 12:12:12'),
+            $this->models->newUserReturnId('First', visitedAt:'2001-01-01 01:01:01'),
+            $this->models->newUserReturnId('Second', visitedAt:'2005-05-05 05:05:05'),
+        ]);
+        $this->assertSame(
+            ['Third', 'Second', 'First'],
+            $this->viewersNames($sessions));
+    }
+
+    private function viewersNames(SessionsSnapshot $sessions): array
+    {
+        $viewers = $this->store->viewers($sessions);
+        return \array_column($viewers->users, 'name');
+    }
 }

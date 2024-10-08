@@ -20,6 +20,7 @@ class ModelsFactory
         bool   $emailConfirmed = null,
         bool   $deleted = null,
         string $createdAt = null,
+        string $visitedAt = null,
     ): User
     {
         $user = new User();
@@ -27,6 +28,7 @@ class ModelsFactory
         $user->email = $email ?? 'irrelevant';
         $user->is_confirm = $emailConfirmed ?? false;
         $user->created_at = $createdAt;
+        $user->visited_at = $visitedAt;
         if ($deleted) {
             $user->deleted_at = true;
         }

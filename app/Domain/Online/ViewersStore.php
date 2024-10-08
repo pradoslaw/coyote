@@ -15,7 +15,9 @@ class ViewersStore
 
     private function mapToViewerUsers(SessionsSnapshot $sessions): array
     {
-        return User::query()->findMany($sessions->users)
+        return User::query()
+            ->orderByDesc('visited_at')
+            ->findMany($sessions->users)
             ->map($this->viewerUser(...))
             ->toArray();
     }
