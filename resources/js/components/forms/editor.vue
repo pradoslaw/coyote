@@ -6,6 +6,7 @@
 <script lang="ts">
 import {CodeBlockLanguages, Editor4Play, EditorState} from "@riddled/4play";
 import store from "../../store/index";
+import {removeVueProxy} from "../../vue";
 
 export default {
   name: 'VueEditor',
@@ -83,67 +84,67 @@ export default {
       this.$emit('state', state);
     },
     destroy() {
-      this.editor!.destroy();
+      removeVueProxy(this.editor).destroy();
     },
     insertImage(href: string, title: string) {
-      this.editor!.insertImage(href, title);
+      removeVueProxy(this.editor).insertImage(href, title);
     },
     insertLink(href: string, title: string) {
-      this.editor!.insertLink(href, title);
+      removeVueProxy(this.editor).insertLink(href, title);
     },
     makeBold() {
-      this.editor!.putBold();
+      removeVueProxy(this.editor).putBold();
     },
     makeItalics() {
-      this.editor!.putItalics();
+      removeVueProxy(this.editor).putItalics();
     },
     makeUnderline() {
-      this.editor!.putUnderline();
+      removeVueProxy(this.editor).putUnderline();
     },
     makeStrikeThrough() {
-      this.editor!.putStrikeThrough();
+      removeVueProxy(this.editor).putStrikeThrough();
     },
     insertBlockQuote(placeholder: string) {
-      this.editor!.putBlockQuote(placeholder);
+      removeVueProxy(this.editor).putBlockQuote(placeholder);
     },
     makeLink(placeholder: string) {
-      this.editor!.putLink(placeholder);
+      removeVueProxy(this.editor).putLink(placeholder);
     },
     makeImage(placeholder: string) {
-      this.editor!.putImage(placeholder);
+      removeVueProxy(this.editor).putImage(placeholder);
     },
     makeKeyNotation(key: string) {
-      this.editor!.putKey(key);
+      removeVueProxy(this.editor).putKey(key);
     },
     appendBlockQuote(content: string) {
-      this.editor!.appendBlockQuote(content);
+      removeVueProxy(this.editor).appendBlockQuote(content);
     },
     appendUserMention(username: string) {
-      this.editor!.appendUserMention(username);
+      removeVueProxy(this.editor).appendUserMention(username);
     },
     insertListOrdered(placeholder: string) {
-      this.editor!.putListOrdered(placeholder);
+      removeVueProxy(this.editor).putListOrdered(placeholder);
     },
     insertListUnordered(placeholder: string) {
-      this.editor!.putListUnordered(placeholder);
+      removeVueProxy(this.editor).putListUnordered(placeholder);
     },
     insertCodeBlock() {
-      this.editor!.putCodeBlock();
+      removeVueProxy(this.editor).putCodeBlock();
     },
     indentMore() {
-      this.editor!.indentMore();
+      removeVueProxy(this.editor).indentMore();
     },
     indentLess() {
-      this.editor!.indentLess();
+      removeVueProxy(this.editor).indentLess();
     },
     addTable(header: string, placeholder: string) {
-      this.editor!.putTable(index => header + ' ' + (index + 1), placeholder);
+      removeVueProxy(this.editor).putTable(index => header + ' ' + (index + 1), placeholder);
     },
     insertEmoji(emojiName: string) {
-      this.editor!.insertEmoji(emojiName);
+      removeVueProxy(this.editor).insertEmoji(emojiName);
     },
     focus() {
-      this.editor!.focus();
+      removeVueProxy(this.editor).focus();
     },
     codeBlockLanguages(): CodeBlockLanguages {
       return Object.fromEntries(
@@ -216,14 +217,14 @@ export default {
   watch: {
     modelValue(newValue: string, oldValue: string) {
       if (newValue === '') {
-        this.editor!.clear();
+        removeVueProxy(this.editor).clear();
       }
     },
   },
   created() {
     store.subscribe((mutation, state) => {
       if (mutation.type === 'theme/CHANGE_THEME') {
-        this.editor!.changeTheme(state.theme.darkTheme);
+        removeVueProxy(this.editor).changeTheme(state.theme.darkTheme);
       }
     });
   },

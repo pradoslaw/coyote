@@ -1,10 +1,14 @@
-import {App, createApp, nextTick as vueNextTick} from "vue";
+import {App, createApp, nextTick as vueNextTick, toRaw} from "vue";
 import axiosErrorHandler from './libs/axios-error-handler.js';
 import store from "./store/index";
 import {install, notify} from './toast';
 
 export function nextTick(block: () => void): void {
   vueNextTick(block);
+}
+
+export function removeVueProxy(dataInstance) {
+  return toRaw(dataInstance);
 }
 
 export function createVueApp(name: string, selector: string, component: object): App<Element> {
