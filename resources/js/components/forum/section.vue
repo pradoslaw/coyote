@@ -34,14 +34,16 @@
               </a>
 
               <div class="overflow-hidden">
-                <h3><a :href="category.url">{{ category.name }}</a></h3>
-                <vue-tags v-if="category.enable_tags && !category.children" :tags="category.tags" class="tag-clouds-sm"></vue-tags>
+                <h3>
+                  <a :href="category.url">{{ category.name }}</a>
+                </h3>
+                <vue-tags v-if="category.enable_tags && !category.children" :tags="category.tags" class="tag-clouds-sm"/>
                 <ul v-if="category.children" class="list-inline list-sub d-md-block d-lg-block">
-                  <li v-for="children in category.children" class="list-inline-item">
-                    <i v-if="children.is_read" class="far fa-file"></i>
-                    <i v-else class="not-read" title="Nowe posty w tej kategorii"></i>
-                    {{ ' '}}
-                    <a :href="children.url">{{ children.name }}</a>
+                  <li v-for="child in category.children" class="list-inline-item">
+                    <i v-if="child.is_read" class="far fa-file"/>
+                    <i v-else class="not-read" title="Nowe posty w tej kategorii"/>
+                    {{ ' ' }}
+                    <a :href="child.url">{{ child.name }}</a>
                     {{ ' ' }}
                   </li>
                 </ul>
