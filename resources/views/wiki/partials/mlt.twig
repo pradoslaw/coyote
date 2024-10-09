@@ -1,18 +1,20 @@
 {% if mlt|length > 0 %}
-    <section class="box related">
-        <h4 class="border-bottom"><i class="far fa-eye fa-fw"></i> Zobacz też</h4>
+  <section class="box related">
+    <h4 class="border-bottom">
+      {{ icon('wikiMoreLikeThis') }}
+      Zobacz też
+    </h4>
+    <ul>
+      {% for item in mlt %}
+        <li>
+          <a href="{{ url(item.path) }}" title="{{ item.title|raw }}">
+            <strong>{{ item.title|raw }}</strong>
+            <small>{{ item.updated_at|format_date }}</small>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
 
-        <ul>
-            {% for item in mlt %}
-                <li>
-                    <a href="{{ url(item.path) }}" title="{{ item.title|raw }}">
-                        <strong>{{ item.title|raw }}</strong>
-                        <small>{{ item.updated_at|format_date }}</small>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </section>
-
-    <div class="clearfix"></div>
+  <div class="clearfix"></div>
 {% endif %}

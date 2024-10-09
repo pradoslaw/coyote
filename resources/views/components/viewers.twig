@@ -1,9 +1,9 @@
 <div class="box">
   <h4 class="heading">
     {% if local %}
-      <i class="fas fa-eye fa-fw"></i>
+      {{ icon('viewersOnlineLocal') }}
     {% else %}
-      <i class="fas fa-users fa-fw"></i>
+      {{ icon('viewersOnlineGlobal') }}
     {% endif %}
     {{ title }}
   </h4>

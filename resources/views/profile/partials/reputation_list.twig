@@ -2,7 +2,11 @@
   <div class="reputation-item">
     <div>
       <strong class="{{ item.value > 0 ? 'text-success' : 'text-danger' }}">
-        <i class="fas fa-level-{{ item.value > 0 ? 'up' : 'down' }}"></i>
+        {% if item.value > 0 %}
+          {{ icon('profileReputationGain') }}
+        {% else %}
+          {{ icon('profileReputationLose') }}
+        {% endif %}
         {{ item.value }} pkt
       </strong>
       za

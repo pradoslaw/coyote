@@ -10,6 +10,7 @@ use Coyote\Domain\Administrator\UserMaterial\List\View\MaterialItem;
 use Coyote\Domain\Administrator\UserMaterial\List\View\MaterialList;
 use Coyote\Domain\Administrator\UserMaterial\List\View\Time;
 use Coyote\Domain\Html;
+use Coyote\Domain\Icon\Icons;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel\Application;
 
@@ -59,7 +60,8 @@ class ViewMaterialsTest extends TestCase
     public function previewHtml(): void
     {
         $vo = $this->item($this->material(markdown:"> welcome\n\nparagraph"));
-        $mark = '<span class="badge badge-material-element"><i class="fas fa-reply-all"></i></span>';
+        $iconQuote = $this->icon('contentMarkerQuote');
+        $mark = '<span class="badge badge-material-element">' . $iconQuote . '</span>';
         $this->assertHtml($mark . ' paragraph', $vo->preview);
     }
 
@@ -199,5 +201,11 @@ class ViewMaterialsTest extends TestCase
     private function assertHtml(string $expectedHtml, Html $content): void
     {
         $this->assertSame($expectedHtml, (string)$content);
+    }
+
+    private function icon(string $iconName): Html
+    {
+        $icons = new Icons();
+        return $icons->icon($iconName);
     }
 }

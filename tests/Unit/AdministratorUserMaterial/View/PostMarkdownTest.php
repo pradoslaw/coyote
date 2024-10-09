@@ -4,6 +4,7 @@ namespace Tests\Unit\AdministratorUserMaterial\View;
 use Coyote\Domain\Administrator\View\Html\InlineHtml;
 use Coyote\Domain\Administrator\View\Html\PostMarkdown;
 use Coyote\Domain\Administrator\View\Html\SubstringHtml;
+use Coyote\Domain\Icon\Icons;
 use Coyote\User;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
@@ -53,7 +54,7 @@ class PostMarkdownTest extends TestCase
      */
     public function markQuote(): void
     {
-        $this->assertPreview("> quote\n\ntext", $this->mark('fas fa-reply-all') . ' text');
+        $this->assertPreview("> quote\n\ntext", $this->mark('contentMarkerQuote') . ' text');
     }
 
     /**
@@ -79,7 +80,7 @@ class PostMarkdownTest extends TestCase
      */
     public function markHeading(): void
     {
-        $headingMark = $this->mark('fas fa-heading');
+        $headingMark = $this->mark('contentMarkerHeading');
         $this->assertPreview('# heading', $headingMark . 'heading');
     }
 
@@ -88,7 +89,7 @@ class PostMarkdownTest extends TestCase
      */
     public function markHeadingBeforeParagraph(): void
     {
-        $headingMark = $this->mark('fas fa-heading');
+        $headingMark = $this->mark('contentMarkerHeading');
         $breakMark = $this->lineBreakMark();
         $this->assertPreview("# heading\nparagraph", $headingMark . 'heading ' . $breakMark . ' paragraph');
     }
@@ -98,7 +99,7 @@ class PostMarkdownTest extends TestCase
      */
     public function markHeadingBeforeParagraphHeading6(): void
     {
-        $headingMark = $this->mark('fas fa-heading');
+        $headingMark = $this->mark('contentMarkerHeading');
         $breakMark = $this->lineBreakMark();
         $this->assertPreview("###### heading\nparagraph", $headingMark . 'heading ' . $breakMark . ' paragraph');
     }
@@ -108,7 +109,7 @@ class PostMarkdownTest extends TestCase
      */
     public function markCodeBlock(): void
     {
-        $this->assertPreview("```\ncode\n```", $this->mark('fas fa-code', 'code'));
+        $this->assertPreview("```\ncode\n```", $this->mark('contentMarkerCode', 'code'));
     }
 
     /**
@@ -137,7 +138,7 @@ class PostMarkdownTest extends TestCase
     public function markVideo(): void
     {
         $preview = new InlineHtml('<video>Foo</video> Bar');
-        $videoIcon = $this->mark('fas fa-film', 'video');
+        $videoIcon = $this->mark('contentMarkerVideo', 'video');
         $this->assertSame("$videoIcon Bar", "$preview");
     }
 
@@ -211,14 +212,21 @@ class PostMarkdownTest extends TestCase
         return new SubstringHtml(new InlineHtml(new PostMarkdown($postContent)), 100);
     }
 
-    private function mark(string $iconClass, string $title = null): string
+    private function mark(string $iconName, string $title = null): string
     {
-        if ($title === null) {
-            $icon = '<i class="' . $iconClass . '"></i>';
-        } else {
-            $icon = '<i class="' . $iconClass . ' me-1"></i>';
+        $icons = new Icons();
+        return '<span class="badge badge-material-element">' .
+            $icons->icon($iconName) .
+            $this->markTitle($title) .
+            '</span>';
+    }
+
+    private function markTitle(?string $title): string
+    {
+        if ($title) {
+            return '<span class="ms-1">' . $title . '</span>';
         }
-        return '<span class="badge badge-material-element">' . $icon . $title . '</span>';
+        return '';
     }
 
     private function lineBreakMark(): string

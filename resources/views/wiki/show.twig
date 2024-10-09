@@ -10,10 +10,13 @@
 
       {% if categories|length > 0 %}
         <div class="wiki-categories">
-          <i class="fas fa-folder-open text-warning"></i>
-
+          <span class="text-warning">
+            {{ icon('wikiCategories') }}
+          </span>
           {% for category in categories %}
-            <a class="btn btn-sm btn-warning" title="Strona znajduje się w kategorii: {{ category.title }}" href="{{ url(category.path) }}">{{ category.title }}</a>
+            <a class="btn btn-sm btn-warning" title="Strona znajduje się w kategorii: {{ category.title }}" href="{{ url(category.path) }}">
+              {{ category.title }}
+            </a>
           {% endfor %}
         </div>
       {% endif %}
@@ -26,8 +29,12 @@
     <aside class="col-sm-3">
       {% if not wiki.deleted_at and (can('wiki-admin') or not wiki.is_locked) %}
         <section id="box-maintain">
-          <a href="{{ route('wiki.submit', [wiki.id]) }}" class="btn btn-sm btn-secondary" title="Kliknij, aby edytować ten artykuł">Edycja {{ wiki.is_locked ? ' (strona zablokowana)' }}</a>
-          <a href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}" class="btn btn-sm btn-primary" title="Dodaj nową stronę w tej kategorii">Nowa strona</a>
+          <a href="{{ route('wiki.submit', [wiki.id]) }}" class="btn btn-sm btn-secondary" title="Kliknij, aby edytować ten artykuł">
+            Edycja {{ wiki.is_locked ? ' (strona zablokowana)' }}
+          </a>
+          <a href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}" class="btn btn-sm btn-primary" title="Dodaj nową stronę w tej kategorii">
+            Nowa strona
+          </a>
         </section>
       {% endif %}
 
@@ -39,12 +46,15 @@
              data-off="{{ labels[0] }}"
              data-on="{{ labels[1] }}"
              title="Obserwując tę stronę będziesz otrzymywał powiadomienia o jej zmianach">
-            <i class="fa-regular fa-fw fa-bell"></i>
+            {{ icon('wikiSubscribe') }}
             <span>{{ labels[not subscribed] }}</span>
           </a>
         </li>
         <li>
-          <a href="{{ route('wiki.log', [wiki.id]) }}"><i class="fas fa-fw fa-clock-rotate-left"></i> Historia i autorzy</a>
+          <a href="{{ route('wiki.log', [wiki.id]) }}">
+            {{ icon('wikiVersionsAndAuthors') }}
+            Historia i autorzy
+          </a>
         </li>
 
         {% include 'wiki.partials.admin' %}
@@ -53,7 +63,7 @@
       {% if author.bio %}
         <section id="box-author" class="box">
           <h4 class="heading">
-            <i class="fas fa-person fa-fw"></i> 
+            {{ icon('wikiAuthor') }}
             O autorze
           </h4>
 
@@ -75,10 +85,9 @@
       {% if authors|length > 0 %}
         <section id="box-authors" class="box mt-3">
           <h4 class="heading">
-            <i class="fas fa-users fa-fw"></i>
+            {{ icon('wikiAuthors') }}
             Stronę współtworzą
           </h4>
-
           <ul>
             {% for author in authors %}
               <li>

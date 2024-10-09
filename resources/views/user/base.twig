@@ -9,7 +9,7 @@
         {% for item in side_menu.roots() %}
           <li id="{{ item.attr.id }}" class="{{ item.attr.class }}">
             <a href="{{ item.url }}">
-              <i class="{{ item.attr.icon }}"></i>
+              {{ item.attr.icon }}
               {{ item.title }}
               <small>{{ item.attr.subscript }}</small>
             </a>

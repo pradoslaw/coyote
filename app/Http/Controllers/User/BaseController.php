@@ -34,7 +34,7 @@ abstract class BaseController extends Controller
                         'id'        => $menuItem->htmlId,
                         'class'     => 'action-link ' . ($menuItem->htmlClass ?? ''),
                         'route'     => $menuItem->route,
-                        'icon'      => $menuItem->htmlIcon,
+                        'icon'      => $menuItem->icon,
                         'subscript' => $menuItem->subscript,
                     ]);
                 }
@@ -44,7 +44,7 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @return MenuItem[]
+     * @return MenuItem[][]
      */
     public function settingsMenu(User $user): array
     {
@@ -54,11 +54,11 @@ abstract class BaseController extends Controller
                     'Moje konto',
                     'user.home',
                     htmlId:'btn-start',
-                    htmlIcon:'far fa-user'),
+                    icon:'userAccount.userAccount'),
                 new MenuItem('Twoje umiejętności',
                     'user.skills',
                     htmlId:'btn-skills',
-                    htmlIcon:'far fa-address-book'),
+                    icon:'userAccount.skills'),
             ],
             [
                 new MenuItem(
@@ -66,67 +66,67 @@ abstract class BaseController extends Controller
                     'user.pm',
                     subscript:"($user->privateMessagesUnread/$user->privateMessages)",
                     htmlId:'btn-pm',
-                    htmlIcon:'far fa-envelope'),
+                    icon:'userAccount.privateMessageList'),
                 new MenuItem(
                     'Powiadomienia',
                     'user.notifications',
                     htmlId:'btn-notifies',
-                    htmlIcon:'fas fa-bell'),
+                    icon:'userAccount.notificationList'),
                 new MenuItem(
                     'Oceny moich postów',
                     'user.rates',
                     htmlId:'btn-rates',
-                    htmlIcon:'far fa-thumbs-up'),
+                    icon:'userAccount.postVotes'),
                 new MenuItem(
                     'Statystyki moich postów',
                     'user.stats',
                     htmlId:'btn-stats',
-                    htmlIcon:'fa-chart-bar'),
+                    icon:'userAccount.postCategories'),
                 new MenuItem(
                     'Zaakceptowane odpowiedzi',
                     'user.accepts',
                     htmlId:'btn-accepts',
-                    htmlIcon:'fa-check'),
+                    icon:'userAccount.postAccepts'),
             ],
             [
                 new MenuItem(
                     'Obserwowane strony',
                     'user.favorites',
                     htmlId:'btn-favorites',
-                    htmlIcon:'far fa-bell'),
+                    icon:'userAccount.subscribedPages'),
                 new MenuItem('Zablokowani oraz obserwowani',
                     'user.relations',
                     htmlId:'btn-favorites',
-                    htmlIcon:'fa-user-group'),
+                    icon:'userAccount.relations'),
                 new MenuItem('Ustawienia powiadomień',
                     'user.notifications.settings',
                     htmlId:'btn-favorites',
-                    htmlIcon:'fa-bell'),
+                    icon:'userAccount.notificationSettings'),
             ],
             [
                 new MenuItem('Ustawienia konta',
                     'user.settings',
                     htmlId:'btn-start',
-                    htmlIcon:'fa-user-gear'),
+                    icon:'userAccount.miscellaneousSettings'),
                 new MenuItem('Zmiana hasła',
                     'user.password',
                     htmlId:'btn-pm',
-                    htmlIcon:'fa-unlock-keyhole'),
+                    icon:'userAccount.passwordChange'),
                 new MenuItem('Dostęp',
                     'user.security',
                     htmlId:'btn-notifies',
-                    htmlIcon:'fa-door-open'),
+                    icon:'userAccount.access'),
                 new MenuItem('Tokeny API',
                     'user.tokens',
-                    htmlId:'btn-favorites',
-                    htmlIcon:'fa-key'),
+                    htmlId:'btn-api-tokens',
+                    icon:'userAccount.apiTokens'),
             ],
             [
                 new MenuItem(
                     'Usuń konto',
                     'user.delete',
                     htmlClass:'text-danger',
-                    htmlIcon:'fa-trash-can'),
+                    icon:'userAccount.accountDelete'),
             ],
         ];
     }

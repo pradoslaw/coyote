@@ -11,15 +11,17 @@
   <main class="mainbar">
     <div class="card card-default tab-content">
       <div id="stream" role="tabpanel" class="card-body tab-pane active">
-        <nav class="mt-3 mb-3 d-flex justify-content-center">{{ paginator.render()|raw }}</nav>
-
+        <nav class="mt-3 mb-3 d-flex justify-content-center">
+          {{ paginator.render()|raw }}
+        </nav>
         <div class="stream">
           {% for activity in paginator %}
             {% include 'components.stream' %}
           {% endfor %}
         </div>
-
-        <nav class="mt-3 mb-3 d-flex justify-content-center">{{ paginator.render()|raw }}</nav>
+        <nav class="mt-3 mb-3 d-flex justify-content-center">
+          {{ paginator.render()|raw }}
+        </nav>
       </div>
     </div>
   </main>
@@ -29,7 +31,10 @@
       <div class="box">
         <ul class="side-menu">
           <li>
-            <a title="Powrót do wątku" href="{{ back_url }}"><i class="fas fa-backward-step fa-fw"></i> Powrót do: {{ topic.title }}</a>
+            <a title="Powrót do wątku" href="{{ back_url }}">
+              {{ icon('topicLogBackToTopic') }}
+              Powrót do: {{ topic.title }}
+            </a>
           </li>
         </ul>
       </div>
@@ -41,6 +46,5 @@
   <script>
     var tags = {{ tags.user|json_encode|raw }};
   </script>
-
   {{ parent() }}
 {% endblock %}

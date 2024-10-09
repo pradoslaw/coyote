@@ -27,11 +27,11 @@
       {% if auth_check() %}
         <div class="d-flex justify-content-end">
           <a class="btn btn-primary btn-sm" href="{{ microblogNewUrl }}">
-            <i class="fa-solid fa-plus"></i>
+            {{ icon('microblogNew') }}
             Nowy wpis
           </a>
           <a class="btn btn-primary btn-sm ms-2" href="{{ microblogMineUrl }}">
-            <i class="fa-regular fa-address-book"></i>
+            {{ icon('microblogMine') }}
             Moje wpisy
           </a>
         </div>
@@ -40,7 +40,7 @@
       {% if tags.others is not empty %}
         <div class="box mb-2">
           <h4 class="heading">
-            <i class="fas fa-tag fa-fw"></i>
+            {{ icon('tagsPopularMicroblog') }}
             Tagi popularne na mikroblogu
           </h4>
           <div class="pt-2 pb-2">

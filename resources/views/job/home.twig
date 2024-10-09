@@ -41,8 +41,9 @@
           <div class="card card-default mt-3">
             <div class="job-search-form card-body">
               <div class="input-item keyword-search" :class="{'extended': selectedTab === 'tech'}">
-                <i class="fas fa-fw fa-magnifying-glass fa-icon"></i>
-
+                <span class="fa-icon">
+                  {{ icon('jobBoardSearch') }}
+                </span>
                 <ul v-cloak class="list-group list-group-tech inline">
                   <li v-for="tag in input.tags" class="list-group-item">
                     <a @click.prevent="toggleTag(tag)" href="javascript:" rel="nofollow">
@@ -51,31 +52,31 @@
                   </li>
                 </ul>
                 <input
-                  v-model="input.q"
-                  @focus="selectTab('tech')"
-                  tabindex="1"
-                  ref="q"
-                  name="q"
-                  type="search"
-                  class="form-control"
-                  placeholder="Szukaj po tytule, nazwie firmy"
-                  autocomplete="off"
-                  autofocus>
+                    v-model="input.q"
+                    @focus="selectTab('tech')"
+                    tabindex="1"
+                    ref="q"
+                    name="q"
+                    type="search"
+                    class="form-control"
+                    placeholder="Szukaj po tytule, nazwie firmy"
+                    autocomplete="off"
+                    autofocus>
                 <a @click="selectTab('tech')" href="javascript:" rel="nofollow">
                   <i class="fas fa-icon" :class="getTabDropdownClass('tech')"></i>
                 </a>
               </div>
 
               <div class="input-item location-search" :class="{'extended': selectedTab === 'location'}">
-                <i class="fas fa-fw fa-location-dot fa-icon"></i>
-
+                <span class="fa-icon">
+                  {{ icon('jobBoardSearchLocation') }}
+                </span>
                 <ul v-cloak class="list-group list-group-tech inline">
                   <li v-if="input.remote" class="list-group-item">
                     <a @click.prevent="toggleRemote" href="javascript:" rel="nofollow">
                       Praca zdalna
                     </a>
                   </li>
-
                   <li v-for="location in input.locations" class="list-group-item">
                     <a @click.prevent="toggleLocation(location)" href="javascript:" rel="nofollow">
                       ${ capitalize(location) }
@@ -84,14 +85,14 @@
                 </ul>
 
                 <input
-                  v-model="input.city"
-                  @focus="selectTab('location')"
-                  tabindex="2"
-                  ref="city"
-                  type="search"
-                  class="form-control"
-                  placeholder="Nazwa miejscowości"
-                  autocomplete="off"
+                    v-model="input.city"
+                    @focus="selectTab('location')"
+                    tabindex="2"
+                    ref="city"
+                    type="search"
+                    class="form-control"
+                    placeholder="Nazwa miejscowości"
+                    autocomplete="off"
                 >
 
                 <a @click="selectTab('location')" href="javascript:" rel="nofollow">
@@ -100,15 +101,16 @@
               </div>
 
               <div class="input-item salary-search" :class="{'extended': selectedTab === 'salary'}">
-                <i class="far fa-fw fa-credit-card fa-icon"></i>
-
+                <span class="fa-icon">
+                  {{ icon('jobBoardFilterSalary') }}
+                </span>
                 <input
-                  v-model.number="input.salary"
-                  @focus="selectTab('salary')"
-                  placeholder="> 0"
-                  type="text"
-                  class="form-control"
-                  tabindex="3"
+                    v-model.number="input.salary"
+                    @focus="selectTab('salary')"
+                    placeholder="> 0"
+                    type="text"
+                    class="form-control"
+                    tabindex="3"
                 >
 
                 <select v-model="defaultCurrency" name="currency" class="form-control">
@@ -120,7 +122,7 @@
 
               <div class="input-item button-search d-none d-md-block">
                 <button tabindex="4" class="btn btn-primary btn-search" type="submit">
-                  <i class="fas fa-magnifying-glass"></i>
+                  {{ icon('jobBoardSearch') }}
                 </button>
               </div>
             </div>
@@ -145,8 +147,12 @@
                     <input type="hidden" name="remote" :checked="input.remote">
 
                     <a @click.prevent="toggleRemote" href="javascript:" rel="nofollow">
-                      <i class="fas fa-fw fa-wifi" :class="{'text-primary': input.remote !== null}"></i>
-
+                      <span class="text-primary" v-if="input.remote !== null">
+                        {{ icon('jobBoardFilterRemote') }}
+                      </span>
+                      <template v-else>
+                        {{ icon('jobBoardFilterRemote') }}
+                      </template>
                       Praca zdalna
                     </a>
                   </li>
@@ -198,8 +204,10 @@
 
       <div class="col-md-3 col-12" style="margin-top: -35px">
         <section v-cloak v-show="subscribed.length" class="box">
-          <h4><i class="fas fa-fw fa-heart"></i> Ulubione ogłoszenia</h4>
-
+          <h4>
+            {{ icon('jobBoardSubscribedOffers') }}
+            Ulubione ogłoszenia
+          </h4>
           <div id="js-subscribed" class="card card-default card-media" style="max-height: 400px">
             <div class="card-body">
               <vue-job-tiny v-for="job in subscriptions" :job="job" :key="job.id"></vue-job-tiny>
@@ -224,6 +232,6 @@
       subscribed: {{ subscribed|json_encode|raw }},
       selectedTab: 'tech',
       skeleton: false,
-    }
+    };
   </script>
 {% endblock %}

@@ -1,15 +1,13 @@
 <div id="js-comments" v-cloak>
   <h3>
-    <i class="fas fa-question-circle-o"></i>
+    {{ icon('jobOfferComments') }}
     Pytania i odpowiedzi
   </h3>
-
   <vue-comment-form
       v-if="isAuthorized"
       resource-id="{{ job.id }}"
       resource="Coyote\Job"
   ></vue-comment-form>
-
   <div v-if="commentsCount > 0" class="card card-default">
     <div class="card-body">
       <vue-comment

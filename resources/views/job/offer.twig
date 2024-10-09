@@ -40,7 +40,12 @@
       {% endif %}
 
       <div class="job-navlinks p-1">
-        <i class="fas fa-backward text-primary"></i> <a href="{{ previous_url ?: route('job.home') }}">Powrót do listy ofert</a>
+        <span class="text-primary">
+          {{ icon('jobOfferBack') }}
+        </span>
+        <a href="{{ previous_url ?: route('job.home') }}">
+          Powrót do listy ofert
+        </a>
       </div>
     </div>
   </div>
@@ -50,7 +55,7 @@
       {% if payment and not session_has('success') %}
         <div class="alert alert-warning">
           <h4>
-            <i class="fas fa-credit-card fa-fw"></i>
+            {{ icon('jobOfferPaymentRequired') }}
             Oczekiwanie na płatność.
           </h4>
           <p>
@@ -83,7 +88,7 @@
       {% if can('job-update') %}
         <section id="box-job-firm" class="box">
           <h4>
-            <i class="fas fa-circle-info fa-fw"></i> 
+            {{ icon('jobOfferDetails') }}
             Informacje o ofercie
           </h4>
 
@@ -91,18 +96,17 @@
             <div class="card-body">
               <ul class="list-unstyled">
                 <li title="Data opublikowania">
-                  <i class="fas fa-calendar-days fa-fw"></i>
+                  {{ icon('jobOfferPublishDate') }}
                   {{ job.boost_at|format_date }}
                 </li>
 
                 <li class="counter" title="Liczba odsłon">
-                  <i class="far fa-eye fa-fw"></i>
+                  {{ icon('jobOfferViews') }}
                   {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
                 </li>
-
                 {% if not job.is_expired %}
                   <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
-                    <i class="far fa-clock fa-fw"></i>
+                    {{ icon('jobOfferExpiresInDays') }}
                     {{ job.deadline }} dni do końca
                   </li>
                 {% endif %}
@@ -114,8 +118,10 @@
 
       {% if mlt|length %}
         <section class="box">
-          <h4><i class="fas fa-star fa-fw"></i> Podobne oferty</h4>
-
+          <h4>
+            {{ icon('jobOfferMoreLikeThis') }}
+            Podobne oferty
+          </h4>
           <div class="card card-default card-media">
             <div class="card-body">
               {% include 'components.jobs' with {'jobs': mlt} %}

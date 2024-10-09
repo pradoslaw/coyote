@@ -2,9 +2,8 @@
   <div class="col-4">
     <button class="btn-google" data-url="{{ route('oauth', ['google']) }}">
       <span class="icon">
-        <i class="fab fa-google"></i>
+        {{ icon('loginGoogle') }}
       </span>
-
       <span class="text">
         Google
       </span>
@@ -14,9 +13,8 @@
   <div class="col-4">
     <button class="btn-fb" data-url="{{ route('oauth', ['facebook']) }}">
       <span class="icon">
-        <i class="fab fa-facebook"></i>
+        {{ icon('loginFacebook') }}
       </span>
-
       Facebook
     </button>
   </div>
@@ -24,9 +22,8 @@
   <div class="col-4">
     <button class="btn-github" data-url="{{ route('oauth', ['github']) }}">
       <span class="icon">
-        <i class="fab fa-github"></i>
+        {{ icon('loginGithub') }}
       </span>
-
       Github
     </button>
   </div>

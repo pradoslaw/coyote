@@ -1,10 +1,9 @@
 {% if related|length > 0 %}
   <section class="related box">
     <h4 class="heading">
-      <i class="fas fa-thumbtack fa-fw"></i>
+      {{ icon('wikiRelated') }}
       Strony powiązane
     </h4>
-
     <ul>
       {% for item in related %}
         <li>

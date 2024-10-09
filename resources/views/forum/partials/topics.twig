@@ -4,11 +4,12 @@
   <li>{{ sortable('replies', 'Odpowiedzi', ['last', 'desc']) }}</li>
   <li>{{ sortable('views', 'Wyświetleń', ['last', 'desc']) }}</li>
   <li>{{ sortable('score', 'Głosów', ['last', 'desc']) }}</li>
-  {# <li class="filter"><a href="javascript:">Filtruj</a></li> #}
 </ul>
 
 {% if forum is defined and not forum.is_locked %}
-  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-end mt-1 mb-3">Nowy wątek</a>
+  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-end mt-1 mb-3">
+    Nowy wątek
+  </a>
 {% endif %}
 
 <div class="clearfix"></div>
@@ -34,13 +35,15 @@
       {{ form_select('forum', forumList, forum.slug, {'id': 'js-forum-list', 'class': 'form-control d-inline w-auto'}) }}
 
       <a class="btn" href="javascript:" id="js-reload" rel="nofollow">
-        <i class="fas fa-circle-arrow-right"></i>
+        {{ icon('forumChangeCategory') }}
       </a>
     </div>
   {% endif %}
 </div>
 
 {% if topics.count() > 10 and forum is defined and not forum.is_locked %}
-  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-end">Nowy wątek</a>
+  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-end">
+    Nowy wątek
+  </a>
   <div class="clearfix"></div>
 {% endif %}

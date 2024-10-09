@@ -128,33 +128,32 @@
             <div class="dropdown-menu dropdown-menu-end">
               <a class="dropdown-item profile-name" href="{{ route('user.home') }}">
                 {{ user('name') }}
-
                 {% if user('is_sponsor') %}
-                  <i class="fa fa-fw fa-medal" title="Konto Premium"></i>
+                  {{ icon('sponsorProfile') }}
                 {% endif %}
               </a>
 
               <div class="dropdown-divider"></div>
 
               <a class="dropdown-item" href="{{ route('profile', [user('id')]) }}">
-                <i class="fas fa-user fa-fw"></i>
+                {{ icon('userProfile') }}
                 Profil
               </a>
               <a class="dropdown-item" href="{{ route('user.pm') }}">
-                <i class="fas fa-envelope fa-fw"></i>
+                {{ icon('privateMessages') }}
                 Wiadomości
               </a>
               <a class="dropdown-item" href="{{ route('user.home') }}">
-                <i class="fas fa-gear fa-fw"></i>
+                {{ icon('userAccount') }}
                 Moje konto
               </a>
               <a class="dropdown-item" href="{{ url('Pomoc') }}">
-                <i class="fas fa-circle-info fa-fw"></i>
+                {{ icon('help') }}
                 Pomoc
               </a>
               {% if can('adm-access') %}
                 <a class="dropdown-item" href="{{ route('adm.home') }}">
-                  <i class="fas fa-user-tie fa-fw"></i>
+                  {{ icon('adminPanel') }}
                   Panel administracyjny
                 </a>
               {% endif %}
@@ -162,7 +161,7 @@
               <div class="dropdown-divider"></div>
 
               <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out" rel="nofollow">
-                <i class="fas fa-right-from-bracket fa-fw"></i>
+                {{ icon('logout') }}
                 Wyloguj
               </a>
             </div>
@@ -179,8 +178,12 @@
         {% endif %}
 
         <button class="navbar-toggler shadow-none order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-menu">
-          <i class="fa-solid fa-bars button-open"></i>
-          <i class="fa-solid fa-xmark button-close"></i>
+          <div class="button-open">
+            {{ icon('mobileMenuOpen') }}
+          </div>
+          <div class="button-close">
+            {{ icon('mobileMenuClose') }}
+          </div>
         </button>
       </div>
     </nav>
@@ -209,8 +212,7 @@
           <div class="row">
             <div class="col-12">
               <div class="alert alert-success mt-3">
-                <i class="fas fa-check"></i>
-
+                {{ icon('alertSuccess') }}
                 {{ session_get('success') }}
               </div>
             </div>
@@ -221,8 +223,7 @@
           <div class="row">
             <div class="col-12">
               <div class="alert alert-danger mt-3">
-                <i class="fas fa-triangle-exclamation"></i>
-
+                {{ icon('alertDanger') }}
                 {{ session_get('error') }}
               </div>
             </div>
@@ -249,7 +250,7 @@
           {{ render_block('footer') }}
         </div>
         <span id="scroll-to-top" title="Powrót na górę">
-          <i class="fas fa-arrow-up"></i>
+          {{ icon('scrollTop') }}
         </span>
       </div>
     </div>

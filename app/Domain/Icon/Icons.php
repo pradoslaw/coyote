@@ -40,6 +40,6 @@ readonly class Icons
         if (\array_key_exists($iconName, $icons)) {
             return $icons[$iconName];
         }
-        throw new \InvalidArgumentException();
+        throw new \InvalidArgumentException("Failed to find icon: $iconName");
     }
 }

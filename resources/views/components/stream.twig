@@ -14,31 +14,33 @@
       <li class="list-inline-item" title="{{ activity.created_at }}">
         {{ activity.created_at|format_date }}
       </li>
-
       <li class="list-inline-item" title="{{ activity.ip }}">
-        <i class="fas fa-fw fa-laptop" data-balloon-pos="up" aria-label="{{ activity.ip }}"></i>
-        <a title="Kliknij, aby wyszukać" class="bubble text-muted" href="{{ route('adm.stream', {ip: activity.ip}) }}">{{ activity.ip }}</a>
+        {{ icon('topicLogUserIp') }}
+        <a title="Kliknij, aby wyszukać" class="bubble text-muted" href="{{ route('adm.stream', {ip: activity.ip}) }}">
+          {{ activity.ip }}
+        </a>
       </li>
-
       {% if activity.browser %}
         <li class="list-inline-item" title="{{ activity.browser }}">
-          <i class="fas fa-fw fa-globe" data-balloon-pos="up" aria-label="{{ activity.browser }}"></i>
-
-          <a title="Kliknij, aby wyszukać" class="bubble text-muted" href="{{ route('adm.stream', {browser: activity.browser}) }}">{{ activity.agent.browser }}, {{ activity.agent.platform }}</a>
+          {{ icon('topicLogUserAgent') }}
+          <a title="Kliknij, aby wyszukać" class="bubble text-muted" href="{{ route('adm.stream', {browser: activity.browser}) }}">
+            {{ activity.agent.browser }}, {{ activity.agent.platform }}
+          </a>
         </li>
       {% endif %}
-
       {% if activity.fingerprint %}
         <li class="list-inline-item">
-          <i class="fas fa-fw fa-info" data-balloon-pos="up" aria-label="{{ activity.fingerprint }}"></i>
-
-          <a title="Kliknij, aby wyszukać" class="bubble text-muted" href="{{ route('adm.stream', {fingerprint: activity.fingerprint}) }}">{{ activity.fingerprint[0:2] }} ... {{ activity.fingerprint[-2:2] }}</a>
+          {{ icon('topicLogUserFingerprint') }}
+          <a title="Kliknij, aby wyszukać" class="bubble text-muted" href="{{ route('adm.stream', {fingerprint: activity.fingerprint}) }}">
+            {{ activity.fingerprint[0:2] }} ... {{ activity.fingerprint[-2:2] }}
+          </a>
         </li>
       {% endif %}
     </ul>
-
     {% if activity.excerpt %}
-      <div class="card card-body bg-light p-2 mt-2 mb-2">{{ activity.excerpt }}</div>
+      <div class="card card-body bg-light p-2 mt-2 mb-2">
+        {{ activity.excerpt }}
+      </div>
     {% endif %}
   </div>
 </div>

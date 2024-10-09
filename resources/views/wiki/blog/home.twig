@@ -17,17 +17,14 @@
                 </h4>
                 <ul class="metadata list-inline">
                   <li class="list-inline-item" title="Data opublikowania" class="date">
-                    <i class="far fa-calendar-days"></i>
                     {{ child.created_at }}
                   </li>
                   <li class=" list-inline-item comment">
                     <a href="{{ url(child.path) }}#box-comment" title="Zobacz komentarze" value="UserComments:{{ child.comments }}">
-                      <i class="fas fa-comments"></i>
                       {{ declination(child.comments|length, ['komentarz', 'komentarze', 'komentarzy']) }}
                     </a>
                   </li>
                   <li class="list-inline-item counter" value="UserPageVisits:{{ child.views }}">
-                    <i class="far fa-eye"></i>
                     {{ declination(child.views, ['odsłona', 'odsłony', 'odsłon']) }}
                   </li>
                 </ul>

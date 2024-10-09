@@ -7,10 +7,11 @@
   {% if auth_check() %}
     <div id="js-tags" class="box">
       <h4 class="heading">
-        <i class="fas fa-tag fa-fw"></i> Moje tagi
+        {{ icon('tagsSubscribed') }}
+        Moje tagi
 
         <a @click="toggleEdit" href="javascript:" class="btn btn-secondary btn-sm float-end" style="margin-top: -4px" rel="nofollow">
-          <i class="fas fa-gear"></i>
+          {{ icon('tagsSubscribedEdit') }}
         </a>
       </h4>
 
@@ -43,10 +44,9 @@
 
   <div class="box mt-5">
     <h4 class="heading">
-      <i class="fas fa-tag fa-fw"></i>
+      {{ icon('tagsPopularForum') }}
       Popularne tagi
     </h4>
-
     {% include 'forum.partials.tags' with {'tags': tags.popular} %}
   </div>
 

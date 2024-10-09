@@ -29,7 +29,7 @@
   <div v-cloak class="typing">
     <div v-if="isTyping" class="small pt-1">
       <small>
-        <i class="far fa-comment-dots"></i>
+        {{ icon('privateMessageTyping') }}
         <em>${ recipient.name } pisze...</em>
       </small>
     </div>

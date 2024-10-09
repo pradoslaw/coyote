@@ -4,7 +4,7 @@
 {% block container %}
   <div class="card card-default">
     <div class="card-header">
-      <i class="fa-solid fa-chart-simple"></i>
+      {{ icon('surveyExperiment') }}
       Szczegóły eksperymentu
     </div>
     <div class="list-group list-group-flush">
@@ -63,7 +63,7 @@
             <input class="form-control" name="members[]" :value="memberId" style="width:100px;" placeholder="ID użytkownika" readonly/>
             <span class="input-group-text p-0">
               <button class="btn" type="button" style="border:none;" @click.prevent="remove(key)">
-                <i class="fa-solid fa-trash"></i>
+                {{ icon('surveyExperimentMemberRemove') }}
               </button>
             </span>
           </div>
@@ -71,7 +71,7 @@
       </div>
       <div class="card-footer d-flex justify-content-end">
         <button class="btn btn-primary">
-          <i class="fa-solid fa-check"></i>
+          {{ icon('surveyExperimentMembersSave') }}
           Zapisz
         </button>
       </div>
@@ -80,7 +80,7 @@
 
   <div class="d-flex justify-content-end mb-4">
     <a class="btn btn-secondary" href="{{ experimentsBackUrl }}">
-      <i class="fa-solid fa-arrow-left"></i>
+      {{ icon('surveyExperimentBack') }}
       Powrót
     </a>
   </div>

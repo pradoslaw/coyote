@@ -17,11 +17,11 @@
 
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="comment-menu-{{ comment.id }}">
               <a class="dropdown-item btn-edit" href="javascript:" data-id="{{ comment.id }}" rel="nofollow">
-                <i class="fas fa-pen-to-square fa-fw"></i>
+                {{ icon('wikiCommentEdit') }}
                 Edytuj
               </a>
               <a class="dropdown-item" href="javascript:" data-bs-target="#modal-confirm-{{ comment.id }}" data-bs-toggle="modal" rel="nofollow">
-                <i class="fas fa-trash-can fa-fw"></i>
+                {{ icon('wikiCommentRemove') }}
                 Usuń
               </a>
             </div>

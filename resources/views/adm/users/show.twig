@@ -16,15 +16,15 @@
       </li>
       <li class="list-group-item">
         <a class="btn btn-secondary" href="{{ navigation.profile }}">
-          <i class="fa fa-user fa-fw"></i>
+          {{ icon('adminUserShowProfile') }}
           Pokaż profil
         </a>
         <a class="btn btn-secondary" href="{{ navigation.stream }}">
-          <i class="fa fa-newspaper fa-fw"></i>
+          {{ icon('adminUserFindInLog') }}
           Znajdź w dzienniku zdarzeń
         </a>
         <button class="btn btn-secondary" disabled title="Funkcjonalność jeszcze nie jest gotowe">
-          <i class="fas fa-fingerprint fa-fw"></i>
+          {{ icon('adminUserFindFingerprints') }}
           Znajdź fingerprinty
         </button>
       </li>
@@ -32,23 +32,23 @@
       <li class="list-group-item">
         <p class="mb-2">Treści użytkownika:</p>
         <a class="btn btn-secondary" href="{{ navigation.posts }}">
-          <i class="far fa-comment fa-fw"></i>
+          {{ icon('adminUserPosts') }}
           Napisane posty
         </a>
         <a class="btn btn-secondary" href="{{ navigation.microblogs }}">
-          <i class="far fa-comments fa-fw"></i>
+          {{ icon('adminUserMicroblogs') }}
           Napisane mikroblogi
         </a>
         <a class="btn btn-secondary" href="{{ navigation.comments }}">
-          <i class="far fa-comments fa-fw"></i>
+          {{ icon('adminUserPostComments') }}
           Napisane komentarze
         </a>
         <a class="btn btn-secondary" href="{{ navigation.receivedFlags }}">
-          <i class="far fa-flag fa-fw"></i>
+          {{ icon('adminUserReportReceived') }}
           Otrzymane raporty
         </a>
         <button class="btn btn-secondary" disabled title="Przekierowanie jeszcze nie jest gotowe">
-          <i class="fas fa-flag fa-fw"></i>
+          {{ icon('adminUserReportSent') }}
           Wysłane raporty
         </button>
       </li>
@@ -57,29 +57,29 @@
 
   <div class="card card-default">
     <div class="card-header">
-      <i class="fas fa-chart-line fa-fw"></i>
+      {{ icon('adminUserStatistics') }}
       Statystyki użytkownika {{ navigation.mention }}
     </div>
     <div class="card-body">
       <div class="btn-group mb-4">
         <a href="?" class="btn btn-secondary">
-          <i class="far fa-calendar-check"></i>
+          {{ icon('adminUserStatisticsAllTime') }}
           Wszystko
         </a>
         <a href="?last=year" type="button" class="btn btn-secondary">
-          <i class="far fa-calendar fa-fw"></i>
+          {{ icon('adminUserStatisticsLastYear') }}
           Ostatnie 365 dni
         </a>
         <a href="?last=month" type="button" class="btn btn-secondary">
-          <i class="fas fa-calendar-days fa-fw"></i>
+          {{ icon('adminUserStatisticsLastMonth') }}
           Ostatnie 31 dni
         </a>
         <a href="?last=week" type="button" class="btn btn-secondary">
-          <i class="fas fa-calendar-week fa-fw"></i>
+          {{ icon('adminUserStatisticsLastWeek') }}
           Ostatnie 7 dni
         </a>
         <a href="?last=day" type="button" class="btn btn-secondary">
-          <i class="fas fa-calendar-day fa-fw"></i>
+          {{ icon('adminUserStatisticsLastDay') }}
           Ostatnie 24h
         </a>
       </div>
@@ -159,7 +159,7 @@
 
   <div class="card card-default">
     <div class="card-header">
-      <i class="fa fa-gear"></i>
+      {{ icon('adminUserSettings') }}
       Ustawienia użytkownika {{ navigation.mention }}
     </div>
 
@@ -167,11 +167,11 @@
       <li class="list-group-item">
         <div>
           <a class="btn btn-secondary" href="{{ navigation.settings }}">
-            <i class="fas fa-user-gear fa-fw"></i>
+            {{ icon('adminUserAccountSettings') }}
             Ustawienia konta
           </a>
           <button class="btn btn-secondary" disabled title="Przekierowanie jeszcze nie jest gotowe">
-            <i class="fa fa-users fa-fw"></i>
+            {{ icon('adminUserGroupSettings') }}
             Dodaj lub usuń z grupy
           </button>
         </div>

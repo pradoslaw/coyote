@@ -19,12 +19,10 @@
   <div class="row mb-4">
     <div class="col-12">
       <h3>Dodatkowe pytania?</h3>
-
-      <i class="fas fa-circle-info fa-2x float-start d-none d-lg-inline"></i>
-
-      <div class="float-start ms-1">
-        <a href="#comments" style="font-size: 15px" class="text-muted">Zadaj pytanie dotyczace tego ogłoszenia</a>
-      </div>
+      {{ icon('jobOfferAdditionalQuestions') }}
+      <a href="#comments" style="font-size: 15px" class="text-muted">
+        Zadaj pytanie dotyczące tego ogłoszenia
+      </a>
     </div>
   </div>
 {% endif %}
@@ -34,10 +32,10 @@
     <a @click="checkAuth(subscribe)" :class="{'on': isSubscribed(job)}" class="btn-subscribe" href="javascript:" rel="nofollow">
       <span v-if="isSubscribed(job)">
         Usuń z ulubionych
-        <i class="fa-solid fa-bell fa-fw"></i>
+        {{ icon('jobOfferSubscribed') }}
       </span>
       <span v-else>
-        <i class="fa-regular fa-bell fa-fw"></i>
+        {{ icon('jobOfferSubscribe') }}
         Dodaj do ulubionych
       </span>
     </a>
@@ -46,19 +44,25 @@
   {% if not job.is_expired and can('update', job) %}
     <li>
       <a class="btn-edit" href="{{ route('job.submit', [job.id]) }}">
-        <i class="fas fa-fw fa-pen-to-square"></i>
+        {{ icon('jobOfferEdit') }}
         Edycja oferty
       </a>
     </li>
   {% endif %}
 
   <li>
-    <a class="btn-add" href="{{ route('job.submit') }}?revalidate=1"><i class="fas fa-fw fa-pencil"></i> Dodaj ofertę pracy</a>
+    <a class="btn-add" href="{{ route('job.submit') }}?revalidate=1">
+      {{ icon('jobOfferNew') }}
+      Dodaj ofertę pracy
+    </a>
   </li>
 
   {% if can('delete', job) %}
     <li>
-      <a class="btn-delete" href="#modal-delete" data-bs-toggle="modal"><i class="fas fa-fw fa-trash-can"></i> Usuń tę ofertę pracy</a>
+      <a class="btn-delete" href="#modal-delete" data-bs-toggle="modal">
+        {{ icon('jobOfferRemove') }}
+        Usuń tę ofertę pracy
+      </a>
     </li>
   {% endif %}
 
@@ -69,8 +73,9 @@
          rel="nofollow"
          data-url="{{ route('job.offer', [job.id, job.slug], false) }}"
          data-metadata="{{ {"Coyote\\Job": job.id}|encrypt }}">
-        <i class="fas fa-fw fa-flag"></i>
-        Zgłoś naruszenie</a>
+        {{ icon('jobOfferReport') }}
+        Zgłoś naruszenie
+      </a>
     </li>
   {% endif %}
 </ul>

@@ -5,7 +5,7 @@
   {{ form_open({url: route('adm.words.save'), method: 'post', id: 'app'}) }}
   <p>
     <button class="btn btn-secondary" @click.prevent="addRow">
-      <i class="fas fa-plus"></i>
+      {{ icon('adminCensoreNew') }}
       Dodaj nowy
     </button>
     <input type="submit" value="Zapisz" class="btn btn-primary" data-submit-state="Zapisywanie...">
@@ -26,7 +26,7 @@
       <td><input type="text" v-model="row.replacement" class="form-control" name="replacement[]"></td>
       <td>
         <button class="btn btn-sm btn-danger" @click.prevent="removeRow(key)">
-          <i class="far fa-fw fa-trash-can"></i>
+          {{ icon('adminCensoreRemove') }}
         </button>
       </td>
     </tr>

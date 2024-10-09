@@ -24,8 +24,7 @@
 
         <ul class="metadata list-inline location">
           <li class="list-inline-item" title="Lokalizacja">
-            <i class="fas fa-location-dot"></i>
-
+            {{ icon('jobOfferLocation') }}
             {% include 'job.partials.location' with {'locations': job.locations} %}
           </li>
         </ul>
@@ -33,8 +32,7 @@
 
       <ul class="about-items list-group list-group-horizontal row">
         <li class="list-group-item col-sm-6">
-          <i class="far fa-fw fa-handshake"></i>
-
+          {{ icon('jobOfferContract') }}
           <p>
             <strong>{{ employment_list[job.employment] }}</strong>
             <small>Umowa</small>
@@ -43,8 +41,7 @@
 
         {% if job.seniority %}
           <li class="list-group-item col-sm-6">
-            <i class="fas fa-fw fa-chart-line"></i>
-
+            {{ icon('jobOfferSeniority') }}
             <p>
               <strong>{{ seniority_list[job.seniority] }}</strong>
               <small>Poziom doświadczenia</small>
@@ -54,8 +51,7 @@
 
         {% if job.firm.employees %}
           <li class="list-group-item col-sm-6">
-            <i class="fas fa-fw fa-users fa-fw"></i>
-
+            {{ icon('jobOfferCompanyEmployees') }}
             <p>
               <strong>{{ employees_list[job.firm.employees] }} pracowników</strong>
               <small>Rozmiar firmy</small>
@@ -65,8 +61,7 @@
 
         {% if job.firm.founded %}
           <li class="list-group-item col-sm-6">
-            <i class="far fa-calendar fa-fw"></i>
-
+            {{ icon('jobOfferCompanyEstablishmentYear') }}
             <p>
               <strong>{{ job.firm.founded }}</strong>
               <small>Rok założenia firmy</small>
@@ -76,8 +71,7 @@
 
         {% if job.firm.website %}
           <li class="list-group-item col-sm-6">
-            <i class="fas fa-link fa-fw"></i>
-
+            {{ icon('jobOfferCompanyWebsite') }}
             <p>
               <strong><a href="{{ job.firm.website }}">{{ job.firm.website }}</a></strong>
               <small>WWW</small>
@@ -103,12 +97,16 @@
                       {% set tooltip = ['mile widziane', 'średnio zaawansowany', 'zaawansowany'][tag.pivot.priority] %}
 
                       {% apply spaceless %}
-                        <div class="progress-bar-dotted">
+                        <div class="progress-bar-dotted" title="{{ tooltip }}">
                           {% for i in 1..3 %}
                             {% if tag.pivot.priority >= i %}
-                              <i class="fas fa-circle text-primary" title="{{ tooltip }}"></i>
+                              <span class="text-primary">
+                                {{ icon('jobOfferRequirementProgress') }}
+                              </span>
                             {% else %}
-                              <i class="fas fa-circle text-muted" title="{{ tooltip }}"></i>
+                              <span class="text-muted">
+                                {{ icon('jobOfferRequirementProgress') }}
+                              </span>
                             {% endif %}
                           {% endfor %}
                         </div>
@@ -139,8 +137,12 @@
           <ul class="features list-group list-group-horizontal row">
             {% for feature in job.features %}
               <li class="list-group-item col-12 col-sm-6 {{ feature.pivot.checked ? 'checked' }}">
-                <i class="fas fa-fw {{ feature.pivot.checked ? 'fa-check' : 'fa-xmark' }}"></i> {{ feature.name }}
-
+                {% if feature.pivot.checked %}
+                  {{ icon('jobOfferFeaturePresent') }}
+                {% else %}
+                  {{ icon('jobOfferFeatureMissing') }}
+                {% endif %}
+                {{ feature.name }}
                 {% if feature.pivot.getAttribute('value') %}
                   <small class="text-muted"> ― {{ feature.pivot.getAttribute('value') }}</small>
                 {% endif %}
@@ -156,7 +158,10 @@
 
           <ul class="benefits list-group list-group-horizontal row">
             {% for benefit in job.firm.benefits %}
-              <li class="list-group-item col-12 col-sm-6 checked"><i class="fas fa-check fa-fw"></i> {{ benefit.name }}</li>
+              <li class="list-group-item col-12 col-sm-6 checked">
+                {{ icon('jobOfferBenefit') }}
+                {{ benefit.name }}
+              </li>
             {% endfor %}
           </ul>
         </section>

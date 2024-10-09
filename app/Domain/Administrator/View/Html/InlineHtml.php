@@ -2,6 +2,7 @@
 namespace Coyote\Domain\Administrator\View\Html;
 
 use Coyote\Domain\Html;
+use Coyote\Domain\Icon\Icons;
 
 class InlineHtml extends Html
 {
@@ -52,26 +53,26 @@ class InlineHtml extends Html
             return $this->unwrapChildren($item);
         }
         if ($item->tagName === 'blockquote') {
-            return $this->badge('fas fa-reply-all');
+            return $this->badge('contentMarkerQuote');
         }
         if ($item->tagName === 'video') {
-            return $this->badge('fas fa-film me-1', 'video');
+            return $this->badge('contentMarkerVideo', 'video');
         }
         if ($item->tagName === 'table') {
-            return $this->badge('fas fa-table me-1', 'table');
+            return $this->badge('contentMarkerTable', 'table');
         }
         if ($item->tagName === 'iframe') {
-            return $this->badge('far fa-window-maximize me-1', 'iframe');
+            return $this->badge('contentMarkerIFrame', 'iframe');
         }
         if ($item->tagName === 'pre') {
-            return $this->badge('fas fa-code me-1', 'code');
+            return $this->badge('contentMarkerCode', 'code');
         }
         if ($item->tagName === 'br') {
             return ' ' . $this->lineBreak();
         }
         if ($item->tagName === 'img') {
             if ($item->getAttribute('class') !== 'img-smile') {
-                return $this->badge('far fa-image me-1', 'image');
+                return $this->badge('contentMarkerImage', 'image');
             }
         }
         $children = $this->unwrapChildren($item);
@@ -86,7 +87,7 @@ class InlineHtml extends Html
         }
         $headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
         if (\in_array($item->tagName, $headings)) {
-            return $this->badge('fas fa-heading') . $children;
+            return $this->badge('contentMarkerHeading') . $children;
         }
         if ($item->tagName === 'p') {
             if ($item->previousElementSibling && \in_array($item->previousElementSibling->tagName, ['p', ...$headings])) {
@@ -97,10 +98,15 @@ class InlineHtml extends Html
         return $item->ownerDocument->saveHTML($item);
     }
 
-    private function badge(string $iconClass, string $title = ''): string
+    private function badge(string $iconName, string $title = ''): string
     {
-        $icon = '<i class="' . $iconClass . '"></i>';
-        return '<span class="badge badge-material-element">' . $icon . $title . '</span>';
+        $icon = (new Icons)->icon($iconName);
+        if ($title) {
+            $titleHtml = '<span class="ms-1">' . $title . '</span>';
+        } else {
+            $titleHtml = '';
+        }
+        return '<span class="badge badge-material-element">' . $icon . $titleHtml . '</span>';
     }
 
     private function body(string $html): \DOMElement

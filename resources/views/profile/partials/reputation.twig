@@ -1,7 +1,7 @@
 {% if user.reputation > 0 %}
   <div class="box pt-2 mb-4">
     <h4 class="heading mb-4">
-      <i class="fa-solid fa-list-check"></i>
+      {{ icon('profileReputationActivity') }}
       Aktywność
     </h4>
     <div class="mb-4">
@@ -14,7 +14,7 @@
   </div>
   <div class="box pt-2 mb-4">
     <h4 class="heading mb-4">
-      <i class="fa-solid fa-chart-line"></i>
+      {{ icon('profileReputationHistory') }}
       Historia reputacji
     </h4>
     <div style="height:280px;">

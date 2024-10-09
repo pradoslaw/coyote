@@ -1,11 +1,14 @@
 <?php
 namespace Coyote\Domain\User;
 
+use Coyote\Domain\Html;
+use Coyote\Domain\Icon\Icons;
+
 class MenuItem
 {
     /** @var string[] */
     public array $route;
-    public ?string $htmlIcon = null;
+    public ?Html $icon = null;
 
     public function __construct(
         public string  $title,
@@ -13,11 +16,12 @@ class MenuItem
         public ?string $subscript = null,
         public ?string $htmlId = null,
         public ?string $htmlClass = null,
-        string         $htmlIcon = null,
+        string         $icon = null,
     )
     {
-        if ($htmlIcon) {
-            $this->htmlIcon = "fa fa-fw $htmlIcon";
+        if ($icon) {
+            $icons = new Icons();
+            $this->icon = $icons->icon($icon);
         }
         $this->route = [$routeName];
     }

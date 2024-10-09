@@ -27,15 +27,18 @@ class HistoryItem
     public function icon(): string
     {
         if ($this->type === 'close-report') {
-            return 'fas fa-check';
+            return 'logReportClosed';
         }
         if ($this->type === 'report') {
-            return 'far fa-flag';
+            return 'logItemReported';
         }
         if ($this->type === 'delete') {
-            return 'far fa-trash-can';
+            return 'logItemDeleted';
         }
-        return 'far fa-comment';
+        if ($this->type === 'create') {
+            return 'logItemCreated';
+        }
+        throw new \Exception("No such type: $this->type");
     }
 
     public function actionVerbPastTense(): string

@@ -42,7 +42,9 @@
       <div class="row">
         <div class="col-2"></div>
         <div class="col-10 text-end text-muted">
-          <i class="fas fa-ellipsis me-2"></i>
+          <div class="pe-2">
+            {{ icon('adminMaterialPostDropdown') }}
+          </div>
         </div>
       </div>
     </div>
@@ -50,7 +52,7 @@
 
   <div class="d-flex justify-content-end">
     <a class="btn btn-secondary" href="{{ post.url }}">
-      <i class="fas fa-arrow-right"></i>
+      {{ icon('adminMaterialPost') }}
       Przejdź do postu
     </a>
   </div>
@@ -62,7 +64,9 @@
     <div class="mb-4">
       {% for item in post.history %}
         <div class="d-flex mb-2">
-          <i class="{{ item.icon }} fa-fw mt-1 me-2"></i>
+          <span class="mt-1 me-2">
+            {{ icon(item.icon) }}
+          </span>
           <div>
             {{ item.userMention }}
             {{ item.actionVerbPastTense }}
@@ -82,7 +86,7 @@
   {% endif %}
 
   <a href="{{ backUrl }}" class="btn btn-secondary">
-    <i class="fas fa-arrow-left"></i>
+    {{ icon('adminMaterialPostBack') }}
     Powrót
   </a>
 {% endblock %}

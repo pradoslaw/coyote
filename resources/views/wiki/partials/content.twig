@@ -32,21 +32,21 @@
         {% block metadata %}
           <ul class="metadata list-inline">
             <li title="Data opublikowania" class="date list-inline-item">
-              <i class="far fa-calendar-days"></i>
+              {{ icon('wikiCreateDate') }}
               {{ wiki.created_at }}
             </li>
             <li title="Data ostatniej zmiany" class="edit-date list-inline-item">
-              <i class="far fa-calendar"></i>
+              {{ icon('wikiLastUpdateDate') }}
               {{ wiki.updated_at }}
             </li>
             <li class="comment list-inline-item">
               <a href="#box-comment" title="Zobacz komentarze" value="UserComments:{{ wiki.comments|length }}">
-                <i class="fas fa-comments"></i>
+                {{ icon('wikiComments') }}
                 {{ declination(wiki.comments|length, ['komentarz', 'komentarze', 'komentarzy']) }}
               </a>
             </li>
             <li class="counter list-inline-item" value="UserPageVisits:{{ wiki.views }}">
-              <i class="far fa-eye"></i>
+              {{ icon('wikiViews') }}
               {{ declination(wiki.views, ['odsłona', 'odsłony', 'odsłon']) }}
             </li>
           </ul>

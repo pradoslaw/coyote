@@ -6,7 +6,10 @@
   <div class="row">
     <main class="col-lg-9 col-12-md">
       <div class="card card-body bg-light p-2 border-0 text-center" v-loader>
-        <span class="lead justify-content-center ms-1"><i class="fas fa-spin fa-spinner  fa-fw"></i> Ładowanie...</span>
+        <span class="lead justify-content-center ms-1">
+          {{ icon('jobBoardLoading', {spin}) }}
+          Ładowanie...
+        </span>
       </div>
 
       <div id="js-submit-form" class="job-form" v-cloak>
@@ -37,7 +40,7 @@
             <div class="row">
               <div class="col-12 col-lg-9 d-flex justify-content-end">
                 <vue-button v-if="currentTab > 0" @click="switchTab(currentTab - 1)" :disabled="isSubmitting" class="btn btn-outline-primary next-tab">
-                  <i class="fas fa-angle-left"></i>
+                  {{ icon('jobOfferDraftTabPrev') }}
                   ${ tabs[currentTab - 1] }
                 </vue-button>
 
@@ -47,7 +50,7 @@
                     :disabled="isSubmitting"
                     class="btn btn-outline-primary next-tab">
                   ${ tabs[currentTab + 1] }
-                  <i class="fas fa-angle-right"></i>
+                  {{ icon('jobOfferDraftTabNext') }}
                 </vue-button>
 
                 <vue-button
@@ -56,7 +59,7 @@
                     @click="submitForm"
                     class="btn btn-primary btn-save ms-2"
                     title="Zapisz tę ofertę">
-                  <i class="fas fa-floppy-disk"></i>
+                  {{ icon('jobOfferDraftSave') }}
                   Zapisz
                   <template v-if="job.firm.name">jako ${ job.firm.name }</template>
                 </vue-button>
@@ -77,11 +80,22 @@
           </p>
 
           <h4 class="mt-3">Możliwe opcje promowania oferty pracy</h4>
-          <p><i class="fas fa-check fa-fw"></i> Ogłoszenie wyświetlane nad tymi darmowymi.</p>
-          <p><i class="fas fa-check fa-fw"></i> Reklama na stronie głównej oraz forum.</p>
-          <p><i class="fas fa-check fa-fw"></i> Podświetlenie oferty.</p>
-          <p><i class="fas fa-check fa-fw"></i> 3x podbicie oferty.</p>
-
+          <p>
+            {{ icon('jobBoardPackageBenefit') }} 
+            Ogłoszenie wyświetlane nad tymi darmowymi.
+          </p>
+          <p>
+            {{ icon('jobBoardPackageBenefit') }}
+            Reklama na stronie głównej oraz forum.
+          </p>
+          <p>
+            {{ icon('jobBoardPackageBenefit') }}
+            Podświetlenie oferty.
+          </p>
+          <p>
+            {{ icon('jobBoardPackageBenefit') }}
+            3x podbicie oferty.
+          </p>
           <h4 class="mt-3">Formy płatności</h4>
           <p>
             Za opcję promowania zapłacisz kartą Visa, Mastercard lub Maestro jak i również <strong>szybkim</strong> przelewem bankowym.

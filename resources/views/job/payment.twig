@@ -9,16 +9,19 @@
     <form @submit.prevent="makePayment" class="col-md-9">
       <div v-if="hasPaymentError" class="alert alert-danger alert-report">
         <p class="mb-3">
-          <i class="fas fa-triangle-exclamation me-1"></i>
-          <b>Wystąpił nieoczekiwany błąd podczas przetwarzania płatności.</b>
+          {{ icon('alertDanger') }}
+          <b class="ms-1">
+            Wystąpił nieoczekiwany błąd podczas przetwarzania płatności.
+          </b>
         </p>
         <p class="mb-0">
-          Spróbuj innej metody platności bądź skontaktuj się z administracją serwisu.
+          Spróbuj innej metody płatności bądź skontaktuj się z administracją serwisu.
         </p>
       </div>
       <div class="card card-default">
         <div class="card-header">
-          <i class="fas fa-lock fa-fw"></i> Płatność poprzez bezpieczne połączenie
+          {{ icon('paymentSecureConnection') }}
+          Płatność poprzez bezpieczne połączenie
         </div>
 
         <div class="card-body" id="payment-methods" v-show="grossPrice > 0">
@@ -56,7 +59,9 @@
 
         <div class="card-body" v-show="!grossPrice">
           <h1 class="text-center">
-            <i class="fas fa-check text-primary"></i>
+            <span class="text-primary">
+              {{ icon('paymentNotNecessary') }}
+            </span>
             Płatność nie jest wymagana
           </h1>
           <div class="d-flex justify-content-center mt-3">
@@ -70,7 +75,8 @@
       {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
       <div v-if="grossPrice > 0" class="card card-default">
         <div class="card-header">
-          <i class="fas fa-lock fa-fw"></i> Dane do faktury
+          {{ icon('paymentInvoiceData') }}
+          Dane do faktury
         </div>
 
         <div class="card-body">
@@ -92,7 +98,6 @@
                       name="invoice[country_id]"
                   />
                 </vue-form-group>
-
                 <vue-form-group :errors="errors['invoice.vat_id']" label="NIP / VAT-ID" class="col-8">
                   <vue-text :is-invalid="'invoice.vat_id' in errors" v-model="form.invoice.vat_id" name="invoice[vat_id]" autocomplete="off"></vue-text>
                 </vue-form-group>
@@ -122,12 +127,12 @@
 
           <div>
             <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-start">
-              <i class="fas fa-angle-left"></i>
+              {{ icon('paymentBackToOffer') }}
               Powrót do ogłoszenia
             </a>
             <vue-button submit :disabled="isProcessing" class="btn btn-primary float-end">
               Zapłać i zapisz
-              <i class="fas fa-angle-right"></i>
+              {{ icon('paymentSaveAndPay') }}
             </vue-button>
           </div>
         </div>
@@ -184,12 +189,10 @@
           <hr>
 
           <div v-show="!coupon.code && !isCoupon">
-            <span class="fa-stack">
-              <i class="far fa-circle fa-stack-2x"></i>
-              <i class="fas fa-dollar-sign fa-stack-1x"></i>
-            </span>
-
-            <a @click="isCoupon = true" style="text-decoration: underline; font-size: 14px; cursor: pointer">Masz kupon rabatowy?</a>
+            {{ icon('paymentCoupon') }}
+            <a @click="isCoupon = true" style=" cursor: pointer">
+              Masz kupon rabatowy?
+            </a>
           </div>
 
           <vue-form-group v-show="isCoupon" label="Masz kod promocyjny?" class="form-group">

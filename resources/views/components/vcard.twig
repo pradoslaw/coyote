@@ -26,21 +26,22 @@
       <div class="media-body">
         <ul class="list-inline pb-2 border-bottom text-truncate">
           <li class="list-inline-item" title="Ostatnia wizyta: {{ visited_at }}">
-            <i class="fas fa-right-to-bracket fa-fw"></i> {{ visited_at }}
+            {{ icon('vCardLastVisitDate') }} 
+            {{ visited_at }}
           </li>
           <li class="list-inline-item" title="Data rejestracji: {{ created_at }}">
-            <i class="fas fa-user-plus fa-fw"></i>
+            {{ icon('vCardRegisterDate') }}
             {{ created_at }}
           </li>
           <li class="list-inline-item" title="Liczba postów: {{ user.posts }}">
-            <i class="far fa-comments fa-fw"></i>
+            {{ icon('vCardPosts') }}
             {{ declination(user.posts, ['post', 'posty', 'postów']) }}
           </li>
         </ul>
 
         <div class="mt-2">
           <h6 class="pb-1">
-            <i class="fas fa-chart-line"></i>
+            {{ icon('vCardReputation') }}
             Reputacja
           </h6>
           <div class="progress">
@@ -56,22 +57,18 @@
 
     <div class="mt-3">
       <vue-follow-button :user-id="{{ user.id }}" class="btn-sm"></vue-follow-button>
-
       <a href="{{ route('forum.user', [user.id]) }}" title="Znajdź posty użytkownika" class="btn btn-sm btn-secondary me-1">
-        <i class="fas fa-magnifying-glass fa-fw"></i>
+        {{ icon('vCardUserFindPosts') }}
       </a>
-
       <a href="{{ route('user.pm.submit', {to: user.name}) }}" title="Napisz wiadomość do tego użytkownika" class="btn btn-sm btn-secondary">
-        <i class="fas fa-envelope fa-fw"></i>
+        {{ icon('vCardUserPrivateMessage') }}
       </a>
-
       {% if can('adm-access') %}
         <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}" title="Zbanuj tego użytkownika" class="btn btn-sm btn-secondary float-end ms-1">
-          <i class="fas fa-user-lock fa-fw"></i>
+          {{ icon('vCardUserBlock') }}
         </a>
-
         <a href="{{ route('adm.users.show', [user.id]) }}" title="Pokaż w panelu administracyjnym" class="btn btn-sm btn-secondary float-end">
-          <i class="fas fa-eye fa-fw"></i>
+          {{ icon('vCardUserShowInAdmin') }}
         </a>
       {% endif %}
     </div>

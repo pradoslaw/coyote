@@ -5,7 +5,11 @@
 {% block container %}
   <div class="box">
     <div class="nav nav-panel">
-      <a href="{{ url(wiki.path) }}" class="nav-item active"><span><i class="fas fa-paragraph"></i></span></a>
+      <a href="{{ url(wiki.path) }}" class="nav-item active">
+        <span>
+          {{ icon('wikiCategory') }}
+        </span>
+      </a>
 
       {% if can('wiki-admin') or not wiki.is_locked %}
         <a class="nav-item" href="{{ route('wiki.submit', [wiki.id]) }}" title="Kliknij, aby edytować ten artykuł">

@@ -20,34 +20,47 @@
             <div class="media-body">
               <ul class="metadata list-inline">
                 <li class="list-inline-item" title="Ostatnia wizyta">
-                  <i class="fas fa-right-to-bracket fa-fw"></i>
+                  {{ icon('userLastVisitDate') }}
                   {{ user('visited_at')|format_date }}
                 </li>
                 <li class="list-inline-item" title="Twoje aktualne IP">
-                  <i class="fas fa-house fa-fw"></i>
+                  {{ icon('userIpAddress') }}
                   {{ ip }}
                 </li>
                 <li class="list-inline-item" title="Data rejestracji">
-                  <i class="fas fa-user-plus fa-fw"></i>
+                  {{ icon('userRegisterDate') }}
                   {{ user('created_at')|format_date }}
                 </li>
                 <li class="list-inline-item" title="Liczba wizyt">
-                  <i class="far fa-eye fa-fw"></i>
+                  {{ icon('userVisits') }}
                   {{ user('visits')|number_format(0, ',', ' ') }}
                 </li>
               </ul>
 
               <div class="mt-2">
-                <h6><i class="fas fa-chart-line"></i> Twoja reputacja</h6>
+                <h6>
+                  {{ icon('userReputation') }}
+                  Twoja reputacja
+                </h6>
 
                 <div class="progress">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;"></div>
+                  <div class="progress-bar"
+                       role="progressbar" 
+                       aria-valuenow="{{ rank.percentage }}" 
+                       aria-valuemin="0" 
+                       aria-valuemax="100" 
+                       style="width: {{ rank.percentage }}%;"></div>
 
-                  <span class="rep"><strong>{{ user('reputation')|number_format(0, '', ' ') }}</strong>
-                    <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small></span>
+                  <span class="rep">
+                    <strong>{{ user('reputation')|number_format(0, '', ' ') }}</strong>
+                    <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small>
+                  </span>
 
                   {% if total_users > 0 %}
-                    <span class="rank" title="Miejsce w rankingu"><strong>#{{ rank.rank }}</strong> <small>/ {{ total_users }}</small></span>
+                    <span class="rank" title="Miejsce w rankingu">
+                      <strong>#{{ rank.rank }}</strong>
+                      <small>/ {{ total_users }}</small>
+                    </span>
                   {% endif %}
                 </div>
               </div>
