@@ -26,6 +26,13 @@ class PingTest extends TestCase
         $this->assertSame('/Mikroblogi', $this->sessionPath());
     }
 
+    #[Test]
+    public function ajaxSettingsIsSavedAsReferer(): void
+    {
+        $this->request('/User/Settings/Ajax', 'http://localhost:8880/Mikroblogi');
+        $this->assertSame('/Mikroblogi', $this->sessionPath());
+    }
+
     private function sessionPath(): string
     {
         /** @var Handler $handler */
