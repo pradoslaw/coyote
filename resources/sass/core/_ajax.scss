@@ -1,10 +1,12 @@
-/** @deprecated */
+/** 
+ * @deprecated 
+ */
 #ajax-loader {
   opacity: .5;
   position: absolute;
   background-color: #fff;
 
-  .fa {
+  .loadingIcon {
     left: 50%;
     top: 50%;
     position: absolute;
