@@ -83,7 +83,10 @@ class Handler implements \SessionHandlerInterface
                 $payload['path'] = $path === '/' ? $path : ('/' . $path);
             }
             if (\in_array($request->path(), ['ping', 'User/Settings/Ajax'])) {
-                $payload['path'] = \parse_url($request->header('Referer'), \PHP_URL_PATH);
+                $parseUrl = \parse_url($request->header('Referer'), \PHP_URL_PATH);
+                if ($parseUrl) {
+                    $payload['path'] = $parseUrl;
+                }
             }
         }
 

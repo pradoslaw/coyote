@@ -33,6 +33,27 @@ class PingTest extends TestCase
         $this->assertSame('/Mikroblogi', $this->sessionPath());
     }
 
+    #[Test]
+    public function ignoreEmptyHttpRefererPathEmpty(): void
+    {
+        $this->request('/ping', 'http://localhost:8880/');
+        $this->assertSame('/', $this->sessionPath());
+    }
+
+    #[Test]
+    public function ignoreEmptyHttpRefererPathMissing(): void
+    {
+        $this->request('/ping', 'http://localhost:8880');
+        $this->assertSame('/ping', $this->sessionPath());
+    }
+
+    #[Test]
+    public function ignoreEmptyHttpRefererMissing(): void
+    {
+        $this->request('/ping', '');
+        $this->assertSame('/ping', $this->sessionPath());
+    }
+
     private function sessionPath(): string
     {
         /** @var Handler $handler */
