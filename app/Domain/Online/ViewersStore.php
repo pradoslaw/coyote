@@ -28,6 +28,7 @@ class ViewersStore
             $user->name,
             $user->group_name,
             $user->photo->getFilename(),
+            \route('profile', [$user->id]),
         );
     }
 }

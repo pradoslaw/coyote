@@ -7,6 +7,7 @@ readonly class ViewerUser
         public string  $name,
         public ?string $groupName,
         public ?string $avatarUrl,
+        public string  $profileUrl,
     )
     {
     }

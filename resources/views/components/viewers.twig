@@ -12,7 +12,7 @@
 <div class="viewers-online">
   <div class="mb-1 viewers-users-group">
     {% for user in usersWithGroup %}
-      <div class="viewer-pill d-inline-flex mb-1" title="{{ user.name }} (online)">
+      <a class="viewer-pill d-inline-flex mb-1" title="{{ user.name }} (online)" style="color:inherit;" href="{{ user.profileUrl }}">
         <div class="viewer-pill-avatar d-inline-block">
           {{ user_avatar(user.avatarUrl, user.name) }}
         </div>
@@ -21,14 +21,14 @@
           <br>
           <small>{{ user.groupName }}</small>
         </span>
-      </div>
+      </a>
     {% endfor %}
   </div>
   <div class="viewers-users">
     {% for user in usersWithoutGroup %}
-      <span class="circle d-inline-block" title="{{ user.name }} (online)">
+      <a class="circle d-inline-block" title="{{ user.name }} (online)" style="color:inherit;" href="{{ user.profileUrl }}">
         {{ user_avatar(user.avatarUrl, user.name) }}
-      </span>
+      </a>
     {% endfor %}
     {% if superfluousCount > 0 %}
       <span class="circle circle-number d-inline-block" title="Jeszcze {{ superfluousCount }} innych użytkowników (online)">
