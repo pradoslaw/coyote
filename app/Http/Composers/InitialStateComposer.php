@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Http\Composers;
 
+use Coyote\Domain\Initials;
 use Coyote\Services\Forum\UserDefined;
 use Coyote\Services\JwtToken;
 use Coyote\User;
@@ -77,6 +78,7 @@ class InitialStateComposer
                 'photo'                => (string)$user->photo->url(),
                 'is_sponsor'           => $user->is_sponsor,
                 'postCommentStyle'     => $user->guest->settings['postCommentStyle'] ?? 'legacy',
+                'initials'             => (new Initials)->of($user->name),
             ],
         ];
     }

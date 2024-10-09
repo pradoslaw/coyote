@@ -148,7 +148,12 @@
               <div class="media microblog-input rounded border-top-0">
                 <div class="me-2">
                   <a v-profile="user.id">
-                    <vue-avatar :photo="user.photo" :name="user.name" class="i-35 d-block img-thumbnail"></vue-avatar>
+                    <vue-avatar
+                      :photo="user.photo" 
+                      :name="user.name"
+                      :initials="user.initials"
+                      class="i-35 d-block img-thumbnail"
+                    />
                   </a>
                 </div>
                 <div class="media-body position-relative">
