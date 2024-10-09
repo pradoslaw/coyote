@@ -3,39 +3,36 @@
     <div class="media" :class="{author: comment.is_owner}">
       <div class="me-2">
         <a v-profile="comment.user.id">
-          <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="img-thumbnail media-object i-38"></vue-avatar>
+          <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="img-thumbnail media-object i-38"/>
         </a>
       </div>
-
       <div class="media-body">
         <div class="dropdown float-end" v-if="comment.permissions.update">
-          <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis"></i></button>
-
+          <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-bs-toggle="dropdown" aria-label="Dropdown">
+            <i class="fa fa-ellipsis"></i>
+          </button>
           <div class="dropdown-menu dropdown-menu-end">
             <a @click="edit" href="javascript:" class="dropdown-item">
-              <i class="fa fa-pen-to-square fa-fw"></i>
+              <i class="fa fa-pen-to-square fa-fw"/>
               Edytuj
             </a>
             <a @click="deleteComment" class="dropdown-item" href="javascript:">
-              <i class="fa fa-fw fa-trash-can"></i>
+              <i class="fa fa-fw fa-trash-can"/>
               Usuń
             </a>
           </div>
         </div>
-
         <h5>
-          <vue-username v-if="comment.user.id" :user="comment.user"></vue-username>
+          <vue-username v-if="comment.user.id" :user="comment.user"/>
           <span v-else>{{ comment.user.name }}</span>
         </h5>
-
-        <h6><a :href="'#comment-' + comment.id" class="text-muted">
-          <vue-timeago :datetime="comment.created_at"/>
-        </a></h6>
-
-        <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
-
-        <div class="mt-2" v-if="!isEditing" v-html="comment.html"></div>
-
+        <h6>
+          <a :href="'#comment-' + comment.id" class="text-muted">
+            <vue-timeago :datetime="comment.created_at"/>
+          </a>
+        </h6>
+        <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"/>
+        <div class="mt-2" v-if="!isEditing" v-html="comment.html"/>
         <div class="mt-2" v-if="isEditing">
           <vue-markdown
             v-model="comment.text"
@@ -44,24 +41,27 @@
             preview-url="/Mikroblogi/Preview"
             :emojis="emojis"
           />
-
           <div class="d-flex mt-2 justify-content-end">
-            <button type="button" class="btn btn-danger btn-sm me-1" @click="isEditing = false">Anuluj</button>
-            <vue-button :disabled="isSubmitting" @click="saveComment(comment)" class="btn btn-primary btn-sm">Zapisz</vue-button>
+            <button type="button" class="btn btn-danger btn-sm me-1" @click="isEditing = false">
+              Anuluj
+            </button>
+            <vue-button :disabled="isSubmitting" @click="saveComment(comment)" class="btn btn-primary btn-sm">
+              Zapisz
+            </vue-button>
           </div>
         </div>
-
         <ul class="list-inline list-inline-bullet mb-0">
           <li class="list-inline-item">
             <a @click="checkAuth(reply)" href="javascript:" class="text-muted">Odpowiedz</a>
           </li>
           <li v-if="isAuthorized" class="list-inline-item">
-            <a href="javascript:" :data-metadata="comment.metadata" :data-url="comment.url" class="btn-report text-muted">Zgłoś</a>
+            <a href="javascript:" :data-metadata="comment.metadata" :data-url="comment.url" class="btn-report text-muted">
+              Zgłoś
+            </a>
           </li>
         </ul>
       </div>
     </div>
-
     <div class="comment">
       <div v-if="isReplying">
         <vue-markdown
@@ -71,28 +71,31 @@
           ref="replyText"
           preview-url="/Mikroblogi/Preview"
         />
-
         <div class="d-flex mt-2 justify-content-end">
           <button type="button" class="btn btn-danger btn-sm me-1" @click="isReplying = false">Anuluj</button>
-
-          <vue-button @click="saveComment(replyForm)" :disabled="isSubmitting" type="submit" class="btn btn-primary btn-sm" title="Ctrl+Enter aby opublikować">
+          <vue-button
+            @click="saveComment(replyForm)"
+            :disabled="isSubmitting"
+            type="submit"
+            class="btn btn-primary btn-sm"
+            title="Ctrl+Enter aby opublikować">
             Zapisz
           </vue-button>
         </div>
       </div>
     </div>
-
     <vue-comment
       v-for="child in comment.children"
       :comment="child"
       :key="child.id"
       :nested="true"
-    ></vue-comment>
+    />
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex';
+
 import {confirmModal} from '../../plugins/modals';
 import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from '../../store/index';
@@ -136,7 +139,6 @@ export default {
   methods: {
     edit() {
       this.isEditing = !this.isEditing;
-
       if (this.isEditing) {
         nextTick(() => this.$refs.submitText.focus());
       }
@@ -144,7 +146,6 @@ export default {
 
     reply() {
       this.isReplying = !this.isReplying;
-
       if (this.isReplying) {
         nextTick(() => this.$refs.replyText.focus());
       }
@@ -166,7 +167,6 @@ export default {
           this.isEditing = false;
           this.isReplying = false;
           this.replyForm.text = '';
-
           this.scrollIntoView(response.data);
         })
         .finally(() => this.isSubmitting = false);
@@ -178,7 +178,6 @@ export default {
   },
   computed: {
     ...mapGetters('user', ['isAuthorized']),
-
     flags() {
       return [
         ...store.getters['flags/filter'](this.comment.id, 'Coyote\\Comment'),
