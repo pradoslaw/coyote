@@ -8,9 +8,9 @@
       {% for item in checklist %}
         <li class="list-group-item">
           {% if item.value %}
-            <i class="fas fa-check text-success fa-fw"></i>
+            {{ icon('adminTickMark') }}
           {% else %}
-            <i class="fas fa-xmark text-danger fa-fw"></i>
+            {{ icon('adminCrossMark') }}
           {% endif %}
           <span>{{ item.label }}</span>
         </li>
