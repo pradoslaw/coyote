@@ -4,7 +4,13 @@
       <div class="media">
         <div class="me-2">
           <a v-profile="user.id">
-            <vue-avatar :name="user.name" :photo="user.photo" :id="user.id" :is-online="user.is_online" class="img-thumbnail media-object i-38"></vue-avatar>
+            <vue-avatar
+              :name="user.name" 
+              :photo="user.photo" 
+              :initials="user.initials"
+              :id="user.id"
+              :is-online="user.is_online"
+              class="img-thumbnail media-object i-38"/>
           </a>
         </div>
 
@@ -17,7 +23,9 @@
             preview-url="/Mikroblogi/Preview"/>
 
           <div class="d-flex mt-2 justify-content-end">
-            <vue-button :disabled="isSubmitting" @click="saveComment" class="btn btn-primary btn-sm" tabindex="3" title="Ctrl+Enter aby opublikować">Zapisz</vue-button>
+            <vue-button :disabled="isSubmitting" @click="saveComment" class="btn btn-primary btn-sm" tabindex="3" title="Ctrl+Enter aby opublikować">
+              Zapisz
+            </vue-button>
           </div>
         </div>
       </div>
