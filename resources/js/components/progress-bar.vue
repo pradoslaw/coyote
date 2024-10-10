@@ -17,6 +17,7 @@ import {default as mixin} from './mixins/form.js';
 
 export default {
   name: 'VueProgressBar',
+  emits: ['click'],
   mixins: [mixin],
   props: {
     modelValue: {
