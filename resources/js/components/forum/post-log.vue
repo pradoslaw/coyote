@@ -4,13 +4,12 @@
       <div class="row d-none d-lg-flex">
         <div class="col-2">
           <h5 class="mb-0 post-author">
-            <vue-username v-if="log.user" :user="log.user"></vue-username>
+            <vue-username v-if="log.user" :user="log.user"/>
             <span v-else>{{ log.user_name }}</span>
           </h5>
         </div>
-
         <div class="col-10">
-          <i class="far fa-file"></i>
+          <vue-icon name="postHistoryVersion"/>
           <a :href="`#id${log.id}`">
             {{ log.title }}
           </a>
@@ -38,7 +37,6 @@
             </li>
           </ul>
         </div>
-
         <div class="col-12 col-lg-10 diff">
           <div v-if="isLoaded" class="post-content" v-html="diffStr" style="white-space: pre-wrap"/>
         </div>
@@ -47,14 +45,14 @@
 
     <div class="card-footer">
       <div class="row">
-        <div class="d-none d-lg-block col-lg-2"></div>
+        <div class="d-none d-lg-block col-lg-2"/>
         <div class="col-12 d-flex col-lg-10">
           <a v-if="isRollbackEnabled" @click="rollback" title="Cofnij do tej wersji" class="btn btn-sm btn-rollback">
-            <i class="fas fa-arrow-rotate-left"/>
+            <vue-icon name="postHistoryVersionRestore"/>
             Cofnij do tej wersji
           </a>
           <a v-else class="btn btn-sm" :href="this.topicLink">
-            <i class="fas fa-eye"/>
+            <vue-icon name="postHistoryVersionShow"/>
             Pokaż aktualną wersję
           </a>
         </div>
@@ -68,11 +66,13 @@ import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
 import VueModal from "../delete-modal.vue";
+import VueIcon from "../icon";
 import VueUserName from "../user-name.vue";
 
 export default {
   name: 'VuePostLog',
   components: {
+    VueIcon,
     'vue-username': VueUserName,
     'vue-modal': VueModal,
     'vue-timeago': VueTimeAgo,

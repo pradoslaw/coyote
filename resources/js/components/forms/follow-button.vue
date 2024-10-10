@@ -1,7 +1,11 @@
 <template>
-  <button v-if="shouldShow" :class="{'follows': follows}" @click="checkAuth(toggleState)" class="btn btn-follow">
-    <i class="fa fa-fw fa-check"></i>
-
+  <button
+    v-if="shouldShow"
+    class="btn btn-follow"
+    :class="{follows}"
+    @click="checkAuth(toggleState)"
+  >
+    <vue-icon name="userFollow"/>
     <slot>
       {{ follows ? 'Obserwujesz' : 'Obserwuj' }}
     </slot>
@@ -12,10 +16,12 @@
 import {mapGetters} from 'vuex';
 
 import store from '../../store/index';
+import VueIcon from "../icon";
 import {default as mixin} from '../mixins/user.js';
 
 export default {
   name: 'VueFollowButton',
+  components: {VueIcon},
   mixins: [mixin],
   props: {
     userId: {
@@ -34,7 +40,11 @@ export default {
   },
   methods: {
     toggleState() {
-      this.follows ? store.dispatch('user/unfollow', this.userId) : store.dispatch('user/follow', this.userId);
+      if (this.follows) {
+        store.dispatch('user/unfollow', this.userId);
+      } else {
+        store.dispatch('user/follow', this.userId);
+      }
     },
   },
 };

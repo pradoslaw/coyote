@@ -5,7 +5,7 @@
     <div v-if="post.deleted_at"
          @click="isCollapsed = !isCollapsed"
          class="post-delete card-body text-decoration-none">
-      <i class="fa-solid fa-trash-can fa-fw"/>
+      <vue-icon name="postDeleted"/>
       Post usunięty
       <vue-timeago :datetime="post.deleted_at"/>
       <template v-if="post.deleter_name">przez {{ post.deleter_name }}.</template>
@@ -13,21 +13,21 @@
       <template v-if="post.delete_reason">Powód: {{ post.delete_reason }}.</template>
     </div>
     <div v-else-if="authorBlocked" class="post-delete card-body text-decoration-none" @click="isCollapsed = !isCollapsed">
-      <i class="fa-fw fa-solid fa-user-slash"/>
+      <vue-icon name="postAuthorBlocked"/>
       Treść posta została ukryta, ponieważ autorem jest zablokowany przez Ciebie użytkownik.
     </div>
     <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed}" class="card-header d-none ">
       <div class="row">
         <div class="col-2">
           <h5 class="mb-0 post-author">
-            <vue-username v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"></vue-username>
+            <vue-username v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"/>
             <span v-else>{{ post.user_name }}</span>
           </h5>
         </div>
 
         <div class="col-10 text-truncate small">
-          <i v-if="post.is_read" class="far fa-file"/>
-          <i v-else title="Nowy post" class="not-read"/>
+          <vue-icon v-if="post.is_read" name="postWasRead"/>
+          <i v-else class="not-read" title="Nowy post"/>
           {{ ' ' }}
           <a :href="post.url" class="small text-body">
             <vue-timeago :datetime="post.created_at"/>
@@ -116,11 +116,9 @@
         </div>
 
         <div v-show="!post.is_editing" class="col-12 col-lg-10">
-          <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
-
+          <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"/>
           <div class="post-vote">
             <strong class="vote-count" title="Ocena posta">{{ post.score }}</strong>
-
             <a
               v-if="!hidden"
               :class="{'on': post.is_voted}"
@@ -132,29 +130,26 @@
               class="vote-up"
               href="javascript:"
             >
-              <i class="far fa-thumbs-up fa-fw"></i>
-              <i class="fas fa-thumbs-up fa-fw"></i>
+              <vue-icon name="postVoted" v-if="post.is_voted"/>
+              <vue-icon name="postVote" v-else/>
             </a>
-
             <a v-if="!hidden && post.permissions.accept"
                :class="{'on': post.is_accepted}"
                @click="accept(post)"
                class="vote-accept"
                href="javascript:"
                title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
-              <i class="fas fa-check fa-fw"></i>
+              <vue-icon name="postAccept"/>
             </a>
             <span v-else-if="post.is_accepted" class="vote-accept on">
-              <i class="fas fa-check fa-fw"></i>
+              <vue-icon name="postAccept"/>
             </span>
           </div>
-
           <div class="post-content">
-            <div v-html="post.html"></div>
-
+            <div v-html="post.html"/>
             <ul v-if="post.assets.length" class="list-unstyled mb-1">
               <li v-for="asset in post.assets" class="small">
-                <i class="fas fa-download"/>
+                <vue-icon name="postAssetDownload"/>
                 {{ ' ' }}
                 <a :href="`/assets/${asset.id}/${asset.name}`">{{ asset.name }}</a>
                 {{ ' ' }}
@@ -163,18 +158,16 @@
             </ul>
             <template v-if="post.user && post.user.sig">
               <hr>
-              <footer v-html="post.user.sig"></footer>
+              <footer v-html="post.user.sig"/>
             </template>
           </div>
-
-          <vue-tags :tags="tags" class="tag-clouds-md mt-2 mb-2"></vue-tags>
-
+          <vue-tags :tags="tags" class="tag-clouds-md mt-2 mb-2"/>
           <div v-if="post.edit_count" class="edit-info">
             <strong>
               <a class="btn-history"
                  :title="post.permissions.update ? 'Zobacz historię zmian tego posta' : ''"
                  :href="post.permissions.update ? `/Forum/Post/Log/${post.id}` : ''">
-                <i class="fas fa-up-right-from-square"></i>
+                <vue-icon name="postEditHistoryShow"/>
               </a>
               edytowany {{ post.edit_count }}x,
               ostatnio:
@@ -183,33 +176,28 @@
             {{ ' ' }}
             <vue-timeago :datetime="post.updated_at"/>
           </div>
-
           <div class="post-comments">
             <div v-if="post.comments_count > Object.keys(post.comments).length"
                  class="d-inline-block mb-2 show-all-comments">
               <a @click="loadComments(post)" href="javascript:">
-                <i class="far fa-comments"></i>
+                <vue-icon name="postFoldedCommentsUnfold"/>
                 Zobacz
                 {{ declination(totalComments, ['pozostały', 'pozostałe', 'pozostałe']) }}
                 {{ totalComments }}
                 {{ declination(totalComments, ['komentarz', 'komentarze', 'komentarzy']) }}
               </a>
             </div>
-
             <vue-comment
               v-for="comment in post.comments"
               :key="comment.id"
-              :comment="comment"
-            ></vue-comment>
-
+              :comment="comment"/>
             <vue-comment-form
               v-show="isCommenting"
               :comment="commentDefault"
               @save="isCommenting = false"
               @cancel="isCommenting = false"
               ref="comment-form"
-              class="mt-2"
-            ></vue-comment-form>
+              class="mt-2"/>
           </div>
         </div>
 
@@ -225,79 +213,90 @@
           :upload-max-size="uploadMaxSize"
           @cancel="$store.commit('posts/edit', post)"
           @save="$store.commit('posts/edit', post)"
-        ></vue-form>
+        />
       </div>
     </div>
 
     <div :class="{'collapse': isCollapsed}" class="card-footer" v-if="!authorBlocked">
       <div class="row">
-        <div class="d-none d-lg-block col-lg-2"></div>
+        <div class="d-none d-lg-block col-lg-2"/>
         <div class="col-12 d-flex col-lg-10">
           <div v-if="!post.deleted_at">
             <button @click="checkAuth(subscribe, post)" class="btn btn-sm">
-              <i :class="{'fas text-primary': post.is_subscribed, 'far': !post.is_subscribed}"
-                 class="fa-fw fa-bell"></i>
-
+              <span v-if="post.is_subscribed" class="text-primary">
+                <vue-icon name="postSubscribed"/>
+              </span>
+              <vue-icon v-else name="postSubscribe"/>
               <span class="d-none d-sm-inline">Obserwuj</span>
             </button>
 
             <button class="btn btn-sm" ref="shareButton">
-              <i class="fas fa-fw fa-share-nodes"/>
+              <vue-icon name="postShare"/>
               <span class="d-none d-sm-inline">Udostępnij</span>
             </button>
 
             <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
-              <i :class="{'fas text-primary': isCommenting, 'far': !isCommenting}" class="fa-fw fa-comment"></i>
+              <span v-if="isCommenting" class="text-primary">
+                <vue-icon name="postCommentActive"/>
+              </span>
+              <vue-icon v-else name="postComment"/>
               <span class="d-none d-sm-inline">Komentuj</span>
             </button>
           </div>
 
           <div v-if="post.permissions.write" class="ms-auto">
             <button v-if="post.permissions.update && !post.deleted_at" @click="edit" class="btn btn-sm">
-              <i :class="{'text-primary': post.is_editing}" class="fas fa-fw fa-pen-to-square"></i>
+              <span v-if="post.is_editing" class="text-primary">
+                <vue-icon name="postEditActive"/>
+              </span>
+              <template v-else>
+                <vue-icon name="postEdit"/>
+              </template>
               <span class="d-none d-sm-inline">Edytuj</span>
             </button>
 
             <template v-if="post.permissions.delete">
               <button v-if="!post.deleted_at" @click="deletePost(true)" class="btn btn-sm">
-                <i class="fa fa-fw fa-trash-can"></i> <span class="d-none d-sm-inline">Usuń</span>
+                <vue-icon name="postDelete"/>
+                <span class="d-none d-sm-inline">Usuń</span>
               </button>
               <button v-else class="btn btn-sm" @click="restore">
-                <i class="fa fa-fw fa-arrow-rotate-left"></i> <span class="d-none d-sm-inline">Przywróć</span>
+                <vue-icon name="postRestore"/>
+                <span class="d-none d-sm-inline">Przywróć</span>
               </button>
             </template>
 
             <template v-if="!post.deleted_at">
               <button @click="$emit('reply', post)" class="btn btn-sm btn-fast-reply" title="Odpowiedz na ten post">
-                <i class="fa fa-fw fa-at"></i>
+                <vue-icon name="postMentionAuthor"/>
               </button>
 
               <button @click="$emit('reply', post, false)" class="btn btn-sm" title="Dodaj cytat do pola odpowiedzi">
-                <i class="fa fa-fw fa-quote-left"></i> <span class="d-none d-sm-inline">Odpowiedz</span>
+                <vue-icon name="postAnswerQuote"/>
+                <span class="d-none d-sm-inline">Odpowiedz</span>
               </button>
 
               <a href="javascript:" :data-metadata="post.metadata" :data-url="post.url" class="btn btn-sm">
-                <i class="fa fa-fw fa-flag"></i> <span class="d-none d-sm-inline">Zgłoś</span>
+                <vue-icon name="postReport"/>
+                <span class="d-none d-sm-inline">Zgłoś</span>
               </a>
             </template>
 
             <div v-if="post.permissions.merge || post.permissions.adm_access" class="dropdown float-end">
               <button class="btn btn-sm" data-bs-toggle="dropdown">
-                <i class="fas fa-fw fa-ellipsis"></i>
+                <vue-icon name="postMenuDropdown"/>
               </button>
-
               <div class="dropdown-menu dropdown-menu-end">
                 <a v-if="!post.deleted_at && post.permissions.merge && post.id !== topic.first_post_id"
                    @click="merge"
                    href="javascript:" class="dropdown-item">
-                  <i class="fas fa-compress fa-fw"></i>
+                  <vue-icon name="postMergeWithPrevious"/>
                   Połącz z poprzednim
                 </a>
-
                 <a v-if="post.permissions.adm_access"
                    class="dropdown-item"
                    :href="`/Adm/Firewall/Save?user=${post.user ? post.user.id : ''}&ip=${post.ip}`">
-                  <i class="fas fa-user-slash fa-fw"></i>
+                  <vue-icon name="postBanAuthor"/>
                   Zbanuj użytkownika
                 </a>
               </div>
@@ -306,10 +305,10 @@
         </div>
       </div>
     </div>
-
-    <vue-modal ref="delete-modal" @delete="reasonId => deletePost(false, reasonId)" :reasons="reasons"></vue-modal>
+    <vue-modal ref="delete-modal" @delete="reasonId => deletePost(false, reasonId)" :reasons="reasons"/>
   </div>
 </template>
+
 <script lang="ts">
 import Popover from 'bootstrap/js/dist/popover';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
@@ -324,6 +323,7 @@ import {notify} from "../../toast";
 import {createVueAppPhantom, nextTick} from "../../vue";
 import VueAvatar from '../avatar.vue';
 import VueDeleteModal from "../delete-modal.vue";
+import VueIcon from "../icon";
 import {default as mixins} from '../mixins/user.js';
 import VueTags from '../tags.vue';
 import VueUserName from "../user-name.vue";
@@ -339,16 +339,17 @@ export default {
   mixins: [mixins],
   components: {
     'vue-avatar': VueAvatar,
-    'vue-username': VueUserName,
+    'vue-button': VueButton,
     'vue-comment': VueComment,
     'vue-comment-form': VueCommentForm,
+    'vue-flag': VueFlag,
     'vue-form': VueForm,
+    'vue-icon': VueIcon,
     'vue-modal': VueDeleteModal,
     'vue-select': VueSelect,
-    'vue-button': VueButton,
-    'vue-flag': VueFlag,
     'vue-tags': VueTags,
     'vue-timeago': VueTimeAgo,
+    'vue-username': VueUserName,
   },
   props: {
     post: {
@@ -493,6 +494,7 @@ function sharePopover(postUrl: string, postId: number, authorName: string, copy:
     data() {
       return {postUrl, postId, authorName};
     },
+    components: {'vue-icon': VueIcon},
     template: `
       <div class="share-container">
         <div class="form-group mb-1">
@@ -501,13 +503,13 @@ function sharePopover(postUrl: string, postId: number, authorName: string, copy:
             <input class="form-control" readonly :value="postUrl" @click="select"/>
             <div class="input-group-append">
               <button type="button" class="btn" @click="copy(postUrl)">
-                <i class="fa-solid fa-copy"/>
+                <vue-icon name="postShareCopyUrl"/>
               </button>
             </div>
           </div>
         </div>
         <button type="button" class="btn btn-secondary mt-1 w-100" @click="copy(postUrl)">
-          <i class="fa-solid fa-copy"/>
+          <vue-icon name="postShareCopyUrl"/>
           Skopiuj link do postu <b>{{ authorName }}</b>
         </button>
       </div>

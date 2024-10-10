@@ -31,10 +31,10 @@
             <div class="col-sm-12">
               <div class="input-group">
                 <a title="Dodaj więcej lokalizacji" class="input-group-text text-decoration-none" href="javascript:" @click="ADD_LOCATION">
-                  <i class="fas fa-fw fa-circle-plus"></i>
+                  <vue-icon name="jobOfferLocationAdd"/>
                 </a>
-                <a title="Usuń lokalizację" class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION(location)" v-if="job.locations.length > 1">
-                  <i class="fas fa-fw fa-circle-minus text-danger"></i>
+                <a title="Usuń lokalizację" class="input-group-text text-decoration-none text-danger" href="javascript:" @click="REMOVE_LOCATION(location)" v-if="job.locations.length > 1">
+                  <vue-icon name="jobOfferLocationRemove"/>
                 </a>
                 <vue-google-place @change="location => setLocation(index, location)" :label="location.label"></vue-google-place>
               </div>
@@ -53,25 +53,24 @@
         </div>
 
         <div class="form-group border-bottom">
-          <label class="col-form-label">Ofertowane wynagrodzenie netto i forma zatrudnienia</label>
-
+          <label class="col-form-label">
+            Ofertowane wynagrodzenie netto i forma zatrudnienia
+          </label>
           <div>
             od
             <vue-text type="number" name="salary_from" class="d-inline-block" v-model="job.salary_from" :is-invalid="'salary_from' in errors"></vue-text>
 
             do
-            <vue-text type="number" name="salary_to" class="d-inline-block" v-model="job.salary_to" :is-invalid="'salary_to' in errors"></vue-text>
-
-            <vue-select name="currency_id" class="d-inline-block" :options="currenciesValues" v-model="job.currency_id"></vue-select>
-
-            <vue-select name="is_gross" class="d-inline-block" :options="['Netto', 'Brutto']" v-model="isGross"></vue-select>
-            <vue-select name="rate" class="d-inline-block" :options="rates" v-model="job.rate"></vue-select>
-            <vue-select name="employment" class="d-inline-block" :options="employments" v-model="job.employment"></vue-select>
-
-            <span class="form-text text-muted">Podanie tych informacji nie jest obowiązkowe, ale dzięki temu Twoja oferta zainteresuje więcej osób. Obiecujemy!</span>
-
-            <vue-error :message="errors.salary_from"></vue-error>
-            <vue-error :message="errors.salary_to"></vue-error>
+            <vue-text type="number" name="salary_to" class="d-inline-block" v-model="job.salary_to" :is-invalid="'salary_to' in errors"/>
+            <vue-select name="currency_id" class="d-inline-block" :options="currenciesValues" v-model="job.currency_id"/>
+            <vue-select name="is_gross" class="d-inline-block" :options="['Netto', 'Brutto']" v-model="isGross"/>
+            <vue-select name="rate" class="d-inline-block" :options="rates" v-model="job.rate"/>
+            <vue-select name="employment" class="d-inline-block" :options="employments" v-model="job.employment"/>
+            <span class="form-text text-muted">
+              Podanie tych informacji nie jest obowiązkowe, ale dzięki temu Twoja oferta zainteresuje więcej osób. Obiecujemy!
+            </span>
+            <vue-error :message="errors.salary_from"/>
+            <vue-error :message="errors.salary_to"/>
           </div>
         </div>
 
@@ -117,11 +116,10 @@
             <li class="list-group-item w-50" v-for="(feature, index) in job.features" :class="{checked: feature.checked}">
               <div class="row form-group">
                 <div class="col-6" @click="TOGGLE_FEATURE(feature)">
-                  <i class="fas fa-fw " :class="{'fa-check': feature.checked, 'fa-xmark': !feature.checked}"></i>
-
+                  <vue-icon name="jobOfferFeaturePresent" v-if="feature.checked"/>
+                  <vue-icon name="jobOfferFeatureMissing" v-else/>
                   {{ feature.name }}
                 </div>
-
                 <div class="col-6" v-show="feature.checked && feature.default">
                   <input type="text" class="form-control form-control-sm" :placeholder="feature.default" v-model="feature.value">
                 </div>
@@ -133,8 +131,13 @@
         <div class="form-group">
           <div class="form-group">
             <div class="custom-control custom-radio">
-              <input type="radio" id="enable_apply_1" name="enable_apply" v-model="job.enable_apply" :value="true" class="custom-control-input">
-
+              <input
+                type="radio"
+                id="enable_apply_1"
+                name="enable_apply"
+                v-model="job.enable_apply"
+                :value="true"
+                class="custom-control-input">
               <label for="enable_apply_1" class="custom-control-label">
                 Zezwól na wysyłanie CV poprzez serwis 4programmers.net
               </label>
@@ -143,10 +146,9 @@
 
           <div class="row">
             <div class="col-sm-6">
-              <vue-text name="email" v-model="job.email" :disabled="job.enable_apply === false" :is-invalid="'email' in errors"></vue-text>
+              <vue-text name="email" v-model="job.email" :disabled="job.enable_apply === false" :is-invalid="'email' in errors"/>
               <span class="form-text text-muted">Adres e-mail nie będzie widoczny dla osób postronnych.</span>
-
-              <vue-error :message="errors.email"></vue-error>
+              <vue-error :message="errors.email"/>
             </div>
           </div>
         </div>
@@ -188,12 +190,14 @@ import VueSelect from '../forms/select.vue';
 import VueTagsInline from '../forms/tags-inline.vue';
 import VueText from '../forms/text.vue';
 import VueGooglePlace from '../google-maps/place.vue';
+import VueIcon from "../icon";
 import VueTags from '../tags.vue';
 import VueRichEditor from "./rich-editor.vue";
 
 export default {
   name: 'VueForm',
   components: {
+    VueIcon,
     'vue-form-group': VueFormGroup,
     'vue-text': VueText,
     'vue-select': VueSelect,

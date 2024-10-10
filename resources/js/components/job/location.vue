@@ -1,54 +1,54 @@
 <template>
-    <div v-if="remote.enabled || locations.length > 0" class="location d-inline text-muted">
-        <i class="fas fa-location-dot"></i>
-
-        <ul>
-            <li v-for="location in locations">
-                <a v-if="clickable" :href="location.url" :title="'Znajdź oferty z miasta ' + location.city">{{ label(location) }}</a>
-                <template v-else>{{ label(location) }}</template>
-            </li>
-        </ul>
-
-        <a v-if="remote.enabled && clickable" :href="remote.url">({{ remoteLabel }})</a>
-        <template v-else-if="!clickable">({{ remoteLabel }})</template>
-    </div>
+  <div v-if="remote.enabled || locations.length > 0" class="location d-inline text-muted">
+    <vue-icon name="jobOfferLocation"/>
+    <ul>
+      <li v-for="location in locations">
+        <a v-if="clickable" :href="location.url" :title="'Znajdź oferty z miasta ' + location.city">
+          {{ label(location) }}
+        </a>
+        <template v-else>{{ label(location) }}</template>
+      </li>
+    </ul>
+    <a v-if="remote.enabled && clickable" :href="remote.url">
+      ({{ remoteLabel }})
+    </a>
+    <template v-else-if="!clickable">
+      ({{ remoteLabel }})
+    </template>
+  </div>
 </template>
 
 <script>
-    export default {
-        props: {
-            remote: {
-                type: Object
-            },
-            locations: {
-                type: Array
-            },
-            clickable: {
-                type: Boolean,
-                default: true
-            },
-            shortened: {
-                type: Boolean,
-                default: false
-            }
-        },
-        methods: {
-            label (location) {
-                if (this.shortened) {
-                    return location.city;
-                }
+import VueIcon from '../icon';
 
-                const strip = (value) => value !== null ? value : '';
+export default {
+  components: {VueIcon},
+  props: {
+    remote: {type: Object},
+    locations: {type: Array},
+    clickable: {type: Boolean, default: true},
+    shortened: {type: Boolean, default: false},
+  },
+  methods: {
+    label(location) {
+      if (this.shortened) {
+        return location.city;
+      }
 
-                return [(`${strip(location.street)} ${strip(location.street_number)}`).trim(), location.city]
-                    .filter(item => item !== '')
-                    .join(', ');
-            }
-        },
-        computed: {
-            remoteLabel () {
-                return this.remote.range ? `${this.remote.range}% pracy zdalnej` : 'praca zdalna';
-            }
-        }
-    }
+      function strip(value) {
+        return value !== null ? value : '';
+      }
+
+      const s = strip(location.street) + ' ' + strip(location.street_number);
+      return [s.trim(), location.city]
+        .filter(item => item !== '')
+        .join(', ');
+    },
+  },
+  computed: {
+    remoteLabel() {
+      return this.remote.range ? `${this.remote.range}% pracy zdalnej` : 'praca zdalna';
+    },
+  },
+};
 </script>

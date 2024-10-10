@@ -1,6 +1,8 @@
+import VueIcon from "../../../../resources/js/components/icon";
 import {VueInstance} from "../../vue";
 
 export default {
+  components: {VueIcon},
   props: {
     tooltip: {type: Boolean},
     long: {type: Boolean},
@@ -21,11 +23,12 @@ export default {
           </div>
         </div>
         <div class="collapse-toggle" @click="collapse">
-          <i :class="['fa-solid', long ? 'fa-chevron-right' : 'fa-chevron-left']"/>
+          <vue-icon name="surveyBadgeShorten" v-if="long"/>
+          <vue-icon name="surveyBadgeEnlarge" v-else/>
         </div>
         <span v-if="long" class="ms-2">Zmieniaj forum na lepsze!</span>
         <button class="btn btn-primary btn-engage ms-2" :class="{narrow:!long}" @click="engage">
-          <i class="fa-solid fa-toggle-off"/>
+          <vue-icon name="surveyExperimentOpen"/>
           <template v-if="long">Testuj</template>
         </button>
       </div>

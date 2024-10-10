@@ -2,7 +2,7 @@
   <div :class="{'is-invalid': isInvalid}" class="editor">
     <vue-tabs @change="switchTab" :items="tabs" :current-tab="tabs.indexOf(currentTab)" type="pills" class="mb-2">
       <div v-if="isContent" class="btn-toolbar ms-auto">
-        <div class="btn-group d-inline me-2 ms-2 mt-1" role="group" aria-label="...">
+        <div class="btn-group d-inline me-2 ms-2 mt-1" role="group">
           <button
             v-for="button in buttons"
             @click="button.click"
@@ -10,7 +10,7 @@
             class="btn btn-sm btn-control"
             :title="button.can ? button.title : button.break"
             :style="{opacity: button.can ? '1.0' : '0.4', cursor: button.can ? 'pointer' : 'default'}">
-            <i :class="['fas fa-fw', button.icon]"/>
+            <vue-icon :name="button.icon"/>
           </button>
         </div>
       </div>
@@ -54,23 +54,27 @@
     <div class="pt-1 ps-2 pe-2 d-flex">
       <div class="small me-auto">
         <template v-if="isProcessing">
-          <i class="fas fa-spinner fa-spin small"/>
+          <vue-icon name="editorAssetUploading" spin/>
           <span class="small">{{ progress }}%</span>
         </template>
-
-        <a v-else :aria-label="uploadTooltip" tabindex="-1" data-balloon-length="large" data-balloon-pos="up-left"
-           data-balloon-nofocus href="javascript:" class="small text-muted" @click="chooseFile">
-          <i class="far fa-image"/>
+        <a v-else
+           :aria-label="uploadTooltip"
+           tabindex="-1"
+           data-balloon-length="large"
+           data-balloon-pos="up-left"
+           data-balloon-nofocus
+           href="javascript:"
+           class="small text-muted"
+           @click="chooseFile">
+          <vue-icon name="editorAssetUpload"/>
           {{ ' ' }}
           <span class="d-none d-sm-inline">Kliknij, aby dodać załącznik lub wklej ze schowka.</span>
         </a>
-
         <slot name="options"/>
       </div>
-
       <div class="small ms-auto">
         <a href="#js-wiki-help" tabindex="-1" data-bs-toggle="collapse" class="small text-muted">
-          <i class="fab fa-markdown"/>
+          <vue-icon name="editorMarkdownHelp"/>
           Instrukcja obsługi Markdown
         </a>
       </div>
@@ -106,6 +110,7 @@ import {pasteDirective} from "../../plugins/paste.js";
 import store from '../../store';
 import {createVueAppGhost, nextTick} from "../../vue";
 import VueError from '../forms/error.vue';
+import VueIcon from "../icon";
 import {default as formMixin} from '../mixins/form.js';
 import VueTabs from '../tabs.vue';
 import VueThumbnail from "../thumbnail.vue";
@@ -120,6 +125,7 @@ export default {
   name: 'VueMarkdown',
   mixins: [formMixin],
   components: {
+    VueIcon,
     'vue-tabs': VueTabs,
     'vue-thumbnail': VueThumbnail,
     'vue-error': VueError,
@@ -187,105 +193,105 @@ export default {
           can: false,
           title: 'Pogrub zaznaczony tekst lub dodaj pogrubienie',
           break: 'Dodanie tutaj pogrubienia mogłoby uszkodzić składnię',
-          icon: 'fa-bold',
+          icon: 'editorControlBold',
         },
         italics: {
           click: this.makeItalics,
           can: false,
           title: 'Pochyl tekst lub dodaj pochylenie',
           break: 'Dodanie tutaj pochylenia mogłoby uszkodzić składnię',
-          icon: 'fa-italic',
+          icon: 'editorControlItalics',
         },
         underline: {
           click: this.makeUnderline,
           can: false,
           title: 'Podkreśl tekst lub dodaj podkreślenie',
           break: 'Dodanie tutaj podkreślenia mogłoby uszkodzić składnię',
-          icon: 'fa-underline',
+          icon: 'editorControlUnderline',
         },
         strike: {
           click: this.makeStrikeThrough,
           can: false,
           title: 'Przekreśl tekst lub dodaj przekreślenie',
           break: 'Dodanie tutaj przekreślenia mogłoby uszkodzić składnię',
-          icon: 'fa-strikethrough',
+          icon: 'editorControlStrikeThrough',
         },
         link: {
           click: this.makeLink,
           can: false,
           title: 'Zamień zaznaczenie w link lub dodaj link',
           break: 'Dodanie tutaj linku mogłoby uszkodzić składnię',
-          icon: 'fa-link',
+          icon: 'editorControlHyperlink',
         },
         code: {
           click: this.insertCode,
           can: false,
           title: 'Zmień zaznaczoną treść w kod lub dodaj pusty znacznik (kod źródłowy, błąd, stack-trace, wynik działania programu itp.)',
           break: 'Dodanie tutaj tekstu preformatowanego mogłoby uszkodzić składnię',
-          icon: 'fa-code',
+          icon: 'editorControlCodeBlock',
         },
         image: {
           click: this.makeImage,
           can: false,
           title: 'Dodaj obraz',
           break: 'Dodanie tutaj obrazu mogłoby uszkodzić składnię',
-          icon: 'fa-image',
+          icon: 'editorControlImage',
         },
         key: {
           click: this.insertKeyNotation,
           can: false,
           title: 'Dodaj notację klawisza wprowadzonego z klawiatury',
           break: 'Dodanie tutaj znacznika klawisza mogłoby uszkodzić składnię',
-          icon: 'fa-keyboard',
+          icon: 'editorControlKeyStroke',
         },
         listOrdered: {
           click: this.insertOrderedList,
           can: false,
           title: 'Zmień zaznaczenie w listę lub dodaj listę uporządkowaną',
           break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
-          icon: 'fa-list-ol',
+          icon: 'editorControlListOrdered',
         },
         listUnordered: {
           click: this.insertUnorderedList,
           can: false,
           title: 'Zmień zaznaczenie w listę lub dodaj listę nieuporządkowaną',
           break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
-          icon: 'fa-list-ul',
+          icon: 'editorControlListUnordered',
         },
         quote: {
           click: this.insertBlockQuote,
           can: false,
           title: 'Cytuj post innego użytkownika lub zmień zaznaczenie w cytat postu',
           break: 'Dodanie tutaj cytatu mogłoby uszkodzić składnię',
-          icon: 'fa-quote-left',
+          icon: 'editorControlQuote',
         },
         table: {
           click: this.insertTable,
           can: false,
           title: 'Zmień zaznaczoną treść w tabelkę lub dodaj pustą tabelkę',
           break: 'Dodanie tutaj tabelki mogłoby spowodować uszkodzenie składni',
-          icon: 'fa-table',
+          icon: 'editorControlTable',
         },
         indentLess: {
           click: this.indentLess,
           can: false,
           title: 'Usuń wcięcie zaznaczonego tekstu',
           break: null,
-          icon: 'fa-outdent',
+          icon: 'editorControlIndentLess',
         },
         indentMore: {
           click: this.indentMore,
           can: false,
           title: 'Dodaj wcięcie zaznaczonego tekstu',
           break: null,
-          icon: 'fa-indent',
+          icon: 'editorControlIndentMore',
         },
         insertEmoji: {
           click: this.toggleEmojiPicker,
           can: false,
           title: 'Dodaj emotikonę',
           break: 'Dodanie tutaj emotikony mogłoby spowodować uszkodzenie składni',
-          icon: 'fa-face-smile-beam',
+          icon: 'editorControlEmoji',
         },
       },
     };

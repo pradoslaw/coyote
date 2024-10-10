@@ -1,16 +1,23 @@
 <template>
   <form @submit.prevent="save">
     <div v-if="showTitleInput" class="form-group">
-      <label class="col-form-label">Temat <em>*</em></label>
-
-      <vue-text v-model="topic.title" :is-invalid="'title' in errors" @accept="save" @leave="findSimilar" name="title" tabindex="1" autofocus="autofocus"></vue-text>
-      <vue-error :message="errors['title']"></vue-error>
-
-      <small v-if="!('title' in errors)" class="text-muted form-text">Bądź rzeczowy. Nie nadawaj wątkom jednowyrazowych tytułów.</small>
-
+      <label class="col-form-label">
+        Temat <em>*</em>
+      </label>
+      <vue-text 
+        v-model="topic.title"
+        :is-invalid="'title' in errors" 
+        @accept="save" 
+        @leave="findSimilar"
+        name="title" 
+        tabindex="1" 
+        autofocus="autofocus"/>
+      <vue-error :message="errors['title']"/>
+      <small v-if="!('title' in errors)" class="text-muted form-text">
+        Bądź rzeczowy. Nie nadawaj wątkom jednowyrazowych tytułów.
+      </small>
       <div v-if="similar.length" class="card mt-2">
         <div class="card-header p-3">Podobne wątki</div>
-
         <div class="card-body related mt-0 p-3">
           <perfect-scrollbar tag="ul" class="position-relative" style="height: 100px">
             <li v-for="topic in similar">
@@ -39,56 +46,63 @@
         ref="markdown">
         <template v-if="isFirstPost" v-slot:options>
           <a href="javascript:" data-bs-target="#js-poll-form" data-bs-toggle="collapse" class="ms-1 small text-muted">
-            <i class="fa fa-square-poll-horizontal"/>
+            <vue-icon name="postPoll"/>
             <span class="d-none d-sm-inline">
               Ankieta
             </span>
           </a>
         </template>
-
         <div v-if="isFirstPost" id="js-poll-form" class="bg-light p-3 mt-2 collapse">
           <div class="form-group row">
-            <label class="col-md-3 col-form-label text-end">Odpowiedzi w ankiecie</label>
-
+            <label class="col-md-3 col-form-label text-end">
+              Odpowiedzi w ankiecie
+            </label>
             <div class="col-md-6">
               <div v-for="(item, index) in poll.items" :key="item.id" class="input-group mb-1">
-                <a @click="removeItem(item)" class="input-group-text text-decoration-none" href="javascript:">
-                  <i :class="{'text-danger': poll.items.length > 2, 'text-muted': poll.items.length <= 2}" title="Usuń odpowiedź" class="fas fa-fw fa-circle-minus"></i>
+                <a
+                  @click="removeItem(item)"
+                  class="input-group-text text-decoration-none"
+                  :class="poll.items.length > 2 ? 'text-danger' : 'text-muted'"
+                  href="javascript:"
+                  title="Usuń odpowiedź">
+                  <vue-icon name="postPollRemoveOption"/>
                 </a>
-
                 <vue-text
                   v-model="item.text"
                   :is-invalid="`poll.items.${index}.text` in errors"
                   ref="poll-items"
                   class="input-sm"
                   @accept="addItem"
-                  placeholder="Naciśnij Enter, aby dodać kolejną pozycję"/>
-                <vue-error :message="errors[`poll.items.${index}.text`]"></vue-error>
+                  placeholder="Naciśnij Enter, aby dodać kolejną pozycję"
+                />
+                <vue-error :message="errors[`poll.items.${index}.text`]"/>
               </div>
             </div>
           </div>
-
           <div class="form-group row">
-            <label class="col-md-3 col-form-label text-end">Możliwych odpowiedzi</label>
-
+            <label class="col-md-3 col-form-label text-end">
+              Możliwych odpowiedzi
+            </label>
             <div class="col-md-6">
-              <vue-text v-model="poll.max_items" :is-invalid="`poll.max_items` in errors" class="input-sm"></vue-text>
+              <vue-text v-model="poll.max_items" :is-invalid="`poll.max_items` in errors" class="input-sm"/>
               <vue-error :message="errors['poll.max_items']"/>
-              <span class="form-text text-muted">Minimalnie jedna możliwa odpowiedź w ankiecie.</span>
+              <span class="form-text text-muted">
+                Minimalnie jedna możliwa odpowiedź w ankiecie.
+              </span>
             </div>
           </div>
-
           <div class="form-group row">
-            <label class="col-md-3 col-form-label text-end">Długość działania</label>
-
+            <label class="col-md-3 col-form-label text-end">
+              Długość działania
+            </label>
             <div class="col-md-6">
-              <vue-text v-model="poll.length" :is-invalid="`poll.length` in errors" class="input-sm"></vue-text>
-              <vue-error :message="errors['poll.length']"></vue-error>
-
-              <span class="form-text text-muted">Określ długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.</span>
+              <vue-text v-model="poll.length" :is-invalid="`poll.length` in errors" class="input-sm"/>
+              <vue-error :message="errors['poll.length']"/>
+              <span class="form-text text-muted">
+                Określ długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.
+              </span>
             </div>
           </div>
-
           <div v-if="poll.id" class="form-group row">
             <div class="col-md-6 offset-md-4">
               <button @click="resetDefaults" class="btn btn-danger btn-sm">
@@ -150,12 +164,14 @@ import VueButton from '../forms/button.vue';
 import VueError from '../forms/error.vue';
 import VueTagsInline from '../forms/tags-inline.vue';
 import VueText from '../forms/text.vue';
+import VueIcon from "../icon";
 import PerfectScrollbar from '../perfect-scrollbar.js';
 
 export default {
   name: 'forum-form',
   store,
   components: {
+    VueIcon,
     'vue-button': VueButton,
     'vue-markdown': VueMarkdown,
     'vue-tags-inline': VueTagsInline,

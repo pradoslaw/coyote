@@ -9,15 +9,15 @@
       <div class="media-body">
         <div class="dropdown float-end" v-if="comment.permissions.update">
           <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-bs-toggle="dropdown" aria-label="Dropdown">
-            <i class="fa fa-ellipsis"></i>
+            <vue-icon name="jobOfferCommentMenuDropdown"/>
           </button>
           <div class="dropdown-menu dropdown-menu-end">
             <a @click="edit" href="javascript:" class="dropdown-item">
-              <i class="fa fa-pen-to-square fa-fw"/>
+              <vue-icon name="jobOfferCommentEdit"/>
               Edytuj
             </a>
             <a @click="deleteComment" class="dropdown-item" href="javascript:">
-              <i class="fa fa-fw fa-trash-can"/>
+              <vue-icon name="jobOfferCommentDelete"/>
               Usuń
             </a>
           </div>
@@ -104,6 +104,7 @@ import VueAvatar from '../avatar.vue';
 import VueFlag from '../flags/flag.vue';
 import VueButton from '../forms/button.vue';
 import VueMarkdown from '../forms/markdown.vue';
+import VueIcon from "../icon";
 import {default as mixins} from '../mixins/user';
 import VueModal from '../modal.vue';
 import VueUserName from '../user-name.vue';
@@ -112,13 +113,14 @@ export default {
   name: 'vue-comment', // required with recursive component
   props: ['comment', 'nested'],
   components: {
-    'vue-modal': VueModal,
     'vue-avatar': VueAvatar,
-    'vue-username': VueUserName,
     'vue-button': VueButton,
     'vue-flag': VueFlag,
+    'vue-icon': VueIcon,
     'vue-markdown': VueMarkdown,
+    'vue-modal': VueModal,
     'vue-timeago': VueTimeAgo,
+    'vue-username': VueUserName,
   },
   mixins: [mixins],
   data() {

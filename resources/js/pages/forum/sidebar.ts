@@ -2,6 +2,7 @@ import {mapGetters} from "vuex";
 
 import VueButton from "../../components/forms/button.vue";
 import VueSelect from "../../components/forms/select.vue";
+import VueIcon from "../../components/icon";
 import {default as mixin} from '../../components/mixins/user';
 import VueModal from "../../components/modal.vue";
 import store from "../../store";
@@ -10,7 +11,12 @@ import {Forum} from '../../types/models';
 export default {
   delimiters: ['${', '}'],
   mixins: [mixin],
-  components: {'vue-modal': VueModal, 'vue-button': VueButton, 'vue-select': VueSelect},
+  components: {
+    'vue-modal': VueModal,
+    'vue-button': VueButton,
+    'vue-select': VueSelect,
+    'vue-icon': VueIcon,
+  },
   store,
   data() {
     return {

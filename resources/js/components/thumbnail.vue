@@ -2,27 +2,21 @@
   <div class="thumbnail">
     <div class="position-relative img-thumbnail text-center">
       <template v-if="url">
-        <img v-if="isImage" :src="url" class="mw-100">
-
-        <div v-else class="placeholder-mask">
-          <i class="far fa-file fa-2x"></i>
+        <img v-if="isImage" :src="url" class="mw-100"/>
+        <div v-else class="placeholder-mask" style="font-size:2em;">
+          <vue-icon name="thumbnailAssetUploadedFile"/>
         </div>
       </template>
-
-      <div v-else class="bg-light placeholder-mask">
-        <i v-if="!isProcessing" class="fas fa-circle-plus fa-2x"></i>
+      <div v-else class="bg-light placeholder-mask" style="font-size:2em;">
+        <vue-icon v-if="!isProcessing" name="thumbnailAssetAdd"/>
       </div>
-
-      <a v-if="url" href="javascript:" class="thumbnail-mask" @click="insertImage"></a>
-
+      <a v-if="url" href="javascript:" class="thumbnail-mask" @click="insertImage"/>
       <a v-if="url" href="javascript:" class="btn btn-sm btn-danger delete" @click="deleteImage" title="Usuń">
-        <i class="fas fa-xmark"></i>
+        <vue-icon name="thumbnailAssetRemove"/>
       </a>
-
-      <div v-if="isProcessing" class="spinner-mask">
-        <i class="fas fa-spinner fa-spin fa-2x"></i>
+      <div v-if="isProcessing" class="spinner-mask" style="font-size:2em;">
+        <vue-icon name="thumbnailAssetUploading" spin/>
       </div>
-
       <input v-show="!url && !isProcessing" @change="upload" :accept="accept" class="thumbnail-mask" type="file" ref="input">
     </div>
   </div>
@@ -31,9 +25,13 @@
 <script lang="ts">
 import axios from 'axios';
 import IsImage from '../libs/assets';
+import VueIcon from "./icon";
 
 export default {
   name: 'VueThumbnail',
+  components: {
+    'vue-icon': VueIcon,
+  },
   props: {
     url: {
       type: String,

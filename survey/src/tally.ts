@@ -1,3 +1,4 @@
+import {iconHtml} from "../../resources/js/components/icon";
 import {notify} from "../../resources/js/toast";
 import SurveyScreen, {Experiment, type Screen} from "./screen/screen";
 import {ExperimentChoice} from "./screen/steps/participate";
@@ -29,6 +30,7 @@ interface Data {
 
 export default {
   props: ['state', 'experiment', 'badgeLong'],
+  inject: ['icons'],
   components: {'vue-survey-screen': SurveyScreen},
   template: `
     <vue-survey-screen
@@ -53,12 +55,12 @@ export default {
   methods: {
     enrollOptIn(this: Instance): void {
       this.screen = 'participate';
-      this.notifyEnroll('Dołączyłeś do testów forum!', 'fa-flask');
+      this.notifyEnroll('Dołączyłeś do testów forum!', 'surveyExperimentJoined');
       this.changeSurveyState('survey-accepted');
     },
     enrollOptOut(this: Instance): void {
       this.screen = 'none';
-      this.notifyEnroll('Wypisano z udziału w testach.', 'fa-bug-slash');
+      this.notifyEnroll('Wypisano z udziału w testach.', 'surveyExperimentLeft');
       this.changeSurveyState('survey-declined');
     },
     experimentOpt(this: Instance, choice: ExperimentChoice): void {
@@ -66,9 +68,9 @@ export default {
       const optIn = choice === 'in';
       this.$emit('experimentOpt', optIn ? 'modern' : 'legacy');
       if (optIn) {
-        this.notifyExperiment('Uruchomiono nową wersję.', 'fa-toggle-on');
+        this.notifyExperiment('Uruchomiono nową wersję.', 'surveyExperimentEnabledModern');
       } else {
-        this.notifyExperiment('Przywrócono pierwotną wersję.', 'fa-toggle-off');
+        this.notifyExperiment('Przywrócono pierwotną wersję.', 'surveyExperimentEnabledLegacy');
       }
     },
     experimentPreview(this: VueInstance, choice: ExperimentChoice): void {
@@ -105,7 +107,7 @@ export default {
       notify({
         type: 'success',
         title,
-        text: `<i class="fa-solid ${fontAwesomeIcon}"></i> ` + text,
+        text: iconHtml(this.icons, fontAwesomeIcon) + ' ' + text,
       });
     },
   },

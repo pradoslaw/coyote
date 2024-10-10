@@ -22,16 +22,16 @@
               <vue-timeago :datetime="comment.created_at" class="text-muted small"/>
             </a>
             <a v-if="comment.editable" @click="edit" href="javascript:" title="Edytuj ten komentarz" class="btn-comment">
-              <i class="fas fa-pencil"></i>
+              <vue-icon name="postCommentEdit"/>
             </a>
             <a v-if="comment.editable" @click="deleteComment" href="javascript:" title="Usuń ten komentarz" class="btn-comment">
-              <i class="fas fa-trash-can"></i>
+              <vue-icon name="postCommentDelete"/>
             </a>
             <a v-if="comment.editable" @click="migrate" href="javascript:" title="Zamień w post" class="btn-comment">
-              <i class="fas fa-compress"></i>
+              <vue-icon name="postCommentConvertToPost"/>
             </a>
             <a :data-metadata="comment.metadata" :data-url="comment.url" title="Zgłoś ten komentarz" href="javascript:" class="btn-comment">
-              <i class="fas fa-flag"></i>
+              <vue-icon name="postCommentReport"/>
             </a>
           </div>
           <span v-html="comment.html" class="comment-text"/>
@@ -40,7 +40,7 @@
     </template>
   </div>
   <div class="post-comment comment-delete" v-else>
-    <i class="fa-solid fa-user-slash"/>
+    <vue-icon name="postCommentAuthorBlocked"/>
     Treść komentarza została ukryta, ponieważ autorem jest zablokowany przez Ciebie użytkownik.
   </div>
 </template>
@@ -53,6 +53,7 @@ import store from "../../store/index";
 import {nextTick} from "../../vue";
 import VueAvatar from "../avatar.vue";
 import VueFlag from "../flags/flag.vue";
+import VueIcon from "../icon";
 import {default as mixins} from '../mixins/user.js';
 import VueUserName from '../user-name.vue';
 import VueCommentForm from "./comment-form.vue";
@@ -61,6 +62,7 @@ export default {
   name: 'comment',
   mixins: [mixins],
   components: {
+    VueIcon,
     'vue-username': VueUserName,
     'vue-avatar': VueAvatar,
     'vue-comment-form': VueCommentForm,

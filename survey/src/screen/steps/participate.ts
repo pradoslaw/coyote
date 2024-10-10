@@ -1,3 +1,4 @@
+import VueIcon from "../../../../resources/js/components/icon";
 import {VueInstance} from "../../vue";
 import VueToggle, {type ToggleValue} from "../toggle";
 
@@ -26,7 +27,7 @@ interface Data {
 
 export default {
   props: {experiment: {type: Object}},
-  components: {'vue-toggle': VueToggle},
+  components: {'vue-toggle': VueToggle, 'vue-icon': VueIcon},
   template: `
     <div class="survey overlay">
       <section class="participate d-flex">
@@ -34,7 +35,7 @@ export default {
           <div class="timer">
             Do końca testu:
             <span>
-              <i class="fa-regular fa-clock"/>
+              <vue-icon name="surveyExperimentDueTime"/>
               {{ experiment.dueTime }}
             </span>
           </div>
@@ -64,7 +65,8 @@ export default {
             <span v-html="experiment.solution"/>
           </p>
           <button class="btn btn-primary mt-auto mb-2" @click="experimentOpt" :disabled="isInitialSelection">
-            <i class="fa-solid" :class="selected === 'first' ? 'fa-toggle-off' : 'fa-toggle-on'"/>
+            <vue-icon name="surveyExperimentChoiceLegacy" v-if="selected === 'first'"/>
+            <vue-icon name="surveyExperimentChoiceModern" v-else/>
             Zapisz wybór
           </button>
           <button class="btn btn-secondary" @click="close">

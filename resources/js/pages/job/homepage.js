@@ -2,6 +2,7 @@ import axios from 'axios';
 import PerfectScrollbar from 'perfect-scrollbar';
 import {mapState} from 'vuex';
 
+import VueIcon from "../../components/icon";
 import VueJobTiny from '../../components/job/job-tiny.vue';
 import VueJob from '../../components/job/job.vue';
 import VuePagination from '../../components/pagination.vue';
@@ -16,6 +17,7 @@ createVueApp('Job', '#js-job', {
     'vue-pagination': VuePagination,
     'vue-job-tiny': VueJobTiny,
     'vue-tabs': VueTabs,
+    'vue-icon': VueIcon,
   },
   data: () => window.data,
   store,
@@ -137,10 +139,6 @@ createVueApp('Job', '#js-job', {
 
     selectTab(tab) {
       this.selectedTab = tab;
-    },
-
-    getTabDropdownClass(tab) {
-      return {'fa-angle-up': this.selectedTab !== tab, 'fa-angle-down': this.selectedTab === tab};
     },
   },
   computed: {

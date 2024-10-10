@@ -3,31 +3,32 @@
     <li v-for="tag in tags">
       <component :is="tagName" :href="tag.url">
         <img v-if="tag.logo" :alt="tag.name" :src="tag.logo">
-
         {{ tag.real_name || tag.name }}
-
         <a v-if="editable" @click="deleteTag(tag)" class="remove">
-          <i class="fa fa-xmark"></i>
+          <vue-icon name="tagRemove"/>
         </a>
       </component>
-
       <vue-progress-bar
         v-if="editable || tag.priority"
         :editable="editable"
         v-model="tag.priority"
         @click="value => setPriority(tag, value)"
-      ></vue-progress-bar>
+      />
     </li>
   </ul>
 </template>
 
 <script lang="ts">
 import {Tag} from "../types/models";
+import VueIcon from "./icon";
 import VueProgressBar from "./progress-bar.vue";
 
 export default {
   name: 'VueTags',
-  components: {'vue-progress-bar': VueProgressBar},
+  components: {
+    'vue-progress-bar': VueProgressBar,
+    'vue-icon': VueIcon,
+  },
   props: {
     tags: {
       type: Array,

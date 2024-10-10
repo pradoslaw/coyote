@@ -2,26 +2,22 @@
   <li :class="{'open': isOpen}" v-click-away="hideDropdown">
     <a @click.prevent="loadMessages" href="/User/Pm" class="nav-link" role="button" aria-haspopup="true" aria-expanded="false">
       <span v-show="count > 0" class="badge">{{ count }}</span>
-
-      <i class="fas fa-envelope fa-fw"></i>
+      <vue-icon name="navigationPrivateMessages"/>
     </a>
-
     <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-end">
       <div class="dropdown-header">
         <a class="float-end small" href="/User/Pm/Submit">
           Wyślij wiadomość
         </a>
-
-        <a title="Przejdź do listy wiadomości" href="/User/Pm">Wiadomości</a>
+        <a title="Przejdź do listy wiadomości" href="/User/Pm">
+          Wiadomości
+        </a>
       </div>
-
       <perfect-scrollbar class="dropdown-modal" :options="{wheelPropagation: false, useBothWheelAxes: false, suppressScrollX: true}">
         <div v-if="messages === null" class="text-center p-3">
-          <i class="fas fa-spinner fa-spin"></i>
+          <vue-icon name="privateMessagesLoading" spin/>
         </div>
-
-        <vue-message v-for="message in messages" :message="message" :key="message.id"></vue-message>
-
+        <vue-message v-for="message in messages" :message="message" :key="message.id"/>
         <div class="text-center p-3 empty-placeholder" v-if="Array.isArray(messages) && messages.length === 0">
           Brak wiadomości prywatnych.
         </div>
@@ -35,6 +31,7 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import clickAway from "../../clickAway.js";
 import DesktopNotifications from '../../libs/notifications';
 import {default as ws} from '../../libs/realtime';
+import VueIcon from "../icon";
 import PerfectScrollbar from '../perfect-scrollbar.js';
 import VueMessage from './message-compact.vue';
 
@@ -43,6 +40,7 @@ export default {
   directives: {clickAway},
   components: {
     'perfect-scrollbar': PerfectScrollbar,
+    'vue-icon': VueIcon,
     'vue-message': VueMessage,
   },
   data() {

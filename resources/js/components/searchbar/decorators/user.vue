@@ -4,13 +4,13 @@
     <span v-html="highlight(item.name)"/>
     <div class="item-options">
       <a class="ms-3" :href="profileUrl" title="Przejdź do profilu użytkownika">
-        <i class="fas fa-user"/>
+        <vue-icon name="autocompleteUserShowProfile"/>
       </a>
       <a class="ms-3" :href="messageUrl" title="Napisz wiadomość">
-        <i class="fas fa-comment"/>
+        <vue-icon name="autocompleteUserPrivateMessage"/>
       </a>
       <a class="ms-3" :href="postsUrl" title="Znajdź posty użytkownika">
-        <i class="fas fa-magnifying-glass"/>
+        <vue-icon name="autocompleteUserFindPosts"/>
       </a>
     </div>
   </a>
@@ -18,12 +18,14 @@
 
 <script lang="ts">
 import VueIconAvatar from '../../icon-avatar.vue';
+import VueIcon from "../../icon";
 import DecoratorMixin from '../mixin';
 
 export default {
   mixins: [DecoratorMixin],
   components: {
     'vue-icon-avatar': VueIconAvatar,
+    'vue-icon': VueIcon,
   },
   computed: {
     profileUrl() {

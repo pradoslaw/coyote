@@ -1,7 +1,7 @@
 <template>
   <div :class="{'sequential': message.sequential, 'unread': ! isRead}" class="media">
     <a v-if="!message.sequential" v-profile="message.user.id" class="i-45 me-2 d-none d-sm-block flex-shrink-0">
-      <vue-avatar 
+      <vue-avatar
         :photo="message.user.photo"
         :name="message.user.name"
         :initials="message.user.initials"
@@ -21,14 +21,14 @@
       </template>
 
       <a @click="deleteMessage" class="btn-delete float-end text-danger" href="javascript:" title="Usuń">
-        <i class="fas fa-trash-can"></i>
+        <vue-icon name="privateMessageDelete"/>
       </a>
 
       <a v-if="clickableText" :href="'/User/Pm/Show/' + message.id" class="excerpt">{{ message.excerpt ? message.excerpt : '(kliknij, aby przeczytać)' }}</a>
-      <div v-else class="pm-text" v-html="message.text"></div>
+      <div v-else class="pm-text" v-html="message.text"/>
 
       <small v-if="last && message.folder === SENTBOX && message.read_at" class="text-muted">
-        <i class="fas fa-check"></i>
+        <vue-icon name="privateMessageReadAt"/>
         Przeczytano,
         <vue-timeago :datetime="message.read_at"/>
       </small>
@@ -42,6 +42,7 @@ import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from "../../store/index";
 import {MessageFolder} from '../../types/models';
 import VueAvatar from '../avatar.vue';
+import VueIcon from "../icon";
 import {default as mixins} from '../mixins/user.js';
 import VueUserName from '../user-name.vue';
 
@@ -52,6 +53,7 @@ export default {
     'vue-avatar': VueAvatar,
     'vue-username': VueUserName,
     'vue-timeago': VueTimeAgo,
+    'vue-icon': VueIcon,
   },
   props: {
     message: {

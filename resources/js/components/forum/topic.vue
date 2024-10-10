@@ -1,23 +1,31 @@
 <template>
   <div class="card-body" :class="{'not-read': !topic.is_read, 'flagged': flag != null, 'tagged': highlight}">
     <div class="row">
-      <div :class="{'col-xl-9 col-lg-10': showCategoryName, 'col-xl-10 col-lg-10': ! showCategoryName}" class="col-md-12 d-flex align-items-center">
-        <a @click.left="mark" :href="getUrl()" :class="{'not-read': !topic.is_read}" class="topic-icon me-2 d-none d-md-flex">
-          <i v-if="topic.is_sticky" class="fa-solid fa-thumbtack"/>
-          <i v-else-if="topic.is_locked" class="fas fa-lock"/>
-          <i v-else class="far fa-comments"/>
+      <div
+        :class="showCategoryName ? 'col-xl-9 col-lg-10' : 'col-xl-10 col-lg-10'"
+        class="col-md-12 d-flex align-items-center"
+      >
+        <a
+          @click.left="mark"
+          :href="getUrl()"
+          :class="{'not-read': !topic.is_read}"
+          class="topic-icon me-2 d-none d-md-flex"
+        >
+          <vue-icon name="topicStateSticky" v-if="topic.is_sticky"/>
+          <vue-icon name="topicStateLocked" v-else-if="topic.is_locked"/>
+          <vue-icon name="topicStateStandard" v-else/>
         </a>
 
         <div class="topic-container">
           <div class="topic-row">
             <h5 class="topic-subject text-truncate m-0">
               <a v-if="isAuthorized" @click="subscribe(topic)" href="javascript:" title="Kliknij aby wł/wył obserwowanie wątku">
-                <i class="fa-solid fa-bell fa-fw on" v-if="topic.is_subscribed"/>
-                <i class="fa-regular fa-bell fa-fw" v-else/>
+                <vue-icon name="topicSubscribed" v-if="topic.is_subscribed" class="on"/>
+                <vue-icon name="topicSubscribe" v-else/>
                 {{ ' ' }}
               </a>
               <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}`">
-                <i class="fas fa-check"/>
+                <vue-icon name="topicAccepted"/>
                 {{ ' ' }}
               </a>
               <a :href="getUrl()" :class="{'topic-unread': !topic.is_read}">{{ topic.title }}</a>
@@ -29,12 +37,12 @@
               </small>
               <a v-if="flag != null" :href="flag" title="Przejdź do raportowanego posta">
                 {{ ' ' }}
-                <i class="fa fa-fire"/>
+                <vue-icon name="topicReported"/>
               </a>
             </h5>
 
             <div v-if="totalPages > 1" class="d-none d-sm-inline ms-2 topic-pagination">
-              <i class="far fa-file small"></i>
+              <vue-icon name="topicPages"/>
               {{ ' ' }}
               <a :href="topic.url + '?page=1'">1</a>
               {{ ' ' }}
@@ -54,17 +62,17 @@
 
             <ul class="topic-statistic list-inline small mt-1 mt-sm-0 mb-0 d-block d-sm-inline ms-sm-auto flex-sm-shrink-0">
               <li class="list-inline-item small" title="Liczba odpowiedzi">
-                <i :class="{'fas topic-has-reply': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i>
+                <vue-icon name="topicRepliesReplyPresent" v-if="topic.is_replied" class="topic-has-reply"/>
+                <vue-icon name="topicRepliesReplyMissing" v-else/>
                 {{ number(topic.replies) }}
               </li>
-
               <li class="list-inline-item small" title="Liczba wyświetleń">
-                <i class="far fa-fw fa-eye"></i>
+                <vue-icon name="topicViews"/>
                 {{ number(topic.views) }}
               </li>
-
               <li v-if="topic.score > 0" class="list-inline-item small" title="Liczba głosów oddanych na ten wątek">
-                <i :class="{'fas text-primary': topic.is_voted, 'far': !topic.is_voted}" class="fa-fw fa-thumbs-up"></i>
+                <vue-icon name="topicVotesVotePresent" v-if="topic.is_voted" class="text-primary"/>
+                <vue-icon name="topicVotesVoteMissing" v-else/>
                 {{ number(topic.score) }}
               </li>
             </ul>
@@ -76,13 +84,13 @@
                  class="text-muted topic-date">
                 <vue-timeago :datetime="topic.created_at"/>
               </a>,
-
-              <vue-username v-if="topic.user" :user="topic.user" class="mt-1 topic-username"></vue-username>
+              <vue-username v-if="topic.user" :user="topic.user" class="mt-1 topic-username"/>
               <span v-else class="topic-username">{{ topic.user_name }}</span>
             </div>
-
             <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs">
-              <li v-for="tag in topic.tags"><a :href="tag.url">{{ tag.name }}</a></li>
+              <li v-for="tag in topic.tags">
+                <a :href="tag.url">{{ tag.name }}</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -119,12 +127,14 @@ import {mapActions, mapGetters} from "vuex";
 import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from '../../store/index';
 import VueAvatar from '../avatar.vue';
+import VueIcon from '../icon';
 import {default as mixins} from '../mixins/user';
 import VueUserName from '../user-name.vue';
 
 export default {
   mixins: [mixins],
   components: {
+    VueIcon,
     'vue-avatar': VueAvatar,
     'vue-username': VueUserName,
     'vue-timeago': VueTimeAgo,

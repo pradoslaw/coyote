@@ -9,7 +9,7 @@
           <vue-radio name="type_id" v-model="selectedType" :checked-value="type.id" :id="`type-${type.id}`"></vue-radio>
         </div>
         <div class="media-body">
-          <i :class="icon(type.name)" class="me-1"/>
+          <vue-icon :name="icon(type.name)" class="me-1"/>
           <label :for="`type-${type.id}`" class="fw-bold">{{ type.name }}</label>
           <p>{{ type.description }}</p>
         </div>
@@ -34,6 +34,7 @@
 import axios from 'axios';
 import {notify} from "../../toast";
 import VueRadio from '../forms/radio.vue';
+import VueIcon from '../icon';
 import VueModal from '../modal.vue';
 
 export default {
@@ -41,6 +42,7 @@ export default {
   components: {
     'vue-modal': VueModal,
     'vue-radio': VueRadio,
+    'vue-icon': VueIcon,
   },
   props: {
     url: {
@@ -88,16 +90,16 @@ export default {
         })
         .finally(() => this.isProcessing = false);
     },
-    icon(name: string): string {
+    icon(title: string): string {
       const icons = {
-        'Spam': 'fas fa-envelopes-bulk',
-        'Wulgaryzmy': 'fas fa-book-skull',
-        'Off-Topic': 'fas fa-wave-square',
-        'Nieprawidłowa kategoria': 'fas fa-table-list',
-        'Próba wyłudzenia gotowca': 'fas fa-user-graduate',
-        'Inne': "far fa-flag",
+        'Spam': 'reportType.spam',
+        'Wulgaryzmy': 'reportType.abusiveLanguage',
+        'Off-Topic': 'reportType.offTopic',
+        'Nieprawidłowa kategoria': 'reportType.category',
+        'Próba wyłudzenia gotowca': 'reportType.extortion',
+        'Inne': "reportType.other",
       };
-      return icons[name];
+      return icons[title];
     },
   },
 };

@@ -6,16 +6,18 @@
     class="i-16 me-2"
   />
   <div v-else class="i-16 me-2 text-center">
-    <i class="fa-solid fa-user"/>
+    <vue-icon name="autocompleteUserNoAvatar"/>
   </div>
 </template>
 
 <script>
 import VueAvatar from './avatar.vue';
+import VueIcon from './icon';
 
 export default {
   components: {
     'vue-avatar': VueAvatar,
+    'vue-icon': VueIcon,
   },
   props: {
     user: {type: Object},

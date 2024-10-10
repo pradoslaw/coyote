@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="{{ cdn('css/core.css') }}">
 
     <script type="text/javascript">var __INITIAL_STATE = {{ __INITIAL_STATE|default('{}')|raw }};</script>
+    <script type="text/javascript">var icons = {{ icons|json_encode|raw }};</script>
   {% endblock %}
 
   {% if __WS_URL %}

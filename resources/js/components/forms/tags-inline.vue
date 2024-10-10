@@ -1,29 +1,27 @@
 <template>
   <div ref="editor" class="tag-editor dropup">
     <span class="align-self-center mx-2 text-muted">
-      <i class="fa-solid fa-tag"/>
+      <vue-icon name="tag"/>
     </span>
     <ul ref="cloud" class="tag-clouds">
       <li v-for="tag in popularTags.slice(0, 3)">
         <a @click="toggleTag({ name: tag.name })" class="suggest" :aria-label="tag.text" data-balloon-pos="up">
-          <i class="fa fa-plus"></i>
-
+          <vue-icon name="tagPopularInclude"/>
           {{ tag.name }}
         </a>
       </li>
     </ul>
 
     <template v-if="popularTags.length > 3">
-      <button class="btn btn-xs text-muted" type="button" data-bs-toggle="dropdown" aria-label="Dropdown" title="Więcej...">
-        <i class="fa-solid fa-plus"/>
+      <button class="btn btn-xs text-muted" type="button" title="Więcej...">
+        <vue-icon name="tagPopularMore"/>
       </button>
 
       <div class="dropdown-menu p-2">
         <ul class="tag-clouds">
           <li v-for="tag in popularTags.slice(3)">
-            <a @click="toggleTag({ name: tag.name })" class="suggest" :aria-label="tag.text" data-balloon-pos="up">
-              <i class="fa fa-plus"></i>
-
+            <a @click="toggleTag({name: tag.name})" class="suggest" :aria-label="tag.text" data-balloon-pos="up">
+              <vue-icon name="tagPopularInclude"/>
               {{ tag.name }}
             </a>
           </li>
@@ -35,8 +33,9 @@
       <li v-for="tag in tags">
         <span>
           {{ tag.name }}
-
-          <a @click="toggleTag(tag)" class="remove"><i class="fa fa-xmark"></i></a>
+          <a @click="toggleTag(tag)" class="remove">
+            <vue-icon name="tagRemove"/>
+          </a>
         </span>
       </li>
     </ul>
@@ -71,10 +70,12 @@ import axios, {AxiosResponse} from 'axios';
 
 import {Tag} from '../../types/models';
 import VueDropdown from '../forms/dropdown.vue';
+import VueIcon from "../icon";
 
 export default {
   name: 'tags-inline',
   components: {
+    VueIcon,
     'vue-dropdown': VueDropdown,
   },
   emits: ['change'],
@@ -134,7 +135,7 @@ export default {
       let input = this.searchText.trim().toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, '');
 
       if (input.startsWith('#')) {
-        input = input.substr(1);
+        input = input.substring(1);
       }
 
       if (input) {

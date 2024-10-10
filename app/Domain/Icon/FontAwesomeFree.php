@@ -5,6 +5,13 @@ readonly class FontAwesomeFree
 {
     public function icons(): array
     {
+        $faTick = 'fa-solid fa-check';
+        $faCross = 'fa-solid fa-xmark';
+        $faSpinner = 'fas fa-spinner';
+
+        $genericUploading = $faSpinner;
+        $genericLoading = $faSpinner;
+        $genericClose = $faCross;
         $genericDropdown = 'fa fa-ellipsis';
 
         return [
@@ -14,7 +21,7 @@ readonly class FontAwesomeFree
 
             // alert
             'alertDanger'                               => 'fas fa-triangle-exclamation',
-            'alertSuccess'                              => 'fas fa-check',
+            'alertSuccess'                              => $faTick,
 
             // registration
             'loginGoogle'                               => 'fab fa-google',
@@ -34,6 +41,30 @@ readonly class FontAwesomeFree
             // microblog
             'microblogNew'                              => 'fa-solid fa-plus',
             'microblogMine'                             => 'fa-regular fa-address-book',
+            'microblogReport'                           => 'fas fa-flag',
+            'microblogShare'                            => 'fas fa-share-nodes',
+            'microblogAddComment'                       => 'far fa-comment',
+            'microblogVote'                             => 'far fa-thumbs-up',
+            'microblogVoted'                            => 'fas fa-thumbs-up',
+            'microblogSubscribe'                        => 'far fa-bell',
+            'microblogSubscribed'                       => 'fas fa-bell',
+            'microblogFoldedUnfold'                     => 'fa fa-circle-right',
+            'microblogCommentsFoldedUnfold'             => 'far fa-comments',
+            'microblogBlockAuthor'                      => 'fas fa-user-slash',
+            'microblogEdit'                             => 'fas fa-pen-to-square',
+            'microblogDelete'                           => 'fas fa-trash-can',
+            'microblogRestore'                          => 'fas fa-trash-arrow-up',
+            'microblogSponsored'                        => 'fas fa-dollar-sign',
+            'microblogMenuDropdown'                     => $genericDropdown,
+
+            // microblog comment
+            'microblogCommentEdit'                      => 'fas fa-pen-to-square',
+            'microblogCommentDelete'                    => 'fas fa-trash-can',
+            'microblogCommentRestore'                   => 'fas fa-trash-arrow-up',
+            'microblogCommentBlockAuthor'               => 'fas fa-user-slash',
+            'microblogCommentNewSave'                   => 'far fa-share-from-square',
+            'microblogCommentMenuEditRemove'            => 'fa fa-bars',
+            'microblogCommentMenuAnswerFlag'            => $genericDropdown,
 
             // navigation dropdown
             'sponsorProfile'                            => 'fa fa-medal',
@@ -46,10 +77,15 @@ readonly class FontAwesomeFree
 
             // navigation menu
             'mobileMenuOpen'                            => 'fa-solid fa-bars',
-            'mobileMenuClose'                           => 'fa-solid fa-xmark',
+            'mobileMenuClose'                           => $genericClose,
+            'mobileSearchClose'                         => $genericClose,
 
             // private messages
             'privateMessageTyping'                      => 'far fa-comment-dots',
+            'privateMessagesLoading'                    => $genericLoading,
+            'privateMessageDelete'                      => 'fas fa-trash-can',
+            'privateMessageReadAt'                      => $faTick,
+            'privateMessageMarkAsRead'                  => 'fas fa-eye',
 
             // user profile
             'userReputation'                            => 'fas fa-chart-line',
@@ -65,7 +101,7 @@ readonly class FontAwesomeFree
             'userAccount.notificationList'              => 'fas fa-bell',
             'userAccount.postVotes'                     => 'far fa-thumbs-up',
             'userAccount.postCategories'                => 'fas fa-chart-bar',
-            'userAccount.postAccepts'                   => 'fas fa-check',
+            'userAccount.postAccepts'                   => $faTick,
             'userAccount.subscribedPages'               => 'far fa-bell', // topics, jobOffers, microblogs
             'userAccount.relations'                     => 'fas fa-user-group',
             'userAccount.notificationSettings'          => 'fas fa-bell',
@@ -75,9 +111,98 @@ readonly class FontAwesomeFree
             'userAccount.apiTokens'                     => 'fas fa-key',
             'userAccount.accountDelete'                 => 'fas fa-trash-can',
 
+            // following user
+            'userFollow'                                => $faTick,
+
+            // report
+            'reportType.spam'                           => 'fas fa-envelopes-bulk',
+            'reportType.abusiveLanguage'                => 'fas fa-book-skull',
+            'reportType.offTopic'                       => 'fas fa-wave-square',
+            'reportType.category'                       => 'fas fa-table-list',
+            'reportType.extortion'                      => 'fas fa-user-graduate',
+            'reportType.other'                          => "far fa-flag",
+
+            // category
+            'categorySectionMenu'                       => 'fas fa-gears',
+            'categorySectionMenuItemEnabled'            => $faTick,
+            'categorySectionFolded'                     => 'far fa-square-plus',
+            'categorySectionFold'                       => 'far fa-square-minus',
+            'categorySectionMarkAsRead'                 => 'far fa-eye',
+            'categorySectionMoveUp'                     => 'fas fa-caret-up',
+            'categorySectionMoveDown'                   => 'fas fa-caret-down',
+            'categorySectionChildWasRead'               => 'far fa-file',
+            'categorySectionChildWasNotRead'            => null, // icon generated by css
+
+            // poll
+            'postPoll'                                  => 'fa fa-square-poll-horizontal',
+            'postPollRemoveOption'                      => 'fas fa-circle-minus',
+
+            // autocomplete
+            'autocompleteUserShowProfile'               => 'fas fa-user',
+            'autocompleteUserPrivateMessage'            => 'fas fa-comment',
+            'autocompleteUserFindPosts'                 => 'fas fa-magnifying-glass',
+            'autocompleteUserNoAvatar'                  => 'fa-solid fa-user',
+            'autocompleteSearch'                        => 'fas fa-magnifying-glass',
+
+            // tags
+            'tag'                                       => 'fa-solid fa-tag',
+            'tagRemove'                                 => $genericClose,
+            'tagRank'                                   => 'fas fa-circle',
+            'tagPopularInclude'                         => 'fa fa-plus',
+            'tagPopularMore'                            => 'fa fa-plus',
+
+            // asset thumbnail
+            'thumbnailAssetRemove'                      => $genericClose,
+            'thumbnailAssetAdd'                         => 'fas fa-circle-plus',
+            'thumbnailAssetUploadedFile'                => 'far fa-file',
+            'thumbnailAssetUploading'                   => $genericUploading,
+
+            // navigation bar
+            'navigationPrivateMessages'                 => 'fas fa-envelope',
+            'navigationSearch'                          => 'fa fa-magnifying-glass',
+            'navigationNotifications'                   => 'fas fa-bell',
+
+            // navigation notifications
+            'notificationsMarkAllAsRead'                => 'far fa-eye',
+            'notificationsOpenInNewTab'                 => 'fas fa-up-right-from-square',
+            'notificationsLoading'                      => $genericLoading,
+            'notificationDelete'                        => $genericClose,
+
+            // editor
+            'editorMarkdownHelp'                        => 'fab fa-markdown',
+            'editorAssetUpload'                         => 'far fa-image',
+            'editorAssetUploading'                      => $genericUploading,
+            'editorControlBold'                         => 'fas fa-bold',
+            'editorControlItalics'                      => 'fas fa-italic',
+            'editorControlUnderline'                    => 'fas fa-underline',
+            'editorControlStrikeThrough'                => 'fas fa-strikethrough',
+            'editorControlHyperlink'                    => 'fas fa-link',
+            'editorControlCodeBlock'                    => 'fas fa-code',
+            'editorControlImage'                        => 'fas fa-image',
+            'editorControlKeyStroke'                    => 'fas fa-keyboard',
+            'editorControlListOrdered'                  => 'fas fa-list-ol',
+            'editorControlListUnordered'                => 'fas fa-list-ul',
+            'editorControlQuote'                        => 'fas fa-quote-left',
+            'editorControlTable'                        => 'fas fa-table',
+            'editorControlIndentMore'                   => 'fas fa-indent',
+            'editorControlIndentLess'                   => 'fas fa-outdent',
+            'editorControlEmoji'                        => 'fas fa-face-smile-beam',
+            'editorEmojiPickerClose'                    => $genericClose,
+            'editorMarkdownHelpKeyArrowUp'              => 'fas fa-arrow-up',
+            'editorMarkdownHelpKeyArrowDown'            => 'fas fa-arrow-down',
+            'editorPasteLoading'                        => $genericUploading,
+
+            // survey
+            'surveyExperimentDueTime'                   => 'fa-regular fa-clock',
+            'surveyExperimentChoiceModern'              => 'fa-solid fa-toggle-on',
+            'surveyExperimentChoiceLegacy'              => 'fa-solid fa-toggle-off',
+            'surveyExperimentOpen'                      => 'fa-solid fa-toggle-off',
+            'surveyBadgeEnlarge'                        => 'fa-solid fa-chevron-left',
+            'surveyBadgeShorten'                        => 'fa-solid fa-chevron-right',
+
             // payment
             'paymentSecureConnection'                   => 'fas fa-lock',
-            'paymentNotNecessary'                       => 'fas fa-check',
+            'paymentNotNecessary'                       => $faTick,
             'paymentInvoiceData'                        => 'fas fa-lock',
             'paymentBackToOffer'                        => 'fas fa-angle-left',
             'paymentSaveAndPay'                         => 'fas fa-angle-right',
@@ -111,6 +236,20 @@ readonly class FontAwesomeFree
             'topicLogBackToTopic'                       => 'fas fa-backward-step',
             'topicActionRename'                         => 'fa fa-pencil',
             'topicActionMove'                           => 'fa fa-circle-arrow-right',
+            'topicActionLock'                           => 'fa fa-lock',
+            'topicActionUnlock'                         => 'fa fa-unlock',
+            'topicAccepted'                             => $faTick,
+            'topicReported'                             => 'fa fa-fire',
+            'topicStateSticky'                          => 'fa-solid fa-thumbtack',
+            'topicStateLocked'                          => 'fas fa-lock',
+            'topicStateStandard'                        => 'far fa-comments',
+            'topicViews'                                => 'far fa-eye',
+            'topicRepliesReplyPresent'                  => 'fas fa-comments',
+            'topicRepliesReplyMissing'                  => 'far fa-comments',
+            'topicVotesVotePresent'                     => 'fas fa-thumbs-up',
+            'topicVotesVoteMissing'                     => 'far fa-thumbs-up',
+            'topicPages'                                => 'far fa-file',
+            'topicActionGoToStart'                      => 'fa-solid fa-backward-fast',
 
             // topic log
             "topicLogUserAgent"                         => "fas fa-globe",
@@ -119,8 +258,43 @@ readonly class FontAwesomeFree
 
             // topic post
             'postSubscribe'                             => 'far fa-bell',
+            'postSubscribed'                            => 'fas fa-bell',
             'postShare'                                 => 'fas fa-share-nodes',
             'postComment'                               => 'far fa-comment',
+            'postShareCopyUrl'                          => 'fa-solid fa-copy',
+            'postCommentActive'                         => 'fas fa-comment',
+            'postDelete'                                => 'fa fa-trash-can',
+            'postRestore'                               => 'fa fa-arrow-rotate-left',
+            'postMentionAuthor'                         => 'fa fa-at',
+            'postAnswerQuote'                           => 'fa fa-quote-left',
+            'postReport'                                => 'fa fa-flag',
+            'postMenuDropdown'                          => $genericDropdown,
+            'postMergeWithPrevious'                     => 'fas fa-compress',
+            'postBanAuthor'                             => 'fas fa-user-slash',
+            'postDeleted'                               => 'fa-solid fa-trash-can',
+            'postAuthorBlocked'                         => 'fa-solid fa-user-slash',
+            'postAccept'                                => $faTick,
+            'postEditHistoryShow'                       => 'fas fa-up-right-from-square',
+            'postFoldedCommentsUnfold'                  => 'far fa-comments',
+            'postVote'                                  => 'far fa-thumbs-up',
+            'postVoted'                                 => 'fas fa-thumbs-up',
+            'postAssetDownload'                         => 'fas fa-download',
+            'postEdit'                                  => 'fas fa-pen-to-square',
+            'postEditActive'                            => 'far fa-pen-to-square',
+            'postWasRead'                               => 'far fa-file',
+            'postWasNotRead'                            => null, // icon generated by css
+
+            // post history
+            'postHistoryVersion'                        => 'far fa-file',
+            'postHistoryVersionRestore'                 => 'fas fa-arrow-rotate-left',
+            'postHistoryVersionShow'                    => 'fas fa-eye',
+
+            // post comment
+            'postCommentEdit'                           => 'fas fa-pencil',
+            'postCommentDelete'                         => 'fas fa-trash-can',
+            'postCommentConvertToPost'                  => 'fas fa-compress',
+            'postCommentReport'                         => 'fas fa-flag',
+            'postCommentAuthorBlocked'                  => 'fa-solid fa-user-slash',
 
             // profile
             'profileReputationHistory'                  => 'fa-solid fa-chart-line',
@@ -144,14 +318,14 @@ readonly class FontAwesomeFree
             'profileUserAge'                            => 'fas fa-calendar-days',
             'profileUserMicroblogs'                     => 'fa-regular fa-address-book',
             'profileUserPermissions'                    => 'fa fa-medal',
-            'profileUserPermissionGranted'              => 'fa fa-check',
-            'profileUserPermissionDenied'               => 'fa fa-xmark',
+            'profileUserPermissionGranted'              => $faTick,
+            'profileUserPermissionDenied'               => $faCross,
 
             // job board
-            'jobBoardLoading'                           => 'fas fa-spinner',
+            'jobBoardLoading'                           => $genericLoading,
             "jobBoardFilterRemote"                      => "fas fa-wifi",
             "jobBoardFilterSalary"                      => "far fa-credit-card",
-            "jobBoardPackageBenefit"                    => "fas fa-check",
+            "jobBoardPackageBenefit"                    => $faTick,
             "jobBoardSearch"                            => "fas fa-magnifying-glass",
             "jobBoardSearchLocation"                    => "fas fa-location-dot",
             "jobBoardSubscribedOffers"                  => "fas fa-heart",
@@ -166,8 +340,8 @@ readonly class FontAwesomeFree
             // job offer
             "jobOfferAdditionalQuestions"               => "fas fa-circle-info",
             "jobOfferBack"                              => "fas fa-backward",
-            "jobOfferBenefit"                           => "fas fa-check",
-            "jobOfferComments"                          => "fas fa-question-circle-o",
+            "jobOfferBenefit"                           => $faTick,
+            "jobOfferComments"                          => "far fa-comment",
             "jobOfferContract"                          => "far fa-handshake",
             "jobOfferDetails"                           => "fas fa-circle-info",
             "jobOfferDraftSave"                         => "fas fa-floppy-disk",
@@ -175,8 +349,8 @@ readonly class FontAwesomeFree
             "jobOfferDraftTabPrev"                      => "fas fa-angle-left",
             "jobOfferEdit"                              => "fas fa-pen-to-square",
             "jobOfferExpiresInDays"                     => "far fa-clock",
-            "jobOfferFeatureMissing"                    => "fas fa-xmark",
-            "jobOfferFeaturePresent"                    => "fas fa-check",
+            "jobOfferFeaturePresent"                    => $faTick,
+            "jobOfferFeatureMissing"                    => $faCross,
             "jobOfferLocation"                          => "fas fa-location-dot",
             "jobOfferMoreLikeThis"                      => "fas fa-star",
             "jobOfferNew"                               => "fas fa-pencil",
@@ -192,6 +366,28 @@ readonly class FontAwesomeFree
             "jobOfferCompanyEmployees"                  => "fas fa-users",
             "jobOfferCompanyEstablishmentYear"          => "far fa-calendar",
             "jobOfferCompanyWebsite"                    => "fas fa-link",
+            'jobOfferLocationAdd'                       => 'fas fa-circle-plus',
+            'jobOfferLocationRemove'                    => 'fa-circle-minus',
+            'jobOfferBenefitPresent'                    => $faTick,
+            'jobOfferBenefitMissing'                    => $faCross,
+            'jobOfferBenefitCustom'                     => $faTick,
+            'jobOfferBenefitRemove'                     => 'fas fa-circle-minus',
+            'jobOfferFirmNameAdd'                       => 'fas fa-circle-plus',
+
+            // job board filters
+            'jobBoardFilterOpen'                        => 'fas fa-angle-down',
+            'jobBoardFilterClosed'                      => 'fas fa-angle-up',
+
+            // job offer comment
+            'jobOfferCommentEdit'                       => 'fa fa-pen-to-square',
+            'jobOfferCommentDelete'                     => 'fa fa-trash-can',
+            'jobOfferCommentMenuDropdown'               => $genericDropdown,
+
+            // job offer pricing
+            'pricingSelected'                           => 'fa fa-circle-check',
+            'pricingBenefitPresent'                     => 'fa fa-circle-check',
+            'pricingBenefitMissing'                     => $faCross,
+            'pricingHelpExample'                        => 'fa fa-circle-question',
 
             // vcard
             "vCardLastVisitDate"                        => "fas fa-right-to-bracket",
@@ -248,11 +444,15 @@ readonly class FontAwesomeFree
             'surveyExperimentNew'                       => 'fa-solid fa-plus',
             'surveyExperimentBack'                      => 'fa-solid fa-arrow-left',
             'surveyExperimentMemberRemove'              => 'fa-solid fa-trash',
-            'surveyExperimentMembersSave'               => 'fa-solid fa-check',
+            'surveyExperimentMembersSave'               => $faTick,
+            'surveyExperimentJoined'                    => 'fa-flask',
+            'surveyExperimentLeft'                      => 'fa-bug-slash',
+            'surveyExperimentEnabledModern'             => 'fa-toggle-on',
+            'surveyExperimentEnabledLegacy'             => 'fa-toggle-off',
 
             // admin panel
-            'adminTickMark'                             => 'fa-solid fa-check',
-            'adminCrossMark'                            => 'fa-solid fa-xmark',
+            'adminTickMark'                             => $faTick,
+            'adminCrossMark'                            => $faCross,
             'adminMaterialPost'                         => 'fas fa-arrow-right',
             'adminMaterialPostDropdown'                 => $genericDropdown,
 
@@ -265,7 +465,7 @@ readonly class FontAwesomeFree
             'logItemCreated'                            => 'far fa-comment', // posts, comments, microblogs
             'logItemDeleted'                            => 'far fa-trash-can',
             'logItemReported'                           => 'far fa-flag',
-            'logReportClosed'                           => 'fas fa-check',
+            'logReportClosed'                           => $faTick,
 
             // admin content marker
             'contentMarkerQuote'                        => 'fas fa-reply-all',

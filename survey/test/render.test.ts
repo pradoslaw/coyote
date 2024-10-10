@@ -164,6 +164,15 @@ describe('render', () => {
     await nextTick();
     assertEquals(component.notifications.title(), 'bar');
   });
+
+  test('receive icon', async () => {
+    const icon = {
+      inject: ['icons'],
+      template: '<span v-text="icons.foo"/>',
+    };
+    const component = render(icon, {}, {foo: 'bar'});
+    assertEquals(component.text(), 'bar');
+  });
 });
 
 const counter = {

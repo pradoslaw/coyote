@@ -1,11 +1,11 @@
 <template>
   <div v-click-away="blurInput" :class="{'nav-search-mobile': isMobile}" class="nav-search">
     <div :class="{'active': isActive}" class="search-bar ms-md-4 me-md-4">
-      <i class="fas fa-magnifying-glass ms-2 me-2"></i>
-
+      <span class="ms-2 me-2">
+        <vue-icon name="autocompleteSearch"/>
+      </span>
       <form action="/Search" role="search" ref="search" class="flex-grow-1">
         <input v-for="[key, value] of params" type="hidden" :name="key" :value="value">
-
         <input
           ref="input"
           @focus="showDropdown"
@@ -22,30 +22,25 @@
           placeholder="Wpisz &quot;?&quot;, aby uzyskać pomoc lub wyszukaj"
         >
       </form>
-
-      <!-- close mobile menu -->
       <button v-if="isMobile" @click="toggleMobile" class="btn nav-link">
-        <i class="fa fa-2x fa-xmark"></i>
+        <span style="font-size:2em;">
+          <vue-icon name="mobileSearchClose"/>
+        </span>
       </button>
-
       <div v-if="isHelpEnabled" class="search-dropdown p-3">
         <div class="row">
           <div class="col-6 mb-2">
             <code>"foo bar"</code> <small class="text-muted">szukaj całych fraz</small>
           </div>
-
           <div class="col-6 mb-2">
             <code>+foo -bar</code> <small class="text-muted">wyklucz lub żądaj danego słowa w dokumencie</small>
           </div>
-
           <div class="col-6 mb-2">
             <code>foo*</code> <small class="text-muted">szuka fragmentów słów</small>
           </div>
-
           <div class="col-6 mb-2">
             <code>foo~</code> <small class="text-muted">szuka podobnych słów</small>
           </div>
-
           <div class="col-6 mb-2">
             <code>user:foo</code> <small class="text-muted">szukaj po autorze</small>
           </div>
@@ -55,8 +50,9 @@
       <div v-else-if="isDropdownVisible && items.length > 0" class="search-dropdown">
         <ul class="list-unstyled">
           <template v-for="category in categories">
-            <li class="title"><span>{{ categoryLabel(category) }}</span></li>
-
+            <li class="title">
+              <span>{{ categoryLabel(category) }}</span>
+            </li>
             <li v-for="child in category.children" :class="{'hover': child.index === selectedIndex}" @mouseover="hoverItem(child.index)">
               <component :is="makeDecorator(child)" :item="child" :value="innerValue"></component>
             </li>
@@ -67,7 +63,7 @@
 
     <div v-if="!isMobile" class="d-md-none navbar-nav ms-auto me-2">
       <a @click="toggleMobile" href="javascript:" class="nav-link">
-        <i class="fa fa-magnifying-glass fa-fw"></i>
+        <vue-icon name="navigationSearch"/>
       </a>
     </div>
   </div>
@@ -83,6 +79,7 @@ import {Hit} from '../../types/hit';
 import {SpecialKeys} from '../../types/keys';
 import {Contexts, HitCategory, Models} from '../../types/search';
 import {nextTick} from "../../vue";
+import VueIcon from "../icon";
 import VueJobDecorator from './decorators/job';
 import VueMicroblogDecorator from './decorators/microblog';
 import VueTopicDecorator from './decorators/topic.vue';
@@ -93,11 +90,12 @@ export default {
   directives: {clickAway},
   store,
   components: {
-    'vue-topic-decorator': VueTopicDecorator,
+    'vue-icon': VueIcon,
     'vue-job-decorator': VueJobDecorator,
-    'vue-wiki-decorator': VueWikiDecorator,
     'vue-microblog-decorator': VueMicroblogDecorator,
+    'vue-topic-decorator': VueTopicDecorator,
     'vue-user-decorator': VueUserDecorator,
+    'vue-wiki-decorator': VueWikiDecorator,
   },
   props: {
     value: String,

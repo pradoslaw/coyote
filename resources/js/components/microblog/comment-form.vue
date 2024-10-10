@@ -5,7 +5,7 @@
       placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)"
       v-model="microblog.text"
 
-      allow-paste 
+      allow-paste
       @paste="addAsset"
       @save="saveComment"
       @cancel="cancel"
@@ -13,7 +13,7 @@
       ref="commentPrompt"
     >
       <button type="button" @click="saveComment" class="btn btn-sm btn-comment-submit" title="Zapisz (Ctrl+Enter)">
-        <i class="far fa-fw fa-share-from-square"/>
+        <vue-icon name="microblogCommentNewSave"/>
       </button>
     </vue-comment-autocomplete>
   </form>
@@ -24,12 +24,14 @@ import IsImage from "../../libs/assets";
 import Textarea from '../../libs/textarea';
 import store from "../../store/index";
 import VueCommentAutocomplete from '../CommentAutocomplete.vue';
+import VueIcon from "../icon";
 import {MicroblogFormMixin} from '../mixins/microblog';
 
 export default {
   name: 'microblog-comment-form',
   store,
   components: {
+    VueIcon,
     'vue-comment-autocomplete': VueCommentAutocomplete,
   },
   mixins: [MicroblogFormMixin],

@@ -9,7 +9,7 @@ describe('badge step', () => {
   });
 
   test('badge emits engage event', async () => {
-    const badge = render(SurveyBadge);
+    const badge = renderBadge();
     await badge.click('button.btn-engage');
     assertTrue(badge.emitted('engage'));
   });
@@ -93,6 +93,9 @@ describe('badge step', () => {
   });
 
   function renderBadge({long = true, tooltip = false} = {}): Component {
-    return render(SurveyBadge, {tooltip, long});
+    return render(SurveyBadge, {tooltip, long}, {
+      'surveyBadgeShorten': 'fa-chevron-right',
+      'surveyBadgeEnlarge': 'fa-chevron-left',
+    });
   }
 });

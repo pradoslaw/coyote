@@ -4,19 +4,24 @@ import {GlobalMountOptions} from "@vue/test-utils/dist/types";
 import {ComponentPublicInstance, nextTick} from "vue";
 import {VueInstance} from "../src/vue";
 
-export function render(component: any, props: Record<string, unknown> = {}): Component {
-  const global = vueWithNotifications();
+interface IconSet {
+  [keyof: string]: string;
+}
+
+export function render(component: any, props: Record<string, unknown> = {}, icons: IconSet = {}): Component {
+  const global = vueWithNotifications({icons});
   return new Component(
     mount(component, {props, global}),
     mount({template: '<vue-library-notifications :dangerously-set-inner-html="true"/>'}, {global}),
   );
 }
 
-function vueWithNotifications(): GlobalMountOptions {
+function vueWithNotifications(provide: object): GlobalMountOptions {
   return {
     plugins: [
       [VueNotifications, {componentName: 'vue-library-notifications'}],
     ],
+    provide,
   };
 }
 

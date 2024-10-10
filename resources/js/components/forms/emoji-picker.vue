@@ -42,7 +42,7 @@
         <div class="search-box">
           <input class="form-control" v-model="searchPhrase" placeholder="Wyszukaj emoji..."/>
           <button class="btn btn-primary" type="button" ref="close-button" @click="close">
-            <i class="fas fa-xmark"/>
+            <vue-icon name="editorEmojiPickerClose"/>
             Zamknij
           </button>
         </div>
@@ -53,6 +53,7 @@
 
 <script>
 import clickAway from '../../clickAway.js';
+import VueIcon from '../icon';
 
 function onIdle(callback) {
   if ("requestIdleCallback" in window) {
@@ -64,6 +65,7 @@ function onIdle(callback) {
 
 export default {
   directives: {clickAway},
+  components: {VueIcon},
   props: {
     emojis: {require: true},
     open: {require: true},

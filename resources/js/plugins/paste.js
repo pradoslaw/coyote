@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {iconHtml} from "../components/icon";
 
 async function upload(textarea, currentTarget, base64) {
   textarea.readonly = 'readonly';
@@ -7,7 +8,7 @@ async function upload(textarea, currentTarget, base64) {
   const rect = textarea.getBoundingClientRect();
 
   overlay.id = 'ajax-loader';
-  overlay.innerHTML = '<i class="fa fa-spinner fa-spin fa-fw loadingIcon"></i>';
+  overlay.innerHTML = iconHtml(window['icons'], 'editorPasteLoading', {spin: true, class: 'loadingIcon'});
   overlay.style.left = `${rect.left}px`;
   overlay.style.top = `${rect.top + document.documentElement.scrollTop}px`;
   overlay.style.width = `${rect.width}px`;

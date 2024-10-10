@@ -43,13 +43,13 @@ describe('survey', () => {
           assertNotification(
             await tallyWithInvitedAction('enrollOptOut'),
             'Zmieniaj forum na lepsze!',
-            '<i class="fa-solid fa-bug-slash"></i> Wypisano z udziału w testach.'));
+            '<i class="fa-solid fa-bug-slash fa-fw"></i> Wypisano z udziału w testach.'));
 
         test('accept invitation, see notification', async () =>
           assertNotification(
             await tallyWithInvitedAction('enrollOptIn'),
             'Zmieniaj forum na lepsze!',
-            '<i class="fa-solid fa-flask"></i> Dołączyłeś do testów forum!'));
+            '<i class="fa-solid fa-flask fa-fw"></i> Dołączyłeś do testów forum!'));
 
         describe('close participate', () => {
           test('when user is uninstructed', async () =>
@@ -94,13 +94,13 @@ describe('survey', () => {
           assertNotification(
             await tallyOnParticipateScreen('experimentOptIn', {title: 'Foo'}),
             'Foo',
-            '<i class="fa-solid fa-toggle-on"></i> Uruchomiono nową wersję.'));
+            '<i class="fa-solid fa-toggle-on fa-fw"></i> Uruchomiono nową wersję.'));
 
         test('experiment opt-out, see notification', async () =>
           assertNotification(
             await tallyOnParticipateScreen('experimentOptOut', {title: 'Foo'}),
             'Foo',
-            '<i class="fa-solid fa-toggle-off"></i> Przywrócono pierwotną wersję.'));
+            '<i class="fa-solid fa-toggle-off fa-fw"></i> Przywrócono pierwotną wersję.'));
       });
 
       describe('notify backend', () => {
@@ -185,7 +185,15 @@ describe('survey', () => {
       }
 
       function renderTally(state: State, experiment?: object, badgeLong?: boolean): Component {
-        return render(VueTally, {state, experiment: experiment || {}, badgeLong: badgeLong || false});
+        return render(VueTally,
+          {state, experiment: experiment || {}, badgeLong: badgeLong || false},
+          {
+            surveyBadgeEnlarge: 'fa-solid fa-flask',
+            surveyExperimentJoined: 'fa-solid fa-flask',
+            surveyExperimentLeft: 'fa-solid fa-bug-slash',
+            surveyExperimentEnabledModern: 'fa-solid fa-toggle-on',
+            surveyExperimentEnabledLegacy: 'fa-solid fa-toggle-off',
+          });
       }
 
       function userAction(tally: Component, eventName: string, args: any[] = []): Promise<void> {

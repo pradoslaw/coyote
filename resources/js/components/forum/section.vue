@@ -3,19 +3,26 @@
     <div class="section-name pb-2 ps-lg-3 pt-lg-2 pe-lg-2">
       <h2 class="float-start">
         <a v-if="collapsable" href="javascript:" @click="collapse">
-          <i class="far" :class="[isCollapse ? 'fa-square-plus': 'fa-square-minus']"/>
+          <vue-icon name="categorySectionFolded" v-if="isCollapse"/>
+          <vue-icon name="categorySectionFold" v-else/>
           {{ name }}
         </a>
-        <template v-else>{{ name }}</template>
+        <template v-else v-text="name"/>
       </h2>
 
-      <div v-if="isAuthorized && !categories[0].parent_id" :class="{'open': isDropdown}" v-click-away="hideDropdown" class="dropdown float-end dropleft">
-        <a href="javascript:" @click="isDropdown = ! isDropdown" class="card-cog mt-2 me-2">
-          <i class="fas fa-gears"/>
+      <div
+        v-if="isAuthorized && !categories[0].parent_id"
+        class="dropdown float-end dropleft"
+        :class="{'open': isDropdown}"
+        v-click-away="hideDropdown"
+      >
+        <a href="javascript:" @click="isDropdown = !isDropdown" class="card-cog mt-2 me-2">
+          <vue-icon name="categorySectionMenu"/>
         </a>
         <div :class="{'d-block': isDropdown}" class="dropdown-menu">
           <a v-for="category in categories" href="javascript:" class="dropdown-item" @click="toggle(category)">
-            <i class="fa" :class="{'fa-check': !category.is_hidden}"/>
+            <vue-icon name="categorySectionMenuItemEnabled" v-if="!category.is_hidden"/>
+            <vue-icon empty v-else/>
             {{ category.name }}
           </a>
         </div>
@@ -40,7 +47,7 @@
                 <vue-tags v-if="category.enable_tags && !category.children" :tags="category.tags" class="tag-clouds-sm"/>
                 <ul v-if="category.children" class="list-inline list-sub d-md-block d-lg-block">
                   <li v-for="child in category.children" class="list-inline-item">
-                    <i v-if="child.is_read" class="far fa-file"/>
+                    <vue-icon name="categorySectionChildWasRead" v-if="child.is_read"/>
                     <i v-else class="not-read" title="Nowe posty w tej kategorii"/>
                     {{ ' ' }}
                     <a :href="child.url">{{ child.name }}</a>
@@ -49,18 +56,21 @@
                 </ul>
               </div>
             </div>
-
             <div v-if="!category.is_redirected" class="col-6 col-md-12 col-lg-2 d-flex align-items-center">
               <ul class="list-inline mb-0 mt-1">
                 <li class="list-inline-item">
                   <strong>{{ number(category.topics) }}</strong>
                   {{ ' ' }}
-                  <small class="text-muted text-wide-spacing">{{ declination(category.topics, ['wątek', 'wątków', 'wątków']) }}</small>
+                  <small class="text-muted text-wide-spacing">
+                    {{ declination(category.topics, ['wątek', 'wątków', 'wątków']) }}
+                  </small>
                 </li>
                 <li class="list-inline-item">
                   <strong>{{ number(category.posts) }}</strong>
                   {{ ' ' }}
-                  <small class="text-muted text-wide-spacing">{{ declination(category.posts, ['post', 'postów', 'postów']) }}</small>
+                  <small class="text-muted text-wide-spacing">
+                    {{ declination(category.posts, ['post', 'postów', 'postów']) }}
+                  </small>
                 </li>
               </ul>
             </div>
@@ -83,12 +93,18 @@
                   <span class="text-muted">
                     <vue-timeago :datetime="category.post.created_at"/>
                   </span>,
-                  <vue-username v-if="category.post.user" :user="category.post.user"></vue-username>
+                  <vue-username v-if="category.post.user" :user="category.post.user"/>
                   <span v-else>{{ category.post.user_name }}</span>
                   <div class="toolbox">
-                    <a href="javascript:" title="Oznacz jako przeczytane" @click="mark(category)"><i class="far fa-eye"></i></a>
-                    <a v-if="isAuthorized" :class="{'disabled': isBeginning(index)}" title="Przesuń w górę" @click="up(category)"><i class="fas fa-caret-up"></i></a>
-                    <a v-if="isAuthorized" :class="{'disabled': isEnding(index)}" title="Przesuń w dół" @click="down(category)"><i class="fas fa-caret-down"></i></a>
+                    <a href="javascript:" title="Oznacz jako przeczytane" @click="mark(category)">
+                      <vue-icon name="categorySectionMarkAsRead"/>
+                    </a>
+                    <a v-if="isAuthorized" :class="{'disabled': isBeginning(index)}" title="Przesuń w górę" @click="up(category)">
+                      <vue-icon name="categorySectionMoveUp"/>
+                    </a>
+                    <a v-if="isAuthorized" :class="{'disabled': isEnding(index)}" title="Przesuń w dół" @click="down(category)">
+                      <vue-icon name="categorySectionMoveDown"/>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -107,6 +123,7 @@ import clickAway from '../../clickAway.js';
 import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from '../../store/index';
 import VueAvatar from '../avatar.vue';
+import VueIcon from '../icon';
 import {default as mixins} from '../mixins/user.js';
 import VueTags from '../tags.vue';
 import VueUsername from '../user-name.vue';
@@ -115,6 +132,7 @@ export default {
   mixins: [mixins],
   directives: {clickAway},
   components: {
+    VueIcon,
     'vue-avatar': VueAvatar,
     'vue-username': VueUsername,
     'vue-tags': VueTags,

@@ -62,8 +62,9 @@
                     placeholder="Szukaj po tytule, nazwie firmy"
                     autocomplete="off"
                     autofocus>
-                <a @click="selectTab('tech')" href="javascript:" rel="nofollow">
-                  <i class="fas fa-icon" :class="getTabDropdownClass('tech')"></i>
+                <a @click="selectTab('tech')" href="javascript:" rel="nofollow" class="fa-icon">
+                  <vue-icon name="jobBoardFilterOpen" v-if="isTabSelected('tech')"></vue-icon>
+                  <vue-icon name="jobBoardFilterClosed" v-else></vue-icon>
                 </a>
               </div>
 
@@ -94,9 +95,9 @@
                     placeholder="Nazwa miejscowości"
                     autocomplete="off"
                 >
-
-                <a @click="selectTab('location')" href="javascript:" rel="nofollow">
-                  <i class="fas fa-icon" :class="getTabDropdownClass('location')"></i>
+                <a @click="selectTab('location')" href="javascript:" rel="nofollow" class="fa-icon">
+                  <vue-icon name="jobBoardFilterOpen" v-if="isTabSelected('location')"></vue-icon>
+                  <vue-icon name="jobBoardFilterClosed" v-else></vue-icon>
                 </a>
               </div>
 

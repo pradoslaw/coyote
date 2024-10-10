@@ -3,38 +3,40 @@
     <div class="card-header">
       Dane firmy
     </div>
-
     <div class="card-body">
       <div v-if="Object.keys(firmsSelect).length" class="border-bottom form-group">
         <label class="col-form-label">Wybierz firmę z listy</label>
-
-        <vue-select :options="firmsSelect" placeholder="-- zapisane firmy --" v-model="defaultFirm"></vue-select>
-        <span class="form-text text-muted">Możesz wybrać jedną z pośród kilku firm przypiasnych do Twojego konta.</span>
+        <vue-select :options="firmsSelect" placeholder="-- zapisane firmy --" v-model="defaultFirm"/>
+        <span class="form-text text-muted">
+          Możesz wybrać jedną z pośród kilku firm przypisanych do Twojego konta.
+        </span>
       </div>
-
       <vue-form-group :errors="errors['firm.name']" label="Nazwa firmy" class="border-bottom">
         <div class="input-group">
-          <a @click="addFirm" class="input-group-text text-decoration-none" href="javascript:" title="Dodaj nową firmę"><i class="fas fa-fw fa-circle-plus"></i></a>
-          <vue-text v-model="firm.name" :is-invalid="'firm.name' in errors" name="firm[name]"></vue-text>
+          <a @click="addFirm" class="input-group-text text-decoration-none" href="javascript:" title="Dodaj nową firmę">
+            <vue-icon name="jobOfferFirmNameAdd"/>
+          </a>
+          <vue-text v-model="firm.name" :is-invalid="'firm.name' in errors" name="firm[name]"/>
         </div>
-
-        <span class="form-text text-muted">Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.</span>
+        <span class="form-text text-muted">
+          Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.
+        </span>
       </vue-form-group>
-
       <div class="border-bottom form-group">
         <div class="form-group">
           <div class="custom-control custom-radio">
-            <input type="radio" id="is_agency_0" class="is_agency custom-control-input" name="is_agency" v-model="firm.is_agency" :value="false"></input>
-
-            <label for="is_agency_0" class="custom-control-label">Bezpośredni pracodawca</label>
+            <input type="radio" id="is_agency_0" class="is_agency custom-control-input" name="is_agency" v-model="firm.is_agency" :value="false">
+            <label for="is_agency_0" class="custom-control-label">
+              Bezpośredni pracodawca
+            </label>
           </div>
         </div>
-
         <div class="form-group">
           <div class="custom-control custom-radio">
-            <input type="radio" id="is_agency_1" class="is_agency custom-control-input" name="is_agency" v-model="firm.is_agency" :value="true"></input>
-
-            <label for="is_agency_1" class="custom-control-label">Agencja pośrednictwa / IT outsourcing</label>
+            <input type="radio" id="is_agency_1" class="is_agency custom-control-input" name="is_agency" v-model="firm.is_agency" :value="true">
+            <label for="is_agency_1" class="custom-control-label">
+              Agencja pośrednictwa / IT outsourcing
+            </label>
           </div>
         </div>
       </div>
@@ -50,8 +52,7 @@
               name="logo"
               upload-url="/Firma/Logo"
               @upload="addLogo"
-              @delete="removeLogo">
-            </vue-thumbnail>
+              @delete="removeLogo"/>
           </div>
         </div>
       </div>
@@ -93,8 +94,7 @@
       </vue-form-group>
 
       <vue-form-group :errors="errors['firm.employees']" label="Liczba pracowników w firmie">
-        <vue-select :options="employees" v-model="firm.employees" placeholder="--" name="firm[employees]"></vue-select>
-
+        <vue-select :options="employees" v-model="firm.employees" placeholder="--" name="firm[employees]"/>
         <span class="form-text text-muted">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
       </vue-form-group>
 
@@ -104,50 +104,55 @@
       </vue-form-group>
 
       <vue-form-group label="Adres" class="border-bottom" v-show="firm.is_agency === false">
-        <vue-text autocomplete="off" v-model="address" @accept="changeAddress" name="address"></vue-text>
-
-        <span class="form-text text-muted">Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.</span>
-
+        <vue-text autocomplete="off" v-model="address" @accept="changeAddress" name="address"/>
+        <span class="form-text text-muted">
+          Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.
+        </span>
         <div id="map">
           <vue-map @click="geocode" class="h-100" :latitude="firm.latitude || 51.919438" :longitude="firm.longitude || 19.145135999">
-            <vue-marker :latitude="firm.latitude" :longitude="firm.longitude"></vue-marker>
+            <vue-marker :latitude="firm.latitude" :longitude="firm.longitude"/>
           </vue-map>
         </div>
       </vue-form-group>
 
       <div class="form-group border-bottom" v-show="firm.is_agency === false">
         <label class="col-form-label">Benefity</label>
-        <span class="form-text text-muted">Kliknij na wybraną pozycję, aby zaznaczyć benefity jakie oferuje Twoja firma. Jeżeli nie ma go na liście, możesz dodać nową pozycję wpisując ją w
-          polu poniżej.</span>
-
+        <span class="form-text text-muted">
+          Kliknij na wybraną pozycję, aby zaznaczyć benefity jakie oferuje Twoja firma. Jeżeli nie ma go na liście, możesz dodać nową pozycję wpisując ją w
+          polu poniżej.
+        </span>
         <ol class="benefits list-group list-group-horizontal d-flex flex-row flex-wrap">
-
           <li
             class="list-group-item w-50 clickable"
             v-for="benefit in defaultBenefits"
             :class="{checked: firm.benefits.includes(benefit)}"
             @click="TOGGLE_BENEFIT(benefit)"
           >
-            <i class="fas fa-fw " :class="{'fa-check': firm.benefits.includes(benefit), 'fa-xmark': !firm.benefits.includes(benefit)}"></i> {{ benefit }}
+            <vue-icon name="jobOfferBenefitPresent" v-if="firm.benefits.includes(benefit)"/>
+            <vue-icon name="jobOfferBenefitMissing" v-else/>
+            {{ benefit }}
           </li>
           <template v-for="benefit in firm.benefits">
             <li class="list-group-item w-50 checked" v-if="!defaultBenefits.includes(benefit)">
-              <i class="fas fa-fw fa-check"></i>
-
-              <input type="text" maxlength="100" :value="benefit" class="form-control form-control-sm" @keydown.enter.prevent="">
-              <button class="btn btn-sm btn-delete" title="Usuń tę pozycję" @click.prevent="REMOVE_BENEFIT(benefit)"><i class="fas fa-circle-minus text-danger"></i></button>
+              <vue-icon name="jobOfferBenefitCustom"/>
+              <input maxlength="100" :value="benefit" class="form-control form-control-sm" @keydown.enter.prevent="">
+              <button class="btn btn-sm btn-delete text-danger" title="Usuń tę pozycję" @click.prevent="REMOVE_BENEFIT(benefit)">
+                <vue-icon name="jobOfferBenefitRemove"/>
+              </button>
             </li>
           </template>
-
           <li class="list-group-item w-50 checked">
-            <i class="fas fa-fw fa-check"></i>
-
-            <input v-model="benefit" type="text" maxlength="100" class="form-control form-control-sm" @keydown.enter.prevent="addBenefit"
-                   placeholder="Wpisz tekst i naciśnij Enter, aby dodać">
+            <vue-icon name="jobOfferBenefitCustom"/>
+            <input
+              v-model="benefit"
+              type="text"
+              maxlength="100"
+              class="form-control form-control-sm"
+              @keydown.enter.prevent="addBenefit"
+              placeholder="Wpisz tekst i naciśnij Enter, aby dodać">
           </li>
         </ol>
-
-        <div class="clearfix"></div>
+        <div class="clearfix"/>
       </div>
     </div>
   </div>
@@ -166,12 +171,14 @@ import VueSelect from '../forms/select.vue';
 import VueText from '../forms/text.vue';
 import VueMap from '../google-maps/map.vue';
 import VueMarker from '../google-maps/marker.vue';
+import VueIcon from "../icon";
 import VueThumbnail from '../thumbnail.vue';
 import VueRichEditor from "./rich-editor.vue";
 
 export default {
   name: 'VueFirmForm',
   components: {
+    VueIcon,
     'vue-form-group': VueFormGroup,
     'vue-text': VueText,
     'vue-select': VueSelect,

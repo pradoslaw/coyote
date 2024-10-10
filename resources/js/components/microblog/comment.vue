@@ -17,19 +17,15 @@
       />
 
       <div v-if="!comment.is_editing" class="w-100">
-        <vue-username :user="comment.user"></vue-username>
-
-        <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
-
-        <div class="comment-text" v-html="comment.html"></div>
-
+        <vue-username :user="comment.user"/>
+        <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"/>
+        <div class="comment-text" v-html="comment.html"/>
         <ul class="d-none d-sm-block list-inline list-inline-bullet-sm microblog-comment-list small m-0">
           <li class="list-inline-item">
             <a :href="comment.url">
-              <vue-timeago :datetime="comment.created_at"></vue-timeago>
+              <vue-timeago :datetime="comment.created_at"/>
             </a>
           </li>
-
           <li class="list-inline-item">
             <a
               @click="checkAuth(vote, comment)"
@@ -42,13 +38,15 @@
               {{ commentLabel }}
             </a>
           </li>
-
           <li class="list-inline-item">
-            <a @click="checkAuth(reply)" href="javascript:">Odpowiedz</a>
+            <a @click="checkAuth(reply)" href="javascript:">
+              Odpowiedz
+            </a>
           </li>
-
           <li v-if="isAuthorized" class="list-inline-item">
-            <a href="javascript:" :data-metadata="comment.metadata" :data-url="comment.url">Zgłoś</a>
+            <a href="javascript:" :data-metadata="comment.metadata" :data-url="comment.url">
+              Zgłoś
+            </a>
           </li>
         </ul>
 
@@ -58,21 +56,19 @@
               <vue-timeago :datetime="comment.created_at"/>
             </a>
           </li>
-
           <li class="list-inline-item">
             <a href="#" class="text-muted" data-bs-toggle="dropdown">
-              <i class="fa fa-bars"></i>
+              <vue-icon name="microblogCommentMenuEditRemove"/>
             </a>
-
             <div class="dropdown-menu">
-              <a @click="checkAuth(reply)" href="javascript:" class="dropdown-item text-muted">Odpowiedz</a>
-
+              <a @click="checkAuth(reply)" href="javascript:" class="dropdown-item text-muted">
+                Odpowiedz
+              </a>
               <a @click="checkAuth(vote, comment)"
                  :title="commentVoters"
                  :class="{'text-primary': comment.is_voted, 'text-muted': !comment.is_voted}"
                  href="javascript:"
-                 class="dropdown-item"
-              >
+                 class="dropdown-item">
                 {{ commentLabel }}
               </a>
             </div>
@@ -81,23 +77,29 @@
       </div>
 
       <div v-if="isAuthorized" class="dropdown">
-        <button class="btn btn-xs border-0 text-muted" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="small fa fa-ellipsis"></i></button>
-
+        <button class="btn btn-xs border-0 small text-muted" type="button" data-bs-toggle="dropdown" aria-label="Dropdown">
+          <vue-icon name="microblogCommentMenuAnswerFlag"/>
+        </button>
         <div class="dropdown-menu dropdown-menu-end">
           <template v-if="comment.permissions.update">
-
             <template v-if="!comment.deleted_at">
-              <a @click="edit(comment)" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-pen-to-square fa-fw"></i> Edytuj</a>
-              <a @click="deleteItem" class="dropdown-item btn-sm-remove" href="javascript:"><i class="fas fa-trash-can fa-fw"></i> Usuń</a>
+              <a @click="edit(comment)" class="dropdown-item btn-sm-edit" href="javascript:">
+                <vue-icon name="microblogCommentEdit"/>
+                Edytuj
+              </a>
+              <a @click="deleteItem" class="dropdown-item btn-sm-remove" href="javascript:">
+                <vue-icon name="microblogCommentDelete"/>
+                Usuń
+              </a>
             </template>
-
-            <a v-else @click="restoreItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-arrow-up fa-fw"></i> Przywróć</a>
-
-            <div v-if="comment.user.id !== user.id" class="dropdown-divider"></div>
+            <a v-else @click="restoreItem" class="dropdown-item" href="javascript:">
+              <vue-icon name="microblogCommentRestore"/>
+              Przywróć
+            </a>
+            <div v-if="comment.user.id !== user.id" class="dropdown-divider"/>
           </template>
-
           <a v-if="comment.user.id !== user.id" @click="block(comment.user)" href="javascript:" class="dropdown-item">
-            <i class="fas fa-fw fa-user-slash"></i>
+            <vue-icon name="microblogCommentBlockAuthor"/>
             Zablokuj użytkownika
           </a>
         </div>
@@ -114,6 +116,7 @@ import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from "../../store/index";
 import VueAvatar from '../avatar.vue';
 import VueFlag from '../flags/flag.vue';
+import VueIcon from "../icon";
 import {MicroblogMixin} from "../mixins/microblog";
 import mixins from '../mixins/user.js';
 import VueUserName from '../user-name.vue';
@@ -124,6 +127,7 @@ export default {
   mixins: [mixins, MicroblogMixin],
   store,
   components: {
+    VueIcon,
     'vue-avatar': VueAvatar,
     'vue-username': VueUserName,
     'vue-comment-form': VueCommentForm,

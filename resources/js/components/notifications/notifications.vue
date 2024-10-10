@@ -2,32 +2,27 @@
   <li :class="{'open': isOpen}" v-click-away="hideDropdown">
     <a @click.prevent="toggleDropdown" href="/User/Notifications" class="nav-link" role="button" aria-haspopup="true" aria-expanded="false">
       <span v-show="count > 0" class="badge">{{ count }}</span>
-
-      <i class="fas fa-bell fa-fw"></i>
+      <vue-icon name="navigationNotifications"/>
     </a>
-
     <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-end">
       <div class="dropdown-header">
-        <div v-if="unreadNotifications.length > 0" class="float-end">
+        <div v-if="!isEmpty" class="float-end">
           <a @click="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="me-1">
-            <i class="fas fa-up-right-from-square"></i>
+            <vue-icon name="notificationsOpenInNewTab"/>
           </a>
-
           <a @click="markAllAsRead" title="Oznacz jako przeczytane" href="javascript:">
-            <i class="far fa-eye"></i>
+            <vue-icon name="notificationsMarkAllAsRead"/>
           </a>
         </div>
-
-        <a title="Przejdź do listy powiadomień" href="/User/Notifications">Powiadomienia</a>
+        <a title="Przejdź do listy powiadomień" href="/User/Notifications">
+          Powiadomienia
+        </a>
       </div>
-
       <perfect-scrollbar ref="scrollbar" class="dropdown-modal" :options="{wheelPropagation: false}">
         <div v-if="notifications === null" class="text-center p-3">
-          <i class="fas fa-spinner fa-spin"></i>
+          <vue-icon name="notificationsLoading" spin/>
         </div>
-
-        <vue-notification v-for="notification in notifications" :notification="notification" :key="notification.id"></vue-notification>
-
+        <vue-notification v-for="notification in notifications" :notification="notification" :key="notification.id"/>
         <div class="text-center p-3 empty-placeholder" v-if="Array.isArray(notifications) && notifications.length === 0">
           Brak powiadomień.
         </div>
@@ -45,8 +40,8 @@ import DesktopNotifications from '../../libs/notifications';
 import {default as ws} from '../../libs/realtime';
 import Session from '../../libs/session.js';
 import store from '../../store';
+import VueIcon from "../icon";
 import PerfectScrollbar from '../perfect-scrollbar.js';
-
 import VueNotification from './notification.vue';
 
 function urlBase64ToUint8Array(base64String) {
@@ -65,10 +60,7 @@ function urlBase64ToUint8Array(base64String) {
 export default {
   name: 'VueNotifications',
   directives: {clickAway},
-  components: {
-    'perfect-scrollbar': PerfectScrollbar,
-    'vue-notification': VueNotification,
-  },
+  components: {VueIcon, PerfectScrollbar, VueNotification},
   store,
   data() {
     return {
