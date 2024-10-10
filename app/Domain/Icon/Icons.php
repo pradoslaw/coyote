@@ -42,4 +42,9 @@ readonly class Icons
         }
         throw new \InvalidArgumentException("Failed to find icon: $iconName");
     }
+
+    public function icons(): array
+    {
+        return $this->fa->icons();
+    }
 }

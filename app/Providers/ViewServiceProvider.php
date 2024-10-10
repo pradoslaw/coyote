@@ -2,6 +2,7 @@
 namespace Coyote\Providers;
 
 use Coyote\Domain\Clock;
+use Coyote\Domain\Icon\Icons;
 use Coyote\Domain\Survey\GuestSurvey;
 use Coyote\Domain\User\UserSettings;
 use Coyote\Http\Composers\InitialStateComposer;
@@ -46,6 +47,7 @@ class ViewServiceProvider extends ServiceProvider
                 'year'           => $clock->year(),
                 'survey'         => $this->survey($this->app[GuestSurvey::class]),
                 'currentUser'    => $this->currentUser(),
+                'icons'          => (new Icons)->icons(),
             ]);
         });
     }

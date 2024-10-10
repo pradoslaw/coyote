@@ -1,3 +1,4 @@
+import * as vueIconModule from "../../resources/js/components/icon.vue";
 import {notify} from "../../resources/js/toast";
 import SurveyScreen, {Experiment, type Screen} from "./screen/screen";
 import {ExperimentChoice} from "./screen/steps/participate";
@@ -105,7 +106,8 @@ export default {
       notify({
         type: 'success',
         title,
-        text: `<i class="fa-solid ${fontAwesomeIcon}"></i> ` + text,
+        // @ts-ignore
+        text: vueIconModule.iconHtml(fontAwesomeIcon) + ' ' + text,
       });
     },
   },

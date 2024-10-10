@@ -238,7 +238,8 @@
           {% if can('lock', forum) %}
             <li class="action-link">
               <a @click="lock" href="javascript:" title="Kliknij, aby zablokować wątek" rel="nofollow">
-                <i :class="{'fa-lock': !topic.is_locked, 'fa-unlock': topic.is_locked}" class="fa fa-lock fa-fw"></i>
+                <vue-icon name="topicActionUnlock" v-if="topic.is_locked"></vue-icon>
+                <vue-icon name="topicActionLock" v-else></vue-icon>
                 <span v-if="topic.is_locked">Odblokuj wątek</span>
                 <span v-else>Zablokuj wątek</span>
               </a>
