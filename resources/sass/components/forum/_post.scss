@@ -2,6 +2,7 @@
 @import "@fortawesome/fontawesome-free/scss/variables";
 @import "../../helpers/mixins";
 @import "../../helpers/variables";
+@import "../../icons/icons";
 
 .card-post {
   .card-body {
@@ -37,14 +38,12 @@
     opacity: .7;
   }
 
-  // mobile
   @include media-breakpoint-down(lg) {
     &.not-read {
       @include not-read-border();
     }
   }
 
-  // desktop version
   i.not-read {
     @include not-read-bullet;
 
@@ -266,9 +265,9 @@ blockquote {
     font-size: .8rem;
 
     &:before {
-      @include font-awesome($fa-var-reply);
+      @include content-icon-solid($icon-post-quote);
       color: $gray;
-      font-weight: 900;
+      position: absolute;
       top: 0;
       left: 0;
       opacity: 0.8;

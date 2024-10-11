@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@import "../icons/icons";
+
 .card {
   margin-bottom: 18px; // backward compatibility. in bootstrap 3 panel have margin-bottom
 }
@@ -37,7 +39,7 @@
 
 // panel wykorzystywany np. na forum czy w panelu usera.
 .card-wrapper {
-  box-shadow: inset 1px 1px #FFF;
+  box-shadow: inset 1px 1px #fff;
   background-color: #e2e7e1;
   border: 1px solid #c7c7c7;
 
@@ -58,9 +60,6 @@
   background-color: $secondary;
   border: 1px solid $card-border-color;
 }
-
-// Komponent uzywany do sortowania elementow znajdujacych sie w panelu
-// -----------------------------------------------------------------------
 
 #sort {
   list-style-type: none;
@@ -99,25 +98,19 @@
 
     &:after {
       position: absolute;
-      font-family: 'Font Awesome 6 Free';
       right: 9px;
       font-size: 14px;
-      font-weight: 900;
     }
   }
 
-  .asc {
-    &:after {
-      content: fa-content($fa-var-sort-up);
-      top: 7px;
-    }
+  .asc:after {
+    @include content-icon-solid($icon-category-sort-asc);
+    top: 7px;
   }
 
-  .desc {
-    &:after {
-      content: fa-content($fa-var-sort-down);
-      top: 2px;
-    }
+  .desc:after {
+    @include content-icon-solid($icon-category-sort-desc);
+    top: 2px;
   }
 }
 

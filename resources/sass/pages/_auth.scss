@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@import "../icons/icons";
+
 .btn-google, .btn-fb, .btn-github {
   width: 100%;
   border-radius: 4px;
@@ -73,20 +75,9 @@ $github-color: #60b044;
 
 #box-login-sidebar, #box-register-sidebar {
   blockquote {
-    font-style: italic;
-    padding: 0 0 0 30px;
     position: relative;
     border-left: none;
     font-size: $font-size-lg;
-    margin: 3% 0;
-
-    &:after {
-      @include font-awesome($fa-var-quote-right);
-      top: 0;
-      left: 0;
-      color: $card-border-color;
-      font-weight: 900;
-    }
   }
 }
 
@@ -107,12 +98,12 @@ $github-color: #60b044;
       padding: 10px 0 10px 25px;
       position: relative;
 
-      &:after {
+      &:before {
         color: $success;
+        position: absolute;
         left: 0;
         top: 10px;
-        font-weight: bold;
-        @include font-awesome($fa-var-check);
+        @include content-icon-solid($icon-register-benefit);
       }
     }
   }

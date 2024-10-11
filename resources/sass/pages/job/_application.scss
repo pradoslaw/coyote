@@ -1,34 +1,15 @@
-// Formularz wysylania aplikacji w odpowiedzi na oferty pracy
-// ---------------------------------
-
-#uploader {
-  background-color: #f8f8f8;
-  border: 2px dotted $card-border-color;
-  box-shadow: none;
-  position: relative;
-  padding-left: 30px;
-  cursor: pointer;
-  font-size: $font-size-sm;
-
-  &:before {
-    @include font-awesome($fa-var-file-pdf);
-    top: 3px;
-    left: 10px;
-    font-size: 14px;
-    font-weight: 400;
-  }
-}
+@import "../../icons/icons";
 
 .github {
   position: relative;
 
   &:before {
-    @include font-awesome($fa-var-github);
+    @include content-icon-brand($icon-application-github-profile);
+    position: absolute;
     top: 40px;
     left: 10px;
     font-size: 15px;
     color: $gray-light;
-    font-family: 'Font Awesome 6 Brands';
   }
 
   input {
