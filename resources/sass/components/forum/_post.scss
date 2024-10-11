@@ -216,22 +216,8 @@
   line-height: 120%;
 }
 
-.vote-up {
-  .fas.fa-thumbs-up {
-    display: none;
-  }
-}
-
 .vote-up.on {
   color: $primary;
-
-  .fas.fa-thumbs-up {
-    display: inline-block;
-  }
-
-  .far.fa-thumbs-up {
-    display: none;
-  }
 }
 
 .vote-up, .vote-count {
