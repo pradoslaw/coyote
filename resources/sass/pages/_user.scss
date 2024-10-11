@@ -147,35 +147,6 @@
 }
 
 #js-skills {
-  .rate {
-    display: inline-block;
-    width: 1.28571429em;
-
-    &:before {
-      font-family: 'Font Awesome 6 Free';
-      font-weight: 400;
-      content: fa-content($fa-var-star);
-    }
-
-    &:hover {
-      text-decoration: none;
-    }
-  }
-
-  .rate-large {
-    cursor: pointer;
-
-    &:before {
-      font-size: $font-size-lg;
-    }
-  }
-
-  .rate.marked {
-    &:before {
-      font-weight: 900;
-    }
-  }
-
   .form-group:last-child {
     margin-bottom: 0;
   }
