@@ -71,11 +71,8 @@
     margin: 18px 0 17px 20px;
 
     &:after {
-      @include font-awesome($fa-var-quote-left);
-      top: 0;
-      left: 0;
+      @include content-icon-solid($icon-job-offer-company-headline);
       color: $gray-light;
-      font-weight: 900;
     }
   }
 

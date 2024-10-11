@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+@import "@fortawesome/fontawesome-free/scss/functions";
+@import "@fortawesome/fontawesome-free/scss/variables";
+
+@mixin content-icon($icon) { // regular
+  font-family: 'Font Awesome 6 Free';
+  content: fa-content($icon);
+  font-weight: 400;
+}
+
+@mixin content-icon-solid($icon) {
+  font-family: 'Font Awesome 6 Free';
+  content: fa-content($icon);
+  font-weight: 900;
+}
+
+@mixin content-icon-brand($icon) {
+  font-family: 'Font Awesome 6 Brands';
+  content: fa-content($icon);
+  font-weight: 400;
+}
+
+$icon-post-quote: $fa-var-reply;
+
+$icon-profile-statement: $fa-var-quote-left;
+$icon-wiki-author-statement: $fa-var-quote-left;
+
+$icon-application-github-profile: $fa-var-github;
+$icon-job-board-search-tag-remove: $fa-var-xmark;
+$icon-wiki-categories: $fa-var-folder-open;
+
+$icon-job-offer-company-headline: $fa-var-quote-left;
+$icon-register-benefit: $fa-var-check;
+
+$icon-category-topic-mark-as-read: $fa-var-eye;
+
+$icon-category-sort-asc: $fa-var-sort-up;
+$icon-category-sort-desc: $fa-var-sort-down;
+
+$icon-admin-table-sort: $fa-var-sort;
+$icon-admin-table-sort-asc: $fa-var-sort-down;
+$icon-admin-table-sort-desc: $fa-var-sort-up;

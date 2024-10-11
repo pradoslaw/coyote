@@ -1,3 +1,5 @@
+@import "../../icons/icons";
+
 .table tr.strikeout {
   td {
     text-decoration:line-through;
@@ -13,21 +15,20 @@
   }
 
   &:before {
-    font-family: 'Font Awesome 6 Free';
     float: right;
-    content: $fa-var-sort;
+    @include content-icon-solid($icon-admin-table-sort);
   }
 }
 
 .table th a.sort.asc {
   &:before {
-    content: $fa-var-sort-down;
+    @include content-icon-solid($icon-admin-table-sort-asc);
   }
 }
 
 .table th a.sort.desc {
   &:before {
-    content: $fa-var-sort-up;
+    @include content-icon-solid($icon-admin-table-sort-desc);
   }
 }
 

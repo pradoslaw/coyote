@@ -1,3 +1,5 @@
+@import "../../icons/icons";
+
 .card-topics {
   margin-bottom: 25px;
 
@@ -134,8 +136,8 @@
 
 a.not-read {
   &:hover:before {
-    @include font-awesome($fa-var-eye);
-
+    @include content-icon($icon-category-topic-mark-as-read);
+    position: absolute;
     display: flex;
     cursor: pointer;
     border-radius: $border-radius;

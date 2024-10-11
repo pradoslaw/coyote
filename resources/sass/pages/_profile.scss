@@ -1,21 +1,19 @@
 @charset "UTF-8";
 
+@import "../icons/icons";
+
 #user-nav-tabs {
   margin: 20px 0;
 }
 
 .statement {
-  padding: 0 0 0 30px;
   position: relative;
   font-size: 14px;
   margin: 20px 0 17px 2px;
 
-  &:after {
-    @include font-awesome($fa-var-quote-left);
-    top: 0;
-    left: 0;
+  &:before {
+    @include content-icon-solid($icon-profile-statement);
     color: $gray-light;
-    font-weight: 600;
   }
 }
 

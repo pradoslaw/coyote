@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@import "../icons/icons";
+
 .link-broken {
   color: $alt-link-hover-color !important;
   border-bottom: 1px dotted $alt-link-hover-color;
@@ -39,8 +41,7 @@
       @include text-truncate();
 
       &:before {
-        @include font-awesome($fa-var-folder-open);
-        font-weight: 400;
+        @include content-icon($icon-wiki-categories);
         left: 0;
       }
 
@@ -124,9 +125,8 @@ article > header {
     margin: 0;
 
     &:before {
-      @include font-awesome($fa-var-quote-left);
+      @include content-icon-solid($icon-wiki-author-statement);
       left: 0;
-      font-weight: 900;
       color: $gray-light;
     }
   }
