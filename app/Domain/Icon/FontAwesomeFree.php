@@ -506,6 +506,11 @@ readonly class FontAwesomeFree
             // footer
             'footerContactUs'                           => 'fa fa-circle-info',
             'footerPromoteFacebook'                     => 'fab fa-facebook',
+
+            // theme toggle
+            'themeToggleDark'                           => 'fas fa-moon',
+            'themeToggleLight'                          => 'fas fa-sun',
+            'themeToggleSystem'                         => 'fas fa-display',
         ];
     }
 }

@@ -502,6 +502,11 @@ readonly class FontAwesomePro
             // footer
             'footerContactUs'                           => 'fa-light fa-circle-info',
             'footerPromoteFacebook'                     => 'fa-brand fa-facebook',
+
+            // theme toggle
+            'themeToggleDark'                           => 'fa-light fa-moon',
+            'themeToggleLight'                          => 'fa-light fa-sun',
+            'themeToggleSystem'                         => 'fa-light fa-display',
         ];
     }
 }

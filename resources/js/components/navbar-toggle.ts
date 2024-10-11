@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import clickAway from "../clickAway.js";
+import VueIcon from "../components/icon";
 import store from "../store/index";
 import {createVueApp} from "../vue";
 
@@ -53,18 +54,19 @@ if (isDarkThemeWip) {
   colorScheme = 'light';
 }
 
-const VueIcon = {
+const VueToggleIcon = {
   props: ['icon', 'className'],
+  components: {VueIcon},
   data() {
     return {
       icons: {
-        'dark-theme': 'fas fa-moon',
-        'light-theme': 'fas fa-sun',
-        'system-theme': 'fas fa-display',
+        'dark-theme': 'themeToggleDark',
+        'light-theme': 'themeToggleLight',
+        'system-theme': 'themeToggleSystem',
       },
     };
   },
-  template: `<i :class="['fa-fw', icons[this.$props.icon], this.$props.className]"/>`,
+  template: '<vue-icon :name="icons[this.$props.icon]"/>',
 };
 
 function systemColorSchemeDark(): boolean {
@@ -91,7 +93,7 @@ type Theme = 'light' | 'dark' | 'system';
 
 createVueApp('NonAlertControls', '#non-alert-controls', {
   components: {
-    'vue-icon': VueIcon,
+    'vue-toggle-icon': VueToggleIcon,
   },
   data() {
     return {
@@ -150,12 +152,12 @@ createVueApp('NonAlertControls', '#non-alert-controls', {
   template: `
     <div :class="['d-flex', 'align-items-center', 'h-100']" v-click-away="close">
       <span :class="['position-relative', 'px-2', 'py-2', 'btn-toggle-theme', {open}]" @click="toggleOpen" v-if="toggleEnabled" style="cursor:pointer;">
-        <vue-icon :icon="oppositeIcon"/>
+        <vue-toggle-icon :icon="oppositeIcon"/>
         <div class="dropdown-menu dropdown-menu-end" style="display:block" v-show="open">
           <span v-for="(item, itemTheme, index) in items"
                 :class="['dropdown-item', {active: itemTheme === theme}]"
                 @click="event => toggleTheme(event, itemTheme)">
-            <vue-icon :icon="item.icon" className="me-1"/>
+            <vue-toggle-icon :icon="item.icon" className="me-1"/>
             {{ item.title }}
             <span v-if="index === 2" style="opacity:0.75">
               {{ systemThemeTitle }}
