@@ -236,12 +236,12 @@
                 <vue-icon name="postSubscribed"/>
               </span>
               <vue-icon v-else name="postSubscribe"/>
-              <span class="d-none d-sm-inline">Obserwuj</span>
+              <span class="d-none d-sm-inline ms-1">Obserwuj</span>
             </button>
 
             <button class="btn btn-sm" ref="shareButton">
               <vue-icon name="postShare"/>
-              <span class="d-none d-sm-inline">Udostępnij</span>
+              <span class="d-none d-sm-inline ms-1">Udostępnij</span>
             </button>
 
             <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
@@ -249,7 +249,7 @@
                 <vue-icon name="postCommentActive"/>
               </span>
               <vue-icon v-else name="postComment"/>
-              <span class="d-none d-sm-inline">Komentuj</span>
+              <span class="d-none d-sm-inline ms-1">Komentuj</span>
             </button>
           </div>
 
@@ -261,13 +261,13 @@
               <template v-else>
                 <vue-icon name="postEdit"/>
               </template>
-              <span class="d-none d-sm-inline">Edytuj</span>
+              <span class="d-none d-sm-inline ms-1">Edytuj</span>
             </button>
 
             <template v-if="post.permissions.delete">
               <button v-if="!post.deleted_at" @click="deletePost(true)" class="btn btn-sm">
                 <vue-icon name="postDelete"/>
-                <span class="d-none d-sm-inline">Usuń</span>
+                <span class="d-none d-sm-inline ms-1">Usuń</span>
               </button>
               <button v-else class="btn btn-sm" @click="restore">
                 <vue-icon name="postRestore"/>
@@ -282,12 +282,12 @@
 
               <button @click="$emit('reply', post, false)" class="btn btn-sm" title="Dodaj cytat do pola odpowiedzi">
                 <vue-icon name="postAnswerQuote"/>
-                <span class="d-none d-sm-inline">Odpowiedz</span>
+                <span class="d-none d-sm-inline ms-1">Odpowiedz</span>
               </button>
 
               <a href="javascript:" :data-metadata="post.metadata" :data-url="post.url" class="btn btn-sm">
                 <vue-icon name="postReport"/>
-                <span class="d-none d-sm-inline">Zgłoś</span>
+                <span class="d-none d-sm-inline ms-1">Zgłoś</span>
               </a>
             </template>
 

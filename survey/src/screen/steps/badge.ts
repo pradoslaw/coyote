@@ -28,7 +28,7 @@ export default {
         </div>
         <span v-if="long" class="ms-2">Zmieniaj forum na lepsze!</span>
         <button class="btn btn-primary btn-engage ms-2" :class="{narrow:!long}" @click="engage">
-          <vue-icon name="surveyExperimentOpen"/>
+          <vue-icon name="surveyExperimentOpen" class="me-1"/>
           <template v-if="long">Testuj</template>
         </button>
       </div>
