@@ -34,6 +34,10 @@ readonly class FontAwesomeFree
             'forumNews'                                 => 'fas fa-star',
             'viewersOnlineLocal'                        => 'fas fa-eye',
             'viewersOnlineGlobal'                       => 'fas fa-users',
+            'homepageActivityMicroblog'                 => 'far fa-person',
+            'homepageActivityPostComment'               => 'far fa-comments',
+            'homepageActivityTopic'                     => 'far fa-file',
+            'homepageActivityPost'                      => 'far fa-file-lines',
 
             // microblog page
             'recommendedUsers'                          => 'fas fa-tag',

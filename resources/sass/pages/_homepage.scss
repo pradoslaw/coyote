@@ -119,7 +119,7 @@
       margin-top: 15px;
     }
 
-    span {
+    .homepage-activity {
       box-shadow: 0 1px 2px #ccc;
       border-radius: 50%;
       border: 1px solid $card-border-color;
@@ -130,10 +130,8 @@
       left: -11px;
       top: 8px;
 
-      &:after {
-        font-family: 'Font Awesome 6 Free';
-        display: block;
-        margin-top: 1px;
+      .activity-icon {
+        margin-top: 2px;
         text-align: center;
         color: $gray-light;
       }
@@ -141,23 +139,6 @@
       &::selection {
         text-shadow: none;
       }
-    }
-
-    span.microblog:after {
-      content: fa-content($fa-var-person);
-    }
-
-    span.comment:after {
-      content: fa-content($fa-var-comments);
-    }
-
-    span.topic:after {
-      content: fa-content($fa-var-file);
-      font-weight: 400;
-    }
-
-    span.post:after {
-      content: fa-content($fa-var-file-lines);
     }
 
     @include media-breakpoint-down(md) {
