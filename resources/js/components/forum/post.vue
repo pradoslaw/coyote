@@ -165,8 +165,9 @@
           <div v-if="post.edit_count" class="edit-info">
             <strong>
               <a class="btn-history"
-                 :title="post.permissions.update ? 'Zobacz historię zmian tego posta' : ''"
-                 :href="post.permissions.update ? `/Forum/Post/Log/${post.id}` : ''">
+                 title="Zobacz historię zmian tego posta"
+                 :href="'/Forum/Post/Log/' + post.id"
+                 v-if="post.permissions.update">
                 <vue-icon name="postEditHistoryShow"/>
               </a>
               edytowany {{ post.edit_count }}x,
