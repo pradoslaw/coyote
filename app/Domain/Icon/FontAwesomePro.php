@@ -12,7 +12,8 @@ readonly class FontAwesomePro
         $genericUploading = $faSpinner;
         $genericLoading = $faSpinner;
         $genericClose = $faCross;
-        $genericDropdown = 'fa-light fa-ellipsis';
+        $genericDropdown = 'fa-regular fa-ellipsis';
+        $genericDropdownVertical = 'fa-regular fa-ellipsis-vertical';
 
         return [
             // global
@@ -29,9 +30,9 @@ readonly class FontAwesomePro
             'loginGithub'                               => 'fa-brand fa-github',
 
             // homepage
-            'microblogsPopular'                         => 'fa-light fa-comments',
-            'reputationRanking'                         => 'fa-light fa-star',
-            'forumNews'                                 => 'fa-light fa-star',
+            'microblogsPopular'                         => 'fa-light fa-fire-flame-curved',
+            'reputationRanking'                         => 'fa-light fa-trophy',
+            'forumNews'                                 => 'fa-light fa-inbox-in',
             'viewersOnlineLocal'                        => 'fa-light fa-eye',
             'viewersOnlineGlobal'                       => 'fa-light fa-users',
             'homepageActivityMicroblog'                 => 'fa-light fa-person',
@@ -40,7 +41,7 @@ readonly class FontAwesomePro
             'homepageActivityPost'                      => 'fa-light fa-file-lines',
 
             // microblog page
-            'recommendedUsers'                          => 'fa-light fa-tag',
+            'recommendedUsers'                          => 'fa-light fa-user-plus',
 
             // microblog
             'microblogNew'                              => 'fa-light fa-plus',
@@ -52,22 +53,22 @@ readonly class FontAwesomePro
             'microblogVoted'                            => 'fa-solid fa-thumbs-up',
             'microblogSubscribe'                        => 'fa-light fa-bell',
             'microblogSubscribed'                       => 'fa-solid fa-bell',
-            'microblogFoldedUnfold'                     => 'fa-light fa-circle-right',
+            'microblogFoldedUnfold'                     => 'fa-light fa-circle-ellipsis',
             'microblogCommentsFoldedUnfold'             => 'fa-light fa-comments',
-            'microblogBlockAuthor'                      => 'fa-light fa-user-slash',
-            'microblogEdit'                             => 'fa-light fa-pen-to-square',
+            'microblogBlockAuthor'                      => 'fa-light fa-lock',
+            'microblogEdit'                             => 'fa-light fa-edit',
             'microblogDelete'                           => 'fa-light fa-trash-can',
-            'microblogRestore'                          => 'fa-light fa-trash-arrow-up',
-            'microblogSponsored'                        => 'fa-light fa-dollar-sign',
+            'microblogRestore'                          => 'fa-light fa-trash-can-undo',
+            'microblogSponsored'                        => 'fa-light fa-circle-dollar',
             'microblogMenuDropdown'                     => $genericDropdown,
 
             // microblog comment
-            'microblogCommentEdit'                      => 'fa-light fa-pen-to-square',
+            'microblogCommentEdit'                      => 'fa-light fa-edit',
             'microblogCommentDelete'                    => 'fa-light fa-trash-can',
-            'microblogCommentRestore'                   => 'fa-light fa-trash-arrow-up',
-            'microblogCommentBlockAuthor'               => 'fa-light fa-user-slash',
+            'microblogCommentRestore'                   => 'fa-light fa-trash-can-undo',
+            'microblogCommentBlockAuthor'               => 'fa-light fa-lock',
             'microblogCommentNewSave'                   => 'fa-light fa-share-from-square',
-            'microblogCommentMenuEditRemove'            => 'fa-light fa-bars',
+            'microblogCommentMenuEditRemove'            => 'fa-light fa-bars', // deprecated 
             'microblogCommentMenuAnswerFlag'            => $genericDropdown,
 
             // navigation dropdown
@@ -75,7 +76,7 @@ readonly class FontAwesomePro
             'userProfile'                               => 'fa-light fa-user',
             'privateMessages'                           => 'fa-light fa-envelope',
             'userAccount'                               => 'fa-light fa-gear',
-            'help'                                      => 'fa-light fa-circle-info',
+            'help'                                      => 'fa-light fa-square-question',
             'adminPanel'                                => 'fa-light fa-user-tie',
             'logout'                                    => 'fa-light fa-right-from-bracket',
 
@@ -116,7 +117,7 @@ readonly class FontAwesomePro
             'userAccount.accountDelete'                 => 'fa-light fa-trash-can',
 
             // following user
-            'userFollow'                                => $faTick,
+            'userFollow'                                => 'fa-light fa-bell',
 
             // report
             'reportType.spam'                           => 'fa-light fa-envelopes-bulk',
@@ -132,8 +133,8 @@ readonly class FontAwesomePro
             'categorySectionFolded'                     => 'fa-light fa-square-plus',
             'categorySectionFold'                       => 'fa-light fa-square-minus',
             'categorySectionMarkAsRead'                 => 'fa-light fa-eye',
-            'categorySectionMoveUp'                     => 'fa-light fa-caret-up',
-            'categorySectionMoveDown'                   => 'fa-light fa-caret-down',
+            'categorySectionMoveUp'                     => 'fa-solid fa-caret-up',
+            'categorySectionMoveDown'                   => 'fa-solid fa-caret-down',
             'categorySectionChildWasRead'               => 'fa-light fa-file',
             'categorySectionChildWasNotRead'            => null, // icon generated by css
 
@@ -144,7 +145,7 @@ readonly class FontAwesomePro
             // autocomplete
             'autocompleteUserShowProfile'               => 'fa-light fa-user',
             'autocompleteUserPrivateMessage'            => 'fa-light fa-comment',
-            'autocompleteUserFindPosts'                 => 'fa-light fa-magnifying-glass',
+            'autocompleteUserFindPosts'                 => 'fa-light fa-user-magnifying-glass',
             'autocompleteUserNoAvatar'                  => 'fa-light fa-user',
             'autocompleteSearch'                        => 'fa-light fa-magnifying-glass',
 
@@ -152,6 +153,7 @@ readonly class FontAwesomePro
             'tag'                                       => 'fa-light fa-tag',
             'tagRemove'                                 => $genericClose,
             'tagRank'                                   => 'fa-light fa-circle',
+            'tagRanked'                                 => 'fa-solid fa-circle',
             'tagPopularInclude'                         => 'fa-light fa-plus',
             'tagPopularMore'                            => 'fa-light fa-plus',
 
@@ -218,14 +220,14 @@ readonly class FontAwesomePro
             'errorPageNeedHelp'                         => 'fa-light fa-asterisk',
 
             // tags
-            'tagsSubscribed'                            => 'fa-light fa-tag',
+            'tagsSubscribed'                            => 'fa-light fa-tags',
             'tagsSubscribedEdit'                        => 'fa-light fa-gear',
-            'tagsPopularForum'                          => 'fa-light fa-tag',
-            'tagsPopularMicroblog'                      => 'fa-light fa-tag',
+            'tagsPopularForum'                          => 'fa-light fa-tags',
+            'tagsPopularMicroblog'                      => 'fa-light fa-tags',
             'tagsPopularLanguage'                       => 'fa-light fa-wrench',
 
             // forum
-            'forumSidebarMobileMenu'                    => 'fa-light fa-ellipsis-vertical',
+            'forumSidebarMobileMenu'                    => $genericDropdownVertical,
             'forumChangeCategory'                       => 'fa-light fa-circle-arrow-right',
             'forumActions'                              => 'fa-light fa-circle-dot',
             'forumGlobalMarkAsRead'                     => 'fa-light fa-eye',
@@ -235,15 +237,15 @@ readonly class FontAwesomePro
             // topic
             'topicSubscribe'                            => 'fa-light fa-bell',
             'topicSubscribed'                           => 'fa-solid fa-bell',
-            'topicLog'                                  => 'fa-light fa-chart-pie',
+            'topicLog'                                  => 'fa-light fa-list-check',
             'topicGoToBeginning'                        => 'fa-light fa-backward-fast',
             'topicLogBackToTopic'                       => 'fa-light fa-backward-step',
-            'topicActionRename'                         => 'fa-light fa-pencil',
+            'topicActionRename'                         => 'fa-light fa-pen-line',
             'topicActionMove'                           => 'fa-light fa-circle-arrow-right',
             'topicActionLock'                           => 'fa-light fa-lock',
             'topicActionUnlock'                         => 'fa-light fa-unlock',
             'topicAccepted'                             => $faTick,
-            'topicReported'                             => 'fa-light fa-fire',
+            'topicReported'                             => 'fa-light fa-flag',
             'topicStateSticky'                          => 'fa-light fa-thumbtack',
             'topicStateLocked'                          => 'fa-light fa-lock',
             'topicStateStandard'                        => 'fa-light fa-comments',
@@ -270,10 +272,10 @@ readonly class FontAwesomePro
             'postDelete'                                => 'fa-light fa-trash-can',
             'postRestore'                               => 'fa-light fa-arrow-rotate-left',
             'postMentionAuthor'                         => 'fa-light fa-at',
-            'postAnswerQuote'                           => 'fa-light fa-quote-left',
+            'postAnswerQuote'                           => 'fa-light fa-comment',
             'postReport'                                => 'fa-light fa-flag',
             'postMenuDropdown'                          => $genericDropdown,
-            'postMergeWithPrevious'                     => 'fa-light fa-compress',
+            'postMergeWithPrevious'                     => 'fa-light fa-arrow-up-from-bracket',
             'postBanAuthor'                             => 'fa-light fa-user-slash',
             'postDeleted'                               => 'fa-light fa-trash-can',
             'postAuthorBlocked'                         => 'fa-light fa-user-slash',
@@ -307,12 +309,12 @@ readonly class FontAwesomePro
             'profileReputationLose'                     => 'fa-light fa-level-down',
             'profileActions'                            => 'fa-light fa-handshake-simple',
             'profileUserSendMessage'                    => 'fa-light fa-envelope',
-            'profileUserFindPosts'                      => 'fa-light fa-magnifying-glass',
+            'profileUserFindPosts'                      => 'fa-light fa-user-magnifying-glass',
             'profileUserBan'                            => 'fa-light fa-user-lock',
             'profileUserShowInAdmin'                    => 'fa-light fa-eye',
             'profileMenuDropdown'                       => $genericDropdown,
-            'profileUserBlock'                          => 'fa-light fa-user-slash',
-            'profileUserUnblock'                        => 'fa-light fa-user',
+            'profileUserBlock'                          => 'fa-light fa-lock',
+            'profileUserUnblock'                        => 'fa-light fa-unlock',
             'profileUserResidence'                      => 'fa-light fa-location-dot',
             'profileUserWebsite'                        => 'fa-light fa-globe',
             'profileUserGithub'                         => 'fa-brand fa-github',
@@ -362,10 +364,11 @@ readonly class FontAwesomePro
             'jobOfferPublishDate'                       => 'fa-light fa-calendar-days',
             'jobOfferRemove'                            => 'fa-light fa-trash-can',
             'jobOfferReport'                            => 'fa-light fa-flag',
-            'jobOfferRequirementProgress'               => 'fa-light fa-circle',
+            'jobOfferRequirementRank'                   => 'fa-light fa-circle',
+            'jobOfferRequirementRanked'                 => 'fa-solid fa-circle',
             'jobOfferSeniority'                         => 'fa-light fa-fw fa-chart-line',
-            'jobOfferSubscribe'                         => 'fa-light fa-bell',
-            'jobOfferSubscribed'                        => 'fa-solid fa-bell',
+            'jobOfferSubscribe'                         => 'fa-light fa-heart',
+            'jobOfferSubscribed'                        => 'fa-solid fa-heart',
             'jobOfferViews'                             => 'fa-light fa-eye',
             'jobOfferCompanyEmployees'                  => 'fa-light fa-users',
             'jobOfferCompanyEstablishmentYear'          => 'fa-light fa-calendar',
@@ -505,7 +508,7 @@ readonly class FontAwesomePro
 
             // theme toggle
             'themeToggleDark'                           => 'fa-light fa-moon',
-            'themeToggleLight'                          => 'fa-light fa-sun',
+            'themeToggleLight'                          => 'fa-light fa-sun-bright',
             'themeToggleSystem'                         => 'fa-light fa-display',
         ];
     }

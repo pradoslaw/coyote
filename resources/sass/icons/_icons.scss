@@ -75,3 +75,61 @@ $icon-category-sort-desc: $fa-var-sort-down;
 $icon-admin-table-sort: $fa-var-sort;
 $icon-admin-table-sort-asc: $fa-var-sort-down;
 $icon-admin-table-sort-desc: $fa-var-sort-up;
+
+.fa-square-question:before {
+  content: "\f2fd";
+}
+
+.fa-message-quote:before {
+  content: "\e1e4";
+}
+
+.fa-inbox-in:before {
+  content: "\f310";
+}
+
+.fa-user-unlock:before {
+  content: "\e058";
+}
+
+.fa-user-magnifying-glass:before {
+  content: "\e5c5";
+}
+
+.fa-floppy-disk-pen:before {
+  content: "\e182";
+}
+
+.fa-pen-line:before {
+  content: "\e212";
+}
+
+.fa-arrow-up-from-line:before {
+  content: "\f342";
+}
+
+.fa-arrow-up-from-bracket:before {
+  content: "\e09a";
+}
+
+.fa-circle-ellipsis:before {
+  content: "\e10a";
+}
+
+.fa-trash-can-arrow-turn-left:before,
+.fa-trash-can-undo:before,
+.fa-trash-undo-alt:before,
+{
+  content: "\f896";
+}
+
+.fa-circle-dollar:before,
+.fa-dollar-circle:before,
+.fa-usd-circle:before,
+{
+  content: "\f2e8";
+}
+
+.fa-sun-alt:before, .fa-sun-bright:before {
+  content: "\e28f";
+}

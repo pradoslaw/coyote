@@ -15,7 +15,7 @@ class TwigExtensionTest extends TestCase
     public function iconTickMark(): void
     {
         $this->assertSame(
-            '<i class="fa-light fa-check fa-fw"></i>',
+            '<i class="fa-light fa-check fa-fw" data-icon="adminTickMark"></i>',
             $this->twig("{{ icon('adminTickMark') }}"));
     }
 
@@ -23,7 +23,7 @@ class TwigExtensionTest extends TestCase
     public function iconCrossMark(): void
     {
         $this->assertSame(
-            '<i class="fa-light fa-xmark fa-fw"></i>',
+            '<i class="fa-light fa-xmark fa-fw" data-icon="adminCrossMark"></i>',
             $this->twig("{{ icon('adminCrossMark') }}"));
     }
 
@@ -39,7 +39,7 @@ class TwigExtensionTest extends TestCase
     public function fontAwesomeSpin(): void
     {
         $this->assertSame(
-            '<i class="fa-light fa-xmark fa-fw fa-spin"></i>',
+            '<i class="fa-light fa-xmark fa-fw fa-spin" data-icon="adminCrossMark"></i>',
             $this->twig("{{ icon('adminCrossMark', {spin}) }}"));
     }
 

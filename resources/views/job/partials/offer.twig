@@ -101,11 +101,11 @@
                           {% for i in 1..3 %}
                             {% if tag.pivot.priority >= i %}
                               <span class="text-primary">
-                                {{ icon('jobOfferRequirementProgress') }}
+                                {{ icon('jobOfferRequirementRanked') }}
                               </span>
                             {% else %}
-                              <span class="text-muted">
-                                {{ icon('jobOfferRequirementProgress') }}
+                              <span >
+                                {{ icon('jobOfferRequirementRank') }}
                               </span>
                             {% endif %}
                           {% endfor %}
