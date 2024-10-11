@@ -6,11 +6,11 @@ use Coyote\Domain\StringHtml;
 
 readonly class Icons
 {
-    private FontAwesomeFree $fa;
+    private FontAwesomePro $fa;
 
     public function __construct()
     {
-        $this->fa = new FontAwesomeFree();
+        $this->fa = new FontAwesomePro();
     }
 
     public function icon(string $iconName): Html
