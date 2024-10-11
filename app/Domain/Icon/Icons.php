@@ -26,12 +26,12 @@ readonly class Icons
     private function iconWithClass(string $iconName, string $modifierClass): Html
     {
         $class = $this->iconClass($iconName);
-        return $this->iconTag("$class $modifierClass");
+        return $this->iconTag("$class $modifierClass", $iconName);
     }
 
-    private function iconTag(string $class): Html
+    private function iconTag(string $class, string $iconName): Html
     {
-        return new StringHtml(\sPrintF('<i class="%s"></i>', $class));
+        return new StringHtml(\sPrintF('<i class="%s" data-icon="%s"></i>', $class, $iconName));
     }
 
     private function iconClass(string $iconName): string

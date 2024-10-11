@@ -3,10 +3,12 @@
     <span
       v-for="i in max"
       :aria-label="tooltips[i - 1]"
-      :class="[{editable}, valueLocal < i ? 'text-muted' : 'text-primary']"
+      class="text-primary"
+      :class="{editable}"
       @click="setValue(i)"
       data-balloon-pos="down">
-      <vue-icon name="tagRank"/>
+      <vue-icon name="tagRank" v-if="valueLocal < i"/>
+      <vue-icon name="tagRanked" v-else/>
     </span>
   </div>
 </template>
