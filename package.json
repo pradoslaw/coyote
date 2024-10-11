@@ -11,6 +11,7 @@
     "@babel/preset-typescript": "^7.24.7",
     "@babel/runtime": "^7.24.8",
     "@fortawesome/fontawesome-free": "^6.6.0",
+    "@fortawesome/fontawesome-pro": "^6.6.0",
     "@kyvg/vue3-notification": "^3.3.0",
     "@popperjs/core": "^2.10.2",
     "@riddled/4play": "^1.18.8",

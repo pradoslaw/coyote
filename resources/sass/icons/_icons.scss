@@ -1,7 +1,15 @@
 @charset "UTF-8";
 
-@import "@fortawesome/fontawesome-free/scss/functions";
-@import "@fortawesome/fontawesome-free/scss/variables";
+$fa-font-path: "/fonts/font-awesome";
+
+@import "@fortawesome/fontawesome-pro/scss/fontawesome";
+@import "@fortawesome/fontawesome-pro/scss/solid";
+@import "@fortawesome/fontawesome-pro/scss/regular";
+@import "@fortawesome/fontawesome-pro/scss/light";
+@import "@fortawesome/fontawesome-pro/scss/brands";
+
+@import "@fortawesome/fontawesome-pro/scss/functions";
+@import "@fortawesome/fontawesome-pro/scss/variables";
 
 @mixin content-icon($icon) { // regular
   font-family: 'Font Awesome 6 Free';
