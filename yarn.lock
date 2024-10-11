@@ -1058,11 +1058,6 @@
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-6.6.0.tgz#0e984f0f2344ee513c185d87d77defac4c0c8224"
   integrity sha512-60G28ke/sXdtS9KZCpZSHHkCbdsOGEhIUGlwq6yhY74UpTiToIh8np7A8yphhM4BWsvNFtIvLpi4co+h9Mr9Ow==
 
-"@fortawesome/fontawesome-pro@^6.6.0":
-  version "6.6.0"
-  resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-pro/-/6.6.0/fontawesome-pro-6.6.0.tgz#be3e1f5745b94077b361204bd3d1bae2ab127334"
-  integrity sha512-I1Fp+yiUYrK0q0UMoO0o9ZEGa0CWhqr0UibM/gcrKl40uYUkVmSemQJPV8+uOJgo4dnOHnTOqIL0r6kcH2hZlQ==
-
 "@hapi/address@^4.0.1":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-4.1.0.tgz#d60c5c0d930e77456fdcde2598e77302e2955e1d"
