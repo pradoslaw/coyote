@@ -298,6 +298,10 @@ readonly class FontAwesomeFree
             "adminUserStatisticsLastMonth"              => "fas fa-calendar-days",
             "adminUserStatisticsLastWeek"               => "fas fa-calendar-week",
             "adminUserStatisticsLastYear"               => "far fa-calendar",
+
+            // footer
+            'footerContactUs'                           => 'fa fa-circle-info',
+            'footerPromoteFacebook'                     => 'fab fa-facebook',
         ];
     }
 }

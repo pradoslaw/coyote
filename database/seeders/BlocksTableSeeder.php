@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 
+use Coyote\Domain\Icon\Icons;
 use Illuminate\Database\Seeder;
 
 class BlocksTableSeeder extends Seeder
@@ -14,6 +15,10 @@ class BlocksTableSeeder extends Seeder
 
     private function addFooterBlock(): void
     {
+        $icons = new Icons();
+        $contactUs = $icons->icon('footerContactUs');
+        $promoteFacebook = $icons->icon('footerPromoteFacebook');
+
         $content = <<<EOF
 <div class="row max-width">
     <div class="col-md-2 col-sm-4">
@@ -70,8 +75,18 @@ class BlocksTableSeeder extends Seeder
             <h6>Skontaktuj się z nami</h6>
 
             <ol>
-                <li><a title="Skontaktuj się poprzez email" href="/Kontakt"><i class="fa fa-circle-info fa-fw"></i>  Napisz do nas</a></li>
-                <li><a title="Skontaktuj się poprzez email" href="https://www.facebook.com/4programmers.net"><i class="fab fa-facebook fa-fw"></i> Odwiedź nas na Facebooku</a></li>
+                <li>
+                    <a title="Skontaktuj się poprzez email" href="/Kontakt">
+                        $contactUs
+                        Napisz do nas
+                    </a>
+                </li>
+                <li>
+                    <a title="Skontaktuj się poprzez email" href="https://www.facebook.com/4programmers.net">
+                        $promoteFacebook 
+                        Odwiedź nas na Facebooku
+                    </a>
+                </li>
             </ol>
         </div>
     </div>
