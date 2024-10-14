@@ -181,30 +181,12 @@ export default {
     'vue-timeago': VueTimeAgo,
   },
   props: {
-    showTitleInput: {
-      type: Boolean,
-      default: false,
-    },
-    showTagsInput: {
-      type: Boolean,
-      default: false,
-    },
-    showStickyCheckbox: {
-      type: Boolean,
-      default: false,
-    },
-    requireTag: {
-      type: Boolean,
-      default: false,
-    },
-    popularTags: {
-      type: Array,
-      default: () => [],
-    },
-    post: {
-      type: Object,
-      required: true,
-    },
+    showTitleInput: {type: Boolean, default: false},
+    showTagsInput: {type: Boolean, default: false},
+    showStickyCheckbox: {type: Boolean, default: false},
+    requireTag: {type: Boolean, default: false},
+    popularTags: {type: Array, default: () => []},
+    post: {type: Object, required: true},
   },
   data() {
     return {
