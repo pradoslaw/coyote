@@ -24,8 +24,8 @@
         :show-sticky-checkbox="showStickyCheckbox"
         :post="undefinedPost"
         :popular-tags="popularTags"
-        require-tag="{{ forum.require_tag }}"
-        show-tags-input="{{ forum.enable_tags }}"
+        :require-tag="{{ vueBoolean(forum.require_tag) }}"
+        :show-tags-input="{{ vueBoolean(forum.enable_tags) }}"
         @save="redirectToTopic"
       ></vue-form>
       <vue-notifications></vue-notifications>

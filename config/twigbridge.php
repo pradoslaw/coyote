@@ -61,6 +61,7 @@ return [
             'Coyote\Services\TwigBridge\Extensions\FormBuilder',
             'Coyote\Services\TwigBridge\Extensions\Media',
             'Coyote\Services\TwigBridge\Extensions\Icon',
+            'Coyote\Services\TwigBridge\Extensions\Vue',
         ],
 
         /*
