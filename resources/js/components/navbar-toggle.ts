@@ -32,6 +32,7 @@ function setViewTheme(isDark: boolean): void {
 
 function setBodyTheme(isDark: boolean): void {
   document.querySelector('html')!.classList.toggle('theme-dark', isDark);
+  document.querySelector('html')!.classList.toggle('theme-light', !isDark);
   document.body.classList.toggle('theme-dark', isDark);
   document.body.classList.toggle('theme-light', !isDark);
 }

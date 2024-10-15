@@ -1,11 +1,23 @@
 @mixin light {
-  body.theme-light & {
+  @include scope(theme-light) {
     @content;
   }
 }
 
 @mixin dark {
-  body.theme-dark & {
+  @include scope(theme-dark) {
     @content;
+  }
+}
+
+@mixin scope($class) {
+  @if & {
+    html.#{$class} & {
+      @content;
+    }
+  } @else {
+    body.#{$class} {
+      @content;
+    }
   }
 }
