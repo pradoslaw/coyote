@@ -172,51 +172,49 @@
             Reputacja użytkowników
           </h4>
 
-          <div id="reputation-tabs" class="nav nav-panel card-tabs">
-            <a role="tab" data-bs-toggle="tab" href="#week"
-               class="nav-item {{ settings.reputationMode == 'week' ? 'active' }}">
-              <span>W tym tygodniu</span>
-            </a>
-            <a role="tab" data-bs-toggle="tab" href="#month"
-               class="nav-item {{ settings.reputationMode == 'month' ? 'active' }}">
-              <span>W tym miesiącu</span>
-            </a>
-            <a role="tab" data-bs-toggle="tab" href="#quarter"
-               class="nav-item {{ settings.reputationMode == 'quarter' ? 'active' }}">
-              <span>W tym kwartale</span>
-            </a>
-          </div>
-
           <div class="card card-default card-reputation tab-content">
-            {% for mode, items in reputation %}
-              <div id="{{ mode }}" role="tabpanel" class="card-body tab-pane {{ settings.reputationMode == mode ? 'active' }}">
-                {% for item in items %}
+            <div class="pt-2 px-3">
+              <div id="reputation-tabs" class="nav nav-pills">
+                <a data-bs-toggle="tab" href="#week" class="nav-link {{ settings.reputationMode == 'week' ? 'active' }}">
+                  <span>W tym tygodniu</span>
+                </a>
+                <a data-bs-toggle="tab" href="#month" class="nav-link {{ settings.reputationMode == 'month' ? 'active' }}">
+                  <span>W tym miesiącu</span>
+                </a>
+                <a data-bs-toggle="tab" href="#quarter" class="nav-link {{ settings.reputationMode == 'quarter' ? 'active' }}">
+                  <span>W tym kwartale</span>
+                </a>
+              </div>
+            </div>
+
+            {% for tab, users in reputation %}
+              <div id="{{ tab }}" role="tabpanel" class="card-body tab-pane {{ settings.reputationMode == tab ? 'active' }}">
+                {% for user in users %}
                   <div class="media">
                     <div class="me-2">
-                      <a href="{{ route('profile', [item.id]) }}">
-                        {{ user_avatar(item.photo, item.name,item) }}
-
+                      <a href="{{ route('profile', [user.id]) }}">
+                        {{ user_avatar(user.photo, user.name) }}
                       </a>
                     </div>
 
                     <div class="media-body">
                       <span class="mb-1 d-block">
-                        <a data-user-id="{{ item.id }}" href="{{ route('profile', [item.id]) }}" class="reputation-username">
-                          {{ item.name }}
+                        <a data-user-id="{{ user.id }}" href="{{ route('profile', [user.id]) }}" class="reputation-username">
+                          {{ user.name }}
                         </a>
                       </span>
 
                       <div class="progress">
                         <div class="progress-bar" role="progressbar"
-                             aria-valuenow="{{ item.percentage|round }}"
+                             aria-valuenow="{{ user.percentage|round }}"
                              aria-valuemin="0"
                              aria-valuemax="100"
-                             style="width: {{ item.percentage|round }}%;"></div>
+                             style="width: {{ user.percentage|round }}%;"></div>
 
                         <span class="rep">
-                          <strong>{{ item.reputation|number_format(0, '', ' ') }}</strong>
+                          <strong>{{ user.reputation|number_format(0, '', ' ') }}</strong>
                           <small>
-                            {{ declination(item.reputation, ['punkt', 'punkty', 'punktów'], true) }}
+                            {{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}
                           </small>
                         </span>
                       </div>

@@ -1,15 +1,20 @@
 body.theme-dark {
   .nav.nav-panel,
-  .card-tabs {
+  .nav.nav-pills,
+  {
     &:before,
     &:after {
       display: none;
     }
 
-    a.nav-item {
+    a.nav-item,
+    a.nav-link,
+    {
       color: #acacac;
-      border-color: #2f2f2f;
-      border-bottom: none;
+
+      &:hover {
+        color: #b2b2b2;
+      }
 
       &.active {
         background: #1a1a1a;
