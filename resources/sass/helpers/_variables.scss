@@ -8,7 +8,6 @@ $warning: #d98d0d;
 $danger: #d9534f;
 
 $body-bg: #fafafa;
-$text-color: #333; // @deprecated
 $body-color: #333;
 $code-color: rgba(51, 51, 51, .9);
 
@@ -52,7 +51,7 @@ $card-border-color: #ddd;
 
 $pagination-bg: #ddd;
 $pagination-disabled-bg: $gray-lighter;
-$pagination-color: $text-color;
+$pagination-color: $body-color;
 $pagination-border-width: 0;
 $pagination-active-color: #fff;
 $pagination-active-bg: $gray-dark;
@@ -62,7 +61,7 @@ $pagination-padding-x: .55rem;
 $dropdown-link-active-color: inherit;
 $dropdown-link-active-bg: inherit;
 
-$custom-control-indicator-checked-color: $text-color;
+$custom-control-indicator-checked-color: $body-color;
 $custom-control-indicator-checked-bg: #fff;
 $custom-control-indicator-checked-border-color: #adb5bd;
 
@@ -82,7 +81,6 @@ $progress-border-radius: 10px;
 
 $alert-border-width: 2px;
 
-
 // DEPRECATED!!!
 
 // nieco ciemniszy kolor linkow (w sytuacji gdy wiele linkow jest obok siebie domyslny kolor jest zbyt jasny)
@@ -99,22 +97,17 @@ $alt-link-hover-color: #d7661c;
 // kolor naglowka <h4> znajdujacego sie w elemencie .box (elementy sekcji)
 $box-header-color: #646466;
 
-// kolor tla dla nieprzeczytanych elementow
-$unread-bg: #fff3cd;
-// :hover dla nowych elementow (powiadomienia, wiadomosci)
-$unread-bg-hover: #ffdca5;
+$unread-bg: #fff3cd; // kolor tla dla nieprzeczytanych elementow
+$unread-bg-hover: #ffdca5; // :hover dla nowych elementow (powiadomienia, wiadomosci)
 
 // Tag clouds, tag dropdown list and tag editor
 // ----------------------------------------------
 
-//$tag-color:                   $text-color;
 $tag-color: $gray;
 $tag-bg: $gray-lighter;
-//$tag-bg:                      $pagination-bg;
 $tag-counter-color: lighten($tag-color, 10%);
 $tag-hover-color: $alt-link-hover-color;
 $tag-hover-bg: darken($gray-lighter, 2%);
-
 
 // Keyboard notation
 // ----------------------------------------------
