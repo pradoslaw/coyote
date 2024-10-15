@@ -8,19 +8,13 @@
 {% block container %}
   {{ render_block('homepage_banner') }}
 
-  <div class="row mt-4">
-    <div class="col-12">
-      <div class="box">
+  <div class="row">
+    <main class="col-md-8">
+      <section id="box-forum" class="box mt-4">
         <h2 class="h4">
           {{ icon('forumNews') }}
           Co nowego na forum?
         </h2>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <main class="col-md-8">
-      <section id="box-forum" class="box">
         <div class="card card-forum">
           <div class="card-body">
             <div class="row">
@@ -164,7 +158,7 @@
       </ul>
     </main>
 
-    <div class="col-md-4 position-relative">
+    <div class="col-md-4 position-relative mt-4">
       <aside class="sticky-aside">
         {{ render_block('homepage_banner_side') }}
 
