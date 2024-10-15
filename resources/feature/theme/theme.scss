@@ -1,0 +1,11 @@
+@mixin light {
+  body.theme-light & {
+    @content;
+  }
+}
+
+@mixin dark {
+  body.theme-dark & {
+    @content;
+  }
+}

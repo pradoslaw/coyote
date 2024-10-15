@@ -1,14 +1,4 @@
-@mixin dark {
-  body.theme-dark & {
-    @content;
-  }
-}
-
-@mixin light {
-  body.theme-light & {
-    @content;
-  }
-}
+@import "../theme/theme";
 
 .viewers-online {
   .viewer-pill {
