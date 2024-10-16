@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@import "bootstrap/scss/mixins/breakpoints";
+
 .nav {
   > li > a:focus {
     background-color: transparent;
@@ -75,9 +77,14 @@
 .nav-pills {
   border-bottom: 1px solid $card-border-color;
 
+  .nav-link {
+    color: #777777;
+  }
+
   .nav-link.active {
+    color: black;
+
     &, &:hover, &:focus, &:active {
-      font-weight: bold;
       border-bottom: 2px solid $alt-link-hover-color;
       margin-bottom: -1px;
     }
