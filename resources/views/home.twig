@@ -139,9 +139,7 @@
       <section id="js-microblog" class="box">
         <h4>
           {{ icon('microblogsPopular') }}
-          <a href="{{ route('microblog.home') }}">
-            Popularne wpisy na mikroblogu
-          </a>
+          Popularne wpisy na mikroblogu
         </h4>
         <vue-microblog
             v-for="microblog in microblogs" :key="microblog.id" :microblog="microblog"
