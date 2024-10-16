@@ -2,7 +2,7 @@
 {% set page_name = recipient.name ? 'Rozmowa z ' ~ recipient.name : 'Nowa wiadomość' %}
 
 {% block pm %}
-  <div v-if="!messages.length" class="row">
+  <div v-if="!messages.length" class="row mt-2">
     <div class="col-12">
       <vue-autocomplete
           ref="autocomplete"
