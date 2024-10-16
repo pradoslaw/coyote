@@ -15,51 +15,6 @@
   }
 }
 
-.nav-panel {
-  position: relative;
-  text-align: left;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  line-height: 24px;
-  height: 25px;
-  overflow: hidden;
-  font-family: 'Open Sans', Arial, sans-serif;
-
-  .nav-item {
-    border: 1px solid $card-border-color;
-    display: inline-block;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    padding: 0 20px;
-    cursor: pointer;
-    font-size: 11px;
-    text-decoration: none;
-    margin-right: -1px;
-
-    &.active {
-      background: #fff;
-      color: #333;
-      z-index: 1; // so that the nav background covers the seam between the tab and the content
-      border-bottom-color: #fff;
-    }
-
-    span {
-      color: $gray;
-      padding: 0;
-
-      &:hover {
-        background: transparent;
-      }
-    }
-  }
-}
-
-.nav-panel + .card {
-  border-top-left-radius: 0;
-  margin-top: -1px;
-}
-
 .nav-link {
   color: $gray-light;
 

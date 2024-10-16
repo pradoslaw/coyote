@@ -1,7 +1,5 @@
 body.theme-dark {
-  .nav.nav-panel,
-  .nav.nav-pills,
-  {
+  .nav.nav-pills {
     &:before,
     &:after {
       display: none;
