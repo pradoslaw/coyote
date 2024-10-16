@@ -4,45 +4,44 @@
 
 {% block container %}
   <div class="box">
-    <div class="nav nav-panel">
-      <a href="{{ url(wiki.path) }}" class="nav-item active">
-        <span>
-          {{ icon('wikiCategory') }}
-        </span>
-      </a>
-
-      {% if can('wiki-admin') or not wiki.is_locked %}
-        <a class="nav-item" href="{{ route('wiki.submit', [wiki.id]) }}" title="Kliknij, aby edytować ten artykuł">
-          <span>
-            Edycja
-            {% if wiki.is_locked %}
-              (strona zablokowana)
-            {% endif %}
-          </span>
-        </a>
-      {% endif %}
-
-      <a class="nav-item"
-         href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}"
-         title="Dodaj nową stronę w tej kategorii">
-        <span>Napisz nowy artykuł w tym dziale</span>
-      </a>
-
-      {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}
-      <a class="nav-item btn-subscribe {{ subscribed ? 'on' }}"
-         data-href="{{ route('wiki.subscribe', [wiki.id]) }}"
-         data-off="{{ labels[0] }}"
-         data-on="{{ labels[1] }}"
-         title="Obserwując tę stronę będziesz otrzymywał powiadomienia o jej zmianach">
-        <span>{{ labels[not subscribed] }}</span>
-      </a>
-
-      <a class="nav-item" href="{{ route('wiki.log', [wiki.id]) }}"><span>Historia i autorzy</span></a>
-    </div>
-
     <div class="card card-default">
       <div class="card-body">
-        <article>
+        <div class="nav nav-pills">
+          <a href="{{ url(wiki.path) }}" class="nav-link active">
+            <span>
+              {{ icon('wikiCategory') }}
+            </span>
+          </a>
+
+          {% if can('wiki-admin') or not wiki.is_locked %}
+            <a class="nav-link" href="{{ route('wiki.submit', [wiki.id]) }}" title="Kliknij, aby edytować ten artykuł">
+              <span>
+                Edycja
+                {% if wiki.is_locked %}
+                  (strona zablokowana)
+                {% endif %}
+              </span>
+            </a>
+          {% endif %}
+
+          <a class="nav-link"
+             href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}"
+             title="Dodaj nową stronę w tej kategorii">
+            <span>Napisz nowy artykuł w tym dziale</span>
+          </a>
+
+          {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}
+          <a class="nav-link btn-subscribe {{ subscribed ? 'on' }}"
+             data-href="{{ route('wiki.subscribe', [wiki.id]) }}"
+             data-off="{{ labels[0] }}"
+             data-on="{{ labels[1] }}"
+             title="Obserwując tę stronę będziesz otrzymywał powiadomienia o jej zmianach">
+            <span>{{ labels[not subscribed] }}</span>
+          </a>
+
+          <a class="nav-link" href="{{ route('wiki.log', [wiki.id]) }}"><span>Historia i autorzy</span></a>
+        </div>
+        <article class="mt-4">
           {% if can('wiki-admin') %}
             <div class="dropdown float-end">
               <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="comment-menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
