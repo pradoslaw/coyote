@@ -6,18 +6,18 @@
 {% block content %}
   <h2>Obserwowane strony</h2>
 
-  <ul class="nav nav-panel">
-    {% for tab in tabs.roots() %}
-      <li {{ forms.attr(tab.attr) }}>
-        <a href="{{ tab.url }}" style="color:inherit;">
-          {{ tab.title }}
-        </a>
-      </li>
-    {% endfor %}
-  </ul>
-
   <div class="card card-default">
     <div class="card-body">
+      <ul class="nav nav-pills">
+        {% for tab in tabs.roots() %}
+          <li {{ forms.attr(tab.attr) }}>
+            <a href="{{ tab.url }}" style="color:inherit;">
+              {{ tab.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+
       <nav class="d-flex justify-content-center mt-2 mb-2">
         {{ paginate|raw }}
       </nav>

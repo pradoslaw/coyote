@@ -75,7 +75,7 @@ class FavoritesController extends BaseController
         return $menu->make('favorites', function (Builder $menu) use ($menuItems) {
             foreach ($menuItems as $menuItem) {
                 $item = $menu->add($menuItem->title, ['route' => $menuItem->route]);
-                $item->attr(['class' => 'nav-item']);
+                $item->attr(['class' => 'nav-link']);
 
                 if ($menuItem->routeName === request()->route()->getName()) {
                     $item->active();
