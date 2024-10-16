@@ -1,5 +1,22 @@
 @charset "UTF-8";
 
+@import "bootstrap/scss/mixins/breakpoints";
+
+@mixin size($size) {
+  @if ($size == 'intermediate') {
+    @include media-breakpoint-only(sm) {
+      @content;
+    }
+    @include media-breakpoint-up(xxl) {
+      @content;
+    }
+  } @else {
+    @include media-breakpoint-up($size) {
+      @content;
+    }
+  }
+}
+
 .card-reputation {
   img, svg {
     width: 40px;
@@ -28,6 +45,20 @@
 
     &:last-child {
       border-bottom: none;
+    }
+  }
+
+  .long-name {
+    display: none;
+    @include size(intermediate) {
+      display: initial;
+    }
+  }
+
+  .short-name {
+    display: initial;
+    @include size(intermediate) {
+      display: none;
     }
   }
 }

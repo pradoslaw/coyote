@@ -176,13 +176,16 @@
             <div class="pt-2 px-3">
               <div id="reputation-tabs" class="nav nav-pills">
                 <a data-bs-toggle="tab" href="#week" class="nav-link {{ settings.reputationMode == 'week' ? 'active' }}">
-                  <span>W tym tygodniu</span>
+                  <span class="long-name">W tym tygodniu</span>
+                  <span class="short-name">Tyg.</span>
                 </a>
                 <a data-bs-toggle="tab" href="#month" class="nav-link {{ settings.reputationMode == 'month' ? 'active' }}">
-                  <span>W tym miesiącu</span>
+                  <span class="long-name">W tym miesiącu</span>
+                  <span class="short-name">Mies.</span>
                 </a>
                 <a data-bs-toggle="tab" href="#quarter" class="nav-link {{ settings.reputationMode == 'quarter' ? 'active' }}">
-                  <span>W tym kwartale</span>
+                  <span class="long-name">W tym kwartale</span>
+                  <span class="short-name">Kwar.</span>
                 </a>
               </div>
             </div>
