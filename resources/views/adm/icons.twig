@@ -31,7 +31,11 @@
     </tr>
     <tr v-for="(icon, index) in editorIcons" v-show="visible(icon)">
       <td>
-        <input :value="icon.location" class="form-control" disabled>
+        <div class="d-flex align-items-center">
+          <i :class="['fa-fw',  icon.defaultIcon]"></i>
+          <input :value="icon.location" class="form-control mx-2" disabled style="font-family:monospace;">
+          <i :class="['fa-fw', icon.currentIcon ]"></i>
+        </div>
       </td>
       <td>
         <input
@@ -39,6 +43,7 @@
             v-model="icon.currentIcon"
             :placeholder="icon.defaultIcon"
             class="form-control"
+            style="font-family:monospace;"
         ></td>
       <td>
         <button

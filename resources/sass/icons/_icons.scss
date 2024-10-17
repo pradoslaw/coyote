@@ -17,6 +17,11 @@ $fa-font-path: "/fonts/font-awesome";
   display: inline-block;
 }
 
+.fa-brand {
+  font-family: 'Font Awesome 6 Brands';
+  font-style: normal;
+}
+
 //@import "@fortawesome/fontawesome-pro/scss/fontawesome";
 //@import "@fortawesome/fontawesome-pro/scss/solid";
 //@import "@fortawesome/fontawesome-pro/scss/regular";
@@ -105,4 +110,22 @@ $icon-admin-table-sort-desc: $fa-var-sort-up;
 
 .fa-arrow-up-from-bracket:before {
   content: "\e09a";
+}
+
+.fa-circle-ellipsis:before {
+  content: "\e10a";
+}
+
+.fa-trash-can-arrow-turn-left:before,
+.fa-trash-can-undo:before,
+.fa-trash-undo-alt:before,
+{
+  content: "\f896";
+}
+
+.fa-circle-dollar:before,
+.fa-dollar-circle:before,
+.fa-usd-circle:before,
+{
+  content: "\f2e8";
 }
