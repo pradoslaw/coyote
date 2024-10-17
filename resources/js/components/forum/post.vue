@@ -120,13 +120,11 @@
           <div class="post-vote">
             <strong
               class="vote-count"
-              title="Ocena posta"
+              @click.once="loadVoters(post)"
               :aria-label="voters"
               data-balloon-pos="left"
               data-balloon-break
-            >
-              {{ post.score }}
-            </strong>
+              v-text="post.score"/>
             <a
               v-if="!hidden"
               :class="{'on': post.is_voted}"
