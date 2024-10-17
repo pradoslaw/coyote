@@ -1,45 +1,60 @@
+<p align="center">
+    <img src="public/img/logo-light.svg">
+</p>
+
+<p align="center">
+    <img src="https://github.com/pradoslaw/coyote/workflows/Tests/badge.svg" alt="Build status"/>
+    <img src="https://img.shields.io/github/last-commit/pradoslaw/coyote/master.svg" alt="last commit">
+    <img src="https://img.shields.io/github/commit-activity/y/pradoslaw/coyote.svg" alt="commit activity">
+    <img src="https://img.shields.io/badge/PR-welcome-brightgreen.svg?style=popout" alt="make a PR">
+</p>
+
 # Coyote
 
-[![Build Status](https://travis-ci.org/adam-boduch/coyote.svg?branch=master)](https://travis-ci.org/adam-boduch/coyote)
-
-Coyote to nazwa systemu obsługującego serwis [4programmers.net].
+Coyote is an open-source library to host forums, e.g. https://4programmers.net/.
 
 [4programmers.net]: https://4programmers.net/
 
-## Instalacja
+## How to report security problems?
 
-1. Stwórz lokalny plik `.env`, bazując na `.env.default`
+We kindly ask you to report security problems to: support@4programmers.net 
+
+## How can you help?
+
+We highly encourage you to participate in the library development! Checkout current issues and find something for yourself
+to work on.
+
+1. Fork the repository
+2. Push your change
+3. Raise a pull request for us to review!
+
+## Installation
+
+1. Create a local file `.env`, based on `.env.default`
    ```bash
    cp .env.default .env
    ```
-2. Uruchom kontenery lokalnie, posługująć się jedną z komend:
-   - ```
-     make up
-     ```
-   - ```
-     docker compose up
-     ```
-   Jeśli uruchomienie aplikacji nie udaje się na systemie Windows, usuń `-u nginx` z pliku `Makefile`
-   z każdej komendy, i spróbuj ponownie.
-3. Zainstaluj zależności:
-   - Wersja developerska (source mapy):
+2. Bring up the application in docker containers:
+   ```
+   docker compose up
+   ```
+3. Install dependencies:
+   - Developer mode (debug, source maps, hmr):
      ```
      make install-dev
      ```
-   - Wersja produkcyjna (minifikacja zasobów):
+   - Production mode (debug disabled, resource minification):
      ```
      make install
      ```
-4. Aplikacja jest gotowa
-   - Odwiedź `localhost:8880`
-   - Na użytkownika `admin` można zalogować się hasłem `123`.
-5. Zatrzymaj aplikację, posługująć się jedną z komend:
-   - ```
-     make stop
-     ```
-   - ```
-     docker compose stop
-     ```
+   Should the starting fail on Windows, remove `-u nginx` from commands in `Makefile`.
+4. The application is running
+   - Visit `localhost:8880`
+   - Login to administrator account with credentials: `admin`/`admin`.
+5. Terminate the application:
+   ```
+   docker compose stop
+   ```
 
 ### Konfiguracja debuggera
 
@@ -94,34 +109,6 @@ polecenie:
    ```
    docker-compose exec php yarn run prod
    ```
-
-#### Powolna praca z Vue
-
-Zmiany w szablonach `.twig` są widoczne od razu po przeładowaniu, ale zmiany w plikach `.vue` są
-widoczne dopiero po przebudowaniu `yarn run dev`.
-
-Dla szybkiego developowania, warto stworzyć osobną aplikację Vue, zbudować w niej komponenty, i potem
-po prostu przekopiować do projektu coyote.
-
-```
-# Stwórz nowy folder poza projektem coyote/
-cd ..
-mkdir spike/
-
-# Stwórz pustą aplikację vue
-cd spike/
-yarn init --yes --private
-yarn add @vue/cli
-yarn run vue create app    # Select preset "Default Vue 2"
-
-# Dodaj SCSS oraz uruchom aplikację
-cd app
-yarn add sass-loader sass
-yarn serve
-```
-
-Możesz teraz po prostu edytować plik `.vue` i pracować na błyskawicznej aplikacji. Po skończeniu, folder `spike/`
-może być usunięty.
 
 ### Testowanie
 
@@ -233,15 +220,3 @@ Aby uruchomić mechanizm kolejek skorzystaj z następującego polecenia:
 ```
 docker-compose exec php php artisan queue:listen --sleep=10
 ```
-
-## Jak zgłaszać błędy bezpieczeństwa?
-
-W przypadku znalezienia błędów prosimy o zgłaszanie ich bezpośrednio na e-mail: support@4programmers.net
-
-## Jak możesz pomóc?
-
-Zachęcamy do aktywnego udziału w rozwoju projektu. Zajrzyj na zakładkę *Issues* i zobacz jakie zadanie możesz zrealizować. Realizujemy tylko te zadania, które są zaakceptowane i przypisane do wersji 2.0.
-
-1. Utwórz fork repozytorium
-2. Wprowadź zmiany
-3. Dodaj pull request
