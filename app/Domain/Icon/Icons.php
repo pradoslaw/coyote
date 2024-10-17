@@ -3,6 +3,7 @@ namespace Coyote\Domain\Icon;
 
 use Coyote\Domain\Html;
 use Coyote\Domain\StringHtml;
+use Illuminate\Support\Facades\Session;
 
 readonly class Icons
 {
@@ -36,7 +37,7 @@ readonly class Icons
 
     private function iconClass(string $iconName): string
     {
-        $icons = $this->fa->icons();
+        $icons = $this->icons();
         if (\array_key_exists($iconName, $icons)) {
             return $icons[$iconName];
         }
@@ -45,6 +46,8 @@ readonly class Icons
 
     public function icons(): array
     {
-        return $this->fa->icons();
+        $defaultIcons = $this->fa->icons();
+        $currentIcons = \array_filter(Session::get('icons', []));
+        return \array_merge($defaultIcons, $currentIcons);
     }
 }

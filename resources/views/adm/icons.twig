@@ -1,0 +1,75 @@
+{% extends 'adm.base' %}
+{% block title %}Ikony {{ parent() }}{% endblock %}
+
+{% block card %}
+  {{ form_open({url: route('adm.icons.save'), method: 'post', id: 'app'}) }}
+  <div class="d-flex justify-content-end">
+    <p>
+      <input type="submit" value="Zapisz" class="btn btn-primary" data-submit-state="Zapisywanie...">
+    </p>
+  </div>
+  <table class="table table-striped">
+    <tr>
+      <th>umiejscowienie</th>
+      <th>ikona FontAwesome</th>
+      <th></th>
+    </tr>
+    <tr v-for="(icon, index) in icons">
+      <td>
+        <input :value="icon.location" class="form-control" disabled>
+      </td>
+      <td>
+        <input
+            :name="'icons[' + icon.location + ']'"
+            :value="icon.currentIcon"
+            :placeholder="icon.defaultIcon"
+            class="form-control"
+        ></td>
+      <td>
+        <button
+            type="button"
+            @click="reset"
+            class="btn btn-sm"
+        >
+          <i class="fa-solid fa-arrow-rotate-left"></i>
+        </button>
+      </td>
+    </tr>
+  </table>
+  {{ form_close() }}
+{% endblock %}
+
+{% block body %}
+  {{ parent() }}
+  <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.min.js"
+      integrity="sha512-XdUZ5nrNkVySQBnnM5vzDqHai823Spoq1W3pJoQwomQja+o4Nw0Ew1ppxo5bhF2vMug6sfibhKWcNJsG8Vj9tg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer">
+  </script>
+  <script>
+    const editorIcons = {{ editorIcons|json_encode|raw }};
+    new Vue({
+      name: 'Icons',
+      el: '#app',
+      delimiters: ['${', '}'],
+      data() {
+        return {
+          editorIcons,
+        };
+      },
+      computed: {
+        icons() {
+          return Object.entries(this.$data.editorIcons).map(([location, [defaultIcon, currentIcon]]) => {
+            return {location, defaultIcon, currentIcon};
+          });
+        },
+      },
+      methods: {
+        reset(event) {
+          event.currentTarget.parentElement.parentElement.querySelector('input[name]').value = '';
+        },
+      },
+    });
+  </script>
+{% endblock %}
