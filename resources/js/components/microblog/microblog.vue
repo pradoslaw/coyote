@@ -115,6 +115,7 @@
                @mouseenter.once="loadVoters(microblog)"
                href="javascript:"
                class="btn btn-gradient"
+               :aria-label="voters"
                data-balloon-pos="up"
                data-balloon-break>
               <vue-icon name="microblogVoted" v-if="microblog.is_voted" class="text-primary"/>
