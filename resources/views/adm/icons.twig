@@ -3,34 +3,49 @@
 
 {% block card %}
   {{ form_open({url: route('adm.icons.save'), method: 'post', id: 'app'}) }}
-  <div class="d-flex justify-content-end">
+  <div class="d-flex justify-content-end mb-3">
     <p>
       <input type="submit" value="Zapisz" class="btn btn-primary" data-submit-state="Zapisywanie...">
     </p>
   </div>
   <table class="table table-striped">
     <tr>
-      <th>umiejscowienie</th>
-      <th>ikona FontAwesome</th>
+      <td>
+        <input class="form-control" placeholder="Wyszukaj po nazwie..." v-model="searchName">
+      </td>
+      <td>
+        <input class="form-control" placeholder="Wyszukaj po ikonie..." v-model="searchIcon">
+      </td>
+      <td>
+        <div style="width:30px; height:35px; display:flex; align-items:center;">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <table class="table table-striped">
+    <tr>
+      <th>Umiejscowienie</th>
+      <th>ikona font-awesome</th>
       <th></th>
     </tr>
-    <tr v-for="(icon, index) in icons">
+    <tr v-for="(icon, index) in editorIcons" v-show="visible(icon)">
       <td>
         <input :value="icon.location" class="form-control" disabled>
       </td>
       <td>
         <input
             :name="'icons[' + icon.location + ']'"
-            :value="icon.currentIcon"
+            v-model="icon.currentIcon"
             :placeholder="icon.defaultIcon"
             class="form-control"
         ></td>
       <td>
         <button
             type="button"
-            @click="reset"
+            @click="icon.currentIcon='';"
             class="btn btn-sm"
-        >
+            :style="{visibility: icon.currentIcon ? 'visible' : 'hidden'}">
           <i class="fa-solid fa-arrow-rotate-left"></i>
         </button>
       </td>
@@ -55,21 +70,36 @@
       delimiters: ['${', '}'],
       data() {
         return {
-          editorIcons,
+          editorIcons: Object
+            .entries(editorIcons)
+            .map(([location, [defaultIcon, currentIcon]]) => {
+              return {location, defaultIcon, currentIcon};
+            }),
+          searchName: '',
+          searchIcon: '',
         };
       },
-      computed: {
-        icons() {
-          return Object.entries(this.$data.editorIcons).map(([location, [defaultIcon, currentIcon]]) => {
-            return {location, defaultIcon, currentIcon};
-          });
-        },
-      },
       methods: {
-        reset(event) {
-          event.currentTarget.parentElement.parentElement.querySelector('input[name]').value = '';
+        visible({location, defaultIcon, currentIcon}) {
+          currentIcon = currentIcon.trim();
+          if (this.$data.searchName) {
+            if (!containsCaseInsensitive(location, this.$data.searchName)) {
+              return false;
+            }
+          }
+          if (this.$data.searchIcon) {
+            const effectiveIcon = currentIcon === '' ? defaultIcon : currentIcon;
+            if (!containsCaseInsensitive(effectiveIcon, this.$data.searchIcon)) {
+              return false;
+            }
+          }
+          return true;
         },
       },
     });
+
+    function containsCaseInsensitive(string, substring) {
+      return string.toLowerCase().includes(substring.toLocaleString());
+    }
   </script>
 {% endblock %}
