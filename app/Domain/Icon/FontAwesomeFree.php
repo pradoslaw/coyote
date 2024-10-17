@@ -29,11 +29,6 @@ readonly class FontAwesomeFree
             'loginGithub'                               => 'fab fa-github',
 
             // homepage
-            'microblogsPopular'                         => 'far fa-comments',
-            'reputationRanking'                         => 'fas fa-star',
-            'forumNews'                                 => 'fas fa-star',
-            'viewersOnlineLocal'                        => 'fas fa-eye',
-            'viewersOnlineGlobal'                       => 'fas fa-users',
             'homepageActivityMicroblog'                 => 'far fa-person',
             'homepageActivityPostComment'               => 'far fa-comments',
             'homepageActivityTopic'                     => 'far fa-file',

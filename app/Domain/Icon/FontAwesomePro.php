@@ -29,11 +29,6 @@ readonly class FontAwesomePro
             'loginGithub'                               => 'fa-brand fa-github',
 
             // homepage
-            'microblogsPopular'                         => 'fa-light fa-fire-flame-curved',
-            'reputationRanking'                         => 'fa-light fa-trophy',
-            'forumNews'                                 => 'fa-light fa-inbox-in',
-            'viewersOnlineLocal'                        => 'fa-light fa-eye',
-            'viewersOnlineGlobal'                       => 'fa-light fa-users',
             'homepageActivityMicroblog'                 => 'fa-light fa-person',
             'homepageActivityPostComment'               => 'fa-light fa-comments',
             'homepageActivityTopic'                     => 'fa-light fa-file',
