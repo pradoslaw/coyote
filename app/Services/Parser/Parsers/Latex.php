@@ -7,14 +7,12 @@ class Latex extends HashParser implements Parser
     {
         return \preg_replace_callback(
             "#<tex>(.*?)</tex>#si",
-            function ($match) {
-                return sprintf(
-                    '<img src="https://latex.codecogs.com/gif.latex?%s" alt="%s">',
-                    rawurlencode($match[1]),
-                    htmlspecialchars($match[1])
-                );
-            },
-            $text
+            fn(array $match): string => \sPrintF(
+                '<img src="https://latex.codecogs.com/svg.latex?%s" alt="%s" class="latex">',
+                \rawUrlEncode($match[1]),
+                \htmlSpecialChars($match[1]),
+            ),
+            $text,
         );
     }
 }

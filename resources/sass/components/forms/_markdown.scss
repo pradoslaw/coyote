@@ -1,3 +1,5 @@
+@import "../../../feature/theme/theme";
+
 .editor {
   border: 1px solid $border-color;
   padding: $input-padding-y 0;
@@ -75,5 +77,11 @@
     &:last-child {
       border-bottom: none;
     }
+  }
+}
+
+img.latex {
+  @include dark {
+    filter: invert(1);
   }
 }
