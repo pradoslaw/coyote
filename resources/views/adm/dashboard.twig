@@ -40,4 +40,26 @@
       {{ registrationsChartYears }}
     </div>
   </div>
+  <ul class="nav nav-pills mb-3 justify-content-end">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pills-weeks-leave" type="button">ostatnie 30 tygodni</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-months-leave" type="button">ostatnie 30 miesięcy</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-years-leave" type="button">ostatnie 30 lat</button>
+    </li>
+  </ul>
+  <div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane show active" id="pills-weeks-leave">
+      {{ leaveChartWeeks }}
+    </div>
+    <div class="tab-pane" id="pills-months-leave">
+      {{ leaveChartMonths }}
+    </div>
+    <div class="tab-pane" id="pills-years-leave">
+      {{ leaveChartYears }}
+    </div>
+  </div>
 {% endblock %}

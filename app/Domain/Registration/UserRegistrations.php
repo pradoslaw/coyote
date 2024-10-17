@@ -14,20 +14,25 @@ readonly class UserRegistrations
 
     public function inRange(HistoryRange $range): array
     {
+        return $this->inRangeColumn($range, 'created_at');
+    }
+
+    public function inRangeColumn(HistoryRange $range, string $column): array
+    {
         return \array_merge(
             $this->arrayFrom(
                 keys:$this->uniformDates->inRange($range),
                 value:0),
-            $this->fetchRegistrationsByPeriod($range->startDate(), $range->endDate(), $range->period),
+            $this->fetchRegistrationsByPeriod($column, $range->startDate(), $range->endDate(), $range->period),
         );
     }
 
-    private function fetchRegistrationsByPeriod(string $from, string $to, Period $period): array
+    private function fetchRegistrationsByPeriod(string $column, string $from, string $to, Period $period): array
     {
-        $dateTruncSqlField = $this->dateTruncSqlField($period);
+        $dateTruncSqlField = $this->dateTruncSqlField($column, $period);
         return User::withTrashed()
-            ->where('created_at', '>=', "$from 00:00:00")
-            ->where('created_at', '<', "$to 24:00:00")
+            ->where($column, '>=', "$from 00:00:00")
+            ->where($column, '<', "$to 24:00:00")
             ->selectRaw("$dateTruncSqlField as created_at_group, Count(*) AS count")
             ->groupByRaw($dateTruncSqlField)
             ->get()
@@ -35,12 +40,12 @@ readonly class UserRegistrations
             ->toArray();
     }
 
-    private function dateTruncSqlField(Period $period): string
+    private function dateTruncSqlField(string $column, Period $period): string
     {
         return match ($period) {
-            Period::Week => "date_trunc('week', created_at)::date",
-            Period::Month => "date_trunc('month', created_at)::date",
-            Period::Year => "date_trunc('year', created_at)::date",
+            Period::Week => "date_trunc('week', $column)::date",
+            Period::Month => "date_trunc('month', $column)::date",
+            Period::Year => "date_trunc('year', $column)::date",
         };
     }
 
