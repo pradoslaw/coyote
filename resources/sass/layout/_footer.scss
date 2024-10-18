@@ -8,11 +8,6 @@ footer {
     position: relative;
 
     ul.breadcrumb {
-      @include media-breakpoint-up(sm) {
-        background: url('/img/home-white.png') no-repeat 0 3px;
-        padding: 2px 0 2px 22px;
-      }
-
       li {
         display: inline;
         color: #f2f2f2;
