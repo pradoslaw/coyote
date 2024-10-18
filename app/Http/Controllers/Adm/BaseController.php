@@ -60,6 +60,7 @@ class BaseController extends Controller
             $menu->add('Bloki statyczne', ['route' => 'adm.blocks'])->prepend($fa('far fa-file-code fa-fw'));
             $menu->add('Faktury i płatności', ['route' => 'adm.payments'])->prepend($fa('fa-cart-shopping fa-fw'))->data('permission', 'adm-payment');
             $menu->add('Eksperymenty', ['route' => 'adm.experiments'])->prepend($fa('fa-solid fa-flask fa-fw'));
+            $menu->add('Ikony', ['route' => 'adm.icons'])->prepend($fa('fa-solid fa-icons fa-fw'));
         })
             ->filter(function (Item $item): bool {
                 if ($item->data('permission')) {

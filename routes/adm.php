@@ -148,5 +148,8 @@ $this->group(
         $this->get('Experiments/{survey}', ['uses' => 'ExperimentsController@show'])->name('experiments.show');
         $this->post('Experiments/Save', ['uses' => 'ExperimentsController@create'])->name('experiments.create');
         $this->post('Experiments/{survey}/Members', ['uses' => 'ExperimentsController@updateMembers'])->name('experiments.updateMembers');
+
+        $this->get('Icons', ['uses' => 'IconsController@index'])->name('icons');
+        $this->post('Icons', ['uses' => 'IconsController@save'])->name('icons.save');
     },
 );
