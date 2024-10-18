@@ -1,7 +1,7 @@
 <template>
   <div class="alert alert-danger alert-report">
     <button @click="$refs.modal.open()" type="button" class="close" data-dismiss="alert" aria-label="Close" title="Usuń">
-      <span aria-hidden="true">&times;</span>
+      <vue-icon name="reportClose"/>
     </button>
 
     <vue-username :user="flag.user" class="alert-link"></vue-username>
@@ -27,12 +27,14 @@
 <script lang="ts">
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
+import VueIcon from "../icon";
 import VueModal from '../modal.vue';
 import VueUserName from "../user-name.vue";
 
 export default {
   name: 'flag',
   components: {
+    VueIcon,
     'vue-username': VueUserName,
     'vue-modal': VueModal,
     'vue-timeago': VueTimeAgo,
