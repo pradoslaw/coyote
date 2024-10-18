@@ -12,8 +12,8 @@ readonly class FontAwesomePro
         $genericUploading = $faSpinner;
         $genericLoading = $faSpinner;
         $genericClose = $faCross;
-        $genericDropdown = 'fa-regular fa-ellipsis';
-        $genericDropdownVertical = 'fa-regular fa-ellipsis-vertical';
+        $genericDropdown = 'fa-solid fa-ellipsis';
+        $genericDropdownVertical = 'fa-solid fa-ellipsis-vertical';
 
         return [
             // global
@@ -49,8 +49,8 @@ readonly class FontAwesomePro
             'microblogReport'                           => 'fa-light fa-flag',
             'microblogShare'                            => 'fa-light fa-share-nodes',
             'microblogAddComment'                       => 'fa-light fa-comment',
-            'microblogVote'                             => 'fa-light fa-heart',
-            'microblogVoted'                            => 'fa-solid fa-heart',
+            'microblogVote'                             => 'fa-light fa-thumbs-up',
+            'microblogVoted'                            => 'fa-solid fa-thumbs-up',
             'microblogSubscribe'                        => 'fa-light fa-bell',
             'microblogSubscribed'                       => 'fa-solid fa-bell',
             'microblogFoldedUnfold'                     => 'fa-light fa-circle-ellipsis',
