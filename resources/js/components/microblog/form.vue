@@ -85,6 +85,9 @@ export default {
     this.startUrlDetector();
   },
   methods: {
+    focus() {
+      this.$refs.markdown.focus();
+    },
     detectUrl() {
       const handler = () => {
         const matches = this.microblog.text.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig);
