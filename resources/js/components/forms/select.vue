@@ -1,8 +1,13 @@
 <template>
-  <select :name="name" v-model="valueLocal" class="form-control" :class="{'is-invalid': isInvalid}">
-    <option v-if="placeholder" :value="null">{{ placeholder }}</option>
-
-    <option v-for="(value, key) in options" :value="key" v-html="value"></option>
+  <select
+    :name="name"
+    v-model="valueLocal"
+    class="form-control"
+    :class="{'is-invalid': isInvalid}"
+    ref="select"
+  >
+    <option v-if="placeholder" :value="null" v-text="placeholder"/>
+    <option v-for="(value, key) in options" :value="key" v-html="value"/>
   </select>
 </template>
 
@@ -41,6 +46,11 @@ export default {
       set(value) {
         this.$emit('update:modelValue', value);
       },
+    },
+  },
+  methods: {
+    focus() {
+      this.$refs.select.focus();
     },
   },
 };

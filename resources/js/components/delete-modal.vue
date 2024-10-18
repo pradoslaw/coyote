@@ -7,7 +7,13 @@
     Tej operacji nie będzie można cofnąć.
 
     <p v-if="reasons" class="mt-2">
-      <vue-select name="reason_id" :options="reasons" v-model="reasonId" class="form-control-sm" placeholder="-- wybierz --"/>
+      <vue-select
+        ref="select"
+        name="reason_id"
+        :options="reasons"
+        v-model="reasonId"
+        class="form-control-sm"
+        placeholder="-- wybierz --"/>
     </p>
 
     <template v-slot:buttons>
@@ -22,6 +28,7 @@
 </template>
 
 <script lang="ts">
+import {nextTick} from "../vue";
 import VueSelect from './forms/select.vue';
 import VueModal from './modal.vue';
 
@@ -43,6 +50,9 @@ export default {
   methods: {
     open() {
       this.$refs.modal.open();
+      nextTick(() => {
+        this.$refs.select.focus();
+      });
     },
     close() {
       this.$refs.modal.close();
