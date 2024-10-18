@@ -118,7 +118,15 @@
         <div v-show="!post.is_editing" class="col-12 col-lg-10">
           <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"/>
           <div class="post-vote">
-            <strong class="vote-count" title="Ocena posta">{{ post.score }}</strong>
+            <strong
+              class="vote-count"
+              title="Ocena posta"
+              @click="loadVoters(post)"
+              :aria-label="voters"
+              data-balloon-pos="left"
+              data-balloon-break
+              v-text="post.score"
+            />
             <a
               v-if="!hidden"
               :class="{'on': post.is_voted}"
