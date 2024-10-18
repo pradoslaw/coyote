@@ -119,6 +119,7 @@ readonly class FontAwesomeFree
             'userFollow'                                => $faTick,
 
             // report
+            'reportClose'                               => null, // &times;
             'reportType.spam'                           => 'fas fa-envelopes-bulk',
             'reportType.abusiveLanguage'                => 'fas fa-book-skull',
             'reportType.offTopic'                       => 'fas fa-wave-square',

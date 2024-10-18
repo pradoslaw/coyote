@@ -120,6 +120,7 @@ readonly class FontAwesomePro
             'userFollow'                                => 'fa-light fa-bell',
 
             // report
+            'reportClose'                               => $faCross,
             'reportType.spam'                           => 'fa-light fa-envelopes-bulk',
             'reportType.abusiveLanguage'                => 'fa-light fa-book-skull',
             'reportType.offTopic'                       => 'fa-light fa-wave-square',
