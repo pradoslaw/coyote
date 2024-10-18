@@ -25,7 +25,7 @@ export function iconHtml(icons: object, iconName: string, options: IconOptions =
   return `<i class="${iconClass(icons, iconName, options)}"></i>`;
 }
 
-function iconClass(icons: object, iconName: string, options: IconOptions): string {
+export function iconClass(icons: object, iconName: string, options: IconOptions): string {
   return [
     icons[iconName],
     'fa-fw',

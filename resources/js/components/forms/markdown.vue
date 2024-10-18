@@ -110,7 +110,7 @@ import {pasteDirective} from "../../plugins/paste.js";
 import store from '../../store';
 import {createVueAppGhost, nextTick} from "../../vue";
 import VueError from '../forms/error.vue';
-import VueIcon from "../icon";
+import VueIcon, {iconClass} from "../icon";
 import {default as formMixin} from '../mixins/form.js';
 import VueTabs from '../tabs.vue';
 import VueThumbnail from "../thumbnail.vue";
@@ -504,8 +504,7 @@ export default {
 
 function avatarIcon() {
   const icon = document.createElement('i');
-  icon.className = 'fa-solid fa-user';
-
+  icon.className = iconClass(window['icons'],'autocompleteUserNoAvatar', {});
   const container = document.createElement('span');
   container.style.display = 'inline-block';
   container.className = "i-16 me-2 text-center";
