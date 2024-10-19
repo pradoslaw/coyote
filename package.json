@@ -14,7 +14,7 @@
     "@kyvg/vue3-notification": "^3.3.0",
     "@popperjs/core": "^2.10.2",
     "@riddled/4play": "^1.18.8",
-    "@sentry/browser": "^6.16.1",
+    "@sentry/browser": "^7.119.1",
     "@sentry/webpack-plugin": "^1.18.3",
     "@tinymce/tinymce-vue": "^6.0.1",
     "@types/babel__core": "7.1.18",
