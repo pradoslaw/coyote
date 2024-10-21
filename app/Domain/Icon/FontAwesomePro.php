@@ -129,6 +129,8 @@ readonly class FontAwesomePro
             'reportType.other'                          => 'fa-light fa-flag',
 
             // category
+            'forumCategory'                             => 'fa-light fa-comments',
+            'forumCategoryLocked'                       => 'fa-light fa-lock',
             'categorySectionMenu'                       => 'fa-light fa-gears',
             'categorySectionMenuItemEnabled'            => $faTick,
             'categorySectionFolded'                     => 'fa-light fa-square-plus',

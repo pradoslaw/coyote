@@ -36,10 +36,13 @@
           <div class="row">
             <div class="col-6 col-md-12 col-lg-5 d-flex align-items-center">
               <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative me-2">
-                <i v-if="category.is_locked" class="logo fas fa-lock "/>
-                <i v-else :class="[className(category.name)]" class="logo far fa-comments"/>
+                <span v-if="category.is_locked" class="logo">
+                  <vue-icon name="forumCategoryLocked"/>
+                </span>
+                <span v-else :class="['logo', className(category.name)]">
+                  <vue-icon name="forumCategory"/>
+                </span>
               </a>
-
               <div class="overflow-hidden">
                 <h3>
                   <a :href="category.url">{{ category.name }}</a>
