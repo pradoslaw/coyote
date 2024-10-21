@@ -90,6 +90,12 @@ $icon-admin-table-sort: $fa-var-sort;
 $icon-admin-table-sort-asc: $fa-var-sort-down;
 $icon-admin-table-sort-desc: $fa-var-sort-up;
 
+@mixin icon {
+  i.fa-fw {
+    @content;
+  }
+}
+
 .fa-square-question:before {
   content: "\f2fd";
 }

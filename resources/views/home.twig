@@ -10,34 +10,36 @@
 
   <div class="row">
     <main class="col-md-8">
-      <section id="box-forum" class="box mt-4">
-        <h2 class="h4">
-          {{ icon('forumNews') }}
+      <section id="box-forum" class="mt-4">
+        <h2>
           Co nowego na forum?
         </h2>
-        <div class="card card-forum">
+        <div class="card card-tile">
           <div class="card-body">
             <div class="row">
               <div class="col-lg-6">
                 <ul id="forum-tabs" class="nav nav-pills nav-forum">
                   <li class="nav-item">
-                    <a class="nav-link {{ settings.topicMode == 'interesting' ? 'active' }}"
-                       title="Zobacz najciekawsze wątki na forum"
-                       href="#interesting"
-                       role="tab" data-bs-toggle="tab">
+                    <span
+                        class="nav-link {{ settings.topicMode == 'interesting' ? 'active' }}"
+                        title="Zobacz najciekawsze wątki na forum"
+                        href="#interesting"
+                        data-bs-toggle="tab">
                       Najciekawsze
-                    </a>
+                    </span>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link {{ settings.topicMode == 'newest' ? 'active' }}"
-                       title="Lista najnowszych wątków na forum" href="#newest"
-                       role="tab" data-bs-toggle="tab">
+                    <span
+                        class="nav-link {{ settings.topicMode == 'newest' ? 'active' }}"
+                        title="Lista najnowszych wątków na forum"
+                        href="#newest"
+                        data-bs-toggle="tab">
                       Nowe wątki
-                    </a>
+                    </span>
                   </li>
                 </ul>
 
-                <div id="box-forum-headline">
+                <div id="box-forum-headline" class="interesting-topics">
                   <div class="tab-content">
                     <div role="tabpanel" class="tab-pane {{ settings.topicMode == 'interesting' ? 'active' }}" id="interesting">
                       {% for topic in interesting %}
@@ -58,7 +60,7 @@
                             <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">
                               {{ topic.forum }}
                             </a>
-                            <small class="float-end">
+                            <small class="topic-created float-end">
                               {{ topic.last_post_created_at|format_date }}
                             </small>
                           </div>
@@ -97,22 +99,27 @@
               </div>
 
               <div id="stream-wrapper" class="col-lg-6">
+                <ul class="nav nav-pills">
+                  <li class="nav-item">
+                    <span class="nav-link">
+                      Ostatnia aktywność
+                    </span>
+                  </li>
+                </ul>
                 <div id="stream">
-                  <div class="overview">
+                  <div class="recent-activity overview">
                     {% for activity in activities %}
                       <div class="media">
-                        <div class="homepage-activity {{ activity.object }} d-none d-sm-block" title="{{ activity.headline|striptags|unescape }}">
-                          <div class="d-block activity-icon">
-                            {% if activity.object == 'microblog' %}
-                              {{ icon('homepageActivityMicroblog') }}
-                            {% elseif activity.object == 'comment' %}
-                              {{ icon('homepageActivityPostComment') }}
-                            {% elseif activity.object == 'topic' %}
-                              {{ icon('homepageActivityTopic') }}
-                            {% elseif activity.object == 'post' %}
-                              {{ icon('homepageActivityPost') }}
-                            {% endif %}
-                          </div>
+                        <div class="homepage-activity {{ activity.object }} d-none d-sm-flex" title="{{ activity.headline|striptags|unescape }}">
+                          {% if activity.object == 'microblog' %}
+                            {{ icon('homepageActivityMicroblog') }}
+                          {% elseif activity.object == 'comment' %}
+                            {{ icon('homepageActivityPostComment') }}
+                          {% elseif activity.object == 'topic' %}
+                            {{ icon('homepageActivityTopic') }}
+                          {% elseif activity.object == 'post' %}
+                            {{ icon('homepageActivityPost') }}
+                          {% endif %}
                         </div>
                         <div class="d-none d-sm-block me-2">
                           <a href="{{ route('profile', [activity.user_id]) }}">
@@ -137,10 +144,7 @@
       </section>
 
       <section id="js-microblog" class="box">
-        <h4>
-          {{ icon('microblogsPopular') }}
-          Popularne wpisy na mikroblogu
-        </h4>
+        <h2>Popularne wpisy na mikroblogu</h2>
         <vue-microblog
             v-for="microblog in microblogs" :key="microblog.id" :microblog="microblog"
             :wrap="true"></vue-microblog>
@@ -165,11 +169,7 @@
         </div>
 
         <section class="box mt-4">
-          <h4 class="heading">
-            {{ icon('reputationRanking') }}
-            Reputacja użytkowników
-          </h4>
-
+          <h2>Reputacja użytkowników</h2>
           <div class="card card-default card-reputation tab-content">
             <div class="pt-2 px-3">
               <div id="reputation-tabs" class="nav nav-pills">
@@ -189,37 +189,26 @@
             </div>
 
             {% for tab, users in reputation %}
-              <div id="{{ tab }}" role="tabpanel" class="card-body tab-pane {{ settings.reputationMode == tab ? 'active' }}">
+              <div id="{{ tab }}" role="tabpanel" class="card-body tab-pane py-0 {{ settings.reputationMode == tab ? 'active' }}">
                 {% for user in users %}
-                  <div class="media">
-                    <div class="me-2">
-                      <a href="{{ route('profile', [user.id]) }}">
-                        {{ user_avatar(user.photo, user.name) }}
+                  <div class="d-flex align-items-center ranking-row" style="padding:12px 0;">
+                    <a href="{{ route('profile', [user.id]) }}" class="ranking-row-avatar">
+                      {{ user_avatar(user.photo, user.name) }}
+                    </a>
+                    <div class="flex-grow-1 ms-4">
+                      <a data-user-id="{{ user.id }}" href="{{ route('profile', [user.id]) }}" class="ranking-username">
+                        {{ user.name }}
                       </a>
-                    </div>
-
-                    <div class="media-body">
-                      <span class="mb-1 d-block">
-                        <a data-user-id="{{ user.id }}" href="{{ route('profile', [user.id]) }}" class="reputation-username">
-                          {{ user.name }}
-                        </a>
-                      </span>
-
-                      <div class="progress">
-                        <div class="progress-bar" role="progressbar"
-                             aria-valuenow="{{ user.percentage|round }}"
-                             aria-valuemin="0"
-                             aria-valuemax="100"
-                             style="width: {{ user.percentage|round }}%;"></div>
-
-                        <span class="rep">
-                          <strong>{{ user.reputation|number_format(0, '', ' ') }}</strong>
-                          <small>
-                            {{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}
-                          </small>
+                      <div class="mt-1 d-flex align-items-center">
+                        <span class="flex-shrink-0 me-4">
+                          <strong>{{ user.reputation }}</strong> pkt
                         </span>
+                        <div class="flex-grow-1 me-4 pe-4">
+                          <div class="ranking-percentage-ray" style="width:{{ user.percentage|round }}%; max-width:100%;"></div>
+                        </div>
                       </div>
                     </div>
+                    <div class="counter me-3"></div>
                   </div>
                 {% else %}
                   <small class="d-block text-muted text-center my-4">

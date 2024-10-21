@@ -1,6 +1,9 @@
 @charset "UTF-8";
 
+@import "../../feature/theme/theme";
+@import "../icons/icons";
 @import "bootstrap/scss/mixins/breakpoints";
+@import "bootstrap/scss/mixins/text-truncate";
 
 @mixin size($size) {
   @if ($size == 'intermediate') {
@@ -17,205 +20,634 @@
   }
 }
 
-.card-reputation {
-  img, svg {
-    width: 40px;
-    height: 40px;
+header nav.navbar {
+  .logo {
+    height: 30px;
+  }
+}
+
+body.lookAndFeelModern {
+  $primary-color-light: #00a538;
+  $secondary-color-light: #005b12;
+  $card-background-dark: #181a1b;
+  $primary-background-light: #e7f7e6;
+  $opposite-color-light: #ffffff;
+  $border-color-light: #dddddd;
+
+  $primary-color-dark: #00a538;
+  $secondary-color-dark: #bdd5c3;
+  $card-background-light: #ffffff;
+  $primary-background-dark: #001306;
+  $opposite-color-dark: #1a1a1a;
+  $border-color-dark: #242a30;
+
+  @include light {
+    color: #646466;
+    background: #f0f2f5;
   }
 
-  .progress {
-    width: 70%;
+  @include dark {
+    color: #c8c8c8;
+    background: #121314;
   }
 
-  .media {
-    border-bottom: 1px solid $card-border-color;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    position: relative;
-    counter-increment: number;
+  .text-primary {
+    @include light {
+      color: $primary-color-light !important;
+    }
+    @include dark {
+      color: $primary-color-dark !important;
+    }
+  }
 
-    &:after {
-      content: counter(number);
-      font-size: 40px;
-      color: $card-border-color;
-      position: absolute;
-      right: 10px;
-      top: 9px;
+  .img-thumbnail {
+    background: none;
+    border: none;
+    padding: 0;
+
+    .user-avatar {
+      border-radius: 4px;
+      overflow: hidden;
+    }
+  }
+
+  .is-online {
+    width: 11px;
+    height: 11px;
+    border: none;
+    @include light {
+      background-color: $primary-color-light;
+    }
+    @include dark {
+      background-color: $primary-color-dark;
+    }
+  }
+
+  header nav.navbar {
+    @include light {
+      color: #777777;
+    }
+    @include dark {
+      color: #eeeeee;
     }
 
-    &:last-child {
-      border-bottom: none;
+    .nav-link,
+    .btn-toggle-theme,
+    {
+      color: inherit;
+    }
+
+    .logo {
+      width: 15px;
+      height: 20px;
+    }
+
+    .btn-register {
+      @include light {
+        color: $opposite-color-light;
+        background: $primary-color-light;
+        border: 1px solid $primary-color-light;
+        &:hover {
+          background: #007e2b;
+          border-color: #007e2b;
+        }
+        &:focus {
+          border-color: #00fe56;
+        }
+        &:active {
+          background: #006522;
+          border-color: #006522;
+        }
+        &:disabled {
+          background: rgba($primary-color-light, 0.3);
+          border-color: rgba($primary-color-light, 0.3);
+        }
+      }
+
+      @include dark {
+        color: $opposite-color-dark;
+        background: $primary-color-dark;
+        border: 1px solid $primary-color-dark;
+        &:hover {
+          background: #00c041;
+          border-color: #00c041;
+        }
+        &:focus {
+          border-color: #00fe56;
+        }
+        &:active {
+          background: #00e34d;
+          border-color: #00e34d;
+        }
+        &:disabled {
+          background: rgba($primary-color-dark, 0.3);
+          border-color: rgba($primary-color-dark, 0.3);
+        }
+      }
+    }
+
+    .nav-search {
+      .search-bar {
+        border: none;
+        @include light {
+          background: $card-background-light;
+          input {
+            color: #777777;
+            background: $card-background-light;
+          }
+        }
+        @include dark {
+          background: $card-background-dark;
+          input {
+            color: #acacac;
+            background: $card-background-dark;
+          }
+        }
+        @include icon {
+          @include light {
+            color: #3c3c3c;
+          }
+          @include dark {
+            color: #505050;
+          }
+        }
+      }
     }
   }
 
-  .long-name {
-    display: none;
-    @include size(intermediate) {
-      display: initial;
-    }
+  h2 {
+    font-size: 0.9em;
+    color: inherit;
   }
 
-  .short-name {
-    display: initial;
-    @include size(intermediate) {
+  h4.heading {
+    font-size: 0.9em;
+    color: inherit;
+    @include theme { // this just overrides previous dark theme
+      border: none;
+    }
+
+    i {
       display: none;
     }
   }
-}
 
-#box-forum {
-  #stream-wrapper {
-    background: url('/img/stream-last-feed.png') no-repeat;
-    padding-top: 25px;
-    padding-left: 2px;
-
-    @include media-breakpoint-down(xl) {
-      margin-top: 20px;
-      background-position-x: 10px;
-      padding-left: 15px;
+  a {
+    @include theme {
+      color: inherit;
     }
   }
 
-  #stream {
-    height: 365px;
-    position: relative;
-    overflow: hidden;
-
-    @include media-breakpoint-down(md) {
-      padding-left: 15px;
+  a[data-user-id] {
+    @include light {
+      color: $secondary-color-light;
+    }
+    @include dark {
+      color: $secondary-color-dark;
     }
   }
 
-  #box-forum-headline {
-    margin-top: 20px;
+  .nav-pills {
+    .nav-link {
+      transition: none;
 
-    .row {
-      border-bottom: 1px solid #e6e6e6;
-      padding: 4px 0 4px 0;
-      margin: 0;
+      @include theme {
+        color: inherit;
+      }
 
-      .display-count {
-        strong {
-          display: block;
-          text-align: center;
-          font-size: 16px;
+      &[href] {
+        cursor: pointer;
+      }
+
+      &.active {
+        @include light {
+          color: black;
         }
-
-        small {
-          display: block;
-          color: #7d7d7d;
-          text-align: center;
-          font-size: 10px;
+        @include dark {
+          color: white;
         }
       }
+    }
 
-      &:nth-child(even) {
-        background-color: #f8f8f8;
+    .nav-link.active {
+      @include light {
+        border-bottom-color: $primary-color-light;
       }
-    }
-
-    a.title {
-      color: $gray;
-      display: block;
-      @include text-truncate();
-    }
-
-    a.category {
-      font-size: 11px;
-    }
-
-    .float-end {
-      color: $gray-light;
-      font-size: 10px;
-    }
-  }
-
-  .overview {
-    border-left: 1px solid $card-border-color;
-    margin: 10px 0 0 10px;
-
-    @include media-breakpoint-down(md) {
-      border-left: none;
-      margin-left: 0;
-    }
-  }
-
-  .media {
-    padding: 0 0 0 20px;
-    font-size: 11px;
-    position: relative;
-    overflow: visible;
-
-    &:not(:first-child) {
-      margin-top: 15px;
-    }
-
-    .homepage-activity {
-      box-shadow: 0 1px 2px #ccc;
-      border-radius: 50%;
-      border: 1px solid $card-border-color;
-      background: #fff;
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      left: -11px;
-      top: 8px;
-
-      .activity-icon {
-        margin-top: 2px;
-        text-align: center;
-        color: $gray-light;
-      }
-
-      &::selection {
-        text-shadow: none;
-      }
-    }
-
-    @include media-breakpoint-down(md) {
-      padding: 0;
-    }
-
-    .default-avatar {
-      svg {
-        width: 38px;
-        height: 38px;
+      @include dark {
+        border-bottom-color: $primary-color-dark;
       }
     }
   }
 
-  .media-body {
-    min-width: 0; // makes flex children not exceed parent width
+  .microblog {
+    .media > .media-body {
+      .media-heading a {
+        @include dark {
+          color: $secondary-color-dark;
+        }
+      }
 
-    p {
-      margin: 0;
-      @include text-truncate();
+      .microblog-comments .media a.username {
+        @include dark {
+          color: $secondary-color-dark;
+        }
+      }
     }
 
-    strong {
-      font-weight: normal;
-      border-left: 1px solid $card-border-color;
-      padding: 0 0 0 10px;
-      margin: 10px 0 0 1px;
-      display: block;
-      font-family: "Open Sans", sans-serif;
+    .microblog-actions .btn {
+      @include light {
+        color: #777777;
+      }
+      @include dark {
+        color: #8f9ba5;
+      }
     }
   }
 
-  .media-object {
-    border: 1px solid #d0d0d0;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
-    width: 42px;
-    background: #fff;
-    padding: 2px;
-    border-radius: 3px;
+  .default-avatar {
+    @include light {
+      color: $primary-color-light;
+      background: $primary-background-light;
+    }
+    @include dark {
+      color: $primary-color-dark;
+      background: $primary-background-dark;
+    }
+  }
 
+  .card {
+    border: none;
+    box-shadow: none;
+    border-radius: 8px;
+    @include light {
+      color: #555555;
+      background: $card-background-light;
+    }
+    @include dark {
+      color: #acacac;
+      background: $card-background-dark;
+    }
+  }
+
+  .card-tile {
+    border-radius: 6px;
+    @include light {
+      background: #eaecf1;
+    }
+    @include dark {
+      background: #0f0f10;
+    }
+  }
+
+  .viewers-online {
+    .viewer-pill {
+      @include theme {
+        border: none;
+      }
+
+      @include light {
+        background-color: $card-background-light;
+      }
+      @include dark {
+        background-color: $card-background-dark;
+      }
+    }
+
+    .viewers-users .circle {
+      @include light {
+        border: 2px solid $card-background-light;
+      }
+      @include dark {
+        border: 2px solid $card-background-dark;
+      }
+
+      &.circle-number {
+        line-height: 28px;
+
+        @include light {
+          color: #333333;
+          background: $card-background-light;
+        }
+        @include dark {
+          color: #acacac;
+          background: $card-background-dark;
+        }
+      }
+    }
+  }
+
+  .card-reputation {
     img, svg {
-      max-width: 100%;
+      width: 40px;
+      height: 40px;
+    }
+
+    .progress {
+      width: 70%;
+    }
+
+    .ranking-row {
+      counter-increment: rank;
+
+      .ranking-row-avatar {
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .counter {
+        align-self: center;
+
+        @include light {
+          color: #dddddd;
+        }
+        @include dark {
+          color: #acacac;
+        }
+
+        &:after {
+          content: counter(rank);
+        }
+      }
+
+      .ranking-percentage-ray {
+        height: 3px;
+        border-radius: 3px;
+        @include light {
+          background: linear-gradient(270deg, $primary-color-light 0%, $opposite-color-light 100%);
+        }
+
+        @include dark {
+          background: linear-gradient(270deg, $primary-color-dark 0%, $opposite-color-dark 100%);
+        }
+      }
+    }
+
+    a.ranking-username {
+      @include light {
+        color: #646466;
+      }
+      @include dark {
+        color: #acacac;
+      }
+    }
+
+    .long-name {
+      display: none;
+      @include size(intermediate) {
+        display: initial;
+      }
+    }
+
+    .short-name {
+      display: initial;
+      @include size(intermediate) {
+        display: none;
+      }
     }
   }
-}
 
-.reputation-username {
-  color: #333;
+  #box-forum {
+    #stream-wrapper {
+      padding-left: 2px;
+
+      @include media-breakpoint-down(xl) {
+        background-position-x: 10px;
+        padding-left: 15px;
+      }
+
+      #stream {
+        height: 365px;
+        position: relative;
+        overflow: hidden;
+
+        @include media-breakpoint-down(md) {
+          padding-left: 15px;
+        }
+
+        .media {
+          padding: 0 0 0 20px;
+          position: relative;
+          overflow: visible;
+
+          @include media-breakpoint-down(md) {
+            padding: 0;
+          }
+
+          &:not(:first-child) {
+            margin-top: 15px;
+          }
+
+          .homepage-activity {
+            border-radius: 50%;
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: -11px;
+            top: 8px;
+            justify-content: center;
+            align-items: center;
+
+            @include light {
+              color: #777777;
+            }
+            @include dark {
+              color: #acacac;
+            }
+            @include light {
+              border: 1px solid #dddddd;
+              background: #ffffff;
+            }
+            @include dark {
+              border: 1px solid #2f2f2f;
+              background: #121212;
+            }
+            @include icon {
+              color: inherit;
+            }
+          }
+
+          .media-object {
+            width: 42px;
+            background: #fff;
+            padding: 2px;
+            border-radius: 7px;
+
+            .user-avatar {
+              max-width: 100%;
+              border-radius: 4px;
+            }
+
+            @include dark {
+              border: 1px solid $border-color-dark;
+              background: #121212;
+            }
+          }
+
+          .media-body {
+            min-width: 0; // makes flex children not exceed parent width
+
+            p {
+              margin: 0;
+              @include text-truncate;
+            }
+
+            strong {
+              display: block;
+              font-weight: normal;
+              padding: 0 0 0 10px;
+              margin: 10px 0 0 1px;
+              font-family: "Open Sans", sans-serif;
+              @include light {
+                border-left: 1px solid $border-color-light;
+              }
+              @include dark {
+                border-left: 1px solid #2f2f2f;
+              }
+            }
+          }
+
+          .default-avatar {
+            img, svg {
+              width: 38px;
+              height: 38px;
+            }
+          }
+        }
+      }
+    }
+
+    #box-forum-headline,
+    .interesting-topics,
+    {
+      margin-top: 20px;
+
+      .row {
+        padding: 4px 0 4px 0;
+        margin: 0;
+
+        @include light {
+          border-bottom: 1px solid #e6e6e6;
+        }
+
+        @include dark {
+          border-bottom: 1px solid #181818;
+        }
+
+        .display-count {
+          strong {
+            display: block;
+            text-align: center;
+            font-size: 16px;
+            @include light {
+              color: #333333;
+            }
+            @include dark {
+              color: #acacac;
+            }
+          }
+
+          small {
+            display: block;
+            text-align: center;
+            font-size: 10px;
+            @include theme {
+              color: #7d7d7d;
+            }
+          }
+        }
+      }
+
+      a.title {
+        display: block;
+        @include light {
+          color: #555555;
+        }
+        @include dark {
+          color: #acacac;
+        }
+        @include text-truncate;
+      }
+
+      a.category {
+        font-size: 0.8em;
+      }
+
+      .topic-created {
+        font-size: 0.75em;
+        @include light {
+          color: #777777;
+        }
+        @include dark {
+          color: #7d7d7d;
+        }
+      }
+    }
+
+    .recent-activity {
+      margin: 10px 0 0 10px;
+      font-size: 0.8em;
+
+      @include light {
+        border-left: 1px solid $border-color-light;
+      }
+      @include dark {
+        border-left: 1px solid $border-color-dark;
+      }
+
+      @include media-breakpoint-down(md) {
+        border-left: none;
+        margin-left: 0;
+      }
+    }
+  }
+
+  .microblog-wrap {
+    &:after {
+      @include dark {
+        background: linear-gradient(
+                        to bottom,
+                        rgba(255, 255, 255, 0) 0,
+                        $opposite-color-dark 65%
+        );
+      }
+    }
+  }
+
+  .recent-activity a,
+  .interesting-topics a.category,
+  {
+    @include light {
+      color: #005b12;
+    }
+    @include dark {
+      color: #bdd5c3;
+    }
+
+    &:hover {
+      text-decoration: underline;
+      @include light {
+        // TODO 
+      }
+      @include dark {
+        color: $primary-color-dark;
+      }
+    }
+  }
+
+  footer {
+    .scroll-top {
+      @include light {
+        color: $primary-color-light;
+        background: $primary-background-light;
+      }
+      @include dark {
+        color: $primary-color-dark;
+        background: $primary-background-dark;
+      }
+    }
+  }
 }

@@ -59,6 +59,7 @@ class HomeController extends Controller
             ),
 
             'globalViewers' => $this->globalViewers(),
+            'lookAndFeel'   => 'lookAndFeelModern',
         ])
             ->with('settings', $this->getSettings());
     }

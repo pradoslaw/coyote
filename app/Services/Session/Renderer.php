@@ -1,7 +1,7 @@
 <?php
 namespace Coyote\Services\Session;
 
-use Coyote\Domain\Online\SessionRepository;
+use Coyote\Domain\Online\FakeSessionRepository;
 use Coyote\Domain\Online\Viewers;
 use Coyote\Domain\Online\ViewersStore;
 use Coyote\Domain\Spacer;
@@ -13,9 +13,9 @@ class Renderer
     private Spacer $spacer;
 
     public function __construct(
-        private SessionRepository $session,
-        private ViewersStore      $store,
-        private Request           $request,
+        private FakeSessionRepository $session,
+        private ViewersStore          $store,
+        private Request               $request,
     )
     {
         $this->spacer = new Spacer(8);
