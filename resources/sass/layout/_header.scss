@@ -160,7 +160,7 @@ body.padding-top {
   align-items: center; // align icons in center
   display: flex;
 
-  > a {
+  .nav-control-icon {
     padding: 0 9px !important; // overwrite .navbar-nav setting
     display: block;
     position: relative;

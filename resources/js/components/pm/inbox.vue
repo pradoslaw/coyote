@@ -1,9 +1,9 @@
 <template>
   <li :class="{'open': isOpen}" v-click-away="hideDropdown">
-    <a @click.prevent="loadMessages" href="/User/Pm" class="nav-link" role="button" aria-haspopup="true" aria-expanded="false">
+    <span @click="loadMessages" class="nav-link nav-control-icon">
       <span v-show="count > 0" class="badge">{{ count }}</span>
       <vue-icon name="navigationPrivateMessages"/>
-    </a>
+    </span>
     <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-end">
       <div class="dropdown-header">
         <a class="float-end small" href="/User/Pm/Submit">
