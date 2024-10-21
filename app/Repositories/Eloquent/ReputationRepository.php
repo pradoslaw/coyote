@@ -102,7 +102,7 @@ class ReputationRepository extends Repository
 
     private function percentage(Eloquent\Collection $result): Eloquent\Collection
     {
-        $max = $result->count() > 0 ? $result->first()->reputation : 0;
+        $max = $result->count() > 0 ? $result->pluck('reputation')->max() : 0;
         foreach ($result as $row) {
             $row->percentage = $max > 0 ? ($row->reputation * 1.0 / $max) * 100 : 0;
         }
