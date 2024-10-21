@@ -17,6 +17,7 @@
 
 .nav-link {
   color: $gray-light;
+  cursor: pointer;
 
   &:hover {
     color: inherit;
