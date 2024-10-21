@@ -1,12 +1,14 @@
 <template>
-  <div class="position-relative user-avatar">
-    <img :src="photo" :alt="name" class="d-block mw-100" loading="lazy" v-if="hasAvatar">
-    <div class="default-avatar" v-else>
-      <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
-        <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" fill="currentColor">
-          {{ initials }}
-        </text>
-      </svg>
+  <div class="position-relative">
+    <div class="user-avatar">
+      <img :src="photo" :alt="name" class="d-block mw-100" loading="lazy" v-if="hasAvatar">
+      <div class="default-avatar" v-else>
+        <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+          <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" fill="currentColor">
+            {{ initials }}
+          </text>
+        </svg>
+      </div>
     </div>
     <div v-if="isOnline" class="is-online"/>
   </div>
