@@ -67,7 +67,8 @@ readonly class FontAwesomePro
             'microblogCommentDelete'                    => 'fa-light fa-trash-can',
             'microblogCommentRestore'                   => 'fa-light fa-trash-can-undo',
             'microblogCommentBlockAuthor'               => 'fa-light fa-lock',
-            'microblogCommentNewSave'                   => 'fa-light fa-share-from-square',
+            'microblogCommentSaveNew'                   => 'fa-light fa-share-from-square',
+            'microblogCommentSaveExisting'              => 'fa-light fa-floppy-disk',
             'microblogCommentMenuEditRemove'            => 'fa-light fa-bars', // deprecated 
             'microblogCommentMenuAnswerFlag'            => $genericDropdown,
 

@@ -2,7 +2,9 @@
   <form>
     <vue-comment-autocomplete
       source="/completion/prompt/users"
-      placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)"
+      :placeholder="editing 
+          ? 'Edytujesz komentarz (Ctrl+Enter aby zapisać)' 
+          : 'Napisz komentarz... (Ctrl+Enter aby wysłać)'"
       v-model="microblog.text"
 
       allow-paste
@@ -13,7 +15,8 @@
       ref="commentPrompt"
     >
       <button type="button" @click="saveComment" class="btn btn-sm btn-comment-submit" title="Zapisz (Ctrl+Enter)">
-        <vue-icon name="microblogCommentNewSave"/>
+        <vue-icon v-if="editing" name="microblogCommentSaveExisting"/>
+        <vue-icon v-else name="microblogCommentSaveNew"/>
       </button>
     </vue-comment-autocomplete>
   </form>
@@ -34,6 +37,7 @@ export default {
     VueIcon,
     'vue-comment-autocomplete': VueCommentAutocomplete,
   },
+  props: {editing: {type: Boolean}},
   mixins: [MicroblogFormMixin],
   methods: {
     focus() {

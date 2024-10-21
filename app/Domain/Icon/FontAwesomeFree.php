@@ -66,7 +66,8 @@ readonly class FontAwesomeFree
             'microblogCommentDelete'                    => 'fas fa-trash-can',
             'microblogCommentRestore'                   => 'fas fa-trash-arrow-up',
             'microblogCommentBlockAuthor'               => 'fas fa-user-slash',
-            'microblogCommentNewSave'                   => 'far fa-share-from-square',
+            'microblogCommentSaveNew'                   => 'far fa-share-from-square',
+            'microblogCommentSaveExisting'              => 'far fa-share-from-square',
             'microblogCommentMenuEditRemove'            => 'fa fa-bars',
             'microblogCommentMenuAnswerFlag'            => $genericDropdown,
 

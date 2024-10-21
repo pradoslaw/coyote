@@ -12,6 +12,7 @@
         :microblog="comment"
         ref="form"
         class="w-100 me-1"
+        editing
         @cancel="edit(comment)"
         @save="edit(comment)"
       />
