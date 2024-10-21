@@ -12,8 +12,8 @@ readonly class FontAwesomePro
         $genericUploading = $faSpinner;
         $genericLoading = $faSpinner;
         $genericClose = $faCross;
-        $genericDropdown = 'fa-regular fa-ellipsis';
-        $genericDropdownVertical = 'fa-regular fa-ellipsis-vertical';
+        $genericDropdown = 'fa-solid fa-ellipsis';
+        $genericDropdownVertical = 'fa-solid fa-ellipsis-vertical';
 
         return [
             // global
