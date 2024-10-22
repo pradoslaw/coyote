@@ -100,8 +100,15 @@
               </div>
 
               <div id="stream-wrapper" class="col-lg-6">
+                <ul class="nav nav-pills nav-forum">
+                  <li class="nav-item">
+                    <span class="nav-link nav-link-style-only">
+                      Ostatnia aktywność
+                    </span>
+                  </li>
+                </ul>
                 <div id="stream">
-                  <div class="overview">
+                  <div class="recent-activity">
                     {% for activity in activities %}
                       <div class="media">
                         <div class="homepage-activity {{ activity.object }} d-none d-sm-block" title="{{ activity.headline|striptags|unescape }}">

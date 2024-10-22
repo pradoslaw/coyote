@@ -24,6 +24,16 @@
   }
 }
 
+.nav-pills {
+  .nav-link {
+    &.nav-link-style-only {
+      // Style an element to look like a nav link, 
+      // without any functionality of nav link.
+      cursor: default;
+    }
+  }
+}
+
 .nav-tabs {
   .nav-link.active {
     border-top: 2px solid $alt-link-hover-color;
