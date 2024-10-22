@@ -4,7 +4,7 @@ body.theme-dark {
   }
 
   #hire-me {
-    .card-default {
+    .card-hire-me {
       border-color: #2f2f2f;
     }
 
@@ -22,7 +22,7 @@ body.theme-dark {
 
     @each $name, $color in (java, #ae2e2e), (javascript, #968425), (csharp, #873b89), (php, #3d72b7), (python, #447c9c), (cpp, #48739e), (c, #acbccc) {
       > .#{$name} {
-        > .card-default {
+        > .card-hire-me {
           border-color: $color;
 
           .card-header {
