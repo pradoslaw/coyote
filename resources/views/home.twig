@@ -21,19 +21,22 @@
               <div class="col-lg-6">
                 <ul id="forum-tabs" class="nav nav-pills nav-forum">
                   <li class="nav-item">
-                    <a class="nav-link {{ settings.topicMode == 'interesting' ? 'active' }}"
-                       title="Zobacz najciekawsze wątki na forum"
-                       href="#interesting"
-                       role="tab" data-bs-toggle="tab">
+                    <span
+                        class="nav-link {{ settings.topicMode == 'interesting' ? 'active' }}"
+                        title="Zobacz najciekawsze wątki na forum"
+                        data-bs-target="#interesting"
+                        data-bs-toggle="tab">
                       Najciekawsze
-                    </a>
+                    </span>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link {{ settings.topicMode == 'newest' ? 'active' }}"
-                       title="Lista najnowszych wątków na forum" href="#newest"
-                       role="tab" data-bs-toggle="tab">
+                    <span
+                        class="nav-link {{ settings.topicMode == 'newest' ? 'active' }}"
+                        title="Lista najnowszych wątków na forum"
+                        data-bs-target="#newest"
+                        data-bs-toggle="tab">
                       Nowe wątki
-                    </a>
+                    </span>
                   </li>
                 </ul>
 
