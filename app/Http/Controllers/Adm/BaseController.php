@@ -46,7 +46,7 @@ class BaseController extends Controller
             $menu->add('Dodane mikroblogi', ['url' => route('adm.flag', ['filter' => 'type:microblog'])])->prepend($fa('fa-magnifying-glass fa-fw'));
             $menu->add('Zgłoszone treści', ['url' => route('adm.flag', ['filter' => 'is:reported is:open'])])->prepend($fa('far fa-flag fa-fw'));
             $menu->add('Rehabilitacja i kary', ['route' => 'adm.firewall'])->prepend($fa('fa-user-doctor fa-fw'));
-            $menu->add('Kto jest online', ['route' => 'adm.sessions'])->prepend($fa('fa-eye fa-fw'));
+            $menu->add('Aktywne sesje', ['route' => 'adm.sessions'])->prepend($fa('fa-light fa-wave-pulse fa-fw'));
             $menu->add('Dziennik zdarzeń', ['route' => 'adm.stream'])->prepend($fa('fa-newspaper fa-fw'));
             $menu->add('Cenzura', ['route' => 'adm.words'])->prepend($fa('fa-highlighter fa-fw'));
             $menu->add('Tagi', ['route' => 'adm.tags'])->prepend($fa('fa-tag fa-fw'));

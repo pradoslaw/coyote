@@ -11,7 +11,7 @@ class SessionsController extends BaseController
 {
     public function index(SessionRepository $session, Registered $registered): View
     {
-        $this->breadcrumb->push('Kto jest online', route('adm.sessions'));
+        $this->breadcrumb->push('Aktywne sesje', route('adm.sessions'));
         $grid = $this->gridBuilder()
             ->createGrid(SessionsGrid::class)
             ->setSource(new CollectionSource($registered->setup($session->all())));
