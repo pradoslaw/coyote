@@ -1,56 +1,28 @@
 <?php
-
 namespace Coyote\Http\Controllers\Job;
 
-use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
-use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
+use Coyote\Repositories\Eloquent\JobRepository;
 use Coyote\Services\Elasticsearch\Builders\Job\AdBuilder;
 use Coyote\Services\Elasticsearch\Raw;
 use Coyote\Services\Skills\Predictions;
 use Coyote\Tag;
+use Illuminate\Database\Eloquent;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class AdController extends Controller
 {
-    /**
-     * @var JobRepository
-     */
-    private $job;
-
-    /**
-     * @var TagRepository
-     */
-    private $tag;
-
-    /**
-     * @param JobRepository $job
-     * @param TagRepository $tag
-     */
-    public function __construct(JobRepository $job, TagRepository $tag)
+    public function __construct(private JobRepository $job)
     {
-//        debugbar()->disable();
-//        parent::__construct();
-
-        $this->job = $job;
-        $this->tag = $tag;
-
         $this->middleware('geocode');
     }
 
-    /**
-     * @param Predictions $predictions
-     * @return string
-     */
-    public function index(Request $request, Predictions $predictions)
+    public function index(Request $request, Predictions $predictions): string
     {
         $builder = new AdBuilder($request);
         $builder->boostLocation($request->attributes->get('geocode'));
 
-        $data = [];
-        $tags = $predictions->getTags();
-        $majorTag = $this->getMajorTag($tags);
-
+        $majorTag = $this->getMajorTag($predictions->getTags());
         if ($majorTag->exists) {
             $builder->boostTags(Raw::escape($majorTag->name));
         }
@@ -60,24 +32,18 @@ class AdController extends Controller
             return false;
         }
 
-        // search jobs that might be interesting for user
-        return (string) view(
-            'job.ad',
-            $data,
-            ['jobs' => $result->getSource(), 'inverse_tags' => [$majorTag->name], 'major_tag' => $majorTag]
-        );
+        return view('job.ad', [
+            'jobs'         => $result->getSource(),
+            'inverse_tags' => [$majorTag->name],
+            'major_tag'    => $majorTag,
+        ]);
     }
 
-    /**
-     * @param \Coyote\Tag[] $tags
-     * @return \Coyote\Tag
-     */
-    private function getMajorTag($tags)
+    private function getMajorTag(?Eloquent\Collection $tags): Tag
     {
         if (empty($tags) || !count($tags)) {
             return new Tag();
         }
-
         return $tags->random();
     }
 }
