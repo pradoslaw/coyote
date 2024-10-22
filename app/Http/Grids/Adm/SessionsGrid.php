@@ -44,7 +44,7 @@ class SessionsGrid extends Grid
             ])
             ->addColumn('path', [
                 'title'  => 'Strona',
-                'render' => fn(Session $session) => link_to($session->path),
+                'render' => fn(Session $session) => link_to($session->path, \parse_url($session->path, \PHP_URL_PATH)),
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE]),
             ])
             ->addColumn('browser', [
