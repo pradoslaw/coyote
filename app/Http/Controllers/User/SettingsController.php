@@ -67,7 +67,7 @@ class SettingsController extends BaseController
             event(new UserSaved($this->auth));
         });
 
-        return back()->with('success', 'Zmiany zostały poprawie zapisane');
+        return back()->with('success', 'Zmiany zostały zapisane.');
     }
 
     public function ajax(Request $request): void
