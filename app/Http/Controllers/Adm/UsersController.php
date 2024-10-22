@@ -151,6 +151,6 @@ class UsersController extends BaseController
             }
         });
 
-        return back()->with('success', 'Zmiany zostały poprawie zapisane');
+        return back()->with('success', 'Zmiany zostały poprawnie zapisane');
     }
 }

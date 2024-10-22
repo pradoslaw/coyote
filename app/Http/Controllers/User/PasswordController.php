@@ -25,6 +25,6 @@ class PasswordController extends BaseController
         $user->password = bcrypt($request->get('password'));
         $user->save();
         auth()->login($user);
-        return back()->with('success', 'Zmiany zostały poprawie zapisane');
+        return back()->with('success', 'Zmiany zostały poprawnie zapisane');
     }
 }
