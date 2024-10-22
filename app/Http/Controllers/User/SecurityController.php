@@ -42,6 +42,6 @@ class SecurityController extends BaseController
         $user->access_ip = implode('.', $ips);
         $user->save();
 
-        return back()->with('success', 'Zmiany zostały poprawnie zapisane');
+        return back()->with('success', 'Zmiany zostały zapisane.');
     }
 }
