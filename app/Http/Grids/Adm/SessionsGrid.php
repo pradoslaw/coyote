@@ -29,16 +29,14 @@ class SessionsGrid extends Grid
                 'filter'    => new Text(['operator' => FilterOperator::OPERATOR_ILIKE]),
             ])
             ->addColumn('created_at', [
-                'title'     => 'Data logowania',
-                'sortable'  => true,
-                'render'    => fn(Session $session) => Carbon::createFromTimestamp($session->createdAt),
-                'decorator' => [$this->getDateTimeDecorator()],
+                'title'    => 'Data logowania',
+                'sortable' => true,
+                'render'   => fn(Session $session) => Carbon::createFromTimestamp($session->createdAt),
             ])
             ->addColumn('updated_at', [
-                'title'     => 'Ostatnia aktywność',
-                'sortable'  => true,
-                'render'    => fn(Session $session) => Carbon::createFromTimestamp($session->updatedAt),
-                'decorator' => [$this->getDateTimeDecorator()],
+                'title'    => 'Ostatnia aktywność',
+                'sortable' => true,
+                'render'   => fn(Session $session) => Carbon::createFromTimestamp($session->updatedAt),
             ])
             ->addColumn('ip', [
                 'title'  => 'IP',

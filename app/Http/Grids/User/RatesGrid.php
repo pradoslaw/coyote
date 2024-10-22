@@ -25,13 +25,10 @@ class RatesGrid extends Grid
             ])
             ->addColumn('user_id', [
                 'title'     => 'Użytkownik',
-                'clickable' => function ($row) {
-                    return link_to_route('profile', $row->user_name, [$row->user_id]);
-                },
+                'clickable' => fn($row) => link_to_route('profile', $row->user_name, [$row->user_id]),
             ])
             ->addColumn('voted_at', [
-                'title'      => 'Data wystawienia oceny',
-                'decorators' => [$this->getDateTimeDecorator()],
+                'title' => 'Data wystawienia oceny',
             ]);
     }
 }

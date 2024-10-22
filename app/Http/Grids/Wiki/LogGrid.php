@@ -16,36 +16,35 @@ class LogGrid extends Grid
         $this
             ->setDefaultOrder(new Order('wiki_log.created_at', 'desc'))
             ->addColumn('user_id', [
-                'title' => 'Użytkownik',
+                'title'     => 'Użytkownik',
                 'clickable' => function ($row) {
                     return link_to_route('profile', $row->user_name, [$row->user_id], ['data-user-id' => $row->user_id]);
-                }
+                },
             ])
             ->addColumn('comment', [
-                'title' => 'Komentarz',
+                'title'  => 'Komentarz',
                 'render' => function ($row) {
                     /** @var Cell $this */
                     $html = $this->getColumn()->getGrid()->getGridHelper()->getHtmlBuilder();
 
                     $this->setValue(
-                        $html->tag('strong', (string) $html->link($row->path, $row->title)) .
-                        $html->tag('p', (string) htmlspecialchars($this->getValue()), ['class' => 'text-muted'])
+                        $html->tag('strong', (string)$html->link($row->path, $row->title)) .
+                        $html->tag('p', (string)htmlspecialchars($this->getValue()), ['class' => 'text-muted']),
                     );
 
                     return $this->getValue();
-                }
+                },
             ])
             ->addColumn('length', [
-                'title' => 'Rozmiar',
-                'decorators' => [new TextSize()]
+                'title'      => 'Rozmiar',
+                'decorators' => [new TextSize()],
             ])
             ->addColumn('diff', [
-                'title' => 'Różnica',
-                'decorators' => [new TextSize()]
+                'title'      => 'Różnica',
+                'decorators' => [new TextSize()],
             ])
             ->addColumn('created_at', [
                 'title' => 'Data modyfikacji',
-                'decorators' => [$this->getDateTimeDecorator()]
             ]);
     }
 
@@ -60,12 +59,12 @@ class LogGrid extends Grid
             ->addColumn('r1', [
                 'render' => function ($row) use ($form) {
                     return $form->radio('r1', $row->id);
-                }
+                },
             ])
             ->addColumn('r2', [
                 'render' => function ($row) use ($form) {
                     return $form->radio('r2', $row->id);
-                }
+                },
             ])
             ->after(function (Row $row) {
                 static $index = 0;
