@@ -30,7 +30,7 @@ class Media extends AbstractExtension
         }
         $photoUrl = $this->photo($photo);
         $htmlUsername = \htmlSpecialChars($name);
-        return new StringHtml('<img class="mw-100" src="' . $photoUrl . '" alt="' . $htmlUsername . '">');
+        return new StringHtml('<img class="user-avatar mw-100" src="' . $photoUrl . '" alt="' . $htmlUsername . '">');
     }
 
     public function logo($filename, $secure = null): string
