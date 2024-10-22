@@ -48,17 +48,12 @@ class SessionsGrid extends Grid
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE]),
             ])
             ->addColumn('browser', [
-                'title' => 'Przeglądarka',
-            ])
-            ->addColumn('platform', [
-                'title' => 'System operacyjny',
+                'title' => 'Urządzenie',
             ])
             ->after(function (Row $row) {
                 $agent = new Agent();
                 $agent->setUserAgent($row->raw('browser'));
-
-                $row->get('platform')->setValue($agent->platform());
-                $row->get('browser')->setValue($agent->browser());
+                $row->get('browser')->setValue($agent->platform() . ', ' . $agent->browser());
             });
     }
 }

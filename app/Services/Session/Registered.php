@@ -28,9 +28,8 @@ class Registered
      */
     public function setup(Collection $collection)
     {
-        $registered = $collection->filter(function (Session $item) {
-            return $item->userId !== null;
-        });
+        $collection = $collection->filter(fn(Session $item) => $item->robot === '');
+        $registered = $collection->filter(fn(Session $item) => $item->userId !== null);
 
         $this->user->pushCriteria(new WithTrashed());
 
