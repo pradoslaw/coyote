@@ -34,6 +34,13 @@ class PingTest extends TestCase
     }
 
     #[Test]
+    public function searchIsSavedAsReferer(): void
+    {
+        $this->request('/Search?q=foo', 'http://localhost:8880/Mikroblogi');
+        $this->assertSame('/Mikroblogi', $this->sessionPath());
+    }
+
+    #[Test]
     public function ignoreEmptyHttpRefererPathEmpty(): void
     {
         $this->request('/ping', 'http://localhost:8880/');
