@@ -4,7 +4,6 @@ namespace Coyote\Http\Grids\Adm;
 
 use Boduch\Grid\Components\EditButton;
 use Boduch\Grid\Decorators\Boolean;
-use Boduch\Grid\Decorators\Ip;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Filters\Select;
 use Boduch\Grid\Filters\Text;
@@ -55,9 +54,8 @@ class UsersGrid extends Grid
                 'filter'     => new Select(['options' => $booleanOptions]),
             ])
             ->addColumn('ip', [
-                'title'      => 'IP',
-                'decorators' => [new Ip()],
-                'filter'     => new Text(['operator' => FilterOperator::OPERATOR_ILIKE]),
+                'title'  => 'IP',
+                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE]),
             ])
             ->addColumn('reputation', [
                 'title'    => 'Reputacja',
