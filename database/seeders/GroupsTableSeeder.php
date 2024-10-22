@@ -22,6 +22,7 @@ class GroupsTableSeeder extends Seeder
             'password'   => bcrypt('admin'),
             'reputation' => 10000,
         ]);
+        $user->is_confirm = true;
         $user->gdpr = '{}';
         $user->save();
 
