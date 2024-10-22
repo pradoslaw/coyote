@@ -55,8 +55,7 @@ export const MicroblogMixin = {
       if (!users?.length) {
         return null;
       }
-
-      return users.length > 10 ? users.splice(0, 10).concat('...').join("\n") : users.join("\n");
+      return users.length > 10 ? users.slice(0, 10).concat('...').join("\n") : users.join("\n");
     },
   },
 };
