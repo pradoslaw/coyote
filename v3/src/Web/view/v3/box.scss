@@ -1,0 +1,43 @@
+
+.flex {
+  display: flex;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.align-center {
+  align-items: safe center;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+$multiplier: 4px;
+
+@mixin mb($space) {
+  margin-bottom: space($space);
+}
+
+@mixin marginY($space) {
+  margin-top: space($space);
+  margin-bottom: space($space);
+}
+
+@mixin padding($space) {
+  padding: space($space);
+}
+
+@mixin rounded($size:null) {
+  @if $size == 'md' {
+    border-radius: space(1.5);
+  } @else {
+    border-radius: space(1);
+  }
+}
+
+@function space($space) {
+  @return $space * $multiplier;
+}

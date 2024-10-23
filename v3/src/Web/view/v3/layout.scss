@@ -1,0 +1,32 @@
+$presence-layout-background: #f0f2f5;
+$presence-layout-shadow-color: #a7e0ba;
+
+:root {
+  --presence-layout-stroke-image: url('/img/v3/stroke.svg');
+}
+
+@function css-max($value1, $value2) {
+  // by default, using max() will be interpreted
+  // as scss max()
+  @return #{'max'}($value1, $value2);
+}
+
+body.presence-layout {
+  font-family: Inter, Arial, sans-serif;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+
+  $background-stroke: var(--presence-layout-stroke-image);
+  $background-shadow: radial-gradient(
+                  circle at bottom right,
+                  $presence-layout-shadow-color 0,
+                  transparent 100%);
+
+  background: $background-stroke no-repeat right bottom, $background-shadow right bottom;
+  background-size: 50% 50%, contain;
+}
+
+p {
+  margin: 0;
+}

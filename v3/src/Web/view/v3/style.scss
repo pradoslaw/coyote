@@ -1,0 +1,141 @@
+@use "./box";
+@use "./layout";
+
+$color-primary: #00a538;
+
+$color-neutral-950: #17181c;
+$color-neutral-800: #4a4e5e;
+$color-neutral-600: #717998;
+$color-neutral-500: #8d97b0;
+$color-neutral-200: #d8dde4;
+$color-neutral-100: #e9ecf1;
+$color-neutral-0: #ffffff;
+
+$color-red-500: #f43f5e;
+
+.card {
+  width: 424px;
+  padding: 24px;
+  border-radius: 8px;
+  background: white;
+  margin-bottom: 8px;
+
+  .card-logo {
+    display: block; // To enable margin collapsing
+    @include box.mb(6);
+  }
+
+  .card-heading {
+    color: #333;
+    font-size: 18px;
+    font-weight: 700;
+    @include box.mb(4);
+  }
+
+  .card-button {
+    width: 100%;
+    background: $color-primary;
+    cursor: pointer;
+    color: white;
+    background: $color-primary;
+    border: 1px solid $color-primary;
+    @include box.padding(2);
+    @include box.marginY(2);
+    @include box.rounded;
+
+    &:hover {
+      background: #007e2b;
+      border-color: #007e2b;
+    }
+
+    &:focus {
+      border-color: #00fe56;
+    }
+
+    &:active {
+      background: #006522;
+      border-color: #006522;
+    }
+
+    &:disabled {
+      background: rgba($color-primary, 0.3);
+      border-color: rgba($color-primary, 0.3);
+    }
+  }
+
+  :last-child {
+    margin-bottom: 0;
+  }
+}
+
+.narrow-section {
+  @include box.marginY(1);
+  overflow-y: auto;
+  max-height: 130px;
+
+  :first-child {
+    margin-top: 0;
+  }
+
+  :last-child {
+    margin-bottom: 0;
+  }
+}
+
+.input-group {
+  @include box.marginY(4);
+
+  label {
+    display: block;
+    color: $color-neutral-950;
+    font-weight: 500;
+    @include box.mb(1);
+  }
+
+  input {
+    &:not([type]),
+    &[type=text],
+    &[type=password],
+    {
+      width: 100%;
+      border: 1px solid $color-neutral-100;
+      @include box.padding(2.5);
+      @include box.marginY(1);
+      @include box.rounded;
+    }
+  }
+
+  .error-message {
+    color: $color-red-500;
+    font-size: 12px;
+  }
+
+  small p {
+    color: $color-neutral-600;
+    font-size: 12px;
+    @include box.marginY(1);
+  }
+}
+
+.input-group-checkbox {
+  $offset-y: 2px;
+  padding-top: $offset-y;
+  font-size: 12px;
+
+  label {
+    color: $color-neutral-800;
+    font-weight: 400;
+
+    $space: box.space(7);
+    padding-left: $space;
+
+    input[type=checkbox] {
+      vertical-align: top;
+      margin-left: -#{$space};
+      margin-top: -$offset-y;
+      width: #{box.space(5)};
+      height: #{box.space(5)};
+      @include box.rounded(md);
+    }
+  }
+}

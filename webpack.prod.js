@@ -16,6 +16,7 @@ const plugins = [
       path.join(__dirname, 'resources/js/**/*.ts'),
       path.join(__dirname, 'resources/js/**/*.js'),
       path.join(__dirname, 'survey/**/*.*'),
+      path.join(__dirname, 'v3/**/*.*'),
     ]),
     safelist: {
       standard: [

@@ -121,6 +121,7 @@ module.exports = {
     wiki: ['./js/pages/wiki.js'],
     job: ['./js/pages/job.js'],
     adm: './sass/pages/adm.scss',
+    v3: '../v3/src/Web/view/v3/style.scss',
   },
   plugins: [
     new VueLoaderPlugin(),

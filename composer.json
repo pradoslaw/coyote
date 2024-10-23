@@ -70,6 +70,7 @@
       "Boduch\\Grid\\": "grid/",
       "Coyote\\": "app/",
       "Neon\\": "neon/src/",
+      "V3\\": "v3/src/",
       "Database\\Seeders\\": "database/seeders/"
     },
     "files": [
@@ -84,7 +85,8 @@
       "Tests\\Grid\\": "tests/Grid/",
       "Tests\\Legacy\\": "tests/Legacy/",
       "Tests\\Unit\\": "tests/Unit/",
-      "Neon\\Test\\": "neon/test/"
+      "Neon\\Test\\": "neon/test/",
+      "V3\\Test\\": "v3/test/"
     },
     "files": [
       "neon/test/BaseFixture/Caught/caught.php"

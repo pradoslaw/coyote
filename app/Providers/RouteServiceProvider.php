@@ -117,6 +117,8 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
             'namespace'  => $this->namespace,
             'middleware' => 'web',
         ], function () {
+            (new \V3\Controller())->setupEndpoints();
+            
             require base_path('routes/auth.php');
             require base_path('routes/misc.php');
             require base_path('routes/forum.php');
