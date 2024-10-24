@@ -13,6 +13,15 @@ $color-neutral-0: #ffffff;
 
 $color-red-500: #f43f5e;
 
+@mixin input-text {
+  input:not([type]),
+  input[type=text],
+  input[type=password],
+  {
+    @content
+  }
+}
+
 .card {
   width: 424px;
   padding: 24px;
@@ -92,28 +101,38 @@ $color-red-500: #f43f5e;
     @include box.mb(1);
   }
 
-  input {
-    &:not([type]),
-    &[type=text],
-    &[type=password],
-    {
-      width: 100%;
-      border: 1px solid $color-neutral-100;
-      @include box.padding(2.5);
-      @include box.marginY(1);
-      @include box.rounded;
-    }
-  }
-
-  .error-message {
-    color: $color-red-500;
-    font-size: 12px;
+  @include input-text {
+    width: 100%;
+    border: 1px solid $color-neutral-100;
+    @include box.padding(2.5);
+    @include box.marginY(1);
+    @include box.rounded;
   }
 
   small p {
     color: $color-neutral-600;
     font-size: 12px;
     @include box.marginY(1);
+  }
+
+  .error-message {
+    display: none;
+  }
+
+  &.input-group-error {
+    .error-message {
+      display: block;
+      color: $color-red-500;
+      font-size: 12px;
+    }
+
+    label {
+      color: $color-red-500;
+    }
+
+    @include input-text {
+      border: 1px solid $color-red-500;
+    }
   }
 }
 

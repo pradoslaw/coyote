@@ -4,22 +4,20 @@
   <link href="//fonts.googleapis.com/css?family=Inter:400,500,700" rel="stylesheet" type="text/css">
 </head>
 <body class="presence-layout">
-
 <div class="flex justify-center align-center h-100">
-  <div>
+  <form action="{{ postSubmitUrl }}" method="POST">
     <div class="card">
       <img class="card-logo" src="{{ logoUrl }}"/>
       <p class="card-heading">
         Dołącz do największej społeczności programistycznej w Polsce
       </p>
 
-      <div class="input-group">
+      <div class="input-group {{ registerErrorsUsername ? 'input-group-error' }}">
         <label>Nazwa użytkownika</label>
         <input placeholder="Twoja nazwa">
-
-        <p class="error-message">
-          Konto o podanej nazwie użytkownika już istnieje
-        </p>
+        {% for error in registerErrorsUsername %}
+          <p class="error-message">{{ error }}</p>
+        {% endfor %}
       </div>
 
       <button class="card-button">
@@ -30,25 +28,34 @@
     <div class="card">
       <img class="card-logo" src="{{ logoUrl }}"/>
 
-      <div class="input-group">
+      <div class="input-group {{ registerErrorPasswordNotSecure ? 'input-group-error' }}">
         <label>Hasło</label>
         <input type="password" placeholder="Stwórz hasło">
+        <p class="error-message">
+          Podane hasło nie jest wystarczająco bezpieczne.
+        </p>
         <small>
           <p>
             Hasło powinno zawierać conajmniej 8 znaków, w tym przynajmniej jedną wielką literę, cyfrę oraz znak specjalny.
           </p>
         </small>
       </div>
-      <div class="input-group">
+      <div class="input-group {{ registerErrorsPassword ? 'input-group-error' }}">
         <label>Powtórz hasło</label>
-        <input type="password" placeholder="Stwórz hasło">
+        <input type="password" placeholder="Powtórz hasło">
+        {% for error in registerErrorsPassword %}
+          <p class="error-message">{{ error }}</p>
+        {% endfor %}
       </div>
-      <div class="input-group">
+      <div class="input-group {{ registerErrorEmailTaken ? 'input-group-error' }}">
         <label>Adres e-mail</label>
         <input placeholder="Twój adres e-mail">
+        <p class="error-message">
+          Ten adres e-mail jest już przypisany do konta.
+        </p>
       </div>
       <div class="narrow-section">
-        <div class="input-group input-group-checkbox">
+        <div class="input-group input-group-checkbox {{ registerErrorTermsNotAccepted ? 'input-group-error' }}">
           <label>
             <input type="checkbox">
             Akceptuję regulamin oraz politykę prywatności.
@@ -74,7 +81,7 @@
         Utwórz konto
       </button>
     </div>
-  </div>
+  </form>
 </div>
 </body>
 </html>
