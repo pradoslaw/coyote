@@ -10,8 +10,19 @@
 {% endblock %}
 
 {% block fixed %}
-  <div class="row mt-4">
+  <div class="row">
     <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 col-xxl-3 mx-auto">
+      <div class="mb-4">
+        <a href="/">
+          <img
+              class="logo mb-4"
+              alt="4programmers.net"
+              style="height:24px;"
+              src="{{ __dark_theme ? cdn('img/logo-footer-dark.svg') : cdn('img/logo-footer-light.svg') }}"
+          />
+        </a>
+      </div>
+
       {% if session_has('success') %}
         <div class="alert alert-success mt-3">
           {{ icon('alertSuccess') }}
