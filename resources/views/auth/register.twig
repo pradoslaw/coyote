@@ -19,9 +19,23 @@
   {# Remove breadcrumbs #}
 {% endblock %}
 
-{% block container %}
+{% block fixed %}
   <div class="row">
     <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 mx-auto">
+      {% if session_has('success') %}
+        <div class="alert alert-success mt-3">
+          {{ icon('alertSuccess') }}
+          {{ session_get('success') }}
+        </div>
+      {% endif %}
+
+      {% if session_has('error') %}
+        <div class="alert alert-danger mt-3">
+          {{ icon('alertDanger') }}
+          {{ session_get('error') }}
+        </div>
+      {% endif %}
+
       {% include 'auth.oauth' %}
 
       {# ten kod jest tutaj na potrzeby pluginu socialize. przekazuje on w GET komunikat bledu #}
