@@ -52,21 +52,23 @@
       {{ form_row(form.password_confirmation) }}
       {{ form_row(form.email) }}
       {{ form_row(form.email_confirmation) }}
-      {{ form_row(form.terms) }}
-      {{ form_row(form.marketing_agreement) }}
-      <div class="form-group">
-        <small class="form-text text-muted">
-          Administratorem danych osobowych podanych w formularzu rejestracyjnym jest Makana sp. z o.o. z
-          siedzibą przy ul.&nbsp;Krupniczej&nbsp;13 we Wrocławiu (50-075). Twoje dane osobowe będą przetwarzane
-          w celu utworzenia i dalszego utrzymywania konta w serwisie 4programmers.net, w szczególności w celu
-          umożliwienia korzystania z usługi zgodnie z <a href="/Regulamin">Regulaminem</a>. W przypadku
-          wyrażenia <a href="/Zgody">zgody</a> na otrzymywanie informacji handlowych będziemy przetwarzać Twoje
-          dane osobowe w celach marketingowych tj., w celu kierowania na podany przez Ciebie adres e-mail
-          informacji handlowych w zakresie objętym wyrażoną zgodą. Wycofanie zgody na otrzymywanie informacji
-          handlowych jest możliwe w dowolnym momencie, co nie wpływa na zgodność przetwarzania danych
-          zrealizowanego przed jej wycofaniem. Więcej informacji o przetwarzaniu danych osobowych oraz Twoich
-          prawach z tym związanych znajdziesz w naszej <a href="/Polityka_prywatności">Polityce Prywatności</a>.
-        </small>
+      <div style="max-height:144px; overflow-y:auto;" class="mb-3">
+        {{ form_row(form.terms) }}
+        {{ form_row(form.marketing_agreement) }}
+        <div class="form-group">
+          <small class="form-text text-muted">
+            Administratorem danych osobowych podanych w formularzu rejestracyjnym jest Makana sp. z o.o. z
+            siedzibą przy ul.&nbsp;Krupniczej&nbsp;13 we Wrocławiu (50-075). Twoje dane osobowe będą przetwarzane
+            w celu utworzenia i dalszego utrzymywania konta w serwisie 4programmers.net, w szczególności w celu
+            umożliwienia korzystania z usługi zgodnie z <a href="/Regulamin">Regulaminem</a>. W przypadku
+            wyrażenia <a href="/Zgody">zgody</a> na otrzymywanie informacji handlowych będziemy przetwarzać Twoje
+            dane osobowe w celach marketingowych tj., w celu kierowania na podany przez Ciebie adres e-mail
+            informacji handlowych w zakresie objętym wyrażoną zgodą. Wycofanie zgody na otrzymywanie informacji
+            handlowych jest możliwe w dowolnym momencie, co nie wpływa na zgodność przetwarzania danych
+            zrealizowanego przed jej wycofaniem. Więcej informacji o przetwarzaniu danych osobowych oraz Twoich
+            prawach z tym związanych znajdziesz w naszej <a href="/Polityka_prywatności">Polityce Prywatności</a>.
+          </small>
+        </div>
       </div>
       <div class="text-center">
         {{ form_row(form.submit) }}
