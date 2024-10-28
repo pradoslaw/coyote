@@ -1,16 +1,16 @@
 {% extends 'forms.themes.inline.row' %}
 
-{% block label %}{% endblock %}
+{% block label %}
+{% endblock %}
+
 {% block wrap %}
-    <div class="custom-control custom-checkbox">
-        {% if not ('[]' in name) %}
-            {{ form_hidden(name, unchecked_value) }}
-        {% endif %}
-
-        {{ include(widget_path) }}
-
-        <label for="{{ attr.id }}" class="custom-control-label">
-            {{ label }}
-        </label>
-    </div>
+  <div class="custom-control custom-checkbox">
+    {% if not ('[]' in name) %}
+      {{ form_hidden(name, unchecked_value) }}
+    {% endif %}
+    <label for="{{ attr.id }}" class="custom-control-label">
+      {{ include(widget_path) }}
+      {{ label }}
+    </label>
+  </div>
 {% endblock %}
