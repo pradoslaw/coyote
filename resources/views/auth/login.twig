@@ -11,7 +11,7 @@
 
 {% block fixed %}
   <div class="row mt-4">
-    <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 mx-auto">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 col-xxl-3 mx-auto">
       {% if session_has('success') %}
         <div class="alert alert-success mt-3">
           {{ icon('alertSuccess') }}
@@ -24,7 +24,7 @@
           {{ session_get('error') }}
         </div>
       {% endif %}
-      
+
       {% include 'auth.oauth' %}
 
       {# ten kod jest tutaj na potrzeby pluginu socialize. przekazuje on w GET komunikat bledu #}
@@ -37,14 +37,23 @@
 
       {{ form_start(form) }}
       {{ form_row(form.name) }}
-      {{ form_row(form.password) }}
-
       <div class="form-group">
+        {{ form_row(form.password) }}
+        <div class="text-end" style="margin-top:-10px;">
+          <a href="{{ url('Password') }}">Zapomniałeś hasła?</a>
+        </div>
+      </div>
+      <div class="text-center" style="margin-top:-10px;">
         {{ form_widget(form.submit) }}
-
-        <a href="{{ url('Password') }}" style="margin-left: 15px">Zapomniałeś hasła?</a>
       </div>
       {{ form_end() }}
+
+      <div class="text-center mt-4 mb-4">
+        Nie masz konta?
+        <a href="{{ route('register') }}">
+          Zarejestruj się
+        </a>
+      </div>
     </div>
   </div>
 {% endblock %}

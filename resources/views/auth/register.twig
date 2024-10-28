@@ -21,7 +21,7 @@
 
 {% block fixed %}
   <div class="row">
-    <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 mx-auto">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 col-xxl-3 mx-auto">
       {% if session_has('success') %}
         <div class="alert alert-success mt-3">
           {{ icon('alertSuccess') }}
@@ -68,8 +68,16 @@
           prawach z tym związanych znajdziesz w naszej <a href="/Polityka_prywatności">Polityce Prywatności</a>.
         </small>
       </div>
-      {{ form_row(form.submit) }}
+      <div class="text-center">
+        {{ form_row(form.submit) }}
+      </div>
       {{ form_end(form) }}
+      <div class="text-center mb-4">
+        Masz już konto?
+        <a href="{{ route('login') }}">
+          Zaloguj się
+        </a>
+      </div>
     </div>
   </div>
 {% endblock %}
