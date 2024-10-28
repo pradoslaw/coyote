@@ -1,5 +1,5 @@
-<div class="row">
-  <div class="col-4">
+<div class="d-flex justify-content-between">
+  <div class="flex-grow-1 mx-1">
     <button class="btn-google" data-url="{{ route('oauth', ['google']) }}">
       <span class="icon">
         {{ icon('loginGoogle') }}
@@ -10,7 +10,7 @@
     </button>
   </div>
 
-  <div class="col-4">
+  <div class="flex-grow-1 mx-1">
     <button class="btn-fb" data-url="{{ route('oauth', ['facebook']) }}">
       <span class="icon">
         {{ icon('loginFacebook') }}
@@ -19,7 +19,7 @@
     </button>
   </div>
 
-  <div class="col-4">
+  <div class="flex-grow-1 mx-1">
     <button class="btn-github" data-url="{{ route('oauth', ['github']) }}">
       <span class="icon">
         {{ icon('loginGithub') }}
