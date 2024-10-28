@@ -60,6 +60,7 @@
   <script type="application/json" id="survey">{{ survey|json_encode|raw }}</script>
   <div id="js-survey"></div>
 
+{% block header %}
   <header class="{{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }}">
     {{ form_open({url: route('logout'), name: 'logout-form'}) }}
     {{ form_close() }}
@@ -80,7 +81,7 @@
         <div class="collapse navbar-collapse flex-grow-0 order-4 order-lg-1 ms-2" id="mobile-menu">
           <ul class="navbar-nav">
             {% for item in __master_menu.roots() %}
-              <li {{ forms.attr(item.attr) }}>
+              <li class="{{ item.attr.class }}">
                 <a href="{{ item.url }}" class="nav-link">
                   {{ item.title|raw }}
                 </a>
@@ -190,11 +191,14 @@
       </div>
     </nav>
   </header>
+{% endblock header %}
 
   <div class="container-fluid">
-    {% if breadcrumb is defined %}
-      {{ breadcrumb|raw }}
-    {% endif %}
+    {% block breadcrumbs %}
+      {% if breadcrumb is defined %}
+        {{ breadcrumb|raw }}
+      {% endif %}
+    {% endblock breadcrumbs %}
 
     <noscript>
       <div class="row">
@@ -239,36 +243,36 @@
     {% endblock %}
   </div>
 
-  {% block footer %}
-    <footer class="container-fluid mt-4">
-      <div class="footer-top">
-        {% if breadcrumb is defined %}
-          {{ breadcrumb|raw }}
-        {% endif %}
+{% block footer %}
+  <footer class="container-fluid mt-4">
+    <div class="footer-top">
+      {% if breadcrumb is defined %}
+        {{ breadcrumb|raw }}
+      {% endif %}
+    </div>
+    <div class="footer-inner row">
+      <div class="col-12">
+        <div class="container-3xl">
+          {{ render_block('footer') }}
+        </div>
+        <span id="scroll-to-top" title="Powrót na górę">
+          {{ icon('scrollTop') }}
+        </span>
       </div>
-      <div class="footer-inner row">
-        <div class="col-12">
-          <div class="container-3xl">
-            {{ render_block('footer') }}
-          </div>
-          <span id="scroll-to-top" title="Powrót na górę">
-            {{ icon('scrollTop') }}
-          </span>
+    </div>
+    <div id="footer-copyright">
+      <div class="container-3xl d-flex">
+        <div>
+          Copyright &copy; 2000-{{ year }}
+          <a href="https://4programmers.net/" class="logo" title="4programmers.net - programowanie"></a>
+        </div>
+        <div class="ms-auto">
+          Coyote {{ config('app.version') }}: {{ timer() }}
         </div>
       </div>
-      <div id="footer-copyright">
-        <div class="container-3xl d-flex">
-          <div>
-            Copyright &copy; 2000-{{ year }}
-            <a href="https://4programmers.net/" class="logo" title="4programmers.net - programowanie"></a>
-          </div>
-          <div class="ms-auto">
-            Coyote {{ config('app.version') }}: {{ timer() }}
-          </div>
-        </div>
-      </div>
-    </footer>
-  {% endblock footer %}
+    </div>
+  </footer>
+{% endblock footer %}
 
   <link rel="stylesheet" href="{{ cdn('css/app.css') }}">
 

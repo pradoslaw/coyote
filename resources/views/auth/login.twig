@@ -1,37 +1,37 @@
 {% extends 'layout' %}
 {% block title %}Logowanie{{ parent() }}{% endblock %}
 
+{% block header %}
+  {# Remove header #}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {# Remove breadcrumbs #}
+{% endblock %}
+
 {% block container %}
   <div class="row mt-4">
-    <div class="col-10 mx-auto">
-      <div class="row">
-        <div id="box-login" class="col-sm-7">
-          <div class="row">
-            <div class="col-10">
-              {% include 'auth.oauth' %}
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 mx-auto">
+      {% include 'auth.oauth' %}
 
-              {# ten kod jest tutaj na potrzeby pluginu socialize. przekazuje on w GET komunikat bledu #}
-              {# niestety z jakiegos powodu nie mozna tego komunikatu przekazac w sesji #}
-              {% if request().has('error') %}
-                <div class="alert alert-danger">
-                  {{ request().get('error') }}
-                </div>
-              {% endif %}
-
-              {{ form_start(form) }}
-              {{ form_row(form.name) }}
-              {{ form_row(form.password) }}
-
-              <div class="form-group">
-                {{ form_widget(form.submit) }}
-
-                <a href="{{ url('Password') }}" style="margin-left: 15px">Zapomniałeś hasła?</a>
-              </div>
-              {{ form_end() }}
-            </div>
-          </div>
+      {# ten kod jest tutaj na potrzeby pluginu socialize. przekazuje on w GET komunikat bledu #}
+      {# niestety z jakiegos powodu nie mozna tego komunikatu przekazac w sesji #}
+      {% if request().has('error') %}
+        <div class="alert alert-danger">
+          {{ request().get('error') }}
         </div>
+      {% endif %}
+
+      {{ form_start(form) }}
+      {{ form_row(form.name) }}
+      {{ form_row(form.password) }}
+
+      <div class="form-group">
+        {{ form_widget(form.submit) }}
+
+        <a href="{{ url('Password') }}" style="margin-left: 15px">Zapomniałeś hasła?</a>
       </div>
+      {{ form_end() }}
     </div>
   </div>
 {% endblock %}
