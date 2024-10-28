@@ -72,39 +72,3 @@ $github-color: #60b044;
     }
   }
 }
-
-#box-login-sidebar, #box-register-sidebar {
-  blockquote {
-    position: relative;
-    border-left: none;
-    font-size: $font-size-lg;
-  }
-}
-
-#box-register-sidebar {
-  h2 {
-    font-size: $font-size-lg;
-    margin-bottom: 20px;
-  }
-
-  blockquote {
-    margin-bottom: 7%;
-  }
-
-  ul {
-    margin: 10px 0;
-
-    li {
-      padding: 10px 0 10px 25px;
-      position: relative;
-
-      &:before {
-        color: $success;
-        position: absolute;
-        left: 0;
-        top: 10px;
-        @include content-icon-solid($icon-register-benefit);
-      }
-    }
-  }
-}

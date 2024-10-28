@@ -1,8 +1,6 @@
 {% extends 'layout' %}
 {% block title %}Logowanie{{ parent() }}{% endblock %}
 
-{% import 'components.forms' as forms %}
-
 {% block container %}
   <div class="row mt-4">
     <div class="col-10 mx-auto">
@@ -32,15 +30,6 @@
               {{ form_end() }}
             </div>
           </div>
-        </div>
-
-        <div id="box-login-sidebar" class="col-sm-5 d-sm-none d-md-block p-5">
-          <h2>Nie masz konta?</h2>
-
-          <blockquote>Rejestracja zajmuje tylko kilka sekund i jest darmowa. Pozwoli Ci to aktywnie korzystać z naszego serwisu</blockquote>
-          <a class="btn btn-secondary" href="{{ route('register') }}">
-            Utwórz konto za darmo
-          </a>
         </div>
       </div>
     </div>
