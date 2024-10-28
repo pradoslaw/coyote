@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 @import "../icons/icons";
+@import "../../feature/theme/theme";
 
 .btn-google, .btn-fb, .btn-github {
   width: 100%;
@@ -61,14 +62,31 @@ $github-color: #60b044;
 
     span {
       font-style: italic;
-      background-color: $body-bg;
       padding: 10px;
+      @include light {
+        background-color: $body-bg;
+      }
+      @include dark {
+        background-color: #252525;
+      }
     }
 
     hr {
       margin-bottom: -10px;
       height: 0;
-      border-top: 1px solid $gray-lighter;
+      @include light {
+        border-top: 1px solid $gray-lighter;
+      }
+
+      @include dark {
+        border-top: 1px solid #404040;
+      }
+    }
+  }
+
+  @include dark {
+    input {
+      background-color: #1a1a1a;
     }
   }
 }
