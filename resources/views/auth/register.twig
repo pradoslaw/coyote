@@ -1,14 +1,21 @@
 {% extends 'layout' %}
 {% block title %}Rejestracja{{ parent() }}{% endblock %}
 
-{% import 'components.forms' as forms %}
+{% block head %}
+  {{ parent() }}
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script type="text/javascript">
+    function onSubmit() {
+      document.getElementById("js-register-form").submit();
+    }
+  </script>
+{% endblock %}
 
 {% block container %}
   <div class="row mt-4">
     <div class="col-10 mx-auto">
       <div class="row">
         <div id="box-register" class="col-sm-7">
-
           <div class="row">
             <div class="col-10">
               {% include 'auth.oauth' %}
@@ -29,7 +36,6 @@
               {{ form_row(form.email_confirmation) }}
               {{ form_row(form.terms) }}
               {{ form_row(form.marketing_agreement) }}
-
               <div class="form-group">
                 <small class="form-text text-muted">
                   Administratorem danych osobowych podanych w formularzu rejestracyjnym jest Makana sp. z o.o. z
@@ -44,9 +50,7 @@
                   prawach z tym związanych znajdziesz w naszej <a href="/Polityka_prywatności">Polityce Prywatności</a>.
                 </small>
               </div>
-
               {{ form_row(form.submit) }}
-
               {{ form_end(form) }}
             </div>
           </div>
@@ -71,16 +75,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
-
-{% block head %}
-  {{ parent() }}
-
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-  <script type="text/javascript">
-      function onSubmit() {
-          document.getElementById("js-register-form").submit();
-      }
-  </script>
 {% endblock %}
