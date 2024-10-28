@@ -66,13 +66,17 @@
         </div>
       {% endif %}
 
+      <h1 class="my-4 d-block text-center" style="font-size:1.25em;">
+        Załóż swoje konto na 4programmers.net
+      </h1>
+
       {{ form_start(form) }}
       {{ form_row(form.name) }}
       {{ form_row(form.password) }}
       {{ form_row(form.password_confirmation) }}
       {{ form_row(form.email) }}
       {{ form_row(form.email_confirmation) }}
-      <div style="max-height:144px; overflow-y:auto;" class="mb-3">
+      <div style="max-height:56px; overflow-y:auto;" class="mb-3">
         {{ form_row(form.terms) }}
         {{ form_row(form.marketing_agreement) }}
         <div class="form-group">
