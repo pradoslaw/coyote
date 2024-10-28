@@ -239,36 +239,36 @@
     {% endblock %}
   </div>
 
-  <footer class="container-fluid mt-4">
-    <div class="footer-top">
-      {% if breadcrumb is defined %}
-        {{ breadcrumb|raw }}
-      {% endif %}
-    </div>
-
-    <div class="footer-inner row">
-      <div class="col-12">
-        <div class="container-3xl">
-          {{ render_block('footer') }}
-        </div>
-        <span id="scroll-to-top" title="Powrót na górę">
-          {{ icon('scrollTop') }}
-        </span>
+  {% block footer %}
+    <footer class="container-fluid mt-4">
+      <div class="footer-top">
+        {% if breadcrumb is defined %}
+          {{ breadcrumb|raw }}
+        {% endif %}
       </div>
-    </div>
-
-    <div id="footer-copyright">
-      <div class="container-3xl d-flex">
-        <div>
-          Copyright &copy; 2000-{{ year }}
-          <a href="https://4programmers.net/" class="logo" title="4programmers.net - programowanie"></a>
-        </div>
-        <div class="ms-auto">
-          Coyote {{ config('app.version') }}: {{ timer() }}
+      <div class="footer-inner row">
+        <div class="col-12">
+          <div class="container-3xl">
+            {{ render_block('footer') }}
+          </div>
+          <span id="scroll-to-top" title="Powrót na górę">
+            {{ icon('scrollTop') }}
+          </span>
         </div>
       </div>
-    </div>
-  </footer>
+      <div id="footer-copyright">
+        <div class="container-3xl d-flex">
+          <div>
+            Copyright &copy; 2000-{{ year }}
+            <a href="https://4programmers.net/" class="logo" title="4programmers.net - programowanie"></a>
+          </div>
+          <div class="ms-auto">
+            Coyote {{ config('app.version') }}: {{ timer() }}
+          </div>
+        </div>
+      </div>
+    </footer>
+  {% endblock footer %}
 
   <link rel="stylesheet" href="{{ cdn('css/app.css') }}">
 
@@ -276,7 +276,7 @@
   <script src="{{ cdn('js/vendor.js') }}"></script>
   <script src="{{ cdn('js/app.js') }}"></script>
   <script src="{{ cdn('js/common.js') }}"></script>
-{% endblock %}
+{% endblock body %}
 
 {{ render_region('bottom') }}
 </body>
