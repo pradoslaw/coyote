@@ -9,6 +9,15 @@
       document.getElementById("js-register-form").submit();
     }
   </script>
+  <style>
+      html body.padding-top {
+          padding-top: 0;
+      }
+
+      html .form-group {
+          margin-bottom: 0.5rem;
+      }
+  </style>
 {% endblock %}
 
 {% block header %}
@@ -20,9 +29,9 @@
 {% endblock %}
 
 {% block fixed %}
-  <div class="row">
+  <div class="row mt-4">
     <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 col-xxl-3 mx-auto">
-      <div class="mb-4">
+      <div class="mb-2">
         <a href="/">
           <img
               class="logo mb-4"
