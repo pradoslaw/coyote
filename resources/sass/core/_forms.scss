@@ -27,3 +27,20 @@
 .form-text-help {
   color: #6c757d;
 }
+
+.custom-checkbox {
+  .custom-control-label {
+    $offset: 22px;
+    padding-left: $offset;
+    width: 100%;
+
+    .custom-control-input {
+      margin-left: -$offset;
+      vertical-align: top;
+    }
+
+    .label-text {
+      display: inline-block;
+    }
+  }
+}

@@ -4,13 +4,13 @@
       <label class="col-form-label">
         Temat <em>*</em>
       </label>
-      <vue-text 
+      <vue-text
         v-model="topic.title"
-        :is-invalid="'title' in errors" 
-        @accept="save" 
+        :is-invalid="'title' in errors"
+        @accept="save"
         @leave="findSimilar"
-        name="title" 
-        tabindex="1" 
+        name="title"
+        tabindex="1"
         autofocus="autofocus"/>
       <vue-error :message="errors['title']"/>
       <small v-if="!('title' in errors)" class="text-muted form-text">
@@ -128,9 +128,8 @@
 
     <div v-if="showStickyCheckbox" class="form-group">
       <div class="custom-control custom-checkbox">
-        <input v-model="topic.is_sticky" type="checkbox" class="custom-control-input" id="is-sticky">
-        {{ ' ' }}
         <label class="custom-control-label" for="is-sticky">
+          <input v-model="topic.is_sticky" type="checkbox" class="custom-control-input" id="is-sticky">
           Przyklejony wątek
         </label>
       </div>

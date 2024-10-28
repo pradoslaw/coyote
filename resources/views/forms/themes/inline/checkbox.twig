@@ -10,7 +10,9 @@
     {% endif %}
     <label for="{{ attr.id }}" class="custom-control-label">
       {{ include(widget_path) }}
-      {{ label }}
+      <span class="label-text">
+        {{ label }}
+      </span>
     </label>
   </div>
 {% endblock %}
