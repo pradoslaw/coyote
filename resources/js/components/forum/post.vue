@@ -16,7 +16,7 @@
       <vue-icon name="postAuthorBlocked"/>
       Treść posta została ukryta, ponieważ autorem jest zablokowany przez Ciebie użytkownik.
     </div>
-    <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed}" class="card-header d-none ">
+    <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed}" class="card-header d-none">
       <div class="row">
         <div class="col-2">
           <h5 class="mb-0 post-author">
@@ -314,11 +314,20 @@
         </div>
       </div>
     </div>
+    <div class="card-footer d-none d-md-block py-2" v-if="post.has_review">
+      <div class="row">
+        <div class="col-lg-2 d-none d-lg-block"/>
+        <div class="col-12 col-lg-10">
+          <vue-post-review :post-id="post.id" @close="closePostReview" @review="postReview"/>
+        </div>
+      </div>
+    </div>
     <vue-modal ref="delete-modal" @delete="reasonId => deletePost(false, reasonId)" :reasons="reasons"/>
   </div>
 </template>
 
 <script lang="ts">
+import axios from "axios";
 import Popover from 'bootstrap/js/dist/popover';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import pl from 'date-fns/locale/pl';
@@ -342,6 +351,7 @@ import VueSelect from './../forms/select.vue';
 import VueCommentForm from "./comment-form.vue";
 import VueComment from './comment.vue';
 import VueForm from './form.vue';
+import VuePostReview, {ReviewType} from "./post-review.vue";
 
 export default {
   name: 'post',
@@ -359,6 +369,7 @@ export default {
     'vue-tags': VueTags,
     'vue-timeago': VueTimeAgo,
     'vue-username': VueUserName,
+    'vue-post-review': VuePostReview,
   },
   props: {
     post: {
@@ -396,6 +407,14 @@ export default {
     }
   },
   methods: {
+    closePostReview(): void {
+      this.post.has_review = false;
+    },
+    postReview(type: ReviewType): void {
+      axios.post('/User/Settings/Ajax', {
+        postsReviewed: {type, postId: this.post.id},
+      });
+    },
     ...mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments', 'loadVoters']),
     formatDistanceToNow(date) {
       return formatDistanceToNow(new Date(date), {locale: pl});

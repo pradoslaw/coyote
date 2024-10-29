@@ -514,6 +514,9 @@ readonly class FontAwesomeFree
             'themeToggleDark'                           => 'fas fa-moon',
             'themeToggleLight'                          => 'fas fa-sun',
             'themeToggleSystem'                         => 'fas fa-display',
+
+            // post review
+            'postReviewClose'                           => $genericClose,
         ];
     }
 }

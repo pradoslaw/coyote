@@ -126,19 +126,10 @@ class UsersController extends BaseController
 
             if ($this->request->has('local-settings-action')) {
                 $action = $this->request->get('local-settings-action');
-                $survey = new GuestSurvey(new Guest($user->guest_id), $clock);
-                if ($action === 'post-comments-modern') {
-                    $survey->setChoice('modern');
-                }
-                if ($action === 'post-comments-legacy') {
-                    $survey->setChoice('legacy');
-                }
-                if ($action === 'post-comments-none-legacy') {
-                    $survey->setChoice('none-legacy');
-                }
-                if ($action === 'post-comments-none-modern') {
-                    $survey->setChoice('none-modern');
-                }
+                $value = $this->request->get('local-settings-value');
+                $guest = new Guest($user->guest_id);
+                $survey = new GuestSurvey($guest, $clock);
+
                 if ($action === 'survey-none') {
                     $survey->setState('survey-none');
                 }
@@ -147,6 +138,15 @@ class UsersController extends BaseController
                 }
                 if ($action === 'survey-clear-log') {
                     $survey->clearLog();
+                }
+                if ($action === 'review-add') {
+                    $posts = $guest->getSetting('postsToReview', []);
+                    $guest->setSetting('postsToReview', 
+                        \array_values(\array_unique([...$posts, (int)$value])));
+                }
+                if ($action === 'review-clear') {
+                    $guest->setSetting('postsToReview', []);
+                    $guest->setSetting('postsReviewed', []);
                 }
             }
         });

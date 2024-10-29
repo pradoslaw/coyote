@@ -514,6 +514,9 @@ readonly class FontAwesomePro
             'themeToggleDark'                           => 'fa-light fa-moon',
             'themeToggleLight'                          => 'fa-light fa-sun-bright',
             'themeToggleSystem'                         => 'fa-light fa-display',
+
+            // post review
+            'postReviewClose'                           => $genericClose,
         ];
     }
 }

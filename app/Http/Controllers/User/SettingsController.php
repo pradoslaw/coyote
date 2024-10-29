@@ -73,7 +73,15 @@ class SettingsController extends BaseController
     public function ajax(Request $request): void
     {
         foreach ($request->all() as $key => $value) {
-            $this->setSetting(str_replace('_', '.', $key), $value);
+            if ($key === 'postsReviewed') {
+                $postId = $value['postId'];
+                $type = $value['type'];
+                $previous = $this->getSetting('postsReviewed', []);
+                $previous[$postId] = $type;
+                $this->setSetting('postsReviewed', $previous);
+            } else {
+                $this->setSetting(str_replace('_', '.', $key), $value);
+            }
         }
     }
 
