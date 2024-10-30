@@ -112,7 +112,7 @@ class PostResource extends JsonResource
                 Forum::class => $this->forum_id,
             ]),
             'has_review'     => $this->hasReview($this->id),
-            'review_style'   => 'none',
+            'review_style'   => 'info',
         ]);
     }
 
@@ -126,18 +126,22 @@ class PostResource extends JsonResource
 
     private function hasReview(?int $id): bool
     {
-        if ($id === null) {
-            return false;
-        }
-        if (!auth()->check()) {
-            return false;
-        }
-        $guest = new Guest(auth()->user()->guest_id);
-        $postsToReview = $guest->getSetting('postsToReview', []);
-        $postsReviewed = $guest->getSetting('postsReviewed', []);
+        $postsToReview = [
+            // bad
+            1979316, 1979348, 1979379, 1979396,
+            // good
+            1979306, 1979395, 1979412, 1979432,
+        ];
         if (\in_array($id, $postsToReview)) {
-            return !\array_key_exists($id, $postsReviewed);
+            return !\array_key_exists(
+                $id,
+                $this->guest()->getSetting('postsReviewed', []));
         }
         return false;
+    }
+
+    private function guest(): Guest
+    {
+        return app(Guest::class);
     }
 }
