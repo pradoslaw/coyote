@@ -112,6 +112,7 @@ class PostResource extends JsonResource
                 Forum::class => $this->forum_id,
             ]),
             'has_review'     => $this->hasReview($this->id),
+            'review_style'   => 'none',
         ]);
     }
 

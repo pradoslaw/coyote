@@ -41,7 +41,13 @@
         </div>
       </div>
     </div>
-
+    <vue-post-review
+      v-if="post.has_review"
+      :post-id="post.id"
+      :review-style="post.review_style"
+      @close="closePostReview"
+      @answer="postReviewAnswer"
+    />
     <div :class="{'collapse': isCollapsed}" class="card-body">
       <div class="media d-lg-none mb-2">
         <div class="media-left me-2">
@@ -314,14 +320,6 @@
         </div>
       </div>
     </div>
-    <div class="card-footer d-none d-md-block py-2" v-if="post.has_review">
-      <div class="row">
-        <div class="col-lg-2 d-none d-lg-block"/>
-        <div class="col-12 col-lg-10">
-          <vue-post-review :post-id="post.id" @close="closePostReview" @review="postReview"/>
-        </div>
-      </div>
-    </div>
     <vue-modal ref="delete-modal" @delete="reasonId => deletePost(false, reasonId)" :reasons="reasons"/>
   </div>
 </template>
@@ -351,7 +349,7 @@ import VueSelect from './../forms/select.vue';
 import VueCommentForm from "./comment-form.vue";
 import VueComment from './comment.vue';
 import VueForm from './form.vue';
-import VuePostReview, {ReviewType} from "./post-review.vue";
+import VuePostReview, {ReviewAnswer} from "./post-review.vue";
 
 export default {
   name: 'post',
@@ -410,7 +408,7 @@ export default {
     closePostReview(): void {
       this.post.has_review = false;
     },
-    postReview(type: ReviewType): void {
+    postReviewAnswer(type: ReviewAnswer): void {
       axios.post('/User/Settings/Ajax', {
         postsReviewed: {type, postId: this.post.id},
       });
