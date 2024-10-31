@@ -2,8 +2,10 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Carbon\Carbon;
+use Coyote\Domain\Registration\ChartSource;
 use Coyote\Domain\Registration\HistoryRange;
 use Coyote\Domain\Registration\Period;
+use Coyote\Domain\Registration\PostsCreated;
 use Coyote\Domain\Registration\UserRegistrations;
 use Coyote\Domain\StringHtml;
 use Coyote\Domain\View\Chart;
@@ -12,7 +14,7 @@ use Illuminate\View\View;
 
 class DashboardController extends BaseController
 {
-    public function index(UserRegistrations $registrations): View
+    public function index(UserRegistrations $userRegistrations, PostsCreated $postCreated): View
     {
         return $this->view('adm.dashboard', [
             'checklist' => [
@@ -32,32 +34,31 @@ class DashboardController extends BaseController
                 ],
             ],
 
-            'registrationsChartWeeks'  => $this->historyChartHtml($registrations, Period::Week, 'created_at'),
-            'registrationsChartMonths' => $this->historyChartHtml($registrations, Period::Month, 'created_at'),
-            'registrationsChartYears'  => $this->historyChartHtml($registrations, Period::Year, 'created_at'),
+            'registrationsChartWeeks'  => $this->historyChartHtml($userRegistrations, Period::Week),
+            'registrationsChartMonths' => $this->historyChartHtml($userRegistrations, Period::Month),
+            'registrationsChartYears'  => $this->historyChartHtml($userRegistrations, Period::Year),
 
-            'leaveChartWeeks'  => $this->historyChartHtml($registrations, Period::Week, 'visited_at'),
-            'leaveChartMonths' => $this->historyChartHtml($registrations, Period::Month, 'visited_at'),
-            'leaveChartYears'  => $this->historyChartHtml($registrations, Period::Year, 'visited_at'),
+            'leaveChartWeeks'  => $this->historyChartHtml($postCreated, Period::Week),
+            'leaveChartMonths' => $this->historyChartHtml($postCreated, Period::Month),
+            'leaveChartYears'  => $this->historyChartHtml($postCreated, Period::Year),
         ]);
     }
 
-    private function historyChartHtml(UserRegistrations $registrations, Period $period, string $column): StringHtml
+    private function historyChartHtml(ChartSource $source, Period $period): StringHtml
     {
         return new StringHtml($this->view('adm.registrations-chart', [
-            'chart'              => $this->registrationsChart($registrations, $period, $column),
+            'chart'              => $this->registrationsChart($source, $period),
             'chartLibrarySource' => Chart::librarySourceHtml(),
-            'title'              => $column === 'created_at' ? 'Historia rejestracji' : 'Ostatnia wizyta użytkownika',
+            'title'              => $source->title(),
         ]));
     }
 
-    private function registrationsChart(UserRegistrations $registrations, Period $period, string $column): Chart
+    private function registrationsChart(ChartSource $source, Period $period): Chart
     {
         $range = new HistoryRange($this->dateNow(), $period, 30);
         return $this->chart(
-            "$period->name.$column",
-            $registrations->inRangeColumn($range, $column),
-            $column === 'created_at',
+            "$period->name.{$source->id()}",
+            $source->inRange($range),
         );
     }
 
@@ -66,12 +67,12 @@ class DashboardController extends BaseController
         return Carbon::now()->toDateString();
     }
 
-    private function chart(string $chartId, array $registeredUsers, bool $positive): Chart
+    private function chart(string $chartId, array $registeredUsers): Chart
     {
         return new Chart(
             \array_keys($registeredUsers),
             \array_values($registeredUsers),
-            [$positive ? '#ff9f40' : '#ff0000'],
+            ['#ff9f40'],
             "registration-history-chart-$chartId",
         );
     }

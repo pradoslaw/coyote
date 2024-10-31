@@ -1,9 +1,9 @@
 <?php
 namespace Coyote\Domain\Registration;
 
-use Coyote\User;
+use Coyote\Post;
 
-readonly class UserRegistrations implements ChartSource
+readonly class PostsCreated implements ChartSource
 {
     private UniformDates $uniformDates;
 
@@ -14,12 +14,12 @@ readonly class UserRegistrations implements ChartSource
 
     public function id(): string
     {
-        return 'users.created_at';
+        return 'posts.created_at';
     }
 
     public function title(): string
     {
-        return 'Historia rejestracji';
+        return 'Utworzone posty';
     }
 
     public function inRange(HistoryRange $range): array
@@ -28,13 +28,14 @@ readonly class UserRegistrations implements ChartSource
             $this->arrayFrom(
                 keys:$this->uniformDates->inRange($range),
                 value:0),
-            $this->fetchRegistrationsByPeriod($range->startDate(), $range->endDate(), $range->period));
+            $this->fetchRegistrationsByPeriod($range->startDate(), $range->endDate(), $range->period),
+        );
     }
 
     private function fetchRegistrationsByPeriod(string $from, string $to, Period $period): array
     {
         $dateTruncSqlField = $this->dateTruncSqlField('created_at', $period);
-        return User::withTrashed()
+        return Post::withTrashed()
             ->where('created_at', '>=', "$from 00:00:00")
             ->where('created_at', '<', "$to 24:00:00")
             ->selectRaw("$dateTruncSqlField as created_at_group, Count(*) AS count")
