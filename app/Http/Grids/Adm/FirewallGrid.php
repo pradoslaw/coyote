@@ -3,7 +3,7 @@ namespace Coyote\Http\Grids\Adm;
 
 use Boduch\Grid\Components\EditButton;
 use Boduch\Grid\Decorators\FormatDateRelative;
-use Boduch\Grid\Decorators\StrLimit;
+use Boduch\Grid\Decorators\LongText;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Filters\Text;
 use Boduch\Grid\Order;
@@ -17,38 +17,39 @@ class FirewallGrid extends Grid
     {
         $this
             ->setDefaultOrder(new Order('id', 'desc'))
-            ->addColumn('id', [
-                'title'     => 'ID',
-                'sortable'  => true,
-                'clickable' => fn(Firewall $row) => link_to_route('adm.firewall.save', $row->id, [$row->id]),
-                'filter'    => new Text(['operator' => FilterOperator::OPERATOR_EQ, 'name' => 'firewall.id']),
-            ])
             ->addColumn('user_name', [
-                'title'       => 'Nazwa użytkownika',
+                'title'       => 'Dla użytkownika',
                 'sortable'    => true,
-                'placeholder' => '--',
-                'clickable'   => fn(Firewall $row) => link_to_route('adm.users.save', $row->user_name, [$row->user_id]),
+                'placeholder' => 'nie podano',
+                'clickable'   => fn(Firewall $ban) => link_to_route('adm.users.save', $ban->user_name, [$ban->user_id]),
                 'filter'      => new Text(['operator' => FilterOperator::OPERATOR_ILIKE, 'name' => 'users.name']),
             ])
             ->addColumn('ip', [
                 'title'  => 'IP',
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE, 'name' => 'firewall.ip']),
             ])
-            ->addColumn('expire_at', [
-                'title'      => 'Wygasa',
-                'decorators' => [new FormatDateRelative('permaban')],
-            ])
             ->addColumn('reason', [
-                'title'      => 'Powód',
-                'decorators' => [new StrLimit()],
+                'title'       => 'Powód',
+                'decorators'  => [new LongText()],
+                'placeholder' => '--',
             ])
             ->addColumn('created_at', [
-                'title'      => 'Dodany',
+                'title'      => 'Utworzony',
                 'decorators' => [new FormatDateRelative('nigdy')],
             ])
+            ->addColumn('duration', [
+                'title'     => 'Długość bana',
+                'clickable' => function (Firewall $ban) {
+                    if ($ban->expire_at === null) {
+                        return '∞';
+                    }
+                    $diff = $ban->expire_at->diffForHumans($ban->created_at, syntax:true);
+                    return "na $diff";
+                },
+            ])
             ->addColumn('moderator_name', [
-                'title'     => 'Założony przez',
-                'clickable' => fn(Firewall $row) => link_to_route('adm.users.save', $row->moderator_name, [$row->moderator_id]),
+                'title'     => 'Dany przez',
+                'clickable' => fn(Firewall $ban) => link_to_route('adm.users.save', $ban->moderator_name, [$ban->moderator_id]),
             ])
             ->addRowAction(new EditButton(fn(Firewall $row) => route('adm.firewall.save', [$row->id])))
             ->addComponent(new CreateButton(

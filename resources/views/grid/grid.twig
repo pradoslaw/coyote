@@ -9,35 +9,36 @@
         </p>
       </div>
     {% endif %}
-
-    <div class="d-flex justify-content-center mt-2 mb-2">{{ pagination|raw }}</div>
+    <div class="d-flex justify-content-center mt-2 mb-2">
+      {{ pagination|raw }}
+    </div>
   {% endblock %}
 
   {% block table %}
     {{ form_open({id: 'filter-form', url: form_url, method: http_method|default('get')}) }}
     <table class="table table-striped">
       <thead>
+      <tr>
+        {% for column in columns %}
+          {{ grid_column(column) }}
+        {% endfor %}
+      </tr>
+      {% if is_filterable %}
         <tr>
           {% for column in columns %}
-            {{ grid_column(column) }}
+            {{ grid_filter(column) }}
           {% endfor %}
         </tr>
-        {% if is_filterable %}
-          <tr>
-            {% for column in columns %}
-              {{ grid_filter(column) }}
-            {% endfor %}
-          </tr>
-        {% endif %}
+      {% endif %}
       </thead>
       <tbody>
-        {% for row in rows %}
-          {{ grid_row(row) }}
-        {% else %}
-          <tr>
-            {{ grid_empty(grid) }}
-          </tr>
-        {% endfor %}
+      {% for row in rows %}
+        {{ grid_row(row) }}
+      {% else %}
+        <tr>
+          {{ grid_empty(grid) }}
+        </tr>
+      {% endfor %}
       </tbody>
     </table>
 

@@ -2,16 +2,17 @@
 
 namespace Coyote;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
  * @property int $user_id
  * @property int $moderator_id
- * @property string $expires_at
+ * @property Carbon $expire_at
  * @property string $reason
- * @property string $created_at
- * @property string $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property string $ip
  * @property string $fingerprint
  * @property \Coyote\User $user

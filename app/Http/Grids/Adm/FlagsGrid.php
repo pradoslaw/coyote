@@ -1,7 +1,7 @@
 <?php
 namespace Coyote\Http\Grids\Adm;
 
-use Boduch\Grid\Decorators\StrLimit;
+use Boduch\Grid\Decorators\LongText;
 use Boduch\Grid\Order;
 use Boduch\Grid\Row;
 use Coyote\Flag;
@@ -20,7 +20,7 @@ class FlagsGrid extends Grid
             ])
             ->addColumn('text', [
                 'title'      => 'Treść raportu',
-                'decorators' => [new StrLimit()],
+                'decorators' => [new LongText()],
                 'clickable'  => fn(Flag $flag) => link_to($flag->url, $flag->text),
             ])
             ->addColumn('user_name', [

@@ -3,7 +3,7 @@
 namespace Coyote\Http\Grids\Adm\Forum;
 
 use Boduch\Grid\Decorators\Boolean;
-use Boduch\Grid\Decorators\StrLimit;
+use Boduch\Grid\Decorators\LongText;
 use Boduch\Grid\Row;
 use Coyote\Forum;
 use Coyote\Services\Grid\Components\CreateButton;
@@ -43,7 +43,7 @@ class CategoriesGrid extends Grid
             ])
             ->addColumn('description', [
                 'title' => 'Opis',
-                'decorators' => [new StrLimit()]
+                'decorators' => [new LongText()]
             ])
             ->addColumn('order', [
                 'title' => 'Położenie'

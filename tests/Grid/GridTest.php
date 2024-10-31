@@ -148,7 +148,7 @@ class GridTest extends TestCase
         $grid = new Grid($this->gridHelper);
         $grid->addColumn('xss', [
             'title'      => 'xss',
-            'decorators' => [new \Boduch\Grid\Decorators\StrLimit()],
+            'decorators' => [new \Boduch\Grid\Decorators\LongText()],
         ]);
 
         $collection = collect([
