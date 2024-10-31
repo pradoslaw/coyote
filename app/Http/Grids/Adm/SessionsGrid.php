@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Grids\Adm;
 
+use Boduch\Grid\Decorators\FormatDateRelative;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Filters\Text;
 use Boduch\Grid\Order;
@@ -29,14 +30,16 @@ class SessionsGrid extends Grid
                 'filter'    => new Text(['operator' => FilterOperator::OPERATOR_ILIKE]),
             ])
             ->addColumn('created_at', [
-                'title'    => 'Data logowania',
-                'sortable' => true,
-                'render'   => fn(Session $session) => Carbon::createFromTimestamp($session->createdAt),
+                'title'      => 'Data logowania',
+                'sortable'   => true,
+                'render'     => fn(Session $session) => Carbon::createFromTimestamp($session->createdAt),
+                'decorators' => [new FormatDateRelative('nigdy')],
             ])
             ->addColumn('updated_at', [
-                'title'    => 'Ostatnia aktywność',
-                'sortable' => true,
-                'render'   => fn(Session $session) => Carbon::createFromTimestamp($session->updatedAt),
+                'title'      => 'Ostatnia aktywność',
+                'sortable'   => true,
+                'render'     => fn(Session $session) => Carbon::createFromTimestamp($session->updatedAt),
+                'decorators' => [new FormatDateRelative('nigdy')],
             ])
             ->addColumn('ip', [
                 'title'  => 'IP',

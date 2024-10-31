@@ -4,6 +4,7 @@ namespace Coyote\Http\Grids\Adm;
 
 use Boduch\Grid\Components\EditButton;
 use Boduch\Grid\Decorators\Boolean;
+use Boduch\Grid\Decorators\FormatDateRelative;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Filters\Select;
 use Boduch\Grid\Filters\Text;
@@ -28,7 +29,7 @@ class UsersGrid extends Grid
                 'sortable' => true,
             ])
             ->addColumn('name', [
-                'title'     => 'Nazwa użytkownika',
+                'title'     => 'Użytkownik',
                 'sortable'  => true,
                 'clickable' => fn(User $user) => link_to_route('adm.users.show', $user->name, [$user->id]),
                 'filter'    => new Text(['operator' => FilterOperator::OPERATOR_ILIKE]),
@@ -38,11 +39,13 @@ class UsersGrid extends Grid
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE]),
             ])
             ->addColumn('created_at', [
-                'title' => 'Data rejestracji',
+                'title'      => 'Rejestracja',
+                'decorators' => [new FormatDateRelative('nigdy')],
             ])
             ->addColumn('visited_at', [
-                'title'    => 'Data ost. wizyty',
-                'sortable' => true,
+                'title'      => 'Ostatnia wizyta',
+                'sortable'   => true,
+                'decorators' => [new FormatDateRelative('nigdy')],
             ])
             ->addColumn('is_active', [
                 'title'      => 'Aktywny',
@@ -52,10 +55,6 @@ class UsersGrid extends Grid
                 'title'      => 'Zablokowany',
                 'decorators' => [new Boolean()],
                 'filter'     => new Select(['options' => $booleanOptions]),
-            ])
-            ->addColumn('ip', [
-                'title'  => 'IP',
-                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE]),
             ])
             ->addColumn('reputation', [
                 'title'    => 'Reputacja',

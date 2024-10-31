@@ -3,7 +3,7 @@
 namespace Coyote\Http\Grids\Adm;
 
 use Boduch\Grid\Decorators\Boolean;
-use Boduch\Grid\Decorators\DateTimeLocalized;
+use Boduch\Grid\Decorators\FormatDateRelative;
 use Coyote\Block;
 use Coyote\Services\Grid\Components\CreateButton;
 use Coyote\Services\Grid\Grid;
@@ -32,12 +32,12 @@ class BlockGrid extends Grid
             ->addColumn('created_at', [
                 'title' => 'Data utworzenia',
                 'sortable' => true,
-                'decorators' => [new DateTimeLocalized($this->gridHelper->getRequest()->user()->date_format)]
+                'decorators' => [new FormatDateRelative('nigdy')]
             ])
             ->addColumn('updated_at', [
                 'title' => 'Data modyfikacji',
                 'sortable' => true,
-                'decorators' => [new DateTimeLocalized($this->gridHelper->getRequest()->user()->date_format)]
+                'decorators' => [new FormatDateRelative('nigdy')]
             ])
             ->addColumn('is_enabled', [
                 'title' => 'Włączony',
