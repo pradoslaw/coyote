@@ -16,6 +16,7 @@ class UniformDates
     private function carbonPeriod(Period $period): CarbonPeriod
     {
         return match ($period) {
+            Period::Day => CarbonPeriod::days(),
             Period::Week => CarbonPeriod::weeks(),
             Period::Month => CarbonPeriod::months(),
             Period::Year => CarbonPeriod::years(),

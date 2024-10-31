@@ -48,6 +48,7 @@ readonly class PostsCreated implements ChartSource
     private function dateTruncSqlField(string $column, Period $period): string
     {
         return match ($period) {
+            Period::Day => "date_trunc('day', $column)::date",
             Period::Week => "date_trunc('week', $column)::date",
             Period::Month => "date_trunc('month', $column)::date",
             Period::Year => "date_trunc('year', $column)::date",

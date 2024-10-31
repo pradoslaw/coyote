@@ -38,9 +38,10 @@ class DashboardController extends BaseController
             'registrationsChartMonths' => $this->historyChartHtml($userRegistrations, Period::Month),
             'registrationsChartYears'  => $this->historyChartHtml($userRegistrations, Period::Year),
 
-            'leaveChartWeeks'  => $this->historyChartHtml($postCreated, Period::Week),
-            'leaveChartMonths' => $this->historyChartHtml($postCreated, Period::Month),
-            'leaveChartYears'  => $this->historyChartHtml($postCreated, Period::Year),
+            'postsCreatedChartDays'   => $this->historyChartHtml($postCreated, Period::Day),
+            'postsCreatedChartWeeks'  => $this->historyChartHtml($postCreated, Period::Week),
+            'postsCreatedChartMonths' => $this->historyChartHtml($postCreated, Period::Month),
+            'postsCreatedChartYears'  => $this->historyChartHtml($postCreated, Period::Year),
         ]);
     }
 
