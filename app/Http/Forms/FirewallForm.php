@@ -1,45 +1,38 @@
 <?php
-
 namespace Coyote\Http\Forms;
 
 use Carbon\Carbon;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\FormEvents;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
+use Coyote\User;
 use Illuminate\Http\Request;
 
 class FirewallForm extends Form implements ValidatesWhenSubmitted
 {
-    use UsernameTransformerTrait;
-
-    /**
-     * @var UserRepository
-     */
-    protected $repository;
-
-    /**
-     * @param Request $request
-     * @param UserRepository $repository
-     */
-    public function __construct(Request $request, UserRepository $repository)
+    public function __construct(Request $request, private UserRepository $repository)
     {
         parent::__construct();
-        $this->repository = $repository;
-
-        $this->transformUsernameToId('name');
-
+        $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) {
+            $username = $form->get('name')->getValue();
+            $form->add('user_id', 'hidden', ['template' => 'hidden']);
+            if ($username) {
+                /** @var User $user */
+                $user = $this->repository->findByName($username);
+                if ($user) {
+                    $form->get('user_id')->setValue($user->id);
+                }
+            }
+        });
         $this->addEventListener(FormEvents::PRE_RENDER, function (Form $form) use ($request) {
             $userId = $this->data->user_id ?? $request->input('user');
-
             if (!empty($userId)) {
                 $user = $this->repository->find($userId, ['name']);
-
                 if (!empty($user)) {
                     $form->get('name')->setValue($user->name);
                 }
             }
-
             if (empty($this->data->id)) {
                 $this->get('expire_at')->setValue(Carbon::now()->addDay(1));
                 $this->get('ip')->setValue($request->input('ip'));
@@ -49,7 +42,7 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
         });
     }
 
-    public function buildForm()
+    public function buildForm(): void
     {
         $this
             ->add('name', 'text', [
@@ -94,10 +87,7 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             ]);
     }
 
-    /**
-     * @return array
-     */
-    public function messages()
+    public function messages(): array
     {
         return ['expire_at.required_if' => 'To pole jest wymagane.'];
     }
