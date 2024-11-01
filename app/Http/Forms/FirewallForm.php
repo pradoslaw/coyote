@@ -29,6 +29,7 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
                 $form->get('expire_at')->setValue(Carbon::parse($form->get('expire_at')->getValue())->format('Y-m-d'));
             }
         });
+        $this->addEventListener(FormEvents::PRE_SUBMIT, fn(Form $form) => $form->remove('created_at'));
         $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) {
             $username = $form->get('name')->getValue();
             $form->add('user_id', 'hidden', ['template' => 'hidden']);
@@ -65,6 +66,10 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             ->add('reason', 'textarea', [
                 'label' => 'Powód',
                 'rules' => 'max:1000',
+            ])
+            ->add('created_at', 'text', [
+                'label' => 'Data utworzenia',
+                'attr'  => ['disabled' => 'disabled'],
             ])
             ->add('expire_at', 'date', [
                 'label' => 'Data wygaśnięcia',
