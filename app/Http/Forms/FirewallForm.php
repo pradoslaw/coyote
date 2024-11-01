@@ -70,7 +70,9 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             ->add('created_at', 'text', [
                 'label' => 'Data utworzenia',
                 'attr'  => ['disabled' => 'disabled'],
-            ])
+            ]);
+
+        $this
             ->add('expire_at', 'date', [
                 'label' => 'Data wygaśnięcia',
                 'rules' => 'required_if:lifetime,0|date_format:Y-m-d',
@@ -81,7 +83,9 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             ->add('lifetime', 'checkbox', [
                 'label'   => 'Bezterminowo',
                 'checked' => empty($this->data->expire_at),
-            ])
+            ]);
+
+        $this
             ->add('submit', 'submit_with_delete', [
                 'label'             => 'Zapisz',
                 'attr'              => [
