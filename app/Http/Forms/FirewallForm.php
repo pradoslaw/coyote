@@ -14,17 +14,6 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
     public function __construct(Request $request, private UserRepository $repository)
     {
         parent::__construct();
-        $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) {
-            $username = $form->get('name')->getValue();
-            $form->add('user_id', 'hidden', ['template' => 'hidden']);
-            if ($username) {
-                /** @var User $user */
-                $user = $this->repository->findByName($username);
-                if ($user) {
-                    $form->get('user_id')->setValue($user->id);
-                }
-            }
-        });
         $this->addEventListener(FormEvents::PRE_RENDER, function (Form $form) use ($request) {
             $userId = $this->data->user_id ?? $request->input('user');
             if (!empty($userId)) {
@@ -38,6 +27,17 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
                 $this->get('ip')->setValue($request->input('ip'));
             } else {
                 $form->get('expire_at')->setValue(Carbon::parse($form->get('expire_at')->getValue())->format('Y-m-d'));
+            }
+        });
+        $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) {
+            $username = $form->get('name')->getValue();
+            $form->add('user_id', 'hidden', ['template' => 'hidden']);
+            if ($username) {
+                /** @var User $user */
+                $user = $this->repository->findByName($username);
+                if ($user) {
+                    $form->get('user_id')->setValue($user->id);
+                }
             }
         });
     }
