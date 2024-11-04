@@ -21,7 +21,7 @@ class FirewallGrid extends Grid
                 'title'       => 'Dla użytkownika',
                 'sortable'    => true,
                 'placeholder' => 'nie podano',
-                'clickable'   => fn(Firewall $ban) => link_to_route('adm.users.save', $ban->user_name, [$ban->user_id]),
+                'clickable'   => fn(Firewall $ban) => link_to_route('adm.firewall.save', $ban->user_name, [$ban->id]),
                 'filter'      => new Text(['operator' => FilterOperator::OPERATOR_ILIKE, 'name' => 'users.name']),
             ])
             ->addColumn('ip', [
@@ -51,10 +51,7 @@ class FirewallGrid extends Grid
                 'title'     => 'Dany przez',
                 'clickable' => fn(Firewall $ban) => link_to_route('adm.users.save', $ban->moderator_name, [$ban->moderator_id]),
             ])
-            ->addRowAction(new EditButton(fn(Firewall $row) => route('adm.firewall.save', [$row->id])))
-            ->addComponent(new CreateButton(
-                route('adm.firewall.save'),
-                'Nowy ban',
-            ));
+            ->addRowAction(new EditButton(fn(Firewall $ban) => route('adm.firewall.save', [$ban->id])))
+            ->addComponent(new CreateButton(route('adm.firewall.save'), 'Nowy ban'));
     }
 }
