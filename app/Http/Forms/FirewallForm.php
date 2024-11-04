@@ -1,7 +1,6 @@
 <?php
 namespace Coyote\Http\Forms;
 
-use Carbon\Carbon;
 use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\FormEvents;
@@ -23,10 +22,7 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
                 }
             }
             if (empty($this->data->id)) {
-                $this->get('expire_at')->setValue(Carbon::now()->addDay(1));
                 $this->get('ip')->setValue($request->input('ip'));
-            } else {
-                $form->get('expire_at')->setValue(Carbon::parse($form->get('expire_at')->getValue())->format('Y-m-d'));
             }
         });
         $this->addEventListener(FormEvents::PRE_SUBMIT, fn(Form $form) => $form->remove('created_at'));
@@ -73,9 +69,9 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             ]);
 
         $this
-            ->add('expire_at', 'date', [
+            ->add('expire_at', 'datetime', [
                 'label' => 'Data wygaśnięcia',
-                'rules' => 'required_if:lifetime,0|date_format:Y-m-d',
+                'rules' => 'required_if:lifetime,0',
                 'attr'  => [
                     'id' => 'expire-at',
                 ],

@@ -2,22 +2,26 @@
 {% block title %}Edycja banu {{ parent() }}{% endblock %}
 
 {% block card %}
-    {{ form(form) }}
+  {{ form(form) }}
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script type="text/javascript">
-        $(function() {
-            $(':checkbox[name="lifetime"]').change(function() {
-                $('#expire-at').attr('disabled', $(this).is(':checked'));
-
-                if ($(this).is(':checked')) {
-                    $('#expire-at').val('');
-                }
-            })
-            .trigger('change');
-        });
-    </script>
+  <script type="text/javascript">
+    $(function () {
+      let previous = $('#expire-at').val();
+      $(':checkbox[name="lifetime"]')
+        .change(function () {
+          $('#expire-at').attr('disabled', $(this).is(':checked'));
+          if ($(this).is(':checked')) {
+            previous = $('#expire-at').val();
+            $('#expire-at').val('');
+          } else {
+            $('#expire-at').val(previous);
+          }
+        })
+        .trigger('change');
+    });
+  </script>
 {% endblock %}
