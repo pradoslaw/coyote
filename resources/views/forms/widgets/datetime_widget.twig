@@ -1,0 +1,11 @@
+{{ 
+  form_input(
+    'datetime-local', 
+    name, 
+    value, 
+    attr|merge({
+      class: (attr.class|default('') ~  ' form-control' ~ (error ? ' is-invalid'))|trim,
+      step: '1',
+    })
+  )
+}}
