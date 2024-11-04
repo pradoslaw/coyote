@@ -1,6 +1,8 @@
 <?php
 namespace Coyote\Http\Forms;
 
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\FormEvents;
@@ -66,36 +68,26 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             ->add('created_at', 'text', [
                 'label' => 'Data utworzenia',
                 'attr'  => ['disabled' => 'disabled'],
-            ]);
-
-        $this
-            ->add('expire_at', 'datetime', [
-                'label' => 'Data wygaśnięcia',
-                'rules' => 'required_if:lifetime,0',
-                'attr'  => [
-                    'id' => 'expire-at',
-                ],
             ])
-            ->add('lifetime', 'checkbox', [
-                'label'   => 'Bezterminowo',
-                'checked' => empty($this->data->expire_at),
+            ->add('expire_at', 'ban_duration', [
+                'label' => 'Data wygaśnięcia',
+                'attr'  => [
+                    'expires_at'       => $this->formatDateTime($this->data?->expire_at?->toImmutable()),
+                    'expiration_dates' => $this->expirationDates(
+                        ($this->data->created_at ?? Carbon::now())->toImmutable(),
+                    ),
+                ],
             ]);
 
-        if (!empty($this->data->expire_at)) {
+        if (!empty($this->data->id)) {
             $this
                 ->add('duration', 'text', [
-                    'label' => 'Długość bana',
+                    'label' => 'Aktualna długość bana',
                     'attr'  => ['disabled' => 'disabled'],
-                    'value' => (function () {
-                        if (empty($this->data)) {
-                            return '';
-                        }
-                        if ($this->data->expire_at === null) {
-                            return '∞';
-                        }
-                        $diff = $this->data->expire_at->diffForHumans($this->data->created_at, syntax:true);
-                        return "na $diff";
-                    })(),
+                    'value' => $this->expirationDateForHumans(
+                        $this->data->expire_at?->toImmutable(),
+                        $this->data->created_at->toImmutable(),
+                    ),
                 ]);
         }
 
@@ -110,8 +102,76 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             ]);
     }
 
-    public function messages(): array
+    private function expirationDates(CarbonImmutable $startDate): array
     {
-        return ['expire_at.required_if' => 'To pole jest wymagane.'];
+        $values = [
+            [$startDate->addMinutes(5)],
+            [$startDate->addMinutes(10)],
+            [$startDate->addMinutes(15)],
+            [$startDate->addMinutes(30)],
+            [$startDate->addMinutes(45)],
+            [$startDate->addHours(1)],
+            [$startDate->addHours(2)],
+            [$startDate->addHours(3)],
+            [$startDate->addHours(4)],
+            [$startDate->addHours(5)],
+            [$startDate->addHours(6)],
+            [$startDate->addHours(12)],
+            [$startDate->addHours(18)],
+            [$startDate->addDays(1)],
+            [$startDate->addDays(1.5), 'półtora dnia'],
+            [$startDate->addDays(2)],
+            [$startDate->addDays(3)],
+            [$startDate->addDays(4)],
+            [$startDate->addDays(5)],
+            [$startDate->addDays(6)],
+            [$startDate->addWeeks(1)],
+            [$startDate->addWeeks(1.5), 'półtora tygodnia'],
+            [$startDate->addWeeks(2)],
+            [$startDate->addWeeks(3)],
+            [$startDate->addWeeks(4)],
+            [$startDate->addWeeks(5), '5 tygodni'],
+            [$startDate->addWeeks(6), '6 tygodni'],
+            [$startDate->addWeeks(7), '7 tygodni'],
+            [$startDate->addMonths(2)],
+            [$startDate->addMonths(2.5), 'dwa i pół mies.'],
+            [$startDate->addMonths(3)],
+            [$startDate->addMonths(3.5), 'trzy i pół miesiąca'],
+            [$startDate->addMonths(4)],
+            [$startDate->addMonths(5)],
+            [$startDate->addMonths(6)],
+            [$startDate->addMonths(7)],
+            [$startDate->addMonths(8)],
+            [$startDate->addMonths(9)],
+            [$startDate->addYear(1)],
+            [$startDate->addYear(1.5), 'półtora roku'],
+            [$startDate->addYear(2)],
+            [$startDate->addYear(3)],
+            [$startDate->addYear(4)],
+            [$startDate->addYear(5)],
+            [null],
+        ];
+        $buttons = [];
+        foreach ($values as $value) {
+            $time = $value[0];
+            $buttons[] = [
+                'expires_at' => $this->formatDateTime($time),
+                'label'      => $value[1] ?? $this->expirationDateForHumans($time, $startDate),
+            ];
+        }
+        return $buttons;
+    }
+
+    private function expirationDateForHumans(?CarbonImmutable $expiresAt, CarbonImmutable $since): string
+    {
+        if ($expiresAt === null) {
+            return '∞';
+        }
+        return $expiresAt->longAbsoluteDiffForHumans($since);
+    }
+
+    private function formatDateTime(?CarbonImmutable $time): ?string
+    {
+        return $time?->format('Y-m-d\TH:i:s');
     }
 }

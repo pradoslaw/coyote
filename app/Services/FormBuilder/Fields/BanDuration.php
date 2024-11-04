@@ -1,6 +1,6 @@
 <?php
 namespace Coyote\Services\FormBuilder\Fields;
 
-class Datetime extends Field
+class BanDuration extends Field
 {
 }

@@ -1,0 +1,57 @@
+<div id="duration-selector">
+  <input 
+      class="form-control"
+      type="datetime-local"
+      name="{{ name }}"
+      :value="selected"
+      step="1"
+  />
+  <div class="d-flex flex-wrap mt-2">
+    <button
+        type="button"
+        v-for="date in expirationDates"
+        v-text="date.label"
+        class="duration-selector-button flex-grow-1"
+        @click="select(date.expires_at)"
+    />
+  </div>
+  <p class="text-muted">
+    <small>Długość blokady jest liczona od daty utworzenia.</small>
+  </p>
+</div>
+
+<style>
+    .duration-selector-button {
+        background: initial;
+        border: 2px solid lightGray;
+        color: gray;
+        border-radius: 4px;
+        padding: 2px 12px;
+        margin-right: 4px;
+        margin-bottom: 4px;
+    }
+</style>
+
+<script>
+  const expiresAt = {{ attr.expires_at|json_encode|raw }};
+  const expirationDates = {{ attr.expiration_dates|json_encode|raw }};
+</script>
+{% verbatim %}
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script type="text/javascript">
+  const app = Vue.createApp({
+  data() {
+    return {
+      expirationDates,
+      selected: expiresAt
+    };
+  },
+  methods: {
+    select(date) {
+      this.selected = date;
+    }
+  }
+});
+app.mount('#duration-selector');
+</script>
+{% endverbatim %}
