@@ -64,21 +64,23 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             ->add('reason', 'textarea', [
                 'label' => 'Powód',
                 'rules' => 'max:1000',
-            ])
-            ->add('created_at', 'datetime', [
+            ]);
+        if (!empty($this->data->id)) {
+            $this->add('created_at', 'datetime', [
                 'label' => 'Data utworzenia',
                 'attr'  => ['disabled' => 'disabled'],
                 'value' => $this->dateFormatForFrontend($this->data?->created_at?->toImmutable()),
-            ])
-            ->add('expire_at', 'ban_duration', [
-                'label' => 'Data wygaśnięcia',
-                'attr'  => [
-                    'expires_at'       => $this->dateFormatForFrontend($this->data?->expire_at?->toImmutable()),
-                    'expiration_dates' => $this->expirationDates(
-                        ($this->data->created_at ?? Carbon::now())->toImmutable(),
-                    ),
-                ],
             ]);
+        }
+        $this->add('expire_at', 'ban_duration', [
+            'label' => 'Data wygaśnięcia',
+            'attr'  => [
+                'expires_at'       => $this->dateFormatForFrontend($this->data?->expire_at?->toImmutable()),
+                'expiration_dates' => $this->expirationDates(
+                    ($this->data->created_at ?? Carbon::now())->toImmutable(),
+                ),
+            ],
+        ]);
 
         if (!empty($this->data->id)) {
             $this
