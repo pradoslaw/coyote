@@ -72,7 +72,7 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             ->add('expire_at', 'ban_duration', [
                 'label' => 'Data wygaśnięcia',
                 'attr'  => [
-                    'expires_at'       => $this->formatDateTime($this->data?->expire_at?->toImmutable()),
+                    'expires_at'       => $this->dateFormatForFrontend($this->data?->expire_at?->toImmutable()),
                     'expiration_dates' => $this->expirationDates(
                         ($this->data->created_at ?? Carbon::now())->toImmutable(),
                     ),
@@ -82,11 +82,19 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
         if (!empty($this->data->id)) {
             $this
                 ->add('duration', 'text', [
-                    'label' => 'Aktualna długość bana',
+                    'label' => 'Długość bana',
                     'attr'  => ['disabled' => 'disabled'],
-                    'value' => $this->expirationDateForHumans(
-                        $this->data->expire_at?->toImmutable(),
+                    'value' => $this->periodLength(
                         $this->data->created_at->toImmutable(),
+                        $this->data->expire_at?->toImmutable(),
+                    ),
+                ])
+                ->add('remaining', 'text', [
+                    'label' => 'Pozostało',
+                    'attr'  => ['disabled' => 'disabled'],
+                    'value' => $this->relativeDifference(
+                        CarbonImmutable::now(),
+                        $this->data->expire_at?->toImmutable(),
                     ),
                 ]);
         }
@@ -155,22 +163,33 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
         foreach ($values as $value) {
             $time = $value[0];
             $buttons[] = [
-                'expires_at' => $this->formatDateTime($time),
-                'label'      => $value[1] ?? $this->expirationDateForHumans($time, $startDate),
+                'expires_at' => $this->dateFormatForFrontend($time),
+                'label'      => $value[1] ?? $this->periodLength($startDate, $time),
             ];
         }
         return $buttons;
     }
 
-    private function expirationDateForHumans(?CarbonImmutable $expiresAt, CarbonImmutable $since): string
+    private function periodLength(CarbonImmutable $since, ?CarbonImmutable $date): string
     {
-        if ($expiresAt === null) {
+        if ($date === null) {
             return '∞';
         }
-        return $expiresAt->longAbsoluteDiffForHumans($since);
+        return $date->longAbsoluteDiffForHumans($since);
     }
 
-    private function formatDateTime(?CarbonImmutable $time): ?string
+    private function relativeDifference(CarbonImmutable $since, ?CarbonImmutable $date): string
+    {
+        if ($date === null) {
+            return '∞';
+        }
+        if ($date->isBefore($since)) {
+            return 'upłynął ' . $date->longAbsoluteDiffForHumans($since) . ' temu';
+        }
+        return $date->diff($since);
+    }
+
+    private function dateFormatForFrontend(?CarbonImmutable $time): ?string
     {
         return $time?->format('Y-m-d\TH:i:s');
     }
