@@ -81,6 +81,24 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
                 'checked' => empty($this->data->expire_at),
             ]);
 
+        if (!empty($this->data->expire_at)) {
+            $this
+                ->add('duration', 'text', [
+                    'label' => 'Długość bana',
+                    'attr'  => ['disabled' => 'disabled'],
+                    'value' => (function () {
+                        if (empty($this->data)) {
+                            return '';
+                        }
+                        if ($this->data->expire_at === null) {
+                            return '∞';
+                        }
+                        $diff = $this->data->expire_at->diffForHumans($this->data->created_at, syntax:true);
+                        return "na $diff";
+                    })(),
+                ]);
+        }
+
         $this
             ->add('submit', 'submit_with_delete', [
                 'label'             => 'Zapisz',
