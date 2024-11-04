@@ -1,7 +1,6 @@
 <?php
 namespace Coyote\Http\Forms;
 
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Services\FormBuilder\Form;
@@ -28,6 +27,20 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             }
         });
         $this->addEventListener(FormEvents::PRE_SUBMIT, fn(Form $form) => $form->remove('created_at'));
+        $this->addEventListener(FormEvents::PRE_SUBMIT, function (Form $form) {
+            if (empty($form->data->id)) {
+                $expiresAt = $form->get('expire_at')->getValue();
+                $referenceDate = $form->get('reference_date')->getValue();
+                if ($expiresAt === null || $referenceDate === null) {
+                    return;
+                }
+                $referenceTime = CarbonImmutable::parse($referenceDate);
+                $selectedExpireTime = CarbonImmutable::parse($expiresAt);
+                $submitTime = CarbonImmutable::now();
+                $adjustedExpireTime = $selectedExpireTime->addSeconds($referenceTime->diff($submitTime)->totalSeconds);
+                $form->get('expire_at')->setValue($adjustedExpireTime);
+            }
+        });
         $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) {
             $username = $form->get('name')->getValue();
             $form->add('user_id', 'hidden', ['template' => 'hidden']);
@@ -65,21 +78,26 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Powód',
                 'rules' => 'max:1000',
             ]);
-        if (!empty($this->data->id)) {
+        if (empty($this->data->id)) {
+            $referenceDate = CarbonImmutable::now();
+            $this->add('reference_date', 'hidden', [
+                'value' => $this->dateFormatForFrontend($referenceDate),
+            ]);
+        } else {
+            $referenceDate = $this->data?->created_at?->toImmutable();
             $this->add('created_at', 'datetime', [
                 'label' => 'Data utworzenia',
                 'attr'  => ['disabled' => 'disabled'],
-                'value' => $this->dateFormatForFrontend($this->data?->created_at?->toImmutable()),
+                'value' => $this->dateFormatForFrontend($referenceDate),
             ]);
         }
         $this->add('expire_at', 'ban_duration', [
             'label' => 'Data wygaśnięcia',
             'attr'  => [
                 'expires_at'       => $this->dateFormatForFrontend($this->data?->expire_at?->toImmutable()),
-                'expiration_dates' => $this->expirationDates(
-                    ($this->data->created_at ?? Carbon::now())->toImmutable(),
-                ),
+                'expiration_dates' => $this->expirationDates($referenceDate),
             ],
+            'help'  => 'Długość blokady jest liczona od daty utworzenia.',
         ]);
 
         if (!empty($this->data->id)) {
@@ -154,12 +172,12 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             [$startDate->addMonths(7)],
             [$startDate->addMonths(8)],
             [$startDate->addMonths(9)],
-            [$startDate->addYear(1)],
-            [$startDate->addYear(1.5), 'półtora roku'],
-            [$startDate->addYear(2)],
-            [$startDate->addYear(3)],
-            [$startDate->addYear(4)],
-            [$startDate->addYear(5)],
+            [$startDate->addYears(1)],
+            [$startDate->addYears(1.5), 'półtora roku'],
+            [$startDate->addYears(2)],
+            [$startDate->addYears(3)],
+            [$startDate->addYears(4)],
+            [$startDate->addYears(5)],
             [null],
         ];
         $buttons = [];
@@ -178,7 +196,7 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
         if ($date === null) {
             return '∞';
         }
-        return $date->longAbsoluteDiffForHumans($since);
+        return $date->diff($since);
     }
 
     private function relativeDifference(CarbonImmutable $since, ?CarbonImmutable $date): string
