@@ -1,10 +1,11 @@
 <?php
 namespace Tests\Unit\Canonical\Topic;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\Canonical;
 
-class Test extends TestCase
+class CanonicalTest extends TestCase
 {
     use Canonical\Fixture\Assertion,
         Canonical\Topic\Fixture\Models;
@@ -72,5 +73,28 @@ class Test extends TestCase
         $this->assertRedirectGet(
             "/Forum/papaya-category/$topicId-invalid-slug?forum=invalid",
             "/Forum/papaya-category/$topicId-papaya_thread");
+    }
+
+    #[Test]
+    public function topicTitleEmptySlug_noDash_noRouteSlug(): void
+    {
+        $topicId = $this->newForumTopic('coyote', '注意');
+        $this->assertNoRedirectGet("/Forum/coyote/$topicId");
+    }
+
+    #[Test]
+    public function topicTitleEmptySlug_dash_noRouteSlug(): void
+    {
+        $topicId = $this->newForumTopic('coyote', '注意');
+        $this->assertNoRedirectGet("/Forum/coyote/$topicId-");
+    }
+
+    #[Test]
+    public function topicTitleEmptySlug_dash_mismatchedRouteSlug(): void
+    {
+        $topicId = $this->newForumTopic('coyote', '注意');
+        $this->assertRedirectGet(
+            "/Forum/coyote/$topicId-foo",
+            "/Forum/coyote/$topicId-");
     }
 }

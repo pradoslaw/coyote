@@ -18,7 +18,7 @@ class RedirectIfMoved extends AbstractMiddleware
         /** @var Topic $topic */
         $topic = $request->route('topic');
         /** @var string|null $slug */
-        $slug = $request->route('slug');
+        $slug = $request->route('slug') ?? '';
 
         return $this->handleRedirect($forum, $topic, $slug, $request, $next);
     }
@@ -26,7 +26,7 @@ class RedirectIfMoved extends AbstractMiddleware
     private function handleRedirect(
         Forum    $forum,
         Topic    $topic,
-        ?string  $slug,
+        string   $slug,
         Request  $request,
         callable $next): HttpFoundation\Response
     {
@@ -37,12 +37,12 @@ class RedirectIfMoved extends AbstractMiddleware
         return $this->redirectToCanonical($route, $topic, $request);
     }
 
-    private function isCanonicalUrl(Route $route, Forum $forum, Topic $topic, ?string $slug): bool
+    private function isCanonicalUrl(Route $route, Forum $forum, Topic $topic, string $slug): bool
     {
         return !$this->mismatchedArguments($route, $forum, $topic, $slug);
     }
 
-    private function mismatchedArguments(Route $route, Forum $forum, Topic $topic, ?string $slug): bool
+    private function mismatchedArguments(Route $route, Forum $forum, Topic $topic, string $slug): bool
     {
         return $this->mismatchedCategory($topic, $forum)
             || $this->mismatchedTopicSlug($route, $topic, $slug);
