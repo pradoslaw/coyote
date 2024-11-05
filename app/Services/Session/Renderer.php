@@ -21,7 +21,7 @@ class Renderer
         $this->spacer = new Spacer(8);
     }
 
-    public function render(string $requestUri, bool $local): View
+    public function render(string $requestUri, bool $local, bool $iconVisible = true): View
     {
         $viewers = $this->sessionViewers($requestUri);
 
@@ -29,11 +29,12 @@ class Renderer
 
         return view('components.viewers', [
             'local'             => $local,
+            'iconVisible'       => $iconVisible,
             'guestsCount'       => $viewers->guestsCount,
             'usersCount'        => \count($viewers->users),
             'title'             => $local
                 ? 'Aktualnie na tej stronie'
-                : "{$viewers->totalCount()} użytkowników online",
+                : 'Użytkownicy online',
             'usersWithGroup'    => $viewers->usersWithGroup(),
             'usersWithoutGroup' => $users,
             'superfluousCount'  => $superfluous,

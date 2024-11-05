@@ -1,9 +1,11 @@
 <div class="box">
   <h4 class="heading">
-    {% if local %}
-      {{ icon('viewersOnlineLocal') }}
-    {% else %}
-      {{ icon('viewersOnlineGlobal') }}
+    {% if iconVisible %}
+      {% if local %}
+        {{ icon('viewersOnlineLocal') }}
+      {% else %}
+        {{ icon('viewersOnlineGlobal') }}
+      {% endif %}
     {% endif %}
     {{ title }}
   </h4>
