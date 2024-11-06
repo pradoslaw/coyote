@@ -34,6 +34,9 @@
     </div>
 
     <div class="form-group">
+      <label class="col-form-label">
+        Treść <em>*</em>
+      </label>
       <vue-markdown
         v-model="post.text"
         :prompt-url="`/completion/prompt/users/${topic.id || ''}`"
