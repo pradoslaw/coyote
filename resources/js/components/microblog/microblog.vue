@@ -160,7 +160,7 @@
 
             <form v-if="isAuthorized" method="POST">
               <div class="media microblog-input rounded border-top-0">
-                <div class="me-2">
+                <div class="me-1">
                   <a v-profile="user.id">
                     <vue-avatar
                       :photo="user.photo" 
