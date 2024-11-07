@@ -128,7 +128,6 @@ class RouteServiceProvider extends \Illuminate\Foundation\Support\Providers\Rout
             require base_path('routes/adm.php');
             require base_path('routes/guide.php');
             require base_path('routes/comment.php');
-            require base_path('routes/survey.php');
             require base_path('routes/wiki.php'); // must be at the end
         });
     }

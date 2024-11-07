@@ -49,42 +49,16 @@
       {{ form_row(form.sig) }}
       {{ form_row(form.submit) }}
     </div>
-
     <div id="groups" class="card-body tab-pane">
       {{ form_row(form.groups) }}
       {{ form_row(form.submit) }}
     </div>
-
     <div id="local-settings" class="card-body tab-pane">
       <p>
         Lokalne ustawienia użytkownika:
       </p>
       <pre><code>{{ userSettings }}</code></pre>
-      <p class="my-0">
-        User experiments:
-      </p>
-      <div class="mb-2">
-        <input class="btn btn-primary" type="submit" name="local-settings-action" value="survey-none">
-        <input class="btn btn-primary" type="submit" name="local-settings-action" value="survey-invited">
-        <input class="btn btn-primary" type="submit" name="local-settings-action" value="survey-clear-log">
-      </div>
-      <p class="my-0">
-        Post reviews:
-      </p>
-      <div class="mb-2">
-        <div class="d-flex">
-          <input class="form-control flex-grow-0" style="width:100px;" name="local-settings-value" placeholder="post #id">
-          <button class="btn btn-outline-primary" type="submit" name="local-settings-action" value="review-add">
-            Add post to reviews
-          </button>
-        </div>
-        <br>
-        <button class="btn btn-primary" type="submit" name="local-settings-action" value="review-clear">
-          Erase review
-        </button>
-      </div>
     </div>
   </div>
-
   {{ form_end(form) }}
 {% endblock %}

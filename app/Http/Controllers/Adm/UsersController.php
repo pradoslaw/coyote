@@ -7,8 +7,6 @@ use Coyote\Domain\Administrator\User\Store\UserStore;
 use Coyote\Domain\Administrator\User\View\Activity;
 use Coyote\Domain\Administrator\User\View\Navigation;
 use Coyote\Domain\Administrator\View\Date;
-use Coyote\Domain\Survey\Clock;
-use Coyote\Domain\Survey\GuestSurvey;
 use Coyote\Events\UserDeleted;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Forms\User\AdminForm;
@@ -16,7 +14,6 @@ use Coyote\Http\Grids\Adm\UsersGrid;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Services\FormBuilder\Form;
-use Coyote\Services\Guest;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
 use Coyote\User;
@@ -76,20 +73,11 @@ class UsersController extends BaseController
     {
         $this->breadcrumb->push("@$user->name", route('adm.users.show', [$user->id]));
         $this->breadcrumb->push('Ustawienia konta', route('adm.users.save', [$user->id]));
-        [$userSettings, $surveyLog] = $this->userSettings($user);
         return $this->view('adm.users.save', [
             'user'         => $user,
             'form'         => $this->getForm($user),
-            'userSettings' => $this->formatJson($userSettings),
-            'surveyLog'    => $this->formatJson($surveyLog),
+            'userSettings' => \json_encode($user->guest?->settings, \JSON_PRETTY_PRINT),
         ]);
-    }
-
-    private function userSettings(User $user): array
-    {
-        $userSettings = \array_diff_key($user->guest?->settings ?? [], ['surveyLog' => null]);
-        $surveyLog = $user->guest?->settings['surveyLog'] ?? null;
-        return [$userSettings, $surveyLog];
     }
 
     protected function getForm(User $user): Form
@@ -99,17 +87,12 @@ class UsersController extends BaseController
         ]);
     }
 
-    private function formatJson(?array $object): string
-    {
-        return \json_encode($object, \JSON_PRETTY_PRINT);
-    }
-
-    public function save(User $user, Clock $clock): RedirectResponse
+    public function save(User $user): RedirectResponse
     {
         $form = $this->getForm($user);
         $form->validate();
 
-        $this->transaction(function () use ($clock, $user, $form) {
+        $this->transaction(function () use ($user, $form) {
             $data = $form->all();
             if ($form->get('delete_photo')->isChecked()) {
                 $data['photo'] = null;
@@ -123,32 +106,6 @@ class UsersController extends BaseController
             $user->groups()->sync((array)$data['groups']);
             stream(Update::class, new Person($user));
             event($user->deleted_at ? new UserDeleted($user) : new UserSaved($user));
-
-            if ($this->request->has('local-settings-action')) {
-                $action = $this->request->get('local-settings-action');
-                $value = $this->request->get('local-settings-value');
-                $guest = new Guest($user->guest_id);
-                $survey = new GuestSurvey($guest, $clock);
-
-                if ($action === 'survey-none') {
-                    $survey->setState('survey-none');
-                }
-                if ($action === 'survey-invited') {
-                    $survey->setState('survey-invited');
-                }
-                if ($action === 'survey-clear-log') {
-                    $survey->clearLog();
-                }
-                if ($action === 'review-add') {
-                    $posts = $guest->getSetting('postsToReview', []);
-                    $guest->setSetting('postsToReview', 
-                        \array_values(\array_unique([...$posts, (int)$value])));
-                }
-                if ($action === 'review-clear') {
-                    $guest->setSetting('postsToReview', []);
-                    $guest->setSetting('postsReviewed', []);
-                }
-            }
         });
 
         return back()->with('success', 'Zmiany zostały zapisane.');
