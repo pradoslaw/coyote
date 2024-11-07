@@ -39,7 +39,7 @@
                   </li>
                 </ul>
 
-                <div id="box-forum-headline">
+                <div id="box-forum-headline" class="interesting-topics">
                   <div class="tab-content">
                     <div role="tabpanel" class="tab-pane {{ settings.topicMode == 'interesting' ? 'active' }}" id="interesting">
                       {% for topic in interesting %}
@@ -60,7 +60,7 @@
                             <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">
                               {{ topic.forum }}
                             </a>
-                            <small class="float-end">
+                            <small class="topic-created float-end">
                               {{ topic.last_post_created_at|format_date }}
                             </small>
                           </div>
@@ -87,7 +87,7 @@
                             <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">
                               {{ topic.forum }}
                             </a>
-                            <small class="float-end">
+                            <small class="float-end topic-created">
                               {{ topic.last_post_created_at|format_date }}
                             </small>
                           </div>

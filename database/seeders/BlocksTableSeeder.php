@@ -21,7 +21,7 @@ class BlocksTableSeeder extends Seeder
 
         $content = <<<EOF
 <div class="row max-width">
-    <div class="col-md-2 col-sm-4">
+    <div class="col-md-2 col-sm-4 footer-column">
         <ul>
             <li><h6><a title="Zobacz nasze oferty pracy" href="/Praca">Praca dla programistów</a></h6></li>
             <li><a href="/Praca/Technologia/javascript">Praca JavaScript</a></li>
@@ -30,11 +30,10 @@ class BlocksTableSeeder extends Seeder
             <li><a href="/Praca/Technologia/php">Praca PHP</a></li>
             <li><a href="/Praca/Technologia/python">Praca Python</a></li>
             <li><a href="/Praca/Technologia/c%2B%2B">Praca C++</a></li>
-
         </ul>
     </div>
 
-    <div class="col-md-2 col-sm-4">
+    <div class="col-md-2 col-sm-4 footer-column">
         <ul>
             <li><h6><a title="Forum dla programistów" href="/Forum">Forum dyskusyjne</a></h6></li>
             <li><a title="Forum dla początkujących programistów" href="/Forum/Newbie">Newbie</a></li>
@@ -46,7 +45,7 @@ class BlocksTableSeeder extends Seeder
         </ul>
     </div>
 
-    <div class="col-md-2 col-sm-4">
+    <div class="col-md-2 col-sm-4 footer-column">
         <ul>
             <li><h6>Sprawy administracyjne</h6></li>
             <li><a title="Jeżeli znalazłeś błąd w oprogramowaniu, tu jest odpowiednie miejsce, aby to zgłosić" href="https://github.com/adam-boduch/coyote/issues">Zgłoś błąd w oprogramowaniu</a></li>
@@ -58,7 +57,7 @@ class BlocksTableSeeder extends Seeder
         </ul>
     </div>
 
-    <div class="col-md-2 col-sm-4">
+    <div class="col-md-2 col-sm-4 footer-column">
         <ul>
             <li><h6>O nas</h6></li>
             <li><a title="Kontakt z serwisem 4programmers.net" href="/Kontakt">Kontakt</a></li>
@@ -70,10 +69,9 @@ class BlocksTableSeeder extends Seeder
         </ul>
     </div>
 
-    <div class=" col-sm-4">
+    <div class="col-sm-4">
         <div class="footer-bubble">
             <h6>Skontaktuj się z nami</h6>
-
             <ol>
                 <li>
                     <a title="Skontaktuj się poprzez email" href="/Kontakt">
