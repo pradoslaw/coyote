@@ -6,7 +6,6 @@ use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Post\Comment;
 use Coyote\Services\Forum\Tracker;
-use Coyote\Services\Guest;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Coyote\User;
@@ -111,7 +110,7 @@ class PostResource extends JsonResource
                 Topic::class => $this->topic_id,
                 Forum::class => $this->forum_id,
             ]),
-            'has_review'     => $this->hasReview($this->id),
+            'has_review'     => false,
             'review_style'   => 'info',
         ]);
     }
@@ -122,26 +121,5 @@ class PostResource extends JsonResource
             $comment->setRelation('forum', $this->forum);
             $comment->setRelation('post', $this->resource);
         });
-    }
-
-    private function hasReview(?int $id): bool
-    {
-        $postsToReview = [
-            // bad
-            1979316, 1979348, 1979379, 1979396,
-            // good
-            1979306, 1979395, 1979412, 1979432,
-        ];
-        if (\in_array($id, $postsToReview)) {
-            return !\array_key_exists(
-                $id,
-                $this->guest()->getSetting('postsReviewed', []));
-        }
-        return false;
-    }
-
-    private function guest(): Guest
-    {
-        return app(Guest::class);
     }
 }
