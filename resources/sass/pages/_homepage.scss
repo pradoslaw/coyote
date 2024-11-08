@@ -221,3 +221,108 @@ header nav.navbar {
 .reputation-username {
   color: #333;
 }
+
+body.theme-dark {
+  #box-forum {
+    .card.card-forum {
+      .nav.nav-forum {
+        border-bottom: 1px solid #2f2f2f;
+
+        .nav-item .nav-link {
+          color: #acacac;
+
+          &:hover {
+            border-color: #404040;
+          }
+
+          &.active {
+            color: #dedede;
+            border-bottom: 2px solid #d7661c;
+          }
+        }
+      }
+
+      #box-forum-headline {
+        .tab-content .tab-pane {
+          .row {
+            border-bottom: 1px solid #2f2f2f;
+
+            &:nth-child(even) {
+              background-color: unset;
+            }
+          }
+
+          a.title {
+            color: #acacac;
+          }
+
+          small {
+            color: #7d7d7d;
+          }
+        }
+      }
+
+      #stream-wrapper {
+        .media {
+          .media-object {
+            border: 1px solid #242a30;
+            background: #121212;
+          }
+
+          .homepage-activity.post,
+          .homepage-activity.comment {
+            color: #acacac;
+            border-color: #2f2f2f;
+            background: #121212;
+            box-shadow: 0 1px 2px 0 #121212;
+
+            &:after {
+              color: inherit;
+            }
+          }
+        }
+
+        .recent-activity {
+          border-left-color: #242a30;
+        }
+
+        small {
+          color: #7d7d7d;
+        }
+
+        strong {
+          border-left-color: #2f2f2f;
+        }
+      }
+    }
+  }
+
+  .card-reputation {
+    background-color: #1a1a1a;
+
+    .media-body {
+      a.reputation-username {
+        color: #acacac;
+      }
+    }
+
+    .media {
+      border-bottom-color: #2f2f2f;
+
+      &:after {
+        color: #2f2f2f;
+      }
+    }
+  }
+
+  h2.h4,
+  h4 {
+    color: #c8c8c8;
+  }
+
+  .microblog-wrap {
+    &:after {
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, #1a1a1a 65%);
+    }
+  }
+}
