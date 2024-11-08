@@ -8,13 +8,15 @@ import SurveyTally, {type State} from "./tally";
 import {trial} from "./trial";
 import {VueInstance} from "./vue";
 
-window.addEventListener('load', () => {
+interface Data {
+  state: State,
+  experiment: Experiment;
+  badgeLong: boolean;
+}
+
+function translateInput(backendInput: string): Data {
   const darkTheme: boolean = document.body.classList.contains('theme-dark');
-  const surveyElement = document.getElementById('survey');
-  if (!surveyElement) {
-    return;
-  }
-  const survey: Survey = JSON.parse(surveyElement!.textContent!);
+  const survey: Survey = JSON.parse(backendInput);
 
   interface Survey {
     surveyState: State;
@@ -22,12 +24,22 @@ window.addEventListener('load', () => {
     surveyBadgeLong: boolean;
   }
 
-  interface Data {
-    state: State,
-    experiment: Experiment;
-    badgeLong: boolean;
-  }
+  return {
+    state: survey.surveyState,
+    experiment: {
+      ...trial,
+      ...darkTheme ? trial.dark : trial.light,
+      optedIn: survey.surveyChoice,
+    },
+    badgeLong: survey.surveyBadgeLong,
+  };
+}
 
+window.addEventListener('load', () => {
+  const surveyElement = document.getElementById('survey');
+  if (!surveyElement) {
+    return;
+  }
   createVueApp('Survey', '#js-survey', {
     components: {'vue-survey-tally': SurveyTally},
     template: `
@@ -42,16 +54,7 @@ window.addEventListener('load', () => {
       />
     `,
     data(): Data {
-      const experiment: Experiment = {
-        ...trial,
-        ...darkTheme ? trial.dark : trial.light,
-        optedIn: survey.surveyChoice,
-      };
-      return {
-        state: survey.surveyState,
-        experiment,
-        badgeLong: survey.surveyBadgeLong,
-      };
+      return translateInput(surveyElement!.textContent!);
     },
     methods: {
       experimentOpt(this: Data, optIn: ExperimentOpt): void {
