@@ -1,3 +1,5 @@
+@import "../../feature/theme/theme";
+
 .microblog-input {
   background-color: #eee;
 }
@@ -22,4 +24,9 @@ ul.microblog-comment-list {
       }
     }
   }
+}
+
+.microblog-comment-action {
+  @include color-theme(#6c757d, #8f9ba5);
+  cursor: pointer;
 }

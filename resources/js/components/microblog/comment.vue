@@ -28,26 +28,26 @@
             </a>
           </li>
           <li class="list-inline-item">
-            <a
+            <span
               @click="checkAuth(vote, comment)"
               @mouseenter.once="loadVoters(comment)"
               :aria-label="commentVoters"
               :class="{'vote-active': comment.is_voted}"
-              href="javascript:"
+              class="microblog-comment-action"
               data-balloon-pos="up"
               data-balloon-break>
               {{ commentLabel }}
-            </a>
+            </span>
           </li>
           <li class="list-inline-item">
-            <a @click="checkAuth(reply)" href="javascript:">
+            <span @click="checkAuth(reply)" class="microblog-comment-action">
               Odpowiedz
-            </a>
+            </span>
           </li>
           <li v-if="isAuthorized" class="list-inline-item">
-            <a href="javascript:" :data-metadata="comment.metadata" :data-url="comment.url">
+            <span :data-metadata="comment.metadata" :data-url="comment.url" class="microblog-comment-action">
               Zgłoś
-            </a>
+            </span>
           </li>
         </ul>
 
