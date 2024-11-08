@@ -6,6 +6,7 @@ import {VueInstance} from "./vue";
 
 export {type Screen};
 
+/** @deprecated Use Stage, instead of State */
 export type State =
   | 'survey-none'
   | 'survey-invited'

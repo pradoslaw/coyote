@@ -5,7 +5,7 @@ import {createVueApp} from "../../resources/js/vue";
 import {type Experiment} from "./screen/screen";
 import {ExperimentOpt} from "./screen/steps/participate";
 import SurveyTally, {type State} from "./tally";
-import {trial} from "./trial";
+import diffFormat from "./time/diffFormat";
 import {VueInstance} from "./vue";
 
 interface Data {
@@ -14,25 +14,90 @@ interface Data {
   badgeLong: boolean;
 }
 
+type Stage = 'stage-none' | 'stage-invited' | 'stage-declined' | 'stage-accepted' | 'stage-instructed' | 'stage-gone';
+type Choice = 'choice-pending' | 'choice-modern' | 'choice-legacy';
+type Assortment = 'assortment-legacy' | 'assortment-modern';
+
+function secondsUntil(dateFormat: string): number {
+  return millisecondsDifference(dateFormat) / 1000;
+}
+
+function millisecondsDifference(dateFormat: string): number {
+  return new Date(dateFormat).getTime() - new Date().getTime();
+}
+
 function translateInput(backendInput: string): Data {
-  const darkTheme: boolean = document.body.classList.contains('theme-dark');
   const survey: Survey = JSON.parse(backendInput);
 
-  interface Survey {
-    surveyState: State;
-    surveyChoice: ExperimentOpt;
-    surveyBadgeLong: boolean;
+  interface ImageSet {
+    imageLegacy: string;
+    imageModern: string;
   }
 
+  interface Trial {
+    title: string;
+    reason: string;
+    solution: string;
+    dueDateTime: string;
+    imageLight: ImageSet;
+    imageDark: ImageSet;
+  }
+
+  interface UserSession {
+    stage: Stage;
+    choice: Choice;
+    badgeNarrow: boolean;
+    assortment: Assortment;
+  }
+
+  interface Survey {
+    trial: Trial;
+    userSession: UserSession;
+    userThemeDark: boolean;
+  }
+
+  const imageSet: ImageSet = survey.userThemeDark ? survey.trial.imageDark : survey.trial.imageLight;
+
   return {
-    state: survey.surveyState,
+    state: mapStageToLegacySurveyState(survey.userSession.stage),
+    badgeLong: !survey.userSession.badgeNarrow,
     experiment: {
-      ...trial,
-      ...darkTheme ? trial.dark : trial.light,
-      optedIn: survey.surveyChoice,
+      title: survey.trial.title,
+      dueTime: diffFormat(secondsUntil(survey.trial.dueDateTime)),
+      reason: survey.trial.reason,
+      solution: survey.trial.solution,
+      imageLegacy: imageSet.imageLegacy,
+      imageModern: imageSet.imageModern,
+      optedIn: mapStageAndAssortmentToLegacyExperimentOpt(survey.userSession.choice, survey.userSession.assortment),
     },
-    badgeLong: survey.surveyBadgeLong,
   };
+}
+
+function mapStageAndAssortmentToLegacyExperimentOpt(choice: Choice, assortment: Assortment): ExperimentOpt {
+  if (choice === 'choice-modern') {
+    return 'modern';
+  }
+  if (choice === 'choice-legacy') {
+    return 'legacy';
+  }
+  if (choice === 'choice-pending') {
+    if (assortment === 'assortment-legacy') {
+      return 'none-legacy';
+    }
+    return 'none-modern';
+  }
+}
+
+function mapStageToLegacySurveyState(stage: Stage): State {
+  const map: { [keyof: string]: State } = {
+    'stage-none': 'survey-none',
+    'stage-invited': 'survey-invited',
+    'stage-declined': 'survey-declined',
+    'stage-accepted': 'survey-accepted',
+    'stage-instructed': 'survey-instructed',
+    'stage-gone': 'survey-gone',
+  };
+  return map[stage];
 }
 
 window.addEventListener('load', () => {
@@ -69,9 +134,7 @@ window.addEventListener('load', () => {
         this.state = state;
       },
       setTheme(this: Data, dark: boolean): void {
-        const theme = dark ? trial.dark : trial.light;
-        this.experiment.imageLegacy = theme.imageLegacy;
-        this.experiment.imageModern = theme.imageModern;
+        throw new Error('To be implemented, changing themed images in runtime.');
       },
       badgeCollapse(this: VueInstance, long: boolean): void {
         this.$data['badgeLong'] = long;

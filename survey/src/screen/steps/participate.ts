@@ -2,12 +2,14 @@ import VueIcon from "../../../../resources/js/components/icon";
 import {VueInstance} from "../../vue";
 import VueToggle, {type ToggleValue} from "../toggle";
 
+/** @deprecated Use trial and user session instead */
 interface Participate extends VueInstance, Data {
   experiment: Experiment;
   optedIn: boolean;
   choice: ExperimentChoice;
 }
 
+/** @deprecated Use trial and user session instead */
 export interface Experiment {
   title: string;
   optedIn: ExperimentOpt;
@@ -18,7 +20,9 @@ export interface Experiment {
   imageModern: string;
 }
 
+/** @deprecated Use choice and assortment instead */
 export type ExperimentOpt = 'none-modern' | 'none-legacy' | 'legacy' | 'modern';
+/** @deprecated Use choice instead */
 export type ExperimentChoice = 'in' | 'out';
 
 interface Data {
@@ -58,10 +62,12 @@ export default {
           </h3>
           <p class="reason mb-4">
             <b>Dlaczego?</b>
+            {{ ' ' }}
             <span v-html="experiment.reason"/>
           </p>
           <p class="solution mb-4">
             <b>Jak?</b>
+            {{ ' ' }}
             <span v-html="experiment.solution"/>
           </p>
           <button class="btn btn-primary mt-auto mb-2" @click="experimentOpt" :disabled="isInitialSelection">
