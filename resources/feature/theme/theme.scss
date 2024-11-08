@@ -21,3 +21,36 @@
     }
   }
 }
+
+@mixin theme {
+  /**
+   * The dark() and light() mixins increase selector specificity.
+   * In some cases, it's necessary to apply a common style to both
+   * themes, overriding a previously defined style. 
+   * Thus, we need to artificially elevate the specificity 
+   * of the style, without actually changing any style.
+   */
+  html.theme-light &,
+  html.theme-dark &,
+  {
+    @content;
+  }
+}
+
+@mixin color-theme($light, $dark) {
+  @include light {
+    color: $light;
+  }
+  @include dark {
+    color: $dark;
+  }
+}
+
+@mixin background-theme($light, $dark) {
+  @include light {
+    background: $light;
+  }
+  @include dark {
+    background: $dark;
+  }
+}
