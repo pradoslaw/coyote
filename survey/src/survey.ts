@@ -1,6 +1,4 @@
 import axios from "axios";
-
-import store from "../../resources/js/store/index";
 import {createVueApp} from "../../resources/js/vue";
 import {type Experiment} from "./screen/screen";
 import {ExperimentOpt} from "./screen/steps/participate";
@@ -105,6 +103,38 @@ window.addEventListener('load', () => {
   if (!surveyElement) {
     return;
   }
+  renderVueApp(
+    translateInput(surveyElement!.textContent!),
+    experimentChangeStyle,
+    storeSurveyPreview,
+    storeSurveyState,
+    storeSurveyBadgeState,
+  );
+
+  function experimentChangeStyle(style: ExperimentOpt): void {
+    axios.post('/trial/choice', {choice: style});
+  }
+
+  function storeSurveyState(surveyState: State): void {
+    axios.post('/trial/stage', {stage: surveyState});
+  }
+
+  function storeSurveyPreview(surveyChoicePreview: ExperimentOpt): void {
+    axios.post('/trial/preview', {preview: surveyChoicePreview});
+  }
+
+  function storeSurveyBadgeState(badgeLong: boolean): void {
+    axios.post('/trial/badge', {badge: badgeLong});
+  }
+});
+
+function renderVueApp(
+  data: Data,
+  experimentChangeStyle: (style: ExperimentOpt) => void,
+  storeSurveyPreview: (surveyChoicePreview: ExperimentOpt) => void,
+  storeSurveyState: (surveyState: State) => void,
+  storeSurveyBadgeState: (badgeLong: boolean) => void,
+): void {
   createVueApp('Survey', '#js-survey', {
     components: {'vue-survey-tally': SurveyTally},
     template: `
@@ -119,7 +149,7 @@ window.addEventListener('load', () => {
       />
     `,
     data(): Data {
-      return translateInput(surveyElement!.textContent!);
+      return data;
     },
     methods: {
       experimentOpt(this: Data, optIn: ExperimentOpt): void {
@@ -142,21 +172,4 @@ window.addEventListener('load', () => {
       },
     },
   });
-
-  function experimentChangeStyle(style: ExperimentOpt): void {
-    store.commit('user/changePostStyle', style);
-    axios.post('/survey', {surveyChoice: style});
-  }
-
-  function storeSurveyState(surveyState: State): void {
-    axios.post('/survey', {surveyState});
-  }
-
-  function storeSurveyPreview(surveyChoicePreview: ExperimentOpt): void {
-    axios.post('/survey', {surveyChoicePreview});
-  }
-
-  function storeSurveyBadgeState(badgeLong: boolean): void {
-    axios.post('/survey', {surveyBadgeState: badgeLong});
-  }
-});
+}

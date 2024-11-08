@@ -3,6 +3,8 @@ namespace Coyote\Feature\Trial;
 
 use Coyote\Domain\Settings\UserTheme;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Factory;
 
@@ -13,6 +15,21 @@ class TrialServiceProvider extends ServiceProvider
         /** @var Factory $view */
         $view = $this->app['view'];
         $this->add($view);
+
+        Route::middleware('web')->group(function () {
+            Route::post('/trial/choice', function (Request $request, TrialService $service) {
+                $service->setChoice($request->get('choice'));
+            });
+            Route::post('/trial/stage', function (Request $request, TrialService $service) {
+                $service->setStage($request->get('stage'));
+            });
+            Route::post('/trial/preview', function (Request $request, TrialService $service) {
+                $service->logPreview($request->get('preview'));
+            });
+            Route::post('/trial/badge', function (Request $request, TrialService $service) {
+                $service->setBadgeNarrow($request->get('badge') === 'narrow');
+            });
+        });
     }
 
     private function add(Factory $viewFactory): void
