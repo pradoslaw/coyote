@@ -41,7 +41,7 @@ class Renderer
         ]);
     }
 
-    private function sessionViewers(string $requestUri): Viewers
+    public function sessionViewers(string $requestUri): Viewers
     {
         $sessions = $this->session->sessionsIn($requestUri);
         if ($this->isUserLogged()) {

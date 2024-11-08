@@ -2,6 +2,8 @@
 namespace Coyote\Feature\Trial;
 
 use Coyote\Domain\Settings\UserTheme;
+use Coyote\Services\Session\Renderer;
+use Coyote\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,7 +36,16 @@ class TrialServiceProvider extends ServiceProvider
 
     private function add(Factory $viewFactory): void
     {
-        $viewFactory->composer('home', $this->addViewField(...));
+        $viewFactory->composer('home', function (View $view) {
+            $view->with(['isHomepageModern' => false]);
+        });
+        $viewFactory->composer('home_modern', function (View $view) {
+            $view->with([
+                'isHomepageModern' => true,
+                'homepageMembers'  => $this->members(),
+            ]);
+        });
+        $viewFactory->composer(['home', 'home_modern'], $this->addViewField(...));
     }
 
     private function addViewField(View $view): void
@@ -43,8 +54,8 @@ class TrialServiceProvider extends ServiceProvider
             'survey' => [
                 'trial'         => [
                     'title'       => 'Wygląd strony głównej.',
-                    'reason'      => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras velit metus, egestas id facilisis vel, consectetur sit amet magna. Praesent auctor arcu augue, ut efficitur dui rhoncus et.',
-                    'solution'    => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras velit metus, egestas id facilisis vel, consectetur sit amet magna. Praesent auctor arcu augue, ut efficitur dui rhoncus et. Donec tempus dapibus justo a faucibus.',
+                    'reason'      => 'Redesign strony głównej forum programistycznego został przeprowadzony w celu podniesienia estetyki i spójności wizualnej. Pomimo braku istotnych zmian w layoutcie, skupiono się na uwydatnieniu i poprawieniu kluczowych elementów, aby strona stała się bardziej przyjazna, przejrzysta i nowoczesna.',
+                    'solution'    => 'W pierwszej kolejności, zadbano o dostosowanie kolorystyki strony do koncepcji brandingu. Dodatkowo wyrównano paddingi i marginesy, a także zwiększono odstępy między poszczególnymi elementami, co dodało stronie przestrzeni i poprawiło jej przejrzystość.',
                     'dueDateTime' => '2024-11-15 16:00:00',
                     'imageLight'  => [
                         'imageLegacy' => '/img/survey/homepage/legacy.light.png',
@@ -56,8 +67,8 @@ class TrialServiceProvider extends ServiceProvider
                     ],
                 ],
                 'userSession'   => [
-                    'stage'      => 'stage-none',
-                    'choice'     => 'choice-modern', 'choice-legacy', 'choice-pending',
+                    'stage'      => 'stage-invited',
+                    'choice'     => 'choice-pending', // 'choice-legacy', 'choice-modern',
                     'badgeLong'  => true,
                     'assortment' => 'assortment-legacy', // 'assortment-modern'
                 ],
@@ -71,5 +82,17 @@ class TrialServiceProvider extends ServiceProvider
         /** @var UserTheme $theme */
         $theme = $this->app[UserTheme::class];
         return $theme;
+    }
+
+    private function members(): array
+    {
+        /** @var Renderer $renderer */
+        $renderer = app(Renderer::class);
+        $viewers = $renderer->sessionViewers('/');
+        return [
+            'usersTotal'   => User::query()->count(),
+            'usersOnline'  => \count($viewers->users),
+            'guestsOnline' => $viewers->guestsCount,
+        ];
     }
 }

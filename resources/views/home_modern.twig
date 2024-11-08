@@ -1,0 +1,267 @@
+{% extends 'layout' %}
+{% block title %}Programowanie: serwis dla programistów{% endblock %}
+{% block description %}Serwis poświęcony programowaniu. Posiadamy 1 mln postów na forum dyskusyjnym, oferty pracy, artykuły i mikroblogi.{% endblock %}
+{% block keywords %}programowanie, programista, c++, c, c#, php, delphi, pascal, python, javascript, node.js, css, sass, html, kurs, mysql, mongodb, postgresql, oracle{% endblock %}
+
+{% import 'components.modals' as modal %}
+
+{% block container %}
+  {{ render_block('homepage_banner') }}
+
+  <div class="row mt-2">
+    <div class="col-lg-8">
+      <div class="community-banner brand-background p-4">
+        <span class="community-banner-subtitle">4programmers</span>
+        <br>
+        <div class="community-banner-title">Największa społeczność programistyczna w Polsce</div>
+      </div>
+    </div>
+    <div class="col-lg-4 mt-2 mt-lg-0">
+      <div class="d-flex members-banner py-4 px-2 px-xl-4 tile-palette-primary">
+        <div class="members-banner-border-right col-4 px-4">
+          <span class="members-banner-title">Członkowie</span>
+          <br>
+          <span class="members-banner-value">{{ homepageMembers.usersTotal }}</span>
+        </div>
+        <div class="members-banner-border-right col-4 px-4">
+          <span class="members-banner-title">
+            <span class="online-indicator d-inline-block me-1"></span>
+            Online
+          </span>
+          <br>
+          <span class="members-banner-value">{{ homepageMembers.usersOnline }}</span>
+        </div>
+        <div class="col-4 px-4">
+          <span class="members-banner-title">Gości</span>
+          <br>
+          <span class="members-banner-value">{{ homepageMembers.guestsOnline }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <main class="col-md-8">
+      <section id="box-forum" class="mt-4">
+        <h2 class="mb-3">
+          Co nowego na forum?
+        </h2>
+        <div class="card card-tile tile-palette-secondary">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <ul id="forum-tabs" class="nav nav-pills nav-forum">
+                  <li class="nav-item">
+                    <span
+                        class="nav-link {{ settings.topicMode == 'interesting' ? 'active' }}"
+                        title="Zobacz najciekawsze wątki na forum"
+                        data-bs-target="#interesting"
+                        data-bs-toggle="tab">
+                      Najciekawsze
+                    </span>
+                  </li>
+                  <li class="nav-item">
+                    <span
+                        class="nav-link {{ settings.topicMode == 'newest' ? 'active' }}"
+                        title="Lista najnowszych wątków na forum"
+                        data-bs-target="#newest"
+                        data-bs-toggle="tab">
+                      Nowe wątki
+                    </span>
+                  </li>
+                </ul>
+
+                <div id="box-forum-headline" class="interesting-topics">
+                  <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane {{ settings.topicMode == 'interesting' ? 'active' }}" id="interesting">
+                      {% for topic in interesting %}
+                        <div class="row">
+                          <span class="display-count col-sm-2 col-lg-3 col-xl-2 d-none d-sm-block p-0">
+                            <strong class="text-nowrap">{{ topic.views }}</strong>
+                            <small class="text-nowrap">
+                              {{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}
+                            </small>
+                          </span>
+
+                          <div class="col-12 col-sm-10 col-lg-9 col-xl-10">
+                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}"
+                               href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}"
+                               class="title">
+                              {{ topic.title }}
+                            </a>
+                            <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">
+                              {{ topic.forum }}
+                            </a>
+                            <small class="topic-created float-end">
+                              {{ topic.last_post_created_at|format_date }}
+                            </small>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane {{ settings.topicMode == 'newest' ? 'active' }}" id="newest">
+                      {% for topic in newest %}
+                        <div class="row">
+                          <span class="display-count col-sm-2 col-lg-3 col-xl-2 d-none d-sm-block p-0">
+                            <strong class="text-nowrap">{{ topic.views }}</strong>
+                            <small class="text-nowrap">
+                              {{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}
+                            </small>
+                          </span>
+
+                          <div class="col-12 col-sm-10 col-lg-9 col-xl-10">
+                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}"
+                               href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}"
+                               class="title">
+                              {{ topic.title }}
+                            </a>
+                            <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">
+                              {{ topic.forum }}
+                            </a>
+                            <small class="float-end topic-created">
+                              {{ topic.last_post_created_at|format_date }}
+                            </small>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="stream-wrapper" class="col-lg-6">
+                <ul class="nav nav-pills">
+                  <li class="nav-item">
+                    <span class="nav-link">
+                      Ostatnia aktywność
+                    </span>
+                  </li>
+                </ul>
+                <div id="stream">
+                  <div class="recent-activity">
+                    {% for activity in activities %}
+                      <div class="media">
+                        <div class="homepage-activity {{ activity.object }} d-none d-sm-flex" title="{{ activity.headline|striptags|unescape }}">
+                          {% if activity.object == 'microblog' %}
+                            {{ icon('homepageActivityMicroblog') }}
+                          {% elseif activity.object == 'comment' %}
+                            {{ icon('homepageActivityPostComment') }}
+                          {% elseif activity.object == 'topic' %}
+                            {{ icon('homepageActivityTopic') }}
+                          {% elseif activity.object == 'post' %}
+                            {{ icon('homepageActivityPost') }}
+                          {% endif %}
+                        </div>
+                        <div class="d-none d-sm-block me-2">
+                          <a href="{{ route('profile', [activity.user_id]) }}">
+                            <div class="media-object">
+                              {{ user_avatar(activity.user.photo, activity.user.name) }}
+                            </div>
+                          </a>
+                        </div>
+                        <div class="media-body">
+                          <p>{{ activity.headline|raw }}</p>
+                          <small>{{ activity.created_at|format_date }}</small>
+                          <strong>{{ activity.excerpt }}</strong>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="js-microblog" class="box">
+        <h2 class="mb-3">
+          Popularne wpisy na mikroblogu
+        </h2>
+        <vue-microblog
+            v-for="microblog in microblogs" :key="microblog.id" :microblog="microblog"
+            :wrap="true"></vue-microblog>
+        <vue-notifications></vue-notifications>
+      </section>
+
+      <ul class="mt-3 mb-3 d-flex justify-content-center pagination">
+        <li class="page-item">
+          <a class="page-link" href="{{ route('microblog.home') }}">
+            Pokaż więcej
+          </a>
+        </li>
+      </ul>
+    </main>
+
+    <div class="col-md-4 position-relative mt-4">
+      <aside class="sticky-aside">
+        {{ render_block('homepage_banner_side') }}
+
+        <div class="mb-4">
+          {{ globalViewers|raw }}
+        </div>
+
+        <section class="box mt-4">
+          <h2 class="mb-3">
+            Reputacja użytkowników
+          </h2>
+          <div class="card card-default card-reputation tab-content tile-palette-primary">
+            <div class="pt-2 px-3">
+              <div id="reputation-tabs" class="nav nav-pills">
+                <span data-bs-toggle="tab" data-bs-target="#week" class="nav-link {{ settings.reputationMode == 'week' ? 'active' }}">
+                  <span class="long-name">W tym tygodniu</span>
+                  <span class="short-name">Tyg.</span>
+                </span>
+                <span data-bs-toggle="tab" data-bs-target="#month" class="nav-link {{ settings.reputationMode == 'month' ? 'active' }}">
+                  <span class="long-name">W tym miesiącu</span>
+                  <span class="short-name">Mies.</span>
+                </span>
+                <span data-bs-toggle="tab" data-bs-target="#quarter" class="nav-link {{ settings.reputationMode == 'quarter' ? 'active' }}">
+                  <span class="long-name">W tym kwartale</span>
+                  <span class="short-name">Kwar.</span>
+                </span>
+              </div>
+            </div>
+
+            {% for tab, users in reputation %}
+              <div id="{{ tab }}" role="tabpanel" class="card-body tab-pane py-0 {{ settings.reputationMode == tab ? 'active' }}">
+                {% for user in users %}
+                  <div class="d-flex align-items-center ranking-row" style="padding:12px 0;">
+                    <a href="{{ route('profile', [user.id]) }}" class="ranking-row-avatar">
+                      {{ user_avatar(user.photo, user.name) }}
+                    </a>
+                    <div class="flex-grow-1 ms-4">
+                      <a data-user-id="{{ user.id }}" href="{{ route('profile', [user.id]) }}" class="ranking-username">
+                        {{ user.name }}
+                      </a>
+                      <div class="mt-1 d-flex align-items-center">
+                        <span class="flex-shrink-0 me-4">
+                          <strong>{{ user.reputation }}</strong> pkt
+                        </span>
+                        <div class="flex-grow-1 me-4 pe-4">
+                          <div class="ranking-percentage-ray" style="width:{{ user.percentage|round }}%; max-width:100%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="counter me-3"></div>
+                  </div>
+                {% else %}
+                  <small class="d-block text-muted text-center my-4">
+                    Bądź pierwszą osobą która otrzyma punkty reputacji w tym okresie.
+                  </small>
+                {% endfor %}
+              </div>
+            {% endfor %}
+          </div>
+        </section>
+        {{ render_block('job_ads') }}
+      </aside>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var microblogs = {{ microblogs|json_encode|raw }};
+    var flags = {{ flags|json_encode|raw }};
+    var emojis = {{ emojis|json_encode|raw }};
+  </script>
+{% endblock %}

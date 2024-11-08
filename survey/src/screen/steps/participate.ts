@@ -73,7 +73,7 @@ export default {
           <button class="btn btn-primary mt-auto mb-2" @click="experimentOpt" :disabled="isInitialSelection">
             <vue-icon name="surveyExperimentChoiceLegacy" v-if="selected === 'first'"/>
             <vue-icon name="surveyExperimentChoiceModern" v-else/>
-            Zapisz wybór
+            Wypróbuj
           </button>
           <button class="btn btn-secondary" @click="close">
             Anuluj

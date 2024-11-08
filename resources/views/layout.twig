@@ -46,7 +46,12 @@
   <link rel="preload" href="/fonts/font-awesome/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/font-awesome/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
 </head>
-<body class="{{ auth_guest() or user('allow_sticky_header') ? 'padding-top' }} {{ __dark_theme ? 'theme-dark' : 'theme-light' }}" data-color-scheme="{{ __color_scheme }}">
+<body
+    data-color-scheme="{{ __color_scheme }}"
+    class="
+    {{ auth_guest() or user('allow_sticky_header') ? 'padding-top' }} 
+    {{ __dark_theme ? 'theme-dark' : 'theme-light' }} 
+    {{ isHomepageModern ? 'homepage-modern' : 'homepage-legacy' }}">
 {{ render_region('body') }}
 
 {% block body %}
@@ -71,9 +76,12 @@
           <img
               class="logo"
               alt="4programmers.net"
-              data-src-light="{{ cdn('img/logo-light.svg') }}"
-              data-src-dark="{{ cdn('img/logo-dark.svg') }}"
-              src="{{ __dark_theme ? cdn('img/logo-dark.svg') : cdn('img/logo-light.svg') }}"
+              data-src-light="{{ cdn(isHomepageModern ? 'img/logo-modern.svg' : 'img/logo-light.svg') }}"
+              data-src-dark="{{ cdn(isHomepageModern ? 'img/logo-modern.svg' : 'img/logo-dark.svg') }}"
+              src="{{ __dark_theme 
+                ? cdn(isHomepageModern ? 'img/logo-modern.svg' : 'img/logo-dark.svg') 
+                : cdn(isHomepageModern ? 'img/logo-modern.svg' : 'img/logo-light.svg') 
+              }}"
           />
         </a>
 
@@ -118,7 +126,7 @@
           <ul id="nav-auth" class="nav-auth navbar-nav order-2"></ul>
 
           <div class="dropdown nav-avatar order-2">
-            <div class="dropdown-toggle d-block i-35 img-thumbnail" data-bs-toggle="dropdown" style="cursor:pointer;">
+            <div class="dropdown-toggle d-block i-35 {{ not isHomepageModern ? 'img-thumbnail' }}" data-bs-toggle="dropdown" style="cursor:pointer;">
               <div class="user-avatar-border">
                 {{ user_avatar(currentUser.photo, currentUser.name) }}
               </div>

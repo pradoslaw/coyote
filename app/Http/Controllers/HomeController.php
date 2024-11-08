@@ -2,6 +2,7 @@
 namespace Coyote\Http\Controllers;
 
 use Coyote\Domain\DiscreetDate;
+use Coyote\Feature\Trial\TrialService;
 use Coyote\Http\Resources\ActivityResource;
 use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Http\Resources\FlagResource;
@@ -35,13 +36,14 @@ class HomeController extends Controller
         parent::__construct();
     }
 
-    public function index(): View
+    public function index(TrialService $service): View
     {
         $cache = app(Cache\Repository::class);
         $this->topic->pushCriteria(new OnlyThoseTopicsWithAccess());
         $this->topic->pushCriteria(new SkipHiddenCategories($this->userId));
         $date = new DiscreetDate(date('Y-m-d H:i:s'));
-        return $this->view('home', [
+
+        return $this->view(!$service->isChoiceModern() ? 'home' : 'home_modern', [
             'flags'       => $this->flags(),
             'microblogs'  => $this->getMicroblogs(),
             'interesting' => $this->topic->interesting(),
