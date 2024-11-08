@@ -2,6 +2,7 @@
 namespace Coyote;
 
 use Carbon\Carbon;
+use Coyote\Feature\Trial\TrialSession;
 use Coyote\Models\Scopes\ExcludeBlocked;
 use Coyote\Notifications\ResetPasswordNotification;
 use Coyote\Services\Media;
@@ -13,6 +14,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -83,6 +85,7 @@ use Ramsey\Uuid\Uuid;
  * @property Tag[] $skills
  * @property string|null $gdpr
  * @property Guest|null $guest
+ * @property TrialSession|null $trialSession
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -327,5 +330,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function receivesBroadcastNotificationsOn(): string
     {
         return 'user:' . $this->id;
+    }
+
+    public function trialSession(): Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(TrialSession::class);
     }
 }
