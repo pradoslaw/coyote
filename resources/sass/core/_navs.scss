@@ -46,14 +46,18 @@
   .nav-link {
     cursor: pointer;
     color: #777777;
-  }
+    border-bottom: 2px solid transparent;
 
-  .nav-link.active {
-    color: black;
+    &.active {
+      color: black;
 
-    &, &:hover, &:focus, &:active {
-      border-bottom: 2px solid $alt-link-hover-color;
-      margin-bottom: -1px;
+      &,
+      &:hover,
+      &:focus,
+      &:active,
+      {
+        border-bottom-color: $alt-link-hover-color;
+      }
     }
   }
 }
