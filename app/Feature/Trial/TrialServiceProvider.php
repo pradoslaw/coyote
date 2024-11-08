@@ -30,12 +30,12 @@ class TrialServiceProvider extends ServiceProvider
                     'solution'    => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras velit metus, egestas id facilisis vel, consectetur sit amet magna. Praesent auctor arcu augue, ut efficitur dui rhoncus et. Donec tempus dapibus justo a faucibus.',
                     'dueDateTime' => '2024-11-15 16:00:00',
                     'imageLight'  => [
-                        'imageLegacy' => '/img/survey/postCommentStyle/legacy.light.png',
-                        'imageModern' => '/img/survey/postCommentStyle/modern.light.png',
+                        'imageLegacy' => '/img/survey/homepage/legacy.light.png',
+                        'imageModern' => '/img/survey/homepage/modern.light.png',
                     ],
                     'imageDark'   => [
-                        'imageLegacy' => '/img/survey/postCommentStyle/legacy.dark.png',
-                        'imageModern' => '/img/survey/postCommentStyle/modern.dark.png',
+                        'imageLegacy' => '/img/survey/homepage/legacy.dark.png',
+                        'imageModern' => '/img/survey/homepage/modern.dark.png',
                     ],
                 ],
                 'userSession'   => [
