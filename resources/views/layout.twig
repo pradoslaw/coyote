@@ -118,14 +118,11 @@
           <ul id="nav-auth" class="nav-auth navbar-nav order-2"></ul>
 
           <div class="dropdown nav-avatar order-2">
-            <a href="#"
-               class="dropdown-toggle img-thumbnail d-block i-35"
-               data-bs-toggle="dropdown"
-               role="button"
-               aria-haspopup="true"
-               aria-expanded="false">
-              {{ user_avatar(currentUser.photo, currentUser.name) }}
-            </a>
+            <div class="dropdown-toggle d-block i-35 img-thumbnail" data-bs-toggle="dropdown" style="cursor:pointer;">
+              <div class="user-avatar-border">
+                {{ user_avatar(currentUser.photo, currentUser.name) }}
+              </div>
+            </div>
 
             <div class="dropdown-menu dropdown-menu-end">
               <a class="dropdown-item profile-name" href="{{ route('user.home') }}">
