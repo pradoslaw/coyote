@@ -19,7 +19,7 @@ trait Dark
 
     function setDarkTheme(bool $dark): void
     {
-        $this->laravel->post('/User/Settings/Ajax', ['dark.theme' => $dark]);
+        $this->laravel->post('/User/Settings/Ajax', ['colorScheme' => $dark ? 'dark' : 'light']);
     }
 
     function setLastColorScheme(string $scheme): void

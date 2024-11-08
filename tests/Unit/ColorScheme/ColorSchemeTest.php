@@ -44,32 +44,4 @@ class ColorSchemeTest extends TestCase
         $this->setColorScheme('system');
         $this->assertSame('system', $this->colorScheme());
     }
-
-    /**
-     * @test
-     */
-    public function colorSchemeLegacyLight()
-    {
-        $this->setColorSchemeLegacy('light');
-        $this->assertSame('light', $this->colorScheme());
-    }
-
-    /**
-     * @test
-     */
-    public function colorSchemeLegacyDark()
-    {
-        $this->setColorSchemeLegacy('dark');
-        $this->assertSame('dark', $this->colorScheme());
-    }
-
-    /**
-     * @test
-     */
-    public function colorSchemeOverrideLegacy()
-    {
-        $this->setColorScheme('light');
-        $this->setColorSchemeLegacy('dark');
-        $this->assertSame('light', $this->colorScheme());
-    }
 }
