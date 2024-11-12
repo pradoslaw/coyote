@@ -115,13 +115,25 @@ window.addEventListener('load', () => {
   if (!surveyElement) {
     return;
   }
-  renderVueApp(
-    translateInput(surveyElement!.textContent!),
-    experimentChangeStyle,
-    storeSurveyPreview,
-    storeSurveyState,
-    storeSurveyBadgeState,
-  );
+  const data = translateInput(surveyElement!.textContent!);
+  if (data.state === 'survey-invited') {
+    setTimeout(() => {
+      runSurvey();
+      storeSurveyEnroll();
+    }, 6 * 1000);
+  } else {
+    runSurvey();
+  }
+
+  function runSurvey() {
+    renderVueApp(
+      data,
+      experimentChangeStyle,
+      storeSurveyPreview,
+      storeSurveyState,
+      storeSurveyBadgeState,
+    );
+  }
 
   function experimentChangeStyle(style: ExperimentOpt): void {
     axios.post('/trial/choice', {choice: 'choice-' + style})
@@ -134,6 +146,10 @@ window.addEventListener('load', () => {
 
   function storeSurveyPreview(surveyChoicePreview: ExperimentOpt): void {
     axios.post('/trial/preview', {preview: surveyChoicePreview});
+  }
+
+  function storeSurveyEnroll(): void {
+    axios.post('/trial/enroll', {});
   }
 
   function storeSurveyBadgeState(badgeLong: boolean): void {

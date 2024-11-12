@@ -31,6 +31,9 @@ class TrialServiceProvider extends ServiceProvider
             Route::post('/trial/badge', function (Request $request, TrialService $service) {
                 $service->setBadgeNarrow($request->get('badge') === 'narrow');
             });
+            Route::post('/trial/enroll', function (TrialService $service) {
+                $service->enrolled();
+            });
         });
     }
 
