@@ -69,9 +69,9 @@ export default {
       const optIn = choice === 'in';
       this.$emit('experimentOpt', optIn ? 'modern' : 'legacy');
       if (optIn) {
-        this.notifyExperiment('Uruchomiono nową wersję.', 'surveyExperimentEnabledModern');
+        this.notifyExperiment('Korzystasz z nowej wersji.', 'surveyExperimentEnabledModern');
       } else {
-        this.notifyExperiment('Przywrócono pierwotną wersję.', 'surveyExperimentEnabledLegacy');
+        this.notifyExperiment('Korzystasz z pierwotnej wersji.', 'surveyExperimentEnabledLegacy');
       }
     },
     experimentPreview(this: VueInstance, choice: ExperimentChoice): void {

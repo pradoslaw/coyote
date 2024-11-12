@@ -94,13 +94,13 @@ describe('survey', () => {
           assertNotification(
             await tallyOnParticipateScreen('experimentOptIn', {title: 'Foo'}),
             'Foo',
-            '<i class="fa-solid fa-toggle-on fa-fw"></i> Uruchomiono nową wersję.'));
+            '<i class="fa-solid fa-toggle-on fa-fw"></i> Korzystasz z nowej wersji.'));
 
         test('experiment opt-out, see notification', async () =>
           assertNotification(
             await tallyOnParticipateScreen('experimentOptOut', {title: 'Foo'}),
             'Foo',
-            '<i class="fa-solid fa-toggle-off fa-fw"></i> Przywrócono pierwotną wersję.'));
+            '<i class="fa-solid fa-toggle-off fa-fw"></i> Korzystasz z pierwotnej wersji.'));
       });
 
       describe('notify backend', () => {
@@ -177,7 +177,7 @@ describe('survey', () => {
         await userAction(tally, 'experimentOptIn');
         await userAction(tally, 'experimentOptOut');
         assertEquals(tally.notifications.count(), 1);
-        assertMatch(tally.notifications.content(), /Przywrócono pierwotną wersję./);
+        assertMatch(tally.notifications.content(), /Korzystasz z pierwotnej wersji./);
       });
 
       function assertScreen(tally: Component, expected: Screen): void {
