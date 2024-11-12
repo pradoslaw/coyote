@@ -107,12 +107,14 @@ abstract class File
 
     public function upload(UploadedFile $uploadedFile)
     {
-        $this->setName($uploadedFile->getClientOriginalName());
-
-        $path = $this->filesystem->putFile($this->directory, $uploadedFile, 'public');
-        $this->setFilename($path);
-
+        $this->uploadFile($uploadedFile->getClientOriginalName(), $uploadedFile);
         return $this;
+    }
+
+    public function uploadFile(string $name, $uploadedFile): void
+    {
+        $this->setName($name);
+        $this->setFilename($this->filesystem->putFile($this->directory, $uploadedFile, 'public'));
     }
 
     public function put($content)

@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Eloquent\Model;
@@ -7,15 +6,9 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
         Model::unguard();
-
         $this->call(PagesTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(GroupsTableSeeder::class);
@@ -37,5 +30,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TagCategoriesTableSeeder::class);
         $this->call(TopicsTableSeeder::class);
         $this->call(ActivityTableSeeder::class);
+        $this->call(UserAvatarsSeeder::class);
     }
 }
