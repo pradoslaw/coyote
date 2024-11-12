@@ -98,6 +98,18 @@ function mapStageToLegacySurveyState(stage: Stage): State {
   return map[stage];
 }
 
+function mapLegacySurveyStateToStage(state: State): Stage {
+  const map: { [keyof: string]: Stage } = {
+    'survey-none': 'stage-none',
+    'survey-invited': 'stage-invited',
+    'survey-declined': 'stage-declined',
+    'survey-accepted': 'stage-accepted',
+    'survey-instructed': 'stage-instructed',
+    'survey-gone': 'stage-gone',
+  };
+  return map[state];
+}
+
 window.addEventListener('load', () => {
   const surveyElement = document.getElementById('survey');
   if (!surveyElement) {
@@ -112,12 +124,12 @@ window.addEventListener('load', () => {
   );
 
   function experimentChangeStyle(style: ExperimentOpt): void {
-    axios.post('/trial/choice', {choice: style})
+    axios.post('/trial/choice', {choice: 'choice-' + style})
       .then(() => window.location.reload());
   }
 
   function storeSurveyState(surveyState: State): void {
-    axios.post('/trial/stage', {stage: surveyState});
+    axios.post('/trial/stage', {stage: mapLegacySurveyStateToStage(surveyState)});
   }
 
   function storeSurveyPreview(surveyChoicePreview: ExperimentOpt): void {
@@ -125,7 +137,7 @@ window.addEventListener('load', () => {
   }
 
   function storeSurveyBadgeState(badgeLong: boolean): void {
-    axios.post('/trial/badge', {badge: badgeLong});
+    axios.post('/trial/badge', {badge: badgeLong ? 'long' : 'narrow'});
   }
 });
 

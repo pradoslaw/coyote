@@ -11,17 +11,17 @@ readonly class TrialService
 
     public function isChoiceModern(): bool
     {
-        return $this->guest->getSetting('isHomepageNew', 'choice-pending') === 'choice-modern';
+        return $this->getUserChoice() === 'choice-modern';
     }
 
     public function setChoice(string $choice): void
     {
-        $this->guest->setSetting('isHomepageNew', "choice-$choice");
+        $this->guest->setSetting('surveyChoice', $choice);
     }
 
     public function setStage(string $stage): void
     {
-        $this->guest->setSetting('surveyStage', \str_replace('survey', 'stage', $stage));
+        $this->guest->setSetting('surveyStage', $stage);
     }
 
     public function logPreview(string $choice): void
@@ -30,21 +30,22 @@ readonly class TrialService
 
     public function setBadgeNarrow(bool $narrow): void
     {
+        $this->guest->getSetting('surveyBadgeNarrow', $narrow);
     }
 
     public function getUserStage(): string
     {
-        return \str_replace('survey', 'stage', $this->guest->getSetting('surveyStage', 'stage-invited'));
+        return $this->guest->getSetting('surveyStage', 'stage-invited');
     }
 
     public function getUserChoice(): string
     {
-        return $this->guest->getSetting('isHomepageNew', 'choice-pending');
+        return $this->guest->getSetting('surveyChoice', 'choice-pending');
     }
 
     public function isUserBadgeLong(): bool
     {
-        return true;
+        return !$this->guest->getSetting('surveyBadgeNarrow', false);
     }
 
     public function getUserAssortment(): string
