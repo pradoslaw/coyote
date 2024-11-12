@@ -112,7 +112,8 @@ window.addEventListener('load', () => {
   );
 
   function experimentChangeStyle(style: ExperimentOpt): void {
-    axios.post('/trial/choice', {choice: style});
+    axios.post('/trial/choice', {choice: style})
+      .then(() => window.location.reload());
   }
 
   function storeSurveyState(surveyState: State): void {
