@@ -51,6 +51,7 @@ export default {
   data(this: Instance): Data {
     return {
       screen: initialScreenFor(this.state),
+      showExperimentOptNotification: false,
     };
   },
   methods: {
@@ -68,10 +69,12 @@ export default {
       this.experimentClose();
       const optIn = choice === 'in';
       this.$emit('experimentOpt', optIn ? 'modern' : 'legacy');
-      if (optIn) {
-        this.notifyExperiment('Korzystasz z nowej wersji.', 'surveyExperimentEnabledModern');
-      } else {
-        this.notifyExperiment('Korzystasz z pierwotnej wersji.', 'surveyExperimentEnabledLegacy');
+      if (this.state === 'survey-instructed') {
+        if (optIn) {
+          this.notifyExperiment('Korzystasz z nowej wersji.', 'surveyExperimentEnabledModern');
+        } else {
+          this.notifyExperiment('Korzystasz z pierwotnej wersji.', 'surveyExperimentEnabledLegacy');
+        }
       }
     },
     experimentPreview(this: VueInstance, choice: ExperimentChoice): void {
