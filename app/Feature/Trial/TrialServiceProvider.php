@@ -50,13 +50,15 @@ class TrialServiceProvider extends ServiceProvider
 
     private function addViewField(View $view): void
     {
+        /** @var TrialService $service */
+        $service = app(TrialService::class);
         $view->with([
             'survey' => [
                 'trial'         => [
                     'title'       => 'Wygląd strony głównej.',
                     'reason'      => 'Redesign strony głównej forum programistycznego został przeprowadzony w celu podniesienia estetyki i spójności wizualnej. Pomimo braku istotnych zmian w layoutcie, skupiono się na uwydatnieniu i poprawieniu kluczowych elementów, aby strona stała się bardziej przyjazna, przejrzysta i nowoczesna.',
                     'solution'    => 'W pierwszej kolejności, zadbano o dostosowanie kolorystyki strony do koncepcji brandingu. Dodatkowo wyrównano paddingi i marginesy, a także zwiększono odstępy między poszczególnymi elementami, co dodało stronie przestrzeni i poprawiło jej przejrzystość.',
-                    'dueDateTime' => '2024-11-15 16:00:00',
+                    'dueDateTime' => '2024-11-19 23:59:59',
                     'imageLight'  => [
                         'imageLegacy' => '/img/survey/homepage/legacy.light.png',
                         'imageModern' => '/img/survey/homepage/modern.light.png',
@@ -67,10 +69,10 @@ class TrialServiceProvider extends ServiceProvider
                     ],
                 ],
                 'userSession'   => [
-                    'stage'      => 'stage-invited',
-                    'choice'     => 'choice-pending', // 'choice-legacy', 'choice-modern',
-                    'badgeLong'  => true,
-                    'assortment' => 'assortment-legacy', // 'assortment-modern'
+                    'stage'      => $service->getUserStage(),
+                    'choice'     => $service->getUserChoice(),
+                    'badgeLong'  => $service->isUserBadgeLong(),
+                    'assortment' => $service->getUserAssortment(), // 'assortment-modern'
                 ],
                 'userThemeDark' => $this->userTheme()->isThemeDark(),
             ],

@@ -16,7 +16,7 @@ readonly class TrialService
 
     public function setChoice(string $choice): void
     {
-        $this->guest->setSetting('isHomepageNew',  "choice-$choice");
+        $this->guest->setSetting('isHomepageNew', "choice-$choice");
     }
 
     public function setStage(string $stage): void
@@ -29,5 +29,25 @@ readonly class TrialService
 
     public function setBadgeNarrow(bool $narrow): void
     {
+    }
+
+    public function getUserStage(): string
+    {
+        return 'stage-invited';
+    }
+
+    public function getUserChoice(): string
+    {
+        return 'choice-pending'; // 'choice-legacy', 'choice-modern',
+    }
+
+    public function isUserBadgeLong(): bool
+    {
+        return true;
+    }
+
+    public function getUserAssortment(): string
+    {
+        return 'assortment-legacy';
     }
 }
