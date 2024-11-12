@@ -21,6 +21,7 @@ readonly class TrialService
 
     public function setStage(string $stage): void
     {
+        $this->guest->setSetting('surveyStage', \str_replace('survey', 'stage', $stage));
     }
 
     public function logPreview(string $choice): void
@@ -33,12 +34,12 @@ readonly class TrialService
 
     public function getUserStage(): string
     {
-        return 'stage-invited';
+        return \str_replace('survey', 'stage', $this->guest->getSetting('surveyStage', 'stage-invited'));
     }
 
     public function getUserChoice(): string
     {
-        return 'choice-pending'; // 'choice-legacy', 'choice-modern',
+        return $this->guest->getSetting('isHomepageNew', 'choice-pending');
     }
 
     public function isUserBadgeLong(): bool
