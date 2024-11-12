@@ -75,6 +75,13 @@ readonly class TrialService
 
     public function getUserAssortment(): string
     {
-        return 'assortment-legacy';
+        $assortment = $this->guest->getSetting('surveyAssortment', null);
+        if ($assortment !== null) {
+            return $assortment;
+        }
+        $legacy = (date('s') % 2) == 0;
+        $value = $legacy ? 'assortment-legacy' : 'assortment-modern';
+        $this->guest->setSetting('surveyAssortment', $value);
+        return $value;
     }
 }
