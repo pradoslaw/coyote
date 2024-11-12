@@ -72,7 +72,7 @@ class TrialServiceProvider extends ServiceProvider
                     'stage'      => $service->getUserStage(),
                     'choice'     => $service->getUserChoice(),
                     'badgeLong'  => $service->isUserBadgeLong(),
-                    'assortment' => $service->getUserAssortment(), // 'assortment-modern'
+                    'assortment' => $service->getUserAssortment(),
                 ],
                 'userThemeDark' => $this->userTheme()->isThemeDark(),
             ],
