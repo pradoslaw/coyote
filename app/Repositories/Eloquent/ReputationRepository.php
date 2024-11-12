@@ -96,6 +96,7 @@ class ReputationRepository extends Repository
             ->select(['users.id', 'name', 'photo', 't.reputation'])
             ->from($this->raw("($from) AS t"))
             ->join('users', 'users.id', '=', 'user_id')
+            ->orderBy('reputation', 'DESC')
             ->get();
         return $this->percentage($result);
     }
