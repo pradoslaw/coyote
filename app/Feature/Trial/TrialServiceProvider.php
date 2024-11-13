@@ -96,7 +96,7 @@ class TrialServiceProvider extends ServiceProvider
         $viewers = $renderer->sessionViewers('/');
         return [
             'usersTotal'   => User::query()->count(),
-            'usersOnline'  => \count($viewers->users),
+            'usersOnline'  => \count($viewers->users) + $viewers->guestsCount,
             'guestsOnline' => $viewers->guestsCount,
         ];
     }
