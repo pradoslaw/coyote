@@ -87,7 +87,7 @@ readonly class TrialService
         if ($assortment !== null) {
             return $assortment;
         }
-        $legacy = (date('s') % 2) == 0;
+        $legacy = (date('s') % 2) == 1;
         $value = $legacy ? 'assortment-legacy' : 'assortment-modern';
         $this->guest->setSetting('surveyAssortment', $value);
         return $value;
