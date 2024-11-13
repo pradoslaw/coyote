@@ -60,7 +60,15 @@ readonly class TrialService
 
     public function getUserStage(): string
     {
-        return $this->guest->getSetting('surveyStage', 'stage-invited');
+        if ($this->canSeeTrial()) {
+            return $this->guest->getSetting('surveyStage', 'stage-invited');
+        }
+        return 'stage-none';
+    }
+
+    private function canSeeTrial(): bool
+    {
+        return auth()->check();
     }
 
     public function getUserChoice(): string
