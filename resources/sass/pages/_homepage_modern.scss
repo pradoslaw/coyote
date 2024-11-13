@@ -326,11 +326,13 @@ body.homepage-modern {
     }
   }
 
-  .nav-pills {
+  :not(.editor) > .nav-pills {
     @include theme {
       border-bottom-color: var(--tile-border-color);
     }
+  }
 
+  .nav-pills {
     .nav-link {
       transition: none;
 
