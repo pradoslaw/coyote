@@ -292,9 +292,15 @@ body.homepage-modern {
     }
   }
 
-  a {
+  :not(.mega-menu-body) > ul > li > a {
     @include theme {
       color: inherit;
+    }
+  }
+
+  .microblog .card-body .microblog-text {
+    a {
+      @include color-theme($secondary-color-light, $secondary-color-dark);
     }
   }
 
