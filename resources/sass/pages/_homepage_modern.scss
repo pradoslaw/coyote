@@ -298,9 +298,17 @@ body.homepage-modern {
     }
   }
 
-  .microblog .card-body .microblog-text {
+  .microblog .card-body .microblog-text,
+  .microblog .card-body .microblog-comments .comment-text,
+  {
     a {
       @include color-theme($secondary-color-light, $secondary-color-dark);
+    }
+  }
+
+  .show-more {
+    a {
+      @include color-theme($primary-color-dark, $primary-color-light);
     }
   }
 
