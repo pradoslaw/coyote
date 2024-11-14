@@ -2,8 +2,9 @@
 namespace Coyote\Domain\Registration;
 
 use Coyote\Post;
+use Illuminate\Support\Facades\DB;
 
-readonly class PostsCreated implements ChartSource
+readonly class FirstPosts implements ChartSource
 {
     private UniformDates $uniformDates;
 
@@ -14,12 +15,12 @@ readonly class PostsCreated implements ChartSource
 
     public function id(): string
     {
-        return 'posts.created_at';
+        return 'firstPost.createdAt';
     }
 
     public function title(): string
     {
-        return 'Utworzone posty';
+        return 'Pierwszy post użytkownika';
     }
 
     public function inRange(HistoryRange $range): array
@@ -33,14 +34,17 @@ readonly class PostsCreated implements ChartSource
 
     private function fetchRegistrationsByPeriod(string $from, string $to, Period $period): array
     {
-        $dateTruncSqlField = $this->dateTruncSqlField('created_at', $period);
-        return Post::withTrashed()
-            ->where('created_at', '>=', "$from 00:00:00")
-            ->where('created_at', '<', "$to 24:00:00")
+        $dateTruncSqlField = $this->dateTruncSqlField('first_post_date', $period);
+        return DB::query()
+            ->from(Post::query()
+                ->select('user_id', DB::raw('MIN(created_at)::date as first_post_date'))
+                ->groupBy('user_id')
+                ->havingRaw("MIN(created_at) >= ?", ["$from 00:00:00"])
+                ->havingRaw("MIN(created_at) < ?", ["$to 24:00:00"]),
+                as:'firstPosts')
             ->selectRaw("$dateTruncSqlField as created_at_group, Count(*) AS count")
             ->groupByRaw($dateTruncSqlField)
-            ->get()
-            ->pluck(key:'created_at_group', value:'count')
+            ->pluck('count', 'created_at_group')
             ->toArray();
     }
 
@@ -49,8 +53,7 @@ readonly class PostsCreated implements ChartSource
         return match ($period) {
             Period::Day => "date_trunc('day', $column)::date",
             Period::Week => "date_trunc('week', $column)::date",
-            Period::Month => "date_trunc('month', $column)::date",
-            Period::Year => "date_trunc('year', $column)::date",
+            Period::Month => "date_trunc('month', $column)::date"
         };
     }
 

@@ -40,6 +40,7 @@
       {{ registrationsChartYears }}
     </div>
   </div>
+
   <ul class="nav nav-pills mb-3 justify-content-end">
     <li class="nav-item" role="presentation">
       <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-days-leave" type="button">ostatnie 30 dni</button>
@@ -66,6 +67,29 @@
     </div>
     <div class="tab-pane" id="pills-years-leave">
       {{ postsCreatedChartYears }}
+    </div>
+  </div>
+
+  <ul class="nav nav-pills mb-3 justify-content-end">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-days-fp" type="button">ostatnie 30 dni</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pills-weeks-fp" type="button">ostatnie 30 tygodni</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-months-fp" type="button">ostatnie 30 miesięcy</button>
+    </li>
+  </ul>
+  <div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane" id="pills-days-fp">
+      {{ firstPostsChartDays }}
+    </div>
+    <div class="tab-pane show active" id="pills-weeks-fp">
+      {{ firstPostsChartWeeks }}
+    </div>
+    <div class="tab-pane" id="pills-months-fp">
+      {{ firstPostsChartMonths }}
     </div>
   </div>
 {% endblock %}

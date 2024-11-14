@@ -3,6 +3,7 @@ namespace Coyote\Http\Controllers\Adm;
 
 use Carbon\Carbon;
 use Coyote\Domain\Registration\ChartSource;
+use Coyote\Domain\Registration\FirstPosts;
 use Coyote\Domain\Registration\HistoryRange;
 use Coyote\Domain\Registration\Period;
 use Coyote\Domain\Registration\PostsCreated;
@@ -14,7 +15,7 @@ use Illuminate\View\View;
 
 class DashboardController extends BaseController
 {
-    public function index(UserRegistrations $userRegistrations, PostsCreated $postCreated): View
+    public function index(UserRegistrations $userRegistrations, PostsCreated $postCreated, FirstPosts $firstPosts): View
     {
         return $this->view('adm.dashboard', [
             'checklist' => [
@@ -42,6 +43,10 @@ class DashboardController extends BaseController
             'postsCreatedChartWeeks'  => $this->historyChartHtml($postCreated, Period::Week),
             'postsCreatedChartMonths' => $this->historyChartHtml($postCreated, Period::Month),
             'postsCreatedChartYears'  => $this->historyChartHtml($postCreated, Period::Year),
+
+            'firstPostsChartDays'   => $this->historyChartHtml($firstPosts, Period::Day),
+            'firstPostsChartWeeks'  => $this->historyChartHtml($firstPosts, Period::Week),
+            'firstPostsChartMonths' => $this->historyChartHtml($firstPosts, Period::Month)
         ]);
     }
 

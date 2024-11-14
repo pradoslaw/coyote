@@ -3,6 +3,7 @@ namespace Coyote\Domain\View;
 
 use Coyote\Domain\Html;
 use Coyote\Domain\StringHtml;
+use function max;
 
 class Chart extends Html
 {
@@ -117,7 +118,7 @@ class Chart extends Html
         if (empty($values)) {
             return $baseline;
         }
-        $max = \max($values) * 1.1;
-        return \max($max, $baseline);
+        $max = \max($values);
+        return max($max * 1.1 + 1, $baseline);
     }
 }
