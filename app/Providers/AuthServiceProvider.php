@@ -68,6 +68,7 @@ class AuthServiceProvider extends \Illuminate\Foundation\Support\Providers\AuthS
         'guide-delete',
         'comment-update',
         'comment-delete',
+        'alpha-access',
     ];
 
     /**
