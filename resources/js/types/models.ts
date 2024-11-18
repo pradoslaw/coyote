@@ -82,7 +82,7 @@ export interface Microblog {
   text: string;
   url: string;
   comments: Microblog[];
-  user: User | null
+  user: User | null;
   assets: Asset[];
   permissions: MicroblogPermission;
   comments_count?: number;
@@ -409,7 +409,7 @@ interface Category {
 
 interface Subcategory {
   name: string;
-  emojis: string[]
+  emojis: string[];
 }
 
 export interface Emoji {
