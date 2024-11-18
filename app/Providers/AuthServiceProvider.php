@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Providers;
 
 use Coyote\Comment;
@@ -26,18 +25,12 @@ use Coyote\User;
 use Coyote\Wiki;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Auth\Access\Gate;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider
+class AuthServiceProvider extends \Illuminate\Foundation\Support\Providers\AuthServiceProvider
 {
     // cache permission for 1 month
-    const CACHE_TTL = 60 * 60 * 24 * 30;
+    const int CACHE_TTL = 60 * 60 * 24 * 30;
 
-    /**
-     * The policy mappings for the application.
-     *
-     * @var array
-     */
     protected $policies = [
         Microblog::class    => MicroblogPolicy::class,
         Forum::class        => ForumPolicy::class,
@@ -52,12 +45,7 @@ class AuthServiceProvider extends ServiceProvider
         Comment::class      => CommentPolicy::class,
     ];
 
-    /**
-     * Global permissions
-     *
-     * @var array
-     */
-    protected $abilities = [
+    protected array $abilities = [
         'adm-access',
         'adm-group',
         'adm-payment',
@@ -85,10 +73,8 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Users' permissions.
      * A little cache so we don't have to request db/redis every time.
-     *
-     * @var array
      */
-    protected $permissions = [];
+    protected array $permissions = [];
 
     public function boot(): void
     {
@@ -98,33 +84,28 @@ class AuthServiceProvider extends ServiceProvider
         foreach ($this->abilities as $ability) {
             $gate->define($ability, function (User $user) use ($ability) {
                 $permissions = $this->getUserPermissions($user);
-
                 return $permissions[$ability] ?? false;
             });
         }
     }
 
-    /**
-     * @param User $user
-     * @return mixed
-     */
-    private function getUserPermissions(User $user)
+    private function getUserPermissions(User $user): array
     {
-        if (isset($this->permissions[$user->id])) {
-            return $this->permissions[$user->id];
+        if (!isset($this->permissions[$user->id])) {
+            $this->permissions[$user->id] = $this->cached(
+                "permission:$user->id",
+                $user->getPermissions()->toArray(...));
         }
+        return $this->permissions[$user->id];
+    }
 
-        // file cache driver does not support tagging.
-        if (config('cache.default') !== 'file') {
-            $cache = $this->app[CacheManager::class];
-
-            $result = $cache->tags('permissions')->remember('permission:' . $user->id, self::CACHE_TTL, function () use ($user) {
-                return $user->getPermissions()->toArray();
-            });
-        } else {
-            $result = $user->getPermissions()->toArray();
+    private function cached(string $cacheTag, callable $producer): array
+    {
+        if (config('cache.default') === 'file') {
+            // file cache driver does not support tagging.
+            return $producer();
         }
-
-        return $this->permissions[$user->id] = $result;
+        $cache = $this->app[CacheManager::class];
+        return $cache->tags('permissions')->remember($cacheTag, self::CACHE_TTL, $producer);
     }
 }

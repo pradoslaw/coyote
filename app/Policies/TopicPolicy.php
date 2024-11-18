@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Policies;
 
 use Coyote\Topic;
@@ -11,29 +10,19 @@ class TopicPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * @var Gate
-     */
-    private $gate;
-
-    /**
-     * TopicPolicy constructor.
-     * @param Gate $gate
-     */
-    public function __construct(Gate $gate)
+    public function __construct(private Gate $gate)
     {
-        $this->gate = $gate;
     }
 
-    /**
-     * @param User|null $user
-     * @param Topic $topic
-     * @return bool
-     */
-    public function write(?User $user, Topic $topic)
+    public function write(?User $user, Topic $topic): bool
     {
         // users with permissions can reply in locked topic
-        return !$topic->is_locked ? true : ($user !== null ? $user->can('update', $topic->forum) : false);
+        if (!$topic->is_locked) {
+            return true;
+        }
+        if ($user !== null) {
+            return $user->can('update', $topic->forum);
+        }
+        return false;
     }
 }
-

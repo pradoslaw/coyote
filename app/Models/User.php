@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\RoutesNotifications;
+use Illuminate\Support;
 use Illuminate\Support\Collection;
 use Laravel\Passport\HasApiTokens;
 use NotificationChannels\WebPush\HasPushSubscriptions;
@@ -222,7 +223,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function followers(): HasManyThrough
     {
-        return $this->hasManyThrough(User::class, Relation::class, 'related_user_id', 'id', 'id', 'user_id')
+        return $this
+            ->hasManyThrough(User::class, Relation::class, 'related_user_id', 'id', 'id', 'user_id')
             ->where('user_relations.is_blocked', false);
     }
 
@@ -232,7 +234,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function getUnreadNotification($objectId)
     {
-        return $this->hasOne(Notification::class)
+        return $this
+            ->hasOne(Notification::class)
             ->where('object_id', '=', $objectId)
             ->whereNull('read_at')
             ->first();
@@ -272,10 +275,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     /**
      * Get user's permissions (including all user's groups)
-     *
-     * @return mixed
      */
-    public function getPermissions()
+    public function getPermissions(): Support\Collection
     {
         return $this
             ->permissions()
