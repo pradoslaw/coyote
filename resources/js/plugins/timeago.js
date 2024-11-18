@@ -27,7 +27,7 @@ export const VueTimeAgo = {
   template: '<time :title="title" v-text="this.timeago"/>',
   computed: {
     title() {
-      if (this.datetime === null) {
+      if (!this.datetime) {
         return '';
       }
       return format(new Date(this.datetime), this.format, {locale: pl});
