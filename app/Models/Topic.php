@@ -41,6 +41,7 @@ use Illuminate\Database\Query\Builder;
  * @property int $subscribers
  * @property Poll $poll
  * @property Post $firstPost
+ * @property boolean $is_tree
  */
 class Topic extends Model
 {

@@ -78,6 +78,11 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
         $this->assertDatabaseHas($table, $data);
     }
 
+    public function assertDatabaseRecordNotExists(string $table, array $data): void
+    {
+        $this->assertDatabaseMissing($table, $data);
+    }
+
     public function databaseTable(string $table): Builder
     {
         return $this->getConnection(null, $table)->table($table);

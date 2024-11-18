@@ -23,6 +23,7 @@ use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class SubmitController extends BaseController
@@ -59,6 +60,10 @@ class SubmitController extends BaseController
         }
 
         $topic->fill($request->only(array_keys($request->rules())));
+        if ($request->get('discussMode') === 'tree') {
+            Gate::authorize('alpha-access');
+            $topic->is_tree = true;
+        }
 
         if (!$post->exists) {
             $post->forum()->associate($forum);
@@ -215,7 +220,7 @@ class SubmitController extends BaseController
             if ($post->user_id !== null && $post->user_id !== $this->userId) {
                 $post->user->notify(
                     (new SubjectChangedNotification($this->auth, $topic))
-                        ->setOriginalSubject(str_limit($originalSubject, 84))
+                        ->setOriginalSubject(str_limit($originalSubject, 84)),
                 );
             }
 
@@ -226,7 +231,7 @@ class SubmitController extends BaseController
             stream(
                 Stream_Update::class,
                 (new Stream_Topic)->map($topic, $post->text),
-                (new Stream_Forum)->map($topic->forum)
+                (new Stream_Forum)->map($topic->forum),
             );
         });
 
