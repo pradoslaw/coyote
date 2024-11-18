@@ -42,35 +42,35 @@ class UserRegistrationsTest extends TestCase
     #[Test]
     public function oneRegistration(): void
     {
-        $this->models->newUser(createdAt:'2125-01-23 21:37:00');
+        $this->driver->newUser(createdAt:'2125-01-23 21:37:00');
         $this->assertSame([1], $this->registrationsInWeek('2125-01-22', '2125-01-24'));
     }
 
     #[Test]
     public function includeDateEdgeStart(): void
     {
-        $this->models->newUser(createdAt:'2125-01-22 00:00:00');
+        $this->driver->newUser(createdAt:'2125-01-22 00:00:00');
         $this->assertSame([1], $this->registrationsInWeek('2125-01-22', '2125-01-22'));
     }
 
     #[Test]
     public function includeDateEdgeEnd(): void
     {
-        $this->models->newUser(createdAt:'2125-01-23 21:37:00');
+        $this->driver->newUser(createdAt:'2125-01-23 21:37:00');
         $this->assertCount(1, $this->registrationsInWeek('2125-01-22', '2125-01-23'));
     }
 
     #[Test]
     public function includeDateEdgeEndLastSecondOfTheDay(): void
     {
-        $this->models->newUser(createdAt:'2125-01-23 23:59:59');
+        $this->driver->newUser(createdAt:'2125-01-23 23:59:59');
         $this->assertCount(1, $this->registrationsInWeek('2125-01-22', '2125-01-23'));
     }
 
     #[Test]
     public function countUsersOne(): void
     {
-        $this->models->newUser(createdAt:'2024-09-30 21:37:00');
+        $this->driver->newUser(createdAt:'2024-09-30 21:37:00');
         $this->assertSame([1], $this->registrationsInWeek('2024-09-30', '2024-10-01'));
     }
 
@@ -79,8 +79,8 @@ class UserRegistrationsTest extends TestCase
     {
         $sunday = '2124-09-24 21:37:00';
         $monday = '2124-09-25 21:37:00';
-        $this->models->newUser(createdAt:$sunday);
-        $this->models->newUser(createdAt:$monday);
+        $this->driver->newUser(createdAt:$sunday);
+        $this->driver->newUser(createdAt:$monday);
         $this->assertSame([1, 1], $this->registrations(new HistoryRange('2124-09-25', Period::Week, 1)));
     }
 
@@ -89,15 +89,15 @@ class UserRegistrationsTest extends TestCase
     {
         $monday = '2024-09-30 21:37:00';
         $tuesday = '2024-10-01 21:37:00';
-        $this->models->newUser(createdAt:$monday);
-        $this->models->newUser(createdAt:$tuesday);
+        $this->driver->newUser(createdAt:$monday);
+        $this->driver->newUser(createdAt:$tuesday);
         $this->assertSame([2], $this->registrationsInWeek('2024-09-30', '2024-10-01'));
     }
 
     #[Test]
     public function includeUsersWhoAreDeleted(): void
     {
-        $this->models->newUser(createdAt:'2125-01-23 21:37:00', deleted:true);
+        $this->driver->newUser(createdAt:'2125-01-23 21:37:00', deleted:true);
         $this->assertCount(1, $this->registrationsInWeek('2125-01-22', '2125-01-24'));
     }
 
@@ -106,7 +106,7 @@ class UserRegistrationsTest extends TestCase
     {
         $monday = "2024-09-30";
         $tuesday = "2024-10-01";
-        $this->models->newUser(createdAt:"$tuesday 21:37:00", deleted:true);
+        $this->driver->newUser(createdAt:"$tuesday 21:37:00", deleted:true);
         $this->assertSame(
             [$monday => 1],
             $this->registrations->inRange(new HistoryRange('2024-10-01', Period::Week, 0)));
@@ -117,8 +117,8 @@ class UserRegistrationsTest extends TestCase
     {
         $mondayOfTheFirstWeek = "2124-09-04";
         $mondayOfTheSecondWeek = "2124-09-18";
-        $this->models->newUser(createdAt:"$mondayOfTheFirstWeek 21:37:00");
-        $this->models->newUser(createdAt:"$mondayOfTheSecondWeek 21:37:00");
+        $this->driver->newUser(createdAt:"$mondayOfTheFirstWeek 21:37:00");
+        $this->driver->newUser(createdAt:"$mondayOfTheSecondWeek 21:37:00");
         $this->assertSame(
             [
                 $mondayOfTheFirstWeek  => 1,
@@ -177,8 +177,8 @@ class UserRegistrationsTest extends TestCase
     #[Test]
     public function countUsersGroupByMonth(): void
     {
-        $this->models->newUser(createdAt:'2124-09-30 21:37:00');
-        $this->models->newUser(createdAt:'2124-10-01 21:37:00');
+        $this->driver->newUser(createdAt:'2124-09-30 21:37:00');
+        $this->driver->newUser(createdAt:'2124-10-01 21:37:00');
         $this->assertSame(
             ['2124-09-01' => 1, '2124-10-01' => 1],
             $this->registrations->inRange(new HistoryRange('2124-10-01', Period::Month, 1)));
@@ -187,8 +187,8 @@ class UserRegistrationsTest extends TestCase
     #[Test]
     public function countUsersGroupByYear(): void
     {
-        $this->models->newUser(createdAt:'2123-12-31 21:37:00');
-        $this->models->newUser(createdAt:'2124-01-01 21:37:00');
+        $this->driver->newUser(createdAt:'2123-12-31 21:37:00');
+        $this->driver->newUser(createdAt:'2124-01-01 21:37:00');
         $this->assertSame(
             ['2123-01-01' => 1, '2124-01-01' => 1],
             $this->registrations->inRange(new HistoryRange('2124-10-01', Period::Year, 1)));

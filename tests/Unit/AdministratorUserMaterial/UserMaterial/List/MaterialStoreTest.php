@@ -18,7 +18,7 @@ class MaterialStoreTest extends TestCase
      */
     public function firstMaterial(): void
     {
-        $this->models->newPost('welcome');
+        $this->driver->newPost('welcome');
         $this->assertPostContent(1, 1, ['welcome']);
     }
 
@@ -45,7 +45,7 @@ class MaterialStoreTest extends TestCase
      */
     public function typeMicroblog(): void
     {
-        $this->models->newMicroblog('microblog');
+        $this->driver->newMicroblog('microblog');
         $this->assertMicroblogContent(1, 1, ['microblog']);
     }
 
@@ -54,7 +54,7 @@ class MaterialStoreTest extends TestCase
      */
     public function typeComment(): void
     {
-        $this->models->newComment('comment');
+        $this->driver->newComment('comment');
         $this->assertCommentContent(1, 1, ['comment']);
     }
 
@@ -63,7 +63,7 @@ class MaterialStoreTest extends TestCase
      */
     public function type(): void
     {
-        $this->models->newComment('comment');
+        $this->driver->newComment('comment');
         [$material] = $this->fetch($this->request(type:'comment'));
         $this->assertSame('comment', $material->type);
     }
@@ -73,7 +73,7 @@ class MaterialStoreTest extends TestCase
      */
     public function createdAt(): void
     {
-        $this->models->newPostCreatedAt('2185-01-23 21:37:00');
+        $this->driver->newPostCreatedAt('2185-01-23 21:37:00');
         [$material] = $this->fetch($this->request(type:'post'));
         $this->assertDateTime('2185-01-23 22:37:00', $material->createdAt);
     }
@@ -83,7 +83,7 @@ class MaterialStoreTest extends TestCase
      */
     public function includeDeleted(): void
     {
-        $this->models->newPostDeleted('deleted');
+        $this->driver->newPostDeleted('deleted');
         [$material] = $this->fetch($this->request(type:'post'));
         $this->assertSame('deleted', $material->contentMarkdown);
     }
@@ -93,7 +93,7 @@ class MaterialStoreTest extends TestCase
      */
     public function existingIsNotDeleted(): void
     {
-        $this->models->newPost('content');
+        $this->driver->newPost('content');
         [$material] = $this->fetch($this->request(type:'post'));
         $this->assertNull($material->deletedAt);
     }
@@ -103,7 +103,7 @@ class MaterialStoreTest extends TestCase
      */
     public function deletedIsDeletedPost(): void
     {
-        $this->models->newPostDeletedAt('content', '2185-01-23 21:37:00');
+        $this->driver->newPostDeletedAt('content', '2185-01-23 21:37:00');
         [$material] = $this->fetch($this->request(type:'post'));
         $this->assertDateTime('2185-01-23 21:37:00', $material->deletedAt);
     }
@@ -113,7 +113,7 @@ class MaterialStoreTest extends TestCase
      */
     public function deletedIsDeletedMicroblog(): void
     {
-        $this->models->newMicroblogDeletedAt('content', '2186-01-23 21:37:00');
+        $this->driver->newMicroblogDeletedAt('content', '2186-01-23 21:37:00');
         [$material] = $this->fetch($this->request(type:'microblog'));
         $this->assertDateTime('2186-01-23 21:37:00', $material->deletedAt);
     }
@@ -123,8 +123,8 @@ class MaterialStoreTest extends TestCase
      */
     public function filterByDeleted(): void
     {
-        $this->models->newPostDeleted('deleted');
-        $this->models->newPost('existing');
+        $this->driver->newPostDeleted('deleted');
+        $this->driver->newPost('existing');
         [$material] = $this->fetch($this->request(type:'post', deleted:true));
         $this->assertSame('deleted', $material->contentMarkdown);
     }
@@ -134,8 +134,8 @@ class MaterialStoreTest extends TestCase
      */
     public function filterByNotDeleted(): void
     {
-        $this->models->newPost('existing');
-        $this->models->newPostDeleted('deleted');
+        $this->driver->newPost('existing');
+        $this->driver->newPostDeleted('deleted');
         [$material] = $this->fetch($this->request(type:'post', deleted:false));
         $this->assertSame('existing', $material->contentMarkdown);
     }
@@ -156,7 +156,7 @@ class MaterialStoreTest extends TestCase
      */
     public function authorUsername(): void
     {
-        $this->models->newPostAuthor('Mark');
+        $this->driver->newPostAuthor('Mark');
         [$material] = $this->fetch($this->request(type:'post'));
         $this->assertSame('Mark', $material->authorUsername);
     }
@@ -166,7 +166,7 @@ class MaterialStoreTest extends TestCase
      */
     public function authorPhoto(): void
     {
-        $this->models->newPostAuthorPhoto('image.jpg');
+        $this->driver->newPostAuthorPhoto('image.jpg');
         [$material] = $this->fetch($this->request(type:'post'));
         $this->assertSame('image.jpg', $material->authorImageUrl);
     }
@@ -176,7 +176,7 @@ class MaterialStoreTest extends TestCase
      */
     public function postNotReported(): void
     {
-        $this->models->newPost('');
+        $this->driver->newPost('');
         [$material] = $this->fetch($this->request(type:'post'));
         $this->assertFalse($material->reported);
     }
@@ -186,7 +186,7 @@ class MaterialStoreTest extends TestCase
      */
     public function postReported(): void
     {
-        $this->models->newPostReported('');
+        $this->driver->newPostReported('');
         [$material] = $this->fetch($this->request(type:'post'));
         $this->assertTrue($material->reported);
     }
@@ -196,7 +196,7 @@ class MaterialStoreTest extends TestCase
      */
     public function postReportedOpen(): void
     {
-        $this->models->newPostReported();
+        $this->driver->newPostReported();
         [$material] = $this->fetch($this->request());
         $this->assertTrue($material->reportOpen);
     }
@@ -206,7 +206,7 @@ class MaterialStoreTest extends TestCase
      */
     public function postReportedClosed(): void
     {
-        $this->models->newPostReportedClosed('');
+        $this->driver->newPostReportedClosed('');
         [$material] = $this->fetch($this->request(type:'post'));
         $this->assertFalse($material->reportOpen);
     }
@@ -216,8 +216,8 @@ class MaterialStoreTest extends TestCase
      */
     public function filterByReported(): void
     {
-        $this->models->newPostReported('reported');
-        $this->models->newPost('regular');
+        $this->driver->newPostReported('reported');
+        $this->driver->newPost('regular');
         [$material] = $this->fetch($this->request(type:'post', reported:true));
         $this->assertSame('reported', $material->contentMarkdown);
     }
@@ -227,8 +227,8 @@ class MaterialStoreTest extends TestCase
      */
     public function filterByNotReported(): void
     {
-        $this->models->newPost('regular');
-        $this->models->newPostReported('reported');
+        $this->driver->newPost('regular');
+        $this->driver->newPostReported('reported');
         [$material] = $this->fetch($this->request(type:'post', reported:false));
         $this->assertSame('regular', $material->contentMarkdown);
     }
@@ -238,8 +238,8 @@ class MaterialStoreTest extends TestCase
      */
     public function filterByAuthorId(): void
     {
-        $userId = $this->models->newPostReturnAuthorId('important');
-        $this->models->newPost('trivial');
+        $userId = $this->driver->newPostReturnAuthorId('important');
+        $this->driver->newPost('trivial');
         [$material] = $this->fetch($this->request(type:'post', authorId:$userId));
         $this->assertSame('important', $material->contentMarkdown);
     }
@@ -249,8 +249,8 @@ class MaterialStoreTest extends TestCase
      */
     public function filterByReportClosed(): void
     {
-        $this->models->newPostReportedClosed('reported-closed');
-        $this->models->newPostReported('reported');
+        $this->driver->newPostReportedClosed('reported-closed');
+        $this->driver->newPostReported('reported');
         [$material] = $this->fetch($this->request(type:'post', reportOpen:false));
         $this->assertSame('reported-closed', $material->contentMarkdown);
     }
@@ -260,8 +260,8 @@ class MaterialStoreTest extends TestCase
      */
     public function filterByReportOpen(): void
     {
-        $this->models->newPostReported('reported-open');
-        $this->models->newPostReportedClosed('reported-closed');
+        $this->driver->newPostReported('reported-open');
+        $this->driver->newPostReportedClosed('reported-closed');
         [$material] = $this->fetch($this->request(type:'post', reportOpen:true));
         $this->assertSame('reported-open', $material->contentMarkdown);
     }
@@ -271,15 +271,15 @@ class MaterialStoreTest extends TestCase
      */
     public function microblogFilterByReportOpen(): void
     {
-        $this->models->newMicroblogReported('reported-open');
-        $this->models->newMicroblogReportedClosed('reported-closed');
+        $this->driver->newMicroblogReported('reported-open');
+        $this->driver->newMicroblogReportedClosed('reported-closed');
         [$material] = $this->fetch($this->request(type:'microblog', reportOpen:true));
         $this->assertSame('reported-open', $material->contentMarkdown);
     }
 
     private function newPosts(array $contents): void
     {
-        \array_walk($contents, $this->models->newPost(...));
+        \array_walk($contents, $this->driver->newPost(...));
     }
 
     private function assertMicroblogContent(int $page, int $pageSize, array $expectedText): void

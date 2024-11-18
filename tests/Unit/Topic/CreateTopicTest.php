@@ -30,6 +30,6 @@ class CreateTopicTest extends TestCase
 
     private function loginAsUser(): void
     {
-        $this->server->loginById($this->models->newUserReturnId());
+        $this->server->loginById($this->driver->newUserReturnId());
     }
 }

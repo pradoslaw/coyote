@@ -25,7 +25,7 @@ class Test extends TestCase
      */
     public function microblogSelfCanonical()
     {
-        $id = $this->models->newMicroblogReturnId();
+        $id = $this->driver->newMicroblogReturnId();
         $this->assertSelfCanonical("/Mikroblogi/View/$id");
     }
 
@@ -42,7 +42,7 @@ class Test extends TestCase
      */
     public function microblogIndexable()
     {
-        $id = $this->models->newMicroblogReturnId();
+        $id = $this->driver->newMicroblogReturnId();
         $this->assertIndexable("/Mikroblogi/View/$id");
     }
 }

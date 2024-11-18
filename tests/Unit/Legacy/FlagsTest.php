@@ -46,7 +46,7 @@ class FlagsTest extends TestCase
     #[Test]
     public function shouldReturnReports(): void
     {
-        $this->models->newPostReported(reportContent:'reported text');
+        $this->driver->newPostReported(reportContent:'reported text');
         $flags = $this->flags->get();
         $this->assertSame(
             ['reported text'],
@@ -56,7 +56,7 @@ class FlagsTest extends TestCase
     #[Test]
     public function shouldFilterByRelation(): void
     {
-        $this->models->newPostReported();
+        $this->driver->newPostReported();
         $this->flags->fromModels([Microblog::class]);
         $this->assertEmpty($this->flags->get()->pluck('text')->toArray());
     }
@@ -64,7 +64,7 @@ class FlagsTest extends TestCase
     #[Test]
     public function shouldReturnReports_ofDeletedResources(): void
     {
-        $this->models->newPostDeletedReported(reportContent:'reported text');
+        $this->driver->newPostDeletedReported(reportContent:'reported text');
         $this->assertSame(
             ['reported text'],
             $this->flags->get()->pluck('text')->toArray());

@@ -71,7 +71,7 @@ class CallbackTest extends TestCase
      */
     public function failureDuplicateName()
     {
-        $this->models->newUser('John');
+        $this->driver->newUser('John');
         $this->assertThat(
             $this->oAuthCallbackUsername('John'),
             $this->redirect(new UrlContainsQuery([
@@ -84,7 +84,7 @@ class CallbackTest extends TestCase
      */
     public function loginMergeUpdateAccount()
     {
-        $this->models->newUserConfirmedEmail('andy@mail');
+        $this->driver->newUserConfirmedEmail('andy@mail');
         $this->oAuthLoggedIn('andy@mail', provider:'github', providerId:'provided-id');
         /** @var User $user */
         $user = User::query()->firstWhere('email', 'andy@mail');
@@ -97,7 +97,7 @@ class CallbackTest extends TestCase
      */
     public function failureDuplicateNameDeleted()
     {
-        $this->models->newUserDeleted('Mark');
+        $this->driver->newUserDeleted('Mark');
         $this->assertThat(
             $this->oAuthCallbackUsername('Mark'),
             $this->redirect(new UrlContainsQuery([

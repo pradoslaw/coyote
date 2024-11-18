@@ -31,35 +31,35 @@ class ViewersStoreTest extends TestCase
     #[Test]
     public function viewerHasUserName(): void
     {
-        $id = $this->models->newUserReturnId('Mark');
+        $id = $this->driver->newUserReturnId('Mark');
         $this->assertSame('Mark', $this->viewer($id)->name);
     }
 
     #[Test]
     public function viewerHasUserGroupName(): void
     {
-        $id = $this->models->newUserReturnId(groupName:'Admin');
+        $id = $this->driver->newUserReturnId(groupName:'Admin');
         $this->assertSame('Admin', $this->viewer($id)->groupName);
     }
 
     #[Test]
     public function viewerHasUserAvatar(): void
     {
-        $id = $this->models->newUserReturnId(photoUrl:'image.png');
+        $id = $this->driver->newUserReturnId(photoUrl:'image.png');
         $this->assertSame('image.png', $this->viewer($id)->avatarUrl);
     }
 
     #[Test]
     public function forUserWithoutGroup_viewerHasGroupNameNull(): void
     {
-        $id = $this->models->newUserReturnId();
+        $id = $this->driver->newUserReturnId();
         $this->assertNull($this->viewer($id)->groupName);
     }
 
     #[Test]
     public function deletedUsers_areNotIncluded(): void
     {
-        $id = $this->models->newUserReturnId(deleted:true);
+        $id = $this->driver->newUserReturnId(deleted:true);
         $this->assertEmpty($this->viewers($id));
     }
 
@@ -88,9 +88,9 @@ class ViewersStoreTest extends TestCase
     public function orderViewersByLastVisit(): void
     {
         $sessions = $this->users([
-            $this->models->newUserReturnId('Third', visitedAt:'2012-12-12 12:12:12'),
-            $this->models->newUserReturnId('First', visitedAt:'2001-01-01 01:01:01'),
-            $this->models->newUserReturnId('Second', visitedAt:'2005-05-05 05:05:05'),
+            $this->driver->newUserReturnId('Third', visitedAt:'2012-12-12 12:12:12'),
+            $this->driver->newUserReturnId('First', visitedAt:'2001-01-01 01:01:01'),
+            $this->driver->newUserReturnId('Second', visitedAt:'2005-05-05 05:05:05'),
         ]);
         $this->assertSame(
             ['Third', 'Second', 'First'],

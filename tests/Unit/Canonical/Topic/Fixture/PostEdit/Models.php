@@ -22,7 +22,7 @@ trait Models
         $topic = $this->storeThread(
             new Forum(['slug' => $forumSlug]),
             new Topic,
-            new Post(['user_id' => $this->models->newUserReturnId()]));
+            new Post(['user_id' => $this->driver->newUserReturnId()]));
         return [$topic->id, $topic->firstPost->id, $topic->firstPost->user];
     }
 }
