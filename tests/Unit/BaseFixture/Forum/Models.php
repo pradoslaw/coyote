@@ -8,11 +8,11 @@ trait Models
 {
     use BaseFixture\Server\Laravel\Transactional;
 
-    var ModelsDsl $models;
+    var ModelsDriver $models;
 
     #[Before]
     public function initializeModels(): void
     {
-        $this->models = new ModelsDsl();
+        $this->models = new ModelsDriver();
     }
 }

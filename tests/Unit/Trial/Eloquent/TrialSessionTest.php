@@ -6,19 +6,19 @@ use Coyote\User;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture\Forum\ModelsDsl;
+use Tests\Unit\BaseFixture\Forum\ModelsDriver;
 use Tests\Unit\BaseFixture\Server\Laravel\Transactional;
 
 class TrialSessionTest extends TestCase
 {
     use Transactional;
 
-    private ModelsDsl $dsl;
+    private ModelsDriver $dsl;
 
     #[Before]
     public function initialize(): void
     {
-        $this->dsl = new ModelsDsl();
+        $this->dsl = new ModelsDriver();
     }
 
     #[Test]

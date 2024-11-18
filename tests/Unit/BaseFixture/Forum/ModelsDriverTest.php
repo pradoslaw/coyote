@@ -14,18 +14,18 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
 
-class ModelsDslTest extends TestCase
+class ModelsDriverTest extends TestCase
 {
     use BaseFixture\Server\Laravel\Transactional;
     use Concerns\InteractsWithDatabase;
 
-    private ModelsDsl $models;
+    private ModelsDriver $models;
     private Application $app;
 
     #[Before]
     public function initializeModels(): void
     {
-        $this->models = new ModelsDsl();
+        $this->models = new ModelsDriver();
         $this->app = $this->laravel->app;
     }
 

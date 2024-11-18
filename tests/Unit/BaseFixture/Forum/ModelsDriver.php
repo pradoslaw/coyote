@@ -3,7 +3,7 @@ namespace Tests\Unit\BaseFixture\Forum;
 
 use Carbon\Carbon;
 
-readonly class ModelsDsl
+readonly class ModelsDriver
 {
     private ModelsFactory $models;
 

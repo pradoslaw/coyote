@@ -4,19 +4,19 @@ namespace Tests\Unit\Block;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture\Forum\ModelsDsl;
+use Tests\Unit\BaseFixture\Forum\ModelsDriver;
 use Tests\Unit\BaseFixture\Server;
 
 class BlockTest extends TestCase
 {
     use Server\Http;
 
-    private ModelsDsl $models;
+    private ModelsDriver $models;
 
     #[Before]
     public function initializeModels(): void
     {
-        $this->models = new ModelsDsl();
+        $this->models = new ModelsDriver();
     }
 
     #[Test]
