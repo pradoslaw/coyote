@@ -17,6 +17,7 @@ declare global {
     tags: Models.Tag[];
     emojis: Models.Emojis;
     showStickyCheckbox: boolean;
+    showDiscussModeSelect: boolean;
     reasons: string[];
     allForums: Models.Forum[];
     showCategoryName: boolean;

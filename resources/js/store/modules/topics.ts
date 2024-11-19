@@ -8,6 +8,8 @@ const state = {
 
 const getters = {
   topic: state => state.topics[0],
+  is_mode_tree: state => state.topics[0].discuss_mode === 'tree',
+  is_mode_linear: state => state.topics[0].discuss_mode === 'linear',
 };
 
 const mutations = {

@@ -191,7 +191,7 @@
             {{ ' ' }}
             <vue-timeago :datetime="post.updated_at"/>
           </div>
-          <div class="post-comments">
+          <div class="post-comments" v-if="is_mode_linear">
             <div v-if="post.comments_count > Object.keys(post.comments).length"
                  class="d-inline-block mb-2 show-all-comments">
               <a @click="loadComments(post)" href="javascript:">
@@ -222,6 +222,7 @@
           class="col-12 col-lg-10 mt-2 mb-2"
           :post="post"
           :show-title-input="post.id === topic.first_post_id"
+          :show-discuss-mode-select="false"
           :show-tags-input="post.id === topic.first_post_id"
           :show-sticky-checkbox="post.id === topic.first_post_id && post.permissions.sticky"
           :upload-mimes="uploadMimes"
@@ -250,13 +251,15 @@
               <span class="d-none d-sm-inline ms-1">Udostępnij</span>
             </button>
 
-            <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
-              <span v-if="isCommenting" class="text-primary">
-                <vue-icon name="postCommentActive"/>
-              </span>
-              <vue-icon v-else name="postComment"/>
-              <span class="d-none d-sm-inline ms-1">Komentuj</span>
-            </button>
+            <template v-if="is_mode_linear">
+              <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
+                <span v-if="isCommenting" class="text-primary">
+                  <vue-icon name="postCommentActive"/>
+                </span>
+                <vue-icon v-else name="postComment"/>
+                <span class="d-none d-sm-inline ms-1">Komentuj</span>
+              </button>
+            </template>
           </div>
 
           <div v-if="post.permissions.write" class="ms-auto">
@@ -463,7 +466,7 @@ export default {
     ...mapState('topics', ['reasons']),
     ...mapGetters('user', ['isAuthorized']),
     ...mapGetters('posts', ['posts']),
-    ...mapGetters('topics', ['topic']),
+    ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
     voters() {
       const users = this.post.voters;
       if (!users?.length) {

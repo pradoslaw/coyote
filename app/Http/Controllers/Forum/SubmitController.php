@@ -36,6 +36,8 @@ class SubmitController extends BaseController
             'show_sticky_checkbox' => (int)$this->stickyNavbar($forum),
             'popular_tags'         => $this->forum->popularTags($forum->id),
             'emojis'               => Emoji::all(),
+
+            'show_discuss_mode_select' => Gate::check('alpha-access'),
         ]);
     }
 

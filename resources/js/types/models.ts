@@ -224,6 +224,7 @@ export interface Topic {
   tags?: Tag[];
   subscribers?: number;
   owner_id?: number | null;
+  discuss_mode: 'tree' | 'linear';
 }
 
 export interface Message {

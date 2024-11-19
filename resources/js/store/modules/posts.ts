@@ -147,8 +147,8 @@ const actions = {
   },
 
   save({commit, state, getters, rootState, rootGetters}, post: Post) {
-    const topic = rootGetters['topics/topic'];
-    const forum = rootGetters['forums/forum'];
+    const topic: Topic = rootGetters['topics/topic'];
+    const forum: Forum = rootGetters['forums/forum'];
 
     const payload = {
       text: post.text,
@@ -157,6 +157,7 @@ const actions = {
       assets: post.assets,
       tags: topic.tags!.map(o => o['name']),
       poll: rootState.poll.poll,
+      discussMode: topic.discuss_mode,
     };
     return axios.post<any>(savePostUrl(forum, topic, post), payload).then(result => {
       commit(getters.exists(result.data.id) ? 'update' : 'add', result.data);

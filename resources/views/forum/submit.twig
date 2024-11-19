@@ -22,6 +22,7 @@
         id="js-submit-form"
         :show-title-input="true"
         :show-sticky-checkbox="showStickyCheckbox"
+        :show-discuss-mode-select="showDiscussModeSelect"
         :post="undefinedPost"
         :popular-tags="popularTags"
         :require-tag="{{ vueBoolean(forum.require_tag) }}"
@@ -82,8 +83,9 @@
 {% block body %}
   <script>
     var forum = {{ forum|json_encode|raw }};
-    var topic = {title: '', tags: []};
+    var topic = {title: '', tags: [], discuss_mode: 'linear'};
     var showStickyCheckbox = {{ show_sticky_checkbox }};
+    var showDiscussModeSelect = {{ show_discuss_mode_select|json_encode|raw }};
     var popularTags = {{ popular_tags|json_encode|raw }};
     var emojis = {{ emojis|json_encode|raw }};
   </script>

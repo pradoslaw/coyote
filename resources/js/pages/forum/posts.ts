@@ -21,6 +21,7 @@ export default {
   store,
   data: () => ({
     showStickyCheckbox: window.showStickyCheckbox,
+    showDiscussModeSelect: window.showDiscussModeSelect,
     undefinedPost: {text: '', html: '', assets: []},
     reasons: window.reasons,
     popularTags: window.popularTags,

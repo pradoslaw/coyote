@@ -29,6 +29,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property int $topic_last_post_id
  * @property int $replies
  * @property int $replies_real
+ * @property boolean $is_tree
  */
 class TopicResource extends JsonResource
 {
@@ -61,6 +62,7 @@ class TopicResource extends JsonResource
                     $this->lastPost->setRelation('forum', $this->forum)->setRelation('topic', $this->resource);
                     return new PostResource($this->lastPost);
                 }),
+                'discuss_mode'         => $this->discussMode(),
             ],
         );
     }
@@ -82,5 +84,10 @@ class TopicResource extends JsonResource
             return $this->subscribers()->forUser($request->user()->id)->exists();
         }
         return false;
+    }
+
+    private function discussMode(): string
+    {
+        return $this->is_tree ? 'tree' : 'linear';
     }
 }

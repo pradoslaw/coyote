@@ -33,6 +33,18 @@
       </div>
     </div>
 
+    <div class="form-group" v-if="showDiscussModeSelect">
+      <label class="col-form-label">
+        Rodzaj wątku <em>*</em>
+      </label>
+      <div class="ms-auto">
+        <select class="form-select" name="discussMode" style="cursor:pointer;" v-model="topic.discuss_mode">
+          <option value="linear">Posty i komentarze (standardowy)</option>
+          <option value="tree">Posty jako odpowiedzi innych postów (eksperymentalny)</option>
+        </select>
+      </div>
+    </div>
+
     <div class="form-group">
       <label class="col-form-label">
         Treść <em>*</em>
@@ -186,6 +198,7 @@ export default {
     showTitleInput: {type: Boolean, default: false},
     showTagsInput: {type: Boolean, default: false},
     showStickyCheckbox: {type: Boolean, default: false},
+    showDiscussModeSelect: {type: Boolean, default: false},
     requireTag: {type: Boolean, default: false},
     popularTags: {type: Array, default: () => []},
     post: {type: Object, required: true},
