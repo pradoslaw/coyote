@@ -1,49 +1,52 @@
 <?php
-
 namespace Tests\Browser;
 
-use Carbon\Carbon;
-use Coyote\User;
-use Faker\Factory;
 use Laravel\Dusk\Browser;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\Test;
 
 class RegisterTest extends DuskTestCase
 {
-    public function testRegisterUser()
+    private Driver $driver;
+
+    #[Before]
+    public function initialize(): void
+    {
+        $this->driver = new Driver();
+    }
+
+    #[Test]
+    public function userRegisters()
     {
         $this->browse(function (Browser $browser) {
-            $faker = Factory::create();
-
-            $browser
-                ->visit('/Register')
-                ->click('#gdpr-all')
-                ->waitUntilMissing('.gdpr-modal')
-                ->type('name', $faker->userName)
-                ->type('email', $faker->email)
-                ->type('password', $password = $faker->password)
-                ->type('password_confirmation', $password)
-                ->check('label[for="terms"]')
-                ->press('Utwórz konto')
-                ->assertPathIs('/User')
-                ->logout();
+            $id = \uniqId();
+            $browser->visit('/Register');
+            $this->driver->closeGdprIfVisible($browser);
+            $browser->type('name', "Mark Twain.$id");
+            $browser->type('email', "mark.twain.$id@gmail.com");
+            $browser->type('password', 'blueberries');
+            $browser->type('password_confirmation', 'blueberries');
+            $browser->check('terms');
+            $browser->press('Utwórz konto');
+            $browser->assertPathIs('/User');
+            $browser->logout();
         });
     }
 
-    public function testRegisterUserPreviouslyDeleted()
+    #[Test]
+    public function providingExistingUserName_resultsInRegisterFailure()
     {
-        $user = factory(User::class)->create(['deleted_at' => Carbon::now()]);
-
+        $user = $this->driver->seedUser(deleted:true);
         $this->browse(function (Browser $browser) use ($user) {
-            $faker = Factory::create();
-
-            $browser->visit('/Register')
-                ->type('name', $user->name)
-                ->type('email', $faker->email)
-                ->type('password', $password = $faker->password)
-                ->type('password_confirmation', $password)
-                ->check('label[for="terms"]')
-                ->press('Utwórz konto')
-                ->assertSee('Konto o podanej nazwie użytkownika już istnieje.');
+            $id = \uniqId();
+            $browser->visit('/Register');
+            $browser->type('name', $user->name);
+            $browser->type('email', "other.mail.$id@gmail.com");
+            $browser->type('password', 'password');
+            $browser->type('password_confirmation', 'password');
+            $browser->check('terms');
+            $browser->press('Utwórz konto');
+            $browser->assertSee('Konto o podanej nazwie użytkownika już istnieje.');
         });
     }
 }

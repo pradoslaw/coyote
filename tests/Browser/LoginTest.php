@@ -1,86 +1,98 @@
 <?php
-
 namespace Tests\Browser;
 
-use Coyote\User;
-use Faker\Factory;
 use Laravel\Dusk\Browser;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\Test;
 
 class LoginTest extends DuskTestCase
 {
-    public function testSuccessfulLoginUsingEmail()
-    {
-        $user = factory(User::class)->create(['password' => bcrypt('123')]);
+    private Driver $driver;
 
+    #[Before]
+    public function initialize(): void
+    {
+        $this->driver = new Driver();
+    }
+
+    #[Test]
+    public function userLogins_usingEmail()
+    {
+        $user = $this->driver->seedUser(password:'123');
         $this->browse(function (Browser $browser) use ($user) {
-            $browser->visit('/Login')
-                ->type('name', $user->email)
-                ->type('password', '123')
-                ->press('Logowanie')
-                ->assertAuthenticated()
-                ->logout();
+            $browser->visit('/Login');
+            $this->closeGdprIfVisible($browser);
+            $browser->type('name', $user->email);
+            $browser->type('password', '123');
+            $browser->press('Zaloguj się');
+            $browser->assertAuthenticated();
+            $browser->logout();
         });
     }
 
-    public function testFailedLoginDueToBlockedUser()
+    #[Test]
+    public function blockedUser_doesNotLogin()
     {
-        $user = factory(User::class)->create(['password' => bcrypt('123'), 'is_blocked' => true]);
-
-        $this->browse(function (Browser $browser) use ($user) {
-            $browser->visit('/Login')
-                ->type('name', $user->email)
-                ->type('password', '123')
-                ->press('Logowanie')
-                ->assertSee('Konto o tym loginie zostało zablokowane.');
+        $blockedUser = $this->driver->seedUser(password:'123', blocked:true);
+        $this->browse(function (Browser $browser) use ($blockedUser) {
+            $browser->visit('/Login');
+            $this->closeGdprIfVisible($browser);
+            $browser->type('name', $blockedUser->email);
+            $browser->type('password', '123');
+            $browser->press('Zaloguj się');
+            $browser->assertSee('Konto o tym loginie zostało zablokowane.');
         });
     }
 
-    public function testFailedLoginDueToFailedLogin()
+    #[Test]
+    public function providingMissingUsername_resultsInFailedLogin()
     {
-        $user = factory(User::class)->create(['password' => bcrypt('123')]);
-
+        $user = $this->driver->seedUser(password:'123');
         $this->browse(function (Browser $browser) use ($user) {
-            $browser->visit('/Login')
-                ->type('name', $user->name . '345345')
-                ->type('password', '123')
-                ->press('Logowanie')
-                ->assertSee('Użytkownik o podanej nazwie nie istnieje.');
+            $browser->visit('/Login');
+            $this->closeGdprIfVisible($browser);
+            $browser->type('name', $user->name . '345345');
+            $browser->type('password', '123');
+            $browser->press('Zaloguj się');
+            $browser->assertSee('Użytkownik o podanej nazwie nie istnieje.');
         });
     }
 
-    public function testFailedLoginDueToFailedPassword()
+    #[Test]
+    public function providingIncorrectPassword_resultsInFailedLogin()
     {
-        $user = factory(User::class)->create(['password' => bcrypt('123')]);
-
+        $user = $this->driver->seedUser(password:'correct password');
         $this->browse(function (Browser $browser) use ($user) {
-            $browser->visit('/Login')
-                ->type('name', $user->name)
-                ->type('password', '1235')
-                ->press('Logowanie')
-                ->assertSee('Podane hasło nie jest prawidłowe.');
+            $browser->visit('/Login');
+            $this->closeGdprIfVisible($browser);
+            $browser->type('name', $user->name);
+            $browser->type('password', 'incorrect');
+            $browser->press('Zaloguj się');
+            $browser->assertSee('Podane hasło nie jest prawidłowe.');
         });
     }
 
-    public function testShowThrottleMessageDueToTooManyAttempts()
+    #[Test]
+    public function tooManyLoginAttempts_resultsInThrottle()
     {
-        $user = factory(User::class)->create(['password' => bcrypt('123')]);
-        $faker = Factory::create();
-
-        $this->browse(function (Browser $browser) use ($user, $faker) {
-            $attempt = function () use ($browser, $user, $faker) {
-                $browser->visit('/Login')
-                    ->type('name', $user->name)
-                    ->type('password', $faker->password)
-                    ->press('Logowanie');
+        $user = $this->driver->seedUser(password:'correct password');
+        $this->browse(function (Browser $browser) use ($user) {
+            $attempt = function () use ($browser, $user) {
+                $browser->visit('/Login');
+                $this->closeGdprIfVisible($browser);
+                $browser->type('name', $user->name);
+                $browser->type('password', 'incorrect');
+                $browser->press('Zaloguj się');
             };
-
-            for ($i = 1; $i <= 3; $i++) {
+            for ($i = 0; $i < 4; $i++) {
                 $attempt();
             }
-
-            $attempt();
-
             $browser->assertSee('Zbyt wiele prób logowania');
         });
+    }
+
+    private function closeGdprIfVisible(Browser $browser): void
+    {
+        $this->driver->closeGdprIfVisible($browser);
     }
 }

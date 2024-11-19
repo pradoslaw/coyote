@@ -15,12 +15,6 @@ class PaymentTest extends DuskTestCase
 {
     use WithFaker;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-    }
-
     public function testSubmitFormWithBankTransfer()
     {
         $plan = Plan::where('name', 'Plus')->first();
