@@ -127,6 +127,7 @@
           <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"/>
           <div class="post-vote">
             <strong
+              v-if="is_mode_linear"
               class="vote-count"
               title="Ocena posta"
               @click="loadVoters(post)"
@@ -136,7 +137,7 @@
               v-text="post.score"
             />
             <a
-              v-if="!hidden"
+              v-if="!hidden && is_mode_linear"
               :class="{'on': post.is_voted}"
               :aria-label="voters"
               @click="checkAuth(vote, post)"
@@ -235,11 +236,31 @@
       </div>
     </div>
 
+    <div :class="{'collapse': isCollapsed}" class="card-footer" v-if="!hidden && is_mode_tree">
+      <div class="row">
+        <div class="d-none d-lg-block col-lg-2"/>
+        <div class="col-12 d-flex col-lg-10 py-1">
+          <div class="text-muted ps-2">
+            {{ scoreDescription }}
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div :class="{'collapse': isCollapsed}" class="card-footer" v-if="!authorBlocked">
       <div class="row">
         <div class="d-none d-lg-block col-lg-2"/>
         <div class="col-12 d-flex col-lg-10">
           <div v-if="!post.deleted_at">
+            <button class="btn btn-sm" v-if="!hidden && is_mode_tree" @click="checkAuth(vote, post)">
+              <span v-if="post.is_voted" class="text-primary">
+                <vue-icon name="postVoted"/>
+              </span>
+              <vue-icon name="postVote" v-else/>
+              <span v-text="post.score" class="ms-1"/>
+              <span class="d-none d-sm-inline ms-1">Doceń</span>
+            </button>
+
             <button @click="checkAuth(subscribe, post)" class="btn btn-sm">
               <span v-if="post.is_subscribed" class="text-primary">
                 <vue-icon name="postSubscribed"/>
@@ -408,6 +429,7 @@ export default {
         this.copy,
       );
     }
+    this.loadVoters(this.post);
   },
   methods: {
     closePostReview(): void {
@@ -475,6 +497,32 @@ export default {
         return null;
       }
       return users.length > 10 ? users.slice(0, 10).concat('...').join("\n") : users.join("\n");
+    },
+    scoreDescription(): string {
+      if (this.post.score === 0) {
+        return 'Doceń post';
+      }
+      if (this.post.score === 1) {
+        if (this.post.is_voted) {
+          return 'Doceniłeś post';
+        }
+      }
+      if (this.otherVoters) {
+        if (this.post.is_voted) {
+          return 'Ty i ' + this.otherVoters.join(', ') + ' doceniliście post';
+        }
+        if (this.otherVoters.length === 1) {
+          return this.otherVoters.join(', ') + ' docenił post';
+        }
+        return this.otherVoters.join(', ') + ' docenili post';
+      }
+      return this.post.score + ' użytkowników doceniło post';
+    },
+    otherVoters(): string[] | undefined {
+      if (this.post.voters) {
+        return this.post.voters.filter((name: string) => name !== this.post.user.name);
+      }
+      return undefined;
     },
     tags() {
       return this.post.id === this.topic.first_post_id ? this.topic.tags : [];
