@@ -33,11 +33,13 @@
             <vue-timeago :datetime="post.created_at"/>
           </a>
           {{ ' ' }}
-          <a v-if="post.ip" :href="`/Adm/Stream?ip=${post.ip}`" :title="post.ip" class="text-muted small">
+          <a v-if="post.ip && is_mode_linear" :href="`/Adm/Stream?ip=${post.ip}`" :title="post.ip" class="text-muted small">
             {{ post.ip }}
           </a>
           {{ ' ' }}
-          <small v-if="post.browser" :title="post.browser" class="text-muted">{{ post.browser }}</small>
+          <small v-if="post.browser && is_mode_linear" :title="post.browser" class="text-muted">
+            {{ post.browser }}
+          </small>
         </div>
       </div>
     </div>
