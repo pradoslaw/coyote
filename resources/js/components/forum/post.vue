@@ -26,20 +26,47 @@
         </div>
 
         <div class="col-10 text-truncate small">
-          <vue-icon v-if="post.is_read" name="postWasRead"/>
-          <i v-else class="not-read" title="Nowy post"/>
-          {{ ' ' }}
-          <a :href="post.url" class="small text-body">
-            <vue-timeago :datetime="post.created_at"/>
-          </a>
-          {{ ' ' }}
-          <a v-if="post.ip && is_mode_linear" :href="`/Adm/Stream?ip=${post.ip}`" :title="post.ip" class="text-muted small">
-            {{ post.ip }}
-          </a>
-          {{ ' ' }}
-          <small v-if="post.browser && is_mode_linear" :title="post.browser" class="text-muted">
-            {{ post.browser }}
-          </small>
+          <div class="d-flex">
+            <div>
+              <vue-icon v-if="post.is_read" name="postWasRead"/>
+              <i v-else class="not-read" title="Nowy post"/>
+              {{ ' ' }}
+              <a :href="post.url" class="small text-body">
+                <vue-timeago :datetime="post.created_at"/>
+              </a>
+              {{ ' ' }}
+              <a v-if="post.ip && is_mode_linear" :href="`/Adm/Stream?ip=${post.ip}`" :title="post.ip" class="text-muted small">
+                {{ post.ip }}
+              </a>
+              {{ ' ' }}
+              <small v-if="post.browser && is_mode_linear" :title="post.browser" class="text-muted">
+                {{ post.browser }}
+              </small>
+            </div>
+            <span class="ms-auto pe-2" v-if="is_mode_tree">
+              <small class="ps-2">
+                Ostatnio:
+                {{ ' ' }}
+                <span class="text-muted">
+                  {{ formatDistanceToNow(post.user.visited_at ? post.user.visited_at : post.user.created_at) }}
+                </span>
+              </small>
+              <small class="ps-2">
+                Rejestracja:
+                {{ ' ' }}
+                <span class="text-muted">
+                  {{ formatDistanceToNow(post.user.created_at) }}
+                </span>
+              </small>
+              <small class="ps-2" v-if="post.user.allow_count">
+                Postów:
+                {{ ' ' }}
+                <a title="Znajdź posty tego użytkownika" :href="`/Forum/User/${post.user.id}`" style="text-decoration:underline">
+                  {{ post.user.posts }}
+                </a>
+              </small>
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -94,12 +121,12 @@
             <span v-if="post.user.group_name" class="badge badge-secondary mb-1">{{ post.user.group_name }}</span>
 
             <ul class="post-stats list-unstyled">
-              <li>
+              <li v-if="is_mode_linear">
                 <strong>Rejestracja:</strong>
                 <small>{{ formatDistanceToNow(post.user.created_at) }}</small>
               </li>
 
-              <li>
+              <li v-if="is_mode_linear">
                 <strong>Ostatnio:</strong>
                 <small>
                   {{ formatDistanceToNow(post.user.visited_at ? post.user.visited_at : post.user.created_at) }}
@@ -111,7 +138,7 @@
                 <small>{{ post.user.location }}</small>
               </li>
 
-              <li v-if="post.user.allow_count">
+              <li v-if="is_mode_linear && post.user.allow_count">
                 <strong>Postów:</strong>
                 <small>
                   <a title="Znajdź posty tego użytkownika"
