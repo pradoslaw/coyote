@@ -11,7 +11,7 @@ readonly class TrialService
 
     public function isChoiceModern(): bool
     {
-        return $this->getUserChoice() === 'choice-modern';
+        return false;
     }
 
     public function setChoice(string $choice): void

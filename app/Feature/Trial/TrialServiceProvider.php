@@ -48,7 +48,7 @@ class TrialServiceProvider extends ServiceProvider
                 'homepageMembers'  => $this->members(),
             ]);
         });
-        $viewFactory->composer(['home', 'home_modern'], $this->addViewField(...));
+//        $viewFactory->composer(['home', 'home_modern'], $this->addViewField(...));
     }
 
     private function addViewField(View $view): void
