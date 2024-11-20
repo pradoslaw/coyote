@@ -71,7 +71,7 @@ class PostResource extends JsonResource
 
         return array_merge($only, [
             'created_at' => $this->created_at->toIso8601String(),
-            'updated_at' => $this->updated_at ? $this->updated_at->toIso8601String() : null,
+            'updated_at' => $this->updated_at?->toIso8601String(),
             'deleted_at' => $this->deleted_at ? Carbon::parse($this->deleted_at)->toIso8601String() : null,
             'user'       => UserResource::make($this->user),
             'html'       => $html,

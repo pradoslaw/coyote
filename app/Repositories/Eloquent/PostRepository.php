@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Repositories\Eloquent;
 
 use Carbon\Carbon;
@@ -8,7 +7,9 @@ use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Topic;
+use Illuminate\Database\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
@@ -18,12 +19,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
  */
 class PostRepository extends Repository implements PostRepositoryInterface
 {
-    /**
-     * @return string
-     */
-    public function model()
+    public function model(): string
     {
-        return 'Coyote\Post';
+        return \Coyote\Post::class;
     }
 
     /**
@@ -31,38 +29,43 @@ class PostRepository extends Repository implements PostRepositoryInterface
      */
     public function lengthAwarePagination(Topic $topic, int $page = 0, int $perPage = 10)
     {
-        $result = $this
-            ->build(function (Builder $builder) use ($topic, $page, $perPage) {
-                return $builder
-                    ->where('posts.topic_id', $topic->id)
-                    ->forPage($page, $perPage);
-            })
-            ->with(['user' => function ($builder) {
-                return $builder->select([
-                    'users.id',
-                    'users.name',
-                    'users.group_name',
-                    'photo',
-                    'posts',
-                    'sig',
-                    'location',
-                    'users.created_at',
-                    'visited_at',
-                    'deleted_at',
-                    'is_blocked',
-                    'allow_smilies',
-                    'allow_count',
-                    'allow_sig',
-                    'is_online',
-                ]);
-            }])
-            ->with(['editor:id,name,is_blocked,deleted_at', 'comments.user', 'assets'])
+        return new LengthAwarePaginator(
+            $this->fetchPosts($topic, $page, $perPage),
+            $topic->replies + 1, // +1 because we have to count first post in the topic
+            $perPage,
+            $page,
+            ['path' => ' ']);
+    }
+
+    private function fetchPosts(Topic $topic, int $page, int $perPage): Eloquent\Collection
+    {
+        return $this
+            ->build(fn(Builder $builder) => $builder
+                ->where('posts.topic_id', $topic->id)
+                ->forPage($page, $perPage))
+            ->with(['user' => fn(Relations\BelongsTo $builder) => $builder->select([
+                'users.id',
+                'users.name',
+                'users.group_name',
+                'photo',
+                'posts',
+                'sig',
+                'location',
+                'users.created_at',
+                'visited_at',
+                'deleted_at',
+                'is_blocked',
+                'allow_smilies',
+                'allow_count',
+                'allow_sig',
+                'is_online',
+            ])])
+            ->with([
+                'editor:id,name,is_blocked,deleted_at',
+                'comments.user',
+                'assets',
+            ])
             ->get();
-
-        // +1 because we have to count first post in the topic
-        $paginate = new LengthAwarePaginator($result, $topic->replies + 1, $perPage, $page, ['path' => ' ']);
-
-        return $paginate;
     }
 
     /**
