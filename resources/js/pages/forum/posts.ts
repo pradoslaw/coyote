@@ -71,17 +71,9 @@ export default {
       subscriber.subscribe('PostSaved', new PostSaved());
       subscriber.subscribe('PostVoted', new PostVoted());
     },
-
-    redirectToTopic(post: Post) {
-      this.resetPost(post);
-
-      window.location.href = post.url;
-    },
-
     changePage(page: number) {
       window.location.href = `?page=${page}`;
     },
-
     reply(post: Post, scrollIntoForm = true) {
       const username = post.user ? post.user.name : post.user_name!;
 
@@ -92,6 +84,13 @@ export default {
         this.markdownRef.appendBlockQuote(username, post.id, post.text);
         notify({type: 'success', text: 'Cytat został dodany do formularza.'});
       }
+    },
+    savedForm(post: Post): void {
+      this.resetPost(post);
+    },
+    redirectToTopic(post: Post) {
+      this.resetPost(post);
+      window.location.href = post.url;
     },
     resetPost(post: Post): void {
       this.undefinedPost = {text: '', html: '', assets: []};
