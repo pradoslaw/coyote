@@ -19,13 +19,17 @@ export default {
     'vue-pagination': VuePagination,
   },
   store,
-  data: () => ({
-    showStickyCheckbox: window.showStickyCheckbox,
-    showDiscussModeSelect: window.showDiscussModeSelect,
-    undefinedPost: {text: '', html: '', assets: []},
-    reasons: window.reasons,
-    popularTags: window.popularTags,
-  }),
+  data() {
+    return {
+      showStickyCheckbox: window.showStickyCheckbox,
+      showDiscussModeSelect: window.showDiscussModeSelect,
+      undefinedPost: {text: '', html: '', assets: []},
+      reasons: window.reasons,
+      popularTags: window.popularTags,
+      treeAnswerPostId: null,
+      postFormHidden: false,
+    };
+  },
   created() {
     store.commit('posts/init', window.pagination);
     store.commit('topics/init', [window.topic]);
@@ -33,6 +37,7 @@ export default {
     store.commit('forums/init', [window.forum]);
     store.commit('poll/init', window.poll);
     store.commit('flags/init', window.flags);
+    this.resetForm();
   },
   mounted() {
     document.getElementById('js-skeleton')?.remove();
@@ -76,7 +81,9 @@ export default {
     },
     reply(post: Post, scrollIntoForm = true) {
       const username = post.user ? post.user.name : post.user_name!;
-
+      if (this.is_mode_tree) {
+        this.treeShowAnswerForm(post.id);
+      }
       if (scrollIntoForm) {
         this.markdownRef.appendUserMention(username);
         document.getElementById('js-submit-form')!.scrollIntoView();
@@ -88,10 +95,19 @@ export default {
     savedForm(post: Post): void {
       this.undefinedPost = {text: '', html: '', assets: []};
       window.location.hash = `id${post.id}`;
+      this.resetForm();
     },
     redirectToTopic(post: Post): void {
       this.undefinedPost = {text: '', html: '', assets: []};
       window.location.href = post.url;
+    },
+    treeShowAnswerForm(postId: number): void {
+      this.$data.treeAnswerPostId = postId;
+      this.$data.postFormHidden = false;
+    },
+    resetForm(): void {
+      this.$data.treeAnswerPostId = null;
+      this.$data.postFormHidden = store.getters['topics/is_mode_tree'];
     },
   },
   computed: {
@@ -99,7 +115,7 @@ export default {
       return this.$refs['js-submit-form'].$refs['markdown']!;
     },
     ...mapGetters('posts', ['posts', 'totalPages', 'currentPage']),
-    ...mapGetters('topics', ['topic']),
+    ...mapGetters('topics', ['topic', 'is_mode_tree']),
     ...mapGetters('user', ['isAuthorized']),
     ...mapState('poll', ['poll']),
   },

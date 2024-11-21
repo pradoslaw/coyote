@@ -45,6 +45,13 @@
       </div>
     </div>
 
+    <div class="form-group" v-if="treeAnswerPostId">
+      <label class="col-form-label">
+        Odpowiadasz na post:
+      </label>
+      <input class="form-control" disabled :value="treeAnswerPostId"/>
+    </div>
+
     <div class="form-group">
       <label class="col-form-label">
         Treść <em>*</em>
@@ -202,6 +209,7 @@ export default {
     requireTag: {type: Boolean, default: false},
     popularTags: {type: Array, default: () => []},
     post: {type: Object, required: true},
+    treeAnswerPostId: {type: Number, required: false},
   },
   data() {
     return {
