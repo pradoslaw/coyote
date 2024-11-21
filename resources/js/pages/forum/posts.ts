@@ -86,15 +86,12 @@ export default {
       }
     },
     savedForm(post: Post): void {
-      this.resetPost(post);
-    },
-    redirectToTopic(post: Post) {
-      this.resetPost(post);
-      window.location.href = post.url;
-    },
-    resetPost(post: Post): void {
       this.undefinedPost = {text: '', html: '', assets: []};
       window.location.hash = `id${post.id}`;
+    },
+    redirectToTopic(post: Post): void {
+      this.undefinedPost = {text: '', html: '', assets: []};
+      window.location.href = post.url;
     },
   },
   computed: {
