@@ -6,8 +6,8 @@ import VuePostWrapper from "../../components/forum/post-wrapper.vue";
 import VuePagination from "../../components/pagination.vue";
 import {PostCommentSaved, PostSaved, PostVoted, Subscriber} from "../../libs/live";
 import store from "../../store/index";
-import {Post} from "../../types/models";
 import {notify} from "../../toast";
+import {Post} from "../../types/models";
 
 export default {
   name: 'Posts',
@@ -93,15 +93,13 @@ export default {
         notify({type: 'success', text: 'Cytat został dodany do formularza.'});
       }
     },
-
-    resetPost(post: Post) {
+    resetPost(post: Post): void {
       this.undefinedPost = {text: '', html: '', assets: []};
       window.location.hash = `id${post.id}`;
     },
   },
   computed: {
     markdownRef(): VueMarkdown {
-      // @ts-ignore
       return this.$refs['js-submit-form'].$refs['markdown']!;
     },
     ...mapGetters('posts', ['posts', 'totalPages', 'currentPage']),
