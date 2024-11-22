@@ -115,6 +115,9 @@ window.addEventListener('load', () => {
   if (!surveyElement) {
     return;
   }
+  if (surveyElement!.textContent! === 'null') {
+    return;
+  }
   const data = translateInput(surveyElement!.textContent!);
   if (data.state === 'survey-invited') {
     setTimeout(() => {
