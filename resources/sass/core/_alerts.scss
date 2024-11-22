@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import "../../feature/theme/theme";
 
 .alert-warning {
   font-size: $font-size-sm;
@@ -17,5 +18,17 @@
 
   .post-comment & {
     margin-bottom: 0.25rem;
+  }
+}
+
+.alert.alert-press {
+  @include light {
+    --bs-alert-bg: var(--bs-body-bg);
+    --bs-alert-border-color: var(--bs-border-color);
+  }
+  @include dark {
+    --bs-alert-bg: #252525;
+    border: var(--bs-alert-border); // this overrides global dark alert color
+    --bs-alert-border-color: #2f2f2f;
   }
 }
