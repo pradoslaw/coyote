@@ -43,6 +43,15 @@ const mutations = {
   },
 
   add(state, post: Post) {
+    if (isModeTree(state)) {
+      if (post.tree_parent_post_id) {
+        const parentIndex = state.data.findIndex(otherPost => otherPost.id === post.tree_parent_post_id);
+        if (parentIndex > -1) {
+          state.data.splice(parentIndex + 1, 0, post);
+          return;
+        }
+      }
+    }
     state.data[post.id!] = post;
   },
 
