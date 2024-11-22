@@ -186,6 +186,7 @@ export interface Post {
   edit_count?: number;
   metadata?: string;
   voters?: string[];
+  tree_parent_post_id: string | null;
 }
 
 export interface PostLog {

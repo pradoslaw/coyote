@@ -14,8 +14,24 @@ const state: Paginator = {
   total: 0,
 };
 
+function isModeTree(state): boolean {
+  const posts: Post[] = Object.values(state.data);
+  return posts
+    .filter((post: Post) => post.tree_parent_post_id !== null)
+    .length > 0;
+}
+
 const getters = {
   posts: state => Object.values(state.data).sort((a, b) => ((a as Post).created_at! > (b as Post).created_at!) ? 1 : -1),
+  postsUnsorted: state => Object.values(state.data),
+  postsInModeOrder(state, getters) {
+    if (isModeTree(state)) {
+      return getters.postsUnsorted;
+    }
+    return getters.posts;
+    // if comment was extracted, sort it into the right place.
+    // doesn't work good because it could've been extracted to other page; but hey.
+  },
   exists: state => (id: number) => id in state.data,
   currentPage: state => state.current_page,
   totalPages: state => state.last_page,
@@ -146,7 +162,10 @@ const actions = {
     return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(subscribe);
   },
 
-  save({commit, state, getters, rootState, rootGetters}, post: Post) {
+  savePostTreeAnswer(
+    {commit, state, getters, rootState, rootGetters},
+    [post, treeAnswerPostId]: [Post, number?],
+  ) {
     const topic: Topic = rootGetters['topics/topic'];
     const forum: Forum = rootGetters['forums/forum'];
 
@@ -158,6 +177,7 @@ const actions = {
       tags: topic.tags!.map(o => o['name']),
       poll: rootState.poll.poll,
       discussMode: topic.discuss_mode,
+      treeAnswerPostId: treeAnswerPostId,
     };
     return axios.post<any>(savePostUrl(forum, topic, post), payload).then(result => {
       commit(getters.exists(result.data.id) ? 'update' : 'add', result.data);

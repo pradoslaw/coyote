@@ -252,7 +252,8 @@ export default {
 
       await this.lastPage();
 
-      store.dispatch('posts/save', this.post)
+      store.dispatch('posts/savePostTreeAnswer',
+        [this.post, this.$props.treeAnswerPostId])
         .then(result => {
           this.$emit('save', result.data);
           nextTick(() => {
@@ -311,7 +312,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('topics', ['topic']),
+    ...mapGetters('topics', ['topic', 'is_mode_tree']),
     ...mapState('poll', ['poll']),
     ...mapGetters('posts', ['totalPages', 'currentPage']),
     isFirstPost() {

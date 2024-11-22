@@ -44,6 +44,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property User|null $editor
  * @property User|null $deleter
  * @property Accept|null $accept
+ * @property int|null tree_parent_post_id
  */
 class Post extends Model
 {

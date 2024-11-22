@@ -130,7 +130,7 @@
       </template>
 
       <vue-post-wrapper
-          v-for="post in posts"
+          v-for="post in postsInModeOrder"
           :key="post.id"
           :post="post"
           @reply="reply"

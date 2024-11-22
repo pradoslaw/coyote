@@ -114,7 +114,7 @@ export default {
     markdownRef(): VueMarkdown {
       return this.$refs['js-submit-form'].$refs['markdown']!;
     },
-    ...mapGetters('posts', ['posts', 'totalPages', 'currentPage']),
+    ...mapGetters('posts', ['posts', 'postsInModeOrder', 'totalPages', 'currentPage']),
     ...mapGetters('topics', ['topic', 'is_mode_tree']),
     ...mapGetters('user', ['isAuthorized']),
     ...mapState('poll', ['poll']),

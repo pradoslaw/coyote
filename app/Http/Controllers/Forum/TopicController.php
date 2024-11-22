@@ -3,6 +3,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Domain\Seo;
 use Coyote\Domain\Seo\Schema\DiscussionForumPosting;
+use Coyote\Feature\TreeTopic\ArrayLinkedSorter;
 use Coyote\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
@@ -115,6 +116,9 @@ class TopicController extends BaseController
 
         $topic->load('tags');
 
+        if ($topic->is_tree) {
+            $posts = $this->reorderPosts($posts);
+        }
         $post = array_first($posts['data']);
         return $this
             ->view('forum.topic', [
@@ -134,6 +138,13 @@ class TopicController extends BaseController
                 'flags'          => $this->flags($forum),
                 'schema_topic'   => $this->discussionForumPosting($topic, $post['html']),
             ]);
+    }
+
+    private function reorderPosts(array $pagination): array
+    {
+        $sorter = new ArrayLinkedSorter();
+        $pagination['data'] = $sorter->sort($pagination['data'], 'id', 'tree_parent_post_id');
+        return $pagination;
     }
 
     private function discussionForumPosting(Topic $topic, string $html): Seo\Schema

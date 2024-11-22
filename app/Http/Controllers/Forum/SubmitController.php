@@ -76,6 +76,7 @@ class SubmitController extends BaseController
 
             $post->ip = $request->ip();
             $post->browser = str_limit($this->request->browser(), 250);
+            $post->tree_parent_post_id = $this->request->get('treeAnswerPostId', null);
         } else {
             $this->authorize('update', [$post]);
 
