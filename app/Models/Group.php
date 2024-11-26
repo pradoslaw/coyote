@@ -31,9 +31,14 @@ class Group extends Eloquent\Model
         if ($this->name === null) {
             return null;
         }
-        if (\str_contains($this->name, ' ')) {
-            return \strStr(\lTrim($this->name), ' ', before_needle:true);
+        return self::groupShortName($this->name);
+    }
+
+    public static function groupShortName(string $groupName): string
+    {
+        if (\str_contains($groupName, ' ')) {
+            return \strStr(\lTrim($groupName), ' ', before_needle:true);
         }
-        return $this->name;
+        return $groupName;
     }
 }

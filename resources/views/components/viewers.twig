@@ -14,14 +14,19 @@
 <div class="viewers-online">
   <div class="mb-1 viewers-users-group">
     {% for user in usersWithGroup %}
-      <a class="viewer-pill d-inline-flex mb-1" title="{{ user.name }} (online)" style="color:inherit;" href="{{ user.profileUrl }}">
+      <a
+          href="{{ user.profileUrl }}"
+          class="viewer-pill d-inline-flex mb-1"
+          title="{{ user.name }} (online) - {{ user.groupName }}"
+          style="color:inherit;"
+      >
         <div class="viewer-pill-avatar d-inline-block">
           {{ user_avatar(user.avatarUrl, user.name) }}
         </div>
         <span class="viewer-pill-title">
           <b>{{ user.name }}</b>
           <br>
-          <small>{{ user.groupName }}</small>
+          <small>{{ user.groupShortName }}</small>
         </span>
       </a>
     {% endfor %}

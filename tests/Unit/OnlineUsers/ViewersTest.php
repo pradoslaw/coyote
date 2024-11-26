@@ -46,6 +46,6 @@ class ViewersTest extends TestCase
 
     private function user(string $name = null, string $group = null): ViewerUser
     {
-        return new ViewerUser($name ?? '', $group, null, '');
+        return new ViewerUser($name ?? '', $group, $group, null, '');
     }
 }

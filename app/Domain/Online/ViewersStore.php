@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Domain\Online;
 
+use Coyote\Group;
 use Coyote\User;
 
 class ViewersStore
@@ -27,8 +28,17 @@ class ViewersStore
         return new ViewerUser(
             $user->name,
             $user->group_name,
+            $this->groupShortName($user->group_name),
             $user->photo->getFilename(),
             \route('profile', [$user->id]),
         );
+    }
+
+    private function groupShortName(?string $groupName): ?string
+    {
+        if ($groupName) {
+            return Group::groupShortName($groupName);
+        }
+        return null;
     }
 }
