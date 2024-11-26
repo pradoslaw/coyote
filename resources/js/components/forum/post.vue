@@ -326,16 +326,6 @@
           </div>
 
           <div v-if="post.permissions.write" class="ms-auto">
-            <button v-if="post.permissions.update && !post.deleted_at" @click="edit" class="btn btn-sm">
-              <span v-if="post.is_editing" class="text-primary">
-                <vue-icon name="postEditActive"/>
-              </span>
-              <template v-else>
-                <vue-icon name="postEdit"/>
-              </template>
-              <span class="d-none d-sm-inline ms-1">Edytuj</span>
-            </button>
-
             <template v-if="post.permissions.delete">
               <button v-if="!post.deleted_at" @click="deletePost(true)" class="btn btn-sm">
                 <vue-icon name="postDelete"/>
@@ -542,6 +532,9 @@ export default {
     postDropdownItems(): object[] {
       const items = [];
       const post: Post = this.$props.post;
+      if (post.permissions.update) {
+        items.push({title: 'Edytuj', iconName: 'postEdit', action: this.edit, disabled: post.deleted_at || post.is_editing});
+      }
       if (post.permissions.merge) {
         items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || post.id === topic.first_post_id});
       }
