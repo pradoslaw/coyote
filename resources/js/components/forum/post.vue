@@ -48,16 +48,6 @@
             </div>
             <span class="ms-auto pe-2" v-if="is_mode_tree">
               <small class="ps-2">
-                <template v-if="post.tree_parent_post_id">
-                  Odpowiedź na post:
-                  <span class="text-muted">#{{ post.tree_parent_post_id }}</span>
-                </template>
-                <template v-else>
-                  Odpowiedź na post:
-                  <span class="text-muted">żaden</span>
-                </template>
-              </small>
-              <small class="ps-2">
                 Ostatnio:
                 {{ ' ' }}
                 <span class="text-muted">
