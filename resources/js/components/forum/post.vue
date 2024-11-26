@@ -372,10 +372,10 @@
                   <vue-icon name="postMergeWithPrevious"/>
                   Połącz z poprzednim
                 </span>
-                <a v-if="post.permissions.adm_access" class="dropdown-item" :href="`/Adm/Firewall/Save?user=${post.user ? post.user.id : ''}&ip=${post.ip}`">
+                <span v-if="post.permissions.adm_access" class="dropdown-item" @click="banAuthor(post)">
                   <vue-icon name="postBanAuthor"/>
                   Zbanuj użytkownika
-                </a>
+                </span>
               </div>
             </div>
           </div>
@@ -513,6 +513,9 @@ export default {
       }).then(() => {
         store.dispatch('posts/merge', this.post);
       });
+    },
+    banAuthor(post: Post): void {
+      window.location.href = `/Adm/Firewall/Save?user=${post.user ? post.user.id : ''}&ip=${post.ip}`;
     },
     restore() {
       this.$data.isCollapsed = false;
