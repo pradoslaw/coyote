@@ -326,27 +326,14 @@
           </div>
 
           <div v-if="post.permissions.write" class="ms-auto">
-            <template v-if="post.permissions.delete">
-              <button v-if="!post.deleted_at" @click="deletePost(true)" class="btn btn-sm">
-                <vue-icon name="postDelete"/>
-                <span class="d-none d-sm-inline ms-1">Usuń</span>
-              </button>
-              <button v-else class="btn btn-sm" @click="restore">
-                <vue-icon name="postRestore"/>
-                <span class="d-none d-sm-inline">Przywróć</span>
-              </button>
-            </template>
-
             <template v-if="!post.deleted_at">
               <button @click="$emit('reply', post)" class="btn btn-sm btn-fast-reply" title="Odpowiedz na ten post">
                 <vue-icon name="postMentionAuthor"/>
               </button>
-
               <button @click="$emit('reply', post, false)" class="btn btn-sm" title="Dodaj cytat do pola odpowiedzi">
                 <vue-icon name="postAnswerQuote"/>
                 <span class="d-none d-sm-inline ms-1">Odpowiedz</span>
               </button>
-
               <a href="javascript:" :data-metadata="post.metadata" :data-url="post.url" class="btn btn-sm">
                 <vue-icon name="postReport"/>
                 <span class="d-none d-sm-inline ms-1">Zgłoś</span>
@@ -371,7 +358,7 @@
         </div>
       </div>
     </div>
-    <vue-modal ref="delete-modal" @delete="reasonId => deletePost(false, reasonId)" :reasons="reasons"/>
+    <vue-modal ref="delete-modal" @delete="deletePostCloseModalDelete" :reasons="reasons"/>
   </div>
 </template>
 
@@ -486,13 +473,13 @@ export default {
         nextTick(() => (this.$refs['comment-form'] as typeof VueCommentForm).focus());
       }
     },
-    deletePost(confirm = false, reasonId: number | null = null) {
-      if (confirm) {
-        (this.$refs['delete-modal'] as typeof VueDeleteModal).open();
-      } else {
-        (this.$refs['delete-modal'] as typeof VueDeleteModal)!.close();
-        store.dispatch('posts/delete', {post: this.post, reasonId}).then(() => this.$data.isCollapsed = true);
-      }
+    deletePostOpenModal(): void {
+      (this.$refs['delete-modal'] as typeof VueDeleteModal).open();
+    },
+    deletePostCloseModalDelete(reasonId: number): void {
+      (this.$refs['delete-modal'] as typeof VueDeleteModal)!.close();
+      store.dispatch('posts/delete', {post: this.post, reasonId})
+        .then(() => this.$data.isCollapsed = true);
     },
     merge() {
       confirmModal({
@@ -534,6 +521,13 @@ export default {
       const post: Post = this.$props.post;
       if (post.permissions.update) {
         items.push({title: 'Edytuj', iconName: 'postEdit', action: this.edit, disabled: post.deleted_at || post.is_editing});
+      }
+      if (post.permissions.delete) {
+        if (post.deleted_at) {
+          items.push({title: 'Przywróć', iconName: 'postRestore', action: this.restore});
+        } else {
+          items.push({title: 'Usuń', iconName: 'postDelete', action: this.deletePostOpenModal});
+        }
       }
       if (post.permissions.merge) {
         items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || post.id === topic.first_post_id});
