@@ -1,7 +1,10 @@
 <template>
   <div :id="anchor"
        class="card card-post"
-       :class="{'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed':isCollapsed}">
+       :class="[
+         {'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed': isCollapsed},
+         postIndentCssClasses
+       ]">
     <div v-if="post.deleted_at"
          @click="isCollapsed = !isCollapsed"
          class="post-delete card-body text-decoration-none">
@@ -528,6 +531,14 @@ export default {
     ...mapGetters('user', ['isAuthorized']),
     ...mapGetters('posts', ['posts']),
     ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
+    postIndentCssClasses(): string[] {
+      const post = this.$props.post;
+      if (!post.indent) return [];
+      if (post.indent === 1) return ['indent', 'indent-1'];
+      if (post.indent === 2) return ['indent', 'indent-2'];
+      if (post.indent === 3) return ['indent', 'indent-3'];
+      return ['indent', 'indent-4'];
+    },
     voters() {
       const users = this.post.voters;
       if (!users?.length) {

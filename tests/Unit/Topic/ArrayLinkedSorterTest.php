@@ -6,7 +6,7 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-class ArrayLinearTreeTest extends TestCase
+class ArrayLinkedSorterTest extends TestCase
 {
     private ArrayLinkedSorter $sorter;
 
@@ -26,8 +26,8 @@ class ArrayLinearTreeTest extends TestCase
     public function singleEntry(): void
     {
         $this->assertSame(
-            [$this->entry()],
-            $this->sorter->sort([$this->entry()], '', ''));
+            [['field' => 'value', 'indent' => 0]],
+            $this->sorter->sort([['field' => 'value']], '', ''));
     }
 
     #[Test]
@@ -41,9 +41,9 @@ class ArrayLinearTreeTest extends TestCase
         $output = $this->sorter->sort($input, 'id', 'parent_id');
         $this->assertSame(
             [
-                ['id' => 4, 'field' => 'blue', 'parent_id' => null],
-                ['id' => 6, 'field' => 'green', 'parent_id' => 4],
-                ['id' => 5, 'field' => 'red', 'parent_id' => null],
+                ['id' => 4, 'field' => 'blue', 'parent_id' => null, 'indent' => 0],
+                ['id' => 6, 'field' => 'green', 'parent_id' => 4, 'indent' => 1],
+                ['id' => 5, 'field' => 'red', 'parent_id' => null, 'indent' => 0],
             ],
             $output);
     }
@@ -61,10 +61,5 @@ class ArrayLinearTreeTest extends TestCase
         $this->assertSame(
             ['one', 'two1', 'three', 'two2'],
             \array_column($output, 'field'));
-    }
-
-    private function entry(): array
-    {
-        return ['field' => 'value'];
     }
 }
