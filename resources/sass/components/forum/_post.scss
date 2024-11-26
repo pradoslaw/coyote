@@ -34,7 +34,9 @@
   }
 
   &.is-deleted {
-    opacity: .7;
+    .card-body, .card-header {
+      opacity: .7;
+    }
   }
 
   @include media-breakpoint-down(lg) {
