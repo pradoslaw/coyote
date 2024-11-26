@@ -368,13 +368,12 @@
                 <vue-icon name="postMenuDropdown"/>
               </button>
               <div class="dropdown-menu dropdown-menu-end">
-                <span v-if="post.permissions.merge && !post.deleted_at && post.id !== topic.first_post_id" @click="merge" class="dropdown-item">
-                  <vue-icon name="postMergeWithPrevious"/>
-                  Połącz z poprzednim
-                </span>
-                <span v-if="post.permissions.adm_access" class="dropdown-item" @click="banAuthor(post)">
-                  <vue-icon name="postBanAuthor"/>
-                  Zbanuj użytkownika
+                <span v-for="item in postDropdownItems"
+                      class="dropdown-item"
+                      :class="{disabled: item.disabled}"
+                      @click="item.action">
+                  <vue-icon :name="item.iconName"/>
+                  {{ item.title }}
                 </span>
               </div>
             </div>
@@ -514,7 +513,8 @@ export default {
         store.dispatch('posts/merge', this.post);
       });
     },
-    banAuthor(post: Post): void {
+    banAuthor(): void {
+      const post = this.$props.post;
       window.location.href = `/Adm/Firewall/Save?user=${post.user ? post.user.id : ''}&ip=${post.ip}`;
     },
     restore() {
@@ -537,8 +537,18 @@ export default {
       return ['indent', 'indent-4'];
     },
     postDropdownVisible(): boolean {
-      const post = this.$props.post;
-      return post.permissions.merge || post.permissions.adm_access;
+      return this.postDropdownItems.length > 0;
+    },
+    postDropdownItems(): object[] {
+      const items = [];
+      const post: Post = this.$props.post;
+      if (post.permissions.merge) {
+        items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || post.id === topic.first_post_id});
+      }
+      if (post.permissions.adm_access) {
+        items.push({title: 'Zbanuj użytkownika', iconName: 'postBanAuthor', action: this.banAuthor});
+      }
+      return items;
     },
     voters() {
       const users = this.post.voters;
