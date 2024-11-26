@@ -1,8 +1,8 @@
 <?php
-
 namespace Coyote;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property int $id
@@ -11,34 +11,19 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $partner
  * @property int $system
  */
-class Group extends Model
+class Group extends Eloquent\Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = ['name', 'description', 'user_id', 'partner'];
-
-    /**
-     * @var string
-     */
     protected $dateFormat = 'Y-m-d H:i:se';
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'group_users');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function permissions()
+    public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany('Coyote\Permission', 'group_permissions')->withPivot('value');
+        return $this->belongsToMany(Permission::class, 'group_permissions')->withPivot('value');
     }
 
     public function shortName(): ?string
