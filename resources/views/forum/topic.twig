@@ -136,7 +136,7 @@
           @reply="reply"
       ></vue-post-wrapper>
 
-      <div class="page-pagination d-flex mb-3">
+      <div class="page-pagination d-flex mb-3" v-if="is_mode_linear">
         <div class="page-page-selector me-auto">
           <vue-pagination @change="changePage" :current-page="currentPage" :total-pages="totalPages" class="pagination-sm"></vue-pagination>
         </div>
