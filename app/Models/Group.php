@@ -40,4 +40,15 @@ class Group extends Model
     {
         return $this->belongsToMany('Coyote\Permission', 'group_permissions')->withPivot('value');
     }
+
+    public function shortName(): ?string
+    {
+        if ($this->name === null) {
+            return null;
+        }
+        if (\str_contains($this->name, ' ')) {
+            return \strStr(\lTrim($this->name), ' ', before_needle:true);
+        }
+        return $this->name;
+    }
 }
