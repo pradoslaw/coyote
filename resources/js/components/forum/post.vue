@@ -270,8 +270,8 @@
           :show-sticky-checkbox="post.id === topic.first_post_id && post.permissions.sticky"
           :upload-mimes="uploadMimes"
           :upload-max-size="uploadMaxSize"
-          @cancel="$store.commit('posts/edit', post)"
-          @save="$store.commit('posts/edit', post)"
+          @cancel="$store.commit('posts/editEnd', post)"
+          @save="$store.commit('posts/editEnd', post)"
         />
       </div>
     </div>
@@ -488,10 +488,8 @@ export default {
       }
     },
     edit() {
-      store.commit('posts/edit', this.post);
-      if (this.post.is_editing) {
-        nextTick(() => (this.$refs.form as VueForm).$refs.markdown.focus());
-      }
+      store.commit('posts/editStart', this.post);
+      nextTick(() => (this.$refs.form as VueForm).$refs.markdown.focus());
     },
     comment() {
       this.$data.isCommenting = !this.$data.isCommenting;

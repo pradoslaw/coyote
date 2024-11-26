@@ -7,8 +7,8 @@
     <vue-comment-form
       v-if="comment.is_editing"
       :comment="comment"
-      @save="$store.commit('posts/edit', comment)"
-      @cancel="$store.commit('posts/edit', comment)"
+      @save="$store.commit('posts/editEnd', comment)"
+      @cancel="$store.commit('posts/editEnd', comment)"
       ref="comment-form"
     />
     <template v-else>
@@ -100,10 +100,8 @@ export default {
   },
   methods: {
     edit() {
-      store.commit('posts/edit', this.comment);
-      if (this.comment.is_editing) {
-        nextTick(() => this.$refs['comment-form'].focus());
-      }
+      store.commit('posts/editStart', this.comment);
+      nextTick(() => this.$refs['comment-form'].focus());
     },
     deleteComment() {
       confirmModal({

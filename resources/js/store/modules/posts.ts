@@ -64,10 +64,12 @@ const mutations = {
     post.deleted_at = new Date();
   },
 
-  edit(state, editable: Post | PostComment) {
-    editable.is_editing = !editable.is_editing;
+  editStart(state, editable: Post | PostComment): void {
+    editable.is_editing = true;
   },
-
+  editEnd(state, editable: Post | PostComment): void {
+    editable.is_editing = false;
+  },
   addComment(state, {post, comment}: ParentChild) {
     if (Array.isArray(post.comments)) {
       post.comments = {};
