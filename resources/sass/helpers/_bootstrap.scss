@@ -156,6 +156,8 @@ hr {
   }
 
   .dropdown-item {
+    cursor: pointer;
+
     &:hover {
       background-color: #e9ecef;
       color: #16181b;

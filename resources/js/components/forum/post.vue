@@ -368,15 +368,11 @@
                 <vue-icon name="postMenuDropdown"/>
               </button>
               <div class="dropdown-menu dropdown-menu-end">
-                <a v-if="!post.deleted_at && post.permissions.merge && post.id !== topic.first_post_id"
-                   @click="merge"
-                   href="javascript:" class="dropdown-item">
+                <span v-if="!post.deleted_at && post.permissions.merge && post.id !== topic.first_post_id" @click="merge" class="dropdown-item">
                   <vue-icon name="postMergeWithPrevious"/>
                   Połącz z poprzednim
-                </a>
-                <a v-if="post.permissions.adm_access"
-                   class="dropdown-item"
-                   :href="`/Adm/Firewall/Save?user=${post.user ? post.user.id : ''}&ip=${post.ip}`">
+                </span>
+                <a v-if="post.permissions.adm_access" class="dropdown-item" :href="`/Adm/Firewall/Save?user=${post.user ? post.user.id : ''}&ip=${post.ip}`">
                   <vue-icon name="postBanAuthor"/>
                   Zbanuj użytkownika
                 </a>
