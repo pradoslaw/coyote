@@ -363,12 +363,12 @@
               </a>
             </template>
 
-            <div v-if="post.permissions.merge || post.permissions.adm_access" class="dropdown float-end">
+            <div v-if="postDropdownVisible" class="dropdown float-end">
               <button class="btn btn-sm" data-bs-toggle="dropdown">
                 <vue-icon name="postMenuDropdown"/>
               </button>
               <div class="dropdown-menu dropdown-menu-end">
-                <span v-if="!post.deleted_at && post.permissions.merge && post.id !== topic.first_post_id" @click="merge" class="dropdown-item">
+                <span v-if="post.permissions.merge && !post.deleted_at && post.id !== topic.first_post_id" @click="merge" class="dropdown-item">
                   <vue-icon name="postMergeWithPrevious"/>
                   Połącz z poprzednim
                 </span>
@@ -535,6 +535,10 @@ export default {
       if (post.indent === 2) return ['indent', 'indent-2'];
       if (post.indent === 3) return ['indent', 'indent-3'];
       return ['indent', 'indent-4'];
+    },
+    postDropdownVisible(): boolean {
+      const post = this.$props.post;
+      return post.permissions.merge || post.permissions.adm_access;
     },
     voters() {
       const users = this.post.voters;
