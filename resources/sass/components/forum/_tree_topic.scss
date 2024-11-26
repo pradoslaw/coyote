@@ -1,14 +1,21 @@
 .card-post.indent {
   &.indent-1 {
+    margin-left: 0;
+  }
+
+  &.indent-2 {
     margin-left: 16px;
   }
-  &.indent-2 {
+
+  &.indent-3 {
     margin-left: 32px;
   }
-  &.indent-3 {
+
+  &.indent-4 {
     margin-left: 40px;
   }
-  &.indent-4 {
+
+  &.indent-5 {
     margin-left: 48px;
   }
 }

@@ -501,7 +501,8 @@ export default {
       if (post.indent === 1) return ['indent', 'indent-1'];
       if (post.indent === 2) return ['indent', 'indent-2'];
       if (post.indent === 3) return ['indent', 'indent-3'];
-      return ['indent', 'indent-4'];
+      if (post.indent === 4) return ['indent', 'indent-4'];
+      return ['indent', 'indent-5'];
     },
     postDropdownVisible(): boolean {
       return this.postDropdownItems.length > 0;
