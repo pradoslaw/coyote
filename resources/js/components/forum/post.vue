@@ -431,7 +431,9 @@ export default {
         this.copy,
       );
     }
-    this.loadVoters(this.post);
+    if (this.is_mode_tree && !this.post.deleted_at) {
+      this.loadVoters(this.post);
+    }
   },
   methods: {
     closePostReview(): void {
