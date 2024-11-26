@@ -114,7 +114,7 @@
 
     <div id="js-post">
       <div class="d-flex mb-3">
-        <div class="me-auto">
+        <div class="me-auto" v-if="is_mode_linear">
           <vue-pagination @change="changePage" :current-page="currentPage" :total-pages="totalPages" class="pagination-sm"></vue-pagination>
         </div>
 
@@ -127,6 +127,25 @@
 
       <template v-if="'id' in poll">
         <vue-poll :poll="poll"></vue-poll>
+      </template>
+
+      <template v-if="is_mode_tree">
+        <div class="d-flex justify-content-end">
+          <label for="tree-post-ordering" class="text-muted">
+            Kolejność postów
+          </label>
+        </div>
+        <div class="d-flex justify-content-end">
+          <select
+              id="tree-post-ordering"
+              :value="treeTopicPostOrdering"
+              @change="changeTreeTopicPostOrdering"
+              class="form-control mb-4"
+              style="width:initial;">
+            <option value="orderByCreationDate">Chronologicznie</option>
+            <option value="orderByLikes">Od największej ilości głosów</option>
+          </select>
+        </div>
       </template>
 
       <vue-post-wrapper

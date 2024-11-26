@@ -1,15 +1,21 @@
 import axios from "axios";
 import {Tag, Topic} from '../../types/models';
 
+export type PostOrdering = 'orderByCreationDate' | 'orderByLikes';
+
 const state = {
   topics: [],
   reasons: [],
+  treePostOrdering: 'orderByCreationDate',
 };
 
 const getters = {
   topic: state => state.topics[0],
   is_mode_tree: state => state.topics[0].discuss_mode === 'tree',
   is_mode_linear: state => state.topics[0].discuss_mode === 'linear',
+  treeTopicPostOrdering(state): PostOrdering {
+    return state.treePostOrdering;
+  },
 };
 
 const mutations = {
@@ -47,6 +53,9 @@ const mutations = {
     const index = topic.tags!.findIndex(item => item.name === tag.name);
 
     index > -1 ? topic.tags!.splice(index, 1) : topic.tags!.push(tag);
+  },
+  postOrdering(state, ordering: PostOrdering): void {
+    state.treePostOrdering = ordering;
   },
 };
 

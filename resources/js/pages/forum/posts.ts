@@ -6,6 +6,7 @@ import VuePostWrapper from "../../components/forum/post-wrapper.vue";
 import VuePagination from "../../components/pagination.vue";
 import {PostCommentSaved, PostSaved, PostVoted, Subscriber} from "../../libs/live";
 import store from "../../store/index";
+import {PostOrdering} from "../../store/modules/topics";
 import {notify} from "../../toast";
 import {Post} from "../../types/models";
 
@@ -28,6 +29,7 @@ export default {
       popularTags: window.popularTags,
       treeAnswerPostId: null,
       postFormHidden: false,
+      treePostOrdering: 'orderByCreationDate',
     };
   },
   created() {
@@ -109,13 +111,17 @@ export default {
       this.$data.treeAnswerPostId = null;
       this.$data.postFormHidden = store.getters['topics/is_mode_tree'];
     },
+    changeTreeTopicPostOrdering(event: Event): void {
+      const ordering: PostOrdering = event.target!.value;
+      store.commit('topics/postOrdering', ordering);
+    },
   },
   computed: {
     markdownRef(): VueMarkdown {
       return this.$refs['js-submit-form'].$refs['markdown']!;
     },
     ...mapGetters('posts', ['posts', 'postsInModeOrder', 'totalPages', 'currentPage']),
-    ...mapGetters('topics', ['topic', 'is_mode_tree']),
+    ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear', 'treeTopicPostOrdering']),
     ...mapGetters('user', ['isAuthorized']),
     ...mapState('poll', ['poll']),
   },
