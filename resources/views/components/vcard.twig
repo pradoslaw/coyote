@@ -10,23 +10,19 @@
     <div class="media">
       <div class="me-2 d-flex flex-column">
         <div class="position-relative img-thumbnail">
-          <div class="vcard-avatar" style="width:95px; height:95px;">
+          <div class="vcard-avatar" style="width:55px; height:55px;">
             {{ user_avatar(user.photo, user.name) }}
           </div>
           {% if user.is_online %}
             <div class="is-online"></div>
           {% endif %}
         </div>
-
-        {% if user.group.name %}
-          <span class="badge badge-secondary mt-1">{{ user.group.name }}</span>
-        {% endif %}
       </div>
 
       <div class="media-body">
-        <ul class="list-inline pb-2 border-bottom text-truncate">
+        <ul class="list-inline border-bottom text-truncate mb-1">
           <li class="list-inline-item" title="Ostatnia wizyta: {{ visited_at }}">
-            {{ icon('vCardLastVisitDate') }} 
+            {{ icon('vCardLastVisitDate') }}
             {{ visited_at }}
           </li>
           <li class="list-inline-item" title="Data rejestracji: {{ created_at }}">
@@ -39,15 +35,21 @@
           </li>
         </ul>
 
-        <div class="mt-2">
-          <h6 class="pb-1">
+        <div>
+          {% if user.group.name %}
+            <span class="badge badge-secondary mb-3">
+              {{ user.group.name }}
+            </span>
+          {% endif %}
+
+          <h6 class="mb-1">
             {{ icon('vCardReputation') }}
             Reputacja
           </h6>
           <div class="progress">
             <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;"></div>
             <span class="rep">
-              <strong>{{ user.reputation|number_format(0, '', ' ') }}</strong> 
+              <strong>{{ user.reputation|number_format(0, '', ' ') }}</strong>
               <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small>
             </span>
           </div>
