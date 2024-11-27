@@ -3,7 +3,7 @@ namespace Neon\Test\Unit\View;
 
 use Neon\Test\BaseFixture\WebClient;
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture;
+use Tests\Integration\BaseFixture;
 
 class SearchTest extends TestCase
 {

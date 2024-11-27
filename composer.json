@@ -83,7 +83,7 @@
       "Tests\\Browser\\": "tests/Browser/",
       "Tests\\Grid\\": "tests/Grid/",
       "Tests\\Legacy\\": "tests/Legacy/",
-      "Tests\\Unit\\": "tests/Unit/",
+      "Tests\\Integration\\": "tests/Integration/",
       "Neon\\Test\\": "neon/test/"
     },
     "files": [

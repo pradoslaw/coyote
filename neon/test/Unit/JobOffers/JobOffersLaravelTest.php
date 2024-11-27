@@ -9,7 +9,7 @@ use Neon\Domain\JobOffer;
 use Neon\Laravel\JobOffers;
 use Neon\Test\BaseFixture;
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture\Server\Laravel;
+use Tests\Integration\BaseFixture\Server\Laravel;
 
 class JobOffersLaravelTest extends TestCase
 {

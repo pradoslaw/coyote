@@ -4,7 +4,7 @@ namespace Neon\Test\Unit\Attendance;
 use Illuminate\Database\DatabaseManager;
 use Neon\Laravel\Attendance;
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture\Server\Laravel\Application;
+use Tests\Integration\BaseFixture\Server\Laravel\Application;
 
 class AttendanceLaravelTest extends TestCase
 {

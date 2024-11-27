@@ -2,7 +2,7 @@
 namespace Neon\Test\Unit\View\Fixture;
 
 use Neon\Test\BaseFixture\WebClient;
-use Tests\Unit\BaseFixture;
+use Tests\Integration\BaseFixture;
 
 trait CssFixture
 {

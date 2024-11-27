@@ -5,7 +5,7 @@ use Neon\Application;
 use Neon\Test\BaseFixture\Domain\TestApplication;
 use Neon\Test\BaseFixture\View\ViewDom;
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture;
+use Tests\Integration\BaseFixture;
 
 class HttpTest extends TestCase
 {

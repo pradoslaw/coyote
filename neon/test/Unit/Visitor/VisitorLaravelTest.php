@@ -6,7 +6,7 @@ use Illuminate\Auth\AuthManager;
 use Neon\Laravel\LaravelVisitor;
 use Neon\Test\BaseFixture;
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture\Server\Laravel;
+use Tests\Integration\BaseFixture\Server\Laravel;
 
 class VisitorLaravelTest extends TestCase
 {

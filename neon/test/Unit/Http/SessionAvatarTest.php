@@ -7,7 +7,7 @@ use Neon\Test\BaseFixture;
 use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\Test\BaseFixture\View\ViewDom;
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture\Server;
+use Tests\Integration\BaseFixture\Server;
 
 class SessionAvatarTest extends TestCase
 {

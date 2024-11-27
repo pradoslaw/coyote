@@ -2,7 +2,7 @@
 namespace Neon\Test\BaseFixture;
 
 use Illuminate\Config\Repository;
-use Tests\Unit\BaseFixture\Server\Laravel;
+use Tests\Integration\BaseFixture\Server\Laravel;
 
 trait PublicImageUrl
 {
