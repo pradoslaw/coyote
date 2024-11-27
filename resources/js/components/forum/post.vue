@@ -185,7 +185,7 @@
                @click="accept(post)"
                class="vote-accept"
                href="javascript:"
-               title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
+               title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną">
               <vue-icon name="postAccept"/>
             </a>
             <span v-else-if="post.is_accepted" class="vote-accept on">
