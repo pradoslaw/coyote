@@ -5,10 +5,10 @@ import VuePoll from "../../components/forum/poll.vue";
 import VuePostWrapper from "../../components/forum/post-wrapper.vue";
 import VuePagination from "../../components/pagination.vue";
 import {PostCommentSaved, PostSaved, PostVoted, Subscriber} from "../../libs/live";
-import {PostOrdering} from "../../treeTopic/postOrdering";
 import store from "../../store/index";
 import {notify} from "../../toast";
-import {Post} from "../../types/models";
+import {PostOrdering} from "../../treeTopic/postOrdering";
+import {Post, Topic} from "../../types/models";
 
 export default {
   name: 'Posts',
@@ -80,6 +80,12 @@ export default {
     },
     changePage(page: number) {
       window.location.href = `?page=${page}`;
+    },
+    replyTopicPost() {
+      const topic: Topic = store.state.topics.topics[0];
+      if (this.is_mode_tree) {
+        this.treeShowAnswerForm(topic.first_post_id!);
+      }
     },
     reply(post: Post, scrollIntoForm = true) {
       const username = post.user ? post.user.name : post.user_name!;
