@@ -180,17 +180,19 @@
               <vue-icon name="postVoted" v-if="post.is_voted"/>
               <vue-icon name="postVote" v-else/>
             </a>
-            <a v-if="!hidden && post.permissions.accept"
-               :class="{'on': post.is_accepted}"
-               @click="accept(post)"
-               class="vote-accept"
-               href="javascript:"
-               title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną">
-              <vue-icon name="postAccept"/>
-            </a>
-            <span v-else-if="post.is_accepted" class="vote-accept on">
-              <vue-icon name="postAccept"/>
-            </span>
+            <template v-if="is_mode_linear">
+              <a v-if="!hidden && post.permissions.accept"
+                 :class="{'on': post.is_accepted}"
+                 @click="accept(post)"
+                 class="vote-accept"
+                 href="javascript:"
+                 title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną">
+                <vue-icon name="postAccept"/>
+              </a>
+              <span v-else-if="post.is_accepted" class="vote-accept on">
+                <vue-icon name="postAccept"/>
+              </span>
+            </template>
           </div>
           <div class="post-content">
             <div v-html="post.html"/>
@@ -302,6 +304,17 @@
             <button class="btn btn-sm" ref="shareButton">
               <vue-icon name="postShare"/>
               <span class="d-none d-sm-inline ms-1">Udostępnij</span>
+            </button>
+
+            <button class="btn btn-sm" v-if="is_mode_tree && post.permissions.accept" @click="accept(post)">
+              <template v-if="post.is_accepted">
+                <vue-icon name="postAccept" class="text-primary"/>
+                <span class="d-none d-sm-inline ms-1">Zaakceptowano</span>
+              </template>
+              <template v-else>
+                <vue-icon name="postAccept"/>
+                <span class="d-none d-sm-inline ms-1">Zaakceptuj</span>
+              </template>
             </button>
 
             <template v-if="is_mode_linear">
