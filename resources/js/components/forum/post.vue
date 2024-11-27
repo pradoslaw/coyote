@@ -136,7 +136,7 @@
                 </small>
               </li>
 
-              <li v-if="post.user.location">
+              <li v-if="is_mode_linear && post.user.location">
                 <strong>Lokalizacja:</strong>
                 <small>{{ post.user.location }}</small>
               </li>
