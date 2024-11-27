@@ -40,12 +40,12 @@ class UsersGrid extends Grid
             ])
             ->addColumn('created_at', [
                 'title'      => 'Rejestracja',
-                'decorators' => [new FormatDateRelative('nigdy')],
+                'decorators' => [new FormatDateRelative('nigdy', shortDate:true)],
             ])
             ->addColumn('visited_at', [
                 'title'      => 'Ostatnia wizyta',
                 'sortable'   => true,
-                'decorators' => [new FormatDateRelative('nigdy')],
+                'decorators' => [new FormatDateRelative('nigdy', shortDate:true)],
             ])
             ->addColumn('is_active', [
                 'title'      => 'Aktywny',

@@ -1,5 +1,4 @@
 <?php
-
 namespace Boduch\Grid\Decorators;
 
 use Boduch\Grid\Cell;
@@ -7,9 +6,7 @@ use Carbon\Carbon;
 
 class FormatDateRelative extends Decorator
 {
-    public function __construct(private string $default)
-    {
-    }
+    public function __construct(private string $default, private bool $shortDate = false) {}
 
     public function decorate(Cell $cell): void
     {
@@ -27,8 +24,16 @@ class FormatDateRelative extends Decorator
         $now = Carbon::now();
         $diff = $now->diffForHumans($date, syntax:true);
         if ($date->isBefore($now)) {
-            return "$diff temu";
+            return $this->formatBefore($diff);
         }
         return "za $diff";
+    }
+
+    private function formatBefore(string $differance): string
+    {
+        if ($this->shortDate) {
+            return $differance;
+        }
+        return "$differance temu";
     }
 }
