@@ -10,42 +10,46 @@ function removeVCard() {
 
 function showVCard(event) {
   clearTimeout(tooltipTimer);
+  const userId = event.target.dataset.userId;
+  const anchorPoint = elementAnchorPoint(event);
 
-  const el = event.target;
-  const userId = el.dataset.userId;
+  tooltipTimer = setTimeout(handler, 250);
 
-  const handler = () => {
+  function handler() {
     axios.get(`/User/Vcard/${userId}`).then(result => {
       removeVCard();
       const container = document.createElement('div');
       container.innerHTML = result.data;
-
       document.body.appendChild(container);
 
       createVueApp('VCard', '#vcard', {components: {'vue-follow-button': VueFollowButton}});
 
       const vcard = document.getElementById('vcard');
-
-      vcard.style.top = `${event.pageY + 10}px`;
-      vcard.style.left = `${Math.min(event.pageX + 10, window.innerWidth - 450)}px`;
+      vcard.style.top = `${anchorPoint.top + 20}px`;
+      vcard.style.left = `${Math.min(anchorPoint.left, window.innerWidth - 450)}px`;
 
       vcard.addEventListener('mouseenter', () => clearTimeout(tooltipTimer));
       vcard.addEventListener('mouseleave', removeVCard);
     });
-  };
+  }
+}
 
-  tooltipTimer = setTimeout(handler, 250);
+function elementAnchorPoint(event) {
+  const element = event.target;
+  if (element.getBoundingClientRect) {
+    const {left, top} = element.getBoundingClientRect();
+    return {left: left + window.scrollX, top: top + window.scrollY};
+  }
+  return {left: event.pageX, top: event.pageY};
 }
 
 function hideVCard() {
   clearTimeout(tooltipTimer);
-
   tooltipTimer = setTimeout(removeVCard, 1500);
 }
 
 function bindEvents() {
   const links = document.querySelectorAll('a[data-user-id]');
-
   links.forEach(link => {
     link.addEventListener('mouseenter', showVCard);
     link.addEventListener('mouseleave', hideVCard);
