@@ -1,4 +1,5 @@
 import axios from "axios";
+import {postsOrdered} from "../../treeTopic/postOrdering";
 import {Forum, Paginator, Post, PostComment, PostLog, Topic, User} from "../../types/models";
 
 type ParentChild = { post: Post, comment: PostComment };
@@ -23,10 +24,10 @@ function isModeTree(state): boolean {
 
 const getters = {
   posts: state => Object.values(state.data).sort((a, b) => ((a as Post).created_at! > (b as Post).created_at!) ? 1 : -1),
-  postsUnsorted: state => Object.values(state.data),
-  postsInModeOrder(state, getters) {
+  postsInModeOrder(state, getters, rootState, rootGetters) {
     if (isModeTree(state)) {
-      return getters.postsUnsorted;
+      const posts: Post[] = Object.values(state.data);
+      return postsOrdered(posts, rootGetters['topics/treeTopicPostOrdering']);
     }
     return getters.posts;
     // if comment was extracted, sort it into the right place.
@@ -42,16 +43,7 @@ const mutations = {
     state = Object.assign(state, pagination);
   },
 
-  add(state, post: Post) {
-    if (isModeTree(state)) {
-      if (post.tree_parent_post_id) {
-        const parentIndex = state.data.findIndex(otherPost => otherPost.id === post.tree_parent_post_id);
-        if (parentIndex > -1) {
-          state.data.splice(parentIndex + 1, 0, post);
-          return;
-        }
-      }
-    }
+  add(state, post: Post): void {
     state.data[post.id!] = post;
   },
 

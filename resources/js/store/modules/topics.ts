@@ -1,7 +1,6 @@
 import axios from "axios";
+import {PostOrdering} from "../../treeTopic/postOrdering";
 import {Tag, Topic} from '../../types/models';
-
-export type PostOrdering = 'orderByCreationDate' | 'orderByLikes';
 
 const state = {
   topics: [],

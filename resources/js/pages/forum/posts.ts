@@ -5,8 +5,8 @@ import VuePoll from "../../components/forum/poll.vue";
 import VuePostWrapper from "../../components/forum/post-wrapper.vue";
 import VuePagination from "../../components/pagination.vue";
 import {PostCommentSaved, PostSaved, PostVoted, Subscriber} from "../../libs/live";
+import {PostOrdering} from "../../treeTopic/postOrdering";
 import store from "../../store/index";
-import {PostOrdering} from "../../store/modules/topics";
 import {notify} from "../../toast";
 import {Post} from "../../types/models";
 
