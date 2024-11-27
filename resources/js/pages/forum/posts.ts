@@ -29,7 +29,7 @@ export default {
       popularTags: window.popularTags,
       treeAnswerPostId: null,
       postFormHidden: false,
-      treePostOrdering: 'orderByCreationDate',
+      treePostOrdering: 'orderByMostLikes',
     };
   },
   created() {

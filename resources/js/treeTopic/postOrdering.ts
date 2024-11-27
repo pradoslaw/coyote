@@ -1,7 +1,10 @@
 import {Post} from "../types/models";
 import {TreeList} from "./treeList";
 
-export type PostOrdering = 'orderByCreationDate' | 'orderByLikes';
+export type PostOrdering =
+  'orderByCreationDateNewest' |
+  'orderByCreationDateOldest' |
+  'orderByMostLikes';
 
 export function postsOrdered(posts: Post[], ordering: PostOrdering): Post[] {
   const tree = new TreeList<Post>(postOrdering(ordering));
@@ -21,7 +24,10 @@ export function postsOrdered(posts: Post[], ordering: PostOrdering): Post[] {
 }
 
 function postOrdering(ordering: PostOrdering): (a, b) => number {
-  if (ordering === 'orderByCreationDate') {
+  if (ordering === 'orderByCreationDateNewest') {
+    return orderByCreationDateDesc;
+  }
+  if (ordering === 'orderByCreationDateOldest') {
     return orderByCreationDateAsc;
   }
   return orderByScoreThenCreationDate;
@@ -29,7 +35,7 @@ function postOrdering(ordering: PostOrdering): (a, b) => number {
 
 function orderByScoreThenCreationDate(a: Post, b: Post): number {
   if (a.score === b.score) {
-    return orderByCreationDateAsc(a, b);
+    return orderByCreationDateDesc(a, b);
   }
   return orderByScoreDesc(a, b);
 }
@@ -40,4 +46,8 @@ function orderByScoreDesc(a: Post, b: Post): number {
 
 function orderByCreationDateAsc(a: Post, b: Post): number {
   return a.created_at! > b.created_at! ? 1 : -1;
+}
+
+function orderByCreationDateDesc(a: Post, b: Post): number {
+  return a.created_at! < b.created_at! ? 1 : -1;
 }
