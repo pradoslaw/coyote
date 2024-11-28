@@ -308,12 +308,12 @@
 
             <button class="btn btn-sm" v-if="is_mode_tree && post.permissions.accept" @click="accept(post)">
               <template v-if="post.is_accepted">
-                <vue-icon name="postAccept" class="text-primary"/>
-                <span class="d-none d-sm-inline ms-1">Zaakceptowano</span>
+                <vue-icon name="postAcceptAccepted" class="text-primary"/>
+                <span class="d-none d-sm-inline ms-1">Najlepsza odpowiedź</span>
               </template>
               <template v-else>
                 <vue-icon name="postAccept"/>
-                <span class="d-none d-sm-inline ms-1">Zaakceptuj</span>
+                <span class="d-none d-sm-inline ms-1">Najlepsza odpowiedź</span>
               </template>
             </button>
 
