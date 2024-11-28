@@ -281,6 +281,7 @@ readonly class FontAwesomePro
             'postDeleted'                               => 'fa-light fa-trash-can',
             'postAuthorBlocked'                         => 'fa-light fa-user-slash',
             'postAccept'                                => $faTick,
+            'postAcceptAccepted'                        => 'fa-light fa-circle-check',
             'postEditHistoryShow'                       => 'fa-light fa-up-right-from-square',
             'postFoldedCommentsUnfold'                  => 'fa-light fa-comments',
             'postVote'                                  => 'fa-light fa-thumbs-up',

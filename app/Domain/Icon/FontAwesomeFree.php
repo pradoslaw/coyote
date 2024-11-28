@@ -277,6 +277,7 @@ readonly class FontAwesomeFree
             'postDeleted'                               => 'fa-solid fa-trash-can',
             'postAuthorBlocked'                         => 'fa-solid fa-user-slash',
             'postAccept'                                => $faTick,
+            'postAcceptAccepted'                        => $faTick,
             'postEditHistoryShow'                       => 'fas fa-up-right-from-square',
             'postFoldedCommentsUnfold'                  => 'far fa-comments',
             'postVote'                                  => 'far fa-thumbs-up',
