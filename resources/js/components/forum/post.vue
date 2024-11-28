@@ -328,9 +328,9 @@
             </template>
           </div>
 
-          <div v-if="post.permissions.write" class="ms-auto">
+          <div v-if="post.permissions.write" :class="{'ms-auto':is_mode_linear}">
             <template v-if="!post.deleted_at">
-              <button @click="$emit('reply', post)" class="btn btn-sm btn-fast-reply" title="Odpowiedz na ten post">
+              <button @click="$emit('reply', post)" class="btn btn-sm btn-fast-reply" title="Odpowiedz na ten post" v-if="is_mode_linear">
                 <vue-icon name="postMentionAuthor"/>
               </button>
               <button @click="$emit('reply', post, false)" class="btn btn-sm" title="Dodaj cytat do pola odpowiedzi">
