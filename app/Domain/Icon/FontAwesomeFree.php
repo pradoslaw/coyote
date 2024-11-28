@@ -401,6 +401,7 @@ readonly class FontAwesomeFree
             "vCardUserFindPosts"                        => "fas fa-magnifying-glass",
             "vCardUserPrivateMessage"                   => "fas fa-envelope",
             "vCardUserShowInAdmin"                      => "fas fa-eye",
+            'vCardUserResidence'                        => 'fas fa-location-dot',
 
             // wiki
             "wikiAttachmentRemove"                      => "fas fa-trash-can",
