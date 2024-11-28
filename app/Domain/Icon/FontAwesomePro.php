@@ -405,6 +405,7 @@ readonly class FontAwesomePro
             'vCardUserFindPosts'                        => 'fa-light fa-magnifying-glass',
             'vCardUserPrivateMessage'                   => 'fa-light fa-envelope',
             'vCardUserShowInAdmin'                      => 'fa-light fa-eye',
+            'vCardUserResidence'                        => 'fa-light fa-location-dot',
 
             // wiki
             'wikiAttachmentRemove'                      => 'fa-light fa-trash-can',
