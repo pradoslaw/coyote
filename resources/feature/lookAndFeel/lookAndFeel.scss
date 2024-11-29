@@ -39,8 +39,10 @@ $text-color-primary-dark: #acacac;
 $text-color-secondary-light: #6c757d;
 $text-color-secondary-dark: #6c757d;
 
-$tag-color-light: #dfe3eb;
-$tag-color-dark: black;
+$tag-text-color-light: #555;
+$tag-text-color-dark: #acacac;
+$tag-background-color-light: #dfe3eb;
+$tag-background-color-dark: black;
 
 body {
   @include background-theme($background-light, $background-dark);
@@ -338,5 +340,6 @@ header nav.navbar {
 }
 
 .designer-tag .designer-tag-label {
-  @include background-theme($tag-color-light, $tag-color-dark);
+  @include color-theme(#555, #acacac);
+  @include background-theme($tag-background-color-light, $tag-background-color-dark);
 }
