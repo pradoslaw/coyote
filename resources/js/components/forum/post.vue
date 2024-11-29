@@ -129,7 +129,10 @@
                 <small>
                   <a title="Znajdź posty tego użytkownika"
                      :href="`/Forum/User/${post.user.id}`"
-                     style="text-decoration: underline">{{ post.user.posts }}</a>
+                     class="designer-topic-post-author-posts-count"
+                  >
+                    {{ post.user.posts }}
+                  </a>
                 </small>
               </li>
             </ul>

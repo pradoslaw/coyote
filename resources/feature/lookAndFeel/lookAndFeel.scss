@@ -2,6 +2,7 @@
 @import "bootstrap/scss/mixins/breakpoints";
 
 @import "../sass/pages/homepage_modern";
+@import "style-guide";
 
 @mixin size($size) {
   @include media-breakpoint-up($size) {
@@ -132,8 +133,8 @@ body {
 }
 
 .default-avatar {
-  @include color-theme(#005b12, #00a538); // TODO this is duplicated in homepage_modern.
-  @include background-theme(#e7f7e6, #001306);
+  @include color-theme($green-700, $green-500); // TODO this is duplicated in homepage_modern.
+  @include background-theme($green-50, $green-900);
 }
 
 .designer-user-avatar-post {
@@ -266,10 +267,10 @@ header nav.navbar {
 .designer-topic-list-user-name-responder,
 {
   @include light {
-    color: #005b12 !important;
+    color: $green-700 !important;
   }
   @include dark {
-    color: #bdd5c3 !important;
+    color: $green-100 !important;
   }
 }
 
@@ -375,10 +376,10 @@ header nav.navbar {
 .microblog {
   .designer-microblog-text {
     @include light {
-      color: #005b12 !important;
+      color: $green-700 !important;
     }
     @include dark {
-      color: #bdd5c3 !important;;
+      color: $green-100 !important;;
     }
   }
 }
@@ -393,7 +394,7 @@ header nav.navbar {
       color: $primary-color-dark;
     }
     @include dark {
-      color: #bdd5c3;
+      color: $green-100;
     }
   }
 }
@@ -406,7 +407,7 @@ header nav.navbar {
     }
     @include dark {
       color: $opposite-color-dark;
-      background: #bdd5c3;
+      background: $green-100;
     }
   }
 }
@@ -420,5 +421,14 @@ header nav.navbar {
   }
   @include dark {
     border-color: $tile-background-dark;
+  }
+}
+
+.designer-topic-post-author-posts-count { // ten sam co kolor nicków
+  @include light {
+    color: $primary-color-dark;
+  }
+  @include dark {
+    color: $green-100;
   }
 }

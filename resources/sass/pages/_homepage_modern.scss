@@ -3,6 +3,7 @@
 @import "bootstrap/scss/mixins/breakpoints";
 @import "bootstrap/scss/mixins/text-truncate";
 @import "../../feature/theme/theme";
+@import "../../janek/style-guide";
 
 @mixin size($size) {
   @if ($size == 'intermediate') {
@@ -37,16 +38,16 @@ header nav.navbar {
   }
 }
 
-$primary-color-light: #00a538;
-$secondary-color-light: #005b12;
+$primary-color-light: $green-500;
+$secondary-color-light: $green-700;
 $primary-opposite-color-light: #ffffff;
-$primary-background-light: #e7f7e6;
+$primary-background-light: $green-50;
 $card-background-light: #ffffff;
 
-$primary-color-dark: #00a538;
-$secondary-color-dark: #bdd5c3;
+$primary-color-dark: $green-500;
+$secondary-color-dark: $green-100;
 $opposite-color-dark: #1a1a1a;
-$primary-background-dark: #001306;
+$primary-background-dark: $green-900;
 $card-background-dark: #181a1b;
 
 $body-background-light: #f0f2f5;
@@ -57,7 +58,6 @@ $border-color-secondary-light: #dddddd;
 
 $border-color-primary-dark: #2f2f2f;
 $border-color-secondary-dark: #181818;
-
 
 body.homepage-modern {
   @include light {
@@ -199,7 +199,7 @@ body.homepage-modern {
 
   .community-banner {
     .community-banner-subtitle {
-      @include color-theme(#005b12, #bdd5c3);
+      @include color-theme($green-700, #bdd5c3);
     }
   }
 
@@ -394,7 +394,7 @@ body.homepage-modern {
   }
 
   .default-avatar {
-    @include color-theme(#005b12, #00a538); // TODO this is copy paste from designer
+    @include color-theme($green-700, $green-500); // TODO this is copy paste from designer
     @include background-theme($primary-background-light, $primary-background-dark);
   }
 
@@ -668,7 +668,7 @@ body.homepage-modern {
   .recent-activity a,
   .interesting-topics a.category,
   {
-    @include color-theme(#005b12, #bdd5c3);
+    @include color-theme($green-700, $green-100);
 
     &:hover {
       @include color-theme(#002107, $primary-color-dark);
