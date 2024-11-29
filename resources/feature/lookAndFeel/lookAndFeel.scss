@@ -20,8 +20,8 @@ $background-dark: #121314; // old #252525
 
 $tile-background-light: white;
 $tile-background-dark: #181a1b;
-$search-background-light: #f7f9fa; // this is 50% opacity from background to white
-$search-background-dark: #151718; // this is 50% opacity from background to white
+$search-background-light: mix($tile-background-light, $background-light, 50%);
+$search-background-dark: mix($tile-background-dark, $background-dark, 50%);
 
 $radius-large: 8px;
 $radius-medium: 6px;
