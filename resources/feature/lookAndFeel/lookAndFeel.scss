@@ -315,3 +315,7 @@ header nav.navbar {
     border-bottom-color: $tile-border-secondary-dark;
   }
 }
+
+.designer-login-button-tertiary {
+  @include color-theme($text-color-light, $text-color-dark);
+}
