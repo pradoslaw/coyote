@@ -62,8 +62,8 @@
 
             <ul class="topic-statistic list-inline small mt-1 mt-sm-0 mb-0 d-block d-sm-inline ms-sm-auto flex-sm-shrink-0">
               <li class="list-inline-item small" title="Liczba odpowiedzi">
-                <vue-icon name="topicRepliesReplyPresent" v-if="topic.is_replied" class="topic-has-reply"/>
-                <vue-icon name="topicRepliesReplyMissing" v-else/>
+                <vue-icon name="topicRepliesReplyPresent" v-if="topic.is_replied" class="topic-has-reply designer-topic-posts designer-topic-posts-has-replies"/>
+                <vue-icon name="topicRepliesReplyMissing" v-else class="designer-topic-posts"/>
                 {{ number(topic.replies) }}
               </li>
               <li class="list-inline-item small" title="Liczba wyświetleń">
