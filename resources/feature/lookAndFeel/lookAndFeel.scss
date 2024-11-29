@@ -1,21 +1,30 @@
 @import "../theme/theme";
 @import "bootstrap/scss/mixins/breakpoints";
 
+@import "../sass/pages/homepage_modern";
+
 @mixin size($size) {
   @include media-breakpoint-up($size) {
     @content;
   }
 }
 
-$radius-large: 8px;
-$radius-medium: 6px;
+@mixin icon {
+  i.fa-fw {
+    @content;
+  }
+}
 
 $background-light: #f0f2f5; // old #fafafa
 $background-dark: #121314; // old #252525
 
 $tile-background-light: white;
 $tile-background-dark: #181a1b;
+$search-background-light: #f7f9fa; // this is 50% opacity from background to white
+$search-background-dark: #151718; // this is 50% opacity from background to white
 
+$radius-large: 8px;
+$radius-medium: 6px;
 $tile-radius: $radius-large;
 $avatar-radius: $radius-large;
 
@@ -138,5 +147,88 @@ body {
 
   .default-avatar {
     border-radius: 4px;
+  }
+}
+
+header nav.navbar {
+  @include color-theme(#777777, #eeeeee);
+
+  @include light {
+    border-bottom-color: $tile-border-secondary-light;
+  }
+  @include dark {
+    border-bottom-color: $tile-border-secondary-dark;
+    border-bottom-width: 1px; // TODO Remove this, as it only overrides legacy stile
+  }
+
+  .nav-link,
+  .btn-toggle-theme,
+  {
+    color: inherit;
+  }
+
+  .logo {
+    width: 15px;
+    height: 20px;
+  }
+
+  .btn-register {
+    @include light {
+      color: $opposite-color-light;
+      background: $primary-color-light;
+      border: 1px solid $primary-color-light;
+      &:hover {
+        background: #007e2b;
+        border-color: #007e2b;
+      }
+      &:focus {
+        border-color: #00fe56;
+      }
+      &:active {
+        background: #006522;
+        border-color: #006522;
+      }
+      &:disabled {
+        background: rgba($primary-color-light, 0.3);
+        border-color: rgba($primary-color-light, 0.3);
+      }
+    }
+
+    @include dark {
+      color: $opposite-color-dark;
+      background: $primary-color-dark;
+      border: 1px solid $primary-color-dark;
+      &:hover {
+        background: #00c041;
+        border-color: #00c041;
+      }
+      &:focus {
+        border-color: #00fe56;
+      }
+      &:active {
+        background: #00e34d;
+        border-color: #00e34d;
+      }
+      &:disabled {
+        background: rgba($primary-color-dark, 0.3);
+        border-color: rgba($primary-color-dark, 0.3);
+      }
+    }
+  }
+
+  .nav-search .search-bar {
+    border: none;
+    @include background-theme($search-background-light, $search-background-dark);
+
+    input {
+      @include color-theme(#777777, #acacac);
+      @include theme {
+        background: transparent;
+      }
+    }
+
+    @include icon {
+      @include color-theme(#3c3c3c, #505050);
+    }
   }
 }

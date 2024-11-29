@@ -37,30 +37,31 @@ header nav.navbar {
   }
 }
 
+$primary-color-light: #00a538;
+$secondary-color-light: #005b12;
+$opposite-color-light: #ffffff;
+$primary-background-light: #e7f7e6;
+$card-background-light: #ffffff;
+
+$primary-color-dark: #00a538;
+$secondary-color-dark: #bdd5c3;
+$opposite-color-dark: #1a1a1a;
+$primary-background-dark: #001306;
+$card-background-dark: #181a1b;
+
+$body-background-light: #f0f2f5;
+$body-background-dark: #121314;
+
+$border-color-light: #dddddd;
+$border-color-primary-light: #dddddd;
+$border-color-secondary-light: #dddddd;
+
+$border-color-dark: #242a30;
+$border-color-primary-dark: #2f2f2f;
+$border-color-secondary-dark: #181818;
+
+
 body.homepage-modern {
-  $primary-color-light: #00a538;
-  $secondary-color-light: #005b12;
-  $opposite-color-light: #ffffff;
-  $primary-background-light: #e7f7e6;
-  $card-background-light: #ffffff;
-
-  $primary-color-dark: #00a538;
-  $secondary-color-dark: #bdd5c3;
-  $opposite-color-dark: #1a1a1a;
-  $primary-background-dark: #001306;
-  $card-background-dark: #181a1b;
-
-  $body-background-light: #f0f2f5;
-  $body-background-dark: #121314;
-
-  $border-color-light: #dddddd;
-  $border-color-primary-light: #dddddd;
-  $border-color-secondary-light: #dddddd;
-
-  $border-color-dark: #242a30;
-  $border-color-primary-dark: #2f2f2f;
-  $border-color-secondary-dark: #181818;
-
   @include light {
     color: #646466;
     background: $body-background-light;
