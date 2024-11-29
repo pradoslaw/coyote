@@ -261,3 +261,47 @@ header nav.navbar {
     color: #bdd5c3 !important;
   }
 }
+
+.designer-primary-button {
+  @include light {
+    color: $primary-opposite-color-light;
+    background: $primary-color-light;
+    border: 1px solid $primary-color-light;
+    &:hover {
+      background: #007e2b;
+      border-color: #007e2b;
+    }
+    &:focus {
+      border-color: #00fe56;
+    }
+    &:active {
+      background: #006522;
+      border-color: #006522;
+    }
+    &:disabled {
+      background: rgba($primary-color-light, 0.3);
+      border-color: rgba($primary-color-light, 0.3);
+    }
+  }
+
+  @include dark {
+    color: $opposite-color-dark;
+    background: $primary-color-dark;
+    border: 1px solid $primary-color-dark;
+    &:hover {
+      background: #00c041;
+      border-color: #00c041;
+    }
+    &:focus {
+      border-color: #00fe56;
+    }
+    &:active {
+      background: #00e34d;
+      border-color: #00e34d;
+    }
+    &:disabled {
+      background: rgba($primary-color-dark, 0.3);
+      border-color: rgba($primary-color-dark, 0.3);
+    }
+  }
+}
