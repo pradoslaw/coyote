@@ -21,12 +21,12 @@ return [
     ],
 
     '__master_menu___' => [
-        'Forum'      => ['route' => 'forum.home', 'class' => 'nav-item dropdown'],
-        'Mikroblogi' => ['route' => 'microblog.home', 'class' => 'nav-item'],
-        'Praca'      => ['route' => 'job.home', 'class' => 'nav-item'],
+        'Forum'      => ['route' => 'forum.home', 'class' => 'nav-item dropdown designer-navbar-text'],
+        'Mikroblogi' => ['route' => 'microblog.home', 'class' => 'nav-item designer-navbar-text'],
+        'Praca'      => ['route' => 'job.home', 'class' => 'nav-item designer-navbar-text'],
         'Kompendium' => [
             'url'      => 'Kategorie',
-            'class'    => 'nav-item dropdown',
+            'class'    => 'nav-item dropdown designer-navbar-text',
             'children' => [
                 'Delphi'       => ['url' => 'Delphi'],
                 'C/C++'        => ['url' => 'C'],

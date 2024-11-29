@@ -39,7 +39,7 @@ header nav.navbar {
 
 $primary-color-light: #00a538;
 $secondary-color-light: #005b12;
-$opposite-color-light: #ffffff;
+$primary-opposite-color-light: #ffffff;
 $primary-background-light: #e7f7e6;
 $card-background-light: #ffffff;
 
@@ -52,11 +52,9 @@ $card-background-dark: #181a1b;
 $body-background-light: #f0f2f5;
 $body-background-dark: #121314;
 
-$border-color-light: #dddddd;
 $border-color-primary-light: #dddddd;
 $border-color-secondary-light: #dddddd;
 
-$border-color-dark: #242a30;
 $border-color-primary-dark: #2f2f2f;
 $border-color-secondary-dark: #181818;
 
@@ -128,7 +126,7 @@ body.homepage-modern {
 
     .btn-register {
       @include light {
-        color: $opposite-color-light;
+        color: $primary-opposite-color-light;
         background: $primary-color-light;
         border: 1px solid $primary-color-light;
         &:hover {
@@ -480,7 +478,7 @@ body.homepage-modern {
         height: 3px;
         border-radius: 3px;
         @include light {
-          background: linear-gradient(270deg, $primary-color-light 0%, $opposite-color-light 100%);
+          background: linear-gradient(270deg, $primary-color-light 0%, $primary-opposite-color-light 100%);
         }
 
         @include dark {
@@ -730,7 +728,7 @@ body.homepage-modern {
   }
 
   .page-link {
-    @include background-theme($opposite-color-light, $opposite-color-dark);
+    @include background-theme($primary-opposite-color-light, $opposite-color-dark);
   }
 
   #footer-copyright {

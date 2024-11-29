@@ -34,6 +34,9 @@ $tile-border-primary-dark: #2a2e30;
 $tile-border-secondary-light: #dde4ea;
 $tile-border-secondary-dark: #2a2e30;
 
+$text-color-light: #333333;
+$text-color-dark: #acacac;
+
 body {
   @include background-theme($background-light, $background-dark);
 }
@@ -151,7 +154,7 @@ body {
 }
 
 header nav.navbar {
-  @include color-theme(#777777, #eeeeee);
+  @include color-theme($text-color-light, #eeeeee);
 
   @include light {
     border-bottom-color: $tile-border-secondary-light;
@@ -174,7 +177,7 @@ header nav.navbar {
 
   .btn-register {
     @include light {
-      color: $opposite-color-light;
+      color: $primary-opposite-color-light;
       background: $primary-color-light;
       border: 1px solid $primary-color-light;
       &:hover {
@@ -221,7 +224,7 @@ header nav.navbar {
     @include background-theme($search-background-light, $search-background-dark);
 
     input {
-      @include color-theme(#777777, #acacac);
+      @include color-theme($text-color-light, $text-color-dark);
       @include theme {
         background: transparent;
       }
@@ -230,5 +233,31 @@ header nav.navbar {
     @include icon {
       @include color-theme(#3c3c3c, #505050);
     }
+  }
+
+  .designer-navbar-text {
+    @include light {
+      color: $text-color-light !important;
+    }
+    @include dark {
+      color: $text-color-dark !important;
+    }
+  }
+}
+
+.designer-topic-list-title {
+  &, & a {
+    @include color-theme($text-color-light, $text-color-dark);
+  }
+}
+
+.designer-topic-list-user-name-author,
+.designer-topic-list-user-name-responder,
+{
+  @include light {
+    color: #005b12 !important;
+  }
+  @include dark {
+    color: #bdd5c3 !important;
   }
 }

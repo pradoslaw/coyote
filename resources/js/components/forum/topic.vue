@@ -18,7 +18,7 @@
 
         <div class="topic-container">
           <div class="topic-row">
-            <h5 class="topic-subject text-truncate m-0">
+            <h5 class="topic-subject text-truncate m-0 designer-topic-list-title">
               <a v-if="isAuthorized" @click="subscribe(topic)" href="javascript:" title="Kliknij aby wł/wył obserwowanie wątku">
                 <vue-icon name="topicSubscribed" v-if="topic.is_subscribed" class="on"/>
                 <vue-icon name="topicSubscribe" v-else/>
@@ -84,7 +84,7 @@
                  class="text-muted topic-date">
                 <vue-timeago :datetime="topic.created_at"/>
               </a>,
-              <vue-username v-if="topic.user" :user="topic.user" class="mt-1 topic-username"/>
+              <vue-username v-if="topic.user" :user="topic.user" class="mt-1 topic-username designer-topic-list-user-name-author"/>
               <span v-else class="topic-username">{{ topic.user_name }}</span>
             </div>
             <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs">
@@ -108,7 +108,7 @@
 
           <div class="media-body small text-truncate">
             <p class="mb-0 d-inline d-md-block">
-              <vue-username v-if="topic.last_post.user" :user="topic.last_post.user" class="topic-username"></vue-username>
+              <vue-username v-if="topic.last_post.user" :user="topic.last_post.user" class="topic-username designer-topic-list-user-name-responder"></vue-username>
               <span class="topic-username" v-else>{{ topic.last_post.user_name }}</span>
             </p>
             {{ ' ' }}

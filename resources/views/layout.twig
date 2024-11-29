@@ -77,11 +77,11 @@
           <img
               class="logo"
               alt="4programmers.net"
-              data-src-light="{{ cdn(isHomepageModern ? 'img/logo-modern.svg' : 'img/logo-light.svg') }}"
-              data-src-dark="{{ cdn(isHomepageModern ? 'img/logo-modern.svg' : 'img/logo-dark.svg') }}"
+              data-src-light="{{ 'img/logo-modern.svg' }}"
+              data-src-dark="{{ 'img/logo-modern.svg' }}"
               src="{{ __dark_theme 
-                ? cdn(isHomepageModern ? 'img/logo-modern.svg' : 'img/logo-dark.svg') 
-                : cdn(isHomepageModern ? 'img/logo-modern.svg' : 'img/logo-light.svg') 
+                ? cdn('img/logo-modern.svg') 
+                : cdn('img/logo-modern.svg') 
               }}"
           />
         </a>
@@ -108,7 +108,7 @@
               </li>
             {% endfor %}
             <li class="nav-item">
-              <a href="/events" class="nav-link">
+              <a href="/events" class="nav-link designer-navbar-text">
                 Wydarzenia
               </a>
             </li>
