@@ -333,3 +333,7 @@ header nav.navbar {
 .designer-login-button-tertiary {
   @include color-theme($text-color-primary-light, $text-color-primary-dark);
 }
+
+.designer-tag .designer-tag-label {
+  @include background-theme($tile-background-light, $tile-background-dark);
+}
