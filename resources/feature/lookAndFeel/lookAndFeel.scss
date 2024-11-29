@@ -343,3 +343,31 @@ header nav.navbar {
   @include color-theme(#555, #acacac);
   @include background-theme($tag-background-color-light, $tag-background-color-dark);
 }
+
+.designer-button-secondary {
+  @include light {
+    color: $primary-color-light;
+    border-color: $primary-color-light;
+  }
+  @include dark {
+    color: $primary-color-dark;
+    border-color: $primary-color-dark;
+  }
+
+  &:hover {
+    @include light {
+      color: $primary-opposite-color-light;
+      background: $primary-color-light;
+    }
+    @include dark {
+      color: $primary-opposite-color-light;
+      background: $primary-color-dark;
+    }
+  }
+
+  &:active {
+    color: $primary-opposite-color-light !important;
+    background: #007e2b !important; // copied from primary
+    border-color: #007e2b !important; // copied from primary
+  }
+}

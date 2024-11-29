@@ -1,7 +1,7 @@
 <template>
   <button
     v-if="shouldShow"
-    class="btn btn-follow"
+    class="btn btn-follow designer-button-secondary"
     :class="{follows}"
     @click="checkAuth(toggleState)"
   >
