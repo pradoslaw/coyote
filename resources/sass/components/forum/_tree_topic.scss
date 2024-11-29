@@ -19,3 +19,15 @@
     margin-left: 48px;
   }
 }
+
+.post-guiderail {
+  height: 100px;
+  left: -10px;
+  width: 10px;
+  top: -24px;
+  border: 2px solid #ddd;
+  border-bottom-left-radius: 6px;
+  border-top: none;
+  border-right: none;
+  z-index: -1;
+}

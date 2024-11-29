@@ -5,6 +5,8 @@
          {'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed': isCollapsed},
          postIndentCssClasses
        ]">
+    <div class="position-absolute post-guiderail" v-if="isChild">
+    </div>
     <div v-if="post.deleted_at"
          @click="isCollapsed = !isCollapsed"
          class="post-delete card-body text-decoration-none">
@@ -518,6 +520,9 @@ export default {
       if (post.indent === 3) return ['indent', 'indent-3'];
       if (post.indent === 4) return ['indent', 'indent-4'];
       return ['indent', 'indent-5'];
+    },
+    isChild(): boolean {
+      return this.$props.post.indent > 1;
     },
     postDropdownVisible(): boolean {
       return this.postDropdownItems.length > 0;
