@@ -154,7 +154,7 @@ body {
 }
 
 header nav.navbar {
-  @include color-theme($text-color-light, #eeeeee);
+  @include color-theme($text-color-light, $text-color-dark);
 
   @include light {
     border-bottom-color: $tile-border-secondary-light;
@@ -303,5 +303,15 @@ header nav.navbar {
       background: rgba($primary-color-dark, 0.3);
       border-color: rgba($primary-color-dark, 0.3);
     }
+  }
+}
+
+.designer-navbar {
+  border-bottom-width: $tile-border-width;
+  @include light {
+    border-bottom-color: $tile-border-secondary-light;
+  }
+  @include dark {
+    border-bottom-color: $tile-border-secondary-dark;
   }
 }
