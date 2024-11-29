@@ -32,7 +32,8 @@
     <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed}" class="card-header d-none designer-post-header">
       <div class="row">
         <div class="col-2">
-          <h5 class="mb-0 post-author">
+          <h5 class="mb-0 post-author designer-topic-user-name-post-author"
+              :class="{'designer-topic-user-name-post-author-self':post.user_id === topic.owner_id}">
             <span
               v-if="!authorBlocked && !post.deleted_at"
               class="d-inline-block me-1 cursor-pointer vertical-align-middle text-muted post-fold-button"
@@ -79,7 +80,8 @@
         </div>
 
         <div class="media-body">
-          <h5 class="mb-0 post-author">
+          <h5 class="mb-0 post-author designer-topic-user-name-post-author" 
+              :class="{'designer-topic-user-name-post-author-self':post.user_id === topic.owner_id}">
             <vue-username v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"></vue-username>
             <span v-else>{{ post.user_name }}</span>
           </h5>

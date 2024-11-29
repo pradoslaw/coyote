@@ -2,7 +2,10 @@
   <component
     :is="tagName"
     v-profile="user.id"
-    :class="[{'badge badge-primary': owner}, 'username']"
+    :class="[
+      {'badge badge-primary designer-topic-user-name-post-author-self': owner}, 
+      'username designer-topic-user-name-post-author'
+    ]"
     :style="{textDecoration: this.user.is_blocked ? 'line-through' : ''}"
     v-text="user.name"
   />

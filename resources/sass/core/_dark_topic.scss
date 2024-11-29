@@ -158,21 +158,8 @@ body.theme-dark {
       }
 
       .card.card-post {
-        .card-header {
-          .post-author {
-            .badge.badge-primary {
-              color: #1d1d1d;
-              background-color: #789b17;
-            }
-
-            a:not(.badge) {
-              color: #789b17;
-            }
-          }
-
-          .small a time {
-            color: #acacac;
-          }
+        .card-header .small a time {
+          color: #acacac;
         }
 
         .card-body {
@@ -251,10 +238,6 @@ body.theme-dark {
 
           .edit-info {
             color: #acacac;
-
-            a {
-              color: #789b17;
-            }
           }
 
           form {
@@ -279,7 +262,7 @@ body.theme-dark {
 
         .card-footer {
           //border-top: 1px solid #2f2f2f; // overriden by post border
- 
+
           button,
           .btn {
             color: #acacac;

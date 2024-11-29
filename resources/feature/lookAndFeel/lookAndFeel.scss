@@ -386,3 +386,27 @@ header nav.navbar {
 .breadcrumb-item + .breadcrumb-item::before {
   color: $primary-color-dark;
 }
+
+.designer-topic-user-name-post-author {
+  &, a {
+    @include light {
+      color: $primary-color-dark;
+    }
+    @include dark {
+      color: #bdd5c3;
+    }
+  }
+}
+
+.designer-topic-user-name-post-author-self {
+  a {
+    @include light {
+      color: $primary-opposite-color-light;
+      background: $primary-color-dark;
+    }
+    @include dark {
+      color: $opposite-color-dark;
+      background: #bdd5c3;
+    }
+  }
+}
