@@ -71,7 +71,7 @@
     {{ form_open({url: route('logout'), name: 'logout-form'}) }}
     {{ form_close() }}
 
-    <nav class="navbar navbar-expand-lg {{ __dark_theme ? 'navbar-dark' : 'navbar-light' }}">
+    <nav class="navbar navbar-expand-lg {{ __dark_theme ? 'navbar-dark' : 'navbar-light' }} designer-navbar">
       <div class="container-3xl d-flex flex-wrap">
         <a rel="home" class="navbar-brand order-0" href="{{ route('home') }}" title="4programmers.net - Strona główna">
           <img
