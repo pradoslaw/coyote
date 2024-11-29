@@ -20,7 +20,7 @@
       </div>
 
       <div class="media-body">
-        <ul class="list-inline border-bottom text-truncate mb-1">
+        <ul class="list-inline border-bottom text-truncate mb-2">
           <li class="list-inline-item" title="Ostatnia wizyta: {{ visited_at }}">
             {{ icon('vCardLastVisitDate') }}
             {{ visited_at }}
@@ -37,12 +37,12 @@
 
         <div>
           {% if user.group.name %}
-            <span class="badge badge-secondary mb-3">
+            <span class="badge badge-secondary">
               {{ user.group.name }}
             </span>
           {% endif %}
 
-          <h6 class="mb-1">
+          <h6 class="mb-1 mt-2">
             {{ icon('vCardReputation') }}
             Reputacja
           </h6>
@@ -67,8 +67,8 @@
       </div>
     </div>
 
-    <div class="mt-3">
-      <vue-follow-button :user-id="{{ user.id }}" class="btn-sm"></vue-follow-button>
+    <div class="mt-4">
+      <vue-follow-button :user-id="{{ user.id }}" class="btn-sm me-1"></vue-follow-button>
       <a href="{{ route('forum.user', [user.id]) }}" title="Znajdź posty użytkownika" class="btn btn-sm btn-secondary me-1">
         {{ icon('vCardUserFindPosts') }}
       </a>
