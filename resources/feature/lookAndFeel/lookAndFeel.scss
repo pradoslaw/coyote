@@ -391,7 +391,7 @@ header nav.navbar {
 .designer-topic-user-name-post-author {
   &, a {
     @include light {
-      color: $primary-color-dark;
+      color: $green-700;
     }
     @include dark {
       color: $green-100;
@@ -403,7 +403,7 @@ header nav.navbar {
   a {
     @include light {
       color: $primary-opposite-color-light;
-      background: $primary-color-dark;
+      background: $green-700;
     }
     @include dark {
       color: $opposite-color-dark;
@@ -426,7 +426,7 @@ header nav.navbar {
 
 .designer-topic-post-author-posts-count { // ten sam co kolor nicków
   @include light {
-    color: $primary-color-dark;
+    color: $green-700;
   }
   @include dark {
     color: $green-100;
