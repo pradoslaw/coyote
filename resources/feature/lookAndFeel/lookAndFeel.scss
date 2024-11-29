@@ -410,3 +410,15 @@ header nav.navbar {
     }
   }
 }
+
+.designer-online-indicator {
+  @include theme {
+    background: $primary-color-light;
+  }
+  @include light {
+    border-color: $tile-background-light;
+  }
+  @include dark {
+    border-color: $tile-background-dark;
+  }
+}
