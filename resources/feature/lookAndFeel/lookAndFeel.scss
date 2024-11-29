@@ -251,6 +251,10 @@ header nav.navbar {
   }
 }
 
+.designer-topic-list-icon {
+  @include color-theme($primary-color-light, $primary-color-dark);
+}
+
 .designer-topic-list-user-name-author,
 .designer-topic-list-user-name-responder,
 {

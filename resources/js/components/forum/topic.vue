@@ -9,7 +9,7 @@
           @click.left="mark"
           :href="getUrl()"
           :class="{'not-read': !topic.is_read}"
-          class="topic-icon me-2 d-none d-md-flex"
+          class="topic-icon me-2 d-none d-md-flex designer-topic-list-icon"
         >
           <vue-icon name="topicStateSticky" v-if="topic.is_sticky"/>
           <vue-icon name="topicStateLocked" v-else-if="topic.is_locked"/>
