@@ -16,12 +16,12 @@
           <div class="d-flex flex-nowrap">
             <div class="flex-shrink-0 me-auto">
               <h5 class="media-heading">
-                <vue-username :user="microblog.user"/>
+                <vue-username :user="microblog.user" class="designer-microblog-text"/>
               </h5>
               <ul class="list-inline mb-0 list-inline-bullet-sm microblog-statistic">
                 <li class="list-inline-item">
                   <a :href="microblog.url" class="small">
-                    <vue-timeago :datetime="microblog.created_at"/>
+                    <vue-timeago :datetime="microblog.created_at" class="designer-microblog-text"/>
                   </a>
                 </li>
                 <li class="list-inline-item small">

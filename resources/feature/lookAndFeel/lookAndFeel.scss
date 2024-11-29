@@ -371,3 +371,14 @@ header nav.navbar {
     border-color: #007e2b !important; // copied from primary
   }
 }
+
+.microblog {
+  .designer-microblog-text {
+    @include light {
+      color: #005b12 !important;
+    }
+    @include dark {
+      color: #bdd5c3 !important;;
+    }
+  }
+}
