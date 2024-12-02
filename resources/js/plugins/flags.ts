@@ -2,28 +2,31 @@ import axios from 'axios';
 import VueFlagModal from "../components/flags/modal.vue";
 import {createVueAppGhost} from "../vue";
 
-function openModal(event) {
-  const el = event.currentTarget;
+export function openFlagModal(flagUrl: string, flagMetadata: string): void {
   axios.get('/Flag').then(result => {
     const [app, domElement] = createVueAppGhost(VueFlagModal, {
-      url: el.dataset.url,
-      metadata: el.dataset.metadata,
+      url: flagUrl,
+      metadata: flagMetadata,
       types: result.data,
-      onClose: () => {
+      onClose(): void {
         app.unmount();
         document.body.removeChild(domElement);
       },
     });
     document.body.append(domElement);
   });
-
-  return false;
-}
-
-function bindEvents() {
-  const links = document.querySelectorAll('a[data-metadata]');
-
-  links.forEach(link => link.addEventListener('click', openModal));
 }
 
 new MutationObserver(bindEvents).observe(document.body, {attributes: true, childList: true, subtree: true});
+
+function bindEvents(): void {
+  document
+    .querySelectorAll('a[data-metadata]')
+    .forEach(link => link.addEventListener('click', clickHandler));
+}
+
+function clickHandler(event: Event): boolean {
+  const el = event.currentTarget as HTMLElement;
+  openFlagModal(el.dataset.url!, el.dataset.metadata!);
+  return false;
+}
