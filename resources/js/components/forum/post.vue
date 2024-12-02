@@ -339,10 +339,6 @@
                 <vue-icon name="postAnswerQuote"/>
                 <span class="d-none d-sm-inline ms-1">Odpowiedz</span>
               </button>
-              <a href="javascript:" :data-metadata="post.metadata" :data-url="post.url" class="btn btn-sm">
-                <vue-icon name="postReport"/>
-                <span class="d-none d-sm-inline ms-1">Zgłoś</span>
-              </a>
             </template>
 
             <div v-if="postDropdownVisible" class="dropdown float-end">
@@ -375,6 +371,7 @@ import pl from 'date-fns/locale/pl';
 import {mapActions, mapGetters, mapState} from "vuex";
 
 import {copyToClipboard} from '../../plugins/clipboard';
+import {openFlagModal} from "../../plugins/flags";
 import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
@@ -505,6 +502,10 @@ export default {
       this.$data.isCollapsed = false;
       store.dispatch('posts/restore', this.post);
     },
+    flagPost(): void {
+      const post = this.$props.post;
+      openFlagModal(post.url, post.metadata);
+    },
   },
   computed: {
     ...mapState('user', ['user']),
@@ -539,6 +540,9 @@ export default {
         } else {
           items.push({title: 'Usuń', iconName: 'postDelete', action: this.deletePostOpenModal});
         }
+      }
+      if (!post.deleted_at) {
+        items.push({title: 'Zgłoś', iconName: 'postReport', action: this.flagPost});
       }
       if (post.permissions.merge) {
         items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || post.id === topic.first_post_id});
