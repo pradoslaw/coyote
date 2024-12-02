@@ -544,7 +544,7 @@ export default {
       if (!post.deleted_at) {
         items.push({title: 'Zgłoś', iconName: 'postReport', action: this.flagPost});
       }
-      if (post.permissions.merge) {
+      if (post.permissions.merge && this.is_mode_linear) {
         items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || post.id === topic.first_post_id});
       }
       if (post.permissions.adm_access) {
