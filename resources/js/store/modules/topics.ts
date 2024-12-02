@@ -5,7 +5,7 @@ import {Tag, Topic} from '../../types/models';
 const state = {
   topics: [],
   reasons: [],
-  treePostOrdering: 'orderByMostLikes',
+  treePostOrdering: 'orderByCreationDateOldest',
 };
 
 const getters = {
