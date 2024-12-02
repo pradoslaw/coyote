@@ -1,26 +1,16 @@
 #vcard {
-  padding: 5px;
+  padding: 2px;
   position: absolute;
   box-shadow: 0 3px 9px #444;
   z-index: 3;
   background-color: $gray-dark;
-  border-radius: $border-radius;
-}
-
-#vcard-header {
-  background-color: $gray;
-  color: #fff;
-  font-size: $font-size-base;
-  padding: 3px 0 3px 16px;
-
-  a {
-    color: inherit;
-  }
+  border-radius: 6px;
 }
 
 #vcard-content {
   background-color: #fff;
   padding: 15px;
+  border-radius: 4px;
 
   .list-inline {
     color: $gray-light;

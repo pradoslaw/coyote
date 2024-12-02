@@ -2,25 +2,28 @@
 {% set created_at = user.created_at|format_date %}
 
 <div id="vcard">
-  <div id="vcard-header">
-    {{ user.name }}
-  </div>
-
   <div id="vcard-content">
     <div class="media">
       <div class="me-2 d-flex flex-column">
-        <div class="position-relative img-thumbnail">
-          <div class="vcard-avatar" style="width:55px; height:55px;">
-            {{ user_avatar(user.photo, user.name) }}
+        <div class="mb-2">
+          <strong>{{ user.name }}</strong>
+        </div>
+        <div>
+          <div class="d-inline-block">
+            <div class="position-relative img-thumbnail">
+              <div class="vcard-avatar" style="width:55px; height:55px;">
+                {{ user_avatar(user.photo, user.name) }}
+              </div>
+              {% if user.is_online %}
+                <div class="is-online"></div>
+              {% endif %}
+            </div>
           </div>
-          {% if user.is_online %}
-            <div class="is-online"></div>
-          {% endif %}
         </div>
       </div>
 
-      <div class="media-body">
-        <ul class="list-inline border-bottom text-truncate mb-2">
+      <div class="media-body ms-4">
+        <ul class="list-inline border-bottom text-truncate mb-3">
           <li class="list-inline-item" title="Ostatnia wizyta: {{ visited_at }}">
             {{ icon('vCardLastVisitDate') }}
             {{ visited_at }}
@@ -72,17 +75,9 @@
       <a href="{{ route('forum.user', [user.id]) }}" title="Znajdź posty użytkownika" class="btn btn-sm btn-secondary me-1">
         {{ icon('vCardUserFindPosts') }}
       </a>
-      <a href="{{ route('user.pm.submit', {to: user.name}) }}" title="Napisz wiadomość do tego użytkownika" class="btn btn-sm btn-secondary">
+      <a href="{{ route('user.pm.submit', {to: user.name}) }}" title="Napisz wiadomość do tego użytkownika" class="btn btn-sm btn-secondary me-1">
         {{ icon('vCardUserPrivateMessage') }}
       </a>
-      {% if can('adm-access') %}
-        <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}" title="Zbanuj tego użytkownika" class="btn btn-sm btn-secondary float-end ms-1">
-          {{ icon('vCardUserBlock') }}
-        </a>
-        <a href="{{ route('adm.users.show', [user.id]) }}" title="Pokaż w panelu administracyjnym" class="btn btn-sm btn-secondary float-end">
-          {{ icon('vCardUserShowInAdmin') }}
-        </a>
-      {% endif %}
     </div>
   </div>
 </div>
