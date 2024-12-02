@@ -59,13 +59,14 @@ class SubmitController extends BaseController
         if (!$topic->exists) {
             $topic = $this->topic->makeModel();
             $topic->forum()->associate($forum);
+
+            if ($request->get('discussMode') === 'tree') {
+                Gate::authorize('alpha-access');
+                $topic->is_tree = true;
+            }
         }
 
         $topic->fill($request->only(array_keys($request->rules())));
-        if ($request->get('discussMode') === 'tree') {
-            Gate::authorize('alpha-access');
-            $topic->is_tree = true;
-        }
 
         if (!$post->exists) {
             $post->forum()->associate($forum);
