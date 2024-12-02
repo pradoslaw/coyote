@@ -129,6 +129,8 @@
         <vue-poll :poll="poll"></vue-poll>
       </template>
 
+      <vue-post-wrapper v-if="is_mode_tree" :post="treeTopicPostsFirst" @reply="reply"></vue-post-wrapper>
+
       <template v-if="is_mode_tree">
         <div class="d-flex justify-content-end">
           <label for="tree-post-ordering" class="text-muted">
@@ -150,7 +152,16 @@
       </template>
 
       <vue-post-wrapper
-          v-for="post in postsInModeOrder"
+          v-if="is_mode_tree"
+          v-for="post in treeTopicPostsRemaining"
+          :key="post.id"
+          :post="post"
+          @reply="reply"
+      ></vue-post-wrapper>
+
+      <vue-post-wrapper
+          v-if="is_mode_linear"
+          v-for="post in linearTopicPosts"
           :key="post.id"
           :post="post"
           @reply="reply"

@@ -15,23 +15,20 @@ const state: Paginator = {
   total: 0,
 };
 
-function isModeTree(state): boolean {
-  const posts: Post[] = Object.values(state.data);
-  return posts
-    .filter((post: Post) => post.tree_parent_post_id !== null)
-    .length > 0;
-}
-
 const getters = {
   posts: state => Object.values(state.data).sort((a, b) => ((a as Post).created_at! > (b as Post).created_at!) ? 1 : -1),
-  postsInModeOrder(state, getters, rootState, rootGetters) {
-    if (isModeTree(state)) {
-      const posts: Post[] = Object.values(state.data);
-      return postsOrdered(posts, rootGetters['topics/treeTopicPostOrdering']);
-    }
+  linearTopicPosts(state, getters): Post[] {
     return getters.posts;
-    // if comment was extracted, sort it into the right place.
-    // doesn't work good because it could've been extracted to other page; but hey.
+  },
+  treeTopicPostsFirst(state, getters): Post {
+    return getters.treeTopicPosts[0];
+  },
+  treeTopicPostsRemaining(state, getters): Post[] {
+    return getters.treeTopicPosts.slice(1);
+  },
+  treeTopicPosts(state, getters, rootState, rootGetters): Post[] {
+    const posts: Post[] = Object.values(state.data);
+    return postsOrdered(posts, rootGetters['topics/treeTopicPostOrdering']);
   },
   exists: state => (id: number) => id in state.data,
   currentPage: state => state.current_page,
