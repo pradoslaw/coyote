@@ -1,3 +1,5 @@
+@import "../../../feature/theme/theme";
+
 .card-post.indent {
   &.indent-1 {
     margin-left: 0;
@@ -21,13 +23,25 @@
 }
 
 .post-guiderail {
-  height: 100px;
+  $topMargin: 18px;
+  $height: 20px;
+  $top: 20px;
+
+  height: $height + $topMargin;
+  top: -$topMargin;
   left: -10px;
   width: 10px;
-  top: -80px;
-  border: 2px solid #ddd;
+  z-index: -1;
+
+  border-width: 2px;
+  border-style: solid;
   border-bottom-left-radius: 6px;
   border-top: none;
   border-right: none;
-  z-index: -1;
+  @include light {
+    border-color: #ddd;
+  }
+  @include dark {
+    border-color: #333;
+  }
 }
