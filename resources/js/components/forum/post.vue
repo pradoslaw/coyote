@@ -1,6 +1,6 @@
 <template>
   <div class="card card-post card-post-folded" :class="postIndentCssClasses" v-if="postFolded">
-    <div class="position-absolute post-guiderail" v-if="isChild"/>
+    <vue-post-guiderail v-if="isChild" :has-next-sibling="hasNextSibling"/>
     <div class="card-body cursor-pointer" @click="postUnfold">
       <vue-icon name="postFolded"/>
       {{ post.user.name }},
@@ -14,8 +14,7 @@
          {'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed': isCollapsed},
          postIndentCssClasses
        ]">
-    <div class="position-absolute post-guiderail" v-if="isChild">
-    </div>
+    <vue-post-guiderail v-if="isChild" :has-next-sibling="hasNextSibling"/>
     <div v-if="post.deleted_at"
          @click="isCollapsed = !isCollapsed"
          class="post-delete card-body text-decoration-none">
@@ -401,12 +400,14 @@ import VueSelect from './../forms/select.vue';
 import VueCommentForm from "./comment-form.vue";
 import VueComment from './comment.vue';
 import VueForm from './form.vue';
+import VuePostGuiderail from "./post-guiderail.vue";
 import VuePostReview, {ReviewAnswer} from "./post-review.vue";
 
 export default {
   name: 'post',
   mixins: [mixins],
   components: {
+    VuePostGuiderail,
     'vue-avatar': VueAvatar,
     'vue-button': VueButton,
     'vue-comment': VueComment,
@@ -532,6 +533,9 @@ export default {
     ...mapGetters('user', ['isAuthorized']),
     ...mapGetters('posts', ['posts']),
     ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
+    hasNextSibling(): boolean {
+      return this.$props.post.hasNextSibling;
+    },
     postIndentCssClasses(): string[] {
       const post = this.$props.post;
       if (!post.indent) return [];

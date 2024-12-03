@@ -16,9 +16,10 @@ export function postsOrdered(posts: Post[], ordering: PostOrdering): Post[] {
     }
   }
   const orderedPosts: Post[] = [];
-  for (const [level, post] of tree.asIndentList()) {
+  for (const [level, post, lastChild] of tree.asTreeItems()) {
     orderedPosts.push(post);
     post.indent = level;
+    post.hasNextSibling = !lastChild;
   }
   return orderedPosts;
 }

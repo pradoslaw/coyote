@@ -4,6 +4,7 @@ interface Record<T> {
   payload: T;
   children: Record<T>[];
   level: number;
+  isLastChild: boolean | null;
 }
 
 export class TreeList<T> {
@@ -14,7 +15,7 @@ export class TreeList<T> {
   }
 
   add(id: number, payload: T): void {
-    this.addRecordRoot({id, parentId: null, payload, children: [], level: 0});
+    this.addRecordRoot({id, parentId: null, payload, children: [], level: 0, isLastChild: null});
   }
 
   private addRecordRoot(record: Record<T>): void {
@@ -24,7 +25,7 @@ export class TreeList<T> {
 
   addChild(id: number, parentId: number, payload: T): void {
     const parent = this.records.get(parentId)!;
-    const record = {id, parentId, payload, children: [], level: parent.level + 1};
+    const record = {id, parentId, payload, children: [], level: parent.level + 1, isLastChild: null};
     parent.children.push(record);
     this.records.set(record.id, record);
   }
@@ -33,8 +34,9 @@ export class TreeList<T> {
     return this.flatRecords().map(record => record.payload);
   }
 
-  asIndentList(): [number, T][] {
-    return this.flatRecords().map(record => [record.level, record.payload]);
+  asTreeItems(): [number, T, boolean][] {
+    return this.flatRecords()
+      .map(record => [record.level, record.payload, record.isLastChild!]);
   }
 
   private flatRecords(): Record<T>[] {
@@ -43,11 +45,13 @@ export class TreeList<T> {
 
   private flattened(records: Record<T>[]): Record<T>[] {
     const list: Record<T>[] = [];
-    for (const record of records) {
+    for (const [i, record] of records.entries()) {
+      record.isLastChild = i === records.length - 1;
       list.push(record);
-      if (record.children.length > 0) {
-        record.children.sort(this.recordSorter.bind(this));
-        list.push(...this.flattened(record.children));
+      const children = record.children;
+      if (children.length > 0) {
+        children.sort(this.recordSorter.bind(this));
+        list.push(...this.flattened(children));
       }
     }
     return list;

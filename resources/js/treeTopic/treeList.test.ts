@@ -50,4 +50,32 @@ describe('tree list', () => {
     topic.addChild(6, 4, 1);
     assertEquals([4, 3, 2, 1], topic.asList());
   });
+
+  test('the root is last child', () => {
+    const topic = new TreeList<string>(() => 0);
+    topic.add(4, 'root');
+    assertEquals([[0, 'root', true]], topic.asTreeItems());
+  });
+
+  test('the only child is the last child', () => {
+    const topic = new TreeList<string>(() => 0);
+    topic.add(15, 'root');
+    topic.addChild(16, 15, 'child');
+    assertEquals([
+      [0, 'root', true],
+      [1, 'child', true],
+    ], topic.asTreeItems());
+  });
+
+  test('the first child is not the last child', () => {
+    const topic = new TreeList<string>(() => 0);
+    topic.add(15, 'root');
+    topic.addChild(16, 15, 'child');
+    topic.addChild(17, 15, 'last child');
+    assertEquals([
+      [0, 'root', true],
+      [1, 'child', false],
+      [1, 'last child', true],
+    ], topic.asTreeItems());
+  });
 });

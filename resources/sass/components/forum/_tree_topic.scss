@@ -1,4 +1,4 @@
-@import "../../../feature/theme/theme";
+@use "../../../feature/theme/theme" as theme;
 
 .card-post.indent {
   &.indent-1 {
@@ -23,25 +23,34 @@
 }
 
 .post-guiderail {
-  $topMargin: 18px;
-  $height: 20px;
-  $top: 20px;
-
-  height: $height + $topMargin;
-  top: -$topMargin;
+  z-index: -1;
   left: -10px;
   width: 10px;
-  z-index: -1;
-
   border-width: 2px;
   border-style: solid;
+  @include theme.light {
+    border-color: #dddddd;
+  }
+  @include theme.dark {
+    border-color: #333333;
+  }
+}
+
+.post-guiderail-to-parent {
+  $topOffset: -18px;
+  $height: 20px;
+
+  height: $height - $topOffset;
+  top: $topOffset;
   border-bottom-left-radius: 6px;
   border-top: none;
   border-right: none;
-  @include light {
-    border-color: #ddd;
-  }
-  @include dark {
-    border-color: #333;
-  }
+}
+
+.post-guiderail-to-sibling {
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  top: 0;
+  height: 100%;
 }

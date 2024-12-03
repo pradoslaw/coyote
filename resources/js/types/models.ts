@@ -188,6 +188,7 @@ export interface Post {
   voters?: string[];
   tree_parent_post_id: number | null;
   indent: number | null;
+  hasNextSibling: boolean | null;
 }
 
 export interface PostLog {
