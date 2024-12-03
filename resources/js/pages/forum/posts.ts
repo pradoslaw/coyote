@@ -96,8 +96,10 @@ export default {
         this.markdownRef.appendUserMention(username);
         document.getElementById('js-submit-form')!.scrollIntoView();
       } else {
-        this.markdownRef.appendBlockQuote(username, post.id, post.text);
-        notify({type: 'success', text: 'Cytat został dodany do formularza.'});
+        if (this.is_mode_linear) {
+          this.markdownRef.appendBlockQuote(username, post.id, post.text);
+          notify({type: 'success', text: 'Cytat został dodany do formularza.'});
+        }
       }
     },
     savedForm(post: Post): void {
