@@ -8,6 +8,10 @@
   cursor: pointer;
 }
 
+.vertical-align-middle {
+  vertical-align: middle;
+}
+
 .card-post {
   .card-body {
     padding: 10px 15px;
@@ -50,6 +54,10 @@
   }
 
   &.card-post-folded {
+    font-size: 11px;
+  }
+
+  .post-fold-button {
     font-size: 11px;
   }
 
