@@ -43,6 +43,10 @@ class TopicController extends BaseController
         $page = (int)$request->get('page');
         $perPage = $this->postsPerPage($request);
 
+        if ($topic->is_tree) {
+            $perPage = 150;
+        }
+
         // user with forum-update ability WILL see every post
         // NOTE: criteria MUST BE pushed before calling getPage() method!
         if ($gate->allows('delete', $forum)) {
