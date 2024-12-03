@@ -1,5 +1,14 @@
 <template>
-  <div :id="anchor"
+  <div class="card card-post card-post-folded" :class="postIndentCssClasses" v-if="postFolded">
+    <div class="position-absolute post-guiderail" v-if="isChild"/>
+    <div class="card-body cursor-pointer" @click="postUnfold">
+      <vue-icon name="postFolded"/>
+      {{ post.user.name }},
+      <vue-timeago :datetime="post.created_at"/>
+    </div>
+  </div>
+  <div v-else
+       :id="anchor"
        class="card card-post"
        :class="[
          {'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed': isCollapsed},
@@ -25,6 +34,9 @@
       <div class="row">
         <div class="col-2">
           <h5 class="mb-0 post-author">
+            <span @click="postFold" class="d-inline-block me-1 cursor-pointer">
+              <vue-icon name="postFold"/>
+            </span>
             <vue-username v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"/>
             <span v-else>{{ post.user_name }}</span>
           </h5>
@@ -428,6 +440,7 @@ export default {
       isCollapsed: false,
       isCommenting: false,
       commentDefault: {text: '', post_id: this.post.id},
+      postFolded: false,
     };
   },
   created() {
@@ -448,6 +461,12 @@ export default {
     }
   },
   methods: {
+    postFold(): void {
+      this.$data.postFolded = true;
+    },
+    postUnfold(): void {
+      this.$data.postFolded = false;
+    },
     closePostReview(): void {
       this.post.has_review = false;
     },

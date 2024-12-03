@@ -4,6 +4,10 @@
 @import "../../helpers/variables";
 @import "../../icons/icons";
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .card-post {
   .card-body {
     padding: 10px 15px;
@@ -43,6 +47,10 @@
     .card-body, .card-header {
       opacity: .7;
     }
+  }
+
+  &.card-post-folded {
+    font-size: 11px;
   }
 
   @include media-breakpoint-down(lg) {
