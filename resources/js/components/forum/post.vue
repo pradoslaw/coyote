@@ -34,7 +34,7 @@
       <div class="row">
         <div class="col-2">
           <h5 class="mb-0 post-author">
-            <span @click="postFold" class="d-inline-block me-1 cursor-pointer text-muted" style="vertical-align:middle;">
+            <span @click="postFold" class="d-inline-block me-1 cursor-pointer text-muted" style="vertical-align:middle;" v-if="!authorBlocked && !post.deleted_at">
               <vue-icon name="postFold"/>
             </span>
             <vue-username v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"/>
