@@ -5,6 +5,7 @@ $body-background: (light: #f0f2f5, dark: #121314);
 $post-background-body: (light: white, dark: #181a1b);
 $post-background-header: (light: none, dark: none);
 $section-heading-divider-color: (light: #e9ecef, dark: #2a2e30);
+$post-header-border: $section-heading-divider-color;
 
 $post-radius: 8px;
 $forum-aside-radius: 8px;
@@ -13,6 +14,8 @@ $forum-aside-radius: 8px;
   @include theme.var(--body-background, $body-background);
   @include theme.var(--post-background-body, $post-background-body);
   @include theme.var(--post-background-header, $post-background-header);
+  @include theme.var(--post-border, (light: none, dark: none));
+  @include theme.var(--post-border-header-color, $post-header-border);
   @include theme.var(--section-heading-divider-color, $section-heading-divider-color);
 }
 
@@ -20,6 +23,8 @@ $forum-aside-radius: 8px;
   @include theme.var(--body-background, (light: #fafafa, dark: #252525));
   @include theme.var(--post-background-body, (light: white, dark: rgb(26, 26, 26)));
   @include theme.var(--post-background-header, (light: rgba(51, 51, 51, 0.03), dark: rgba(255, 255, 255, 0.03)));
+  @include theme.var(--post-border, (light: 1px solid rgb(221, 221, 221), dark: 1px solid #2f2f2f));
+  @include theme.var(--post-border-header-color, (light: rgb(221, 221, 221), dark: #2f2f2f));
   @include theme.var(--section-heading-divider-color, (light: #dee2e6, dark: #2f2f2f));
 }
 
@@ -28,11 +33,13 @@ $forum-aside-radius: 8px;
     background: var(--body-background);
   }
   .neon-post {
+    border: var(--post-border);
     background: var(--post-background-body);
     border-radius: $post-radius;
     .neon-post-header,
     .neon-post-footer {
       background: var(--post-background-header);
+      border-color: var(--post-border-header-color);
     }
   }
 }
