@@ -284,7 +284,7 @@
       </div>
     </div>
 
-    <div :class="{'collapse': isCollapsed}" class="card-footer" v-if="!hidden && is_mode_tree">
+    <div :class="{'collapse': isCollapsed}" class="card-footer" v-if="!hidden && is_mode_tree && scoreDescriptionVisible">
       <div class="row">
         <div class="d-none d-lg-block col-lg-2"/>
         <div class="col-12 d-flex col-lg-10 py-1">
@@ -592,6 +592,9 @@ export default {
         return null;
       }
       return users.length > 10 ? users.slice(0, 10).concat('...').join("\n") : users.join("\n");
+    },
+    scoreDescriptionVisible(): boolean {
+      return this.post.score > 1;
     },
     scoreDescription(): string {
       if (this.post.score === 0) {
