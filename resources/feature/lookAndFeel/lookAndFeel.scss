@@ -5,6 +5,9 @@ $body-background: (light: #f0f2f5, dark: #121314);
 $post-background-body: (light: white, dark: #181a1b);
 $post-background-header: (light: none, dark: none);
 
+$post-radius: 8px;
+$forum-aside-radius: 8px;
+
 .look-and-feel-modern {
   @include theme.var(--body-background, $body-background);
   @include theme.var(--post-background-body, $post-background-body);
@@ -23,6 +26,7 @@ $post-background-header: (light: none, dark: none);
   }
   .neon-post {
     background: var(--post-background-body);
+    border-radius: $post-radius;
     .neon-post-header,
     .neon-post-footer {
       background: var(--post-background-header);
@@ -33,7 +37,7 @@ $post-background-header: (light: none, dark: none);
 .neon-forum-aside {
   background: var(--body-background);
   padding: 24px !important; // !important for .sticky-aside
-
+  border-radius: $forum-aside-radius;
   @include size.size(xl) {
     padding: 0 !important;
   }
