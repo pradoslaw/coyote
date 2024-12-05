@@ -14,7 +14,7 @@
   }
 }
 
-@mixin theme {
+@mixin both {
   /**
    * The dark() and light() mixins increase selector specificity.
    * In some cases, it's necessary to apply a common style to both
@@ -30,12 +30,12 @@
 }
 
 @mixin property($property, $light, $dark) {
-  @include light {
-    #{$property}: $light;
-  }
-  @include dark {
-    #{$property}: $dark;
-  }
+  @include light {#{$property}: $light}
+  @include dark {#{$property}: $dark}
+}
+
+@mixin var($property, $themeMap) {
+  @include property($property, map-get($themeMap, 'light'), map-get($themeMap, 'dark'));
 }
 
 @mixin color-theme($light, $dark) {
@@ -49,4 +49,8 @@
 // Deprecated
 @mixin background-theme($light, $dark) {
   @include background($light, $dark)
+}
+
+@mixin theme {
+  @include both {@content}
 }

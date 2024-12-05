@@ -9,7 +9,7 @@
   </div>
   <div v-else
        :id="anchor"
-       class="card card-post"
+       class="card card-post neon-post"
        :class="[
          {'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed': isCollapsed},
          postIndentCssClasses
@@ -29,7 +29,7 @@
       <vue-icon name="postAuthorBlocked"/>
       Treść posta została ukryta, ponieważ autorem jest zablokowany przez Ciebie użytkownik.
     </div>
-    <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed}" class="card-header d-none">
+    <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed}" class="card-header d-none neon-post-header">
       <div class="row">
         <div class="col-2">
           <h5 class="mb-0 post-author">
@@ -261,7 +261,7 @@
       </div>
     </div>
 
-    <div :class="{'collapse': isCollapsed}" class="card-footer" v-if="!hidden && is_mode_tree && scoreDescriptionVisible">
+    <div :class="{'collapse': isCollapsed}" class="card-footer neon-post-footer" v-if="!hidden && is_mode_tree && scoreDescriptionVisible">
       <div class="row">
         <div class="d-none d-lg-block col-lg-2"/>
         <div class="col-12 d-flex col-lg-10 py-1">
@@ -272,7 +272,7 @@
       </div>
     </div>
 
-    <div :class="{'collapse': isCollapsed}" class="card-footer" v-if="!authorBlocked">
+    <div :class="{'collapse': isCollapsed}" class="card-footer neon-post-footer" v-if="!authorBlocked">
       <div class="row">
         <div class="d-none d-lg-block col-lg-2"/>
         <div class="col-12 d-flex col-lg-10">

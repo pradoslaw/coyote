@@ -1,13 +1,32 @@
 @use "../theme/theme" as theme;
 
-.look-and-feel-legacy {
-  @include theme.property(--body-background, #fafafa, #252525);
-}
+$body-background: (light: #f0f2f5, dark: #121314);
+$post-background-body: (light: white, dark: #181a1b);
+$post-background-header: (light: none, dark: none);
 
 .look-and-feel-modern {
-  @include theme.property(--body-background, #f0f2f5, #121314);
+  @include theme.var(--body-background, $body-background);
+  @include theme.var(--post-background-body, $post-background-body);
+  @include theme.var(--post-background-header, $post-background-header);
 }
 
-body {
-  background: var(--body-background);
+.look-and-feel-legacy {
+  @include theme.var(--body-background, (light: #fafafa, dark: #252525));
+  @include theme.var(--post-background-body, (light: white, dark: rgb(26, 26, 26)));
+  @include theme.var(--post-background-header, (light: rgba(51, 51, 51, 0.03), dark: rgba(255, 255, 255, 0.03)));
+}
+
+@include theme.both {
+  body {
+    background: var(--body-background);
+  }
+
+  .neon-post {
+    background: var(--post-background-body);
+
+    .neon-post-header,
+    .neon-post-footer {
+      background: var(--post-background-header);
+    }
+  }
 }
