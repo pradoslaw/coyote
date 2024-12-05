@@ -62,29 +62,6 @@
                 {{ post.browser }}
               </small>
             </div>
-            <span class="ms-auto pe-2" v-if="is_mode_tree">
-              <small class="ps-2">
-                Ostatnio:
-                {{ ' ' }}
-                <span class="text-muted">
-                  {{ formatDistanceToNow(post.user.visited_at ? post.user.visited_at : post.user.created_at) }}
-                </span>
-              </small>
-              <small class="ps-2">
-                Rejestracja:
-                {{ ' ' }}
-                <span class="text-muted">
-                  {{ formatDistanceToNow(post.user.created_at) }}
-                </span>
-              </small>
-              <small class="ps-2" v-if="post.user.allow_count">
-                Postów:
-                {{ ' ' }}
-                <a title="Znajdź posty tego użytkownika" :href="`/Forum/User/${post.user.id}`" style="text-decoration:underline">
-                  {{ post.user.posts }}
-                </a>
-              </small>
-            </span>
           </div>
         </div>
       </div>
