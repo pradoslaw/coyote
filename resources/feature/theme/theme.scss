@@ -1,24 +1,16 @@
 @mixin light {
-  @include scope(theme-light) {
-    @content;
-  }
+  @include scope(theme-light) {@content}
 }
 
 @mixin dark {
-  @include scope(theme-dark) {
-    @content;
-  }
+  @include scope(theme-dark) {@content}
 }
 
 @mixin scope($class) {
   @if & {
-    html.#{$class} & {
-      @content;
-    }
+    html.#{$class} & {@content}
   } @else {
-    body.#{$class} {
-      @content;
-    }
+    html.#{$class} {@content}
   }
 }
 
@@ -26,14 +18,14 @@
   /**
    * The dark() and light() mixins increase selector specificity.
    * In some cases, it's necessary to apply a common style to both
-   * themes, overriding a previously defined style. 
-   * Thus, we need to artificially elevate the specificity 
+   * themes, overriding a previously defined style.
+   * For that we need to artificially elevate the specificity 
    * of the style, without actually changing any style.
    */
-  html.theme-light &,
-  html.theme-dark &,
-  {
-    @content;
+  @if & {
+    html.theme-light &, html.theme-dark & {@content}
+  } @else {
+    html.theme-light, html.theme-dark {@content}
   }
 }
 
