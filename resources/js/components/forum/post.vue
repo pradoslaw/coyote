@@ -540,13 +540,21 @@ export default {
       return this.$props.post.hasNextSibling;
     },
     postIndentCssClasses(): string[] {
-      const post = this.$props.post;
-      if (!post.indent) return [];
-      if (post.indent === 1) return ['indent', 'indent-1'];
-      if (post.indent === 2) return ['indent', 'indent-2'];
-      if (post.indent === 3) return ['indent', 'indent-3'];
-      if (post.indent === 4) return ['indent', 'indent-4'];
-      return ['indent', 'indent-5'];
+      const level = this.$props.post.indent;
+      if (!level) return [];
+      if (level === 1) return ['indent', 'indent-none'];
+      if (level === 2) return ['indent', 'indent-1'];
+      if (level === 3) return ['indent', 'indent-2'];
+      if (level === 4) return ['indent', 'indent-3'];
+      if (level === 5) return ['indent', 'indent-4'];
+      if (level === 6) return ['indent', 'indent-5'];
+      if (level === 7) return ['indent', 'indent-6'];
+      if (level === 8) return ['indent', 'indent-7'];
+      if (level === 9) return ['indent', 'indent-8'];
+      if (level === 10) return ['indent', 'indent-9'];
+      if (level === 11) return ['indent', 'indent-10'];
+      if (level === 12) return ['indent', 'indent-11'];
+      return ['indent', 'indent-12'];
     },
     isChild(): boolean {
       return this.$props.post.indent > 1;
