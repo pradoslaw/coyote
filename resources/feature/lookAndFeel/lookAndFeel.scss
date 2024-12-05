@@ -1,4 +1,5 @@
 @use "../theme/theme" as theme;
+@use "./size" as size;
 
 $body-background: (light: #f0f2f5, dark: #121314);
 $post-background-body: (light: white, dark: #181a1b);
@@ -20,13 +21,20 @@ $post-background-header: (light: none, dark: none);
   body {
     background: var(--body-background);
   }
-
   .neon-post {
     background: var(--post-background-body);
-
     .neon-post-header,
     .neon-post-footer {
       background: var(--post-background-header);
     }
+  }
+}
+
+.neon-forum-aside {
+  background: var(--body-background);
+  padding: 24px !important; // !important for .sticky-aside
+
+  @include size.size(xl) {
+    padding: 0 !important;
   }
 }
