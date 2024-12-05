@@ -1,0 +1,13 @@
+@use "../theme/theme" as theme;
+
+.look-and-feel-legacy {
+  @include theme.property(--body-background, #fafafa, #252525);
+}
+
+.look-and-feel-modern {
+  @include theme.property(--body-background, #f0f2f5, #121314);
+}
+
+body {
+  background: var(--body-background);
+}

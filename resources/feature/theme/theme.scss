@@ -37,20 +37,24 @@
   }
 }
 
-@mixin color-theme($light, $dark) {
+@mixin property($property, $light, $dark) {
   @include light {
-    color: $light;
+    #{$property}: $light;
   }
   @include dark {
-    color: $dark;
+    #{$property}: $dark;
   }
 }
 
+@mixin color-theme($light, $dark) {
+  @include property(color, $light, $dark);
+}
+
+@mixin background($light, $dark) {
+  @include property(background, $light, $dark);
+}
+
+// Deprecated
 @mixin background-theme($light, $dark) {
-  @include light {
-    background: $light;
-  }
-  @include dark {
-    background: $dark;
-  }
+  @include background($light, $dark)
 }
