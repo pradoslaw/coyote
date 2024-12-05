@@ -374,6 +374,7 @@ import VueIcon from "../icon";
 import {default as mixins} from '../mixins/user.js';
 import VueTags from '../tags.vue';
 import VueUserName from "../user-name.vue";
+import {voteDescription} from "../voteDescription";
 import VueFlag from './../flags/flag.vue';
 import VueButton from './../forms/button.vue';
 import VueSelect from './../forms/select.vue';
@@ -574,30 +575,17 @@ export default {
       return this.post.score > 1;
     },
     scoreDescription(): string {
-      if (this.post.score === 0) {
-        return 'Doceń post';
-      }
-      if (this.post.score === 1) {
-        if (this.post.is_voted) {
-          return 'Doceniłeś post';
-        }
-      }
-      if (this.otherVoters) {
-        if (this.post.is_voted) {
-          return 'Ty i ' + this.otherVoters.join(', ') + ' doceniliście post';
-        }
-        if (this.otherVoters.length === 1) {
-          return this.otherVoters.join(', ') + ' docenił post';
-        }
-        return this.otherVoters.join(', ') + ' docenili post';
-      }
-      return this.post.score + ' użytkowników doceniło post';
+      return voteDescription(
+        this.post.score,
+        this.post.is_voted,
+        this.otherVoters,
+      );
     },
-    otherVoters(): string[] | undefined {
+    otherVoters(): string[] | null {
       if (this.post.voters) {
-        return this.post.voters.filter((name: string) => name !== this.post.user.name);
+        return this.post.voters.filter((name: string) => name !== this.user.name);
       }
-      return undefined;
+      return null;
     },
     tags() {
       return this.post.id === this.topic.first_post_id ? this.topic.tags : [];

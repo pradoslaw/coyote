@@ -1,16 +1,27 @@
 export function voteDescription(
   votes: number,
   youVoted: boolean,
-  voters: string[],
+  otherVoters: string[] | null,
 ): string {
-  if (votes === 2) {
-    return 'Ty i ' + voters[0] + ' doceniliście post';
+  if (votes === 0) {
+    return 'Doceń post';
   }
-  if (votes === 1) {
-    if (youVoted) {
-      return 'Doceniłeś post';
-    }
-    return voters[0] + ' docenił post';
+  if (votes === 1 && youVoted) {
+    return 'Doceniłeś post';
   }
-  return 'Doceń post';
+  if (!otherVoters) {
+    return votes + ' użytkowników doceniło post';
+  }
+  if (youVoted) {
+    return joinMultiple(['Ty', ...otherVoters]) + ' doceniliście post';
+  }
+  if (otherVoters.length === 1) {
+    return otherVoters[0] + ' docenił post';
+  }
+  return joinMultiple(otherVoters) + ' docenili post';
+}
+
+function joinMultiple(voters: string[]): string {
+  const lastVoter = voters.pop();
+  return voters.join(', ') + ' i ' + lastVoter;
 }
