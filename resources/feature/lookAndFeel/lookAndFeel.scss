@@ -2,15 +2,15 @@
 @use "./size" as size;
 @use "./style-guide" as style;
 
-$body-background:               (light: #f0f2f5, dark: #121314);
-$post-background:               (light: white, dark: #181a1b);
+$body-background:               (light: style.$neutral-000, dark: style.$neutral-600);
+$post-background:               (light: style.$white, dark: style.$neutral-500);
 $post-header-background:        (light: none, dark: none);
-$post-header-border-color:      (light: #e9ecef, dark: #2a2e30);
-$section-heading-divider-color: (light: #dde4ea, dark: #2a2e30);
+$post-header-border-color:      (light: style.$neutral-050, dark: style.$neutral-400);
+$section-heading-divider-color: (light: style.$neutral-100, dark: style.$neutral-400);
 $aside-border-color:            $section-heading-divider-color;
 $default-avatar-color:          (light: style.$green-700, dark: style.$green-500);
 $default-avatar-background:     (light: style.$green-050, dark: style.$green-900);
-$navbar-text-color:             (light: #333333, dark: #acacac);
+$navbar-text-color:             (light: style.$neutral-300, dark: style.$neutral-200);
 
 $post-radius:                   8px;
 $forum-aside-radius:            8px;
