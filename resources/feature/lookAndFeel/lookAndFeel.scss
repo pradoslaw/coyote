@@ -2,18 +2,18 @@
 @use "./size" as size;
 @use "./style-guide" as style;
 
-$body-background: (light: #f0f2f5, dark: #121314);
-$post-background-body: (light: white, dark: #181a1b);
-$post-background-header: (light: none, dark: none);
+$body-background:               (light: #f0f2f5, dark: #121314);
+$post-background-body:          (light: white, dark: #181a1b);
+$post-background-header:        (light: none, dark: none);
 $section-heading-divider-color: (light: #dde4ea, dark: #2a2e30);
-$aside-border-color: $section-heading-divider-color;
-$post-header-border: (light: #e9ecef, dark: #2a2e30);
-$default-avatar-color: (light: style.$green-700, dark: style.$green-500);
-$default-avatar-background: (light: style.$green-050, dark: style.$green-900);
-$navbar-text-color: (light: #333333, dark: #acacac);
+$aside-border-color:            $section-heading-divider-color;
+$post-header-border:            (light: #e9ecef, dark: #2a2e30);
+$default-avatar-color:          (light: style.$green-700, dark: style.$green-500);
+$default-avatar-background:     (light: style.$green-050, dark: style.$green-900);
+$navbar-text-color:             (light: #333333, dark: #acacac);
 
-$post-radius: 8px;
-$forum-aside-radius: 8px;
+$post-radius:                   8px;
+$forum-aside-radius:            8px;
 
 .look-and-feel-modern {
   @include theme.var(--body-background, $body-background);
@@ -46,25 +46,25 @@ $forum-aside-radius: 8px;
     background: var(--body-background);
   }
   .neon-post {
-    border: var(--post-border);
-    background: var(--post-background-body);
+    border:        var(--post-border);
+    background:    var(--post-background-body);
     border-radius: $post-radius;
     .neon-post-header,
     .neon-post-footer {
-      background: var(--post-background-header);
+      background:   var(--post-background-header);
       border-color: var(--post-border-header-color);
     }
   }
 }
 
 .neon-forum-aside {
-  background: var(--body-background);
-  padding: 24px !important; // !important for .sticky-aside
+  background:    var(--body-background);
+  padding:       24px !important; // !important for .sticky-aside
   border-radius: $forum-aside-radius;
-  border: 1px solid var(--aside-border-color);
+  border:        1px solid var(--aside-border-color);
   @include size.size(xl) {
     padding: 0 !important;
-    border: none;
+    border:  none;
   }
 }
 
@@ -76,7 +76,7 @@ $forum-aside-radius: 8px;
 }
 
 .default-avatar {
-  color: var(--default-avatar-color);
+  color:      var(--default-avatar-color);
   background: var(--default-avatar-background);
 }
 
@@ -88,15 +88,15 @@ $forum-aside-radius: 8px;
 
 .look-and-feel-modern {
   .neon-logo {
-    width: 15px;
+    width:  15px;
     height: 20px;
   }
   .neon-post-user-avatar {
-    border: none;
+    border:  none;
     padding: 0;
     .user-avatar {
       border-radius: 8px;
-      overflow: hidden;
+      overflow:      hidden;
     }
   }
 }
