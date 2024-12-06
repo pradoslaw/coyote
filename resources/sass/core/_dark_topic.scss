@@ -54,6 +54,10 @@ body.theme-dark {
   .card {
     background: #1a1a1a;
     border-color: #2f2f2f;
+
+    .card-header {
+      border-bottom: 1px solid #2f2f2f;
+    }
   }
 
   main {
@@ -164,6 +168,17 @@ body.theme-dark {
 
       .card.card-post {
         .card-header {
+          .post-author {
+            .badge.badge-primary {
+              color: #1d1d1d;
+              background-color: #789b17;
+            }
+
+            a:not(.badge) {
+              color: #789b17;
+            }
+          }
+
           .small a time {
             color: #acacac;
           }
@@ -226,6 +241,12 @@ body.theme-dark {
               border-top: 1px solid #2f2f2f;
 
               a {
+                color: #789b17;
+
+                &.badge.badge-primary {
+                  color: #1d1d1d;
+                }
+
                 time {
                   color: #8f9ba5 !important;
 
@@ -266,8 +287,8 @@ body.theme-dark {
         }
 
         .card-footer {
-          border-top: 1px solid #2f2f2f;
-
+          //border-top: 1px solid #2f2f2f; // overriden by post border
+ 
           button,
           .btn {
             color: #acacac;
@@ -287,6 +308,12 @@ body.theme-dark {
       }
 
       form {
+        .btn.btn-primary {
+          color: #1d1d1d;
+          background-color: #789b17;
+          border: none;
+        }
+
         .btn.btn-danger {
           color: #1d1d1d;
           background-color: #9f3835;
@@ -335,6 +362,13 @@ body.theme-dark {
   }
 
   aside {
+    &#sidebar {
+      //background-color: #252525; // this is replaced by designer-aside
+      //border-color: #789b17;  // this is replaced by designer-aside
+      border-width: 1px;
+      box-shadow: none;
+    }
+
     .btn.btn-secondary.btn-sm {
       border: 1px solid #404040;
 
@@ -453,6 +487,11 @@ body.theme-dark {
         background: #1a1a1a;
       }
     }
+  }
+
+  .btn.btn-primary {
+    background-color: #789b17;
+    color: #1a1a1a;
   }
 
   .btn.btn-secondary {

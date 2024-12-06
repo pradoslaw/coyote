@@ -34,13 +34,13 @@
       <div class="page-topic-controls d-flex mb-3">
         {% if is_writeable %}
           <div class="ms-auto">
-            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm neon-primary-button">Nowy wątek</a>
+            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm">Nowy wątek</a>
           </div>
         {% endif %}
       </div>
       {% for post in posts.data %}
-        <div class="card card-post neon-post">
-          <div class="card-header d-none d-lg-block neon-post-header">
+        <div class="card card-post">
+          <div class="card-header d-none d-lg-block">
             <div class="row">
               <div class="col-2">
                 <div style="height: 20px"></div>
@@ -82,7 +82,7 @@
             </div>
           </div>
 
-          <div class="card-footer neon-post-footer">
+          <div class="card-footer">
             <div class="row">
               <div class="d-none d-lg-block col-lg-2"></div>
 
@@ -120,7 +120,7 @@
 
         {% if is_writeable %}
           <div class="ms-auto">
-            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm neon-primary-button">Nowy wątek</a>
+            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm">Nowy wątek</a>
           </div>
         {% endif %}
       </div>
@@ -242,7 +242,7 @@
     {% block side_menu %}
       <div id="js-sidebar" class="box mb-5" v-cloak>
         <div class="box">
-          <h4 class="heading neon-section-heading">
+          <h4 class="heading">
             {{ icon('forumActions') }}
             Akcje
           </h4>

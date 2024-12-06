@@ -75,15 +75,6 @@ body.homepage-modern {
     cursor: pointer;
   }
 
-  .user-avatar-border {
-    padding: 2px;
-    border-radius: 6px;
-    @include background-theme($card-background-light, $card-background-dark);
-
-    .user-avatar {
-      border-radius: 4px;
-    }
-  }
 
   .text-primary {
     @include light {
@@ -412,7 +403,7 @@ body.homepage-modern {
   }
 
   .default-avatar {
-    @include color-theme($primary-color-light, $primary-color-dark);
+    @include color-theme(#005b12, #00a538); // TODO this is copy paste from designer
     @include background-theme($primary-background-light, $primary-background-dark);
   }
 
