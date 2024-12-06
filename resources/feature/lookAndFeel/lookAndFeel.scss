@@ -5,6 +5,7 @@ $body-background: (light: #f0f2f5, dark: #121314);
 $post-background-body: (light: white, dark: #181a1b);
 $post-background-header: (light: none, dark: none);
 $section-heading-divider-color: (light: #e9ecef, dark: #2a2e30);
+$aside-border-color: $section-heading-divider-color;
 $post-header-border: $section-heading-divider-color;
 $default-avatar-color: (light: #005b12, dark: #00a538);
 $default-avatar-background: (light: #e7f7e6, dark: #001306);
@@ -19,6 +20,7 @@ $forum-aside-radius: 8px;
   @include theme.var(--post-border, (light: none, dark: none));
   @include theme.var(--post-border-header-color, $post-header-border);
   @include theme.var(--section-heading-divider-color, $section-heading-divider-color);
+  @include theme.var(--aside-border-color, $aside-border-color);
   @include theme.var(--default-avatar-color, $default-avatar-color);
   @include theme.var(--default-avatar-background, $default-avatar-background);
 }
@@ -30,6 +32,7 @@ $forum-aside-radius: 8px;
   @include theme.var(--post-border, (light: 1px solid #dddddd, dark: 1px solid #2f2f2f));
   @include theme.var(--post-border-header-color, (light: #dddddd, dark: #2f2f2f));
   @include theme.var(--section-heading-divider-color, (light: #dee2e6, dark: #2f2f2f));
+  @include theme.var(--aside-border-color, (light: #dee2e6, dark: #2f2f2f));
   @include theme.var(--default-avatar-color, (light: #435b00, dark: #789b17));
   @include theme.var(--default-avatar-background, (light: #f3f7e6, dark: #141414));
 }
@@ -54,7 +57,7 @@ $forum-aside-radius: 8px;
   background: var(--body-background);
   padding: 24px !important; // !important for .sticky-aside
   border-radius: $forum-aside-radius;
-  border: 1px solid var(--section-heading-divider-color);
+  border: 1px solid var(--aside-border-color);
   @include size.size(xl) {
     padding: 0 !important;
     border: none;
