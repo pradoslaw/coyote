@@ -38,7 +38,7 @@
   @include property($property, map-get($themeMap, 'light'), map-get($themeMap, 'dark'));
 }
 
-@mixin color-theme($light, $dark) {
+@mixin color($light, $dark) {
   @include property(color, $light, $dark);
 }
 
@@ -49,6 +49,10 @@
 // Deprecated
 @mixin background-theme($light, $dark) {
   @include background($light, $dark)
+}
+
+@mixin color-theme($light, $dark) {
+  @include color($light, $dark);
 }
 
 @mixin theme {

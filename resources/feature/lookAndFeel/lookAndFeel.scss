@@ -6,6 +6,8 @@ $post-background-body: (light: white, dark: #181a1b);
 $post-background-header: (light: none, dark: none);
 $section-heading-divider-color: (light: #e9ecef, dark: #2a2e30);
 $post-header-border: $section-heading-divider-color;
+$default-avatar-color: (light: #005b12, dark: #00a538);
+$default-avatar-background: (light: #e7f7e6, dark: #001306);
 
 $post-radius: 8px;
 $forum-aside-radius: 8px;
@@ -17,6 +19,8 @@ $forum-aside-radius: 8px;
   @include theme.var(--post-border, (light: none, dark: none));
   @include theme.var(--post-border-header-color, $post-header-border);
   @include theme.var(--section-heading-divider-color, $section-heading-divider-color);
+  @include theme.var(--default-avatar-color, $default-avatar-color);
+  @include theme.var(--default-avatar-background, $default-avatar-background);
 }
 
 .look-and-feel-legacy {
@@ -26,6 +30,8 @@ $forum-aside-radius: 8px;
   @include theme.var(--post-border, (light: 1px solid rgb(221, 221, 221), dark: 1px solid #2f2f2f));
   @include theme.var(--post-border-header-color, (light: rgb(221, 221, 221), dark: #2f2f2f));
   @include theme.var(--section-heading-divider-color, (light: #dee2e6, dark: #2f2f2f));
+  @include theme.var(--default-avatar-color, (light: #435b00, dark: #789b17));
+  @include theme.var(--default-avatar-background, (light: #f3f7e6, dark: #141414));
 }
 
 @include theme.both {
@@ -60,4 +66,9 @@ $forum-aside-radius: 8px;
     border-bottom-width: 2px;
     border-bottom-color: var(--section-heading-divider-color) !important; // !important for h4.section
   }
+}
+
+.default-avatar {
+  color: var(--default-avatar-color);
+  background: var(--default-avatar-background);
 }

@@ -8,14 +8,4 @@
       color: currentColor;
     }
   }
-
-  body.theme-light & {
-    color: #435b00;
-    background: #f3f7e6;
-  }
-
-  body.theme-dark & {
-    color: #789b17;
-    background: #141414;
-  }
 }
