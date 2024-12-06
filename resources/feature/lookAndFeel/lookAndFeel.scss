@@ -4,9 +4,9 @@
 $body-background: (light: #f0f2f5, dark: #121314);
 $post-background-body: (light: white, dark: #181a1b);
 $post-background-header: (light: none, dark: none);
-$section-heading-divider-color: (light: #e9ecef, dark: #2a2e30);
+$section-heading-divider-color: (light: #dde4ea, dark: #2a2e30);
 $aside-border-color: $section-heading-divider-color;
-$post-header-border: $section-heading-divider-color;
+$post-header-border: (light: #e9ecef, dark: #2a2e30);
 $default-avatar-color: (light: #005b12, dark: #00a538);
 $default-avatar-background: (light: #e7f7e6, dark: #001306);
 
