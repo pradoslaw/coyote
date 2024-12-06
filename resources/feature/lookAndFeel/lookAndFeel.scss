@@ -1,5 +1,6 @@
 @use "../theme/theme" as theme;
 @use "./size" as size;
+@use "./style-guide" as style;
 
 $body-background: (light: #f0f2f5, dark: #121314);
 $post-background-body: (light: white, dark: #181a1b);
@@ -7,8 +8,8 @@ $post-background-header: (light: none, dark: none);
 $section-heading-divider-color: (light: #dde4ea, dark: #2a2e30);
 $aside-border-color: $section-heading-divider-color;
 $post-header-border: (light: #e9ecef, dark: #2a2e30);
-$default-avatar-color: (light: #005b12, dark: #00a538);
-$default-avatar-background: (light: #e7f7e6, dark: #001306);
+$default-avatar-color: (light: style.$green-700, dark: style.$green-500);
+$default-avatar-background: (light: style.$green-050, dark: style.$green-900);
 
 $post-radius: 8px;
 $forum-aside-radius: 8px;
