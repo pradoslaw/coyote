@@ -7,11 +7,16 @@ $post-background:               (light: style.$white, dark: style.$navy-500);
 $post-header-border-color:      (light: style.$neutral-050, dark: style.$navy-400);
 $section-heading-divider-color: (light: style.$neutral-100, dark: style.$navy-400);
 $aside-border-color:            $section-heading-divider-color;
+
 $default-avatar-color:          (light: style.$green-700, dark: style.$green-500);
 $default-avatar-background:     (light: style.$green-050, dark: style.$green-900);
+
 $navbar-text-color:             (light: style.$neutral-300, dark: style.$neutral-200);
 $viewer-online-pill-background: (light: style.$white, dark: style.$navy-500);
 $viewer-online-circle-border:   (light: 2px solid style.$white, dark: 2px solid style.$navy-500);
+
+$username-style:                (light: style.$green-700, dark: style.$green-100);
+$username-author-color:         (light: white, dark: style.$neutral-400);
 
 $post-radius:                   8px;
 $forum-aside-radius:            8px;
@@ -30,6 +35,9 @@ $forum-aside-radius:            8px;
   @include theme.var(--viewer-online-pill-background, $viewer-online-pill-background);
   @include theme.var(--viewer-online-pill-border, (light: none, dark: none));
   @include theme.var(--viewer-online-circle-border, $viewer-online-circle-border);
+  @include theme.var(--username-color, $username-style);
+  @include theme.var(--username-author-color, $username-author-color);
+  @include theme.var(--username-author-background, $username-style);
 }
 
 .look-and-feel-legacy {
@@ -46,6 +54,9 @@ $forum-aside-radius:            8px;
   @include theme.var(--viewer-online-pill-background, (light: white, dark: #2e2e2e));
   @include theme.var(--viewer-online-pill-border, (light: 1px solid #dedede, dark: 1px solid #383838));
   @include theme.var(--viewer-online-circle-border, (light: 1px solid #dedede, dark: 1px solid #383838));
+  @include theme.var(--username-color, (light: #80a41a, dark: #789b17));
+  @include theme.var(--username-author-color, (light: white, dark: #1d1d1d));
+  @include theme.var(--username-author-background, (light: #80a41a, dark: #789b17));
 }
 
 @include theme.both {
@@ -121,4 +132,13 @@ $forum-aside-radius:            8px;
   .viewers-users .circle {
     border: var(--viewer-online-circle-border);
   }
+}
+
+.neon-username {
+  color: var(--username-color);
+}
+
+.neon-username-author {
+  color:      var(--username-author-color) !important; // overrides .badge {color}
+  background: var(--username-author-background);
 }

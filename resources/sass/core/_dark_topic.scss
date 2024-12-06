@@ -164,17 +164,6 @@ body.theme-dark {
 
       .card.card-post {
         .card-header {
-          .post-author {
-            .badge.badge-primary {
-              color: #1d1d1d;
-              background-color: #789b17;
-            }
-
-            a:not(.badge) {
-              color: #789b17;
-            }
-          }
-
           .small a time {
             color: #acacac;
           }
@@ -237,12 +226,6 @@ body.theme-dark {
               border-top: 1px solid #2f2f2f;
 
               a {
-                color: #789b17;
-
-                &.badge.badge-primary {
-                  color: #1d1d1d;
-                }
-
                 time {
                   color: #8f9ba5 !important;
 

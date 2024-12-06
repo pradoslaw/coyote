@@ -95,7 +95,6 @@
 }
 
 .post-author {
-  @include link-color-darker;
   @include text-truncate;
 
   font-size: .9rem;
