@@ -3,7 +3,6 @@
 @import "bootstrap/scss/mixins/breakpoints";
 @import "bootstrap/scss/mixins/text-truncate";
 @import "../../feature/theme/theme";
-@import "../../janek/style-guide";
 
 @mixin size($size) {
   @if ($size == 'intermediate') {
@@ -40,8 +39,8 @@ header nav.navbar {
 
 $primary-color-light: $green-500;
 $secondary-color-light: $green-700;
-$primary-opposite-color-light: #ffffff;
-$primary-background-light: $green-50;
+$opposite-color-light: #ffffff;
+$primary-background-light: $green-050;
 $card-background-light: #ffffff;
 
 $primary-color-dark: $green-500;
@@ -118,7 +117,7 @@ body.homepage-modern {
 
     .btn-register {
       @include light {
-        color: $primary-opposite-color-light;
+        color: $opposite-color-light;
         background: $primary-color-light;
         border: 1px solid $primary-color-light;
         &:hover {
@@ -470,7 +469,7 @@ body.homepage-modern {
         height: 3px;
         border-radius: 3px;
         @include light {
-          background: linear-gradient(270deg, $primary-color-light 0%, $primary-opposite-color-light 100%);
+          background: linear-gradient(270deg, $primary-color-light 0%, $opposite-color-light 100%);
         }
 
         @include dark {
@@ -720,7 +719,7 @@ body.homepage-modern {
   }
 
   .page-link {
-    @include background-theme($primary-opposite-color-light, $opposite-color-dark);
+    @include background-theme($opposite-color-light, $opposite-color-dark);
   }
 
   #footer-copyright {

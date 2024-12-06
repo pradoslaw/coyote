@@ -9,7 +9,7 @@
   </div>
   <div v-else
        :id="anchor"
-       class="card card-post designer-post"
+       class="card card-post neon-post"
        :class="[
          {'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed': isCollapsed},
          postIndentCssClasses
@@ -29,7 +29,7 @@
       <vue-icon name="postAuthorBlocked"/>
       Treść posta została ukryta, ponieważ autorem jest zablokowany przez Ciebie użytkownik.
     </div>
-    <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed}" class="card-header d-none designer-post-header">
+    <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed}" class="card-header d-none neon-post-header">
       <div class="row">
         <div class="col-2">
           <h5 class="mb-0 post-author designer-topic-user-name-post-author"

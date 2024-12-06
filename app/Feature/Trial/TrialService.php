@@ -11,7 +11,7 @@ readonly class TrialService
 
     public function isChoiceModern(): bool
     {
-        return true;
+        return false;
     }
 
     public function setChoice(string $choice): void
@@ -60,7 +60,7 @@ readonly class TrialService
 
     public function getUserStage(): string
     {
-        return 'stage-none';
+        return $this->guest->getSetting('surveyStage', 'stage-invited');
     }
 
     public function getUserChoice(): string

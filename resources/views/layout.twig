@@ -75,13 +75,13 @@
       <div class="container-3xl d-flex flex-wrap">
         <a rel="home" class="navbar-brand order-0" href="{{ route('home') }}" title="4programmers.net - Strona główna">
           <img
-              class="logo"
+              class="logo neon-logo"
               alt="4programmers.net"
-              data-src-light="{{ 'img/logo-modern.svg' }}"
-              data-src-dark="{{ 'img/logo-modern.svg' }}"
+              data-src-light="{{ cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-light.svg') }}"
+              data-src-dark="{{ cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-dark.svg') }}"
               src="{{ __dark_theme 
-                ? cdn('img/logo-modern.svg') 
-                : cdn('img/logo-modern.svg') 
+                ? cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-dark.svg') 
+                : cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-light.svg') 
               }}"
           />
         </a>
@@ -90,7 +90,7 @@
           <ul class="navbar-nav">
             {% for item in __master_menu.roots() %}
               <li class="{{ item.attr.class }}">
-                <a href="{{ item.url }}" class="nav-link">
+                <a href="{{ item.url }}" class="nav-link neon-navbar-link">
                   {{ item.title|raw }}
                 </a>
 
@@ -108,7 +108,7 @@
               </li>
             {% endfor %}
             <li class="nav-item">
-              <a href="/events" class="nav-link designer-navbar-text">
+              <a href="/events" class="nav-link neon-navbar-link">
                 Wydarzenia
               </a>
             </li>
@@ -127,7 +127,7 @@
           <ul id="nav-auth" class="nav-auth navbar-nav order-2"></ul>
 
           <div class="dropdown nav-avatar order-2">
-            <div class="dropdown-toggle d-block i-35 {{ not isHomepageModern ? 'img-thumbnail' }} designer-user-avatar-navbar" data-bs-toggle="dropdown" style="cursor:pointer;">
+            <div class="dropdown-toggle d-block i-35 {{ not isHomepageModern ? 'img-thumbnail' }} neon-navbar-user-avatar" data-bs-toggle="dropdown" style="cursor:pointer;">
               <div class="user-avatar-border">
                 {{ user_avatar(currentUser.photo, currentUser.name) }}
               </div>
@@ -176,7 +176,7 @@
           </div>
         {% else %}
           <div class="form-inline order-2 ms-auto">
-            <a class="btn btn-sm btn-login me-1 designer-login-button-tertiary" href="{{ route('login') }}" style="border:none;">
+            <a class="btn btn-sm btn-login me-1 neon-navbar-link designer-login-button-tertiary" href="{{ route('login') }}" style="border:none;">
               Zaloguj się
             </a>
             <a class="btn btn-sm btn-primary btn-register" href="{{ route('register') }}">

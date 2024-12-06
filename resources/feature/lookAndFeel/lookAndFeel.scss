@@ -1,7 +1,6 @@
 @import "../theme/theme";
 @import "bootstrap/scss/mixins/breakpoints";
-
-@import "../sass/pages/homepage_modern";
+@import "../../sass/pages/homepage_modern";
 @import "style-guide";
 
 @mixin size($size) {
@@ -16,56 +15,56 @@
   }
 }
 
-$background-light: #f0f2f5; // old #fafafa
-$background-dark: #121314; // old #252525
+$background-light:            #f0f2f5; // old #fafafa
+$background-dark:             #121314; // old #252525
 
-$tile-background-light: white;
-$tile-background-dark: #181a1b;
-$search-background-light: mix($tile-background-light, $background-light, 50%);
-$search-background-dark: mix($tile-background-dark, $background-dark, 50%);
+$tile-background-light:       white;
+$tile-background-dark:        #181a1b;
+$search-background-light:     mix($tile-background-light, $background-light, 50%);
+$search-background-dark:      mix($tile-background-dark, $background-dark, 50%);
 
-$radius-large: 8px;
-$radius-medium: 6px;
-$tile-radius: $radius-large;
-$avatar-radius: $radius-large;
+$radius-large:                8px;
+$radius-medium:               6px;
+$tile-radius:                 $radius-large;
+$avatar-radius:               $radius-large;
 
-$tile-border-width: 1px;
-$tile-border-primary-light: #e9ecef;
-$tile-border-primary-dark: #2a2e30;
+$tile-border-width:           1px;
+$tile-border-primary-light:   #e9ecef;
+$tile-border-primary-dark:    #2a2e30;
 $tile-border-secondary-light: #dde4ea;
-$tile-border-secondary-dark: #2a2e30;
+$tile-border-secondary-dark:  #2a2e30;
 
-$text-color-primary-light: #333333;
-$text-color-primary-dark: #acacac;
-$text-color-secondary-light: #6c757d;
-$text-color-secondary-dark: #6c757d;
+$text-color-primary-light:    #333333;
+$text-color-primary-dark:     #acacac;
+$text-color-secondary-light:  #6c757d;
+$text-color-secondary-dark:   #6c757d;
 
-$tag-text-color-light: #555;
-$tag-text-color-dark: #acacac;
-$tag-background-color-light: #dfe3eb;
-$tag-background-color-dark: black;
+$tag-text-color-light:        #555;
+$tag-text-color-dark:         #acacac;
+$tag-background-color-light:  #dfe3eb;
+$tag-background-color-dark:   black;
 
 body {
   @include background-theme($background-light, $background-dark);
 }
 
-.designer-post {
+.neon-post {
   border-radius: $tile-radius;
-  border: none;
+  border:        none;
 
   @include background-theme($tile-background-light, $tile-background-dark);
 
-  .designer-post-header {
+  .neon-post-header {
     @include background-theme($tile-background-light, $tile-background-dark);
   }
 
   .designer-post-footer {
     @include background-theme($tile-background-light, $tile-background-dark);
-    border-bottom-left-radius: $tile-radius;
+    border-bottom-left-radius:  $tile-radius;
     border-bottom-right-radius: $tile-radius;
   }
 
-  .designer-post-header {
+  .neon-post-header {
     border-bottom-width: $tile-border-width;
   }
 
@@ -73,7 +72,7 @@ body {
     border-top-width: $tile-border-width;
   }
 
-  .designer-post-header,
+  .neon-post-header,
   .designer-post-footer {
     @include light {
       border-color: $tile-border-primary-light;
@@ -84,9 +83,9 @@ body {
   }
 }
 
-.designer-aside {
+.neon-forum-aside {
   @include background-theme($background-light, $background-dark);
-  padding: 24px;
+  padding:       24px;
   border-radius: $tile-radius;
 
   @include light {
@@ -101,12 +100,12 @@ body {
 
     @include theme {
       background: none;
-      border: none !important;
+      border:     none !important;
     }
   }
 }
 
-.designer-section-heading, h4.heading { // TODO remove h4.heading
+.neon-section-heading, h4.heading { // TODO remove h4.heading
   border-bottom-width: $tile-border-width !important;
   @include light {
     border-bottom-color: $tile-border-secondary-light;
@@ -134,19 +133,19 @@ body {
 
 .default-avatar {
   @include color-theme($green-700, $green-500); // TODO this is duplicated in homepage_modern.
-  @include background-theme($green-50, $green-900);
+  @include background-theme($green-050, $green-900);
 }
 
 .designer-user-avatar-post {
-  border: none;
-  padding: 0;
+  border:        none;
+  padding:       0;
   border-radius: $avatar-radius;
-  overflow: hidden;
+  overflow:      hidden;
 }
 
-.designer-user-avatar-navbar {
-  padding: 0;
-  border: none;
+.neon-navbar-user-avatar {
+  padding:       0;
+  border:        none;
   border-radius: $radius-medium;
 
   @include light {
@@ -179,49 +178,49 @@ header nav.navbar {
   }
 
   .logo {
-    width: 15px;
+    width:  15px;
     height: 20px;
   }
 
   .btn-register {
     @include light {
-      color: $primary-opposite-color-light;
+      color:      $opposite-color-light;
       background: $primary-color-light;
-      border: 1px solid $primary-color-light;
+      border:     1px solid $primary-color-light;
       &:hover {
-        background: #007e2b;
+        background:   #007e2b;
         border-color: #007e2b;
       }
       &:focus {
         border-color: #00fe56;
       }
       &:active {
-        background: #006522;
+        background:   #006522;
         border-color: #006522;
       }
       &:disabled {
-        background: rgba($primary-color-light, 0.3);
+        background:   rgba($primary-color-light, 0.3);
         border-color: rgba($primary-color-light, 0.3);
       }
     }
 
     @include dark {
-      color: $opposite-color-dark;
+      color:      $opposite-color-dark;
       background: $primary-color-dark;
-      border: 1px solid $primary-color-dark;
+      border:     1px solid $primary-color-dark;
       &:hover {
-        background: #00c041;
+        background:   #00c041;
         border-color: #00c041;
       }
       &:focus {
         border-color: #00fe56;
       }
       &:active {
-        background: #00e34d;
+        background:   #00e34d;
         border-color: #00e34d;
       }
       &:disabled {
-        background: rgba($primary-color-dark, 0.3);
+        background:   rgba($primary-color-dark, 0.3);
         border-color: rgba($primary-color-dark, 0.3);
       }
     }
@@ -243,7 +242,8 @@ header nav.navbar {
     }
   }
 
-  .designer-navbar-text {
+  .neon-navbar-text,
+  .neon-navbar-link {
     @include light {
       color: $text-color-primary-light !important;
     }
@@ -284,43 +284,43 @@ header nav.navbar {
 
 .designer-primary-button {
   @include light {
-    color: $primary-opposite-color-light;
+    color:      $opposite-color-light;
     background: $primary-color-light;
-    border: 1px solid $primary-color-light;
+    border:     1px solid $primary-color-light;
     &:hover {
-      background: #007e2b;
+      background:   #007e2b;
       border-color: #007e2b;
     }
     &:focus {
       border-color: #00fe56;
     }
     &:active {
-      background: #006522;
+      background:   #006522;
       border-color: #006522;
     }
     &:disabled {
-      background: rgba($primary-color-light, 0.3);
+      background:   rgba($primary-color-light, 0.3);
       border-color: rgba($primary-color-light, 0.3);
     }
   }
 
   @include dark {
-    color: $opposite-color-dark;
+    color:      $opposite-color-dark;
     background: $primary-color-dark;
-    border: 1px solid $primary-color-dark;
+    border:     1px solid $primary-color-dark;
     &:hover {
-      background: #00c041;
+      background:   #00c041;
       border-color: #00c041;
     }
     &:focus {
       border-color: #00fe56;
     }
     &:active {
-      background: #00e34d;
+      background:   #00e34d;
       border-color: #00e34d;
     }
     &:disabled {
-      background: rgba($primary-color-dark, 0.3);
+      background:   rgba($primary-color-dark, 0.3);
       border-color: rgba($primary-color-dark, 0.3);
     }
   }
@@ -347,28 +347,28 @@ header nav.navbar {
 
 .designer-button-secondary {
   @include light {
-    color: $primary-color-light;
+    color:        $primary-color-light;
     border-color: $primary-color-light;
   }
   @include dark {
-    color: $primary-color-dark;
+    color:        $primary-color-dark;
     border-color: $primary-color-dark;
   }
 
   &:hover {
     @include light {
-      color: $primary-opposite-color-light;
+      color:      $opposite-color-light;
       background: $primary-color-light;
     }
     @include dark {
-      color: $primary-opposite-color-light;
+      color:      $opposite-color-light;
       background: $primary-color-dark;
     }
   }
 
   &:active {
-    color: $primary-opposite-color-light !important;
-    background: #007e2b !important; // copied from primary
+    color:        $opposite-color-light !important;
+    background:   #007e2b !important; // copied from primary
     border-color: #007e2b !important; // copied from primary
   }
 }
@@ -402,11 +402,11 @@ header nav.navbar {
 .designer-topic-user-name-post-author-self {
   a {
     @include light {
-      color: $primary-opposite-color-light;
+      color:      $opposite-color-light;
       background: $green-700;
     }
     @include dark {
-      color: $opposite-color-dark;
+      color:      $opposite-color-dark;
       background: $green-100;
     }
   }
