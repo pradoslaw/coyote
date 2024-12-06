@@ -158,7 +158,7 @@
     </div>
 
     <div class="mt-2">
-      <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm" @click="save">
+      <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm neon-primary-button" @click="save">
         <template v-if="post.id">Zapisz</template>
         <template v-else>Dodaj post</template>
       </vue-button>

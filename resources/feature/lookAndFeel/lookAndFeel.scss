@@ -155,3 +155,33 @@ $forum-aside-radius:            8px;
     border-radius: 4px;
   }
 }
+
+.look-and-feel-modern {
+  .neon-primary-button {
+    border: none;
+
+    @include theme.light {
+      color:      style.$white;
+      background: style.$green-500;
+      &:hover {background: #007e2b;}
+      &:active {background: #006522;}
+      &:disabled {background: rgba(style.$green-500, 0.3);}
+    }
+
+    @include theme.dark {
+      color:      style.$neutral-400;
+      background: style.$green-500;
+      &:hover {background: #00c041;}
+      &:active {background: #00e34d;}
+      &:disabled {background: rgba(style.$green-500, 0.3);}
+    }
+  }
+}
+
+.look-and-feel-legacy {
+  .neon-primary-button {
+    @include theme.dark {
+      color: #1a1a1a;
+    }
+  }
+}

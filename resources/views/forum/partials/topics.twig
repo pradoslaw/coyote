@@ -7,7 +7,7 @@
 </ul>
 
 {% if forum is defined and not forum.is_locked %}
-  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-end mt-1 mb-3">
+  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-end mt-1 mb-3 neon-primary-button">
     Nowy wątek
   </a>
 {% endif %}
@@ -42,7 +42,7 @@
 </div>
 
 {% if topics.count() > 10 and forum is defined and not forum.is_locked %}
-  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-end">
+  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-end neon-primary-button">
     Nowy wątek
   </a>
   <div class="clearfix"></div>
