@@ -2,16 +2,16 @@
 @use "./size" as size;
 @use "./style-guide" as style;
 
-$body-background:               (light: style.$neutral-000, dark: style.$neutral-600);
-$post-background:               (light: style.$white, dark: style.$neutral-500);
-$post-header-border-color:      (light: style.$neutral-050, dark: style.$neutral-400);
-$section-heading-divider-color: (light: style.$neutral-100, dark: style.$neutral-400);
+$body-background:               (light: style.$neutral-000, dark: style.$neutral-500);
+$post-background:               (light: style.$white, dark: style.$navy-500);
+$post-header-border-color:      (light: style.$neutral-050, dark: style.$navy-400);
+$section-heading-divider-color: (light: style.$neutral-100, dark: style.$navy-400);
 $aside-border-color:            $section-heading-divider-color;
 $default-avatar-color:          (light: style.$green-700, dark: style.$green-500);
 $default-avatar-background:     (light: style.$green-050, dark: style.$green-900);
 $navbar-text-color:             (light: style.$neutral-300, dark: style.$neutral-200);
-$viewer-online-pill-background: (light: style.$white, dark: style.$neutral-500);
-$viewer-online-circle-border:   (light: 2px solid style.$white, dark: 2px solid style.$neutral-500);
+$viewer-online-pill-background: (light: style.$white, dark: style.$navy-500);
+$viewer-online-circle-border:   (light: 2px solid style.$white, dark: 2px solid style.$navy-500);
 
 $post-radius:                   8px;
 $forum-aside-radius:            8px;
