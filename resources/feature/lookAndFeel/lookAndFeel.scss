@@ -10,6 +10,7 @@ $aside-border-color: $section-heading-divider-color;
 $post-header-border: (light: #e9ecef, dark: #2a2e30);
 $default-avatar-color: (light: style.$green-700, dark: style.$green-500);
 $default-avatar-background: (light: style.$green-050, dark: style.$green-900);
+$navbar-text-color: (light: #333333, dark: #acacac);
 
 $post-radius: 8px;
 $forum-aside-radius: 8px;
@@ -24,6 +25,7 @@ $forum-aside-radius: 8px;
   @include theme.var(--aside-border-color, $aside-border-color);
   @include theme.var(--default-avatar-color, $default-avatar-color);
   @include theme.var(--default-avatar-background, $default-avatar-background);
+  @include theme.var(--navbar-text-color, $navbar-text-color);
 }
 
 .look-and-feel-legacy {
@@ -36,6 +38,7 @@ $forum-aside-radius: 8px;
   @include theme.var(--aside-border-color, (light: #dee2e6, dark: #2f2f2f));
   @include theme.var(--default-avatar-color, (light: #435b00, dark: #789b17));
   @include theme.var(--default-avatar-background, (light: #f3f7e6, dark: #141414));
+  @include theme.var(--navbar-text-color, (light: #777777, dark: #eeeeee));
 }
 
 @include theme.both {
@@ -96,4 +99,9 @@ $forum-aside-radius: 8px;
       overflow: hidden;
     }
   }
+}
+
+.neon-navbar-text,
+.neon-navbar-link {
+  color: var(--navbar-text-color) !important;
 }

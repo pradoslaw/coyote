@@ -1,6 +1,6 @@
 <template>
   <li :class="{'open': isOpen}" v-click-away="hideDropdown">
-    <span @click="loadMessages" class="nav-link nav-control-icon">
+    <span @click="loadMessages" class="nav-link nav-control-icon neon-navbar-text">
       <span v-show="count > 0" class="badge">{{ count }}</span>
       <vue-icon name="navigationPrivateMessages"/>
     </span>

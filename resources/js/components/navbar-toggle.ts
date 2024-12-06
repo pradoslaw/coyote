@@ -151,7 +151,7 @@ createVueApp('NonAlertControls', '#non-alert-controls', {
   },
   template: `
     <div :class="['d-flex', 'align-items-center', 'h-100']" v-click-away="close">
-      <span :class="['position-relative', 'px-2', 'py-2', 'btn-toggle-theme', {open}]" @click="toggleOpen" v-if="toggleEnabled" style="cursor:pointer;">
+      <span :class="['position-relative', 'px-2', 'py-2', 'btn-toggle-theme', 'neon-navbar-text', {open}]" @click="toggleOpen" v-if="toggleEnabled" style="cursor:pointer;">
         <vue-toggle-icon :icon="oppositeIcon"/>
         <div class="dropdown-menu dropdown-menu-end" style="display:block" v-show="open">
           <span v-for="(item, itemTheme, index) in items"

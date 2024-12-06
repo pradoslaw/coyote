@@ -90,7 +90,7 @@
           <ul class="navbar-nav">
             {% for item in __master_menu.roots() %}
               <li class="{{ item.attr.class }}">
-                <a href="{{ item.url }}" class="nav-link">
+                <a href="{{ item.url }}" class="nav-link neon-navbar-link">
                   {{ item.title|raw }}
                 </a>
 
@@ -108,7 +108,7 @@
               </li>
             {% endfor %}
             <li class="nav-item">
-              <a href="/events" class="nav-link">
+              <a href="/events" class="nav-link neon-navbar-link">
                 Wydarzenia
               </a>
             </li>
@@ -176,7 +176,7 @@
           </div>
         {% else %}
           <div class="form-inline order-2 ms-auto">
-            <a class="btn btn-sm btn-login me-1" href="{{ route('login') }}" style="border:none;">
+            <a class="btn btn-sm btn-login me-1 neon-navbar-link" href="{{ route('login') }}" style="border:none;">
               Zaloguj się
             </a>
             <a class="btn btn-sm btn-primary btn-register" href="{{ route('register') }}">
