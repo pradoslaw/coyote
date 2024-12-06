@@ -4,7 +4,6 @@
 
 $body-background:               (light: style.$neutral-000, dark: style.$neutral-600);
 $post-background:               (light: style.$white, dark: style.$neutral-500);
-$post-header-background:        (light: none, dark: none);
 $post-header-border-color:      (light: style.$neutral-050, dark: style.$neutral-400);
 $section-heading-divider-color: (light: style.$neutral-100, dark: style.$neutral-400);
 $aside-border-color:            $section-heading-divider-color;
@@ -19,7 +18,7 @@ $forum-aside-radius:            8px;
   @include theme.var(--body-background, $body-background);
   @include theme.var(--post-background, $post-background);
   @include theme.var(--post-border, (light: none, dark: none));
-  @include theme.var(--post-header-background, $post-header-background);
+  @include theme.var(--post-header-background, (light: none, dark: none));
   @include theme.var(--post-header-border-color, $post-header-border-color);
   @include theme.var(--section-heading-divider-color, $section-heading-divider-color);
   @include theme.var(--aside-border-color, $aside-border-color);
