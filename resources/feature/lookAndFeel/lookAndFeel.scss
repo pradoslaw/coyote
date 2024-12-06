@@ -10,6 +10,8 @@ $aside-border-color:            $section-heading-divider-color;
 $default-avatar-color:          (light: style.$green-700, dark: style.$green-500);
 $default-avatar-background:     (light: style.$green-050, dark: style.$green-900);
 $navbar-text-color:             (light: style.$neutral-300, dark: style.$neutral-200);
+$viewer-online-pill-background: (light: style.$white, dark: style.$neutral-500);
+$viewer-online-circle-border:   (light: 2px solid style.$white, dark: 2px solid style.$neutral-500);
 
 $post-radius:                   8px;
 $forum-aside-radius:            8px;
@@ -25,6 +27,9 @@ $forum-aside-radius:            8px;
   @include theme.var(--default-avatar-color, $default-avatar-color);
   @include theme.var(--default-avatar-background, $default-avatar-background);
   @include theme.var(--navbar-text-color, $navbar-text-color);
+  @include theme.var(--viewer-online-pill-background, $viewer-online-pill-background);
+  @include theme.var(--viewer-online-pill-border, (light: none, dark: none));
+  @include theme.var(--viewer-online-circle-border, $viewer-online-circle-border);
 }
 
 .look-and-feel-legacy {
@@ -38,6 +43,9 @@ $forum-aside-radius:            8px;
   @include theme.var(--default-avatar-color, (light: #435b00, dark: #789b17));
   @include theme.var(--default-avatar-background, (light: #f3f7e6, dark: #141414));
   @include theme.var(--navbar-text-color, (light: #777777, dark: #eeeeee));
+  @include theme.var(--viewer-online-pill-background, (light: white, dark: #2e2e2e));
+  @include theme.var(--viewer-online-pill-border, (light: 1px solid #dedede, dark: 1px solid #383838));
+  @include theme.var(--viewer-online-circle-border, (light: 1px solid #dedede, dark: 1px solid #383838));
 }
 
 @include theme.both {
@@ -103,4 +111,14 @@ $forum-aside-radius:            8px;
 .neon-navbar-text,
 .neon-navbar-link {
   color: var(--navbar-text-color) !important;
+}
+
+.viewers-online {
+  .viewer-pill {
+    background: var(--viewer-online-pill-background);
+    border:     var(--viewer-online-pill-border);
+  }
+  .viewers-users .circle {
+    border: var(--viewer-online-circle-border);
+  }
 }
