@@ -75,13 +75,13 @@
       <div class="container-3xl d-flex flex-wrap">
         <a rel="home" class="navbar-brand order-0" href="{{ route('home') }}" title="4programmers.net - Strona główna">
           <img
-              class="logo"
+              class="logo neon-logo"
               alt="4programmers.net"
-              data-src-light="{{ cdn(isHomepageModern ? 'img/logo-modern.svg' : 'img/logo-light.svg') }}"
-              data-src-dark="{{ cdn(isHomepageModern ? 'img/logo-modern.svg' : 'img/logo-dark.svg') }}"
+              data-src-light="{{ cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-light.svg') }}"
+              data-src-dark="{{ cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-dark.svg') }}"
               src="{{ __dark_theme 
-                ? cdn(isHomepageModern ? 'img/logo-modern.svg' : 'img/logo-dark.svg') 
-                : cdn(isHomepageModern ? 'img/logo-modern.svg' : 'img/logo-light.svg') 
+                ? cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-dark.svg') 
+                : cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-light.svg') 
               }}"
           />
         </a>
