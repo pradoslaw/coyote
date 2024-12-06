@@ -72,3 +72,14 @@ $forum-aside-radius: 8px;
   color: var(--default-avatar-color);
   background: var(--default-avatar-background);
 }
+
+.look-and-feel-modern {
+  .neon-post-user-avatar {
+    border: none;
+    padding: 0;
+    .user-avatar {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+  }
+}

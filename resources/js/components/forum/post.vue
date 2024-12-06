@@ -111,7 +111,7 @@
               :photo="post.user.photo"
               :initials="post.user.initials"
               :is-online="post.user.is_online"
-              class="post-avatar img-thumbnail"
+              class="post-avatar img-thumbnail neon-post-user-avatar"
             ></vue-avatar>
 
             <span v-if="post.user.group_name" class="badge badge-secondary mb-1">{{ post.user.group_name }}</span>
