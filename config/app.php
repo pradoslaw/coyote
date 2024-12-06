@@ -188,6 +188,7 @@ return [
         Coyote\Providers\AppServiceProvider::class,
 
         Coyote\Providers\ConfigServiceProvider::class,
+        Coyote\Feature\LookAndFeel\LookAndFeelServiceProvider::class,
 
         // Obsluga sesji przez Coyote (nadpisujemy domyslny driver)
         Coyote\Providers\SessionServiceProvider::class,
@@ -230,7 +231,6 @@ return [
         Swap\Laravel\SwapServiceProvider::class,
         Coyote\Providers\SeoServiceProvider::class,
         Coyote\Feature\Trial\TrialServiceProvider::class,
-        Coyote\Feature\LookAndFeel\LookAndFeelServiceProvider::class,
     ],
     /*
     |--------------------------------------------------------------------------

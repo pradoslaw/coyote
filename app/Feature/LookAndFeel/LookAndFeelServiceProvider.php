@@ -4,6 +4,7 @@ namespace Coyote\Feature\LookAndFeel;
 use Coyote\Services\Guest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Factory;
 
@@ -16,6 +17,15 @@ class LookAndFeelServiceProvider extends ServiceProvider
 
         $view->composer('layout', function (View $view) {
             $view->with(['lookAndFeelModern' => $this->lookAndFeel() === 'modern']);
+        });
+
+        Route::middleware(['web', 'auth'])->group(function () {
+            Route::get('/LookAndFeel/StyleGuide', function (StyleGuide $guide, StyleGuideView $view) {
+                if ($this->userSetting() === 'modern') {
+                    return $view->view($guide->getColors());
+                }
+                return response(status:404);
+            });
         });
     }
 
