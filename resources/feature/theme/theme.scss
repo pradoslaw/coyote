@@ -8,25 +8,14 @@
 
 @mixin scope($class) {
   @if & {
-    html.#{$class} & {@content}
+    *:where(html.#{$class}) & {@content}
   } @else {
-    html.#{$class} {@content}
+    *:where(html.#{$class}) {@content}
   }
 }
 
 @mixin both {
-  /**
-   * The dark() and light() mixins increase selector specificity.
-   * In some cases, it's necessary to apply a common style to both
-   * themes, overriding a previously defined style.
-   * For that we need to artificially elevate the specificity 
-   * of the style, without actually changing any style.
-   */
-  @if & {
-    html.theme-light &, html.theme-dark & {@content}
-  } @else {
-    html.theme-light, html.theme-dark {@content}
-  }
+  @content;
 }
 
 @mixin property($property, $light, $dark) {

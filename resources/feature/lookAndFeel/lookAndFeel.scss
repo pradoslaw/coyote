@@ -63,19 +63,18 @@ $forum-aside-radius:            8px;
   --var-navbar-user-avatar-padding: 0.25rem;
 }
 
-@include theme.both {
-  body {
-    background: var(--body-background);
-  }
-  .neon-post {
-    border:        var(--post-border);
-    background:    var(--post-background);
-    border-radius: $post-radius;
-    .neon-post-header,
-    .neon-post-footer {
-      background:   var(--post-header-background);
-      border-color: var(--post-header-border-color);
-    }
+body {
+  background: var(--body-background) !important; // overrides _reboot.scss body {background}
+}
+
+.neon-post {
+  border:        var(--post-border) !important; // overrides .card {border}
+  background:    var(--post-background);
+  border-radius: $post-radius;
+  .neon-post-header,
+  .neon-post-footer {
+    background:   var(--post-header-background);
+    border-color: var(--post-header-border-color);
   }
 }
 
@@ -90,11 +89,9 @@ $forum-aside-radius:            8px;
   }
 }
 
-@include theme.both {
-  .neon-section-heading {
-    border-bottom-width: 2px;
-    border-bottom-color: var(--section-heading-divider-color) !important; // !important for h4.section
-  }
+.neon-section-heading {
+  border-bottom-width: 2px;
+  border-bottom-color: var(--section-heading-divider-color) !important; // !important for h4.section
 }
 
 .default-avatar {
@@ -125,7 +122,7 @@ $forum-aside-radius:            8px;
 
 .neon-navbar-text,
 .neon-navbar-link {
-  color: var(--navbar-text-color) !important;
+  color: var(--navbar-text-color) !important; // overrides .nav-link {color}
 }
 
 .viewers-online {
