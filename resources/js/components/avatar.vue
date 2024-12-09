@@ -10,7 +10,7 @@
         </svg>
       </div>
     </div>
-    <div v-if="isOnline" class="is-online"/>
+    <div v-if="isOnline" class="is-online neon-is-online"/>
   </div>
 </template>
 
