@@ -8,7 +8,7 @@ import {PostCommentSaved, PostSaved, PostVoted, Subscriber} from "../../libs/liv
 import store from "../../store/index";
 import {notify} from "../../toast";
 import {PostOrdering} from "../../treeTopic/postOrdering";
-import {Post, Topic} from "../../types/models";
+import {Post} from "../../types/models";
 
 export default {
   name: 'Posts',
@@ -27,7 +27,6 @@ export default {
       undefinedPost: {text: '', html: '', assets: []},
       reasons: window.reasons,
       popularTags: window.popularTags,
-      treeAnswerPostId: null,
       postFormHidden: false,
       treePostOrdering: 'orderByCreationDateOldest',
     };
@@ -81,25 +80,14 @@ export default {
     changePage(page: number) {
       window.location.href = `?page=${page}`;
     },
-    replyTopicPost() {
-      const topic: Topic = store.state.topics.topics[0];
-      if (this.is_mode_tree) {
-        this.treeShowAnswerForm(topic.first_post_id!);
-      }
-    },
     reply(post: Post, scrollIntoForm = true) {
       const username = post.user ? post.user.name : post.user_name!;
-      if (this.is_mode_tree) {
-        this.treeShowAnswerForm(post.id);
-      }
       if (scrollIntoForm) {
         this.markdownRef.appendUserMention(username);
         document.getElementById('js-submit-form')!.scrollIntoView();
       } else {
-        if (this.is_mode_linear) {
-          this.markdownRef.appendBlockQuote(username, post.id, post.text);
-          notify({type: 'success', text: 'Cytat został dodany do formularza.'});
-        }
+        this.markdownRef.appendBlockQuote(username, post.id, post.text);
+        notify({type: 'success', text: 'Cytat został dodany do formularza.'});
       }
     },
     savedForm(post: Post): void {
@@ -111,12 +99,7 @@ export default {
       this.undefinedPost = {text: '', html: '', assets: []};
       window.location.href = post.url;
     },
-    treeShowAnswerForm(postId: number): void {
-      this.$data.treeAnswerPostId = postId;
-      this.$data.postFormHidden = false;
-    },
     resetForm(): void {
-      this.$data.treeAnswerPostId = null;
       this.$data.postFormHidden = store.getters['topics/is_mode_tree'];
     },
     changeTreeTopicPostOrdering(event: Event): void {

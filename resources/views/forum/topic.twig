@@ -181,21 +181,10 @@
         <vue-form
             id="js-submit-form"
             ref="js-submit-form"
-            v-if="!postFormHidden"
-            :tree-answer-post-id="treeAnswerPostId"
+            v-if="is_mode_linear"
             :post="undefinedPost"
             @save="savedForm"
         ></vue-form>
-        <template v-else>
-          <div class="alert alert-press">
-            Kliknij
-            <span style="border: 1px solid rgba(119,119,119,0.3); padding:2px 2px 2px 4px; border-radius:4px; margin:0 6px 0 4px;">
-              {{ icon('postAnswerQuote') }}
-              Odpowiedz
-            </span>
-            przy wybranym poście, żeby na niego odpowiedzieć.
-          </div>
-        </template>
       {% endif %}
 
       <section class="page-change-category d-flex my-3">
@@ -209,6 +198,17 @@
           </div>
         {% endif %}
       </section>
+
+      {% if is_writeable %}
+        <div class="alert alert-press">
+          Kliknij
+          <span style="border: 1px solid rgba(119,119,119,0.3); padding:2px 2px 2px 4px; border-radius:4px; margin:0 6px 0 4px;">
+            {{ icon('postAnswerQuote') }}
+            Odpowiedz
+          </span>
+          przy wybranym poście, żeby na niego odpowiedzieć.
+        </div>
+      {% endif %}
 
       {% if not auth_check() %}
         <div class="d-flex justify-content-center">

@@ -311,10 +311,10 @@
 
           <div v-if="post.permissions.write" :class="{'ms-auto':is_mode_linear}">
             <template v-if="!post.deleted_at">
-              <button @click="$emit('reply', post)" class="btn btn-sm btn-fast-reply" title="Odpowiedz na ten post" v-if="is_mode_linear">
+              <button @click="replyMentionAuthor" class="btn btn-sm btn-fast-reply" title="Odpowiedz na ten post" v-if="is_mode_linear">
                 <vue-icon name="postMentionAuthor"/>
               </button>
-              <button @click="$emit('reply', post, false)" class="btn btn-sm" title="Dodaj cytat do pola odpowiedzi">
+              <button @click="replyQuoteContent" class="btn btn-sm" title="Dodaj cytat do pola odpowiedzi">
                 <vue-icon name="postAnswerQuote"/>
                 <span class="d-none d-sm-inline ms-1">Odpowiedz</span>
               </button>
@@ -335,6 +335,14 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" v-if="is_mode_tree && !post.deleted_at && treeTopicReplyVisible">
+      <div class="d-none d-lg-block col-lg-2"/>
+      <div class="col-12 col-lg-10">
+        <div class="px-2 pb-2 ps-lg-0 pe-lg-4 pb-lg-3">
+          <vue-form :tree-answer-post-id="post.id" :post="postDefault" @save="formSaved"/>
         </div>
       </div>
     </div>
@@ -411,6 +419,8 @@ export default {
       isCommenting: false,
       commentDefault: {text: '', post_id: this.post.id},
       postFolded: false,
+      postDefault: {text: '', html: '', assets: []},
+      treeTopicReplyVisible: false,
     };
   },
   created() {
@@ -494,6 +504,19 @@ export default {
     flagPost(): void {
       const post = this.$props.post;
       openFlagModal(post.url, post.metadata);
+    },
+    replyMentionAuthor(): void {
+      this.$emit('reply', this.$props.post);
+    },
+    replyQuoteContent(): void {
+      if (store.getters['topics/is_mode_tree']) {
+        this.$data.treeTopicReplyVisible = !this.$data.treeTopicReplyVisible;
+      } else {
+        this.$emit('reply', this.$props.post, false);
+      }
+    },
+    formSaved(): void {
+      this.$data.treeTopicReplyVisible = false;
     },
   },
   computed: {

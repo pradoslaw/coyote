@@ -45,15 +45,8 @@
       </div>
     </div>
 
-    <div class="form-group" v-if="treeAnswerPostId">
-      <label class="col-form-label">
-        Odpowiadasz na post:
-      </label>
-      <input class="form-control" disabled :value="treeAnswerPostId"/>
-    </div>
-
     <div class="form-group">
-      <label class="col-form-label">
+      <label class="col-form-label" v-if="is_mode_linear">
         Treść <em>*</em>
       </label>
       <vue-markdown
@@ -312,7 +305,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('topics', ['topic', 'is_mode_tree']),
+    ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
     ...mapState('poll', ['poll']),
     ...mapGetters('posts', ['totalPages', 'currentPage']),
     isFirstPost() {
