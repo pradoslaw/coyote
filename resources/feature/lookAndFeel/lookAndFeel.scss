@@ -52,6 +52,7 @@ $scroll-top-background:         (light: style.$green-050, dark: style.$green-900
   @include theme.var(--scroll-top-background, $scroll-top-background);
   @include theme.var(--tabber-active-border-color, style.$green-500);
   @include theme.var(--user-online-color, style.$green-500);
+  @include theme.var(--notification-count-alert-color, style.$red-500);
 }
 
 .look-and-feel-legacy {
@@ -80,6 +81,7 @@ $scroll-top-background:         (light: style.$green-050, dark: style.$green-900
   @include theme.var(--scroll-top-background, (light: #f3f7e6, dark: #141414));
   @include theme.var(--tabber-active-border-color, #d7661c);
   @include theme.var(--user-online-color, #80a41a);
+  @include theme.var(--notification-count-alert-color, #ff4a00);
 }
 
 body {
@@ -227,4 +229,8 @@ body {
 
 .neon-is-online {
   background: var(--user-online-color);
+}
+
+.neon-notification-alert-count {
+  background: var(--notification-count-alert-color) !important; // overrides .navbar .badge
 }

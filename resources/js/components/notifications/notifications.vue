@@ -1,7 +1,9 @@
 <template>
   <li :class="{'open': isOpen}" v-click-away="hideDropdown">
     <span @click="toggleDropdown" class="nav-link nav-control-icon neon-navbar-text">
-      <span v-show="count > 0" class="badge">{{ count }}</span>
+      <span v-show="count > 0" class="badge neon-notification-alert-count">
+        {{ count }}
+      </span>
       <vue-icon name="navigationNotifications"/>
     </span>
     <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-end">
