@@ -1,7 +1,7 @@
 
 .card-section {
   background-color: transparent;
-  border: none;
+  border:           none;
 
   .card-categories:nth-child(odd) {
     background-color: #fafafa;
@@ -9,22 +9,19 @@
 }
 
 .section-name {
-  h2 {
-    font-size: 14px;
-    margin: 0;
-  }
+  font-size: 14px;
 }
 
 // desktop
 @include media-breakpoint-up(lg) {
   .card-section {
     background-color: $secondary;
-    border: 1px solid $card-border-color;
+    border:           1px solid $card-border-color;
   }
 }
 
 .card-cog {
-  color: $gray-light;
+  color:     $gray-light;
   font-size: 80%;
 }
 
@@ -36,32 +33,32 @@
 
   h3 {
     font-size: 120%;
-    margin: 0 0 4px 0;
+    margin:    0 0 4px 0;
   }
 
   .logo {
     font-size: 18px;
-    color: $primary;
-    padding: 5px;
+    color:     $primary;
+    padding:   5px;
   }
 
   .toolbox {
-    color: #757575;
+    color:     #757575;
     font-size: 14px;
-    display: none;
-    position: absolute;
-    right: 10px;
-    bottom: 2px;
+    display:   none;
+    position:  absolute;
+    right:     10px;
+    bottom:    2px;
 
     a {
-      padding-left: 2px;
+      padding-left:  2px;
       padding-right: 2px;
-      color: inherit;
-      cursor: pointer;
+      color:         inherit;
+      cursor:        pointer;
     }
 
     .disabled {
-      cursor: not-allowed;
+      cursor:  not-allowed;
       opacity: .5;
     }
   }
@@ -73,13 +70,13 @@
     }
 
     .media {
-      border-top: 1px solid $card-border-color;
-      margin-top: 5px;
+      border-top:  1px solid $card-border-color;
+      margin-top:  5px;
       padding-top: 10px;
     }
 
     .toolbox {
-      display: block;
+      display:    block;
       margin-top: 0;
     }
   }
@@ -89,12 +86,12 @@
   }
 
   .img-thumbnail {
-    width: 38px;
+    width:  38px;
     height: 38px;
   }
 
   .card-body {
-    padding: 10px 15px;
+    padding:       10px 15px;
     border-bottom: 1px solid $card-border-color;
 
     &:nth-child(even) {
@@ -117,16 +114,16 @@
 // ----------------------------
 
 .list-sub {
-  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAICAMAAAAV+IX9AAADAFBMVEXIyMgAAAABAQECAgIDAwMEBAQFBQUGBgYHBwcICAgJCQkKCgoLCwsMDAwNDQ0ODg4PDw8QEBARERESEhITExMUFBQVFRUWFhYXFxcYGBgZGRkaGhobGxscHBwdHR0eHh4fHx8gICAhISEiIiIjIyMkJCQlJSUmJiYnJycoKCgpKSkqKiorKyssLCwtLS0uLi4vLy8wMDAxMTEyMjIzMzM0NDQ1NTU2NjY3Nzc4ODg5OTk6Ojo7Ozs8PDw9PT0+Pj4/Pz9AQEBBQUFCQkJDQ0NERERFRUVGRkZHR0dISEhJSUlKSkpLS0tMTExNTU1OTk5PT09QUFBRUVFSUlJTU1NUVFRVVVVWVlZXV1dYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFiYmJjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2tsbGxtbW1ubm5vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh5eXl6enp7e3t8fHx9fX1+fn5/f3+AgICBgYGCgoKDg4OEhISFhYWGhoaHh4eIiIiJiYmKioqLi4uMjIyNjY2Ojo6Pj4+QkJCRkZGSkpKTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OkpKSlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v5xDke+AAAAAXRSTlMAQObYZgAAAAFiS0dEx40FSlsAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAZdEVYdFNvZnR3YXJlAEFkb2JlIEltYWdlUmVhZHlxyWU8AAAAFElEQVR4nGNg2MyADEjgIQEGogEAkGwLMez7MxEAAAAASUVORK5CYII=') no-repeat 0 3px;
-  font-size: 11px;
-  margin: 0;
+  background:   url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAICAMAAAAV+IX9AAADAFBMVEXIyMgAAAABAQECAgIDAwMEBAQFBQUGBgYHBwcICAgJCQkKCgoLCwsMDAwNDQ0ODg4PDw8QEBARERESEhITExMUFBQVFRUWFhYXFxcYGBgZGRkaGhobGxscHBwdHR0eHh4fHx8gICAhISEiIiIjIyMkJCQlJSUmJiYnJycoKCgpKSkqKiorKyssLCwtLS0uLi4vLy8wMDAxMTEyMjIzMzM0NDQ1NTU2NjY3Nzc4ODg5OTk6Ojo7Ozs8PDw9PT0+Pj4/Pz9AQEBBQUFCQkJDQ0NERERFRUVGRkZHR0dISEhJSUlKSkpLS0tMTExNTU1OTk5PT09QUFBRUVFSUlJTU1NUVFRVVVVWVlZXV1dYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFiYmJjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2tsbGxtbW1ubm5vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh5eXl6enp7e3t8fHx9fX1+fn5/f3+AgICBgYGCgoKDg4OEhISFhYWGhoaHh4eIiIiJiYmKioqLi4uMjIyNjY2Ojo6Pj4+QkJCRkZGSkpKTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OkpKSlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v5xDke+AAAAAXRSTlMAQObYZgAAAAFiS0dEx40FSlsAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAZdEVYdFNvZnR3YXJlAEFkb2JlIEltYWdlUmVhZHlxyWU8AAAAFElEQVR4nGNg2MyADEjgIQEGogEAkGwLMez7MxEAAAAASUVORK5CYII=') no-repeat 0 3px;
+  font-size:    11px;
+  margin:       0;
   padding-left: 17px;
 
   li a {
     color: $link-color-darker;
 
     &:hover {
-      color: $alt-link-hover-color;
+      color:           $alt-link-hover-color;
       text-decoration: none;
     }
   }
@@ -134,7 +131,7 @@
   i.not-read {
     @include not-read-bullet;
 
-    display: inline-block;
+    display:       inline-block;
     margin-bottom: -2px;
   }
 }

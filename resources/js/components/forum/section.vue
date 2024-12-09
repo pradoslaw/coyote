@@ -1,7 +1,7 @@
 <template>
   <div class="card-section card pt-1">
-    <div class="section-name pb-2 ps-lg-3 pt-lg-2 pe-lg-2">
-      <h2 class="float-start">
+    <div class="pb-2 ps-lg-3 pt-lg-2 pe-lg-2">
+      <h2 class="section-name mb-0 float-start">
         <span v-if="collapsable" @click="collapse">
           <vue-icon name="categorySectionFolded" v-if="isCollapse"/>
           <vue-icon name="categorySectionFold" v-else/>
