@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {VNode} from "vue";
+import {h, VNode} from "vue";
 
 import VueDropdownMenu from '../components/dropdown-menu.vue';
 import VueAutocomplete from '../components/forms/autocomplete.vue';
@@ -91,9 +91,10 @@ const VueResultTopic = {
     hits: {type: Array},
   },
   components: {'vue-topic': VueTopic},
-  render(createElement) {
+  render() {
+    const createElement = h;
     let items: VNode[] = [];
-    this.hits.forEach(hit => items.push(createElement('vue-topic', {props: {topic: hit, postsPerPage: window.postsPerPage, showCategoryName: true}})));
+    this.hits.forEach(hit => items.push(createElement(VueTopic, {topic: hit, postsPerPage: window.postsPerPage, showCategoryName: true})));
     return createElement('div', {class: 'card card-default card-topics'}, items);
   },
 };
@@ -212,7 +213,7 @@ createVueApp('Search', '#js-search', {
     },
 
     pushState() {
-      history.pushState({params: this.requestParams, hits: this.hits}, '', this.getUrl(this.requestParams));
+      // history.pushState({params: this.requestParams, hits: this.hits}, '', this.getUrl(this.requestParams));
     },
 
     popState(event) {
