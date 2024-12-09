@@ -18,6 +18,8 @@ $viewer-online-circle-border:   (light: 2px solid style.$white, dark: 2px solid 
 $username-style:                (light: style.$green-700, dark: style.$green-100);
 $username-author-color:         (light: white, dark: style.$neutral-400);
 
+$post-content-link-color:       (light: style.$green-700, dark: style.$green-100);
+
 $post-radius:                   8px;
 $forum-aside-radius:            8px;
 
@@ -40,6 +42,7 @@ $forum-aside-radius:            8px;
   @include theme.var(--username-author-background, $username-style);
   @include theme.var(--var-navbar-user-avatar-border, (light: 2px solid white, dark: 2px solid #181a1b));
   --var-navbar-user-avatar-padding: 0;
+  @include theme.var(--post-content-link-color, $post-content-link-color);
 }
 
 .look-and-feel-legacy {
@@ -61,6 +64,7 @@ $forum-aside-radius:            8px;
   @include theme.var(--username-author-background, (light: #80a41a, dark: #789b17));
   @include theme.var(--var-navbar-user-avatar-border, (light: 1px solid #dee2e6, dark: 1px solid #121212));
   --var-navbar-user-avatar-padding: 0.25rem;
+  @include theme.var(--post-content-link-color, (light: #5e7813, dark: #789b17));
 }
 
 body {
@@ -180,5 +184,11 @@ body {
     @include theme.dark {
       color: #1a1a1a;
     }
+  }
+}
+
+.neon-post-content {
+  a {
+    color: var(--post-content-link-color) !important; // overrides a:not(.badge)
   }
 }
