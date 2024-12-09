@@ -27,6 +27,8 @@ $forum-aside-radius:            8px;
 $scroll-top-color:              (light: style.$green-700, dark: style.$green-500);
 $scroll-top-background:         (light: style.$green-050, dark: style.$green-900);
 
+$navbar-search-bar-color:       (light: style.$white, dark: style.$navy-500);
+
 .look-and-feel-modern {
   @include theme.var(--body-background, $body-background);
   @include theme.var(--post-background, $post-background);
@@ -53,6 +55,7 @@ $scroll-top-background:         (light: style.$green-050, dark: style.$green-900
   @include theme.var(--tabber-active-border-color, style.$green-500);
   @include theme.var(--user-online-color, style.$green-500);
   @include theme.var(--notification-count-alert-color, style.$red-500);
+  @include theme.var(--navbar-search-bar-color, $navbar-search-bar-color);
 }
 
 .look-and-feel-legacy {
@@ -76,12 +79,12 @@ $scroll-top-background:         (light: style.$green-050, dark: style.$green-900
   --var-navbar-user-avatar-padding: 0.25rem;
   @include theme.var(--post-content-link-color, (light: #5e7813, dark: #789b17));
   @include theme.var(--post-user-posts-counter-color, (light: #5e7813, dark: #789b17));
-
   @include theme.var(--scroll-top-color, (light: #80a41a, dark: #80a41a));
   @include theme.var(--scroll-top-background, (light: #f3f7e6, dark: #141414));
   @include theme.var(--tabber-active-border-color, #d7661c);
   @include theme.var(--user-online-color, #80a41a);
   @include theme.var(--notification-count-alert-color, #ff4a00);
+  @include theme.var(--navbar-search-bar-color, (light: white, dark: #2a2a2a));
 }
 
 body {
@@ -233,4 +236,17 @@ body {
 
 .neon-notification-alert-count {
   background: var(--notification-count-alert-color) !important; // overrides .navbar .badge
+}
+
+.neon-navbar-search-bar {
+  background-color: var(--navbar-search-bar-color) !important;
+  input {
+    background-color: var(--navbar-search-bar-color) !important;
+  }
+}
+
+.look-and-feel-legacy {
+  .navbar {
+    @include theme.property(border-bottom, 1px solid #e2e2e2, 2px solid #2f2f2f);
+  }
 }

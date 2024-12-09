@@ -15,19 +15,6 @@ body.theme-dark {
 
   header { // TODO Remove after new homepage
     nav.navbar {
-      border-bottom-color: #2f2f2f;
-      border-bottom-width: 2px;
-
-      .nav-search {
-        .search-bar {
-          background-color: #2a2a2a;
-
-          input {
-            background-color: #2a2a2a;
-          }
-        }
-      }
-
       .btn-register {
         background-color: #789b17;
         color: #1a1a1a;

@@ -1,6 +1,6 @@
 <template>
   <div v-click-away="blurInput" :class="{'nav-search-mobile': isMobile}" class="nav-search">
-    <div :class="{'active': isActive}" class="search-bar ms-md-4 me-md-4">
+    <div :class="{'active': isActive}" class="search-bar ms-md-4 me-md-4 neon-navbar-search-bar">
       <span class="ms-2 me-2">
         <vue-icon name="autocompleteSearch"/>
       </span>
