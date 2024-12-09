@@ -1,13 +1,12 @@
 <template>
-  <div :class="`nav nav-${this.type}`">
+  <div :class="['nav', `nav-${this.type}`, 'neon-tabber']">
     <div v-for="(item, key) in items" :key="key" class="nav-item">
       <a
         :href="typeof key === 'string' ? key : 'javascript:'"
-        class="nav-link"
-        :class="{'active': key === currentTab}"
-        v-text="item"
-
+        class="nav-link neon-tabber-tab"
+        :class="{'active neon-tabber-tab-active': key === currentTab}"
         @click="$emit('change', key)"
+        v-text="item"
       />
     </div>
     <slot/>

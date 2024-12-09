@@ -50,6 +50,7 @@ $scroll-top-background:         (light: style.$green-050, dark: style.$green-900
   @include theme.var(--post-user-posts-counter-color, $post-user-posts-counter-color);
   @include theme.var(--scroll-top-color, $scroll-top-color);
   @include theme.var(--scroll-top-background, $scroll-top-background);
+  @include theme.var(--tabber-active-border-color, (light: style.$green-500, dark:style.$green-500)); // TODO fix, so that same value can be used
 }
 
 .look-and-feel-legacy {
@@ -76,6 +77,7 @@ $scroll-top-background:         (light: style.$green-050, dark: style.$green-900
 
   @include theme.var(--scroll-top-color, (light: #80a41a, dark: #80a41a));
   @include theme.var(--scroll-top-background, (light: #f3f7e6, dark: #141414));
+  @include theme.var(--tabber-active-border-color, (light: #d7661c, dark:#d7661c)); // TODO fix, so that same value can be used
 }
 
 body {
@@ -211,4 +213,12 @@ body {
 .neon-scroll-top {
   color:      var(--scroll-top-color) !important; // overrides footer .scroll top
   background: var(--scroll-top-background) !important; // overrides footer .scroll top
+}
+
+.neon-tabber {
+  .neon-tabber-tab {
+    &.neon-tabber-tab-active {
+      border-bottom-color: var(--tabber-active-border-color) !important; // overrides .nav-pills .nav-link.active
+    }
+  }
 }
