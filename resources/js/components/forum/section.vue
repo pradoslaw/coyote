@@ -2,11 +2,11 @@
   <div class="card-section card pt-1">
     <div class="section-name pb-2 ps-lg-3 pt-lg-2 pe-lg-2">
       <h2 class="float-start">
-        <a v-if="collapsable" href="javascript:" @click="collapse">
+        <span v-if="collapsable" @click="collapse">
           <vue-icon name="categorySectionFolded" v-if="isCollapse"/>
           <vue-icon name="categorySectionFold" v-else/>
           {{ name }}
-        </a>
+        </span>
         <template v-else v-text="name"/>
       </h2>
 
@@ -16,15 +16,15 @@
         :class="{'open': isDropdown}"
         v-click-away="hideDropdown"
       >
-        <a href="javascript:" @click="isDropdown = !isDropdown" class="card-cog mt-2 me-2">
+        <span @click="isDropdown = !isDropdown" class="card-cog mt-2 me-2">
           <vue-icon name="categorySectionMenu"/>
-        </a>
+        </span>
         <div :class="{'d-block': isDropdown}" class="dropdown-menu">
-          <a v-for="category in categories" href="javascript:" class="dropdown-item" @click="toggle(category)">
+          <span v-for="category in categories" class="dropdown-item" @click="toggle(category)">
             <vue-icon name="categorySectionMenuItemEnabled" v-if="!category.is_hidden"/>
             <vue-icon empty v-else/>
             {{ category.name }}
-          </a>
+          </span>
         </div>
       </div>
       <div class="clearfix"/>
