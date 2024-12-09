@@ -268,3 +268,20 @@ body {
     @include theme.property(border, 1px solid #ddd, 1px solid #acacac);
   }
 }
+
+@mixin lookAndFeelBoth($cssVarName, $modern, $legacy) {
+  @if & {
+    .look-and-feel-modern & {@include theme.var($cssVarName, $modern)}
+    .look-and-feel-legacy & {@include theme.var($cssVarName, $legacy)}
+  } @else {
+    .look-and-feel-modern {@include theme.var($cssVarName, $modern)}
+    .look-and-feel-legacy {@include theme.var($cssVarName, $legacy)}
+  }
+}
+
+.neon-subscribe {
+  &.neon-subscribe-active {
+    @include lookAndFeelBoth(--subscribe-active-color, style.$red-500, #e37329);
+    color: var(--subscribe-active-color) !important; // overrides .card-topics .on
+  }
+}

@@ -19,11 +19,11 @@
         <div class="topic-container">
           <div class="topic-row">
             <h5 class="topic-subject text-truncate m-0">
-              <a v-if="isAuthorized" @click="subscribe(topic)" href="javascript:" title="Kliknij aby wł/wył obserwowanie wątku">
-                <vue-icon name="topicSubscribed" v-if="topic.is_subscribed" class="on"/>
-                <vue-icon name="topicSubscribe" v-else/>
+              <span v-if="isAuthorized" @click="subscribe(topic)" title="Kliknij aby wł/wył obserwowanie wątku" class="cursor-pointer">
+                <vue-icon name="topicSubscribed" v-if="topic.is_subscribed" class="on neon-subscribe neon-subscribe-active"/>
+                <vue-icon name="topicSubscribe" v-else class="neon-subscribe"/>
                 {{ ' ' }}
-              </a>
+              </span>
               <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}`">
                 <vue-icon name="topicAccepted"/>
                 {{ ' ' }}

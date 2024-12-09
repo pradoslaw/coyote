@@ -247,11 +247,11 @@
           <li :class="{'on': topic.is_subscribed}" class="btn-subscribe action-link" v-if="isAuthorized">
             <a @click="subscribe(topic)" href="javascript:">
               <template v-if="topic.is_subscribed">
-                {{ icon('topicSubscribed') }}
+                <vue-icon name="topicSubscribed" class="neon-subscribe neon-subscribe-active"></vue-icon>
                 <span>Zakończ obserwację</span>
               </template>
               <template v-else>
-                {{ icon('topicSubscribe') }}
+                <vue-icon name="topicSubscribe" class="neon-subscribe"></vue-icon>
                 <span>Obserwuj wątek</span>
               </template>
             </a>

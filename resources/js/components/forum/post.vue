@@ -276,10 +276,10 @@
             </button>
 
             <button @click="checkAuth(subscribe, post)" class="btn btn-sm">
-              <span v-if="post.is_subscribed" class="text-primary">
+              <span v-if="post.is_subscribed" class="text-primary neon-subscribe neon-subscribe-active">
                 <vue-icon name="postSubscribed"/>
               </span>
-              <vue-icon v-else name="postSubscribe"/>
+              <vue-icon v-else name="postSubscribe" class="neon-subscribe"/>
               <span class="d-none d-sm-inline ms-1">Obserwuj</span>
             </button>
 
