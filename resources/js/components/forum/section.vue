@@ -1,6 +1,6 @@
 <template>
-  <div class="card-section card pt-1">
-    <div class="pb-2 ps-lg-3 pt-lg-2 pe-lg-2">
+  <div class="card-section card neon-collapsable-section">
+    <div class="pb-2 pt-1 ps-lg-3 pt-lg-2 pe-lg-2">
       <h2 class="section-name mb-0 float-start">
         <span v-if="collapsable" @click="collapse">
           <vue-icon name="categorySectionFolded" v-if="isCollapse"/>
@@ -30,9 +30,9 @@
       <div class="clearfix"/>
     </div>
 
-    <section v-if="!isCollapse" class="card card-default card-categories mb-0">
+    <section v-if="!isCollapse" class="card-categories mb-0">
       <template v-for="(category, index) in categories">
-        <div v-if="!category.is_hidden" :class="{'not-read': !category.is_read}" class="card-body">
+        <div v-if="!category.is_hidden" :class="{'not-read': !category.is_read}" class="px-3 py-2 neon-collapsable-section-item toolbox-container">
           <div class="row">
             <div class="col-6 col-md-12 col-lg-5 d-flex align-items-center">
               <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative me-2">

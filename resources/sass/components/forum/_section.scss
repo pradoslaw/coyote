@@ -1,23 +1,9 @@
-
 .card-section {
-  background-color: transparent;
-  border:           none;
-
-  .card-categories:nth-child(odd) {
-    background-color: #fafafa;
-  }
+  border: none;
 }
 
 .section-name {
   font-size: 14px;
-}
-
-// desktop
-@include media-breakpoint-up(lg) {
-  .card-section {
-    background-color: $secondary;
-    border:           1px solid $card-border-color;
-  }
 }
 
 .card-cog {
@@ -90,18 +76,7 @@
     height: 38px;
   }
 
-  .card-body {
-    padding:       10px 15px;
-    border-bottom: 1px solid $card-border-color;
-
-    &:nth-child(even) {
-      background-color: #fafafa;
-    }
-
-    &:last-child {
-      border-bottom: none;
-    }
-
+  .toolbox-container {
     &:hover {
       .toolbox {
         display: block;

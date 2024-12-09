@@ -56,6 +56,8 @@ $navbar-search-bar-color:       (light: style.$white, dark: style.$navy-500);
   @include theme.var(--user-online-color, style.$green-500);
   @include theme.var(--notification-count-alert-color, style.$red-500);
   @include theme.var(--navbar-search-bar-color, $navbar-search-bar-color);
+  @include theme.var(--neon-collapsable-section-background, (light: #f6f7f9, dark: #212425));
+  @include theme.var(--neon-collapsable-section-item-odd-background, (light: white, dark: #181a1b));
 }
 
 .look-and-feel-legacy {
@@ -85,6 +87,8 @@ $navbar-search-bar-color:       (light: style.$white, dark: style.$navy-500);
   @include theme.var(--user-online-color, #80a41a);
   @include theme.var(--notification-count-alert-color, #ff4a00);
   @include theme.var(--navbar-search-bar-color, (light: white, dark: #2a2a2a));
+  @include theme.var(--neon-collapsable-section-background, (light: #f6f6f6, dark: #1a1a1a));
+  @include theme.var(--neon-collapsable-section-item-odd-background, (light: white, dark: #1e1e1e));
 }
 
 body {
@@ -248,5 +252,19 @@ body {
 .look-and-feel-legacy {
   .navbar {
     @include theme.property(border-bottom, 1px solid #e2e2e2, 2px solid #2f2f2f);
+  }
+}
+
+.neon-collapsable-section {
+  background-color: var(--neon-collapsable-section-background) !important; // overrides .card {background}
+
+  .neon-collapsable-section-item:nth-child(odd) {
+    background-color: var(--neon-collapsable-section-item-odd-background);
+  }
+}
+
+.look-and-feel-legacy {
+  .neon-collapsable-section {
+    @include theme.property(border, 1px solid #ddd, 1px solid #acacac);
   }
 }
