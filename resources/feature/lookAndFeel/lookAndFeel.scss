@@ -24,6 +24,9 @@ $post-user-posts-counter-color: (light: style.$green-700, dark: style.$green-100
 $post-radius:                   8px;
 $forum-aside-radius:            8px;
 
+$scroll-top-color:              (light: style.$green-700, dark: style.$green-500);
+$scroll-top-background:         (light: style.$green-050, dark: style.$green-900);
+
 .look-and-feel-modern {
   @include theme.var(--body-background, $body-background);
   @include theme.var(--post-background, $post-background);
@@ -45,6 +48,8 @@ $forum-aside-radius:            8px;
   --var-navbar-user-avatar-padding: 0;
   @include theme.var(--post-content-link-color, $post-content-link-color);
   @include theme.var(--post-user-posts-counter-color, $post-user-posts-counter-color);
+  @include theme.var(--scroll-top-color, $scroll-top-color);
+  @include theme.var(--scroll-top-background, $scroll-top-background);
 }
 
 .look-and-feel-legacy {
@@ -68,6 +73,9 @@ $forum-aside-radius:            8px;
   --var-navbar-user-avatar-padding: 0.25rem;
   @include theme.var(--post-content-link-color, (light: #5e7813, dark: #789b17));
   @include theme.var(--post-user-posts-counter-color, (light: #5e7813, dark: #789b17));
+
+  @include theme.var(--scroll-top-color, (light: #80a41a, dark: #80a41a));
+  @include theme.var(--scroll-top-background, (light: #f3f7e6, dark: #141414));
 }
 
 body {
@@ -198,4 +206,9 @@ body {
 
 .neon-post-counter {
   color: var(--post-user-posts-counter-color);
+}
+
+.neon-scroll-top {
+  color:      var(--scroll-top-color) !important; // overrides footer .scroll top
+  background: var(--scroll-top-background) !important; // overrides footer .scroll top
 }
