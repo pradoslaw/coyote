@@ -126,6 +126,7 @@
                 <strong>Postów:</strong>
                 <small>
                   <a title="Znajdź posty tego użytkownika"
+                     class="neon-post-counter"
                      :href="`/Forum/User/${post.user.id}`"
                      style="text-decoration: underline">{{ post.user.posts }}</a>
                 </small>
