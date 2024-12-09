@@ -6,7 +6,7 @@ $body-background:               (light: style.$neutral-000, dark: style.$neutral
 $post-background:               (light: style.$white, dark: style.$navy-500);
 $post-header-border-color:      (light: style.$neutral-050, dark: style.$navy-300);
 $section-heading-divider-color: (light: style.$neutral-100, dark: style.$navy-300);
-$aside-border-color:            $section-heading-divider-color;
+$aside-border-color:            (light: style.$neutral-100, dark: style.$navy-300);
 
 $default-avatar-color:          (light: style.$green-700, dark: style.$green-500);
 $default-avatar-background:     (light: style.$green-050, dark: style.$green-900);
