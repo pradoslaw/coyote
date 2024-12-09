@@ -140,7 +140,7 @@ body {
 }
 
 .neon-username {
-  color: var(--username-color);
+  color: var(--username-color) !important; // overrides .badge {color}
 }
 
 .neon-username-author {
