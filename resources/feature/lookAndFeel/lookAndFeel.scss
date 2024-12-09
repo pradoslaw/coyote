@@ -202,7 +202,7 @@ body {
 .look-and-feel-legacy {
   .neon-primary-button {
     @include theme.dark {
-      color: #1a1a1a;
+      color: #1a1a1a !important; // overrides .btn:hover
     }
   }
 }

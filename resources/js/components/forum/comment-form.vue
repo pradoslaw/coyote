@@ -15,7 +15,7 @@
         <p class="text-muted float-start">
           Pozostało <strong>{{ maxLength - comment.text.length }}</strong> znaków
         </p>
-        <vue-button :disabled="isProcessing" @click="saveComment" class="btn btn-sm btn-primary float-end" title="Kliknij, aby wysłać (Ctrl+Enter)">
+        <vue-button :disabled="isProcessing" @click="saveComment" class="btn btn-sm btn-primary neon-primary-button float-end" title="Kliknij, aby wysłać (Ctrl+Enter)">
           <template v-if="newComment">Komentuj</template>
           <template v-else>Zapisz</template>
         </vue-button>
