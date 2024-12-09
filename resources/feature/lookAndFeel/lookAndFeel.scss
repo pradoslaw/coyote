@@ -15,7 +15,7 @@ $navbar-text-color:             (light: style.$neutral-300, dark: style.$neutral
 $viewer-online-pill-background: (light: style.$white, dark: style.$navy-500);
 $viewer-online-circle-border:   (light: 2px solid style.$white, dark: 2px solid style.$navy-500);
 
-$username-style:                (light: style.$green-700, dark: style.$green-100);
+$username-color:                (light: style.$green-700, dark: style.$green-100);
 $username-author-color:         (light: white, dark: style.$neutral-400);
 
 $post-content-link-color:       (light: style.$green-700, dark: style.$green-100);
@@ -38,9 +38,9 @@ $forum-aside-radius:            8px;
   @include theme.var(--viewer-online-pill-background, $viewer-online-pill-background);
   @include theme.var(--viewer-online-pill-border, (light: none, dark: none));
   @include theme.var(--viewer-online-circle-border, $viewer-online-circle-border);
-  @include theme.var(--username-color, $username-style);
+  @include theme.var(--username-color, $username-color);
   @include theme.var(--username-author-color, $username-author-color);
-  @include theme.var(--username-author-background, $username-style);
+  @include theme.var(--username-author-background, $username-color);
   @include theme.var(--var-navbar-user-avatar-border, (light: 2px solid white, dark: 2px solid #181a1b));
   --var-navbar-user-avatar-padding: 0;
   @include theme.var(--post-content-link-color, $post-content-link-color);
