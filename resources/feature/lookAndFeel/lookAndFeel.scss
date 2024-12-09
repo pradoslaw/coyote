@@ -88,7 +88,7 @@ body {
 
 .neon-post {
   border:        var(--post-border) !important; // overrides .card {border}
-  background:    var(--post-background);
+  background:    var(--post-background) !important; // overrides .card {background}
   border-radius: $post-radius;
   .neon-post-header,
   .neon-post-footer {
