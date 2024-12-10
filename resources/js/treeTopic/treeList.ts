@@ -8,6 +8,12 @@ interface Record<T> {
   ignoreChildren: boolean;
 }
 
+export interface TreeItem<T> {
+  item: T;
+  nestLevel: number;
+  hasNextSibling: boolean;
+}
+
 export class TreeList<T> {
   private roots: Record<T>[] = [];
   private records: Map<number, Record<T>> = new Map<number, Record<T>>();
@@ -35,9 +41,12 @@ export class TreeList<T> {
     return this.flatRecords().map(record => record.payload);
   }
 
-  asTreeItems(): [number, T, boolean][] {
-    return this.flatRecords()
-      .map(record => [record.level, record.payload, record.isLastChild!]);
+  treeItems(): TreeItem<T>[] {
+    return this.flatRecords().map((record): TreeItem<T> => ({
+      item: record.payload,
+      nestLevel: record.level,
+      hasNextSibling: !record.isLastChild,
+    }));
   }
 
   private flatRecords(): Record<T>[] {

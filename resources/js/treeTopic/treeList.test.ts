@@ -58,7 +58,7 @@ describe('tree list', () => {
   test('the root is last child', () => {
     const topic = new TreeList<string>(() => 0);
     topic.add(4, 'root');
-    assertEquals([[0, 'root', true]], topic.asTreeItems());
+    assertEquals([{item: 'root', nestLevel: 0, hasNextSibling: false}], topic.treeItems());
   });
 
   test('the only child is the last child', () => {
@@ -66,9 +66,9 @@ describe('tree list', () => {
     topic.add(15, 'root');
     addChild(topic, 16, 15, 'child');
     assertEquals([
-      [0, 'root', true],
-      [1, 'child', true],
-    ], topic.asTreeItems());
+      {nestLevel: 0, item: 'root', hasNextSibling: false},
+      {nestLevel: 1, item: 'child', hasNextSibling: false},
+    ], topic.treeItems());
   });
 
   test('the first child is not the last child', () => {
@@ -77,10 +77,10 @@ describe('tree list', () => {
     addChild(topic, 16, 15, 'child');
     addChild(topic, 17, 15, 'last child');
     assertEquals([
-      [0, 'root', true],
-      [1, 'child', false],
-      [1, 'last child', true],
-    ], topic.asTreeItems());
+      {nestLevel: 0, item: 'root', hasNextSibling: false},
+      {nestLevel: 1, item: 'child', hasNextSibling: true},
+      {nestLevel: 1, item: 'last child', hasNextSibling: false},
+    ], topic.treeItems());
   });
 
   test('children can be excluded', () => {
@@ -90,8 +90,8 @@ describe('tree list', () => {
     addChild(topic, 17, 16, 'child');
     addChild(topic, 18, 17, "grand child");
     assertEquals([
-      [0, 'root', true],
-      [1, 'without children', true],
-    ], topic.asTreeItems());
+      {nestLevel: 0, item: 'root', hasNextSibling: false},
+      {nestLevel: 1, item: 'without children', hasNextSibling: false},
+    ], topic.treeItems());
   });
 });
