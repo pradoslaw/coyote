@@ -4,8 +4,7 @@ const {WebpackManifestPlugin} = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const {VueLoaderPlugin} = require('vue-loader');
-const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
-const exec = require('child_process').exec;
+const SvgSpriteMapPlugin = require('svg-spritemap-webpack-plugin');
 
 module.exports = {
   devtool: 'source-map', // slower but better
@@ -115,13 +114,14 @@ module.exports = {
   },
   context: path.join(__dirname, 'resources'),
   entry: {
-    core: './sass/core.scss',
-    app: ['./js/app.js', './sass/app.scss'],
+    stylesEager: './sass/core.scss',
+    stylesLazyApp: './sass/app.scss',
+    stylesLazyAdm: './sass/pages/adm.scss',
+    app: './js/app.js',
     legacy: './js/legacy.js',
-    forum: ['./js/pages/forum.ts'],
-    wiki: ['./js/pages/wiki.js'],
-    job: ['./js/pages/job.js'],
-    adm: './sass/pages/adm.scss',
+    forum: './js/pages/forum.ts',
+    wiki: './js/pages/wiki.js',
+    job: './js/pages/job.js',
   },
   plugins: [
     new VueLoaderPlugin(),
@@ -144,7 +144,7 @@ module.exports = {
       fileName: 'manifest.json',
     }),
 
-    new SVGSpritemapPlugin([
+    new SvgSpriteMapPlugin([
       'resources/images/logos/logo-php.svg',
       'resources/images/logos/logo-java.svg',
       'resources/images/logos/logo-javascript.svg',

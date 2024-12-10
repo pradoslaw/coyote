@@ -27,7 +27,7 @@
     <meta property="og:description" content="{{ block('description') }}">
     <meta property="og:image" content="{{ block('logo') is defined ? block ('logo') : secure_asset('img/apple-touch.png') }}">
 
-    <link rel="stylesheet" href="{{ cdn('css/core.css') }}">
+    <link rel="stylesheet" href="{{ cdn('css/stylesEager.css') }}">
 
     <script type="text/javascript">var __INITIAL_STATE = {{ __INITIAL_STATE|default('{}')|raw }};</script>
     <script type="text/javascript">var icons = {{ icons|json_encode|raw }};</script>
@@ -279,7 +279,7 @@
   </footer>
 {% endblock footer %}
 
-  <link rel="stylesheet" href="{{ cdn('css/app.css') }}">
+  <link rel="stylesheet" href="{{ cdn('css/stylesLazyApp.css') }}">
 
   <script src="{{ cdn('js/runtime.js') }}"></script>
   <script src="{{ cdn('js/vendor.js') }}"></script>
