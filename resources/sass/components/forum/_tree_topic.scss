@@ -31,11 +31,11 @@
 }
 
 .post-guiderail-to-parent {
-  $topOffset:                -18px;
+  $topOffset:                18px;
   $height:                   20px;
 
-  height:                    $height - $topOffset;
-  top:                       $topOffset;
+  height:                    $height + $topOffset;
+  top:                       -$topOffset;
   border-bottom-left-radius: 6px;
   border-top:                none;
   border-right:              none;
