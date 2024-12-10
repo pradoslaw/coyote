@@ -162,19 +162,6 @@
               <vue-icon name="postVoted" v-if="post.is_voted"/>
               <vue-icon name="postVote" v-else/>
             </a>
-            <template v-if="is_mode_linear">
-              <a v-if="!hidden && post.permissions.accept"
-                 :class="{'on': post.is_accepted}"
-                 @click="accept(post)"
-                 class="vote-accept"
-                 href="javascript:"
-                 title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną">
-                <vue-icon name="postAccept"/>
-              </a>
-              <span v-else-if="post.is_accepted" class="vote-accept on">
-                <vue-icon name="postAccept"/>
-              </span>
-            </template>
           </div>
           <div class="post-content neon-post-content">
             <div v-html="post.html"/>
@@ -288,17 +275,6 @@
               <span class="d-none d-sm-inline ms-1">Udostępnij</span>
             </button>
 
-            <button class="btn btn-sm" v-if="is_mode_tree && post.permissions.accept" @click="accept(post)">
-              <template v-if="post.is_accepted">
-                <vue-icon name="postAcceptAccepted" class="text-primary"/>
-                <span class="d-none d-sm-inline ms-1">Najlepsza odpowiedź</span>
-              </template>
-              <template v-else>
-                <vue-icon name="postAccept"/>
-                <span class="d-none d-sm-inline ms-1">Najlepsza odpowiedź</span>
-              </template>
-            </button>
-
             <template v-if="is_mode_linear">
               <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
                 <span v-if="isCommenting" class="text-primary">
@@ -308,6 +284,17 @@
                 <span class="d-none d-sm-inline ms-1">Komentuj</span>
               </button>
             </template>
+
+            <button class="btn btn-sm" v-if="post.permissions.accept" @click="accept(post)" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną">
+              <template v-if="post.is_accepted">
+                <vue-icon name="postAcceptAccepted" class="text-primary"/>
+                <span class="d-none d-sm-inline ms-1">Najlepsza odpowiedź</span>
+              </template>
+              <template v-else>
+                <vue-icon name="postAccept"/>
+                <span class="d-none d-sm-inline ms-1">Najlepsza odpowiedź</span>
+              </template>
+            </button>
           </div>
 
           <div v-if="post.permissions.write" :class="{'ms-auto':is_mode_linear}">
