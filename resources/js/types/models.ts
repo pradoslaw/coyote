@@ -164,7 +164,7 @@ export interface Post {
   editor?: User;
   deleter_name?: string;
   delete_reason?: string;
-  created_at: Date | null;
+  created_at: Date;
   updated_at: Date | null;
   deleted_at: Date | null;
   text: string;

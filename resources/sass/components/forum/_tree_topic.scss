@@ -1,25 +1,30 @@
 @use "../../../feature/theme/theme" as theme;
 
+$indent-width:               16px;
+$guiderail-post-left-offset: 10px;
+$guiderail-post-top-offset:  18px;
+$post-top-margin:            20px;
+
 .card-post.indent {
   &.indent-none {margin-left: 0;}
-  &.indent-1 {margin-left: 16px * 1;}
-  &.indent-2 {margin-left: 16px * 2;}
-  &.indent-3 {margin-left: 16px * 3;}
-  &.indent-4 {margin-left: 16px * 4;}
-  &.indent-5 {margin-left: 16px * 5;}
-  &.indent-6 {margin-left: 16px * 6;}
-  &.indent-7 {margin-left: 16px * 7;}
-  &.indent-8 {margin-left: 16px * 8;}
-  &.indent-9 {margin-left: 16px * 9;}
-  &.indent-10 {margin-left: 16px * 10;}
-  &.indent-11 {margin-left: 16px * 11;}
-  &.indent-12 {margin-left: 16px * 12;}
+  &.indent-1 {margin-left: $indent-width * 1;}
+  &.indent-2 {margin-left: $indent-width * 2;}
+  &.indent-3 {margin-left: $indent-width * 3;}
+  &.indent-4 {margin-left: $indent-width * 4;}
+  &.indent-5 {margin-left: $indent-width * 5;}
+  &.indent-6 {margin-left: $indent-width * 6;}
+  &.indent-7 {margin-left: $indent-width * 7;}
+  &.indent-8 {margin-left: $indent-width * 8;}
+  &.indent-9 {margin-left: $indent-width * 9;}
+  &.indent-10 {margin-left: $indent-width * 10;}
+  &.indent-11 {margin-left: $indent-width * 11;}
+  &.indent-12 {margin-left: $indent-width * 12;}
 }
 
 .post-guiderail {
   z-index:      -1;
-  left:         -10px;
-  width:        10px;
+  width:        $guiderail-post-left-offset;
+  left:         -$guiderail-post-left-offset;
   border-width: 2px;
   border-style: solid;
   @include theme.light {
@@ -31,11 +36,8 @@
 }
 
 .post-guiderail-to-parent {
-  $topOffset:                18px;
-  $height:                   20px;
-
-  height:                    $height + $topOffset;
-  top:                       -$topOffset;
+  top:                       -$guiderail-post-top-offset;
+  height:                    $guiderail-post-top-offset + $post-top-margin;
   border-bottom-left-radius: 6px;
   border-top:                none;
   border-right:              none;
@@ -47,4 +49,13 @@
   border-bottom: none;
   top:           0;
   height:        100%;
+}
+
+.post-guiderail-of-parent {
+  border-top:    none;
+  border-right:  none;
+  border-bottom: none;
+  top:           -$guiderail-post-top-offset;
+  left:          -($guiderail-post-left-offset + $indent-width);
+  height:        calc(100% + $guiderail-post-top-offset);
 }

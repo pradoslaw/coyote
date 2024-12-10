@@ -1,6 +1,10 @@
 <template>
   <div class="card card-post card-post-folded" :class="postIndentCssClasses" v-if="postFolded">
-    <vue-post-guiderail v-if="guiderailVisible" :has-next-sibling="hasNextSibling"/>
+    <vue-post-guiderail
+      v-if="guiderailVisible"
+      :has-next-sibling="hasNextSibling"
+      :parent-has-next-sibling="parentHasNextSibling"
+    />
     <div class="card-body cursor-pointer" @click="postUnfold">
       <vue-icon name="postFolded"/>
       {{ post.user.name }},
@@ -14,7 +18,11 @@
          {'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed': isCollapsed},
          postIndentCssClasses
        ]">
-    <vue-post-guiderail v-if="guiderailVisible" :has-next-sibling="hasNextSibling"/>
+    <vue-post-guiderail
+      v-if="guiderailVisible"
+      :has-next-sibling="hasNextSibling"
+      :parent-has-next-sibling="parentHasNextSibling"
+    />
     <div v-if="post.deleted_at"
          @click="isCollapsed = !isCollapsed"
          class="post-delete card-body text-decoration-none">
@@ -534,6 +542,13 @@ export default {
         return false;
       }
       return this.$props.treeItem.nestLevel >= 2;
+    },
+    parentHasNextSibling(): boolean {
+      const level = this.$props.treeItem.nestLevel;
+      if (level <= 2) {
+        return false;
+      }
+      return store.getters['posts/parentPostHasNextSibling'](this.$props.post);
     },
     postDropdownVisible(): boolean {
       return this.postDropdownItems.length > 0;

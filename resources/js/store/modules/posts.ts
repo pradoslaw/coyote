@@ -16,7 +16,11 @@ const state: Paginator = {
 };
 
 const getters = {
-  posts: state => Object.values(state.data).sort((a, b) => ((a as Post).created_at! > (b as Post).created_at!) ? 1 : -1),
+  posts(state): Post[] {
+    const posts: Post[] = Object.values(state.data);
+    posts.sort((a, b) => a.created_at > b.created_at ? 1 : -1); // this mutates state! Ugh!
+    return posts;
+  },
   linearTopicPosts(state, getters): Post[] {
     return getters.posts;
   },
@@ -26,13 +30,28 @@ const getters = {
   treeTopicPostsRemaining(state, getters): TreePost[] {
     return getters.treeTopicPosts.slice(1);
   },
-  treeTopicPosts(state, getters, rootState, rootGetters): TreePost[] {
-    const posts: Post[] = Object.values(state.data);
-    return postsOrdered(posts, rootGetters['topics/treeTopicPostOrdering']);
+  treeTopicPosts(state, getters): TreePost[] {
+    return Array.from(getters.treeTopicPostsMap.values());
+  },
+  treeTopicPostsMap(state, getters, rootState, rootGetters): Map<number, TreePost> {
+    const treePosts = new Map<number, TreePost>();
+    postsOrdered(getters.posts, rootGetters['topics/treeTopicPostOrdering'])
+      .forEach(treePost => treePosts.set(treePost.post.id, treePost));
+    return treePosts;
   },
   exists: state => (id: number) => id in state.data,
   currentPage: state => state.current_page,
   totalPages: state => state.last_page,
+  parentPostHasNextSibling: (state, getters) => (post: Post): boolean => {
+    if (post.parentPostId === null) {
+      return false;
+    }
+    const parentPost: TreePost = getters.treeTopicPostsMap.get(post.parentPostId);
+    if (parentPost.post.parentPostId === null) {
+      return false;
+    }
+    return parentPost.treeItem.hasNextSibling;
+  },
 };
 
 const mutations = {
