@@ -1,3 +1,4 @@
+@use "../../../feature/theme/theme";
 @import "../../icons/icons";
 
 .card-topics {
@@ -8,11 +9,11 @@
   }
 
   .topic-icon {
-    position: relative;
-    align-items: center;
+    position:        relative;
+    align-items:     center;
     justify-content: center;
     text-decoration: none;
-    flex-shrink: 0;
+    flex-shrink:     0;
 
     @extend .i-35;
   }
@@ -23,8 +24,8 @@
     // highligh search results
     em {
       background-color: $unread-bg;
-      font-style: normal;
-      font-weight: bold;
+      font-style:       normal;
+      font-weight:      bold;
     }
 
     > small {
@@ -41,14 +42,14 @@
   }
 
   .topic-container {
-    width: 100%;
+    width:     100%;
     min-width: 0; // @see https://medium.com/@gaurav5430/css-flex-positioning-gotchas-child-expands-to-more-than-the-width-allowed-by-the-parent-799c37428dd6
   }
 
   .topic-pagination {
-    font-size: $font-size-sm;
-    white-space: nowrap;
-    margin-left: .5rem;
+    font-size:    $font-size-sm;
+    white-space:  nowrap;
+    margin-left:  .5rem;
     margin-right: .25rem;
   }
 
@@ -56,7 +57,7 @@
     border-bottom: 1px solid $card-border-color;
 
     &:nth-child(even) {
-      background-color: #fafafa;
+      @include theme.property(background-color, #fafafa, #252525);
     }
 
     &:last-child {
@@ -69,8 +70,8 @@
 
     // must be here. otherwise, background-color would be overwritten by :nth-children()
     &.flagged {
-      background-color: $alert-danger-background;
-      color: $alert-danger-color;
+      background-color:    $alert-danger-background;
+      color:               $alert-danger-color;
       border-bottom-color: $alert-danger-border;
 
       a {
@@ -82,7 +83,7 @@
   // desktop
   @include media-breakpoint-up(sm) {
     .topic-row {
-      display: flex;
+      display:   flex;
       flex-wrap: nowrap;
     }
 
@@ -107,8 +108,8 @@
 
   @include media-breakpoint-up(lg) {
     .tag-clouds {
-      margin-left: auto;
-      margin-top: -4px; // same height on every row whether tag exists
+      margin-left:   auto;
+      margin-top:    -4px; // same height on every row whether tag exists
       margin-bottom: 0; // remove margin bottom on large screen
     }
   }
@@ -137,28 +138,28 @@
 a.not-read {
   &:hover:before {
     @include content-icon($icon-category-topic-mark-as-read);
-    position: absolute;
-    display: flex;
-    cursor: pointer;
-    border-radius: $border-radius;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
+    position:         absolute;
+    display:          flex;
+    cursor:           pointer;
+    border-radius:    $border-radius;
+    width:            100%;
+    height:           100%;
+    top:              0;
+    left:             0;
     background-color: #000;
-    opacity: 0.5;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    font-size: 1rem;
-    z-index: 100;
+    opacity:          0.5;
+    justify-content:  center;
+    align-items:      center;
+    color:            #fff;
+    font-size:        1rem;
+    z-index:          100;
   }
 
   &:after {
-    content: ' ';
+    content:  ' ';
     position: absolute;
-    bottom: 2px;
-    right: 0;
+    bottom:   2px;
+    right:    0;
 
     @include not-read-bullet;
   }
