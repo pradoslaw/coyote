@@ -5,6 +5,7 @@ interface Record<T> {
   children: Record<T>[];
   level: number;
   isLastChild: boolean | null;
+  ignoreChildren: boolean;
 }
 
 export class TreeList<T> {
@@ -15,7 +16,7 @@ export class TreeList<T> {
   }
 
   add(id: number, payload: T): void {
-    this.addRecordRoot({id, parentId: null, payload, children: [], level: 0, isLastChild: null});
+    this.addRecordRoot({id, parentId: null, payload, children: [], level: 0, isLastChild: null, ignoreChildren: false});
   }
 
   private addRecordRoot(record: Record<T>): void {
@@ -23,9 +24,9 @@ export class TreeList<T> {
     this.records.set(record.id, record);
   }
 
-  addChild(id: number, parentId: number, payload: T): void {
+  addChild(id: number, parentId: number, payload: T, ignoreChildren: boolean): void {
     const parent = this.records.get(parentId)!;
-    const record = {id, parentId, payload, children: [], level: parent.level + 1, isLastChild: null};
+    const record = {id, parentId, payload, children: [], level: parent.level + 1, isLastChild: null, ignoreChildren};
     parent.children.push(record);
     this.records.set(record.id, record);
   }
@@ -48,10 +49,12 @@ export class TreeList<T> {
     for (const [i, record] of records.entries()) {
       record.isLastChild = i === records.length - 1;
       list.push(record);
-      const children = record.children;
-      if (children.length > 0) {
-        children.sort(this.recordSorter.bind(this));
-        list.push(...this.flattened(children));
+      if (!record.ignoreChildren) {
+        const children = record.children;
+        if (children.length > 0) {
+          children.sort(this.recordSorter.bind(this));
+          list.push(...this.flattened(children));
+        }
       }
     }
     return list;

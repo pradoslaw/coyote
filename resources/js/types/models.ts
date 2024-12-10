@@ -189,6 +189,7 @@ export interface Post {
   tree_parent_post_id: number | null;
   indent: number | null;
   hasNextSibling: boolean | null;
+  childrenFolded: boolean | null;
 }
 
 export interface PostLog {

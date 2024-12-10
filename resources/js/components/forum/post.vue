@@ -431,9 +431,11 @@ export default {
   methods: {
     postFold(): void {
       this.$data.postFolded = true;
+      store.commit('posts/foldChildren', this.$props.post);
     },
     postUnfold(): void {
       this.$data.postFolded = false;
+      store.commit('posts/unfoldChildren', this.$props.post);
     },
     closePostReview(): void {
       this.post.has_review = false;

@@ -131,6 +131,12 @@ const mutations = {
     post.score = users.length;
     post.is_voted = users.includes(<string>user?.name);
   },
+  foldChildren(state, post: Post): void {
+    post.childrenFolded = true;
+  },
+  unfoldChildren(state, post: Post): void {
+    post.childrenFolded = false;
+  },
 };
 
 function savePostUrl(forum: Forum, topic: Topic, post: Post) {
