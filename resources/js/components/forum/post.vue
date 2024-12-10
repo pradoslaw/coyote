@@ -1,6 +1,6 @@
 <template>
   <div class="card card-post card-post-folded" :class="postIndentCssClasses" v-if="postFolded">
-    <vue-post-guiderail v-if="isChild" :has-next-sibling="hasNextSibling"/>
+    <vue-post-guiderail v-if="guiderailVisible" :has-next-sibling="hasNextSibling"/>
     <div class="card-body cursor-pointer" @click="postUnfold">
       <vue-icon name="postFolded"/>
       {{ post.user.name }},
@@ -14,7 +14,7 @@
          {'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed': isCollapsed},
          postIndentCssClasses
        ]">
-    <vue-post-guiderail v-if="isChild" :has-next-sibling="hasNextSibling"/>
+    <vue-post-guiderail v-if="guiderailVisible" :has-next-sibling="hasNextSibling"/>
     <div v-if="post.deleted_at"
          @click="isCollapsed = !isCollapsed"
          class="post-delete card-body text-decoration-none">
@@ -535,8 +535,8 @@ export default {
       if (level === 12) return ['indent', 'indent-11'];
       return ['indent', 'indent-12'];
     },
-    isChild(): boolean {
-      return this.$props.post.indent > 1;
+    guiderailVisible(): boolean {
+      return this.$props.post.indent >= 2;
     },
     postDropdownVisible(): boolean {
       return this.postDropdownItems.length > 0;
