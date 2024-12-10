@@ -12,7 +12,7 @@ export function postsOrdered(posts: Post[], ordering: PostOrdering): Post[] {
     if (!post.parentPostId) {
       tree.add(post.id, post);
     } else {
-      tree.addChild(post.id, post.parentPostId, post, post.childrenFolded === true);
+      tree.addChild(post.id, post.parentPostId, post, post.childrenFolded);
     }
   }
   const orderedPosts: Post[] = [];

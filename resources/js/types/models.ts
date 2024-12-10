@@ -189,7 +189,7 @@ export interface Post {
   parentPostId: number | null;
   indent: number | null;
   hasNextSibling: boolean | null;
-  childrenFolded: boolean | null;
+  childrenFolded: boolean;
 }
 
 export interface PostLog {
