@@ -1,21 +1,20 @@
 <template>
-  <vue-post :post="post" @reply="reply"/>
+  <vue-post :post="post" :tree-item="treeItem" @reply="reply"/>
 </template>
 
 <script lang="ts">
+import {Post} from "../../types/models";
 import VuePost from '../forum/post.vue';
 
 export default {
   components: {VuePost},
   emits: ['reply'],
   props: {
-    post: {
-      type: Object,
-      required: true,
-    },
+    post: {type: Object, required: true},
+    treeItem: {type: Object, required: false},
   },
   methods: {
-    reply(post, scrollIntoForm) {
+    reply(post: Post, scrollIntoForm: boolean): void {
       this.$emit('reply', post, scrollIntoForm);
     },
   },

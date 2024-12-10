@@ -1,6 +1,6 @@
 import axios from "axios";
 import {postsOrdered} from "../../treeTopic/postOrdering";
-import {Forum, Paginator, Post, PostComment, PostLog, Topic, User} from "../../types/models";
+import {Forum, Paginator, Post, PostComment, PostLog, Topic, TreePost, User} from "../../types/models";
 
 type ParentChild = { post: Post, comment: PostComment };
 
@@ -21,12 +21,12 @@ const getters = {
     return getters.posts;
   },
   treeTopicPostsFirst(state, getters): Post {
-    return getters.treeTopicPosts[0];
+    return getters.treeTopicPosts[0].post;
   },
-  treeTopicPostsRemaining(state, getters): Post[] {
+  treeTopicPostsRemaining(state, getters): TreePost[] {
     return getters.treeTopicPosts.slice(1);
   },
-  treeTopicPosts(state, getters, rootState, rootGetters): Post[] {
+  treeTopicPosts(state, getters, rootState, rootGetters): TreePost[] {
     const posts: Post[] = Object.values(state.data);
     return postsOrdered(posts, rootGetters['topics/treeTopicPostOrdering']);
   },

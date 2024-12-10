@@ -388,17 +388,10 @@ export default {
     'vue-post-review': VuePostReview,
   },
   props: {
-    post: {
-      type: Object,
-      required: true,
-    },
-    uploadMaxSize: {
-      type: Number,
-      default: 20,
-    },
-    uploadMimes: {
-      type: String,
-    },
+    post: {type: Object, required: true},
+    treeItem: {type: Object, required: false},
+    uploadMaxSize: {type: Number, default: 20},
+    uploadMimes: {type: String},
   },
   data() {
     return {
@@ -516,11 +509,12 @@ export default {
     ...mapGetters('posts', ['posts']),
     ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
     hasNextSibling(): boolean {
-      return this.$props.post.hasNextSibling;
+      return this.$props.treeItem.hasNextSibling;
     },
     postIndentCssClasses(): string[] {
-      const level = this.$props.post.indent;
-      if (!level) return [];
+      if (!this.$props.treeItem) return [];
+      const level = this.$props.treeItem.nestLevel;
+      if (level === 0) return ['indent', 'indent-none'];
       if (level === 1) return ['indent', 'indent-none'];
       if (level === 2) return ['indent', 'indent-1'];
       if (level === 3) return ['indent', 'indent-2'];
@@ -536,7 +530,10 @@ export default {
       return ['indent', 'indent-12'];
     },
     guiderailVisible(): boolean {
-      return this.$props.post.indent >= 2;
+      if (!this.$props.treeItem) {
+        return false;
+      }
+      return this.$props.treeItem.nestLevel >= 2;
     },
     postDropdownVisible(): boolean {
       return this.postDropdownItems.length > 0;

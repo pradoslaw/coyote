@@ -153,9 +153,10 @@
 
       <vue-post-wrapper
           v-if="is_mode_tree"
-          v-for="post in treeTopicPostsRemaining"
-          :key="post.id"
-          :post="post"
+          v-for="treePost in treeTopicPostsRemaining"
+          :key="treePost.post.id"
+          :post="treePost.post"
+          :tree-item="treePost.treeItem"
           @reply="reply"
       ></vue-post-wrapper>
 

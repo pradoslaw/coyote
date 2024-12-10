@@ -1,4 +1,4 @@
-import {Post} from "../types/models";
+import {Post, TreePost} from "../types/models";
 import {TreeList} from "./treeList";
 
 export type PostOrdering =
@@ -6,7 +6,7 @@ export type PostOrdering =
   'orderByCreationDateOldest' |
   'orderByMostLikes';
 
-export function postsOrdered(posts: Post[], ordering: PostOrdering): Post[] {
+export function postsOrdered(posts: Post[], ordering: PostOrdering): TreePost[] {
   const tree = new TreeList<Post>(postOrdering(ordering));
   for (const post of posts) {
     if (!post.parentPostId) {
@@ -15,14 +15,13 @@ export function postsOrdered(posts: Post[], ordering: PostOrdering): Post[] {
       tree.addChild(post.id, post.parentPostId, post, post.childrenFolded);
     }
   }
-  const orderedPosts: Post[] = [];
-  for (const item of tree.treeItems()) {
-    const post = item.item;
-    orderedPosts.push(post);
-    post.indent = item.nestLevel;
-    post.hasNextSibling = item.hasNextSibling;
-  }
-  return orderedPosts;
+  return tree.treeItems().map(item => ({
+    post: item.item,
+    treeItem: {
+      nestLevel: item.nestLevel,
+      hasNextSibling: item.hasNextSibling,
+    },
+  }));
 }
 
 function postOrdering(ordering: PostOrdering): (a, b) => number {

@@ -187,9 +187,17 @@ export interface Post {
   metadata?: string;
   voters?: string[];
   parentPostId: number | null;
-  indent: number | null;
-  hasNextSibling: boolean | null;
   childrenFolded: boolean;
+}
+
+export interface TreePost {
+  post: Post;
+  treeItem: TreeItem;
+}
+
+export interface TreeItem {
+  nestLevel: number;
+  hasNextSibling: boolean;
 }
 
 export interface PostLog {
