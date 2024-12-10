@@ -1,5 +1,5 @@
 <template>
-  <div class="card card-post card-post-folded" :class="postIndentCssClasses" v-if="postFolded">
+  <div class="card card-post card-post-folded neon-post-folded" :class="postIndentCssClasses" v-if="postFolded">
     <vue-post-guiderail
       v-if="guiderailVisible"
       :has-next-sibling="hasNextSibling"
