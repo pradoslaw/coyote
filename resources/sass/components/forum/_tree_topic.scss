@@ -17,9 +17,9 @@
 }
 
 .post-guiderail {
-  z-index: -1;
-  left: -10px;
-  width: 10px;
+  z-index:      -1;
+  left:         -10px;
+  width:        10px;
   border-width: 2px;
   border-style: solid;
   @include theme.light {
@@ -31,20 +31,20 @@
 }
 
 .post-guiderail-to-parent {
-  $topOffset: -18px;
-  $height: 20px;
+  $topOffset:                -18px;
+  $height:                   20px;
 
-  height: $height - $topOffset;
-  top: $topOffset;
+  height:                    $height - $topOffset;
+  top:                       $topOffset;
   border-bottom-left-radius: 6px;
-  border-top: none;
-  border-right: none;
+  border-top:                none;
+  border-right:              none;
 }
 
 .post-guiderail-to-sibling {
-  border-top: none;
-  border-right: none;
+  border-top:    none;
+  border-right:  none;
   border-bottom: none;
-  top: 0;
-  height: 100%;
+  top:           0;
+  height:        100%;
 }
