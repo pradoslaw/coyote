@@ -113,7 +113,7 @@ class PostResource extends JsonResource
             'has_review'     => false,
             'review_style'   => 'info',
 
-            'tree_parent_post_id' => $this->tree_parent_post_id,
+            'parentPostId' => $this->tree_parent_post_id,
         ]);
     }
 

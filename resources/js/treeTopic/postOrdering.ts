@@ -9,10 +9,10 @@ export type PostOrdering =
 export function postsOrdered(posts: Post[], ordering: PostOrdering): Post[] {
   const tree = new TreeList<Post>(postOrdering(ordering));
   for (const post of posts) {
-    if (!post.tree_parent_post_id) {
+    if (!post.parentPostId) {
       tree.add(post.id, post);
     } else {
-      tree.addChild(post.id, post.tree_parent_post_id, post, post.childrenFolded === true);
+      tree.addChild(post.id, post.parentPostId, post, post.childrenFolded === true);
     }
   }
   const orderedPosts: Post[] = [];

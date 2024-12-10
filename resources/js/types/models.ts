@@ -186,7 +186,7 @@ export interface Post {
   edit_count?: number;
   metadata?: string;
   voters?: string[];
-  tree_parent_post_id: number | null;
+  parentPostId: number | null;
   indent: number | null;
   hasNextSibling: boolean | null;
   childrenFolded: boolean | null;
