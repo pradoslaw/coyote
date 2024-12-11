@@ -111,6 +111,15 @@ body {
   border:     none !important; // overrides .card {border}
 }
 
+.look-and-feel-legacy {
+  .neon-post-folded {
+    background:   var(--post-header-background) !important; // overrides .card {background}
+    border-width: 1px !important; // overrides modern .neon-post-folded
+    border-style: solid !important; // overrides modern .neon-post-folded 
+    border-color: var(--post-header-border-color) !important; // overrides .card {border}
+  }
+}
+
 .neon-forum-aside {
   background:    var(--body-background);
   padding:       24px !important; // !important for .sticky-aside

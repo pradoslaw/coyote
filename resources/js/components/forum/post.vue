@@ -4,9 +4,10 @@
       v-if="guiderailVisible"
       :has-next-sibling="hasNextSibling"
       :parent-has-next-sibling="parentHasNextSibling"
+      :expanded="postFolded"
+      @toggle="guiderailToggle"
     />
     <div class="card-body cursor-pointer" @click="postUnfold">
-      <vue-icon name="postFolded"/>
       {{ post.user.name }},
       <vue-timeago :datetime="post.created_at"/>
     </div>
@@ -22,6 +23,8 @@
       v-if="guiderailVisible"
       :has-next-sibling="hasNextSibling"
       :parent-has-next-sibling="parentHasNextSibling"
+      :expanded="postFolded"
+      @toggle="guiderailToggle"
     />
     <div v-if="post.deleted_at"
          @click="isCollapsed = !isCollapsed"
@@ -29,9 +32,15 @@
       <vue-icon name="postDeleted"/>
       Post usunięty
       <vue-timeago :datetime="post.deleted_at"/>
-      <template v-if="post.deleter_name">przez {{ post.deleter_name }}.</template>
+      <template v-if="post.deleter_name">
+        {{' '}}
+        przez {{ post.deleter_name }}.
+      </template>
       <template v-else>.</template>
-      <template v-if="post.delete_reason">Powód: {{ post.delete_reason }}.</template>
+      <template v-if="post.delete_reason">
+        {{' '}}
+        Powód: {{ post.delete_reason }}.
+      </template>
     </div>
     <div v-else-if="authorBlocked" class="post-delete card-body text-decoration-none" @click="isCollapsed = !isCollapsed">
       <vue-icon name="postAuthorBlocked"/>
@@ -41,12 +50,6 @@
       <div class="row">
         <div class="col-2">
           <h5 class="mb-0 post-author">
-            <span
-              v-if="!authorBlocked && !post.deleted_at"
-              class="d-inline-block me-1 cursor-pointer vertical-align-middle text-muted post-fold-button"
-              @click="postFold">
-              <vue-icon name="postFold"/>
-            </span>
             <vue-username v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"/>
             <span v-else>{{ post.user_name }}</span>
           </h5>
@@ -437,6 +440,14 @@ export default {
     postUnfold(): void {
       this.$data.postFolded = false;
       store.commit('posts/unfoldChildren', this.$props.post);
+    },
+    guiderailToggle(expanded: boolean): void {
+      this.$data.postFolded = expanded;
+      if (expanded) {
+        store.commit('posts/foldChildren', this.$props.post);
+      } else {
+        store.commit('posts/unfoldChildren', this.$props.post);
+      }
     },
     closePostReview(): void {
       this.post.has_review = false;
