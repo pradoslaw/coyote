@@ -267,8 +267,8 @@ class DispatchPostNotificationsTest extends TestCase
 
         event(new PostSaved($post));
 
-        Notification::assertSentToTimes($subscriber, UserMentionedNotification::class, 0);
-        Notification::assertSentToTimes($subscriber, SubmittedNotification::class, 1);
+        Notification::assertSentToTimes($subscriber, UserMentionedNotification::class, 1); // If the user is mentioned in newly created post,
+        Notification::assertSentToTimes($subscriber, SubmittedNotification::class, 0); // we don't need to notify of the newly created post.
     }
 
     #[Test]

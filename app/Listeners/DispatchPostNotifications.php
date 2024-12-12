@@ -26,58 +26,86 @@ class DispatchPostNotifications implements ShouldQueue
     private function handlePostSaved(Post $post, bool $wasRecentlyCreated): void
     {
         if ($wasRecentlyCreated) {
-            $user = $post->user;
-            $subscribers = $post->topic
-                ->subscribers()
-                ->excludeUserAndBlockers($user->id)
-                ->has('user')
-                ->with('user')
-                ->get()
-                ->pluck('user');
-            $subscribers = $subscribers
-                ->merge($user->followers)
-                ->unique('id');
-            $this->dispatcher->send($subscribers, new SubmittedNotification($user, $post));
-            $this->sendUserMentionedNotification($post, $user, $subscribers);
+            $this->handlePostCreated($post, $post->user);
         }
         if (!$wasRecentlyCreated && $post->editor) {
-            $user = $post->editor;
-            $subscribers = $post
-                ->subscribers()
-                ->excludeUserAndBlockers($user->id)
-                ->has('user')
-                ->with('user')
-                ->get()
-                ->pluck('user');
-            $this->dispatcher->send($subscribers, new ChangedNotification($user, $post));
-            $this->sendUserMentionedNotification($post, $user, $subscribers);
+            $this->handlePostEdited($post, $post->editor);
         }
     }
 
-    private function sendUserMentionedNotification(
-        Post               $post,
-        User               $user,
-        Support\Collection $subscribers,
-    ): void
+    private function handlePostCreated(Post $post, User $author): void
+    {
+        $users = $this->postUsersToMention($post);
+        $this->sendNotificationUserMentioned($post, $author, $users);
+        $this->sendNotificationPostCreated($post, $author, $users);
+    }
+
+    private function handlePostEdited(Post $post, User $editor): void
+    {
+        $users = $this->postUsersToMention($post);
+        $this->sendNotificationUserMentioned($post, $editor, $users);
+        $this->sendNotificationPostEdited($post, $editor, $users);
+    }
+
+    private function postUsersToMention(Post $post): array
     {
         if ($post->user === null) {
-            return;
+            return [];
         }
-
-        if ($post->user->reputation < Reputation::USER_MENTION) {
-            return;
+        if ($post->user->reputation >= Reputation::USER_MENTION) {
+            return (new Helper\Login)->grab($post->html);
         }
-
-        $usersId = $this->mentionedUserIds($post);
-        if (!empty($usersId)) {
-            $this->dispatcher->send(
-                $this->users->excludeUserAndBlockers($post->user_id)->findMany($usersId)->exceptUsers($subscribers),
-                new UserMentionedNotification($user, $post));
-        }
+        return [];
     }
 
-    private function mentionedUserIds(Post $post): array
+    private function sendNotificationPostCreated(Post $post, User $author, array $alreadyMentioned): void
     {
-        return (new Helper\Login)->grab($post->html);
+        $this->dispatcher->send(
+            $this
+                ->topicSubscribers($post, $author, $alreadyMentioned)
+                ->merge($author->followers)
+                ->unique('id'),
+            new SubmittedNotification($author, $post));
+    }
+
+    private function sendNotificationPostEdited(Post $post, User $editor, array $alreadyMentioned): void
+    {
+        $this->dispatcher->send(
+            $this->postSubscribers($post, $editor, $alreadyMentioned),
+            new ChangedNotification($editor, $post));
+    }
+
+    private function sendNotificationUserMentioned(Post $post, User $notifier, array $mentionedUserIds): void
+    {
+        if (empty($mentionedUserIds)) {
+            return;
+        }
+        $this->dispatcher->send(
+            $this->users->excludeUserAndBlockers($post->user_id)->findMany($mentionedUserIds),
+            new UserMentionedNotification($notifier, $post));
+    }
+
+    private function topicSubscribers(Post $post, User $notifiableBy, array $exceptSubscribers): Support\Collection
+    {
+        return $post->topic
+            ->subscribers()
+            ->whereNotIn('subscriptions.user_id', $exceptSubscribers)
+            ->excludeUserAndBlockers($notifiableBy->id)
+            ->has('user')
+            ->with('user')
+            ->get()
+            ->pluck('user');
+    }
+
+    private function postSubscribers(Post $post, User $notifiableBy, array $exceptSubscribers): Support\Collection
+    {
+        return $post
+            ->subscribers()
+            ->whereNotIn('subscriptions.user_id', $exceptSubscribers)
+            ->excludeUserAndBlockers($notifiableBy->id)
+            ->has('user')
+            ->with('user')
+            ->get()
+            ->pluck('user');
     }
 }
