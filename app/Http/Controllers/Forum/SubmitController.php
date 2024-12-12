@@ -248,7 +248,7 @@ class SubmitController extends BaseController
         });
 
         event(new TopicSaved($topic));
-        event(new PostSaved($post));
+        event(new PostSaved($post, $post->html));
 
         return response()->json(['url' => UrlBuilder::topic($topic)]);
     }
