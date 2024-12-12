@@ -13,6 +13,7 @@ use Coyote\Post;
 use Coyote\Repositories\Contracts\PollRepositoryInterface;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Parser\Extensions\Emoji;
+use Coyote\Services\Parser\Factories\PostFactory;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Actor as Stream_Actor;
@@ -84,6 +85,7 @@ class SubmitController extends BaseController
             $post->topic()->associate($topic);
         }
 
+        $previousPostMarkdown = $post->text;
         $post->fill($request->all());
 
         if ($post->isDirtyWithRelations() && $post->exists) {
@@ -155,7 +157,13 @@ class SubmitController extends BaseController
         // fire the event. it can be used to index a content and/or add page path to "pages" table
         event(new TopicSaved($topic));
         // add post to elasticsearch
-        broadcast(new PostSaved($post))->toOthers();
+        $previousPostHtml = null;
+        if ($previousPostMarkdown !== null && $previousPostMarkdown !== $post->text) {
+            /** @var PostFactory $factory */
+            $factory = app('parser.post');
+            $previousPostHtml = $factory->parse($previousPostMarkdown);
+        }
+        broadcast(new PostSaved($post, $previousPostHtml))->toOthers();
 
         $resource = (new PostResource($post))->setTracker($tracker)->response($this->request);
 

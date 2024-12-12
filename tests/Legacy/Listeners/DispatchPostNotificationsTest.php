@@ -304,6 +304,22 @@ class DispatchPostNotificationsTest extends TestCase
         Notification::assertSentToTimes($newlyMentioned, UserMentionedNotification::class, 1);
     }
 
+    #[Test]
+    public function updatingPostViaHttp_passesPreviousMarkdownPost_soUserIsNotMentionedAgain(): void
+    {
+        $this->newUser('Mark');
+        $user = $this->newUser(canMentionUsers:true);
+        $post = $this->userAddsPost($user, 'previous content @Mark');
+        $this->clearPostMarkdownCache('updated content @Mark');
+
+        $this
+            ->actingAs($user)
+            ->post($this->postSaveUrl($post), ['text' => 'updated content @Mark'])
+            ->assertSuccessful();
+
+        Notification::assertNothingSent();
+    }
+
     private function newUser(string $username = null, bool $canMentionUsers = null): User
     {
         $factoryBuilder = factory(User::class);
