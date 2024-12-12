@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Legacy\Listeners;
 
 use Coyote\Events\PostSaved;
@@ -14,6 +13,8 @@ use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Notification;
 use NotificationChannels\WebPush\WebPushChannel;
+use PHPUnit\Framework\Attributes\PreCondition;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Legacy\TestCase;
 
 class DispatchPostNotificationsTest extends TestCase
@@ -23,180 +24,147 @@ class DispatchPostNotificationsTest extends TestCase
     private Forum $forum;
     private Topic $topic;
 
-    public function setUp(): void
+    #[PreCondition]
+    public function initialize(): void
     {
-        parent::setUp();
-
         $this->forum = factory(Forum::class)->create();
         $this->topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
-
         Notification::fake();
     }
 
+    #[Test]
     public function testDispatchNotificationToSubscribers()
     {
-        /** @var User $user */
-        $user = factory(User::class)->create();
-        $this->topic->subscribers()->create(['user_id' => $user->id]);
-
-        $post = factory(Post::class)->state('user')->create(['topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
+        $user = $this->newUser();
+        $this->userSubscribesTopic($user, $this->topic);
+        [$post, $postAuthor] = $this->someoneWritesPost();
 
         event(new PostSaved($post));
 
-        Notification::assertSentTo($user, function (SubmittedNotification $notification, $channels) use ($post) {
+        Notification::assertSentTo($user, function (SubmittedNotification $notification, array $channels) use ($postAuthor) {
             $this->assertContains(DatabaseChannel::class, $channels);
             $this->assertContains(WebPushChannel::class, $channels);
             $this->assertContains('mail', $channels);
             $this->assertContains('broadcast', $channels);
 
-            return $notification->notifier->id === $post->user_id;
+            return $notification->notifier->id === $postAuthor->id;
         });
     }
 
+    #[Test]
     public function testDoNotDispatchNotificationToMySelf()
     {
-        /** @var User $user */
-        $user = factory(User::class)->create();
-        $this->topic->subscribers()->create(['user_id' => $user->id]);
-
-        $post = factory(Post::class)->create(['user_id' => $user->id, 'topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
+        $user = $this->newUser();
+        $this->userSubscribesTopic($user, $this->topic);
+        $post = $this->userAddsPost($user);
 
         event(new PostSaved($post));
 
         Notification::assertNothingSent();
     }
 
+    #[Test]
     public function testDoNotDispatchNotificationDueToUserWasBlocked()
     {
-        /** @var User $user */
-        $user = factory(User::class)->create();
-        // watch topic
-        $this->topic->subscribers()->create(['user_id' => $user->id]);
-
-        /** @var User $blocked */
-        $blocked = factory(User::class)->create();
-
-        // ban user
-        $user->relations()->create(['related_user_id' => $blocked->id, 'is_blocked' => true]);
-
-        $post = factory(Post::class)->create(['user_id' => $blocked->id, 'topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
-        $post->wasRecentlyCreated = true;
+        $user = $this->newUser();
+        $this->userSubscribesTopic($user, $this->topic);
+        $blocked = $this->newUser();
+        $this->userBlocksUser($user, $blocked);
+        $post = $this->userAddsPost($blocked);
 
         event(new PostSaved($post));
 
         Notification::assertNothingSent();
     }
 
+    #[Test]
     public function testDispatchMentionNotification()
     {
-        /** @var User $user */
-        $user = factory(User::class)->create();
-
-        $post = factory(Post::class)->state('user')->create(['text' => "Hello @{{$user->name}}", 'topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
-
-        $post->user->reputation = 11;
-        $post->user->save();
+        $authorUser = $this->newUser(canMentionUsers:true);
+        $mentionedUser = $this->newUser();
+        $post = $this->userAddsPost($authorUser, "Hello @{{$mentionedUser->name}}");
 
         event(new PostSaved($post));
 
-        Notification::assertSentTo($user, UserMentionedNotification::class);
+        Notification::assertSentTo($mentionedUser, UserMentionedNotification::class);
     }
 
+    #[Test]
     public function testDoNotDispatchMentionNotificationToMyself()
     {
-        /** @var User $user */
-        $user = factory(User::class)->create();
-
-        $post = factory(Post::class)->create(['user_id' => $user->id, 'text' => "Hello @{{$user->name}}", 'topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
+        $user = $this->newUser();
+        $post = $this->userAddsPost($user, "Hello @{{$user->name}}");
 
         event(new PostSaved($post));
 
         Notification::assertNothingSent();
     }
 
+    #[Test]
     public function testDoNotDispatchMentionNotificationDueToUserWasBlocked()
     {
-        /** @var User $user */
-        $user = factory(User::class)->create();
-
-        /** @var User $blocked */
-        $blocked = factory(User::class)->create();
-
-        // ban user
-        $user->relations()->create(['related_user_id' => $blocked->id, 'is_blocked' => true]);
-
-        $post = factory(Post::class)->create(['user_id' => $blocked->id, 'text' => "Hello @{{$user->name}}", 'topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
-        $post->wasRecentlyCreated = true;
+        $user = $this->newUser();
+        $blocked = $this->newUser();
+        $this->userBlocksUser($user, $blocked);
+        $post = $this->userAddsPost($blocked, "Hello @{{$user->name}}");
 
         event(new PostSaved($post));
 
         Notification::assertNothingSent();
     }
 
+    #[Test]
     public function testDispatchNotificationToFollowers()
     {
-        /** @var User $user */
-        $user = factory(User::class)->create();
-        $follower = factory(User::class)->create();
-
-        $follower->relations()->create(['related_user_id' => $user->id, 'is_blocked' => false]);
-
-        $post = factory(Post::class)->create(['user_id' => $user->id, 'topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
+        $user = $this->newUser();
+        $follower = $this->newUser();
+        $this->userFollowsUser($follower, $user);
+        $post = $this->userAddsPost($user);
 
         event(new PostSaved($post));
 
         Notification::assertSentTo($follower, SubmittedNotification::class);
     }
 
+    #[Test]
     public function testDispatchOnlyOneNotification()
     {
-        /** @var User $user */
-        $user = factory(User::class)->create();
-        $follower = factory(User::class)->create();
-
-        $this->topic->subscribers()->create(['user_id' => $user->id]);
-        $this->topic->subscribers()->create(['user_id' => $follower->id]);
-
-        $follower->relations()->create(['related_user_id' => $user->id, 'is_blocked' => false]);
-
-        $post = factory(Post::class)->create(['user_id' => $user->id, 'topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
+        $followee = $this->newUser();
+        $user = $this->newUser();
+        $this->userSubscribesTopic($followee, $this->topic);
+        $this->userSubscribesTopic($user, $this->topic);
+        $this->userFollowsUser($user, $followee);
+        $post = $this->userAddsPost($followee);
 
         event(new PostSaved($post));
 
-        Notification::assertSentToTimes($follower, SubmittedNotification::class, 1);
+        Notification::assertSentToTimes($user, SubmittedNotification::class, 1);
     }
 
+    #[Test]
     public function testDispatchChangedNotification()
     {
-        /** @var User $user */
-        $user = factory(User::class)->create();
+        $user = $this->newUser();
+        [$post, $postAuthor] = $this->someoneWritesPost();
 
-        /** @var Post $post */
-        $post = factory(Post::class)->state('user')->create(['topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
-        $post->subscribers()->create(['user_id' => $user->id]);
+        $this->userSubscribesPost($user, $post);
 
-        $post->editor_id = $post->user_id;
+        $post->editor_id = $postAuthor->id;
         $post->wasRecentlyCreated = false;
         $post->save();
-
-        $this->assertEquals($post->user_id, $post->editor_id);
 
         event(new PostSaved($post));
 
         Notification::assertSentTo($user, ChangedNotification::class);
     }
 
+    #[Test]
     public function testDoNotDispatchChangedNotificationDueUserWasBlocked()
     {
-        /** @var User $blocked */
-        $blocked = factory(User::class)->create();
-
-        /** @var Post $post */
-        $post = factory(Post::class)->state('user')->create(['topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
-        $post->subscribers()->create(['user_id' => $blocked->id]);
-
-        // post author added some user to blacklist
-        $post->user->relations()->create(['related_user_id' => $blocked->id, 'is_blocked' => true]);
+        $blocked = $this->newUser();
+        [$post, $postAuthor] = $this->someoneWritesPost();
+        $this->userSubscribesPost($blocked, $post);
+        $this->userBlocksUser($postAuthor, $blocked);
 
         $post->editor_id = $blocked->id;
         $post->wasRecentlyCreated = false;
@@ -205,5 +173,57 @@ class DispatchPostNotificationsTest extends TestCase
         event(new PostSaved($post));
 
         Notification::assertNothingSent();
+    }
+
+    private function newUser(bool $canMentionUsers = false): User
+    {
+        $factoryBuilder = factory(User::class);
+        if ($canMentionUsers) {
+            $factoryBuilder->state('canMentionUsers');
+        }
+        return $factoryBuilder->create();
+    }
+
+    private function userSubscribesTopic(User $user, Topic $topic): void
+    {
+        $topic->subscribers()->create(['user_id' => $user->id]);
+    }
+
+    private function userSubscribesPost(User $user, Post $post): void
+    {
+        $post->subscribers()->create(['user_id' => $user->id]);
+    }
+
+    private function userFollowsUser(User $user, User $followee): void
+    {
+        $user->relations()->create(['related_user_id' => $followee->id, 'is_blocked' => false]);
+    }
+
+    private function userBlocksUser(User $user, User $blocked): void
+    {
+        $user->relations()->create(['related_user_id' => $blocked->id, 'is_blocked' => true]);
+    }
+
+    private function userAddsPost(User $user, string $postMarkdown = null): Post
+    {
+        $attributes = [
+            'user_id'  => $user->id,
+            'forum_id' => $this->forum->id,
+            'topic_id' => $this->topic->id,
+        ];
+        if ($postMarkdown) {
+            $attributes['text'] = $postMarkdown;
+        }
+        return factory(Post::class)->create($attributes);
+    }
+
+    private function someoneWritesPost(): array
+    {
+        /** @var Post $post */
+        $post = factory(Post::class)->create([
+            'topic_id' => $this->topic->id,
+            'forum_id' => $this->forum->id,
+        ]);
+        return [$post, $post->user];
     }
 }

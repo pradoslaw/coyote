@@ -3,7 +3,9 @@
 use Coyote\Group;
 use Coyote\Permission;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 
+/** @var Factory $factory */
 $factory->define(\Coyote\User::class, function (Faker $faker) {
     return [
         'name'            => $faker->userName . $faker->randomNumber(3),
@@ -23,6 +25,8 @@ $factory->state(\Coyote\User::class, 'id', function (Faker $faker) {
     ];
 });
 
+$factory->state(\Coyote\User::class, 'canMentionUsers', ['reputation' => \Coyote\Reputation::USER_MENTION]);
+
 $factory->afterCreatingState(\Coyote\User::class, 'admin', function (\Coyote\User $user) {
     /** @var Group $group */
     $group = factory(Group::class)->create();
@@ -35,7 +39,7 @@ $factory->afterCreatingState(\Coyote\User::class, 'admin', function (\Coyote\Use
 
 $factory->afterCreatingState(\Coyote\User::class, 'alpha', function (\Coyote\User $user) {
     $permission = Permission::query()->where('name', 'alpha-access')->first();
-    
+
     /** @var Group $group */
     $group = factory(Group::class)->create();
     $group->users()->attach($user->id);
