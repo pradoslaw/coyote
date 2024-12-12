@@ -33,26 +33,53 @@ class DispatchPostNotificationsTest extends TestCase
     }
 
     #[Test]
-    public function testDispatchNotificationToSubscribers()
+    public function notificationIsSent_toSubscribers()
     {
         $user = $this->newUser();
         $this->userSubscribesTopic($user, $this->topic);
-        [$post, $postAuthor] = $this->someoneWritesPost();
+        [$post] = $this->someoneWritesPost();
 
         event(new PostSaved($post));
 
-        Notification::assertSentTo($user, function (SubmittedNotification $notification, array $channels) use ($postAuthor) {
+        Notification::assertSentTo($user, function (SubmittedNotification $notification, array $channels): true {
             $this->assertContains(DatabaseChannel::class, $channels);
             $this->assertContains(WebPushChannel::class, $channels);
             $this->assertContains('mail', $channels);
             $this->assertContains('broadcast', $channels);
-
-            return $notification->notifier->id === $postAuthor->id;
+            return true;
         });
     }
 
     #[Test]
-    public function testDoNotDispatchNotificationToMySelf()
+    public function notificationIsSent_notifierIsPostAuthor()
+    {
+        $subscriber = $this->newUser();
+        $this->userSubscribesTopic($subscriber, $this->topic);
+        [$post, $postAuthor] = $this->someoneWritesPost();
+
+        event(new PostSaved($post));
+
+        Notification::assertSentTo($subscriber,
+            fn(SubmittedNotification $notification) => $notification->notifier->id === $postAuthor->id);
+    }
+
+    #[Test]
+    public function whenEditing_notifierIsEditor()
+    {
+        [$post] = $this->someoneWritesPost();
+        $subscriber = $this->newUser();
+        $this->userSubscribesPost($subscriber, $post);
+        $editor = $this->newUser();
+        $this->userEditsPost($editor, $post);
+
+        event(new PostSaved($post));
+
+        Notification::assertSentTo($subscriber,
+            fn(ChangedNotification $notification) => $notification->notifier->id === $editor->id);
+    }
+
+    #[Test]
+    public function notificationIsNotSent_whenUserAddsOwnPost()
     {
         $user = $this->newUser();
         $this->userSubscribesTopic($user, $this->topic);
@@ -64,13 +91,14 @@ class DispatchPostNotificationsTest extends TestCase
     }
 
     #[Test]
-    public function testDoNotDispatchNotificationDueToUserWasBlocked()
+    public function blockedUserAddingPost_doesNotNotifySubscriber()
     {
-        $user = $this->newUser();
-        $this->userSubscribesTopic($user, $this->topic);
-        $blocked = $this->newUser();
-        $this->userBlocksUser($user, $blocked);
-        $post = $this->userAddsPost($blocked);
+        $subscriber = $this->newUser();
+        $blockedAuthor = $this->newUser();
+        $this->userBlocksUser($subscriber, $blockedAuthor);
+
+        $this->userSubscribesTopic($subscriber, $this->topic);
+        $post = $this->userAddsPost($blockedAuthor);
 
         event(new PostSaved($post));
 
@@ -78,11 +106,11 @@ class DispatchPostNotificationsTest extends TestCase
     }
 
     #[Test]
-    public function testDispatchMentionNotification()
+    public function mentioningUsernameInPost_sendsNotificationToMentionedUser()
     {
         $authorUser = $this->newUser(canMentionUsers:true);
         $mentionedUser = $this->newUser();
-        $post = $this->userAddsPost($authorUser, "Hello @{{$mentionedUser->name}}");
+        $post = $this->userAddsPostMention($authorUser, $mentionedUser);
 
         event(new PostSaved($post));
 
@@ -90,10 +118,10 @@ class DispatchPostNotificationsTest extends TestCase
     }
 
     #[Test]
-    public function testDoNotDispatchMentionNotificationToMyself()
+    public function mentioningSelf_doesNotSendNotification()
     {
         $user = $this->newUser();
-        $post = $this->userAddsPost($user, "Hello @{{$user->name}}");
+        $post = $this->userAddsPostMention($user, $user);
 
         event(new PostSaved($post));
 
@@ -101,12 +129,12 @@ class DispatchPostNotificationsTest extends TestCase
     }
 
     #[Test]
-    public function testDoNotDispatchMentionNotificationDueToUserWasBlocked()
+    public function mentionedByBlockedUser_doesNotSendNotification_toMentionedUser()
     {
-        $user = $this->newUser();
-        $blocked = $this->newUser();
-        $this->userBlocksUser($user, $blocked);
-        $post = $this->userAddsPost($blocked, "Hello @{{$user->name}}");
+        $mentionedUser = $this->newUser();
+        $blockedAuthor = $this->newUser();
+        $this->userBlocksUser($mentionedUser, $blockedAuthor);
+        $post = $this->userAddsPostMention($blockedAuthor, $mentionedUser);
 
         event(new PostSaved($post));
 
@@ -114,12 +142,24 @@ class DispatchPostNotificationsTest extends TestCase
     }
 
     #[Test]
-    public function testDispatchNotificationToFollowers()
+    public function mentionByUserWithoutSufficientReputation_doesNotSendNotification()
     {
-        $user = $this->newUser();
+        $post = $this->userAddsPostMention(
+            $this->newUser(canMentionUsers:false),
+            $this->newUser());
+
+        event(new PostSaved($post));
+
+        Notification::assertNothingSent();
+    }
+
+    #[Test]
+    public function postAddedByFollowedAuthor_sendsNotification_toTheFollower()
+    {
         $follower = $this->newUser();
-        $this->userFollowsUser($follower, $user);
-        $post = $this->userAddsPost($user);
+        $author = $this->newUser();
+        $this->userFollowsUser($follower, $author);
+        $post = $this->userAddsPost($author);
 
         event(new PostSaved($post));
 
@@ -127,61 +167,134 @@ class DispatchPostNotificationsTest extends TestCase
     }
 
     #[Test]
-    public function testDispatchOnlyOneNotification()
+    public function userBeingSubscribedAndFollowing_doesNotReceive_twoNotifications_forOnePost()
     {
-        $followee = $this->newUser();
-        $user = $this->newUser();
-        $this->userSubscribesTopic($followee, $this->topic);
-        $this->userSubscribesTopic($user, $this->topic);
-        $this->userFollowsUser($user, $followee);
-        $post = $this->userAddsPost($followee);
+        $follower = $this->newUser();
+        $this->userSubscribesTopic($follower, $this->topic);
+
+        $author = $this->newUser();
+        $this->userFollowsUser($follower, $author);
+        $post = $this->userAddsPost($author);
 
         event(new PostSaved($post));
 
-        Notification::assertSentToTimes($user, SubmittedNotification::class, 1);
+        Notification::assertSentToTimes($follower, SubmittedNotification::class, 1);
     }
 
     #[Test]
-    public function testDispatchChangedNotification()
+    public function subscriberIsNotified_ofPostEdit()
     {
-        $user = $this->newUser();
         [$post, $postAuthor] = $this->someoneWritesPost();
-
-        $this->userSubscribesPost($user, $post);
-
-        $post->editor_id = $postAuthor->id;
-        $post->wasRecentlyCreated = false;
-        $post->save();
+        $subscriber = $this->newUser();
+        $this->userSubscribesPost($subscriber, $post);
+        $this->userEditsPost($postAuthor, $post);
 
         event(new PostSaved($post));
 
-        Notification::assertSentTo($user, ChangedNotification::class);
+        Notification::assertSentTo($subscriber, ChangedNotification::class);
     }
 
     #[Test]
-    public function testDoNotDispatchChangedNotificationDueUserWasBlocked()
+    public function subscriberIsNotNotified_ofPostEdit_byBlockedUser()
     {
-        $blocked = $this->newUser();
         [$post, $postAuthor] = $this->someoneWritesPost();
-        $this->userSubscribesPost($blocked, $post);
-        $this->userBlocksUser($postAuthor, $blocked);
-
-        $post->editor_id = $blocked->id;
-        $post->wasRecentlyCreated = false;
-        $post->save();
+        $subscriber = $this->newUser();
+        $this->userSubscribesPost($subscriber, $post);
+        $this->userBlocksUser($subscriber, $postAuthor);
+        $this->userEditsPost($postAuthor, $post);
 
         event(new PostSaved($post));
 
         Notification::assertNothingSent();
     }
 
-    private function newUser(bool $canMentionUsers = false): User
+    #[Test]
+    public function notificationSender_isPostAuthor(): void
+    {
+        $user = $this->newUser();
+        $this->userSubscribesTopic($user, $this->topic);
+        $post = $this->userAddsPost($this->newUser(username:'Mark'));
+
+        event(new PostSaved($post));
+
+        Notification::assertSentTo($user,
+            fn(SubmittedNotification $notification): bool => \in_array('Mark', $notification->sender()));
+    }
+
+    #[Test]
+    public function notificationOfCreation_isNotSent_toDeletedSubscriber(): void
+    {
+        $goner = $this->newUser();
+        $this->userSubscribesTopic($goner, $this->topic);
+        $this->userDeletesAccount($goner);
+        [$post] = $this->someoneWritesPost();
+
+        event(new PostSaved($post));
+
+        Notification::assertNothingSent();
+    }
+
+    #[Test]
+    public function notificationOfEdit_isNotSent_toDeletedSubscriber(): void
+    {
+        [$post, $postAuthor] = $this->someoneWritesPost();
+        $goner = $this->newUser();
+        $this->userSubscribesPost($goner, $post);
+        $this->userDeletesAccount($goner);
+        $this->userEditsPost($postAuthor, $post);
+
+        event(new PostSaved($post));
+
+        Notification::assertNothingSent();
+    }
+
+    #[Test]
+    public function editingLegacyPostWithoutUser_doesNotCrash(): void
+    {
+        $mentioned = $this->newUser();
+        $post = $this->postIsAddedWithoutUserMentions($mentioned);
+        $this->userEditsPost($this->newUser(), $post);
+        event(new PostSaved($post));
+        Notification::assertNothingSent();
+    }
+
+    #[Test]
+    public function userBeingSubscribedAndMentioned_doesNotReceive_twoNotifications_forOnePost()
+    {
+        $subscriber = $this->newUser();
+        $this->userSubscribesTopic($subscriber, $this->topic);
+        $post = $this->userAddsPostMention($this->newUser(canMentionUsers:true), $subscriber);
+
+        event(new PostSaved($post));
+
+        Notification::assertSentToTimes($subscriber, UserMentionedNotification::class, 0);
+        Notification::assertSentToTimes($subscriber, SubmittedNotification::class, 1);
+    }
+
+    #[Test]
+    public function nonDirtyEdit_doesNotCrash(): void
+    {
+        // When edit is made from http controller, non-dirty changes
+        // don't actually set editor in post. Hence post can
+        // be not recently created and still not have an editor.
+        [$post, $postAuthor] = $this->someoneWritesPost();
+        $this
+            ->actingAs($postAuthor)
+            ->post($this->postSaveUrl($post), ['text' => $post->text])
+            ->assertSuccessful();
+    }
+
+    private function newUser(string $username = null, bool $canMentionUsers = null): User
     {
         $factoryBuilder = factory(User::class);
         if ($canMentionUsers) {
             $factoryBuilder->state('canMentionUsers');
         }
-        return $factoryBuilder->create();
+        $attributes = [];
+        if ($username) {
+            $attributes['name'] = $username;
+        }
+        return $factoryBuilder->create($attributes);
     }
 
     private function userSubscribesTopic(User $user, Topic $topic): void
@@ -225,5 +338,43 @@ class DispatchPostNotificationsTest extends TestCase
             'forum_id' => $this->forum->id,
         ]);
         return [$post, $post->user];
+    }
+
+    private function userAddsPostMention(User $authorUser, User $mentionedUser): Post
+    {
+        return $this->userAddsPost($authorUser, $this->mentionMarkdown($mentionedUser));
+    }
+
+    private function postIsAddedWithoutUserMentions(User $mentioned): Post
+    {
+        return factory(Post::class)
+            ->state('legacyPostWithoutUser')
+            ->create([
+                'forum_id' => $this->forum->id,
+                'topic_id' => $this->topic->id,
+                'text'     => $this->mentionMarkdown($mentioned),
+            ]);
+    }
+
+    private function userEditsPost(User $editor, Post $post): void
+    {
+        $post->editor_id = $editor->id;
+        $post->wasRecentlyCreated = false;
+        $post->save();
+    }
+
+    private function userDeletesAccount(User $user): void
+    {
+        $user->delete();
+    }
+
+    private function mentionMarkdown(User $mentionedUser): string
+    {
+        return "Hello, @{{$mentionedUser->name}}!";
+    }
+
+    private function postSaveUrl(Post $post): string
+    {
+        return route('forum.topic.save', ['forum' => $this->forum, 'topic' => $this->topic, 'post' => $post]);
     }
 }

@@ -14,21 +14,16 @@ class SubmittedNotification extends AbstractNotification implements ShouldQueue
      */
     protected $sender;
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
     public function toMail()
     {
         return (new MailMessage)
             ->subject($this->getMailSubject())
             ->line(
-                sprintf(
+                \sPrintF(
                     '<strong>%s</strong> dodał nowy post w wątku: <strong>%s</strong>',
                     $this->getSender(),
-                    htmlentities($this->post->topic->title)
-                )
+                    htmlentities($this->post->topic->title),
+                ),
             )
             ->line('<hr>')
             ->line($this->post->html)
@@ -36,49 +31,27 @@ class SubmittedNotification extends AbstractNotification implements ShouldQueue
             ->action('Zobacz post', url($this->redirectionUrl()));
     }
 
-    /**
-     * @param string|null $sender
-     * @return $this
-     */
-    public function setSender(?string $sender)
-    {
-        $this->sender = $sender;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
     protected function getSender(): string
     {
         return $this->sender ?: $this->notifier->name;
     }
 
-    /**
-     * @return array
-     */
-    public function sender()
+    public function sender(): array
     {
         return [
-            'name' => $this->getSender(),
-            'user_id' => $this->notifier->id ?? null
+            'name'    => $this->getSender(),
+            'user_id' => $this->notifier->id ?? null,
         ];
     }
 
     /**
-     * Unikalne ID okreslajace dano powiadomienie. To ID posluzy do grupowania powiadomien tego samego typu
-     *
-     * @return string
+     * Unikalne ID okreslajace dane powiadomienie. To ID posluzy do grupowania powiadomien tego samego typu
      */
-    public function objectId()
+    public function objectId(): string
     {
         return substr(md5(class_basename($this) . $this->post->topic->id), 16);
     }
 
-    /**
-     * @return string
-     */
     protected function getMailSubject(): string
     {
         return $this->getSender() . ' napisał post w wątku: ' . $this->post->topic->title;

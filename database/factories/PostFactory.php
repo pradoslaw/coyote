@@ -21,3 +21,10 @@ $factory->state(\Coyote\Post::class, 'id', function (Faker $faker) {
         'id' => $faker->numberBetween(10000000),
     ];
 });
+
+$factory->state(\Coyote\Post::class, 'legacyPostWithoutUser', function () {
+    return [
+        'user_id'   => null,
+        'user_name' => 'legacy',
+    ];
+});

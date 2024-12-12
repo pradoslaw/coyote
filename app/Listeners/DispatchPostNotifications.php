@@ -29,37 +29,37 @@ class DispatchPostNotifications implements ShouldQueue
             $subscribers = $post->topic
                 ->subscribers()
                 ->excludeUserAndBlockers($user->id)
-                ->has('user') // <-- make sure to skip records with deleted users
+                ->has('user')
                 ->with('user')
                 ->get()
                 ->pluck('user');
-            $notification = (new SubmittedNotification($user, $post))->setSender($this->postUsername($post));
+            $notification = new SubmittedNotification($user, $post);
             $subscribers = $subscribers
                 ->merge($user->followers)
                 ->unique('id');
             $this->dispatcher->send($subscribers, $notification);
-            $this->sendUserMentionedNotification($post, $user, $subscribers, $this->postUsername($post));
+            $this->sendUserMentionedNotification($post, $user, $subscribers);
         } else {
             if ($post->editor) {
                 $user = $post->editor;
                 $subscribers = $post
                     ->subscribers()
                     ->excludeUserAndBlockers($user->id)
-                    ->has('user') // <-- make sure to skip records with deleted users
+                    ->has('user')
                     ->with('user')
                     ->get()
                     ->pluck('user');
                 $this->dispatcher->send($subscribers, new ChangedNotification($user, $post));
-                $this->sendUserMentionedNotification($post, $user, $subscribers, $user->name);
+                $this->sendUserMentionedNotification($post, $user, $subscribers);
             }
         }
     }
 
     private function sendUserMentionedNotification(
         Post               $post,
-        ?User              $user,
+        User               $user,
         Support\Collection $subscribers,
-        string             $senderName): void
+    ): void
     {
         if ($post->user === null) {
             return;
@@ -74,13 +74,7 @@ class DispatchPostNotifications implements ShouldQueue
         if (!empty($usersId)) {
             $this->dispatcher->send(
                 $this->user->excludeUserAndBlockers($post->user_id)->findMany($usersId)->exceptUsers($subscribers),
-                (new UserMentionedNotification($user, $post))->setSender($senderName),
-            );
+                new UserMentionedNotification($user, $post));
         }
-    }
-
-    private function postUsername(Post $post): string
-    {
-        return $post->user?->name ?? $post->user_name;
     }
 }
