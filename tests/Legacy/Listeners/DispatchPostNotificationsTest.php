@@ -8,8 +8,10 @@ use Coyote\Notifications\Post\SubmittedNotification;
 use Coyote\Notifications\Post\UserMentionedNotification;
 use Coyote\Post;
 use Coyote\Services\Notification\DatabaseChannel;
+use Coyote\Services\Parser\Factories\PostFactory;
 use Coyote\Topic;
 use Coyote\User;
+use Illuminate\Container\Container;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Notification;
 use NotificationChannels\WebPush\WebPushChannel;
@@ -284,6 +286,24 @@ class DispatchPostNotificationsTest extends TestCase
             ->assertSuccessful();
     }
 
+    #[Test]
+    public function userWhoWasPreviouslyMentioned_isNotMentionedAgainInEdit(): void
+    {
+        $author = $this->newUser(canMentionUsers:true);
+
+        $previouslyMentioned = $this->newUser('George');
+        $post = $this->userAddsPost($author, '@George');
+        $previous = $post->html;
+
+        $newlyMentioned = $this->newUser('Michael');
+        $this->userEditsPost($author, $post, '@George @Michael');
+
+        event(new PostSaved($post, previousPostHtml:$previous));
+
+        Notification::assertSentToTimes($previouslyMentioned, UserMentionedNotification::class, 0);
+        Notification::assertSentToTimes($newlyMentioned, UserMentionedNotification::class, 1);
+    }
+
     private function newUser(string $username = null, bool $canMentionUsers = null): User
     {
         $factoryBuilder = factory(User::class);
@@ -325,6 +345,7 @@ class DispatchPostNotificationsTest extends TestCase
             'topic_id' => $this->topic->id,
         ];
         if ($postMarkdown) {
+            $this->clearPostMarkdownCache($postMarkdown);
             $attributes['text'] = $postMarkdown;
         }
         return factory(Post::class)->create($attributes);
@@ -356,10 +377,14 @@ class DispatchPostNotificationsTest extends TestCase
             ]);
     }
 
-    private function userEditsPost(User $editor, Post $post): void
+    private function userEditsPost(User $editor, Post $post, string $postMarkdown = null): void
     {
         $post->editor_id = $editor->id;
         $post->wasRecentlyCreated = false;
+        if ($postMarkdown !== null) {
+            $this->clearPostMarkdownCache($postMarkdown);
+            $post->text = $postMarkdown;
+        }
         $post->save();
     }
 
@@ -376,5 +401,11 @@ class DispatchPostNotificationsTest extends TestCase
     private function postSaveUrl(Post $post): string
     {
         return route('forum.topic.save', ['forum' => $this->forum, 'topic' => $this->topic, 'post' => $post]);
+    }
+
+    private function clearPostMarkdownCache(string $postMarkdown): void
+    {
+        $factory = new PostFactory(app(Container::class));
+        $factory->cache->forget($factory->cache->key($postMarkdown));
     }
 }

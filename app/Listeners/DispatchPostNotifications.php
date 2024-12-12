@@ -20,40 +20,38 @@ class DispatchPostNotifications implements ShouldQueue
 
     public function handle(PostSaved $event): void
     {
-        $this->handlePostSaved($event->post, $event->wasRecentlyCreated);
-    }
-
-    private function handlePostSaved(Post $post, bool $wasRecentlyCreated): void
-    {
-        if ($wasRecentlyCreated) {
+        $post = $event->post;
+        if ($event->wasRecentlyCreated) {
             $this->handlePostCreated($post, $post->user);
         }
-        if (!$wasRecentlyCreated && $post->editor) {
-            $this->handlePostEdited($post, $post->editor);
+        if (!$event->wasRecentlyCreated && $post->editor) {
+            $this->handlePostEdited($post, $post->editor, $event->previousPostHtml);
         }
     }
 
     private function handlePostCreated(Post $post, User $author): void
     {
-        $users = $this->postUsersToMention($post);
+        $users = $this->postUsersToMention($post, null);
         $this->sendNotificationUserMentioned($post, $author, $users);
         $this->sendNotificationPostCreated($post, $author, $users);
     }
 
-    private function handlePostEdited(Post $post, User $editor): void
+    private function handlePostEdited(Post $post, User $editor, ?string $previousPostHtml): void
     {
-        $users = $this->postUsersToMention($post);
+        $users = $this->postUsersToMention($post, $previousPostHtml);
         $this->sendNotificationUserMentioned($post, $editor, $users);
         $this->sendNotificationPostEdited($post, $editor, $users);
     }
 
-    private function postUsersToMention(Post $post): array
+    private function postUsersToMention(Post $post, ?string $previousHtml): array
     {
         if ($post->user === null) {
             return [];
         }
         if ($post->user->reputation >= Reputation::USER_MENTION) {
-            return (new Helper\Login)->grab($post->html);
+            $previouslyMentioned = $this->postUserMentionsOrEmpty($previousHtml);
+            $currentlyMentioned = $this->postUserMentionsOrEmpty($post->html);
+            return \array_diff($currentlyMentioned, $previouslyMentioned);
         }
         return [];
     }
@@ -107,5 +105,13 @@ class DispatchPostNotifications implements ShouldQueue
             ->with('user')
             ->get()
             ->pluck('user');
+    }
+
+    private function postUserMentionsOrEmpty(?string $postHtml): array
+    {
+        if ($postHtml === null) {
+            return [];
+        }
+        return (new Helper\Login)->grab($postHtml);
     }
 }

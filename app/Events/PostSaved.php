@@ -13,24 +13,13 @@ class PostSaved extends BroadcastEvent implements ShouldBroadcast
 {
     use SerializesModels, InteractsWithSockets;
 
-    /**
-     * @var Post
-     */
-    public Post $post;
-
-    /**
-     * @var bool
-     */
     public bool $wasRecentlyCreated;
 
-    /**
-     * Create a new event instance.
-     *
-     * @param Post $post
-     */
-    public function __construct(Post $post)
+    public function __construct(
+        public Post    $post,
+        public ?string $previousPostHtml = null,
+    )
     {
-        $this->post = $post;
         $this->wasRecentlyCreated = $post->wasRecentlyCreated;
     }
 
