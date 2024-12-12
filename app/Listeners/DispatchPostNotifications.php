@@ -16,15 +16,16 @@ use Illuminate\Support;
 
 class DispatchPostNotifications implements ShouldQueue
 {
-    public function __construct(
-        private Dispatcher     $dispatcher,
-        private UserRepository $user) {}
+    public function __construct(private Dispatcher $dispatcher, private UserRepository $users) {}
 
     public function handle(PostSaved $event): void
     {
-        $post = $event->post;
+        $this->handlePostSaved($event->post, $event->wasRecentlyCreated);
+    }
 
-        if ($event->wasRecentlyCreated) {
+    private function handlePostSaved(Post $post, bool $wasRecentlyCreated): void
+    {
+        if ($wasRecentlyCreated) {
             $user = $post->user;
             $subscribers = $post->topic
                 ->subscribers()
@@ -33,25 +34,23 @@ class DispatchPostNotifications implements ShouldQueue
                 ->with('user')
                 ->get()
                 ->pluck('user');
-            $notification = new SubmittedNotification($user, $post);
             $subscribers = $subscribers
                 ->merge($user->followers)
                 ->unique('id');
-            $this->dispatcher->send($subscribers, $notification);
+            $this->dispatcher->send($subscribers, new SubmittedNotification($user, $post));
             $this->sendUserMentionedNotification($post, $user, $subscribers);
-        } else {
-            if ($post->editor) {
-                $user = $post->editor;
-                $subscribers = $post
-                    ->subscribers()
-                    ->excludeUserAndBlockers($user->id)
-                    ->has('user')
-                    ->with('user')
-                    ->get()
-                    ->pluck('user');
-                $this->dispatcher->send($subscribers, new ChangedNotification($user, $post));
-                $this->sendUserMentionedNotification($post, $user, $subscribers);
-            }
+        }
+        if (!$wasRecentlyCreated && $post->editor) {
+            $user = $post->editor;
+            $subscribers = $post
+                ->subscribers()
+                ->excludeUserAndBlockers($user->id)
+                ->has('user')
+                ->with('user')
+                ->get()
+                ->pluck('user');
+            $this->dispatcher->send($subscribers, new ChangedNotification($user, $post));
+            $this->sendUserMentionedNotification($post, $user, $subscribers);
         }
     }
 
@@ -64,17 +63,21 @@ class DispatchPostNotifications implements ShouldQueue
         if ($post->user === null) {
             return;
         }
-        // get id of users that were mentioned in the text
-        $usersId = (new Helper\Login)->grab($post->html);
 
         if ($post->user->reputation < Reputation::USER_MENTION) {
             return;
         }
 
+        $usersId = $this->mentionedUserIds($post);
         if (!empty($usersId)) {
             $this->dispatcher->send(
-                $this->user->excludeUserAndBlockers($post->user_id)->findMany($usersId)->exceptUsers($subscribers),
+                $this->users->excludeUserAndBlockers($post->user_id)->findMany($usersId)->exceptUsers($subscribers),
                 new UserMentionedNotification($user, $post));
         }
+    }
+
+    private function mentionedUserIds(Post $post): array
+    {
+        return (new Helper\Login)->grab($post->html);
     }
 }
