@@ -137,12 +137,13 @@
             Kolejność postów
           </label>
         </div>
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end align-items-center mb-4">
+          {{ icon('treeTopicPostOrder') }}
           <select
               id="tree-post-ordering"
               :value="treeTopicPostOrdering"
               @change="changeTreeTopicPostOrdering"
-              class="form-control mb-4"
+              class="form-control ms-1"
               style="width:initial;">
             <option value="orderByMostLikes">Najwyżej oceniane</option>
             <option value="orderByCreationDateNewest">Najnowsze</option>
