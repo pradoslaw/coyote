@@ -18,19 +18,17 @@ class DispatchPostNotifications implements ShouldQueue
 {
     public function __construct(
         private Dispatcher     $dispatcher,
-        private UserRepository $user)
-    {
-    }
+        private UserRepository $user) {}
 
     public function handle(PostSaved $event): void
     {
         $post = $event->post;
-        
+
         if ($event->wasRecentlyCreated) {
             $user = $post->user;
             $subscribers = $post->topic
                 ->subscribers()
-                ->excludeBlocked($user->id)
+                ->excludeUserAndBlockers($user->id)
                 ->has('user') // <-- make sure to skip records with deleted users
                 ->with('user')
                 ->get()
@@ -46,7 +44,7 @@ class DispatchPostNotifications implements ShouldQueue
                 $user = $post->editor;
                 $subscribers = $post
                     ->subscribers()
-                    ->excludeBlocked($user->id)
+                    ->excludeUserAndBlockers($user->id)
                     ->has('user') // <-- make sure to skip records with deleted users
                     ->with('user')
                     ->get()
@@ -75,8 +73,8 @@ class DispatchPostNotifications implements ShouldQueue
 
         if (!empty($usersId)) {
             $this->dispatcher->send(
-                $this->user->excludeBlocked($post->user_id)->findMany($usersId)->exceptUsers($subscribers),
-                (new UserMentionedNotification($user, $post))->setSender($senderName)
+                $this->user->excludeUserAndBlockers($post->user_id)->findMany($usersId)->exceptUsers($subscribers),
+                (new UserMentionedNotification($user, $post))->setSender($senderName),
             );
         }
     }
