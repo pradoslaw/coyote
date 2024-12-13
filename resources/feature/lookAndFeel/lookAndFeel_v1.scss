@@ -3,9 +3,9 @@
 @use "./style-guide" as style;
 @use "./bootstrap" as bootstrap;
 
-$post-radius:                   8px;
-$forum-aside-radius:            8px;
-$category-section-radius:       8px;
+$post-radius:             8px;
+$forum-aside-radius:      8px;
+$category-section-radius: 8px;
 
 .look-and-feel-modern {
   @include theme.var(--body-background, (light: style.$neutral-000, dark: style.$neutral-500));
@@ -25,7 +25,6 @@ $category-section-radius:       8px;
   @include theme.var(--username-author-color, (light: white, dark: style.$neutral-400));
   @include theme.var(--username-author-background, (light: style.$green-700, dark: style.$green-100));
   @include theme.var(--var-navbar-user-avatar-border, (light: 2px solid white, dark: 2px solid #181a1b));
-  --var-navbar-user-avatar-padding: 0;
   @include theme.var(--post-content-link-color, (light: style.$green-700, dark: style.$green-100));
   @include theme.var(--post-user-posts-counter-color, (light: style.$green-700, dark: style.$green-100));
   @include theme.var(--scroll-top-color, (light: style.$green-700, dark: style.$green-500));
@@ -56,7 +55,6 @@ $category-section-radius:       8px;
   @include theme.var(--username-author-color, (light: white, dark: #1d1d1d));
   @include theme.var(--username-author-background, (light: #80a41a, dark: #789b17));
   @include theme.var(--var-navbar-user-avatar-border, (light: 1px solid #dee2e6, dark: 1px solid #121212));
-  --var-navbar-user-avatar-padding: 0.25rem;
   @include theme.var(--post-content-link-color, (light: #5e7813, dark: #789b17));
   @include theme.var(--post-user-posts-counter-color, (light: #5e7813, dark: #789b17));
   @include theme.var(--scroll-top-color, (light: #80a41a, dark: #80a41a));
@@ -162,6 +160,18 @@ body {
 .neon-username-author {
   color:      var(--username-author-color) !important; // overrides .badge {color}
   background: var(--username-author-background);
+}
+
+.look-and-feel-modern {
+  .neon-navbar-user-avatar {
+    --var-navbar-user-avatar-padding: 0;
+  }
+}
+
+.look-and-feel-legacy {
+  .neon-navbar-user-avatar {
+    --var-navbar-user-avatar-padding: 0.25rem;
+  }
 }
 
 .neon-navbar-user-avatar {
