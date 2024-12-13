@@ -1,0 +1,56 @@
+@use "../theme/theme" as theme;
+@use "./style-guide" as style;
+
+@mixin modern {
+  @if & {
+    .look-and-feel-modern & {@content}
+  } @else {
+    .look-and-feel-modern {@content}
+  }
+}
+
+@mixin legacy {
+  @if & {
+    .look-and-feel-legacy & {@content}
+  } @else {
+    .look-and-feel-legacy {@content}
+  }
+}
+
+@mixin lookAndFeelBoth($cssVarName, $modern, $legacy) {
+  @include modern {@include theme.var($cssVarName, $modern)}
+  @include legacy {@include theme.var($cssVarName, $legacy)}
+}
+
+.neon-subscribe {
+  &.neon-subscribe-active {
+    @include lookAndFeelBoth(--subscribe-active-color, style.$red-500, #e37329);
+    color: var(--subscribe-active-color) !important; // overrides .card-topics .on
+  }
+}
+
+.neon-forum-category {
+  @include lookAndFeelBoth(--category-color,
+          (light: style.$neutral-300, dark:style.$neutral-200),
+          (light: #5e7813, dark:#acacac));
+  color: var(--category-color) !important;
+}
+
+@include lookAndFeelBoth(--link-color,
+        (light: style.$neutral-300, dark:style.$neutral-200),
+        (light: #5e7813, dark:#acacac));
+
+.neon-forum-category-last-topic {
+  color: var(--link-color) !important;
+}
+
+.neon-forum-category-subcategory {
+  color: var(--link-color) !important;
+}
+
+.neon-category-default-icon {
+  @include lookAndFeelBoth(--category-default-icon-color,
+          (light: style.$green-700, dark:style.$green-100),
+          (light: #5e7813, dark:#acacac));
+  color: var(--category-default-icon-color) !important;
+}
