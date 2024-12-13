@@ -141,24 +141,27 @@
       </vue-markdown>
     </div>
 
-    <div v-if="showStickyCheckbox" class="form-group">
-      <div class="custom-control custom-checkbox">
-        <label class="custom-control-label" for="is-sticky">
-          <input v-model="topic.is_sticky" type="checkbox" class="custom-control-input" id="is-sticky">
-          Przyklejony wątek
-        </label>
+    <div class="d-flex justify-content-between">
+      <div>
+        <div v-if="showStickyCheckbox" class="form-group">
+          <div class="custom-control custom-checkbox">
+            <label class="custom-control-label" for="is-sticky">
+              <input v-model="topic.is_sticky" type="checkbox" class="custom-control-input" id="is-sticky">
+              Przyklejony wątek
+            </label>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <div class="mt-2">
-      <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm neon-primary-button" @click="save">
-        <template v-if="post.id">Zapisz</template>
-        <template v-else>Dodaj post</template>
-      </vue-button>
-      {{ ' ' }}
-      <button v-if="post.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-danger me-2">
-        Anuluj
-      </button>
+      <div>
+        <button v-if="post.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-danger ms-2">
+          Anuluj
+        </button>
+        {{ ' ' }}
+        <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm neon-primary-button" @click="save">
+          <template v-if="post.id">Zapisz</template>
+          <template v-else>Dodaj post</template>
+        </vue-button>
+      </div>
     </div>
   </form>
 </template>

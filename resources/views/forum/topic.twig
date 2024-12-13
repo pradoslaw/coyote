@@ -147,19 +147,17 @@
         ></vue-form>
       {% endif %}
 
-      <template v-if="is_mode_tree">
-        <div class="d-flex justify-content-end">
+      <template v-if="is_mode_tree && treeTopicPostsRemaining.length > 0">
+        <div class="mb-4" style="margin-top:-24px;">
           <label for="tree-post-ordering" class="text-muted">
             Kolejność postów
           </label>
-        </div>
-        <div class="d-flex justify-content-end align-items-center mb-4">
           {{ icon('treeTopicPostOrder') }}
           <select
               id="tree-post-ordering"
               :value="treeTopicPostOrdering"
               @change="changeTreeTopicPostOrdering"
-              class="form-control ms-1"
+              class="form-control"
               style="width:initial;">
             <option value="orderByMostLikes">Najwyżej oceniane</option>
             <option value="orderByCreationDateNewest">Najnowsze</option>
@@ -207,13 +205,10 @@
 
       <section class="page-change-category d-flex my-3">
         {% if user_forums is defined %}
-          <div class="ms-auto">
-            {{ form_select('forum', user_forums, forum.slug, {'id': 'js-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
-
-            <a class="btn" href="javascript:" id="js-reload" rel="nofollow">
-              {{ icon('forumChangeCategory') }}
-            </a>
-          </div>
+          {{ form_select('forum', user_forums, forum.slug, {'id': 'js-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
+          <a class="btn" href="javascript:" id="js-reload" rel="nofollow">
+            {{ icon('forumChangeCategory') }}
+          </a>
         {% endif %}
       </section>
 
