@@ -129,7 +129,23 @@
         <vue-poll :poll="poll"></vue-poll>
       </template>
 
-      <vue-post-wrapper v-if="is_mode_tree" :post="treeTopicPostsFirst" @reply="reply"></vue-post-wrapper>
+      <vue-post-wrapper
+          v-if="is_mode_tree"
+          :post="treeTopicPostsFirst"
+          :tree-topic-post-first="true"
+          @reply="reply"
+      ></vue-post-wrapper>
+
+      {% if is_writeable %}
+        <vue-form
+            id="js-submit-form"
+            ref="js-submit-form"
+            v-if="is_mode_tree"
+            :tree-answer-post-id="{{ model.first_post_id }}"
+            :post="undefinedPost"
+            @save="savedForm"
+        ></vue-form>
+      {% endif %}
 
       <template v-if="is_mode_tree">
         <div class="d-flex justify-content-end">

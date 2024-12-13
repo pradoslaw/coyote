@@ -1,5 +1,5 @@
 <template>
-  <vue-post :post="post" :tree-item="treeItem" @reply="reply"/>
+  <vue-post :post="post" :tree-item="treeItem" @reply="reply" :tree-topic-post-first="treeTopicPostFirst"/>
 </template>
 
 <script lang="ts">
@@ -12,6 +12,7 @@ export default {
   props: {
     post: {type: Object, required: true},
     treeItem: {type: Object, required: false},
+    treeTopicPostFirst: {type: Boolean, required: false},
   },
   methods: {
     reply(post: Post, scrollIntoForm: boolean): void {

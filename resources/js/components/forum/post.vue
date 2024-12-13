@@ -33,12 +33,12 @@
       Post usunięty
       <vue-timeago :datetime="post.deleted_at"/>
       <template v-if="post.deleter_name">
-        {{' '}}
+        {{ ' ' }}
         przez {{ post.deleter_name }}.
       </template>
       <template v-else>.</template>
       <template v-if="post.delete_reason">
-        {{' '}}
+        {{ ' ' }}
         Powód: {{ post.delete_reason }}.
       </template>
     </div>
@@ -313,7 +313,7 @@
               <button @click="replyMentionAuthor" class="btn btn-sm btn-fast-reply" title="Odpowiedz na ten post" v-if="is_mode_linear">
                 <vue-icon name="postMentionAuthor"/>
               </button>
-              <button @click="replyQuoteContent" class="btn btn-sm" title="Dodaj cytat do pola odpowiedzi">
+              <button @click="replyQuoteContent" class="btn btn-sm" title="Dodaj cytat do pola odpowiedzi" v-if="!treeTopicPostFirst">
                 <vue-icon name="postAnswerQuote"/>
                 <span class="d-none d-sm-inline ms-1">Odpowiedz</span>
               </button>
@@ -403,6 +403,7 @@ export default {
     treeItem: {type: Object, required: false},
     uploadMaxSize: {type: Number, default: 20},
     uploadMimes: {type: String},
+    treeTopicPostFirst: {type: Boolean, required: false},
   },
   data() {
     return {
