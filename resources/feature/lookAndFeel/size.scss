@@ -1,7 +1,5 @@
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins/breakpoints";
+@use "./bootstrap" as bootstrap;
 
 @mixin size($size) {
-  @include media-breakpoint-up($size) {@content}
+  @include bootstrap.media-breakpoint-up($size) {@content}
 }
