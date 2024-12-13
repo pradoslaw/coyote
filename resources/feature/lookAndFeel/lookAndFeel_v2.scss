@@ -17,26 +17,26 @@
   }
 }
 
-@mixin lookAndFeelBoth($cssVarName, $modern, $legacy) {
+@mixin lookAndFeel($cssVarName, $modern, $legacy) {
   @include modern {@include theme.var($cssVarName, $modern)}
   @include legacy {@include theme.var($cssVarName, $legacy)}
 }
 
 .neon-subscribe {
   &.neon-subscribe-active {
-    @include lookAndFeelBoth(--subscribe-active-color, style.$red-500, #e37329);
+    @include lookAndFeel(--subscribe-active-color, style.$red-500, #e37329);
     color: var(--subscribe-active-color) !important; // overrides .card-topics .on
   }
 }
 
 .neon-forum-category {
-  @include lookAndFeelBoth(--category-color,
+  @include lookAndFeel(--category-color,
           (light: style.$neutral-300, dark:style.$neutral-200),
           (light: #5e7813, dark:#acacac));
   color: var(--category-color) !important;
 }
 
-@include lookAndFeelBoth(--link-color,
+@include lookAndFeel(--link-color,
         (light: style.$neutral-300, dark:style.$neutral-200),
         (light: #5e7813, dark:#acacac));
 
@@ -49,7 +49,7 @@
 }
 
 .neon-category-default-icon {
-  @include lookAndFeelBoth(--category-default-icon-color,
+  @include lookAndFeel(--category-default-icon-color,
           (light: style.$green-700, dark:style.$green-100),
           (light: #5e7813, dark:#acacac));
   color: var(--category-default-icon-color) !important;
