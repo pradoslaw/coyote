@@ -350,3 +350,22 @@ body {
           (light: #5e7813, dark:#acacac));
   color: var(--category-color) !important;
 }
+
+@include lookAndFeelBoth(--link-color,
+        (light: style.$neutral-300, dark:style.$neutral-200),
+        (light: #5e7813, dark:#acacac));
+
+.neon-forum-category-last-topic {
+  color: var(--link-color) !important;
+}
+
+.neon-forum-category-subcategory {
+  color: var(--link-color) !important;
+}
+
+.neon-category-default-icon {
+  @include lookAndFeelBoth(--category-default-icon-color,
+          (light: style.$green-700, dark:style.$green-100),
+          (light: #5e7813, dark:#acacac));
+  color: var(--category-default-icon-color) !important;
+}

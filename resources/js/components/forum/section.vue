@@ -35,7 +35,7 @@
         <div v-if="!category.is_hidden" :class="{'not-read': !category.is_read}" class="px-3 py-2 neon-collapsable-section-item toolbox-container">
           <div class="row">
             <div class="col-6 col-md-12 col-lg-5 d-flex align-items-center">
-              <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative me-2">
+              <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative me-2 neon-category-default-icon">
                 <span v-if="category.is_locked" class="logo">
                   <vue-icon name="forumCategoryLocked"/>
                 </span>
@@ -55,7 +55,9 @@
                     <vue-icon name="categorySectionChildWasRead" v-if="child.is_read"/>
                     <i v-else class="not-read" title="Nowe posty w tej kategorii"/>
                     {{ ' ' }}
-                    <a :href="child.url">{{ child.name }}</a>
+                    <a :href="child.url" class="neon-forum-category-subcategory">
+                      {{ child.name }}
+                    </a>
                     {{ ' ' }}
                   </li>
                 </ul>
@@ -93,7 +95,9 @@
                 </a>
                 <div class="media-body overflow-hidden">
                   <p class="text-truncate mb-1">
-                    <a :href="getUrl(category)" class="category-last-topic">{{ category.topic.title }}</a>
+                    <a :href="getUrl(category)" class="category-last-topic neon-forum-category-last-topic">
+                      {{ category.topic.title }}
+                    </a>
                   </p>
                   <span class="text-muted">
                     <vue-timeago :datetime="category.post.created_at"/>
