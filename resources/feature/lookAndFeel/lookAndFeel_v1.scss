@@ -8,31 +8,31 @@ $forum-aside-radius:      8px;
 $category-section-radius: 8px;
 
 .look-and-feel-modern {
-  @include theme.var(--body-background, (light: style.$neutral-000, dark: style.$neutral-500));
-  @include theme.var(--post-background, (light: style.$white, dark: style.$navy-500));
+  @include theme.var(--body-background, (light: style.$navy-050, dark: style.$neutral-900));
+  @include theme.var(--post-background, (light: style.$white, dark: style.$neutral-800));
   @include theme.var(--post-border, (light: none, dark: none));
   @include theme.var(--post-header-background, (light: none, dark: none));
-  @include theme.var(--post-header-border-color, (light: style.$neutral-050, dark: style.$navy-300));
-  @include theme.var(--section-heading-divider-color, (light: style.$neutral-100, dark: style.$navy-300));
-  @include theme.var(--aside-border-color, (light: style.$neutral-100, dark: style.$navy-300));
+  @include theme.var(--post-header-border-color, (light: style.$neutral-050, dark: style.$navy-800));
+  @include theme.var(--section-heading-divider-color, (light: style.$neutral-100, dark: style.$navy-800));
+  @include theme.var(--aside-border-color, (light: style.$neutral-100, dark: style.$navy-800));
   @include theme.var(--default-avatar-color, (light: style.$green-700, dark: style.$green-500));
-  @include theme.var(--default-avatar-background, (light: style.$green-050, dark: style.$green-900));
-  @include theme.var(--navbar-text-color, (light: style.$neutral-300, dark: style.$neutral-200));
-  @include theme.var(--viewer-online-pill-background, (light: style.$white, dark: style.$navy-500));
+  @include theme.var(--default-avatar-background, (light: style.$green-000, dark: style.$green-950));
+  @include theme.var(--navbar-text-color, (light: style.$neutral-700, dark: style.$neutral-200));
+  @include theme.var(--viewer-online-pill-background, (light: style.$white, dark: style.$neutral-800));
   @include theme.var(--viewer-online-pill-border, (light: none, dark: none));
-  @include theme.var(--viewer-online-circle-border, (light: 2px solid style.$white, dark: 2px solid style.$navy-500));
-  @include theme.var(--username-color, (light: style.$green-700, dark: style.$green-100));
-  @include theme.var(--username-author-color, (light: white, dark: style.$neutral-400));
-  @include theme.var(--username-author-background, (light: style.$green-700, dark: style.$green-100));
+  @include theme.var(--viewer-online-circle-border, (light: 2px solid style.$white, dark: 2px solid style.$neutral-800));
+  @include theme.var(--username-color, (light: style.$green-700, dark: style.$green-050));
+  @include theme.var(--username-author-color, (light: white, dark: style.$neutral-900));
+  @include theme.var(--username-author-background, (light: style.$green-700, dark: style.$green-050));
   @include theme.var(--var-navbar-user-avatar-border, (light: 2px solid white, dark: 2px solid #181a1b));
-  @include theme.var(--post-content-link-color, (light: style.$green-700, dark: style.$green-100));
-  @include theme.var(--post-user-posts-counter-color, (light: style.$green-700, dark: style.$green-100));
+  @include theme.var(--post-content-link-color, (light: style.$green-700, dark: style.$green-050));
+  @include theme.var(--post-user-posts-counter-color, (light: style.$green-700, dark: style.$green-050));
   @include theme.var(--scroll-top-color, (light: style.$green-700, dark: style.$green-500));
-  @include theme.var(--scroll-top-background, (light: style.$green-050, dark: style.$green-900));
+  @include theme.var(--scroll-top-background, (light: style.$green-000, dark: style.$green-950));
   @include theme.var(--tabber-active-border-color, style.$green-500);
   @include theme.var(--user-online-color, style.$green-500);
   @include theme.var(--notification-count-alert-color, style.$red-500);
-  @include theme.var(--navbar-search-bar-color, (light: style.$white, dark: style.$navy-500));
+  @include theme.var(--navbar-search-bar-color, (light: style.$white, dark: style.$neutral-800));
   @include theme.var(--neon-collapsable-section-background, (light: #f6f7f9, dark: #212425));
   @include theme.var(--neon-collapsable-section-item-odd-background, (light: white, dark: #181a1b));
 }
@@ -196,7 +196,7 @@ body {
     }
 
     @include theme.dark {
-      color:      style.$neutral-400;
+      color:      style.$neutral-900;
       background: style.$green-500;
       &:hover {background: #00c041;}
       &:active {background: #00e34d;}
