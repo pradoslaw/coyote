@@ -299,3 +299,10 @@ body {
     color: var(--subscribe-active-color) !important; // overrides .card-topics .on
   }
 }
+
+.neon-forum-category {
+  @include lookAndFeelBoth(--category-color,
+          (light: style.$neutral-300, dark:style.$neutral-200),
+          (light: #5e7813, dark:#acacac));
+  color: var(--category-color) !important;
+}

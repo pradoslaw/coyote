@@ -45,7 +45,9 @@
               </a>
               <div class="overflow-hidden">
                 <h3>
-                  <a :href="category.url">{{ category.name }}</a>
+                  <a :href="category.url" class="neon-forum-category">
+                    {{ category.name }}
+                  </a>
                 </h3>
                 <vue-tags v-if="category.enable_tags && !category.children" :tags="category.tags" class="tag-clouds-sm"/>
                 <ul v-if="category.children" class="list-inline list-sub d-md-block d-lg-block">
