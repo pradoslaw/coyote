@@ -22,7 +22,7 @@ class LookAndFeelServiceProvider extends ServiceProvider
         Route::middleware(['web', 'auth'])->group(function () {
             Route::get('/LookAndFeel/StyleGuide', function (StyleGuide $guide, StyleGuideView $view) {
                 if ($this->userSetting() === 'modern') {
-                    return $view->view($guide->getColors());
+                    return $view->view($guide->getColorGroups());
                 }
                 return response(status:404);
             });
