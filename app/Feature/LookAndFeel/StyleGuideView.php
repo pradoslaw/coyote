@@ -10,7 +10,20 @@ class StyleGuideView
         return Blade::render('
             <link rel="stylesheet" href="{{ cdn(\'css/stylesEager.css\') }}">
             <script>
-                variableNames();
+                const names = variableNames();
+                window.addEventListener("load", () => {
+                    const container = document.getElementById("atoms");
+                    names.forEach(name => {                    
+                        const code = document.createElement("code");
+                        code.textContent = name;
+                        
+                        const line = document.createElement("div");
+                        line.style.marginBottom = "4px";
+                        line.appendChild(code);
+                        
+                        container.appendChild(line);
+                    });
+                });
                 function variableNames() {
                   const variableNames = Array.from(document.styleSheets)
                     .filter(sheet => ownStyle(sheet))
@@ -54,19 +67,29 @@ class StyleGuideView
                   border-radius:4px;
               }
             </style>
-            <h2 style="font-family:sans-serif;">4programmers - Primitive colors</h2>
-            @foreach ($colorGroups as $colors)
-                <div style="display:flex; flex-wrap:wrap;">
-                    @foreach ($colors as $colorName => $colorValue)
-                      <div style="padding: 24px 16px; border: 1px solid #d0d0d0; text-align:center;">
-                        <div class="color-preview" style="background:{{$colorValue}}"></div>
-                        <p><code>{{$colorName}}</code></p>
-                        <code>{{$colorValue}}</code>
-                      </div>
+            <div style="display:flex;">
+                <div style="margin-right:24px; margin-left:24px;">
+                    <h2 style="font-family:sans-serif;">4programmers - Primitive colors</h2>
+                    @foreach ($colorGroups as $groupName => $colors)
+                        <h3 style="font-size:1.1em; margin:0;">{{$groupName}}</h3>
+                        <div style="display:flex; flex-wrap:wrap; margin-bottom:8px;">
+                            @foreach ($colors as $colorName => $colorValue)
+                              <div style="border: 1px solid #d0d0d0; text-align:center; width:64px;">
+                                <div class="color-preview" style="background:{{$colorValue}}"></div>
+                                <p style="margin-bottom:0;">
+                                    <code style="font-size:0.6em;">{{$colorName}}</code>
+                                </p>
+                                <code>{{$colorValue}}</code>
+                              </div>
+                            @endforeach
+                        </div>
                     @endforeach
                 </div>
-            @endforeach
-        ',
+                <div>
+                    <h2 style="font-family:sans-serif;">4programmers - Atom elements</h2>
+                    <div id="atoms"></div>
+                </div>
+            </div>',
             ['colorGroups' => $colorGroups]);
     }
 }

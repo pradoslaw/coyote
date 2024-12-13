@@ -3,7 +3,7 @@ namespace Coyote\Feature\LookAndFeel;
 
 class StyleGuide
 {
-    public function getColorGroups(): array
+    public function getPrimitiveColorGroups(): array
     {
         $content = file_get_contents('../resources/feature/lookAndFeel/style-guide.scss');
         $groups = [];
@@ -17,7 +17,7 @@ class StyleGuide
             [$key, $value] = \explode(':', $withoutDollar);
             $value = \trim($value);
             if ($value === 'white') {
-                $value = '#ffffff';
+                continue;
             }
             $exploded = \explode('-', $key);
             if (count($exploded) === 1) {
@@ -25,7 +25,7 @@ class StyleGuide
             } else {
                 [$group, $groupValue] = $exploded;
             }
-            $groups[$group][$groupValue] = \trim($value);
+            $groups[$group]["$group-$groupValue"] = \trim(\strToUpper($value));
         }
         return $groups;
     }
