@@ -1,6 +1,7 @@
 @use "../theme/theme" as theme;
 @use "./size" as size;
 @use "./style-guide" as style;
+@use "./bootstrap" as bootstrap;
 
 $body-background:               (light: style.$neutral-000, dark: style.$neutral-500);
 $post-background:               (light: style.$white, dark: style.$navy-500);
@@ -23,6 +24,7 @@ $post-user-posts-counter-color: (light: style.$green-700, dark: style.$green-100
 
 $post-radius:                   8px;
 $forum-aside-radius:            8px;
+$category-section-radius:       8px;
 
 $scroll-top-color:              (light: style.$green-700, dark: style.$green-500);
 $scroll-top-background:         (light: style.$green-050, dark: style.$green-900);
@@ -271,15 +273,57 @@ body {
 
 .neon-collapsable-section {
   background-color: var(--neon-collapsable-section-background) !important; // overrides .card {background}
-
   .neon-collapsable-section-item:nth-child(odd) {
     background-color: var(--neon-collapsable-section-item-odd-background);
+  }
+  .neon-collapsable-section-item:first-child {
+    border-top-left-radius:  $category-section-radius;
+    border-top-right-radius: $category-section-radius;
+  }
+  .neon-collapsable-section-item:last-child {
+    border-bottom-left-radius:  $category-section-radius;
+    border-bottom-right-radius: $category-section-radius;
+  }
+}
+
+.look-and-feel-modern {
+  .neon-collapsable-section {
+    border: none;
   }
 }
 
 .look-and-feel-legacy {
   .neon-collapsable-section {
     @include theme.property(border, 1px solid #ddd, 1px solid #acacac);
+  }
+}
+
+.look-and-feel-legacy {
+  .card.card-topics {
+    @include theme.light {
+      border: var(--bs-card-border-width) solid var(--bs-card-border-color);
+    }
+    .card-body {
+      border-bottom: 1px solid bootstrap.$card-border-color;
+      &:nth-child(even) {
+        @include theme.property(background-color, #fafafa, #252525);
+      }
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+
+  @include theme.dark {
+    .card.card-topics,
+    .card-categories {
+      .card-body:nth-child(even) {
+        background-color: #1e1e1e;
+      }
+      .card-body {
+        border-bottom-color: #242a30;
+      }
+    }
   }
 }
 

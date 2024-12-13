@@ -1,5 +1,5 @@
 <template>
-  <div class="card-body" :class="{'not-read': !topic.is_read, 'flagged': flag != null, 'tagged': highlight}">
+  <div class="card-body neon-collapsable-section-item" :class="{'not-read': !topic.is_read, 'flagged': flag != null, 'tagged': highlight}">
     <div class="row">
       <div
         :class="showCategoryName ? 'col-xl-9 col-lg-10' : 'col-xl-10 col-lg-10'"

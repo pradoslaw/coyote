@@ -54,16 +54,6 @@
   }
 
   .card-body {
-    border-bottom: 1px solid $card-border-color;
-
-    &:nth-child(even) {
-      @include theme.property(background-color, #fafafa, #252525);
-    }
-
-    &:last-child {
-      border-bottom: 0;
-    }
-
     &.tagged {
       background-color: $unread-bg;
     }
