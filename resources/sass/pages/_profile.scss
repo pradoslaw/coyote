@@ -7,14 +7,8 @@
 }
 
 .statement {
-  position: relative;
   font-size: 14px;
   margin: 20px 0 17px 2px;
-
-  &:before {
-    @include content-icon-solid($icon-profile-statement);
-    color: $gray-light;
-  }
 }
 
 #box-reputation {

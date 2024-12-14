@@ -96,6 +96,7 @@ readonly class FontAwesomePro
             'userRegisterDate'                          => 'fa-light fa-user-plus',
             'userIpAddress'                             => 'fa-light fa-house',
             'userVisits'                                => 'fa-light fa-eye',
+            'userAboutMe'                               => 'fa-solid fa-quote-left',
 
             // user account settings
             'userAccount.userAccount'                   => 'fa-light fa-user',
