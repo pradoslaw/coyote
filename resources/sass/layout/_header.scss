@@ -127,7 +127,8 @@ body.padding-top {
   display: flex;
   align-items: center; // center image vertically
 
-  a {
+  a,
+  .dropdown-item {
     color: $gray;
 
     &:hover {

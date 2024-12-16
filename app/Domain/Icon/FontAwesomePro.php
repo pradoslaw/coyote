@@ -521,6 +521,9 @@ readonly class FontAwesomePro
 
             // post review
             'postReviewClose'                           => $genericClose,
+
+            // look&feel
+            'lookAndFeel'                               => 'fa-light fa-palette',
         ];
     }
 }

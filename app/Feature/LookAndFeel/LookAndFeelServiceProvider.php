@@ -2,6 +2,7 @@
 namespace Coyote\Feature\LookAndFeel;
 
 use Coyote\Services\Guest;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +17,10 @@ class LookAndFeelServiceProvider extends ServiceProvider
         $view = $this->app['view'];
 
         $view->composer('layout', function (View $view) {
-            $view->with(['lookAndFeelModern' => $this->lookAndFeel() === 'modern']);
+            $view->with([
+                'accessToLookAndFeel' => $this->accessToLookAndFeel(),
+                'lookAndFeelModern'   => $this->lookAndFeel() === 'modern',
+            ]);
         });
 
         Route::middleware(['web', 'auth'])->group(function () {
@@ -25,6 +29,9 @@ class LookAndFeelServiceProvider extends ServiceProvider
                     return $view->view($guide->getPrimitiveColorGroups());
                 }
                 return response(status:404);
+            });
+            Route::post('/LookAndFeel', function (Request $request) {
+                $this->setLookAndFeel($request->get('lookAndFeel') === 'modern');
             });
         });
     }
@@ -60,5 +67,20 @@ class LookAndFeelServiceProvider extends ServiceProvider
             return 'modern';
         }
         return null;
+    }
+
+    private function setLookAndFeel(bool $isModern): void
+    {
+        if (!auth()->check()) {
+            return;
+        }
+        $guest = new Guest(auth()->user()->guest_id);
+        $guest->setSetting('lookAndFeel', $isModern ? 'modern' : 'legacy');
+    }
+
+    private function accessToLookAndFeel(): bool
+    {
+        $gate = $this->app->get(Gate::class);
+        return $gate->allows('beta-access');
     }
 }

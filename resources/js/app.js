@@ -20,6 +20,7 @@ import './sentry.ts';
 import './store/index.ts';
 import './gdpr.ts';
 import '../feature/stickyAside/sticky-aside.js';
+import '../feature/lookAndFeel/lookAndFeel';
 
 import '../../survey/src/survey';
 

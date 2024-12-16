@@ -79,10 +79,9 @@
               alt="4programmers.net"
               data-src-light="{{ cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-light.svg') }}"
               data-src-dark="{{ cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-dark.svg') }}"
-              src="{{ __dark_theme 
-                ? cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-dark.svg') 
-                : cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-light.svg') 
-              }}"
+              src="{{ __dark_theme
+              ? cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-dark.svg')
+              : cdn(lookAndFeelModern ? 'img/logo-modern.svg' : 'img/logo-light.svg') }}"
           />
         </a>
 
@@ -124,7 +123,8 @@
         </div>
 
         {% if auth_check() %}
-          <ul id="nav-auth" class="nav-auth navbar-nav order-2"></ul>
+          <ul id="nav-auth" class="nav-auth navbar-nav order-2">
+          </ul>
 
           <div class="dropdown nav-avatar order-2">
             <div class="dropdown-toggle d-block i-35 {{ not isHomepageModern ? 'img-thumbnail' }} neon-navbar-user-avatar" data-bs-toggle="dropdown" style="cursor:pointer;">
@@ -140,6 +140,31 @@
                   {{ icon('sponsorProfile') }}
                 {% endif %}
               </a>
+
+              {% if accessToLookAndFeel %}
+                <div class="dropdown-divider"></div>
+                <style>
+                    .option {
+                        opacity: 0.5;
+                        cursor: pointer;
+                    }
+                    .option:hover {
+                        text-decoration: underline;
+                    }
+                    .option-active {
+                        font-weight: bold;
+                    }
+                </style>
+                <span class="dropdown-item" title="Przełącz Look&amp;Feel forum" id="lookAndFeelSwitcher" style="cursor:default;">
+                  {{ icon('lookAndFeel') }}
+                  <span class="me-2">
+                    Look&amp;Feel:
+                  </span>
+                  <span class="option {{ lookAndFeelModern ?: 'option-active' }}" @click="lookAndFeelSwitchLegacy">Początkowy</span>
+                  /
+                  <span class="option {{ lookAndFeelModern ?'option-active' }}" @click="lookAndFeelSwitchModern">Nowy</span>
+                </span>
+              {% endif %}
 
               <div class="dropdown-divider"></div>
 
