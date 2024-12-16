@@ -2,7 +2,7 @@
   <div class="card card-post card-post-folded neon-post-folded" :class="postIndentCssClasses" v-if="postFolded">
     <vue-post-guiderail
       v-if="guiderailVisible"
-      :has-next-sibling="hasNextSibling"
+      :links-to-parent="linksToParent"
       :parent-levels="parentsWithSiblings"
       :expanded="postFolded"
       @toggle="guiderailToggle"
@@ -21,7 +21,7 @@
        ]">
     <vue-post-guiderail
       v-if="guiderailVisible"
-      :has-next-sibling="hasNextSibling"
+      :links-to-parent="linksToParent"
       :parent-levels="parentsWithSiblings"
       :expanded="postFolded"
       @toggle="guiderailToggle"
@@ -528,9 +528,6 @@ export default {
     ...mapGetters('user', ['isAuthorized']),
     ...mapGetters('posts', ['posts']),
     ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
-    hasNextSibling(): boolean {
-      return this.$props.treeItem.hasNextSibling;
-    },
     postIndentCssClasses(): string[] {
       if (!this.$props.treeItem) return [];
       const level = this.$props.treeItem.nestLevel;
@@ -550,19 +547,21 @@ export default {
       return ['indent', 'indent-12'];
     },
     guiderailVisible(): boolean {
-      if (!this.$props.treeItem) {
-        return false;
-      }
-      return this.$props.treeItem.nestLevel >= 2;
+      return !!this.$props.treeItem;
+    },
+    linksToParent(): boolean {
+      return this.$props.treeItem.nestLevel > 1;
     },
     parentsWithSiblings(): number[] {
-      const parentsWithSiblings = [];
-      const level = this.$props.treeItem.nestLevel;
-      if (level > 2 && store.getters['posts/parentPostHasNextSibling'](this.$props.post, 1)) {
-        parentsWithSiblings.push(1);
-      }
-      if (level > 3 && store.getters['posts/parentPostHasNextSibling'](this.$props.post, 2)) {
-        parentsWithSiblings.push(2);
+      return this.parentLevelsWithSiblings
+        .map(parentLevel => this.$props.treeItem.nestLevel - parentLevel)
+        .filter(nestLevel => nestLevel > 1)
+        .map(nestLevel => this.$props.treeItem.nestLevel - nestLevel);
+    },
+    parentLevelsWithSiblings(): number[] {
+      const parentsWithSiblings = store.getters['posts/parentLevelsWithSiblings'](this.$props.post);
+      if (this.$props.treeItem.hasNextSibling) {
+        parentsWithSiblings.push(0);
       }
       return parentsWithSiblings;
     },

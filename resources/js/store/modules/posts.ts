@@ -42,38 +42,21 @@ const getters = {
   exists: state => (id: number) => id in state.data,
   currentPage: state => state.current_page,
   totalPages: state => state.last_page,
-  parentPostHasNextSibling: (state, getters) => (post: Post, parentLevel: number): boolean => {
-    if (parentLevel === 1) {
-      return getters._directParentPostHasNextSibling(post);
+  parentLevelsWithSiblings: (state, getters) => (post: Post): number[] => {
+    const parentLevels: number[] = [];
+    let current: Post = post;
+    let level = 1;
+    while (true) {
+      if (current.parentPostId === null) {
+        return parentLevels;
+      }
+      const parentPost: TreePost = getters.treeTopicPostsMap.get(current.parentPostId);
+      if (parentPost.treeItem.hasNextSibling) {
+        parentLevels.push(level);
+      }
+      current = parentPost.post;
+      ++level;
     }
-    if (parentLevel === 2) {
-      return getters._grandParentPostHasNextSibling(post);
-    }
-    return false;
-  },
-  _directParentPostHasNextSibling: (state, getters) => (post: Post): boolean => {
-    if (post.parentPostId === null) {
-      return false;
-    }
-    const parentPost: TreePost = getters.treeTopicPostsMap.get(post.parentPostId);
-    if (parentPost.post.parentPostId === null) {
-      return false;
-    }
-    return parentPost.treeItem.hasNextSibling;
-  },
-  _grandParentPostHasNextSibling: (state, getters) => (post: Post): boolean => {
-    if (post.parentPostId === null) {
-      return false;
-    }
-    const parentPost: TreePost = getters.treeTopicPostsMap.get(post.parentPostId);
-    if (parentPost.post.parentPostId === null) {
-      return false;
-    }
-    const grandParentPost: TreePost = getters.treeTopicPostsMap.get(parentPost.post.parentPostId);
-    if (grandParentPost.post.parentPostId === null) {
-      return false;
-    }
-    return grandParentPost.treeItem.hasNextSibling;
   },
 };
 

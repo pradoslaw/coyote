@@ -1,10 +1,9 @@
 <template>
   <div
     v-for="cssClass in parentGuiderails"
-    class="position-absolute post-guiderail post-guiderail-of-parent" :class="cssClass"
+    class="position-absolute post-guiderail" :class="cssClass"
   />
-  <div class="position-absolute post-guiderail post-guiderail-to-sibling" v-if="hasNextSibling"/>
-  <div class="position-absolute post-guiderail post-guiderail-to-parent">
+  <div class="position-absolute post-guiderail post-guiderail-to-parent" v-if="linksToParent">
     <div class="position-absolute post-guiderail-button d-flex justify-content-center align-items-center cursor-pointer" @click="toggle" style="font-size:0.7em;">
       <vue-icon name="postGuiderailExpanded" v-if="expanded"/>
       <vue-icon name="postGuiderailCollapsed" v-else/>
@@ -21,8 +20,8 @@ export default {
   emits: ['toggle'],
   props: {
     expanded: {required: true, type: Boolean},
-    hasNextSibling: {required: false, default: false},
     parentLevels: {required: false, type: Array},
+    linksToParent: {required: false, type: Boolean},
   },
   methods: {
     toggle(): void {
@@ -32,10 +31,19 @@ export default {
   computed: {
     parentGuiderails(): number[] {
       return this.$props.parentLevels.map(parentLevel => {
-        if (parentLevel === 1) {
-          return 'post-guiderail-of-parent-1';
-        }
-        return 'post-guiderail-of-parent-2';
+        const parentLevels = {
+          0: 'post-guiderail-to-sibling',
+          1: 'post-guiderail-of-parent post-guiderail-of-parent-1',
+          2: 'post-guiderail-of-parent post-guiderail-of-parent-2',
+          3: 'post-guiderail-of-parent post-guiderail-of-parent-3',
+          4: 'post-guiderail-of-parent post-guiderail-of-parent-4',
+          5: 'post-guiderail-of-parent post-guiderail-of-parent-5',
+          6: 'post-guiderail-of-parent post-guiderail-of-parent-6',
+          7: 'post-guiderail-of-parent post-guiderail-of-parent-7',
+          8: 'post-guiderail-of-parent post-guiderail-of-parent-8',
+          9: 'post-guiderail-of-parent post-guiderail-of-parent-9',
+        };
+        return parentLevels[parentLevel];
       });
     },
   },
