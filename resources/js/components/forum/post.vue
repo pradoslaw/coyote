@@ -3,7 +3,7 @@
     <vue-post-guiderail
       v-if="guiderailVisible"
       :has-next-sibling="hasNextSibling"
-      :parent-has-next-sibling="parentHasNextSibling"
+      :parent-levels="parentsWithSiblings"
       :expanded="postFolded"
       @toggle="guiderailToggle"
     />
@@ -22,7 +22,7 @@
     <vue-post-guiderail
       v-if="guiderailVisible"
       :has-next-sibling="hasNextSibling"
-      :parent-has-next-sibling="parentHasNextSibling"
+      :parent-levels="parentsWithSiblings"
       :expanded="postFolded"
       @toggle="guiderailToggle"
     />
@@ -555,12 +555,16 @@ export default {
       }
       return this.$props.treeItem.nestLevel >= 2;
     },
-    parentHasNextSibling(): boolean {
+    parentsWithSiblings(): number[] {
+      const parentsWithSiblings = [];
       const level = this.$props.treeItem.nestLevel;
-      if (level <= 2) {
-        return false;
+      if (level > 2 && store.getters['posts/parentPostHasNextSibling'](this.$props.post, 1)) {
+        parentsWithSiblings.push(1);
       }
-      return store.getters['posts/parentPostHasNextSibling'](this.$props.post);
+      if (level > 3 && store.getters['posts/parentPostHasNextSibling'](this.$props.post, 2)) {
+        parentsWithSiblings.push(2);
+      }
+      return parentsWithSiblings;
     },
     postDropdownVisible(): boolean {
       return this.postDropdownItems.length > 0;

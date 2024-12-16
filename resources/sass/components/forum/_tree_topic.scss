@@ -57,7 +57,7 @@ $post-border-width:          1px; // change to 0px in modern look&feel
   border-right:  none;
   border-bottom: none;
   top:           0;
-  height:        calc(100% + $post-border-width*2);
+  height:        calc(100% + $post-border-width * 2);
 }
 
 .post-guiderail-of-parent {
@@ -65,6 +65,8 @@ $post-border-width:          1px; // change to 0px in modern look&feel
   border-right:  none;
   border-bottom: none;
   top:           -$guiderail-post-top-offset;
-  left:          -($guiderail-post-left-offset + $indent-width);
-  height:        calc(100% + $guiderail-post-top-offset + $post-border-width*2);
+  height:        calc(100% + $guiderail-post-top-offset + $post-border-width * 2);
+
+  &.post-guiderail-of-parent-1 { left: -($guiderail-post-left-offset + $indent-width * 1); }
+  &.post-guiderail-of-parent-2 { left: -($guiderail-post-left-offset + $indent-width * 2); }
 }
