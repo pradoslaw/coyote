@@ -212,17 +212,6 @@
         {% endif %}
       </section>
 
-      {% if is_writeable %}
-        <div class="alert alert-press">
-          Kliknij
-          <span style="border: 1px solid rgba(119,119,119,0.3); padding:2px 2px 2px 4px; border-radius:4px; margin:0 6px 0 4px;">
-            {{ icon('postAnswerQuote') }}
-            Odpowiedz
-          </span>
-          przy wybranym poście, żeby na niego odpowiedzieć.
-        </div>
-      {% endif %}
-
       {% if not auth_check() %}
         <div class="d-flex justify-content-center">
           <div>
