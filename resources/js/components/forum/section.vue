@@ -7,7 +7,7 @@
           <vue-icon name="categorySectionFold" v-else/>
           {{ name }}
         </span>
-        <template v-else v-text="name"/>
+        <template v-else>{{name}}</template>
       </h2>
 
       <div
