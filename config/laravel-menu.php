@@ -5,7 +5,7 @@ return [
         'default'          => [
             'auto_activate'    => true,
             'activate_parents' => true,
-            'active_class'     => 'active',
+            'active_class'     => 'active neon-tab-active',
             'restful'          => false,
             'cascade_data'     => true,
             'rest_base'        => '',      // string|array
@@ -46,10 +46,10 @@ return [
     // _ na poczatku gdyz ten plugin korzysta z metody share() klasy View, a nazwa "forum" moze
     // wchodzic w konflikt z innymi zmiennymi przekazywanymi do twiga
     '_forum'           => [
-        'Kategorie'   => ['route' => 'forum.categories', 'class' => 'nav-item'],
-        'Wszystkie'   => ['route' => 'forum.all', 'class' => 'nav-item'],
-        'Obserwowane' => ['route' => 'forum.subscribes', 'class' => 'nav-item', 'data' => ['role' => true]],
-        'Moje'        => ['route' => 'forum.mine', 'class' => 'nav-item', 'data' => ['role' => true], 'title' => 'Wątki w których brałem udział'],
-        'Moje tagi'   => ['route' => 'forum.interesting', 'class' => 'nav-item', 'title' => 'Wątki zawierające moje tagi'],
+        'Kategorie'   => ['route' => 'forum.categories', 'class' => 'nav-item neon-forum-tab'],
+        'Wszystkie'   => ['route' => 'forum.all', 'class' => 'nav-item neon-forum-tab'],
+        'Obserwowane' => ['route' => 'forum.subscribes', 'class' => 'nav-item neon-forum-tab', 'data' => ['role' => true]],
+        'Moje'        => ['route' => 'forum.mine', 'class' => 'nav-item neon-forum-tab', 'data' => ['role' => true], 'title' => 'Wątki w których brałem udział'],
+        'Moje tagi'   => ['route' => 'forum.interesting', 'class' => 'nav-item neon-forum-tab', 'title' => 'Wątki zawierające moje tagi'],
     ],
 ];

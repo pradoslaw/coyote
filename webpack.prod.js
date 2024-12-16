@@ -57,6 +57,7 @@ const plugins = [
         'divider',
         'vue-notification-group',
         'vue-notification-wrapper',
+        'neon-tab-active',
       ],
       deep: [
         /^logo/,

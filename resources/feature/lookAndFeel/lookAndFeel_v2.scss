@@ -54,3 +54,54 @@
           (light: #5e7813, dark:#acacac));
   color: var(--category-default-icon-color) !important;
 }
+
+$lavary-tab:        'nav-item';
+$lavary-tab-anchor: 'nav-link';
+
+@include modern {
+  .neon-tabs {
+    @include theme.var(--tab-border-color, (light: style.$navy-100, dark: style.$navy-700));
+    @include theme.var(--tab-border-active-color, style.$green-500);
+    @include theme.var(--tab-text-active-color, (light: style.$neutral-900, dark: style.$neutral-050));
+    @include theme.var(--tab-text-inactive-color, (light: style.$neutral-700, dark: style.$neutral-200));
+
+    background:    none;
+    border-bottom: 1px solid var(--tab-border-color); // overrides bootstrap .nav-tabs {border-bottom}
+    .#{$lavary-tab} {
+      .#{$lavary-tab-anchor} {
+        background-color: transparent; // overrides bootstrap .nav-link
+        border:           none; // overrides bootstrap .nav-link
+        color:            var(--tab-text-inactive-color);
+        &.neon-tab-active {
+          color:         var(--tab-text-active-color);
+          border-top:    none;
+          border-bottom: 1px solid var(--tab-border-active-color);
+        }
+      }
+    }
+  }
+}
+
+@include legacy {
+  .nav-tabs {
+    @include theme.dark {
+      border-bottom-color: #404040;
+    }
+    .#{$lavary-tab} {
+      .#{$lavary-tab-anchor} {
+        &.active {
+          @include theme.light {
+            border-top: 2px solid #d7661c;
+          }
+          @include theme.dark {
+            background:          #252525;
+            color:               #acacac;
+            border-color:        #404040;
+            border-bottom-color: #252525;
+            border-top-color:    #d7661c;
+          }
+        }
+      }
+    }
+  }
+}

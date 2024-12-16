@@ -401,23 +401,6 @@ body.theme-dark {
   }
 
   .nav.nav-tabs {
-    border-bottom-color: #404040;
-
-    .nav-item .nav-link {
-      background: #252525;
-
-      &:hover {
-        border-color: #404040;
-      }
-
-      &.active {
-        color: #acacac;
-        border-color: #404040;
-        border-bottom-color: #252525;
-        border-top-color: #d7661c;
-      }
-    }
-
     &.card-header-tabs {
       .nav-item .nav-link {
         background: #1a1a1a;
