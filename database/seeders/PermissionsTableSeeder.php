@@ -33,7 +33,8 @@ class PermissionsTableSeeder extends Seeder
         $this->addPermission('microblog-update', 'Edycja wpisów mikrobloga');
         $this->addPermission('pastebin-delete', 'Usuwanie wpisów z Pastebin');
         $this->addPermission('wiki-admin', 'Administracja stronami Wiki');
-        $this->addPermission('alpha-access', 'Wczesny dostęp do funkcjonalności serwisu');
+        $this->addPermission('alpha-access', 'Prototypowy dostęp do funkcjonalności serwisu');
+        $this->addPermission('beta-access', 'Wczesny dostęp do funkcjonalności serwisu');
 
         /** @var Group $group */
         $group = Group::query()->firstWhere('name', 'Administrator');
