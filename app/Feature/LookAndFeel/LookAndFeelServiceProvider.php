@@ -25,7 +25,7 @@ class LookAndFeelServiceProvider extends ServiceProvider
 
         Route::middleware(['web', 'auth'])->group(function () {
             Route::get('/LookAndFeel/StyleGuide', function (StyleGuide $guide, StyleGuideView $view) {
-                if ($this->userSetting() === 'modern') {
+                if ($this->lookAndFeel() === 'modern') {
                     return $view->view($guide->getPrimitiveColorGroups());
                 }
                 return response(status:404);
@@ -36,12 +36,7 @@ class LookAndFeelServiceProvider extends ServiceProvider
         });
     }
 
-    private function lookAndFeel(): string
-    {
-        return $this->requestOverride() ?? $this->userSetting() ?? 'legacy';
-    }
-
-    private function userSetting(): ?string
+    private function lookAndFeel(): ?string
     {
         if (!auth()->check()) {
             return null;
@@ -52,19 +47,6 @@ class LookAndFeelServiceProvider extends ServiceProvider
         }
         if ($guest->getSetting('lookAndFeel') === 'legacy') {
             return 'legacy';
-        }
-        return null;
-    }
-
-    private function requestOverride(): ?string
-    {
-        /** @var Request $request */
-        $request = $this->app[Request::class];
-        if ($request->query->get('lookAndFeel') === 'legacy') {
-            return 'legacy';
-        }
-        if ($request->query->has('lookAndFeel')) {
-            return 'modern';
         }
         return null;
     }

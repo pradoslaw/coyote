@@ -17,21 +17,9 @@ class LookAndFeelTest extends TestCase
         $this->assertTrue($this->lookAndFeelLegacy($response->content()));
     }
 
-    #[Test]
-    public function passingQueryParam_enablesModernLookAndFeel(): void
-    {
-        $response = $this->laravel->call('GET', '/?lookAndFeel=modern');
-        $this->assertTrue($this->lookAndFeelModern($response->content()));
-    }
-
     private function lookAndFeelLegacy(string $htmlContent): bool
     {
         return \in_array('look-and-feel-legacy', $this->htmlBodyClasses($htmlContent));
-    }
-
-    private function lookAndFeelModern(string $htmlContent): bool
-    {
-        return \in_array('look-and-feel-modern', $this->htmlBodyClasses($htmlContent));
     }
 
     private function htmlBodyClasses(string $htmlContent): array|false
