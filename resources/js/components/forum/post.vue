@@ -303,7 +303,7 @@
               </template>
               <template v-else>
                 <vue-icon name="postAccept"/>
-                <span class="d-none d-sm-inline ms-1">Najlepsza odpowiedź</span>
+                <span class="d-none d-sm-inline ms-1">Zaakceptuj</span>
               </template>
             </button>
           </div>
