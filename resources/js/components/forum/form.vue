@@ -234,6 +234,9 @@ export default {
     this.originalText = this.post.text;
   },
   methods: {
+    focus(): void {
+      this.$refs.markdown.focus();
+    },
     cancel() {
       this.post.text = this.originalText;
       this.$emit('cancel');

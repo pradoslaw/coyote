@@ -350,7 +350,7 @@
       <div class="d-none d-lg-block col-lg-2"/>
       <div class="col-12 col-lg-10">
         <div class="px-2 pb-2 ps-lg-0 pe-lg-4 pb-lg-3">
-          <vue-form :tree-answer-post-id="post.id" :post="postDefault" @save="formSaved"/>
+          <vue-form :tree-answer-post-id="post.id" :post="postDefault" @save="formSaved" ref="topicReply"/>
         </div>
       </div>
     </div>
@@ -514,6 +514,11 @@ export default {
     replyQuoteContent(): void {
       if (store.getters['topics/is_mode_tree']) {
         this.$data.treeTopicReplyVisible = !this.$data.treeTopicReplyVisible;
+        if (this.$data.treeTopicReplyVisible) {
+          nextTick(() => {
+            this.$refs.topicReply.focus();
+          });
+        }
       } else {
         this.$emit('reply', this.$props.post, false);
       }
