@@ -42,6 +42,7 @@ export default {
           7: 'post-guiderail-of-parent post-guiderail-of-parent-7',
           8: 'post-guiderail-of-parent post-guiderail-of-parent-8',
           9: 'post-guiderail-of-parent post-guiderail-of-parent-9',
+          10: 'post-guiderail-of-parent post-guiderail-of-parent-10',
         };
         return parentLevels[parentLevel];
       });
