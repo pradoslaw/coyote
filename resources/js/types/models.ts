@@ -188,6 +188,7 @@ export interface Post {
   voters?: string[];
   parentPostId: number | null;
   childrenFolded: boolean;
+  type: 'regular' | 'obscured';
 }
 
 export interface TreePost {

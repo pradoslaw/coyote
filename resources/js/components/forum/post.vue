@@ -8,7 +8,7 @@
       @toggle="guiderailToggle"
     />
     <div class="card-body cursor-pointer" @click="postUnfold">
-      {{ post.user.name }},
+      {{ post.user ? post.user.name : 'Post usunięty' }},
       <vue-timeago :datetime="post.created_at"/>
     </div>
   </div>
@@ -27,8 +27,9 @@
       @toggle="guiderailToggle"
     />
     <div v-if="post.deleted_at"
-         @click="isCollapsed = !isCollapsed"
-         class="post-delete card-body text-decoration-none">
+         @click="toggleDeletedPost"
+         class="post-delete card-body text-decoration-none"
+         :class="{'cursor-pointer':!postObscured}">
       <vue-icon name="postDeleted"/>
       Post usunięty
       <vue-timeago :datetime="post.deleted_at"/>
@@ -432,9 +433,10 @@ export default {
     }
   },
   methods: {
-    postFold(): void {
-      this.$data.postFolded = true;
-      store.commit('posts/foldChildren', this.$props.post);
+    toggleDeletedPost(): void {
+      if (!this.postObscured) {
+        this.$data.isCollapsed = !this.$data.isCollapsed;
+      }
     },
     postUnfold(): void {
       this.$data.postFolded = false;
@@ -535,6 +537,9 @@ export default {
     ...mapGetters('user', ['isAuthorized']),
     ...mapGetters('posts', ['posts']),
     ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
+    postObscured(): boolean {
+      return this.$props.post.type === 'obscured';
+    },
     postIndentCssClasses(): string[] {
       if (!this.$props.treeItem) return [];
       const level = this.$props.treeItem.nestLevel;

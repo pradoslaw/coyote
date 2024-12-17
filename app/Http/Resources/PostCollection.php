@@ -18,6 +18,7 @@ class PostCollection extends ResourceCollection
     private Tracker $tracker;
     private Topic $topic;
     private Forum $forum;
+    private bool $obscureDeletedPosts = false;
 
     public function setTracker(Tracker $tracker): self
     {
@@ -32,11 +33,16 @@ class PostCollection extends ResourceCollection
         return $this;
     }
 
+    public function obscureDeletedPosts(): void
+    {
+        $this->obscureDeletedPosts = true;
+    }
+
     public function toArray(Request $request): array
     {
         $collection = $this
             ->collection
-            ->map(function (PostResource $resource) use ($request) {
+            ->map(function (PostResource $resource) {
                 /** @var Post $post */
                 $post = $resource->resource;
 
@@ -51,6 +57,13 @@ class PostCollection extends ResourceCollection
                 return $resource;
             })
             ->keyBy('id');
+
+        if ($this->obscureDeletedPosts) {
+            $collection->map(function (PostResource $resource) {
+                $resource->obscureDeletedPosts();
+                return $resource;
+            });
+        }
 
         return $this
             ->resource

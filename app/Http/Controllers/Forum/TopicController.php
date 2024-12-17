@@ -49,11 +49,16 @@ class TopicController extends BaseController
 
         // user with forum-update ability WILL see every post
         // NOTE: criteria MUST BE pushed before calling getPage() method!
-        if ($gate->allows('delete', $forum)) {
+        $hasAccessToDeletedPosts = $gate->allows('delete', $forum);
+        if ($hasAccessToDeletedPosts) {
             $this->post->pushCriteria(new WithTrashed());
             $this->post->pushCriteria(new WithTrashedInfo());
 
             $topic->replies = $topic->replies_real; // user is able to see real number of posts in this topic
+        } else {
+            if ($topic->is_tree) {
+                $this->post->pushCriteria(new WithTrashed());
+            }
         }
 
         // user wants to show certain post. we need to calculate page number based on post id.
@@ -86,7 +91,7 @@ class TopicController extends BaseController
 
         $tracker = Tracker::make($topic);
 
-        if ($gate->allows('delete', $forum) || $gate->allows('move', $forum)) {
+        if ($hasAccessToDeletedPosts || $gate->allows('move', $forum)) {
             $reasons = Reason::query()->pluck('name', 'id')->toArray();
             $this->forum->resetCriteria();
             $this->pushForumCriteria(false);
@@ -99,9 +104,12 @@ class TopicController extends BaseController
             $reasons = null;
         }
 
-        $resource = (new PostCollection($paginate))
-            ->setRelations($topic, $forum)
-            ->setTracker($tracker);
+        $resource = new PostCollection($paginate);
+        $resource->setRelations($topic, $forum);
+        $resource->setTracker($tracker);
+        if (!$hasAccessToDeletedPosts) {
+            $resource->obscureDeletedPosts();
+        }
 
         $dateTime = $paginate->last()->created_at;
 

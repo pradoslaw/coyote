@@ -40,6 +40,7 @@ class PostResource extends JsonResource
 {
     private Gate $gate;
     private ?Tracker $tracker = null;
+    private bool $obscureDeletedPosts = false;
 
     public function __construct($resource)
     {
@@ -53,11 +54,24 @@ class PostResource extends JsonResource
         return $this;
     }
 
-    /**
-     * @param Request $request
-     * @return array
-     */
-    public function toArray($request): array
+    public function obscureDeletedPosts(): void
+    {
+        $this->obscureDeletedPosts = true;
+    }
+
+    public function toArray(Request $request): array
+    {
+        if ($this->obscureDeletedPosts) {
+            /** @var Post $post */
+            $post = $this->resource;
+            if ($post->deleted_at) {
+                return $this->postResourceToArrayObscured();
+            }
+        }
+        return $this->postResourceToArray($request);
+    }
+
+    private function postResourceToArray(Request $request): array
     {
         $this->applyCommentsRelation();
 
@@ -115,6 +129,7 @@ class PostResource extends JsonResource
 
             'parentPostId'   => $this->tree_parent_post_id,
             'childrenFolded' => false,
+            'type'           => 'regular',
         ]);
     }
 
@@ -124,5 +139,29 @@ class PostResource extends JsonResource
             $comment->setRelation('forum', $this->forum);
             $comment->setRelation('post', $this->resource);
         });
+    }
+
+    private function postResourceToArrayObscured(): array
+    {
+        return \array_merge(
+            $this->resource->only(['id', 'deleter_name', 'delete_reason']),
+            [
+                'type'           => 'obscured',
+                'parentPostId'   => $this->tree_parent_post_id,
+                'childrenFolded' => false,
+                'assets'         => [],
+                'permissions'    => [
+                    'write'      => false,
+                    'delete'     => false,
+                    'update'     => false,
+                    'merge'      => false,
+                    'sticky'     => false,
+                    'adm_access' => false,
+                    'accept'     => false,
+                ],
+                'created_at'     => $this->created_at->toIso8601String(),
+                'deleted_at'     => $this->deleted_at ? Carbon::parse($this->deleted_at)->toIso8601String() : null,
+            ],
+        );
     }
 }
