@@ -157,15 +157,21 @@ export default {
   },
   methods: {
     getUrl() {
-      const urlFragment = id => `${this.topic.url}?p=${id}#id${id}`;
+      const postUrl = id => `${this.topic.url}?p=${id}#id${id}`;
 
       // redirect straight to specific post if this field is present
       if (this.topic.user_post_id) {
-        return urlFragment(this.topic.user_post_id);
+        return postUrl(this.topic.user_post_id);
       }
 
       // redirect to last post if topic has been read by registered user.
-      return (this.topic.is_read && (this.isAuthorized && this.topic.last_post_created_at > store.state.user.user.created_at) ? urlFragment(this.topic.last_post.id) : this.topic.url);
+      if (this.topic.is_read && (this.isAuthorized && this.topic.last_post_created_at > store.state.user.user.created_at)) {
+        if (this.$props.topic.discuss_mode === 'tree') {
+          return this.$props.topic.url;
+        }
+        return postUrl(this.topic.last_post.id);
+      }
+      return this.topic.url;
     },
 
     mark(event) {
