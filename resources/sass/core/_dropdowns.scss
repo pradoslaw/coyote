@@ -29,6 +29,7 @@
 
 .dropdown-menu.dropdown-menu-start {
   @extend .dropdown-menu, .dropdown-menu-end;
+  --bs-position: start;
 
   &:before {
     left: 9px;

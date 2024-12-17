@@ -33,15 +33,6 @@ export function setAxiosErrorVueNotification(): void {
   axiosErrorHandler((message: string) => notify({type: 'error', text: message}));
 }
 
-export function createVueAppPhantom(component: object, properties: Record<string, unknown>): Element {
-  const app = createApp(component, properties);
-  app.use(store);
-  app.provide('icons', icons);
-  const el = document.createElement('div');
-  app.mount(el);
-  return el;
-}
-
 export function createVueAppGhost(component: object, properties: object): [App<Element>, Element] {
   const app = createApp(component, {...properties});
   app.use(store);

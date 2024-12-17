@@ -281,10 +281,18 @@
               <span class="d-none d-sm-inline ms-1">Obserwuj</span>
             </button>
 
-            <button class="btn btn-sm" ref="shareButton">
-              <vue-icon name="postShare"/>
-              <span class="d-none d-sm-inline ms-1">Udostępnij</span>
-            </button>
+            <div class="dropdown d-inline-block">
+              <button class="btn btn-sm" data-bs-toggle="dropdown">
+                <vue-icon name="postShare"/>
+                <span class="d-none d-sm-inline ms-1">Udostępnij</span>
+              </button>
+              <div class="dropdown-menu dropdown-menu-start">
+                <span v-for="item in shareDropdownItems" class="dropdown-item" @click="item.action">
+                  <vue-icon :name="item.iconName"/>
+                  {{ item.title }}
+                </span>
+              </div>
+            </div>
 
             <template v-if="is_mode_linear">
               <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
@@ -351,7 +359,6 @@
 
 <script lang="ts">
 import axios from "axios";
-import Popover from 'bootstrap/js/dist/popover';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import pl from 'date-fns/locale/pl';
 import {mapActions, mapGetters, mapState} from "vuex";
@@ -362,7 +369,7 @@ import {confirmModal} from "../../plugins/modals";
 import {VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
 import {notify} from "../../toast";
-import {createVueAppPhantom, nextTick} from "../../vue";
+import {nextTick} from "../../vue";
 import VueAvatar from '../avatar.vue';
 import VueDeleteModal from "../delete-modal.vue";
 import VueIcon from "../icon";
@@ -420,15 +427,6 @@ export default {
     this.isCollapsed = this.hidden;
   },
   mounted() {
-    if (this.$refs.shareButton) {
-      initializeSharePopover(
-        this.$refs.shareButton,
-        this.post.url,
-        this.post.id,
-        this.post.user?.name || this.post.user_name,
-        this.copy,
-      );
-    }
     if (this.is_mode_tree && !this.post.deleted_at) {
       this.loadVoters(this.post);
     }
@@ -462,11 +460,11 @@ export default {
     formatDistanceToNow(date) {
       return formatDistanceToNow(new Date(date), {locale: pl});
     },
-    copy(text: string): void {
+    copy(text: string, successMessage: string): void {
       if (copyToClipboard(text)) {
-        notify({type: 'success', text: 'Skopiowano link do schowka.'});
+        notify({type: 'success', text: successMessage});
       } else {
-        notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
+        notify({type: 'error', text: 'Nie można skopiować linku. Sprawdź ustawienia przeglądarki.'});
       }
     },
     edit() {
@@ -520,6 +518,15 @@ export default {
     },
     formSaved(): void {
       this.$data.treeTopicReplyVisible = false;
+    },
+    copyPostLink(): void {
+      this.copy(this.$props.post.url, 'Link do postu znajduje się w schowku.');
+    },
+    copyThreadLink(): void {
+      this.copy(baseUrl(this.$props.post.url), 'Link do wątku znajduje się w schowku.');
+    },
+    copyPostLinkMarkdown(): void {
+      this.copy(markdownLink(this.$props.post.id, this.$props.post.url), 'Link Markdown do postu znajduje się w schowku.');
     },
   },
   computed: {
@@ -592,6 +599,13 @@ export default {
       }
       return items;
     },
+    shareDropdownItems(): object[] {
+      const items = [];
+      items.push({title: 'Kopiuj link do postu ', iconName: 'postCopyLinkPost', action: this.copyPostLink});
+      items.push({title: 'Kopiuj link do postu jako Markdown', iconName: 'postCopyLinkPost', action: this.copyPostLinkMarkdown});
+      items.push({title: 'Kopiuj link do wątku', iconName: 'postCopyLinkThread', action: this.copyThreadLink});
+      return items;
+    },
     voters() {
       const users = this.post.voters;
       if (!users?.length) {
@@ -639,57 +653,12 @@ export default {
   },
 };
 
-function initializeSharePopover(
-  button: HTMLButtonElement,
-  postUrl: string,
-  postId: number,
-  authorName: string,
-  copy: (text: string) => void,
-): void {
-  new Popover(button, {
-    container: button,
-    placement: 'top',
-    trigger: 'focus',
-    title: 'Udostępnij',
-    html: true,
-    animation: false,
-    content() {
-      return sharePopover(postUrl, postId, authorName, copy);
-    },
-  });
+function baseUrl(postUrl: string): string {
+  const url = new URL(postUrl);
+  return url.origin + url.pathname;
 }
 
-function sharePopover(postUrl: string, postId: number, authorName: string, copy: (text: string) => void): Element {
-  return createVueAppPhantom({
-    data() {
-      return {postUrl, postId, authorName};
-    },
-    components: {'vue-icon': VueIcon},
-    template: `
-      <div class="share-container">
-        <div class="form-group mb-1">
-          <label>Post <b>#{{ postId }}</b> od <b>{{ authorName }}</b>:</label>
-          <div class="input-group">
-            <input class="form-control" readonly :value="postUrl" @click="select"/>
-            <div class="input-group-append">
-              <button type="button" class="btn" @click="copy(postUrl)">
-                <vue-icon name="postShareCopyUrl"/>
-              </button>
-            </div>
-          </div>
-        </div>
-        <button type="button" class="btn btn-secondary mt-1 w-100" @click="copy(postUrl)">
-          <vue-icon name="postShareCopyUrl"/>
-          Skopiuj link do postu <b>{{ authorName }}</b>
-        </button>
-      </div>
-    `,
-    methods: {
-      copy,
-      select(event) {
-        event.target.select();
-      },
-    },
-  }, {});
+function markdownLink(postId: number, postUrl: string): string {
+  return `[#${postId}](${postUrl})`;
 }
 </script>
