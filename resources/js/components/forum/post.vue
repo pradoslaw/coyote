@@ -114,7 +114,7 @@
               class="post-avatar img-thumbnail neon-post-user-avatar"
             ></vue-avatar>
 
-            <span v-if="post.user.group_name" class="badge badge-secondary mb-1">{{ post.user.group_name }}</span>
+            <span v-if="post.user.group_name && !is_mode_tree" class="badge badge-secondary mb-1">{{ post.user.group_name }}</span>
 
             <ul class="post-stats list-unstyled">
               <li v-if="is_mode_linear">
