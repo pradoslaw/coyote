@@ -87,18 +87,27 @@
             :is-online="post.user.is_online"
             :initials="post.user.initials"
             class="d-block i-35 img-thumbnail"
-          ></vue-avatar>
+          />
         </div>
 
         <div class="media-body">
           <h5 class="mb-0 post-author">
-            <vue-username v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"></vue-username>
+            <vue-username v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"/>
             <span v-else>{{ post.user_name }}</span>
           </h5>
 
           <a :href="post.url" class="text-muted small">
             <vue-timeago :datetime="post.created_at"/>
           </a>
+
+          <span class="ms-1" v-if="post.edit_count && is_mode_tree" :title="'edytowany ' + post.edit_count + 'x, ostatnio przez ' + post.editor.name + ', ' + editedTimeAgo">
+            <a v-if="post.permissions.update" :href="'/Forum/Post/Log/' + post.id" style="color:inherit; font-size:0.8em; opacity:0.7;">
+              (edytowany)
+            </a>
+            <span v-else>
+              (edytowany)
+            </span>
+          </span>
         </div>
       </div>
 
@@ -192,7 +201,7 @@
             </template>
           </div>
           <vue-tags :tags="tags" class="tag-clouds-md mt-2 mb-2"/>
-          <div v-if="post.edit_count" class="edit-info">
+          <div v-if="post.edit_count && is_mode_linear" class="edit-info">
             <strong>
               <a class="btn-history"
                  title="Zobacz historię zmian tego posta"
@@ -200,8 +209,7 @@
                  v-if="post.permissions.update">
                 <vue-icon name="postEditHistoryShow"/>
               </a>
-              edytowany {{ post.edit_count }}x,
-              ostatnio:
+              edytowany {{ post.edit_count }}x, ostatnio:
               <vue-username :user="post.editor"/>
             </strong>
             {{ ' ' }}
@@ -369,7 +377,7 @@ import {mapActions, mapGetters, mapState} from "vuex";
 import {copyToClipboard} from '../../plugins/clipboard';
 import {openFlagModal} from "../../plugins/flags";
 import {confirmModal} from "../../plugins/modals";
-import {VueTimeAgo} from "../../plugins/timeago.js";
+import {formatTimeAgo, VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
 import {notify} from "../../toast";
 import {nextTick} from "../../vue";
@@ -540,13 +548,16 @@ export default {
   },
   computed: {
     is() {
-      return is
+      return is;
     },
     ...mapState('user', ['user']),
     ...mapState('topics', ['reasons']),
     ...mapGetters('user', ['isAuthorized']),
     ...mapGetters('posts', ['posts']),
     ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
+    editedTimeAgo() {
+      return formatTimeAgo(this.$props.post.updated_at);
+    },
     postObscured(): boolean {
       return this.$props.post.type === 'obscured';
     },

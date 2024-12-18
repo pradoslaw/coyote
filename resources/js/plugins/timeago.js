@@ -1,17 +1,35 @@
-import format from 'date-fns/format';
-import pl from 'date-fns/locale/pl';
+import fnsFormat from 'date-fns/format';
+import fnsLocalePl from 'date-fns/locale/pl';
 
 import timeago from '../libs/timeago.js';
 import store from '../store/index';
 
 const defaultTimeFormat = store.getters['user/dateFormat']('yyyy-MM-dd HH:mm');
 
+export function format(datetime) {
+  if (datetime) {
+    return fnsFormat(new Date(datetime), defaultTimeFormat, {locale: fnsLocalePl});
+  }
+  return '';
+}
+
+export function formatTimeAgo(datetime) {
+  if (!datetime) {
+    return;
+  }
+  const date = new Date(datetime);
+  const value = timeago(date.getTime() / 1000);
+  if (value) {
+    return value;
+  }
+  return format(date);
+}
+
 export const VueTimeAgo = {
   store,
   props: {
     datetime: {required: true},
     autoUpdate: {default: 60},
-    format: {type: String, default: defaultTimeFormat},
   },
   data() {
     return {
@@ -27,23 +45,12 @@ export const VueTimeAgo = {
   template: '<time :title="title" v-text="this.timeago"/>',
   computed: {
     title() {
-      if (!this.datetime) {
-        return '';
-      }
-      return format(new Date(this.datetime), this.format, {locale: pl});
+      return format(this.datetime, defaultTimeFormat);
     },
   },
   methods: {
     getTimeago() {
-      if (!this.datetime) {
-        return;
-      }
-      const date = new Date(this.datetime);
-      const value = timeago(date.getTime() / 1000);
-      if (value) {
-        return value;
-      }
-      return format(date, this.format, {locale: pl});
+      return formatTimeAgo(this.datetime);
     },
     startUpdater() {
       if (this.autoUpdate) {
