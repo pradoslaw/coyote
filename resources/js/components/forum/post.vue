@@ -47,7 +47,7 @@
       <vue-icon name="postAuthorBlocked"/>
       Treść posta została ukryta, ponieważ autorem jest zablokowany przez Ciebie użytkownik.
     </div>
-    <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed}" class="card-header d-none neon-post-header">
+    <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed && is_mode_linear}" class="card-header d-none neon-post-header">
       <div class="row">
         <div class="col-2">
           <h5 class="mb-0 post-author">
@@ -78,7 +78,7 @@
       @answer="postReviewAnswer"
     />
     <div :class="{'collapse': isCollapsed}" class="card-body">
-      <div class="media d-lg-none mb-2">
+      <div class="media mb-2" :class="{'d-lg-none':is_mode_linear}">
         <div class="media-left me-2">
           <vue-avatar
             v-if="post.user"
@@ -103,7 +103,7 @@
       </div>
 
       <div class="row">
-        <div class="d-none d-lg-block col-lg-2">
+        <div class="d-none" :class="{'d-lg-block col-lg-2':is_mode_linear}" v-if="is_mode_linear">
           <template v-if="post.user">
             <vue-avatar
               v-if="post.user"
@@ -147,7 +147,7 @@
           </template>
         </div>
 
-        <div v-show="!post.is_editing" class="col-12 col-lg-10">
+        <div v-show="!post.is_editing" class="col-12" :class="{'col-lg-10':is_mode_linear}">
           <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"/>
           <div class="post-vote">
             <strong
@@ -235,7 +235,8 @@
         <vue-form
           v-if="post.is_editing"
           ref="form"
-          class="col-12 col-lg-10 mt-2 mb-2"
+          class="col-12 mt-2 mb-2"
+          :class="{'col-lg-10':is_mode_linear}"
           :post="post"
           :show-title-input="isFirstPost"
           :show-discuss-mode-select="false"
@@ -251,8 +252,8 @@
 
     <div :class="{'collapse': isCollapsed}" class="card-footer neon-post-footer" v-if="!hidden && is_mode_tree && scoreDescriptionVisible">
       <div class="row">
-        <div class="d-none d-lg-block col-lg-2"/>
-        <div class="col-12 d-flex col-lg-10 py-1">
+        <div class="d-none" :class="{'d-lg-block col-lg-2':is_mode_linear}" v-if="is_mode_linear"/>
+        <div class="col-12 d-flex py-1" :class="{'col-lg-10':is_mode_linear}">
           <div class="text-muted ps-2">
             {{ scoreDescription }}
           </div>
@@ -262,8 +263,8 @@
 
     <div :class="{'collapse': isCollapsed}" class="card-footer neon-post-footer" v-if="!authorBlocked">
       <div class="row">
-        <div class="d-none d-lg-block col-lg-2"/>
-        <div class="col-12 d-flex col-lg-10">
+        <div class="d-none" :class="{'d-lg-block col-lg-2':is_mode_linear}" v-if="is_mode_linear"/>
+        <div class="col-12 d-flex" :class="{'col-lg-10':is_mode_linear}">
           <div v-if="!post.deleted_at">
             <button class="btn btn-sm" v-if="!hidden && is_mode_tree" @click="checkAuth(vote, post)">
               <span v-if="post.is_voted" class="text-primary">
@@ -347,9 +348,9 @@
       </div>
     </div>
     <div class="row" v-if="is_mode_tree && !post.deleted_at && treeTopicReplyVisible">
-      <div class="d-none d-lg-block col-lg-2"/>
-      <div class="col-12 col-lg-10">
-        <div class="px-2 pb-2 ps-lg-0 pe-lg-4 pb-lg-3">
+      <div class="d-none d-lg-block col-lg-2" v-if="is_mode_linear"/>
+      <div class="col-12" :class="{'col-lg-10':is_mode_linear}">
+        <div class="px-2 pb-2" :class="{'ps-lg-0 pe-lg-4 pb-lg-3':is_mode_linear}">
           <vue-form :tree-answer-post-id="post.id" :post="postDefault" @save="formSaved" ref="topicReply"/>
         </div>
       </div>
@@ -361,6 +362,7 @@
 <script lang="ts">
 import axios from "axios";
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import {is} from "date-fns/locale";
 import pl from 'date-fns/locale/pl';
 import {mapActions, mapGetters, mapState} from "vuex";
 
@@ -537,6 +539,9 @@ export default {
     },
   },
   computed: {
+    is() {
+      return is
+    },
     ...mapState('user', ['user']),
     ...mapState('topics', ['reasons']),
     ...mapGetters('user', ['isAuthorized']),
