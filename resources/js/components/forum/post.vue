@@ -175,7 +175,7 @@
               <vue-icon name="postVote" v-else/>
             </a>
           </div>
-          <div class="post-content neon-post-content">
+          <div class="post-content neon-post-content" :style="is_mode_tree ? {minHeight:'initial'} : {}">
             <div v-html="post.html"/>
             <ul v-if="post.assets.length" class="list-unstyled mb-1">
               <li v-for="asset in post.assets" class="small">
