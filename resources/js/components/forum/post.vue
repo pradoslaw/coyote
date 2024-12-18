@@ -186,7 +186,7 @@
                 <small>({{ size(asset.size) }}) - <em>ściągnięć: {{ asset.count }}</em></small>
               </li>
             </ul>
-            <template v-if="post.user && post.user.sig">
+            <template v-if="signatureVisible">
               <hr>
               <footer v-html="post.user.sig"/>
             </template>
@@ -237,10 +237,10 @@
           ref="form"
           class="col-12 col-lg-10 mt-2 mb-2"
           :post="post"
-          :show-title-input="post.id === topic.first_post_id"
+          :show-title-input="isFirstPost"
           :show-discuss-mode-select="false"
-          :show-tags-input="post.id === topic.first_post_id"
-          :show-sticky-checkbox="post.id === topic.first_post_id && post.permissions.sticky"
+          :show-tags-input="isFirstPost"
+          :show-sticky-checkbox="isFirstPost && post.permissions.sticky"
           :upload-mimes="uploadMimes"
           :upload-max-size="uploadMaxSize"
           @cancel="$store.commit('posts/editEnd', post)"
@@ -602,7 +602,7 @@ export default {
         items.push({title: 'Zgłoś', iconName: 'postReport', action: this.flagPost});
       }
       if (post.permissions.merge && this.is_mode_linear) {
-        items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || post.id === topic.first_post_id});
+        items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || this.isFirstPost});
       }
       if (post.permissions.adm_access) {
         items.push({title: 'Zbanuj użytkownika', iconName: 'postBanAuthor', action: this.banAuthor});
@@ -640,7 +640,7 @@ export default {
       return null;
     },
     tags() {
-      return this.post.id === this.topic.first_post_id ? this.topic.tags : [];
+      return this.isFirstPost ? this.topic.tags : [];
     },
     anchor() {
       return `id${this.post.id}`;
@@ -659,6 +659,15 @@ export default {
     },
     authorBlocked(): boolean {
       return this.post.user_id && store.getters['user/isBlocked'](this.post.user_id);
+    },
+    isFirstPost(): boolean {
+      return this.$props.post.id === this.topic.first_post_id;
+    },
+    signatureVisible(): boolean {
+      if (this.is_mode_tree && !this.isFirstPost) {
+        return false;
+      }
+      return this.$props.post.user && this.$props.post.user.sig;
     },
   },
 };
