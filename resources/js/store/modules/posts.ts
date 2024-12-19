@@ -187,12 +187,13 @@ const actions = {
   },
 
   subscribe({commit}, post: Post) {
-    const subscribe = () => commit(post.is_subscribed ? 'unsubscribe' : 'subscribe', post);
-    subscribe();
-
-    return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(subscribe);
+    commit('subscribe', post);
+    return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('unsubscribe', post));
   },
-
+  unsubscribe({commit}, post: Post) {
+    commit('unsubscribe', post);
+    return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('subscribe', post));
+  },
   savePostTreeAnswer(
     {commit, state, getters, rootState, rootGetters},
     [post, treeAnswerPostId]: [Post, number?],

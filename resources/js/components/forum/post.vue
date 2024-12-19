@@ -283,14 +283,6 @@
               <span class="d-none d-sm-inline ms-1">Doceń</span>
             </button>
 
-            <button @click="checkAuth(subscribe, post)" class="btn btn-sm">
-              <span v-if="post.is_subscribed" class="text-primary neon-subscribe neon-subscribe-active">
-                <vue-icon name="postSubscribed"/>
-              </span>
-              <vue-icon v-else name="postSubscribe" class="neon-subscribe"/>
-              <span class="d-none d-sm-inline ms-1">Obserwuj</span>
-            </button>
-
             <div class="dropdown d-inline-block">
               <button class="btn btn-sm" data-bs-toggle="dropdown">
                 <vue-icon name="postShare"/>
@@ -468,7 +460,7 @@ export default {
         postsReviewed: {type, postId: this.post.id},
       });
     },
-    ...mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments', 'loadVoters']),
+    ...mapActions('posts', ['vote', 'accept', 'subscribe', 'unsubscribe', 'loadComments', 'loadVoters']),
     formatDistanceToNow(date) {
       return formatDistanceToNow(new Date(date), {locale: pl});
     },
@@ -604,6 +596,11 @@ export default {
     postDropdownItems(): object[] {
       const items = [];
       const post: Post = this.$props.post;
+      if (post.is_subscribed) {
+        items.push({title: 'Przestań obserwować', iconName: 'postSubscribed', action: () => this.checkAuth(this.unsubscribe, post)});
+      } else {
+        items.push({title: 'Obserwuj', iconName: 'postSubscribe', action: () => this.checkAuth(this.subscribe, post)});
+      }
       if (post.permissions.update) {
         items.push({title: 'Edytuj', iconName: 'postEdit', action: this.edit, disabled: post.deleted_at || post.is_editing});
       }
