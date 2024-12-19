@@ -139,6 +139,7 @@ interface PostPermission {
 }
 
 interface PostModeratorPermission {
+  delete: boolean;
   update: boolean;
   accept: boolean;
   merge: boolean;

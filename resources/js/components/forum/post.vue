@@ -602,18 +602,14 @@ export default {
         items.push({title: 'Edytuj', iconName: 'postEdit', action: this.edit, disabled: post.deleted_at || post.is_editing});
       }
       if (post.permissions.delete) {
-        if (post.deleted_at) {
-          items.push({title: 'Przywróć', iconName: 'postRestore', action: this.restore});
-        } else {
-          items.push({title: 'Usuń', iconName: 'postDelete', action: this.deletePostOpenModal});
-        }
+        items.push({title: 'Usuń', iconName: 'postDelete', action: this.deletePostOpenModal});
       }
       if (!post.deleted_at) {
         items.push({title: 'Zgłoś', iconName: 'postReport', action: this.flagPost});
       }
       const canMerge = this.is_mode_linear;
       const mod = post.moderatorPermissions;
-      if (mod.update || mod.accept || (mod.merge && canMerge) || mod.admAccess) {
+      if (mod.delete || mod.update || mod.accept || (mod.merge && canMerge) || mod.admAccess) {
         items.push({divider: true});
       }
       if (mod.accept) {
@@ -621,6 +617,13 @@ export default {
           items.push({title: 'Usuń akceptację jako moderator', iconName: 'postAcceptAccepted', action: () => this.accept(post)});
         } else {
           items.push({title: 'Zaakceptuj jako moderator', iconName: 'postAccept', action: () => this.accept(post)});
+        }
+      }
+      if (mod.delete) {
+        if (post.deleted_at) {
+          items.push({title: 'Przywróć', iconName: 'postRestore', action: this.restore});
+        } else {
+          items.push({title: 'Usuń jako moderator', iconName: 'postDelete', action: this.deletePostOpenModal});
         }
       }
       if (mod.update) {

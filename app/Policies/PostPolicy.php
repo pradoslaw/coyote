@@ -17,14 +17,7 @@ class PostPolicy
 
     public function delete(User $user, Post $post): bool
     {
-        if (!$this->isLocked($post)
-            && $this->isAuthor($user, $post)
-            && $this->isLastPost($post)
-            && !$this->isArchive($post)) {
-            return true;
-        }
-
-        return $this->check('forum-delete', $user, $post);
+        return $this->deleteAsUser($user, $post) || $this->deleteAsModerator($user, $post);
     }
 
     public function accept(User $user, Post $post): bool
@@ -94,5 +87,18 @@ class PostPolicy
     public function updateAsModerator(User $user, Post $post): bool
     {
         return $this->check('forum-update', $user, $post);
+    }
+
+    public function deleteAsUser(User $user, Post $post): bool
+    {
+        return !$this->isLocked($post)
+            && $this->isAuthor($user, $post)
+            && $this->isLastPost($post)
+            && !$this->isArchive($post);
+    }
+
+    public function deleteAsModerator(User $user, Post $post): bool
+    {
+        return $this->check('forum-delete', $user, $post);
     }
 }
