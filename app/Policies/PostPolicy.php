@@ -36,7 +36,17 @@ class PostPolicy
 
     public function accept(User $user, Post $post): bool
     {
-        return !$this->isFirstPost($post) && ($user->id === $post->topic->firstPost->user_id || $user->can('update', $post->forum));
+        return $this->acceptAsUser($user, $post) || $this->acceptAsModerator($user, $post);
+    }
+
+    public function acceptAsUser(User $user, Post $post): bool
+    {
+        return !$this->isFirstPost($post) && $user->id === $post->topic->firstPost->user_id;
+    }
+
+    public function acceptAsModerator(User $user, Post $post): bool
+    {
+        return !$this->isFirstPost($post) && $user->can('update', $post->forum);
     }
 
     private function check(string $ability, User $user, Post $post): bool

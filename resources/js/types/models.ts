@@ -139,6 +139,7 @@ interface PostPermission {
 }
 
 interface PostModeratorPermission {
+  accept: boolean;
   merge: boolean;
   sticky: boolean;
   admAccess: boolean;

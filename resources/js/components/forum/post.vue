@@ -183,6 +183,9 @@
               <vue-icon name="postVoted" v-if="post.is_voted"/>
               <vue-icon name="postVote" v-else/>
             </a>
+            <span v-if="post.is_accepted" class="vote-accept on">
+              <vue-icon name="postAccept"/>
+            </span>
           </div>
           <div class="post-content neon-post-content" :style="is_mode_tree ? {minHeight:'initial'} : {}">
             <div v-html="post.html"/>
@@ -309,7 +312,7 @@
             <button class="btn btn-sm" v-if="post.permissions.accept" @click="accept(post)" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną">
               <template v-if="post.is_accepted">
                 <vue-icon name="postAcceptAccepted" class="text-primary"/>
-                <span class="d-none d-sm-inline ms-1">Najlepsza odpowiedź</span>
+                <span class="d-none d-sm-inline ms-1">Zaakceptuj</span>
               </template>
               <template v-else>
                 <vue-icon name="postAccept"/>
@@ -610,6 +613,13 @@ export default {
       }
       if (!post.deleted_at) {
         items.push({title: 'Zgłoś', iconName: 'postReport', action: this.flagPost});
+      }
+      if (post.moderatorPermissions.accept) {
+        if (post.is_accepted) {
+          items.push({title: 'Usuń akceptację jako moderator', iconName: 'postAcceptAccepted', action: () => this.accept(post)});
+        } else {
+          items.push({title: 'Zaakceptuj jako moderator', iconName: 'postAccept', action: () => this.accept(post)});
+        }
       }
       if (post.moderatorPermissions.merge && this.is_mode_linear) {
         items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || this.isFirstPost});
