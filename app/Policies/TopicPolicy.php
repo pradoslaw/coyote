@@ -10,10 +10,6 @@ class TopicPolicy
 {
     use HandlesAuthorization;
 
-    public function __construct(private Gate $gate)
-    {
-    }
-
     public function write(?User $user, Topic $topic): bool
     {
         // users with permissions can reply in locked topic

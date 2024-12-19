@@ -1,21 +1,15 @@
 <?php
-
 namespace Coyote\Policies;
 
-use Coyote\Reputation;
-use Illuminate\Auth\Access\HandlesAuthorization;
-use Coyote\User;
 use Coyote\Post;
+use Coyote\Reputation;
+use Coyote\User;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class PostPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * @param User $user
-     * @param Post $post
-     * @return bool
-     */
     public function update(User $user, Post $post): bool
     {
         if (!$this->isLocked($post)
@@ -28,11 +22,6 @@ class PostPolicy
         return $this->check('forum-update', $user, $post);
     }
 
-    /**
-     * @param User $user
-     * @param Post $post
-     * @return bool
-     */
     public function delete(User $user, Post $post): bool
     {
         if (!$this->isLocked($post)
@@ -47,15 +36,9 @@ class PostPolicy
 
     public function accept(User $user, Post $post): bool
     {
-        return $post->id !== $post->topic->first_post_id && ($user->id === $post->topic->firstPost->user_id || $user->can('update', $post->forum));
+        return !$this->isFirstPost($post) && ($user->id === $post->topic->firstPost->user_id || $user->can('update', $post->forum));
     }
 
-    /**
-     * @param string $ability
-     * @param User $user
-     * @param Post $post
-     * @return bool
-     */
     private function check(string $ability, User $user, Post $post): bool
     {
         return $user->can(substr($ability, 6), $post->forum);
@@ -63,34 +46,24 @@ class PostPolicy
 
     private function isLocked(Post $post): bool
     {
-        return $post->forum->is_locked // removing (updating etc) in locked category is forbidden
-            || $post->topic->is_locked;
+        return $post->topic->is_locked || $post->forum->is_locked;
     }
 
-    /**
-     * @param User $user
-     * @param Post $post
-     * @return bool
-     */
     private function isAuthor(User $user, Post $post): bool
     {
         return $user->id === $post->user_id;
     }
 
-    /**
-     * @param User $user
-     * @param Post $post
-     * @return bool
-     */
+    private function isFirstPost(Post $post): bool
+    {
+        return $post->id === $post->topic->first_post_id;
+    }
+
     private function isLastPost(Post $post): bool
     {
         return $post->id === $post->topic->last_post_id;
     }
 
-    /**
-     * @param Post $post
-     * @return bool
-     */
     private function isRecentlyAdded(Post $post): bool
     {
         return $post->created_at->diffInHours(now()) <= 24;
