@@ -286,6 +286,13 @@
               </a>
             </li>
           {% endif %}
+
+          <li class="action-link">
+            <a href="javascript:" rel="nofollow" @click="copyTopicLink">
+              {{ icon('topicShare') }}
+              <span>Udostępnij</span>
+            </a>
+          </li>
         </ul>
 
         {% if can('move', forum) %}

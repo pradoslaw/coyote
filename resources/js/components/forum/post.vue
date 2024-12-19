@@ -531,9 +531,6 @@ export default {
     copyPostLink(): void {
       this.copy(this.$props.post.url, 'Link do postu znajduje się w schowku.');
     },
-    copyThreadLink(): void {
-      this.copy(baseUrl(this.$props.post.url), 'Link do wątku znajduje się w schowku.');
-    },
     copyPostLinkMarkdown(): void {
       this.copy(markdownLink(this.$props.post.id, this.$props.post.url), 'Link Markdown do postu znajduje się w schowku.');
     },
@@ -626,7 +623,6 @@ export default {
       const items = [];
       items.push({title: 'Kopiuj link do postu ', iconName: 'postCopyLinkPost', action: this.copyPostLink});
       items.push({title: 'Kopiuj link do postu jako Markdown', iconName: 'postCopyLinkPost', action: this.copyPostLinkMarkdown});
-      items.push({title: 'Kopiuj link do wątku', iconName: 'postCopyLinkThread', action: this.copyThreadLink});
       return items;
     },
     voters() {
@@ -684,11 +680,6 @@ export default {
     },
   },
 };
-
-function baseUrl(postUrl: string): string {
-  const url = new URL(postUrl);
-  return url.origin + url.pathname;
-}
 
 function markdownLink(postId: number, postUrl: string): string {
   return `[#${postId}](${postUrl})`;

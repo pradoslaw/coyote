@@ -5,7 +5,9 @@ import VueSelect from "../../components/forms/select.vue";
 import VueIcon from "../../components/icon";
 import {default as mixin} from '../../components/mixins/user';
 import VueModal from "../../components/modal.vue";
+import {copyToClipboard} from "../../plugins/clipboard";
 import store from "../../store";
+import {notify} from "../../toast";
 import {Forum} from '../../types/models';
 
 export default {
@@ -30,6 +32,16 @@ export default {
     };
   },
   methods: {
+    copyTopicLink(): void {
+      this.copy(baseUrl(this.$data.topic.url), 'Link do wątku znajduje się w schowku.');
+    },
+    copy(text: string, successMessage: string): void {
+      if (copyToClipboard(text)) {
+        notify({type: 'success', text: successMessage});
+      } else {
+        notify({type: 'error', text: 'Nie można skopiować linku. Sprawdź ustawienia przeglądarki.'});
+      }
+    },
     markForums() {
       store.dispatch('forums/markAll');
       store.commit('topics/markAll');
@@ -73,3 +85,8 @@ export default {
     },
   },
 };
+
+function baseUrl(postUrl: string): string {
+  const url = new URL(postUrl);
+  return url.origin + url.pathname;
+}

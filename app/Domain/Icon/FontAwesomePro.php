@@ -258,6 +258,7 @@ readonly class FontAwesomePro
             'topicVotesVoteMissing'                     => 'fa-light fa-thumbs-up',
             'topicPages'                                => 'fa-light fa-file',
             'topicActionGoToStart'                      => 'fa-light fa-backward-fast',
+            'topicShare'                                => 'fa-light fa-share-nodes',
 
             // topic log
             'topicLogUserAgent'                         => 'fa-light fa-globe',
