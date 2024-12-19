@@ -185,8 +185,6 @@ export interface Post {
   is_editing?: boolean;
   permissions: PostPermission;
   moderatorPermissions: PostModeratorPermission;
-  ip?: string;
-  browser?: string;
   comments: PostComment[];
   comments_count: number;
   assets: Asset[];

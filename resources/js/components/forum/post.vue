@@ -498,10 +498,6 @@ export default {
         store.dispatch('posts/merge', this.post);
       });
     },
-    banAuthor(): void {
-      const post = this.$props.post;
-      window.location.href = `/Adm/Firewall/Save?user=${post.user ? post.user.id : ''}&ip=${post.ip}`;
-    },
     restore() {
       this.$data.isCollapsed = false;
       store.dispatch('posts/restore', this.post);
@@ -609,7 +605,7 @@ export default {
       }
       const canMerge = this.is_mode_linear;
       const mod = post.moderatorPermissions;
-      if (mod.delete || mod.update || mod.accept || (mod.merge && canMerge) || mod.admAccess) {
+      if (mod.delete || mod.update || mod.accept || (mod.merge && canMerge)) {
         items.push({divider: true});
       }
       if (mod.accept) {
@@ -632,9 +628,6 @@ export default {
       }
       if (mod.merge && canMerge) {
         items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || this.isFirstPost});
-      }
-      if (mod.admAccess) {
-        items.push({title: 'Zbanuj użytkownika', iconName: 'postBanAuthor', action: this.banAuthor});
       }
       return items;
     },
