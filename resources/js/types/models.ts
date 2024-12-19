@@ -135,10 +135,13 @@ interface PostPermission {
   write: boolean;
   delete: boolean;
   update: boolean;
+  accept: boolean;
+}
+
+interface PostModeratorPermission {
   merge: boolean;
   sticky: boolean;
-  adm_access: boolean;
-  accept: boolean;
+  admAccess: boolean;
 }
 
 export interface PostComment {
@@ -178,6 +181,7 @@ export interface Post {
   is_voted: boolean;
   is_editing?: boolean;
   permissions: PostPermission;
+  moderatorPermissions: PostModeratorPermission;
   ip?: string;
   browser?: string;
   comments: PostComment[];

@@ -80,12 +80,14 @@ class SubmitControllerTest extends TestCase
             'permissions' => [
                 'delete' => true,
                 'accept' => false,
-                'adm_access' => false,
-                'merge' => false,
-                'sticky' => false,
                 'update' => true,
                 'write' => true
-            ]
+            ],
+            'moderatorPermissions' => [
+                'merge' => false,
+                'sticky' => false,
+                'admAccess' => false,
+            ],
         ]);
 
         $id = $response->json('id');

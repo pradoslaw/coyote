@@ -87,41 +87,43 @@ class PostResource extends JsonResource
         $comments = $request->get('p') == $this->id ? $post->comments : $post->comments->slice(-5, null, true);
 
         return array_merge($only, [
-            'created_at'     => $this->created_at->toIso8601String(),
-            'updated_at'     => $this->updated_at?->toIso8601String(),
-            'deleted_at'     => $this->deleted_at ? Carbon::parse($this->deleted_at)->toIso8601String() : null,
-            'user'           => UserResource::make($this->user),
-            'html'           => $html,
-            'url'            => UrlBuilder::post($post, true),
-            'is_locked'      => $this->topic->is_locked || $this->forum->is_locked,
+            'created_at'           => $this->created_at->toIso8601String(),
+            'updated_at'           => $this->updated_at?->toIso8601String(),
+            'deleted_at'           => $this->deleted_at ? Carbon::parse($this->deleted_at)->toIso8601String() : null,
+            'user'                 => UserResource::make($this->user),
+            'html'                 => $html,
+            'url'                  => UrlBuilder::post($post, true),
+            'is_locked'            => $this->topic->is_locked || $this->forum->is_locked,
             $this->mergeWhen($this->tracker !== null, fn() => [
                 'is_read' => $this->tracker->getMarkTime() >= $this->created_at,
             ]),
             $this->mergeWhen($this->editor !== null, fn() => [
                 'editor' => UserResource::make($this->editor),
             ]),
-            'permissions'    => [
-                'write'      => $this->gate->allows('write', $this->topic) && $this->gate->allows('write', $this->forum),
-                'delete'     => $this->gate->allows('delete', $post) || $this->gate->allows('delete', $this->forum),
-                'update'     => $this->gate->allows('update', $post),
-                'merge'      => $this->gate->allows('merge', $this->forum),
-                'sticky'     => $this->gate->allows('sticky', $this->forum),
-                'adm_access' => $this->gate->allows('adm-access'),
-                'accept'     => $this->gate->allows('accept', $post),
+            'permissions'          => [
+                'write'  => $this->gate->allows('write', $this->topic) && $this->gate->allows('write', $this->forum),
+                'delete' => $this->gate->allows('delete', $post) || $this->gate->allows('delete', $this->forum),
+                'update' => $this->gate->allows('update', $post),
+                'accept' => $this->gate->allows('accept', $post),
             ],
-            'comments'       => PostCommentResource::collection($comments)->keyBy('id'),
-            'comments_count' => $commentsCount,
-            'assets'         => AssetsResource::collection($post->assets),
-            'metadata'       => encrypt([
+            'moderatorPermissions' => [
+                'merge'     => $this->gate->allows('merge', $this->forum),
+                'sticky'    => $this->gate->allows('sticky', $this->forum),
+                'admAccess' => $this->gate->allows('adm-access'),
+            ],
+            'comments'             => PostCommentResource::collection($comments)->keyBy('id'),
+            'comments_count'       => $commentsCount,
+            'assets'               => AssetsResource::collection($post->assets),
+            'metadata'             => encrypt([
                 Post::class  => $this->id,
                 Topic::class => $this->topic_id,
                 Forum::class => $this->forum_id,
             ]),
-            'has_review'     => false,
-            'review_style'   => 'info',
-            'parentPostId'   => $post->tree_parent_post_id,
-            'childrenFolded' => false,
-            'type'           => 'regular',
+            'has_review'           => false,
+            'review_style'         => 'info',
+            'parentPostId'         => $post->tree_parent_post_id,
+            'childrenFolded'       => false,
+            'type'                 => 'regular',
         ]);
     }
 
@@ -138,21 +140,23 @@ class PostResource extends JsonResource
         return \array_merge(
             $this->resource->only(['id', 'deleter_name', 'delete_reason']),
             [
-                'type'           => 'obscured',
-                'parentPostId'   => $this->tree_parent_post_id,
-                'childrenFolded' => false,
-                'assets'         => [],
-                'permissions'    => [
-                    'write'      => false,
-                    'delete'     => false,
-                    'update'     => false,
-                    'merge'      => false,
-                    'sticky'     => false,
-                    'adm_access' => false,
-                    'accept'     => false,
+                'type'                 => 'obscured',
+                'parentPostId'         => $this->tree_parent_post_id,
+                'childrenFolded'       => false,
+                'assets'               => [],
+                'permissions'          => [
+                    'write'  => false,
+                    'delete' => false,
+                    'update' => false,
+                    'merge'  => false,
+                    'accept' => false,
                 ],
-                'created_at'     => $this->created_at->toIso8601String(),
-                'deleted_at'     => $this->deleted_at ? Carbon::parse($this->deleted_at)->toIso8601String() : null,
+                'moderatorPermissions' => [
+                    'sticky'    => false,
+                    'admAccess' => false,
+                ],
+                'created_at'           => $this->created_at->toIso8601String(),
+                'deleted_at'           => $this->deleted_at ? Carbon::parse($this->deleted_at)->toIso8601String() : null,
             ],
         );
     }

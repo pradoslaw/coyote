@@ -249,7 +249,7 @@
           :show-title-input="isFirstPost"
           :show-discuss-mode-select="false"
           :show-tags-input="isFirstPost"
-          :show-sticky-checkbox="isFirstPost && post.permissions.sticky"
+          :show-sticky-checkbox="isFirstPost && post.moderatorPermissions.sticky"
           :upload-mimes="uploadMimes"
           :upload-max-size="uploadMaxSize"
           @cancel="$store.commit('posts/editEnd', post)"
@@ -611,10 +611,10 @@ export default {
       if (!post.deleted_at) {
         items.push({title: 'Zgłoś', iconName: 'postReport', action: this.flagPost});
       }
-      if (post.permissions.merge && this.is_mode_linear) {
+      if (post.moderatorPermissions.merge && this.is_mode_linear) {
         items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || this.isFirstPost});
       }
-      if (post.permissions.adm_access) {
+      if (post.moderatorPermissions.admAccess) {
         items.push({title: 'Zbanuj użytkownika', iconName: 'postBanAuthor', action: this.banAuthor});
       }
       return items;
