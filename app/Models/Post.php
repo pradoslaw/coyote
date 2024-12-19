@@ -8,6 +8,7 @@ use Coyote\Models\Subscription;
 use Coyote\Post\Accept;
 use Coyote\Post\Log;
 use Coyote\Post\Vote;
+use Illuminate\Database\Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -38,7 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Topic $topic
  * @property Asset[] $assets
  * @property Vote[] $votes
- * @property Coyote\Post\Comment[] $comments
+ * @property Coyote\Post\Comment[]|Eloquent\Collection $comments
  * @property Flag[] $flags
  * @property User|null $user
  * @property User|null $editor
