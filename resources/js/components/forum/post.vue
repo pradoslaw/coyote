@@ -327,7 +327,8 @@
               </button>
               <div class="dropdown-menu dropdown-menu-end">
                 <template v-for="item in postDropdownItems">
-                  <a v-if="item.link" class="dropdown-item" :href="item.link">
+                  <div v-if="item.divider" class="dropdown-divider"/>
+                  <a v-else-if="item.link" class="dropdown-item" :href="item.link">
                     <vue-icon :name="item.iconName"/>
                     {{ item.title }}
                   </a>
@@ -610,21 +611,26 @@ export default {
       if (!post.deleted_at) {
         items.push({title: 'Zgłoś', iconName: 'postReport', action: this.flagPost});
       }
-      if (post.moderatorPermissions.accept) {
+      const canMerge = this.is_mode_linear;
+      const mod = post.moderatorPermissions;
+      if (mod.update || mod.accept || (mod.merge && canMerge) || mod.admAccess) {
+        items.push({divider: true});
+      }
+      if (mod.accept) {
         if (post.is_accepted) {
           items.push({title: 'Usuń akceptację jako moderator', iconName: 'postAcceptAccepted', action: () => this.accept(post)});
         } else {
           items.push({title: 'Zaakceptuj jako moderator', iconName: 'postAccept', action: () => this.accept(post)});
         }
       }
-      if (post.moderatorPermissions.update) {
+      if (mod.update) {
         items.push({title: 'Edytuj jako moderator', iconName: 'postEdit', action: this.edit, disabled: post.deleted_at || post.is_editing});
         items.push({title: 'Historia edycji', iconName: 'postEditHistoryShow', link: '/Forum/Post/Log/' + post.id});
       }
-      if (post.moderatorPermissions.merge && this.is_mode_linear) {
+      if (mod.merge && canMerge) {
         items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || this.isFirstPost});
       }
-      if (post.moderatorPermissions.admAccess) {
+      if (mod.admAccess) {
         items.push({title: 'Zbanuj użytkownika', iconName: 'postBanAuthor', action: this.banAuthor});
       }
       return items;
