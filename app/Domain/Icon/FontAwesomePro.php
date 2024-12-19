@@ -267,7 +267,7 @@ readonly class FontAwesomePro
 
             // topic post
             'postSubscribe'                             => 'fa-light fa-bell',
-            'postSubscribed'                            => 'fa-solid fa-bell',
+            'postSubscribed'                            => 'fa-light fa-bell-slash',
             'postShare'                                 => 'fa-light fa-share-nodes',
             'postComment'                               => 'fa-light fa-comment',
             'postShareCopyUrl'                          => 'fa-light fa-copy',
@@ -295,6 +295,7 @@ readonly class FontAwesomePro
             'postVisitPost'                             => 'fa-light fa-share',
             'postVisitThread'                           => 'fa-light fa-share',
             'postCopyLinkPost'                          => 'fa-light fa-link',
+            'postCopyLinkPostMarkdown'                  => 'fa-brand fa-markdown',
             'postCopyLinkThread'                        => 'fa-light fa-link',
 
             // tree topic

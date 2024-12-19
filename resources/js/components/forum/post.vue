@@ -283,19 +283,6 @@
               <span class="d-none d-sm-inline ms-1">Doceń</span>
             </button>
 
-            <div class="dropdown d-inline-block">
-              <button class="btn btn-sm" data-bs-toggle="dropdown">
-                <vue-icon name="postShare"/>
-                <span class="d-none d-sm-inline ms-1">Udostępnij</span>
-              </button>
-              <div class="dropdown-menu dropdown-menu-start">
-                <span v-for="item in shareDropdownItems" class="dropdown-item" @click="item.action">
-                  <vue-icon :name="item.iconName"/>
-                  {{ item.title }}
-                </span>
-              </div>
-            </div>
-
             <template v-if="is_mode_linear">
               <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
                 <span v-if="isCommenting" class="text-primary">
@@ -334,13 +321,16 @@
                 <vue-icon name="postMenuDropdown"/>
               </button>
               <div class="dropdown-menu dropdown-menu-end">
-                <span v-for="item in postDropdownItems"
-                      class="dropdown-item"
-                      :class="{disabled: item.disabled}"
-                      @click="item.action">
-                  <vue-icon :name="item.iconName"/>
-                  {{ item.title }}
-                </span>
+                <template v-for="item in postDropdownItems">
+                  <div v-if="item.divider" class="dropdown-divider"/>
+                  <span v-else
+                        class="dropdown-item"
+                        :class="{disabled: item.disabled}"
+                        @click="item.action">
+                    <vue-icon :name="item.iconName"/>
+                    {{ item.title }}
+                  </span>
+                </template>
               </div>
             </div>
           </div>
@@ -593,11 +583,6 @@ export default {
     postDropdownItems(): object[] {
       const items = [];
       const post: Post = this.$props.post;
-      if (post.is_subscribed) {
-        items.push({title: 'Przestań obserwować', iconName: 'postSubscribed', action: () => this.checkAuth(this.unsubscribe, post)});
-      } else {
-        items.push({title: 'Obserwuj', iconName: 'postSubscribe', action: () => this.checkAuth(this.subscribe, post)});
-      }
       if (post.permissions.update) {
         items.push({title: 'Edytuj', iconName: 'postEdit', action: this.edit, disabled: post.deleted_at || post.is_editing});
       }
@@ -608,8 +593,21 @@ export default {
           items.push({title: 'Usuń', iconName: 'postDelete', action: this.deletePostOpenModal});
         }
       }
+      if (post.permissions.update || post.permissions.delete) {
+        items.push({divider: true});
+      }
+      if (post.is_subscribed) {
+        items.push({title: 'Przestań obserwować', iconName: 'postSubscribed', action: () => this.checkAuth(this.unsubscribe, post)});
+      } else {
+        items.push({title: 'Obserwuj', iconName: 'postSubscribe', action: () => this.checkAuth(this.subscribe, post)});
+      }
+      items.push({title: 'Kopiuj link', iconName: 'postCopyLinkPost', action: this.copyPostLink});
+      items.push({title: 'Kopiuj link Markdown', iconName: 'postCopyLinkPostMarkdown', action: this.copyPostLinkMarkdown});
       if (!post.deleted_at) {
         items.push({title: 'Zgłoś', iconName: 'postReport', action: this.flagPost});
+      }
+      if ((post.permissions.merge && this.is_mode_linear) || post.permissions.adm_access) {
+        items.push({divider: true});
       }
       if (post.permissions.merge && this.is_mode_linear) {
         items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || this.isFirstPost});
@@ -617,12 +615,6 @@ export default {
       if (post.permissions.adm_access) {
         items.push({title: 'Zbanuj użytkownika', iconName: 'postBanAuthor', action: this.banAuthor});
       }
-      return items;
-    },
-    shareDropdownItems(): object[] {
-      const items = [];
-      items.push({title: 'Kopiuj link do postu ', iconName: 'postCopyLinkPost', action: this.copyPostLink});
-      items.push({title: 'Kopiuj link do postu jako Markdown', iconName: 'postCopyLinkPost', action: this.copyPostLinkMarkdown});
       return items;
     },
     voters() {
