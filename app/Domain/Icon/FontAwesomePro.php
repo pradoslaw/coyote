@@ -267,7 +267,7 @@ readonly class FontAwesomePro
 
             // topic post
             'postSubscribe'                             => 'fa-light fa-bell',
-            'postSubscribed'                            => 'fa-solid fa-bell',
+            'postSubscribed'                            => 'fa-light fa-bell-slash',
             'postShare'                                 => 'fa-light fa-share-nodes',
             'postComment'                               => 'fa-light fa-comment',
             'postShareCopyUrl'                          => 'fa-light fa-copy',
