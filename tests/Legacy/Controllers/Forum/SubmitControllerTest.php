@@ -84,6 +84,7 @@ class SubmitControllerTest extends TestCase
                 'write' => true
             ],
             'moderatorPermissions' => [
+                'update' => false,
                 'accept' => false,
                 'merge' => false,
                 'sticky' => false,

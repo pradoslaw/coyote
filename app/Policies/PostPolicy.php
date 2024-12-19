@@ -12,14 +12,7 @@ class PostPolicy
 
     public function update(User $user, Post $post): bool
     {
-        if (!$this->isLocked($post)
-            && $this->isAuthor($user, $post)
-            && ($this->isRecentlyAdded($post) || $this->isLastPost($post) || $this->hasEnoughReputationToEditPost($user))
-            && !$this->isArchive($post)) {
-            return true;
-        }
-
-        return $this->check('forum-update', $user, $post);
+        return $this->updateAsUser($user, $post) || $this->updateAsModerator($user, $post);
     }
 
     public function delete(User $user, Post $post): bool
@@ -87,5 +80,19 @@ class PostPolicy
     private function hasEnoughReputationToEditPost(User $user): bool
     {
         return $user->reputation >= Reputation::EDIT_POST;
+    }
+
+    public function updateAsUser(User $user, Post $post): bool
+    {
+        $isLocked = !$this->isLocked($post);
+        $isAuthor = $this->isAuthor($user, $post);
+        $isWithinUserRights = $this->isRecentlyAdded($post) || $this->isLastPost($post) || $this->hasEnoughReputationToEditPost($user);
+        $isNotArchive = !$this->isArchive($post);
+        return $isLocked && $isAuthor && $isWithinUserRights && $isNotArchive;
+    }
+
+    public function updateAsModerator(User $user, Post $post): bool
+    {
+        return $this->check('forum-update', $user, $post);
     }
 }

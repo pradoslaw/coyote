@@ -101,12 +101,7 @@
           </a>
 
           <span class="ms-1" v-if="post.edit_count && is_mode_tree" :title="'edytowany ' + post.edit_count + 'x, ostatnio przez ' + post.editor.name + ', ' + editedTimeAgo">
-            <a v-if="post.permissions.update" :href="'/Forum/Post/Log/' + post.id" style="color:inherit; font-size:0.8em; opacity:0.7;">
-              (edytowany)
-            </a>
-            <span v-else>
-              (edytowany)
-            </span>
+            (edytowany)
           </span>
         </div>
       </div>
@@ -206,12 +201,6 @@
           <vue-tags :tags="tags" class="tag-clouds-md mt-2 mb-2"/>
           <div v-if="post.edit_count && is_mode_linear" class="edit-info">
             <strong>
-              <a class="btn-history"
-                 title="Zobacz historię zmian tego posta"
-                 :href="'/Forum/Post/Log/' + post.id"
-                 v-if="post.permissions.update">
-                <vue-icon name="postEditHistoryShow"/>
-              </a>
               edytowany {{ post.edit_count }}x, ostatnio:
               <vue-username :user="post.editor"/>
             </strong>
@@ -337,13 +326,20 @@
                 <vue-icon name="postMenuDropdown"/>
               </button>
               <div class="dropdown-menu dropdown-menu-end">
-                <span v-for="item in postDropdownItems"
-                      class="dropdown-item"
-                      :class="{disabled: item.disabled}"
-                      @click="item.action">
-                  <vue-icon :name="item.iconName"/>
-                  {{ item.title }}
-                </span>
+                <template v-for="item in postDropdownItems">
+                  <a v-if="item.link" class="dropdown-item" :href="item.link">
+                    <vue-icon :name="item.iconName"/>
+                    {{ item.title }}
+                  </a>
+                  <span
+                    v-else
+                    class="dropdown-item"
+                    :class="{disabled: item.disabled}"
+                    @click="item.action">
+                    <vue-icon :name="item.iconName"/>
+                    {{ item.title }}
+                  </span>
+                </template>
               </div>
             </div>
           </div>
@@ -620,6 +616,10 @@ export default {
         } else {
           items.push({title: 'Zaakceptuj jako moderator', iconName: 'postAccept', action: () => this.accept(post)});
         }
+      }
+      if (post.moderatorPermissions.update) {
+        items.push({title: 'Edytuj jako moderator', iconName: 'postEdit', action: this.edit, disabled: post.deleted_at || post.is_editing});
+        items.push({title: 'Historia edycji', iconName: 'postEditHistoryShow', link: '/Forum/Post/Log/' + post.id});
       }
       if (post.moderatorPermissions.merge && this.is_mode_linear) {
         items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || this.isFirstPost});
