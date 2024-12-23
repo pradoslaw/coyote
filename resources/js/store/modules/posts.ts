@@ -169,12 +169,11 @@ const mutations = {
     }
   },
 
-  subscribe(state, post: Post) {
-    post.is_subscribed = true;
+  subscribe(state, postId: number): void {
+    state.data[postId].is_subscribed = true;
   },
-
-  unsubscribe(state, post: Post) {
-    post.is_subscribed = false;
+  unsubscribe(state, postId: number): void {
+    state.data[postId].is_subscribed = false;
   },
 
   updateVoters(state, {post, users, user}: { post: Post, users: string[], user?: User }) {
@@ -213,12 +212,12 @@ const actions = {
   },
 
   subscribe({commit}, post: Post) {
-    commit('subscribe', post);
-    return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('unsubscribe', post));
+    commit('subscribe', post.id);
+    return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('unsubscribe', post.id));
   },
   unsubscribe({commit}, post: Post) {
-    commit('unsubscribe', post);
-    return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('subscribe', post));
+    commit('unsubscribe', post.id);
+    return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('subscribe', post.id));
   },
   savePostTreeAnswer(
     {commit, state, getters, rootState, rootGetters},
@@ -249,12 +248,10 @@ const actions = {
       const commentId = comment.id;
       const postId = comment.post_id;
 
-      const post = state.data[postId];
-
       if (result.data.is_subscribed) {
-        commit('subscribe', post);
+        commit('subscribe', postId);
       } else {
-        commit('unsubscribe', post);
+        commit('unsubscribe', postId);
       }
       if (getters.commentExists(postId, commentId)) {
         commit('updateComment', {postId, comment});
