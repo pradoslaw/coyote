@@ -21,9 +21,6 @@ abstract class MicroblogObserver {
 }
 
 abstract class PostObserver {
-  get posts(): Post[] {
-    return store.state.posts.data;
-  }
 }
 
 export class MicroblogSaved extends MicroblogObserver implements Observer {
@@ -114,13 +111,13 @@ export class PostSaved implements Observer {
 
 export class PostVoted extends PostObserver implements Observer {
   update(payload: PostVoters) {
-    const existing = this.posts[payload.id!];
-
-    if (!existing) {
-      return;
+    const postId = payload.id!;
+    if (store.getters['posts/exists'](postId)) {
+      store.dispatch('posts/updateVoters', {
+        postId,
+        users: payload.users,
+      });
     }
-
-    store.dispatch('posts/updateVoters', {post: existing, users: payload.users});
   }
 }
 

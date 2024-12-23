@@ -175,11 +175,10 @@ const mutations = {
   unsubscribe(state, postId: number): void {
     state.data[postId].is_subscribed = false;
   },
-
-  updateVoters(state, {post, users, user}: { post: Post, users: string[], user?: User }) {
-    post.voters = users;
-    post.score = users.length;
-    post.is_voted = users.includes(<string>user?.name);
+  updateVoters(state, {postId, users, user}: { postId: number, users: string[], user?: User }): void {
+    state.data[postId].voters = users;
+    state.data[postId].score = users.length;
+    state.data[postId].is_voted = users.includes(user?.name!);
   },
   foldChildren(state, post: Post): void {
     post.childrenFolded = true;
@@ -201,7 +200,7 @@ const actions = {
     commit('vote', post);
 
     return axios.post<any>(`/Forum/Post/Vote/${post.id}`)
-      .then(response => dispatch('updateVoters', {post, users: response.data.users}))
+      .then(response => dispatch('updateVoters', {postId: post.id, users: response.data.users}))
       .catch(() => commit('vote', post));
   },
 
@@ -313,14 +312,13 @@ const actions = {
     if (!post.score) {
       return;
     }
-
     return axios.get<any>(`/Forum/Post/Voters/${post.id}`).then(response => {
-      dispatch('updateVoters', {post, users: response.data.users});
+      dispatch('updateVoters', {postId: post.id, users: response.data.users});
     });
   },
 
-  updateVoters({commit, rootState}, {post, users}: { post: Post, users: string[] }) {
-    commit('updateVoters', {post, users, user: rootState.user.user});
+  updateVoters({commit, rootState}, {postId, users}: { postId: number, users: string[] }) {
+    commit('updateVoters', {postId, users, user: rootState.user.user});
   },
 };
 
