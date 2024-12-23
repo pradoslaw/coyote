@@ -1,26 +1,20 @@
 <?php
-
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Events\PostWasDeleted;
 use Coyote\Events\PostSaved;
+use Coyote\Events\PostWasDeleted;
 use Coyote\Http\Resources\PostResource;
 use Coyote\Post;
 use Coyote\Services\Forum\Tracker;
-use Coyote\Services\Stream\Activities\Merge as Stream_Merge;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Activities\Merge as Stream_Merge;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\UrlBuilder;
 
 class MergeController extends BaseController
 {
-    /**
-     * @param Post $post
-     * @return PostResource
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function index(Post $post)
+    public function index(Post $post): PostResource
     {
         $this->authorize('merge', $post->forum);
 
@@ -49,6 +43,8 @@ class MergeController extends BaseController
             $comment->setRelation('forum', $post->forum);
         });
 
-        return (new PostResource($previous))->setTracker($tracker);
+        $postResource = new PostResource($previous);
+        $postResource->setTracker($tracker);
+        return $postResource;
     }
 }

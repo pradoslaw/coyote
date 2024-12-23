@@ -1,27 +1,25 @@
 <?php
-
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Events\CommentDeleted;
 use Coyote\Events\CommentSaved;
 use Coyote\Events\PostSaved;
 use Coyote\Events\TopicSaved;
+use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\Forum\PostCommentRequest;
 use Coyote\Http\Resources\PostCommentResource;
 use Coyote\Http\Resources\PostResource;
 use Coyote\Notifications\Post\Comment\MigratedNotification;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
-use Coyote\Http\Controllers\Controller;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
-use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Activities\Move as Stream_Move;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream;
-use Illuminate\Contracts\Notifications\Dispatcher;
 
 class CommentController extends Controller
 {
@@ -137,8 +135,8 @@ class CommentController extends Controller
             $post = $topic->posts()->forceCreate(
                 array_merge(
                     ['forum_id' => $topic->forum_id, 'topic_id' => $topic->id, 'ip' => $stream->ip, 'browser' => $stream->browser],
-                    $comment->only(['created_at', 'text', 'user_id'])
-                )
+                    $comment->only(['created_at', 'text', 'user_id']),
+                ),
             );
 
             if ($this->userId !== $comment->user_id) {
@@ -169,7 +167,9 @@ class CommentController extends Controller
 
         PostResource::withoutWrapping();
 
-        return (new PostResource($post))->setTracker($tracker)->resolve($this->request);
+        $postResource = new PostResource($post);
+        $postResource->setTracker($tracker);
+        return $postResource->resolve($this->request);
     }
 
     private function target(Post\Comment $comment): array

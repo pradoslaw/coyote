@@ -19,6 +19,7 @@ class PostCollection extends ResourceCollection
     private Topic $topic;
     private Forum $forum;
     private bool $obscureDeletedPosts = false;
+    private ?int $selectedPostId = null;
 
     public function setTracker(Tracker $tracker): self
     {
@@ -38,36 +39,32 @@ class PostCollection extends ResourceCollection
         $this->obscureDeletedPosts = true;
     }
 
+    public function setSelectedPostId(int $postId): void
+    {
+        $this->selectedPostId = $postId;
+    }
+
     public function toArray(Request $request): array
     {
-        $collection = $this
-            ->collection
-            ->map(function (PostResource $resource) {
-                /** @var Post $post */
-                $post = $resource->resource;
-
-                // set relations to avoid N+1 SQL loading. be aware we must use setRelation() method because setRelations() overwrites all already
-                // assigned relations
-                $post->setRelation('topic', $this->topic);
-                $post->setRelation('forum', $this->forum);
-
-                $resource->resource = $post;
-                $resource->setTracker($this->tracker);
-
-                return $resource;
-            })
-            ->keyBy('id');
-
-        if ($this->obscureDeletedPosts) {
-            $collection->map(function (PostResource $resource) {
+        /** @var PostResource $resource */
+        foreach ($this->collection as $resource) {
+            /** @var Post $post */
+            $post = $resource->resource;
+            // Set relations, to avoid N+1 SQL loading.
+            // Be aware to use setRelation(), since setRelations() overwrites existing relations.
+            $post->setRelation('topic', $this->topic);
+            $post->setRelation('forum', $this->forum);
+            $resource->setTracker($this->tracker);
+            if ($this->obscureDeletedPosts) {
                 $resource->obscureDeletedPosts();
-                return $resource;
-            });
+            }
+            if ($this->selectedPostId) {
+                $resource->setSelectedPostId($this->selectedPostId);
+            }
         }
-
         return $this
             ->resource
-            ->setCollection($collection)
+            ->setCollection($this->collection->keyBy('id'))
             ->toArray();
     }
 }

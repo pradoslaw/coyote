@@ -8,6 +8,7 @@ use Coyote\Services\Forum\Tracker;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Database\Eloquent;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,6 +19,7 @@ class PostResource extends JsonResource
 
     private ?Tracker $tracker = null;
     private bool $obscureDeletedPosts = false;
+    private ?int $selectedPostId = null;
 
     public function __construct(Post $resource)
     {
@@ -37,6 +39,11 @@ class PostResource extends JsonResource
         $this->obscureDeletedPosts = true;
     }
 
+    public function setSelectedPostId(int $postId): void
+    {
+        $this->selectedPostId = $postId;
+    }
+
     public function toArray(Request $request): array
     {
         if ($this->obscureDeletedPosts) {
@@ -45,15 +52,11 @@ class PostResource extends JsonResource
             }
         }
         $this->applyCommentsRelations();
-        return $this->postResourceToArray($request);
+        return $this->postResourceToArray();
     }
 
-    private function postResourceToArray(Request $request): array
+    private function postResourceToArray(): array
     {
-        // show all comments if parameter "p" is present. it means that user wants to be redirected
-        // to specific post and probably wants to see all comments (or specific comment)
-        $comments = $request->get('p') == $this->post->id ? $this->post->comments : $this->post->comments->slice(-5);
-
         return [
             ...$this->post->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed', 'user_id', 'deleter_name', 'delete_reason']),
             'created_at'           => $this->post->created_at->toIso8601String(),
@@ -83,7 +86,7 @@ class PostResource extends JsonResource
                 'sticky'    => $this->gate->allows('sticky', $this->post->forum),
                 'admAccess' => $this->gate->allows('adm-access'),
             ],
-            'comments'             => PostCommentResource::collection($comments)->keyBy('id'),
+            'comments'             => PostCommentResource::collection($this->postFoldedComments())->keyBy('id'),
             'comments_count'       => \count($this->post->comments),
             'assets'               => AssetsResource::collection($this->post->assets),
             'metadata'             => encrypt([
@@ -129,5 +132,13 @@ class PostResource extends JsonResource
             'created_at'           => $this->post->created_at->toIso8601String(),
             'deleted_at'           => $this->post->deleted_at ? Carbon::parse($this->post->deleted_at)->toIso8601String() : null,
         ];
+    }
+
+    private function postFoldedComments(): Eloquent\Collection
+    {
+        if ($this->selectedPostId == $this->post->id) {
+            return $this->post->comments;
+        }
+        return $this->post->comments->slice(-5);
     }
 }
