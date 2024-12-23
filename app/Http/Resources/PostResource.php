@@ -99,6 +99,7 @@ class PostResource extends JsonResource
             'parentPostId'         => $this->post->tree_parent_post_id,
             'childrenFolded'       => false,
             'type'                 => 'regular',
+            'highlighted'          => $this->selectedPostId === $this->post->id,
         ];
     }
 

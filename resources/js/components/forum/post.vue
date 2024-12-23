@@ -666,8 +666,8 @@ export default {
     anchor() {
       return `id${this.post.id}`;
     },
-    highlight() {
-      return '#' + this.anchor === window.location.hash;
+    highlight(): boolean {
+      return this.post.highlighted;
     },
     totalComments() {
       return this.post.comments_count - Object.keys(this.post.comments).length;
