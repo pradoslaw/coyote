@@ -85,30 +85,26 @@ const getters = {
 };
 
 const mutations = {
-  init(state, pagination) {
+  init(state, pagination): void {
     state = Object.assign(state, pagination);
   },
-
   add(state, post: Post): void {
     state.data[post.id!] = post;
   },
-
-  update(state, post: Post) {
+  update(state, post: Post): void {
     const {text, html, assets, editor, updated_at, edit_count, score} = post;
     state.data[post.id] = {...state.data[post.id], ...{text, html, assets, editor, updated_at, edit_count, score}};
   },
-
-  delete(state, post: Post) {
+  delete(state, post: Post): void {
     post.deleted_at = new Date();
   },
-
   editStart(state, editable: Post | PostComment): void {
     editable.is_editing = true;
   },
   editEnd(state, editable: Post | PostComment): void {
     editable.is_editing = false;
   },
-  addComment(state, {postId, comment}: ParentChild) {
+  addComment(state, {postId, comment}: ParentChild): void {
     const post = state.data[postId];
     if (Array.isArray(post.comments)) {
       post.comments = {};
@@ -116,7 +112,7 @@ const mutations = {
     post.comments[comment.id!] = comment;
     post.comments_count! += 1;
   },
-  updateComment(state, {postId, comment}: ParentChild) {
+  updateComment(state, {postId, comment}: ParentChild): void {
     const post = state.data[postId];
     post.comments[comment.id] = {
       ...post.comments[comment.id],
@@ -124,25 +120,22 @@ const mutations = {
       html: comment.html,
     };
   },
-  deleteComment(state, comment: PostComment) {
+  deleteComment(state, comment: PostComment): void {
     const post = state.data[comment.post_id];
     delete post.comments[comment.id!];
     post.comments_count! -= 1;
   },
-
-  setComments(state, {post, comments}) {
+  setComments(state, {post, comments}): void {
     post.comments = comments;
     post.comments_count = comments.length;
   },
-
-  restore(state, post: Post) {
+  restore(state, post: Post): void {
     post.deleted_at = null;
 
     delete post.delete_reason;
     delete post.deleter_name;
   },
-
-  vote(state, post: Post) {
+  vote(state, post: Post): void {
     if (post.is_voted) {
       post.is_voted = false;
       post.score -= 1;
@@ -151,8 +144,7 @@ const mutations = {
       post.score += 1;
     }
   },
-
-  accept(state, post: Post) {
+  accept(state, post: Post): void {
     if (post.is_accepted) {
       post.is_accepted = false;
     } else {
@@ -168,7 +160,6 @@ const mutations = {
       post.is_accepted = true;
     }
   },
-
   subscribe(state, postId: number): void {
     state.data[postId].is_subscribed = true;
   },
@@ -188,7 +179,7 @@ const mutations = {
   },
 };
 
-function savePostUrl(forum: Forum, topic: Topic, post: Post) {
+function savePostUrl(forum: Forum, topic: Topic, post: Post): string {
   if (post.id) {
     return `/Forum/${forum.slug}/Submit/${topic?.id || ''}/${post.id}`;
   }
@@ -219,7 +210,7 @@ const actions = {
     return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('subscribe', post.id));
   },
   savePostTreeAnswer(
-    {commit, state, getters, rootState, rootGetters},
+    {commit, getters, rootState, rootGetters},
     [post, treeAnswerPostId]: [Post, number?],
   ) {
     const topic: Topic = rootGetters['topics/topic'];
@@ -241,7 +232,7 @@ const actions = {
     });
   },
 
-  saveComment({state, commit, getters}, comment: PostComment) {
+  saveComment({commit, getters}, comment: PostComment) {
     return axios.post<any>(`/Forum/Comment/${comment.id || ''}`, comment).then(result => {
       const comment: PostComment = result.data.data;
       const commentId = comment.id;
