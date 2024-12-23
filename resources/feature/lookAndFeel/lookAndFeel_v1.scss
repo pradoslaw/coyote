@@ -158,8 +158,9 @@ body {
 }
 
 .neon-username-author {
-  color:      var(--username-author-color) !important; // overrides .badge {color}
-  background: var(--username-author-background);
+  color:       var(--username-author-color) !important; // overrides .badge {color}
+  background:  var(--username-author-background);
+  font-weight: normal !important; // overrides .badge {font-weight}
 }
 
 .look-and-feel-modern {
