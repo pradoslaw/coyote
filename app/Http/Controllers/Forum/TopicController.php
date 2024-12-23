@@ -107,6 +107,9 @@ class TopicController extends BaseController
         $resource = new PostCollection($paginate);
         $resource->setRelations($topic, $forum);
         $resource->setTracker($tracker);
+        if ($request->filled('p')) {
+            $resource->setSelectedPostId($request->get('p'));
+        }
         if (!$hasAccessToDeletedPosts) {
             $resource->obscureDeletedPosts();
         }
