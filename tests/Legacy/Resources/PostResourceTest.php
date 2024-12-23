@@ -28,7 +28,9 @@ class PostResourceTest extends TestCase
     #[Test]
     public function testPostUnreadForNewUser()
     {
+        /** @var Forum $forum */
         $forum = factory(Forum::class)->create();
+        /** @var Topic $topic */
         $topic = factory(Topic::class)->create(['forum_id' => $forum->id]);
 
         $guest = new Guest($this->uuid);
