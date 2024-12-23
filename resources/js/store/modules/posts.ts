@@ -1,6 +1,7 @@
 import axios from "axios";
 import {postsOrdered} from "../../treeTopic/postOrdering";
 import {Forum, Paginator, Post, PostComment, PostLog, Topic, TreePost, User} from "../../types/models";
+import store from "../index";
 
 type ParentChild = { post: Post, comment: PostComment };
 
@@ -39,7 +40,11 @@ const getters = {
       .forEach(treePost => treePosts.set(treePost.post.id, treePost));
     return treePosts;
   },
-  exists: state => (id: number) => id in state.data,
+  exists(state) {
+    return (postId: number): boolean => {
+      return postId in state.data;
+    };
+  },
   currentPage(state): number {
     return state.current_page;
   },
@@ -64,6 +69,11 @@ const getters = {
       current = parentPost.post;
       ++level;
     }
+  },
+  commentExists(state) {
+    return (postId: number, postCommentId: number) => {
+      return postCommentId in state.data[postId].comments;
+    };
   },
 };
 

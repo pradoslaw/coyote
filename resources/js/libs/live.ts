@@ -72,25 +72,24 @@ export class MicroblogCommentSaved extends MicroblogObserver implements Observer
 }
 
 export class PostCommentSaved implements Observer {
-  update(payload: PostComment) {
-    const post = store.state.posts.data[payload.post_id];
-    const existing = post?.comments[payload.id];
-
-    if (!post || existing?.is_editing === true) {
+  update(payload: PostComment): void {
+    const postId = payload.post_id;
+    if (!store.getters['posts/exists'](postId)) {
       return;
     }
-
-    if (!existing) {
+    const post = store.state.posts.data[postId];
+    if (store.getters['posts/commentExists'](postId, payload.id)) {
+      const comment: PostComment = store.state.posts.data[postId].comments[payload.id];
+      if (comment.is_editing === true) {
+        return;
+      }
+      store.commit('posts/updateComment', {post, comment: payload});
+    } else {
       payload.is_read = false;
-
       getPostComment(payload.id).then(({data}) => {
         store.commit('posts/addComment', {post, comment: data});
       });
-
-      return;
     }
-
-    store.commit('posts/updateComment', {post, comment: payload});
   }
 }
 
