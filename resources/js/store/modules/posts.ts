@@ -226,19 +226,19 @@ const actions = {
       discussMode: topic.discuss_mode,
       treeAnswerPostId: treeAnswerPostId,
     };
-    return axios.post<any>(savePostUrl(forum, topic, post), payload).then(result => {
-      commit(getters.exists(result.data.id) ? 'update' : 'add', result.data);
-      return result;
+    return axios.post<any>(savePostUrl(forum, topic, post), payload).then(response => {
+      commit(getters.exists(response.data.id) ? 'update' : 'add', response.data);
+      return response;
     });
   },
 
   saveComment({commit, getters}, comment: PostComment) {
-    return axios.post<any>(`/Forum/Comment/${comment.id || ''}`, comment).then(result => {
-      const comment: PostComment = result.data.data;
+    return axios.post<any>(`/Forum/Comment/${comment.id || ''}`, comment).then(response => {
+      const comment: PostComment = response.data.data;
       const commentId = comment.id;
       const postId = comment.post_id;
 
-      if (result.data.is_subscribed) {
+      if (response.data.is_subscribed) {
         commit('subscribe', postId);
       } else {
         commit('unsubscribe', postId);
@@ -272,9 +272,9 @@ const actions = {
   },
 
   merge({commit, getters}, post: Post) {
-    return axios.post(`/Forum/Post/Merge/${post.id}`).then(result => {
+    return axios.post(`/Forum/Post/Merge/${post.id}`).then(response => {
       commit('delete', post);
-      commit('update', result.data);
+      commit('update', response.data);
     });
   },
 
@@ -283,8 +283,8 @@ const actions = {
   },
 
   loadComments({commit}, post: Post) {
-    axios.get(`/Forum/Comment/Show/${post.id}`).then(result => {
-      commit('setComments', {post, comments: result.data});
+    axios.get(`/Forum/Comment/Show/${post.id}`).then(response => {
+      commit('setComments', {post, comments: response.data});
     });
   },
 
@@ -292,10 +292,9 @@ const actions = {
     const topic = rootGetters['topics/topic'];
     const forum = rootGetters['forums/forum'];
 
-    return axios.get(`/Forum/${forum.slug}/${topic.id}-${topic.slug}`, {params: {page}}).then(result => {
-      commit('init', result.data);
-
-      return result;
+    return axios.get(`/Forum/${forum.slug}/${topic.id}-${topic.slug}`, {params: {page}}).then(response => {
+      commit('init', response.data);
+      return response;
     });
   },
 
