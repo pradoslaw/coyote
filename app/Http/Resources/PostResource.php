@@ -4,48 +4,26 @@ namespace Coyote\Http\Resources;
 use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Post;
-use Coyote\Post\Comment;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
-use Coyote\User;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/**
- * @property int $id
- * @property int $user_id
- * @property int $topic_id
- * @property int $forum_id
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property Carbon|null $deleted_at
- * @property string $user_name
- * @property string $text
- * @property string $html
- * @property string $delete_reason
- * @property User $user
- * @property User|null $editor
- * @property User|null $deleter
- * @property int $score
- * @property int $edit_count
- * @property Topic $topic
- * @property Forum $forum
- * @property string $ip
- * @property string $host
- * @property string $browser
- */
 class PostResource extends JsonResource
 {
-    private Gate $gate;
+    private readonly Gate $gate;
+    private readonly Post $post;
+
     private ?Tracker $tracker = null;
     private bool $obscureDeletedPosts = false;
 
-    public function __construct($resource)
+    public function __construct(Post $resource)
     {
         parent::__construct($resource);
         $this->gate = app(Gate::class);
+        $this->post = $resource;
     }
 
     public function setTracker(Tracker $tracker): self
@@ -62,105 +40,94 @@ class PostResource extends JsonResource
     public function toArray(Request $request): array
     {
         if ($this->obscureDeletedPosts) {
-            /** @var Post $post */
-            $post = $this->resource;
-            if ($post->deleted_at) {
+            if ($this->post->deleted_at) {
                 return $this->postResourceToArrayObscured();
             }
         }
+        $this->applyCommentsRelations();
         return $this->postResourceToArray($request);
     }
 
     private function postResourceToArray(Request $request): array
     {
-        /** @var Post $post */
-        $post = $this->resource;
-
-        $this->applyCommentsRelation();
-
-        $only = $post->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed', 'user_id', 'deleter_name', 'delete_reason']);
-        $html = $this->text !== null ? $this->html : null;
-
-        $commentsCount = count($post->comments);
         // show all comments if parameter "p" is present. it means that user wants to be redirected
         // to specific post and probably wants to see all comments (or specific comment)
-        $comments = $request->get('p') == $this->id ? $post->comments : $post->comments->slice(-5, null, true);
+        $comments = $request->get('p') == $this->post->id ? $this->post->comments : $this->post->comments->slice(-5);
 
-        return array_merge($only, [
-            'created_at'           => $this->created_at->toIso8601String(),
-            'updated_at'           => $this->updated_at?->toIso8601String(),
-            'deleted_at'           => $this->deleted_at ? Carbon::parse($this->deleted_at)->toIso8601String() : null,
-            'user'                 => UserResource::make($this->user),
-            'html'                 => $html,
-            'url'                  => UrlBuilder::post($post, true),
-            'is_locked'            => $this->topic->is_locked || $this->forum->is_locked,
+        return [
+            ...$this->post->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed', 'user_id', 'deleter_name', 'delete_reason']),
+            'created_at'           => $this->post->created_at->toIso8601String(),
+            'updated_at'           => $this->post->updated_at?->toIso8601String(),
+            'deleted_at'           => $this->post->deleted_at ? Carbon::parse($this->post->deleted_at)->toIso8601String() : null,
+            'user'                 => UserResource::make($this->post->user),
+            'html'                 => $this->post->text === null ? null : $this->post->html,
+            'url'                  => UrlBuilder::post($this->post, true),
+            'is_locked'            => $this->post->topic->is_locked || $this->post->forum->is_locked,
             $this->mergeWhen($this->tracker !== null, fn() => [
-                'is_read' => $this->tracker->getMarkTime() >= $this->created_at,
+                'is_read' => $this->post->created_at <= $this->tracker->getMarkTime(),
             ]),
-            $this->mergeWhen($this->editor !== null, fn() => [
-                'editor' => UserResource::make($this->editor),
+            $this->mergeWhen($this->post->editor !== null, fn() => [
+                'editor' => UserResource::make($this->post->editor),
             ]),
             'permissions'          => [
-                'write'  => $this->gate->allows('write', $this->topic) && $this->gate->allows('write', $this->forum),
-                'delete' => $this->gate->allows('deleteAsUser', $post),
-                'update' => $this->gate->allows('updateAsUser', $post),
-                'accept' => $this->gate->allows('acceptAsUser', $post),
+                'write'  => $this->gate->allows('write', $this->post->topic) && $this->gate->allows('write', $this->post->forum),
+                'delete' => $this->gate->allows('deleteAsUser', $this->post),
+                'update' => $this->gate->allows('updateAsUser', $this->post),
+                'accept' => $this->gate->allows('acceptAsUser', $this->post),
             ],
             'moderatorPermissions' => [
-                'delete'    => $this->gate->allows('deleteAsModerator', $post) || $this->gate->allows('delete', $this->forum),
-                'update'    => $this->gate->allows('updateAsModerator', $post),
-                'accept'    => $this->gate->allows('acceptAsModerator', $post),
-                'merge'     => $this->gate->allows('merge', $this->forum),
-                'sticky'    => $this->gate->allows('sticky', $this->forum),
+                'delete'    => $this->gate->allows('deleteAsModerator', $this->post) || $this->gate->allows('delete', $this->post->forum),
+                'update'    => $this->gate->allows('updateAsModerator', $this->post),
+                'accept'    => $this->gate->allows('acceptAsModerator', $this->post),
+                'merge'     => $this->gate->allows('merge', $this->post->forum),
+                'sticky'    => $this->gate->allows('sticky', $this->post->forum),
                 'admAccess' => $this->gate->allows('adm-access'),
             ],
             'comments'             => PostCommentResource::collection($comments)->keyBy('id'),
-            'comments_count'       => $commentsCount,
-            'assets'               => AssetsResource::collection($post->assets),
+            'comments_count'       => \count($this->post->comments),
+            'assets'               => AssetsResource::collection($this->post->assets),
             'metadata'             => encrypt([
-                Post::class  => $this->id,
-                Topic::class => $this->topic_id,
-                Forum::class => $this->forum_id,
+                Post::class  => $this->post->id,
+                Topic::class => $this->post->topic_id,
+                Forum::class => $this->post->forum_id,
             ]),
             'has_review'           => false,
             'review_style'         => 'info',
-            'parentPostId'         => $post->tree_parent_post_id,
+            'parentPostId'         => $this->post->tree_parent_post_id,
             'childrenFolded'       => false,
             'type'                 => 'regular',
-        ]);
+        ];
     }
 
-    private function applyCommentsRelation(): void
+    private function applyCommentsRelations(): void
     {
-        $this->resource->comments->each(function (Comment $comment) {
-            $comment->setRelation('forum', $this->forum);
-            $comment->setRelation('post', $this->resource);
-        });
+        foreach ($this->post->comments as $comment) {
+            $comment->setRelation('forum', $this->post->forum);
+            $comment->setRelation('post', $this->post);
+        }
     }
 
     private function postResourceToArrayObscured(): array
     {
-        return \array_merge(
-            $this->resource->only(['id', 'deleter_name', 'delete_reason']),
-            [
-                'type'                 => 'obscured',
-                'parentPostId'         => $this->tree_parent_post_id,
-                'childrenFolded'       => false,
-                'assets'               => [],
-                'permissions'          => [
-                    'write'  => false,
-                    'delete' => false,
-                    'update' => false,
-                    'merge'  => false,
-                    'accept' => false,
-                ],
-                'moderatorPermissions' => [
-                    'sticky'    => false,
-                    'admAccess' => false,
-                ],
-                'created_at'           => $this->created_at->toIso8601String(),
-                'deleted_at'           => $this->deleted_at ? Carbon::parse($this->deleted_at)->toIso8601String() : null,
+        return [
+            ...$this->post->only(['id', 'deleter_name', 'delete_reason']),
+            'type'                 => 'obscured',
+            'parentPostId'         => $this->post->tree_parent_post_id,
+            'childrenFolded'       => false,
+            'assets'               => [],
+            'permissions'          => [
+                'write'  => false,
+                'delete' => false,
+                'update' => false,
+                'merge'  => false,
+                'accept' => false,
             ],
-        );
+            'moderatorPermissions' => [
+                'sticky'    => false,
+                'admAccess' => false,
+            ],
+            'created_at'           => $this->post->created_at->toIso8601String(),
+            'deleted_at'           => $this->post->deleted_at ? Carbon::parse($this->post->deleted_at)->toIso8601String() : null,
+        ];
     }
 }
