@@ -26,8 +26,13 @@
           </li>
         </ul>
 
-        <p v-if="hits.meta.total" class="text-muted">Wyniki <strong>${ hits.meta.from } - ${ hits.meta.to }</strong> z <strong>${ hits.meta.total }</strong> znalezione w czasie <strong>${
-            hits.took } ms.</strong></p>
+        <p v-if="hits.meta.total" class="text-muted">
+          Wyniki 
+          <strong>${ hits.meta.from } - ${ hits.meta.to }</strong> 
+          z 
+          <strong>${ hits.meta.total }</strong> 
+          znalezione w czasie <strong>${hits.took} ms.</strong>
+        </p>
 
         <ul class="list-inline">
           <li v-if="shouldShowCategories" class="list-inline-item dropdown">
