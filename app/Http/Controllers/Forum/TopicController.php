@@ -130,21 +130,22 @@ class TopicController extends BaseController
         $post = array_first($posts['data']);
         return $this
             ->view('forum.topic', [
-                'threadStartUrl' => route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
-                'posts'          => $posts,
-                'forum'          => $forum,
-                'paginate'       => $paginate,
-                'reasons'        => $reasons,
-                'model'          => $topic, // we need eloquent model in twig to show information about locked/moved topic
-                'topic'          => (new TopicResource($tracker))->toResponse($request)->getData(true),
-                'poll'           => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
-                'is_writeable'   => $gate->allows('write', $forum) && $gate->allows('write', $topic),
-                'all_forums'     => $allForums,
-                'emojis'         => Emoji::all(),
-                'user_forums'    => $userForums,
-                'description'    => excerpt($post['text'], 100),
-                'flags'          => $this->flags($forum),
-                'schema_topic'   => $this->discussionForumPosting($topic, $post['html']),
+                'threadStartUrl'        => route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
+                'posts'                 => $posts,
+                'forum'                 => $forum,
+                'paginationCurrentPage' => $paginate->currentPage(),
+                'paginationPerPage'     => $paginate->perPage(),
+                'reasons'               => $reasons,
+                'model'                 => $topic, // we need eloquent model in twig to show information about locked/moved topic
+                'topic'                 => (new TopicResource($tracker))->toResponse($request)->getData(true),
+                'poll'                  => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
+                'is_writeable'          => $gate->allows('write', $forum) && $gate->allows('write', $topic),
+                'all_forums'            => $allForums,
+                'emojis'                => Emoji::all(),
+                'user_forums'           => $userForums,
+                'description'           => excerpt($post['text'], 100),
+                'flags'                 => $this->flags($forum),
+                'schema_topic'          => $this->discussionForumPosting($topic, $post['html']),
             ]);
     }
 

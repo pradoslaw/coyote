@@ -1,6 +1,6 @@
 {% extends 'forum.base' %}
 
-{% block title %}{{ model.title ~ (paginate.currentPage() > 1 ? (' - Strona ' ~ paginate.currentPage())) }}{{ parent() }}{% endblock %}
+{% block title %}{{ model.title ~ (paginationCurrentPage > 1 ? (' - Strona ' ~ paginationCurrentPage)) }}{{ parent() }}{% endblock %}
 {% block description %}{{ description }}{% endblock %}
 
 {% import 'components.forms' as forms %}
@@ -176,7 +176,7 @@
         </div>
 
         <div class="page-page-size-selector">
-          {% include 'forum.partials.per_page' with {label: 'Liczba odpowiedzi na stronę', perPage: paginate.perPage()} %}
+          {% include 'forum.partials.per_page' with {label: 'Liczba odpowiedzi na stronę', perPage: paginationPerPage} %}
         </div>
       </div>
 
