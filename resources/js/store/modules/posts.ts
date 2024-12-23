@@ -73,8 +73,13 @@ const getters = {
     }
   },
   commentExists(state) {
-    return (postId: number, postCommentId: number) => {
+    return (postId: number, postCommentId: number): boolean => {
       return postCommentId in state.data[postId].comments;
+    };
+  },
+  commentIsEditing(state) {
+    return (postId: number, postCommentId: number): boolean => {
+      return state.data[postId].comments[postCommentId].is_editing;
     };
   },
 };
