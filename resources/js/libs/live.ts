@@ -79,10 +79,9 @@ export class PostCommentSaved implements Observer {
     }
     if (store.getters['posts/commentExists'](postId, payload.id)) {
       const comment: PostComment = store.state.posts.data[postId].comments[payload.id];
-      if (comment.is_editing === true) {
-        return;
+      if (!comment.is_editing) {
+        store.commit('posts/updateComment', {postId, comment: payload});
       }
-      store.commit('posts/updateComment', {postId, comment: payload});
     } else {
       payload.is_read = false;
       getPostComment(payload.id).then(({data}) => {

@@ -240,16 +240,21 @@ const actions = {
 
   saveComment({state, commit, getters}, comment: PostComment) {
     return axios.post<any>(`/Forum/Comment/${comment.id || ''}`, comment).then(result => {
-      const postId = result.data.data.post_id!;
-      const commentId = result.data.data.id!;
+      const comment: PostComment = result.data.data;
+      const commentId = comment.id;
+      const postId = comment.post_id;
 
       const post = state.data[postId];
 
-      commit(result.data.is_subscribed ? 'subscribe' : 'unsubscribe', post);
-      if (post.comments[commentId]) {
-        commit('updateComment', {postId, comment: result.data.data});
+      if (result.data.is_subscribed) {
+        commit('subscribe', post);
       } else {
-        commit('addComment', {postId, comment: result.data.data});
+        commit('unsubscribe', post);
+      }
+      if (getters.commentExists(postId, commentId)) {
+        commit('updateComment', {postId, comment});
+      } else {
+        commit('addComment', {postId, comment});
       }
     });
   },
