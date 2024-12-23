@@ -77,17 +77,16 @@ export class PostCommentSaved implements Observer {
     if (!store.getters['posts/exists'](postId)) {
       return;
     }
-    const post = store.state.posts.data[postId];
     if (store.getters['posts/commentExists'](postId, payload.id)) {
       const comment: PostComment = store.state.posts.data[postId].comments[payload.id];
       if (comment.is_editing === true) {
         return;
       }
-      store.commit('posts/updateComment', {post, comment: payload});
+      store.commit('posts/updateComment', {postId, comment: payload});
     } else {
       payload.is_read = false;
       getPostComment(payload.id).then(({data}) => {
-        store.commit('posts/addComment', {post, comment: data});
+        store.commit('posts/addComment', {postId, comment: data});
       });
     }
   }

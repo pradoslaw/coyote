@@ -1,9 +1,11 @@
 import axios from "axios";
 import {postsOrdered} from "../../treeTopic/postOrdering";
 import {Forum, Paginator, Post, PostComment, PostLog, Topic, TreePost, User} from "../../types/models";
-import store from "../index";
 
-type ParentChild = { post: Post, comment: PostComment };
+type ParentChild = {
+  postId: number,
+  comment: PostComment
+};
 
 const state: Paginator = {
   current_page: 0,
@@ -101,20 +103,22 @@ const mutations = {
   editEnd(state, editable: Post | PostComment): void {
     editable.is_editing = false;
   },
-  addComment(state, {post, comment}: ParentChild) {
+  addComment(state, {postId, comment}: ParentChild) {
+    const post = state.data[postId];
     if (Array.isArray(post.comments)) {
       post.comments = {};
     }
     post.comments[comment.id!] = comment;
     post.comments_count! += 1;
   },
-
-  updateComment(state, {post, comment}: ParentChild) {
-    let {text, html} = comment; // update only text and html version
-
-    post.comments[comment.id] = {...post.comments[comment.id], ...{text, html}};
+  updateComment(state, {postId, comment}: ParentChild) {
+    const post = state.data[postId];
+    post.comments[comment.id] = {
+      ...post.comments[comment.id],
+      text: comment.text, // update only text and html version
+      html: comment.html,
+    };
   },
-
   deleteComment(state, comment: PostComment) {
     const post = state.data[comment.post_id];
     delete post.comments[comment.id!];
@@ -243,9 +247,9 @@ const actions = {
 
       commit(result.data.is_subscribed ? 'subscribe' : 'unsubscribe', post);
       if (post.comments[commentId]) {
-        commit('updateComment', {post, comment: result.data.data});
+        commit('updateComment', {postId, comment: result.data.data});
       } else {
-        commit('addComment', {post, comment: result.data.data});
+        commit('addComment', {postId, comment: result.data.data});
       }
     });
   },
