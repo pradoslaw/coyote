@@ -589,16 +589,16 @@ export default {
     postDropdownItems(): object[] {
       const items = [];
       const post: Post = this.$props.post;
-      if (post.is_subscribed) {
-        items.push({title: 'Przestań obserwować', iconName: 'postSubscribed', action: () => this.checkAuth(this.unsubscribe, post)});
-      } else {
-        items.push({title: 'Obserwuj', iconName: 'postSubscribe', action: () => this.checkAuth(this.subscribe, post)});
-      }
       if (post.permissions.update) {
         items.push({title: 'Edytuj', iconName: 'postEdit', action: this.edit, disabled: post.deleted_at || post.is_editing});
       }
       if (post.permissions.delete) {
         items.push({title: 'Usuń', iconName: 'postDelete', action: this.deletePostOpenModal});
+      }
+      if (post.is_subscribed) {
+        items.push({title: 'Przestań obserwować', iconName: 'postSubscribed', action: () => this.checkAuth(this.unsubscribe, post)});
+      } else {
+        items.push({title: 'Obserwuj', iconName: 'postSubscribe', action: () => this.checkAuth(this.subscribe, post)});
       }
       if (!post.deleted_at) {
         items.push({title: 'Zgłoś', iconName: 'postReport', action: this.flagPost});
