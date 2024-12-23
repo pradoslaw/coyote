@@ -40,8 +40,15 @@ const getters = {
     return treePosts;
   },
   exists: state => (id: number) => id in state.data,
-  currentPage: state => state.current_page,
-  totalPages: state => state.last_page,
+  currentPage(state): number {
+    return state.current_page;
+  },
+  totalPages(state): number {
+    return state.last_page;
+  },
+  isLastPage(state, getters): boolean {
+    return getters.currentPage >= getters.totalPages;
+  },
   parentLevelsWithSiblings: (state, getters) => (post: Post): number[] => {
     const parentLevels: number[] = [];
     let current: Post = post;

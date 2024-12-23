@@ -95,31 +95,24 @@ export class PostCommentSaved implements Observer {
 }
 
 export class PostSaved implements Observer {
-  update(payload: Post) {
-    const existing = store.state.posts.data[payload.id];
-
-    if (!existing) {
+  update(payload: Post): void {
+    const postId: number = payload.id;
+    if (store.getters['posts/exists'](postId)) {
+      store.commit('posts/update', payload);
+    } else {
       payload.is_read = false;
-
-      // user must be on the last page of topic
-      if (store.getters['posts/currentPage'] < store.getters['posts/totalPages']) {
-        return;
+      if (store.getters['posts/isLastPage']) {
+        getPost(postId).then(({data}): void => {
+          store.commit('posts/add', data);
+          nextTick(() => {
+            const post = document.getElementById(`id${postId}`)!;
+            post.addEventListener('mouseover', () => {
+              return store.dispatch('topics/mark', store.getters['topics/topic']);
+            }, {once: true});
+          });
+        });
       }
     }
-
-    if (!existing) {
-      const topic = store.getters['topics/topic'];
-
-      getPost(payload.id).then(({data}) => {
-        store.commit(`posts/add`, data);
-
-        nextTick(() => document.getElementById(`id${payload.id}`)!.addEventListener('mouseover', () => store.dispatch('topics/mark', topic), {once: true}));
-      });
-
-      return;
-    }
-
-    store.commit(`posts/update`, payload);
   }
 }
 
