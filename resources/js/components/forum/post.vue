@@ -615,16 +615,16 @@ export default {
           items.push({title: 'Zaakceptuj jako moderator', iconName: 'postAccept', action: () => this.accept(post)});
         }
       }
+      if (mod.update) {
+        items.push({title: 'Edytuj jako moderator', iconName: 'postEdit', action: this.edit, disabled: post.deleted_at || post.is_editing});
+        items.push({title: 'Historia edycji', iconName: 'postEditHistoryShow', link: '/Forum/Post/Log/' + post.id});
+      }
       if (mod.delete) {
         if (post.deleted_at) {
           items.push({title: 'Przywróć', iconName: 'postRestore', action: this.restore});
         } else {
           items.push({title: 'Usuń jako moderator', iconName: 'postDelete', action: this.deletePostOpenModal});
         }
-      }
-      if (mod.update) {
-        items.push({title: 'Edytuj jako moderator', iconName: 'postEdit', action: this.edit, disabled: post.deleted_at || post.is_editing});
-        items.push({title: 'Historia edycji', iconName: 'postEditHistoryShow', link: '/Forum/Post/Log/' + post.id});
       }
       if (mod.merge && canMerge) {
         items.push({title: 'Połącz z poprzednim', iconName: 'postMergeWithPrevious', action: this.merge, disabled: post.deleted_at || this.isFirstPost});
