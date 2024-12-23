@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <div class="card card-post card-post-folded neon-post-folded" :class="postIndentCssClasses" v-if="postFolded">
-      <vue-post-guiderail
-        v-if="guiderailVisible"
-        :links-to-parent="linksToParent"
-        :parent-levels="parentsWithSiblings"
-        :expanded="postFolded"
-        @toggle="guiderailToggle"
-      />
+  <div class="tree-post position-relative" :class="postIndentCssClasses">
+    <vue-post-guiderail
+      v-if="guiderailVisible"
+      :links-to-parent="linksToParent"
+      :parent-levels="parentsWithSiblings"
+      :expanded="postFolded"
+      @toggle="guiderailToggle"
+    />
+    <div class="card card-post card-post-folded neon-post-folded" v-if="postFolded">
       <div class="card-body cursor-pointer" @click="postUnfold">
         {{ post.user ? post.user.name : 'Post usunięty' }},
         <vue-timeago :datetime="post.created_at"/>
@@ -16,17 +16,7 @@
     <div v-else
          :id="anchor"
          class="card card-post neon-post"
-         :class="[
-         {'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed': isCollapsed},
-         postIndentCssClasses
-       ]">
-      <vue-post-guiderail
-        v-if="guiderailVisible"
-        :links-to-parent="linksToParent"
-        :parent-levels="parentsWithSiblings"
-        :expanded="postFolded"
-        @toggle="guiderailToggle"
-      />
+         :class="{'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed': isCollapsed}">
       <div v-if="post.deleted_at"
            @click="toggleDeletedPost"
            class="post-delete card-body text-decoration-none"
