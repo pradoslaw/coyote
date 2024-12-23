@@ -236,10 +236,17 @@ const actions = {
 
   saveComment({state, commit, getters}, comment: PostComment) {
     return axios.post<any>(`/Forum/Comment/${comment.id || ''}`, comment).then(result => {
-      const post = state.data[result.data.data.post_id!];
+      const postId = result.data.data.post_id!;
+      const commentId = result.data.data.id!;
+
+      const post = state.data[postId];
 
       commit(result.data.is_subscribed ? 'subscribe' : 'unsubscribe', post);
-      commit(post.comments[result.data.data.id!] ? 'updateComment' : 'addComment', {post, comment: result.data.data});
+      if (post.comments[commentId]) {
+        commit('updateComment', {post, comment: result.data.data});
+      } else {
+        commit('addComment', {post, comment: result.data.data});
+      }
     });
   },
 
