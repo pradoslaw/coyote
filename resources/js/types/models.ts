@@ -205,6 +205,7 @@ export interface TreePost {
 export interface TreeItem {
   nestLevel: number;
   hasNextSibling: boolean;
+  hasChildren: boolean;
 }
 
 export interface PostLog {

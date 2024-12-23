@@ -9,6 +9,7 @@
       <vue-icon name="postGuiderailCollapsed" v-else/>
     </div>
   </div>
+  <div class="position-absolute post-guiderail post-guiderail-to-child" v-if="linksToChild"/>
 </template>
 
 <script lang="ts">
@@ -22,6 +23,7 @@ export default {
     expanded: {required: true, type: Boolean},
     parentLevels: {required: false, type: Array},
     linksToParent: {required: false, type: Boolean},
+    linksToChild: {required: false, type: Boolean},
   },
   methods: {
     toggle(): void {

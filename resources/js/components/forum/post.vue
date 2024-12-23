@@ -2,6 +2,7 @@
   <div class="tree-post position-relative" :class="postIndentCssClasses">
     <vue-post-guiderail
       v-if="guiderailVisible"
+      :links-to-child="linksToChild"
       :links-to-parent="linksToParent"
       :parent-levels="parentsWithSiblings"
       :expanded="postFolded"
@@ -574,6 +575,12 @@ export default {
     },
     linksToParent(): boolean {
       return this.$props.treeItem.nestLevel > 1;
+    },
+    linksToChild(): boolean {
+      if (this.$data.postFolded) {
+        return false;
+      }
+      return this.$props.treeItem.hasChildren;
     },
     parentsWithSiblings(): number[] {
       return this.parentLevelsWithSiblings

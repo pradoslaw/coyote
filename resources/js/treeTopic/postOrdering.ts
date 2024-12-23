@@ -8,11 +8,13 @@ export type PostOrdering =
 
 export function postsOrdered(posts: Post[], ordering: PostOrdering): TreePost[] {
   const tree = new TreeList<Post>(postOrdering(ordering));
+  const postsWithChildren = new Set();
   for (const post of posts) {
     if (!post.parentPostId) {
       tree.add(post.id, post);
     } else {
       tree.addChild(post.id, post.parentPostId, post, post.childrenFolded);
+      postsWithChildren.add(post.parentPostId);
     }
   }
   return tree.treeItems().map(item => ({
@@ -20,6 +22,7 @@ export function postsOrdered(posts: Post[], ordering: PostOrdering): TreePost[] 
     treeItem: {
       nestLevel: item.nestLevel,
       hasNextSibling: item.hasNextSibling,
+      hasChildren: postsWithChildren.has(item.item.id),
     },
   }));
 }
