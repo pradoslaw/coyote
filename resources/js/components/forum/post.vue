@@ -23,7 +23,7 @@
           :initials="post.user.initials"
           :is-online="post.user.is_online"
           class="img-thumbnail neon-post-user-avatar me-1"
-          style="width:40px;"
+          style="width:40px; z-index:1;"
         />
       </div>
       <div
