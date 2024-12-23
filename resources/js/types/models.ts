@@ -194,6 +194,7 @@ export interface Post {
   parentPostId: number | null;
   childrenFolded: boolean;
   type: 'regular' | 'obscured';
+  highlighted: boolean;
 }
 
 export interface TreePost {
