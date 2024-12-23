@@ -52,6 +52,14 @@ $post-border-width:          1px; // change to 0px in modern look&feel
   border-right:              none;
 }
 
+.post-guiderail-to-child {
+  border-top:    none;
+  border-right:  none;
+  border-bottom: none;
+  height:        100%;
+  left:          $indent-width - $guiderail-post-left-offset;
+}
+
 .post-guiderail-to-sibling {
   border-top:    none;
   border-right:  none;
