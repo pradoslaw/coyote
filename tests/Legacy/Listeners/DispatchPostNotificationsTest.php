@@ -320,6 +320,18 @@ class DispatchPostNotificationsTest extends TestCase
         Notification::assertNothingSent();
     }
 
+    #[Test]
+    public function sendsNotificationToTreeTopicPostAuthor(): void
+    {
+        $treeTopic = $this->newTreeTopic();
+        [$post, $postAuthor] = $this->someoneWritesPost($treeTopic);
+        [$response] = $this->someoneWritesPost($treeTopic, treeResponseTo:$post);
+
+        event(new PostSaved($response));
+
+        Notification::assertSentToTimes($postAuthor, SubmittedNotification::class, 1);
+    }
+
     private function newUser(string $username = null, bool $canMentionUsers = null): User
     {
         $factoryBuilder = factory(User::class);
@@ -367,12 +379,16 @@ class DispatchPostNotificationsTest extends TestCase
         return factory(Post::class)->create($attributes);
     }
 
-    private function someoneWritesPost(): array
+    private function someoneWritesPost(
+        Topic $topic = null,
+        Post  $treeResponseTo = null,
+    ): array
     {
         /** @var Post $post */
         $post = factory(Post::class)->create([
-            'topic_id' => $this->topic->id,
-            'forum_id' => $this->forum->id,
+            'topic_id'            => $topic?->id ?? $this->topic->id,
+            'forum_id'            => $this->forum->id,
+            'tree_parent_post_id' => $treeResponseTo?->id,
         ]);
         return [$post, $post->user];
     }
@@ -423,5 +439,12 @@ class DispatchPostNotificationsTest extends TestCase
     {
         $factory = new PostFactory(app(Container::class));
         $factory->cache->forget($factory->cache->key($postMarkdown));
+    }
+
+    private function newTreeTopic(): mixed
+    {
+        return factory(Topic::class)
+            ->state('tree')
+            ->create(['forum_id' => $this->forum->id]);
     }
 }

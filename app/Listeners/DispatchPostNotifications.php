@@ -2,6 +2,7 @@
 namespace Coyote\Listeners;
 
 use Coyote\Events\PostSaved;
+use Coyote\Notifications\Post\AbstractNotification;
 use Coyote\Notifications\Post\ChangedNotification;
 use Coyote\Notifications\Post\SubmittedNotification;
 use Coyote\Notifications\Post\UserMentionedNotification;
@@ -58,12 +59,20 @@ class DispatchPostNotifications implements ShouldQueue
 
     private function sendNotificationPostCreated(Post $post, User $author, array $alreadyMentioned): void
     {
-        $this->dispatcher->send(
-            $this
-                ->topicSubscribers($post, $author, $alreadyMentioned)
-                ->merge($author->followers)
-                ->unique('id'),
+        $this->send(
+            $this->postCreatedNotifiables($post, $author, $alreadyMentioned),
             new SubmittedNotification($author, $post));
+    }
+
+    private function postCreatedNotifiables(Post $post, User $author, array $alreadyMentioned): Support\Collection
+    {
+        $notifiables = $this
+            ->topicSubscribers($post, $author, $alreadyMentioned)
+            ->merge($author->followers);
+        if ($post->treeParentPost) {
+            $notifiables->add($post->treeParentPost->user);
+        }
+        return $notifiables;
     }
 
     private function sendNotificationPostEdited(Post $post, User $editor, array $alreadyMentioned): void
@@ -113,5 +122,10 @@ class DispatchPostNotifications implements ShouldQueue
             return [];
         }
         return (new Helper\Login)->grab($postHtml);
+    }
+
+    private function send(Support\Collection $notifiables, AbstractNotification $notification): void
+    {
+        $this->dispatcher->send($notifiables->unique('id'), $notification);
     }
 }

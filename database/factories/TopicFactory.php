@@ -32,6 +32,8 @@ $factory->afterMaking(Topic::class, function (Topic $topic) {
     ]);
 });
 
+$factory->state(Topic::class, 'tree', fn() => ['is_tree' => true]);
+
 $factory->state(Topic::class, 'id', function (Faker $faker) {
     return ['id' => $faker->numberBetween(10000000)];
 });
