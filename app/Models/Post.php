@@ -46,6 +46,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property User|null $deleter
  * @property Accept|null $accept
  * @property int|null tree_parent_post_id
+ * @property Post|null $treeParentPost
  */
 class Post extends Model
 {
@@ -140,6 +141,11 @@ class Post extends Model
     public function logs(): HasMany
     {
         return $this->hasMany(Log::class);
+    }
+
+    public function treeParentPost(): BelongsTo
+    {
+        return $this->belongsTo(Post::class);
     }
 
     /**
