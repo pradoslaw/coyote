@@ -332,6 +332,18 @@ class DispatchPostNotificationsTest extends TestCase
         Notification::assertSentToTimes($postAuthor, SubmittedNotification::class, 1);
     }
 
+    #[Test]
+    public function dontReceiveNotification_byRespondingToOwnPost(): void
+    {
+        $treeTopic = $this->newTreeTopic();
+        [$post, $postAuthor] = $this->someoneWritesPost($treeTopic);
+        [$response] = $this->someoneWritesPost($treeTopic, author:$postAuthor, treeResponseTo:$post);
+
+        event(new PostSaved($response));
+
+        Notification::assertSentToTimes($postAuthor, SubmittedNotification::class, 0);
+    }
+
     private function newUser(string $username = null, bool $canMentionUsers = null): User
     {
         $factoryBuilder = factory(User::class);
@@ -382,12 +394,14 @@ class DispatchPostNotificationsTest extends TestCase
     private function someoneWritesPost(
         Topic $topic = null,
         Post  $treeResponseTo = null,
+        User  $author = null,
     ): array
     {
         /** @var Post $post */
         $post = factory(Post::class)->create([
             'topic_id'            => $topic?->id ?? $this->topic->id,
             'forum_id'            => $this->forum->id,
+            'user_id'             => $author?->id ?? factory(\Coyote\User::class),
             'tree_parent_post_id' => $treeResponseTo?->id,
         ]);
         return [$post, $post->user];
