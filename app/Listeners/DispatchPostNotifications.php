@@ -70,7 +70,9 @@ class DispatchPostNotifications implements ShouldQueue
             ->topicSubscribers($post, $author, $alreadyMentioned)
             ->merge($author->followers);
         if ($post->treeParentPost) {
-            $notifiables->add($post->treeParentPost->user);
+            if ($post->treeParentPost->user->id !== $author->id) {
+                $notifiables->add($post->treeParentPost->user);
+            }
         }
         return $notifiables;
     }
