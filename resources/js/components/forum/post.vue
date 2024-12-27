@@ -270,7 +270,14 @@
             <div class="d-none" :class="{'d-lg-block col-lg-2':is_mode_linear}" v-if="is_mode_linear"/>
             <div class="col-12 d-flex" :class="{'col-lg-10':is_mode_linear}">
               <div v-if="!post.deleted_at">
-                <button class="btn btn-sm" v-if="!hidden && is_mode_tree" @click="checkAuth(vote, post)">
+                <button 
+                  v-if="!hidden && is_mode_tree" 
+                  class="btn btn-sm" 
+                  @click="checkAuth(vote, post)"
+                  :aria-label="voters"
+                  data-balloon-pos="up"
+                  data-balloon-break
+                >
                   <span v-if="post.is_voted" class="text-primary">
                     <vue-icon name="postVoted"/>
                   </span>
