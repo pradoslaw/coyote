@@ -13,20 +13,24 @@ describe('tree list', () => {
     topic.addChild(id, parentId, payload, ignoreChildren);
   }
 
+  function treeItems<T>(topic: TreeList<T>): T[] {
+    return topic.flatTreeItems().map(record => record.item);
+  }
+
   test('emptyTopic hasNoPosts', () => {
-    assertEquals([], topic.asList());
+    assertEquals([], treeItems(topic));
   });
 
   test('topicWithOnePost hasOnePost', () => {
     topic.add(1, 'foo');
-    assertEquals(['foo'], topic.asList());
+    assertEquals(['foo'], treeItems(topic));
   });
 
   test('answerPost isBelowHisParentPost', () => {
     topic.add(4, 'blue');
     topic.add(5, 'red');
     addChild(topic, 6, 4, 'green');
-    assertEquals(['blue', 'green', 'red'], topic.asList());
+    assertEquals(['blue', 'green', 'red'], treeItems(topic));
   });
 
   test('secondLevelAnswer isCloserToParent thanFirstLevelAnswer', () => {
@@ -34,7 +38,7 @@ describe('tree list', () => {
     addChild(topic, 5, 4, 'two-1');
     addChild(topic, 6, 5, 'three');
     addChild(topic, 7, 4, 'two-2');
-    assertEquals(['one', 'two-1', 'three', 'two-2'], topic.asList());
+    assertEquals(['one', 'two-1', 'three', 'two-2'], treeItems(topic));
   });
 
   test('sort first level children in ascending order', () => {
@@ -43,7 +47,7 @@ describe('tree list', () => {
     addChild(topic, 5, 4, 2);
     addChild(topic, 6, 4, 3);
     addChild(topic, 6, 4, 1);
-    assertEquals([4, 1, 2, 3], topic.asList());
+    assertEquals([4, 1, 2, 3], treeItems(topic));
   });
 
   test('sort first level children in descending order', () => {
@@ -52,7 +56,7 @@ describe('tree list', () => {
     addChild(topic, 5, 4, 2);
     addChild(topic, 6, 4, 3);
     addChild(topic, 6, 4, 1);
-    assertEquals([4, 3, 2, 1], topic.asList());
+    assertEquals([4, 3, 2, 1], treeItems(topic));
   });
 
   test('the root is last child', () => {
