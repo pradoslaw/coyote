@@ -17,7 +17,7 @@ export function postsOrdered(posts: Post[], ordering: PostOrdering): TreePost[] 
       postsWithChildren.add(post.parentPostId);
     }
   }
-  return tree.treeItems().map(item => ({
+  return tree.flatTreeItems().map(item => ({
     post: item.item,
     treeItem: {
       nestLevel: item.nestLevel,

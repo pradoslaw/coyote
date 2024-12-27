@@ -41,7 +41,7 @@ export class TreeList<T> {
     return this.flatRecords().map(record => record.payload);
   }
 
-  treeItems(): TreeItem<T>[] {
+  flatTreeItems(): TreeItem<T>[] {
     return this.flatRecords().map((record): TreeItem<T> => ({
       item: record.payload,
       nestLevel: record.level,
