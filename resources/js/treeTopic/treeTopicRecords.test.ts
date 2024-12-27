@@ -1,19 +1,19 @@
 import {beforeEach, describe, test} from "@jest/globals";
 import {assertEquals} from "../../../survey/test/assert";
-import {MultipleRootsError, TreeList} from "./treeList";
+import {MultipleRootsError, TreeTopicRecords} from "./treeTopicRecords";
 
 describe('tree list', () => {
-  let topic: TreeList<string>;
+  let topic: TreeTopicRecords<string>;
 
   beforeEach(() => {
-    topic = new TreeList(() => 0);
+    topic = new TreeTopicRecords(() => 0);
   });
 
-  function addChild<T>(topic: TreeList<T>, id: number, parentId: number, payload: T, ignoreChildren: boolean = false): void {
+  function addChild<T>(topic: TreeTopicRecords<T>, id: number, parentId: number, payload: T, ignoreChildren: boolean = false): void {
     topic.addChild(id, parentId, payload, ignoreChildren);
   }
 
-  function treeItems<T>(topic: TreeList<T>): T[] {
+  function treeItems<T>(topic: TreeTopicRecords<T>): T[] {
     return topic.flatTreeItems().map(record => record.item);
   }
 
@@ -43,7 +43,7 @@ describe('tree list', () => {
   });
 
   test('sort first level children in ascending order', () => {
-    const topic = new TreeList<number>((a, b) => a - b);
+    const topic = new TreeTopicRecords<number>((a, b) => a - b);
     topic.setRoot(4, 4);
     addChild(topic, 5, 4, 2);
     addChild(topic, 6, 4, 3);
@@ -52,7 +52,7 @@ describe('tree list', () => {
   });
 
   test('sort first level children in descending order', () => {
-    const topic = new TreeList<number>((a, b) => b - a);
+    const topic = new TreeTopicRecords<number>((a, b) => b - a);
     topic.setRoot(4, 4);
     addChild(topic, 5, 4, 2);
     addChild(topic, 6, 4, 3);
@@ -61,13 +61,13 @@ describe('tree list', () => {
   });
 
   test('the root is last child', () => {
-    const topic = new TreeList<string>(() => 0);
+    const topic = new TreeTopicRecords<string>(() => 0);
     topic.setRoot(4, 'root');
     assertEquals([{item: 'root', nestLevel: 0, hasNextSibling: false}], topic.flatTreeItems());
   });
 
   test('the only child is the last child', () => {
-    const topic = new TreeList<string>(() => 0);
+    const topic = new TreeTopicRecords<string>(() => 0);
     topic.setRoot(15, 'root');
     addChild(topic, 16, 15, 'child');
     assertEquals([
@@ -77,7 +77,7 @@ describe('tree list', () => {
   });
 
   test('the first child is not the last child', () => {
-    const topic = new TreeList<string>(() => 0);
+    const topic = new TreeTopicRecords<string>(() => 0);
     topic.setRoot(15, 'root');
     addChild(topic, 16, 15, 'child');
     addChild(topic, 17, 15, 'last child');
@@ -89,7 +89,7 @@ describe('tree list', () => {
   });
 
   test('children can be excluded', () => {
-    const topic = new TreeList<string>(() => 0);
+    const topic = new TreeTopicRecords<string>(() => 0);
     topic.setRoot(15, 'root');
     addChild(topic, 16, 15, 'without children', true);
     addChild(topic, 17, 16, 'child');
@@ -101,13 +101,13 @@ describe('tree list', () => {
   });
 
   test('only one root is allowed', () => {
-    const topic = new TreeList<string>(() => 0);
+    const topic = new TreeTopicRecords<string>(() => 0);
     topic.setRoot(15, 'root');
     expect(() => topic.setRoot(15, 'root')).toThrow(MultipleRootsError);
   });
 
   test('listing records without root returns an empty array', () => {
-    const topic = new TreeList<string>(() => 0);
+    const topic = new TreeTopicRecords<string>(() => 0);
     assertEquals([], topic.flatTreeItems());
   });
 });

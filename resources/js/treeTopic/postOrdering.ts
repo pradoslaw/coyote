@@ -1,5 +1,5 @@
 import {Post, TreePost} from "../types/models";
-import {TreeList} from "./treeList";
+import {TreeTopicRecords} from "./treeTopicRecords";
 
 export type PostOrdering =
   'orderByCreationDateNewest' |
@@ -7,7 +7,7 @@ export type PostOrdering =
   'orderByMostLikes';
 
 export function postsOrdered(posts: Post[], ordering: PostOrdering): TreePost[] {
-  const tree = new TreeList<Post>(postOrdering(ordering));
+  const tree = new TreeTopicRecords<Post>(postOrdering(ordering));
   const postsWithChildren = new Set();
   for (const post of posts) {
     if (!post.parentPostId) {

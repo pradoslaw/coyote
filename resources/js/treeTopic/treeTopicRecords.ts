@@ -17,7 +17,7 @@ export interface TreeItem<T> {
 export class MultipleRootsError extends Error {
 }
 
-export class TreeList<T> {
+export class TreeTopicRecords<T> {
   private root?: Record<T>;
   private records: Map<number, Record<T>> = new Map<number, Record<T>>();
 
