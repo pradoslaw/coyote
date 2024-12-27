@@ -10,7 +10,7 @@
     />
     <div class="card card-post card-post-folded neon-post-folded" v-if="postFolded">
       <div class="card-body cursor-pointer" @click="postUnfold">
-        {{ post.user ? post.user.name : 'Post usunięty' }},
+        {{ post.user.name }},
         <vue-timeago :datetime="post.created_at"/>
       </div>
     </div>
