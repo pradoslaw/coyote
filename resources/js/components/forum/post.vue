@@ -9,11 +9,20 @@
       @toggle="guiderailToggle"
     />
     <div class="card card-post card-post-folded neon-post-folded" v-if="postFolded">
-      <div class="card-body cursor-pointer" @click="postUnfold">
-        <span class="text-muted">
-          <vue-timeago :datetime="post.created_at"/>
-        </span>
-        {{ postAnswersAuthorName }}
+      <div class="card-body cursor-pointer" @click="postUnfold" style="padding-top:4px; padding-bottom:4px;">
+        <div class="d-flex align-items-center">
+          <span class="text-muted pe-2">
+            <vue-timeago :datetime="post.created_at"/>
+          </span>
+          <div v-for="author in postAnswersAuthors" style="width:38px;">
+            <vue-avatar
+              :photo="author.photo"
+              :name="author.name"
+              :initials="author.initials"
+              class="img-thumbnail me-1"
+            />
+          </div>
+        </div>
       </div>
     </div>
     <div v-else class="d-flex">
@@ -555,9 +564,8 @@ export default {
     ...mapGetters('user', ['isAuthorized']),
     ...mapGetters('posts', ['posts']),
     ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
-    postAnswersAuthorName(): string {
-      const authorNames = store.getters['posts/treeTopicSubtreeMemberNames'](this.$props.post.id);
-      return authorNames.join(', ');
+    postAnswersAuthors(): string {
+      return store.getters['posts/postAnswersAuthors'](this.$props.post.id);
     },
     editedTimeAgo() {
       return formatTimeAgo(this.$props.post.updated_at);

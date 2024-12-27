@@ -53,15 +53,14 @@ const getters = {
   currentPage(state): number {
     return state.current_page;
   },
-  treeTopicSubtreeMemberNames(state: Paginator): Function<number, string[]> {
-    return (postId: number): string[] => {
+  postAnswersAuthors(state: Paginator): Function<number, User[]> {
+    return (postId: number): User[] => {
       const posts: Post[] = Object.values(state.data);
       const postsTree = new TreeMap<number, Post>();
       for (const post of posts) {
         postsTree.put(post.id, post, post.parentPostId || undefined);
       }
-      const authorNames = postsTree.childrenOf(postId).map(post => post.user.name);
-      return Array.from(new Set(authorNames));
+      return postsTree.childrenOf(postId).map(post => post.user!);
     };
   },
   totalPages(state): number {

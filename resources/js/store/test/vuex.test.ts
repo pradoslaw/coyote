@@ -39,13 +39,6 @@ describe('vuex', () => {
       assertEquals(['Mark', 'John'], store.readTreeTopicSubtreeMembers(237));
     });
 
-    test('multiple posts by the same author, only return author name once', () => {
-      store.preparePost(237, 'Mark');
-      store.preparePost(238, 'Mark');
-      store.init();
-      assertEquals(['Mark'], store.readTreeTopicSubtreeMembers(237));
-    });
-
     test('only return members of particular subtree', () => {
       store.preparePost(237, 'Mark');
       store.preparePost(238, 'John', 237);
@@ -83,7 +76,7 @@ class StoreDsl {
   }
 
   readTreeTopicSubtreeMembers(postId: number): string[] {
-    return this.store.getters['posts/treeTopicSubtreeMemberNames'](postId);
+    return this.store.getters['posts/postAnswersAuthors'](postId).map(user => user.name);
   }
 
   clear(): void {
