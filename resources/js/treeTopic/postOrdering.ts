@@ -11,7 +11,7 @@ export function postsOrdered(posts: Post[], ordering: PostOrdering): TreePost[] 
   const postsWithChildren = new Set();
   for (const post of posts) {
     if (!post.parentPostId) {
-      tree.add(post.id, post);
+      tree.setRoot(post.id, post);
     } else {
       tree.addChild(post.id, post.parentPostId, post, post.childrenFolded);
       postsWithChildren.add(post.parentPostId);

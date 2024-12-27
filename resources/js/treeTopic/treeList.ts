@@ -14,26 +14,33 @@ export interface TreeItem<T> {
   hasNextSibling: boolean;
 }
 
+export class MultipleRootsError extends Error {
+}
+
 export class TreeList<T> {
-  private roots: Record<T>[] = [];
+  private root?: Record<T>;
   private records: Map<number, Record<T>> = new Map<number, Record<T>>();
 
   constructor(private sorter: (a: T, b: T) => number) {
   }
 
-  add(id: number, payload: T): void {
-    this.addRecordRoot({id, parentId: null, payload, children: [], level: 0, isLastChild: null, ignoreChildren: false});
-  }
-
-  private addRecordRoot(record: Record<T>): void {
-    this.roots.push(record);
-    this.records.set(record.id, record);
+  setRoot(id: number, payload: T): void {
+    const root = this.rootRecord(id, payload);
+    if (this.root) {
+      throw new MultipleRootsError();
+    }
+    this.root = root;
+    this.addRecord(root);
   }
 
   addChild(id: number, parentId: number, payload: T, ignoreChildren: boolean): void {
     const parent = this.records.get(parentId)!;
-    const record = {id, parentId, payload, children: [], level: parent.level + 1, isLastChild: null, ignoreChildren};
-    parent.children.push(record);
+    const child = this.childRecord(id, parent, payload, ignoreChildren);
+    parent.children.push(child);
+    this.addRecord(child);
+  }
+
+  private addRecord(record: Record<T>): void {
     this.records.set(record.id, record);
   }
 
@@ -46,7 +53,10 @@ export class TreeList<T> {
   }
 
   private flatRecords(): Record<T>[] {
-    return this.flattened(this.roots);
+    if (this.root) {
+      return this.flattened([this.root]);
+    }
+    return [];
   }
 
   private flattened(records: Record<T>[]): Record<T>[] {
@@ -67,5 +77,13 @@ export class TreeList<T> {
 
   private recordSorter(a: Record<T>, b: Record<T>): number {
     return this.sorter(a.payload, b.payload);
+  }
+
+  private rootRecord(id: number, payload: T): Record<T> {
+    return {id, parentId: null, payload, children: [], level: 0, isLastChild: null, ignoreChildren: false};
+  }
+
+  private childRecord(id: number, parent: Record<T>, payload: T, ignoreChildren: boolean): Record<T> {
+    return {id, parentId: parent.id, payload, children: [], level: parent.level + 1, isLastChild: null, ignoreChildren};
   }
 }
