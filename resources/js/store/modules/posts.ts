@@ -1,5 +1,6 @@
 import axios from "axios";
 import {postsOrdered} from "../../treeTopic/postOrdering";
+import {TreeMap} from "../../treeTopic/treeMap";
 import {Forum, Paginator, Post, PostComment, PostLog, Topic, TreePost, User} from "../../types/models";
 
 type Function<A, R> = (argument: A) => R;
@@ -51,6 +52,17 @@ const getters = {
   },
   currentPage(state): number {
     return state.current_page;
+  },
+  treeTopicSubtreeMemberNames(state: Paginator): Function<number, string[]> {
+    return (postId: number): string[] => {
+      const posts: Post[] = Object.values(state.data);
+      const postsTree = new TreeMap<number, Post>();
+      for (const post of posts) {
+        postsTree.put(post.id, post, post.parentPostId || undefined);
+      }
+      const authorNames = postsTree.childrenOf(postId).map(post => post.user.name);
+      return Array.from(new Set(authorNames));
+    };
   },
   totalPages(state): number {
     return state.last_page;

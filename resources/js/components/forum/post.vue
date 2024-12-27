@@ -10,8 +10,10 @@
     />
     <div class="card card-post card-post-folded neon-post-folded" v-if="postFolded">
       <div class="card-body cursor-pointer" @click="postUnfold">
-        {{ post.user.name }},
-        <vue-timeago :datetime="post.created_at"/>
+        <span class="text-muted">
+          <vue-timeago :datetime="post.created_at"/>
+        </span>
+        {{ postAnswersAuthorName }}
       </div>
     </div>
     <div v-else class="d-flex">
@@ -270,9 +272,9 @@
             <div class="d-none" :class="{'d-lg-block col-lg-2':is_mode_linear}" v-if="is_mode_linear"/>
             <div class="col-12 d-flex" :class="{'col-lg-10':is_mode_linear}">
               <div v-if="!post.deleted_at">
-                <button 
-                  v-if="!hidden && is_mode_tree" 
-                  class="btn btn-sm" 
+                <button
+                  v-if="!hidden && is_mode_tree"
+                  class="btn btn-sm"
                   @click="checkAuth(vote, post)"
                   :aria-label="voters"
                   data-balloon-pos="up"
@@ -553,6 +555,10 @@ export default {
     ...mapGetters('user', ['isAuthorized']),
     ...mapGetters('posts', ['posts']),
     ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
+    postAnswersAuthorName(): string {
+      const authorNames = store.getters['posts/treeTopicSubtreeMemberNames'](this.$props.post.id);
+      return authorNames.join(', ');
+    },
     editedTimeAgo() {
       return formatTimeAgo(this.$props.post.updated_at);
     },
