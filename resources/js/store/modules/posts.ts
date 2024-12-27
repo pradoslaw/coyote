@@ -2,6 +2,8 @@ import axios from "axios";
 import {postsOrdered} from "../../treeTopic/postOrdering";
 import {Forum, Paginator, Post, PostComment, PostLog, Topic, TreePost, User} from "../../types/models";
 
+type Function<A, R> = (argument: A) => R;
+
 type ParentChild = {
   postId: number,
   comment: PostComment
@@ -56,21 +58,23 @@ const getters = {
   isLastPage(state, getters): boolean {
     return getters.currentPage >= getters.totalPages;
   },
-  parentLevelsWithSiblings: (state, getters) => (post: Post): number[] => {
-    const parentLevels: number[] = [];
-    let current: Post = post;
-    let level = 1;
-    while (true) {
-      if (current.parentPostId === null) {
-        return parentLevels;
+  parentLevelsWithSiblings(state, getters): Function<Post, number[]> {
+    return function (post: Post): number[] {
+      const parentLevels: number[] = [];
+      let current: Post = post;
+      let level = 1;
+      while (true) {
+        if (current.parentPostId === null) {
+          return parentLevels;
+        }
+        const parentPost: TreePost = getters.treeTopicPostsMap.get(current.parentPostId);
+        if (parentPost.treeItem.hasNextSibling) {
+          parentLevels.push(level);
+        }
+        current = parentPost.post;
+        ++level;
       }
-      const parentPost: TreePost = getters.treeTopicPostsMap.get(current.parentPostId);
-      if (parentPost.treeItem.hasNextSibling) {
-        parentLevels.push(level);
-      }
-      current = parentPost.post;
-      ++level;
-    }
+    };
   },
   commentExists(state) {
     return (postId: number, postCommentId: number): boolean => {
