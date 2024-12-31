@@ -25,10 +25,12 @@ export class TreeMap<K, V> {
     if (!node) {
       return [];
     }
-    return [
-      node.value,
-      ...node.children.flatMap(child => [child.value, ...child.children.map(x => x.value)]),
-    ];
+
+    function itemWithChildren(node: TreeMapNode<V>): V[] {
+      return [node.value, ...node.children.flatMap(itemWithChildren)];
+    }
+
+    return itemWithChildren(node);
   }
 }
 
