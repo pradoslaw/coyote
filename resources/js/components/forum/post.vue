@@ -11,9 +11,6 @@
     <div class="card card-post card-post-folded neon-post-folded" v-if="postFolded">
       <div class="card-body cursor-pointer" @click="postUnfold" style="padding-top:4px; padding-bottom:4px;">
         <div class="d-flex align-items-center">
-          <span class="text-muted pe-2">
-            <vue-timeago :datetime="post.created_at"/>
-          </span>
           <div v-for="author in postAnswersAuthors" style="width:38px;">
             <vue-avatar
               :photo="author.photo"
