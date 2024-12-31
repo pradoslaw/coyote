@@ -384,7 +384,6 @@
 <script lang="ts">
 import axios from "axios";
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-import {is} from "date-fns/locale";
 import pl from 'date-fns/locale/pl';
 import {mapActions, mapGetters, mapState} from "vuex";
 
@@ -556,9 +555,6 @@ export default {
     },
   },
   computed: {
-    is() {
-      return is;
-    },
     ...mapState('user', ['user']),
     ...mapState('topics', ['reasons']),
     ...mapGetters('user', ['isAuthorized']),
