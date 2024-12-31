@@ -9,7 +9,7 @@
       @toggle="guiderailToggle"
     />
     <div class="card card-post card-post-folded neon-post-folded" v-if="postFolded">
-      <div class="card-body cursor-pointer" @click="postUnfold" style="padding-top:4px; padding-bottom:4px;">
+      <div class="card-body cursor-pointer p-1" @click="postUnfold">
         <div class="d-flex align-items-center">
           <div v-for="author in postAnswersAuthors" style="width:38px;">
             <vue-avatar
@@ -19,6 +19,7 @@
               class="img-thumbnail me-1"
             />
           </div>
+          <span class="ms-2" v-text="postAnswersAuthorsSeeMore"/>
         </div>
       </div>
     </div>
@@ -387,6 +388,7 @@ import {is} from "date-fns/locale";
 import pl from 'date-fns/locale/pl';
 import {mapActions, mapGetters, mapState} from "vuex";
 
+import declination from '../../libs/declination.js';
 import {copyToClipboard} from '../../plugins/clipboard';
 import {openFlagModal} from "../../plugins/flags";
 import {confirmModal} from "../../plugins/modals";
@@ -563,6 +565,10 @@ export default {
     ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
     postAnswersAuthors(): string {
       return store.getters['posts/postAnswersAuthors'](this.$props.post.id);
+    },
+    postAnswersAuthorsSeeMore(): string {
+      const answers = this.postAnswersAuthors.length;
+      return `Zobacz ${answers} ${declination(answers, ['pozostałą odpowiedź', 'pozostałe odpowiedzi', 'pozostałych odpowiedzi'])}.`;
     },
     editedTimeAgo() {
       return formatTimeAgo(this.$props.post.updated_at);
