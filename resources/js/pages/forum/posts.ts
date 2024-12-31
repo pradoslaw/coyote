@@ -9,6 +9,7 @@ import store from "../../store/index";
 import {notify} from "../../toast";
 import {PostOrdering} from "../../treeTopic/postOrdering";
 import {Post} from "../../types/models";
+import {nextTick} from "../../vue";
 
 export default {
   name: 'Posts',
@@ -29,6 +30,7 @@ export default {
       popularTags: window.popularTags,
       postFormHidden: false,
       treePostOrdering: 'orderByCreationDateOldest',
+      editorRevealed: false,
     };
   },
   created() {
@@ -70,6 +72,12 @@ export default {
     });
   },
   methods: {
+    revealEditor(): void {
+      this.$data.editorRevealed = true;
+      nextTick(() => {
+        this.markdownRef.focus();
+      });
+    },
     liveUpdate() {
       const subscriber = new Subscriber(`topic:${window.topic.id}`);
 

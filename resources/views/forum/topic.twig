@@ -124,18 +124,25 @@
       ></vue-post-wrapper>
 
       {% if is_writeable %}
-        <vue-form
-            id="js-submit-form"
-            ref="js-submit-form"
-            v-if="is_mode_tree"
-            :tree-answer-post-id="{{ model.first_post_id }}"
-            :post="undefinedPost"
-            @save="savedForm"
-        ></vue-form>
+        <template v-if="is_mode_tree">
+          <vue-form
+              id="js-submit-form"
+              ref="js-submit-form"
+              v-if="editorRevealed"
+              :tree-answer-post-id="{{ model.first_post_id }}"
+              :post="undefinedPost"
+              @save="savedForm"
+          ></vue-form>
+          <div v-else @click="revealEditor" class="card card-default" style="cursor:text;">
+            <div class="card-body mb-4">
+              Kliknij, aby dodać treść...
+            </div>
+          </div>
+        </template>
       {% endif %}
 
       <template v-if="is_mode_tree && treeTopicPostsRemaining.length > 0">
-        <div class="mb-4" style="margin-top:-24px;">
+        <div class="mb-4">
           <label for="tree-post-ordering" class="text-muted">
             Kolejność postów
           </label>
