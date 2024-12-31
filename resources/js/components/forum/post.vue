@@ -11,6 +11,7 @@
     <div class="card card-post card-post-folded neon-post-folded" v-if="postFolded" style="margin-left:15px;">
       <div class="card-body cursor-pointer p-1" @click="postUnfold">
         <div class="d-flex align-items-center">
+          <span class="mx-2" v-text="postAnswersAuthorsSeeMore"/>
           <div v-for="author in postAnswersAuthors" style="width:38px;">
             <vue-avatar
               :photo="author.photo"
@@ -19,7 +20,6 @@
               class="img-thumbnail me-1"
             />
           </div>
-          <span class="ms-2" v-text="postAnswersAuthorsSeeMore"/>
         </div>
       </div>
     </div>
