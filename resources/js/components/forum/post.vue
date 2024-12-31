@@ -449,8 +449,9 @@ export default {
       treeTopicReplyVisible: false,
     };
   },
-  created() {
-    this.isCollapsed = this.hidden;
+  created(): void {
+    this.$data.isCollapsed = this.hidden;
+    this.$data.postFolded = this.$props.post.childrenFolded;
   },
   mounted() {
     if (this.is_mode_tree && !this.post.deleted_at) {
