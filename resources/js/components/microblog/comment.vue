@@ -112,7 +112,7 @@
 <script lang="ts">
 import {mapActions, mapGetters, mapState} from "vuex";
 
-import declination from '../../libs/declination.js';
+import declination from '../../libs/declination';
 import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from "../../store/index";
 import VueAvatar from '../avatar.vue';

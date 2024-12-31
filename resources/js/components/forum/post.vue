@@ -388,7 +388,7 @@ import {is} from "date-fns/locale";
 import pl from 'date-fns/locale/pl';
 import {mapActions, mapGetters, mapState} from "vuex";
 
-import declination from '../../libs/declination.js';
+import declination from '../../libs/declination';
 import {copyToClipboard} from '../../plugins/clipboard';
 import {openFlagModal} from "../../plugins/flags";
 import {confirmModal} from "../../plugins/modals";
