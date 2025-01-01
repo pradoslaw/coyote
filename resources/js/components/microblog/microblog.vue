@@ -309,7 +309,7 @@ export default {
       return this
         .microblog
         .assets
-        .find(asset => asset.metadata !== null);
+        .find(asset => asset.metadata);
     },
 
     flags() {
