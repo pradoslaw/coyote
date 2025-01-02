@@ -123,42 +123,44 @@
           @reply="reply"
       ></vue-post-wrapper>
 
-      {% if is_writeable %}
-        <template v-if="is_mode_tree">
-          <vue-form
-              id="js-submit-form"
-              ref="js-submit-form"
-              v-if="editorRevealed"
-              :tree-answer-post-id="{{ model.first_post_id }}"
-              :post="undefinedPost"
-              @save="savedForm"
-          ></vue-form>
-          <div v-else @click="revealEditor" class="card card-default" style="cursor:text;">
-            <div class="card-body mb-4">
-              Kliknij, aby dodać treść...
+      <div style="margin-left:44px;">
+        {% if is_writeable %}
+          <template v-if="is_mode_tree">
+            <vue-form
+                id="js-submit-form"
+                ref="js-submit-form"
+                v-if="editorRevealed"
+                :tree-answer-post-id="{{ model.first_post_id }}"
+                :post="undefinedPost"
+                @save="savedForm"
+            ></vue-form>
+            <div v-else @click="revealEditor" class="card card-default" style="cursor:text;">
+              <div class="card-body mb-4">
+                Kliknij, aby dodać treść...
+              </div>
             </div>
+          </template>
+        {% endif %}
+
+        <template v-if="is_mode_tree && treeTopicPostsRemaining.length > 0">
+          <div class="mb-4">
+            <label for="tree-post-ordering" class="text-muted">
+              Kolejność postów
+            </label>
+            {{ icon('treeTopicPostOrder') }}
+            <select
+                id="tree-post-ordering"
+                :value="treeTopicPostOrdering"
+                @change="changeTreeTopicPostOrdering"
+                class="form-control"
+                style="width:initial;">
+              <option value="orderByMostLikes">Najwyżej oceniane</option>
+              <option value="orderByCreationDateNewest">Najnowsze</option>
+              <option value="orderByCreationDateOldest">Najstarsze</option>
+            </select>
           </div>
         </template>
-      {% endif %}
-
-      <template v-if="is_mode_tree && treeTopicPostsRemaining.length > 0">
-        <div class="mb-4">
-          <label for="tree-post-ordering" class="text-muted">
-            Kolejność postów
-          </label>
-          {{ icon('treeTopicPostOrder') }}
-          <select
-              id="tree-post-ordering"
-              :value="treeTopicPostOrdering"
-              @change="changeTreeTopicPostOrdering"
-              class="form-control"
-              style="width:initial;">
-            <option value="orderByMostLikes">Najwyżej oceniane</option>
-            <option value="orderByCreationDateNewest">Najnowsze</option>
-            <option value="orderByCreationDateOldest">Najstarsze</option>
-          </select>
-        </div>
-      </template>
+      </div>
 
       <vue-post-wrapper
           v-if="is_mode_tree"
