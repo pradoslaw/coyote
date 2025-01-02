@@ -5,15 +5,17 @@ import {Tag, Topic} from '../../types/models';
 const state = {
   topics: [],
   reasons: [],
-  treePostOrdering: 'orderByMostLikes',
+  treeTopicOrder: 'byScore',
 };
+
+export type TreeTopicOrder = 'byScore' | 'newest' | 'oldest' | 'linear';
 
 const getters = {
   topic: state => state.topics[0],
   is_mode_tree: state => state.topics[0].discuss_mode === 'tree',
   is_mode_linear: state => state.topics[0].discuss_mode === 'linear',
-  treeTopicPostOrdering(state): TreeOrderBy {
-    return state.treePostOrdering;
+  treeTopicOrder(state): TreeTopicOrder {
+    return state.treeTopicOrder;
   },
 };
 
@@ -53,8 +55,8 @@ const mutations = {
 
     index > -1 ? topic.tags!.splice(index, 1) : topic.tags!.push(tag);
   },
-  postOrdering(state, ordering: TreeOrderBy): void {
-    state.treePostOrdering = ordering;
+  treeTopicOrder(state, order: TreeTopicOrder): void {
+    state.treeTopicOrder = order;
   },
 };
 

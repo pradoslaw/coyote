@@ -29,7 +29,6 @@ export default {
       reasons: window.reasons,
       popularTags: window.popularTags,
       postFormHidden: false,
-      treePostOrdering: 'orderByCreationDateOldest',
       editorRevealed: false,
     };
   },
@@ -110,9 +109,9 @@ export default {
     resetForm(): void {
       this.$data.postFormHidden = store.getters['topics/is_mode_tree'];
     },
-    changeTreeTopicPostOrdering(event: Event): void {
+    changeTreeTopicOrder(event: Event): void {
       const ordering: TreeOrderBy = event.target!.value;
-      store.commit('topics/postOrdering', ordering);
+      store.commit('topics/treeTopicOrder', ordering);
     },
   },
   computed: {
@@ -120,7 +119,7 @@ export default {
       return this.$refs['js-submit-form'].$refs['markdown']!;
     },
     ...mapGetters('posts', ['posts', 'linearTopicPosts', 'treeTopicPostsFirst', 'treeTopicPostsRemaining', 'totalPages', 'currentPage']),
-    ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear', 'treeTopicPostOrdering']),
+    ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear', 'treeTopicOrder']),
     ...mapGetters('user', ['isAuthorized']),
     ...mapState('poll', ['poll']),
   },

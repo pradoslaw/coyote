@@ -144,19 +144,20 @@
 
         <template v-if="is_mode_tree && treeTopicPostsRemaining.length > 0">
           <div class="mb-4">
-            <label for="tree-post-ordering" class="text-muted">
+            <label for="tree-post-ordering2" class="text-muted">
               Kolejność postów
             </label>
             {{ icon('treeTopicPostOrder') }}
             <select
-                id="tree-post-ordering"
-                :value="treeTopicPostOrdering"
-                @change="changeTreeTopicPostOrdering"
+                id="tree-post-ordering2"
+                :value="treeTopicOrder"
+                @change="changeTreeTopicOrder"
                 class="form-control"
                 style="width:initial;">
-              <option value="orderByMostLikes">Najwyżej oceniane</option>
-              <option value="orderByCreationDateNewest">Najnowsze</option>
-              <option value="orderByCreationDateOldest">Najstarsze</option>
+              <option value="byScore">Najwyżej oceniane</option>
+              <option value="newest">Najnowsze</option>
+              <option value="oldest">Najstarsze</option>
+              <option value="linear">Spłaszczone</option>
             </select>
           </div>
         </template>

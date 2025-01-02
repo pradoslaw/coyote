@@ -1,7 +1,8 @@
 import axios from "axios";
 import {TreeMap} from "../../treeTopic/treeMap";
-import {postOrdering, postsToTreePosts} from "../../treeTopic/treeOrderBy";
+import {postOrdering, postsToTreePosts, TreeOrderBy} from "../../treeTopic/treeOrderBy";
 import {Forum, Paginator, Post, PostComment, PostLog, Topic, TreePost, User} from "../../types/models";
+import {TreeTopicOrder} from "./topics";
 
 type Function<A, R> = (argument: A) => R;
 
@@ -21,6 +22,21 @@ const state: Paginator = {
   total: 0,
 };
 
+const flatTreeItem = {
+  nestLevel: 0,
+  hasNextSibling: false,
+  hasChildren: false,
+};
+
+function topicOrderToTreeOrdering(topicOrder: TreeTopicOrder): TreeOrderBy {
+  const map = {
+    'byScore': 'orderByMostLikes',
+    'newest': 'orderByCreationDateNewest',
+    'oldest': 'orderByCreationDateOldest',
+  };
+  return map[topicOrder];
+}
+
 const getters = {
   posts(state): Post[] {
     const posts: Post[] = Object.values(state.data);
@@ -31,17 +47,26 @@ const getters = {
     return getters.posts;
   },
   treeTopicPostsFirst(state, getters): Post {
+    if (getters.isLinearized) {
+      return getters.posts[0];
+    }
     return getters.treeTopicPosts[0].post;
   },
   treeTopicPostsRemaining(state, getters): TreePost[] {
+    if (getters.isLinearized) {
+      return getters.posts.slice(1).map(post => ({post, treeItem: flatTreeItem}));
+    }
     return getters.treeTopicPosts.slice(1);
   },
   treeTopicPosts(state, getters): TreePost[] {
     return Array.from(getters.treeTopicPostsMap.values());
   },
+  isLinearized(state, getters, rootState, rootGetters): boolean {
+    return rootGetters['topics/treeTopicOrder'] === 'linear';
+  },
   treeTopicPostsMap(state, getters, rootState, rootGetters): Map<number, TreePost> {
     const map = new Map<number, TreePost>();
-    const treePosts = postsToTreePosts(getters.posts, postOrdering(rootGetters['topics/treeTopicPostOrdering']));
+    const treePosts = postsToTreePosts(getters.posts, postOrdering(topicOrderToTreeOrdering(rootGetters['topics/treeTopicOrder'])));
     for (const treePost of treePosts) {
       map.set(treePost.post.id, treePost);
     }
@@ -72,6 +97,9 @@ const getters = {
     return getters.currentPage >= getters.totalPages;
   },
   parentLevelsWithSiblings(state, getters): Function<Post, number[]> {
+    if (getters.isLinearized) {
+      return () => [];
+    }
     return function (post: Post): number[] {
       const parentLevels: number[] = [];
       let current: Post = post;
