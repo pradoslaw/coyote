@@ -5,25 +5,10 @@
       :links-to-child="linksToChild"
       :links-to-parent="linksToParent"
       :parent-levels="parentsWithSiblings"
-      :expanded="postFolded"
+      :expanded="childrenFolded"
       @toggle="guiderailToggle"
     />
-    <div class="card card-post card-post-folded neon-post-folded" v-if="postFolded">
-      <div class="card-body cursor-pointer p-1" @click="postUnfold">
-        <div class="d-flex align-items-center">
-          <span class="mx-2" v-text="postAnswersAuthorsSeeMore"/>
-          <div v-for="author in postAnswersAuthors" style="width:38px;">
-            <vue-avatar
-              :photo="author.photo"
-              :name="author.name"
-              :initials="author.initials"
-              class="img-thumbnail me-1"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-else class="d-flex">
+    <div class="d-flex">
       <div>
         <vue-avatar
           v-if="post.user && is_mode_tree"
@@ -377,6 +362,30 @@
       </div>
     </div>
   </div>
+  <div class="tree-post position-relative" :class="postIndentCssClasses" v-if="childrenFolded">
+    <vue-post-guiderail
+      v-if="guiderailVisible"
+      :links-to-child="false"
+      :links-to-parent="false"
+      :parent-levels="parentsWithSiblings"
+      :expanded="childrenFolded"
+      @toggle="guiderailToggle"
+    />
+    <div class="card card-post card-post-folded neon-post-folded" style="margin-left:44px;">
+      <div class="card-body cursor-pointer p-1" @click="unfoldChildren">
+        <div class="d-flex align-items-center">
+          <span class="mx-2" v-text="postAnswersAuthorsSeeMore"/>
+          <div v-for="author in postAnswersAuthors" style="width:38px;">
+            <vue-avatar
+              :photo="author.photo"
+              :name="author.name"
+              :initials="author.initials"
+              class="img-thumbnail me-1"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -441,14 +450,12 @@ export default {
       isCollapsed: false,
       isCommenting: false,
       commentDefault: {text: '', post_id: this.post.id},
-      postFolded: false,
       postDefault: {text: '', html: '', assets: []},
       treeTopicReplyVisible: false,
     };
   },
   created(): void {
     this.$data.isCollapsed = this.hidden;
-    this.$data.postFolded = this.$props.post.childrenFolded;
   },
   mounted() {
     if (this.is_mode_tree && !this.post.deleted_at) {
@@ -461,12 +468,10 @@ export default {
         this.$data.isCollapsed = !this.$data.isCollapsed;
       }
     },
-    postUnfold(): void {
-      this.$data.postFolded = false;
+    unfoldChildren(): void {
       store.commit('posts/unfoldChildren', this.$props.post);
     },
     guiderailToggle(expanded: boolean): void {
-      this.$data.postFolded = expanded;
       if (expanded) {
         store.commit('posts/foldChildren', this.$props.post);
       } else {
@@ -558,12 +563,15 @@ export default {
     ...mapGetters('user', ['isAuthorized']),
     ...mapGetters('posts', ['posts']),
     ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
+    childrenFolded(): boolean {
+      return this.$props.post.childrenFolded;
+    },
     postAnswersAuthors(): string {
       return store.getters['posts/postAnswersAuthors'](this.$props.post.id);
     },
     postAnswersAuthorsSeeMore(): string {
       const answers = this.postAnswersAuthors.length;
-      return `Zobacz ${answers} ${declination(answers, ['pozostałą odpowiedź', 'pozostałe odpowiedzi', 'pozostałych odpowiedzi'])}.`;
+      return `Zobacz ${answers} ${declination(answers, ['odpowiedź', 'odpowiedzi', 'odpowiedzi'])}.`;
     },
     editedTimeAgo() {
       return formatTimeAgo(this.$props.post.updated_at);
@@ -596,9 +604,6 @@ export default {
       return this.$props.treeItem.nestLevel > 1;
     },
     linksToChild(): boolean {
-      if (this.$data.postFolded) {
-        return false;
-      }
       return this.$props.treeItem.hasChildren;
     },
     parentsWithSiblings(): number[] {

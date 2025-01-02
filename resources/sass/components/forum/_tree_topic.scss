@@ -39,7 +39,7 @@ $post-border-width:          1px; // change to 0px in modern look&feel
   left:             - ($button-width + $guiderail-width)/2;
   width:            $button-width;
   height:           $button-width;
-  bottom:           $button-bottom-offset - ($button-width + $guiderail-width)/2;
+  bottom:           - ($button-width + $guiderail-width)/2;
 
   @include theme.property(border, $guiderail-width solid #dddddd, $guiderail-width solid #333333);
   border-radius:    $button-width/2;
@@ -56,7 +56,7 @@ $post-border-width:          1px; // change to 0px in modern look&feel
 
 .post-guiderail-to-child {
   border-bottom: none;
-  height:        100%;
+  height:        calc(100% - $button-bottom-offset);
   left:          $indent-width - $guiderail-post-left-offset;
 }
 
