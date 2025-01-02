@@ -291,16 +291,6 @@
                   </div>
                 </div>
 
-                <template v-if="is_mode_linear">
-                  <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
-                    <span v-if="isCommenting" class="text-primary">
-                      <vue-icon name="postCommentActive"/>
-                    </span>
-                    <vue-icon v-else name="postComment"/>
-                    <span class="d-none d-sm-inline ms-1">Komentuj</span>
-                  </button>
-                </template>
-
                 <button class="btn btn-sm" v-if="post.permissions.accept" @click="accept(post)" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną">
                   <template v-if="post.is_accepted">
                     <vue-icon name="postAcceptAccepted" class="text-primary"/>
@@ -311,6 +301,16 @@
                     <span class="d-none d-sm-inline ms-1">Zaakceptuj</span>
                   </template>
                 </button>
+
+                <template v-if="is_mode_linear">
+                  <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
+                    <span v-if="isCommenting" class="text-primary">
+                      <vue-icon name="postCommentActive"/>
+                    </span>
+                    <vue-icon v-else name="postComment"/>
+                    <span class="d-none d-sm-inline ms-1">Komentuj</span>
+                  </button>
+                </template>
               </div>
 
               <div v-if="post.permissions.write" :class="{'ms-auto':is_mode_linear}">
