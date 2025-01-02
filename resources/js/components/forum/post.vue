@@ -28,6 +28,9 @@
              @click="toggleDeletedPost"
              class="post-delete card-body text-decoration-none"
              :class="{'cursor-pointer':!postObscured}">
+          <div class="mb-3">
+            <strong>Usunięto</strong>
+          </div>
           <vue-icon name="postDeleted"/>
           Post usunięty
           <vue-timeago :datetime="post.deleted_at"/>
