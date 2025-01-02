@@ -2,8 +2,8 @@
   <div class="tree-post position-relative" :class="postIndentCssClasses">
     <vue-post-guiderail
       v-if="guiderailVisible"
-      :links-to-child="linksToChild"
       :links-to-parent="linksToParent"
+      :link-to-child="linkToChild"
       :parent-levels="parentsWithSiblings"
       :expanded="childrenFolded"
       @toggle="guiderailToggle"
@@ -365,7 +365,7 @@
   <div class="tree-post position-relative" :class="postIndentCssClasses" v-if="childrenFolded">
     <vue-post-guiderail
       v-if="guiderailVisible"
-      :links-to-child="false"
+      link-to-child="none"
       :links-to-parent="false"
       :parent-levels="parentsWithSiblings"
       :expanded="childrenFolded"
@@ -415,7 +415,7 @@ import VueSelect from './../forms/select.vue';
 import VueCommentForm from "./comment-form.vue";
 import VueComment from './comment.vue';
 import VueForm from './form.vue';
-import VuePostGuiderail from "./post-guiderail.vue";
+import VuePostGuiderail, {ChildLink} from "./post-guiderail.vue";
 import VuePostReview, {ReviewAnswer} from "./post-review.vue";
 
 export default {
@@ -437,6 +437,7 @@ export default {
     'vue-username': VueUserName,
     'vue-post-review': VuePostReview,
   },
+  emits: ['reply'],
   props: {
     post: {type: Object, required: true},
     treeItem: {type: Object, required: false},
@@ -603,8 +604,14 @@ export default {
     linksToParent(): boolean {
       return this.$props.treeItem.nestLevel > 1;
     },
-    linksToChild(): boolean {
-      return this.$props.treeItem.hasChildren;
+    linkToChild(): ChildLink {
+      if (!this.$props.treeItem.hasChildren) {
+        return 'none';
+      }
+      if (this.childrenFolded) {
+        return 'toggle-only';
+      }
+      return 'toggle-and-link';
     },
     parentsWithSiblings(): number[] {
       return this.parentLevelsWithSiblings

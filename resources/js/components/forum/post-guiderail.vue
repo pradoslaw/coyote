@@ -4,7 +4,8 @@
     class="position-absolute post-guiderail" :class="cssClass"
   />
   <div class="position-absolute post-guiderail post-guiderail-to-parent" v-if="linksToParent"/>
-  <div class="position-absolute post-guiderail post-guiderail-to-child" v-if="linksToChild">
+  <div class="position-absolute post-guiderail post-guiderail-to-child" v-if="linksToChild"/>
+  <div class="position-absolute post-guiderail post-guiderail-to-toggle" v-if="toggleVisible">
     <div class="position-absolute post-guiderail-button d-flex justify-content-center align-items-center cursor-pointer" @click="toggle" style="font-size:0.7em;">
       <vue-icon name="postGuiderailExpanded" v-if="expanded"/>
       <vue-icon name="postGuiderailCollapsed" v-else/>
@@ -15,15 +16,17 @@
 <script lang="ts">
 import VueIcon from '../icon';
 
+export type ChildLink = 'none' | 'toggle-only' | 'toggle-and-link';
+
 export default {
   name: 'VuePostGuiderail',
   components: {VueIcon},
   emits: ['toggle'],
   props: {
     expanded: {required: true, type: Boolean},
-    parentLevels: {required: false, type: Array},
-    linksToParent: {required: false, type: Boolean},
-    linksToChild: {required: false, type: Boolean},
+    parentLevels: {type: Array},
+    linksToParent: {type: Boolean},
+    linkToChild: {type: String},
   },
   methods: {
     toggle(): void {
@@ -31,6 +34,12 @@ export default {
     },
   },
   computed: {
+    toggleVisible(): boolean {
+      return this.$props.linkToChild !== 'none';
+    },
+    linksToChild(): boolean {
+      return this.$props.linkToChild === 'toggle-and-link';
+    },
     parentGuiderails(): number[] {
       return this.$props.parentLevels.map(parentLevel => {
         const parentLevels = {

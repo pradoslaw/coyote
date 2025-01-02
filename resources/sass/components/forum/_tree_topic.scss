@@ -54,9 +54,16 @@ $post-border-width:          1px; // change to 0px in modern look&feel
   border-right:              none;
 }
 
-.post-guiderail-to-child {
+.post-guiderail-to-toggle {
   border-bottom: none;
   height:        calc(100% - $button-bottom-offset);
+  left:          $indent-width - $guiderail-post-left-offset;
+}
+
+.post-guiderail-to-child {
+  border-bottom: none;
+  height:        $button-bottom-offset;
+  bottom:        0;
   left:          $indent-width - $guiderail-post-left-offset;
 }
 
