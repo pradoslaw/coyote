@@ -1,5 +1,5 @@
 import axios from "axios";
-import {postsOrdered} from "../../treeTopic/postOrdering";
+import {postsOrdered} from "../../treeTopic/treeOrderBy";
 import {TreeMap} from "../../treeTopic/treeMap";
 import {Forum, Paginator, Post, PostComment, PostLog, Topic, TreePost, User} from "../../types/models";
 

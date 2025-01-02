@@ -7,7 +7,7 @@ import VuePagination from "../../components/pagination.vue";
 import {PostCommentSaved, PostSaved, PostVoted, Subscriber} from "../../libs/live";
 import store from "../../store/index";
 import {notify} from "../../toast";
-import {PostOrdering} from "../../treeTopic/postOrdering";
+import {TreeOrderBy} from "../../treeTopic/treeOrderBy";
 import {Post} from "../../types/models";
 import {nextTick} from "../../vue";
 
@@ -111,7 +111,7 @@ export default {
       this.$data.postFormHidden = store.getters['topics/is_mode_tree'];
     },
     changeTreeTopicPostOrdering(event: Event): void {
-      const ordering: PostOrdering = event.target!.value;
+      const ordering: TreeOrderBy = event.target!.value;
       store.commit('topics/postOrdering', ordering);
     },
   },

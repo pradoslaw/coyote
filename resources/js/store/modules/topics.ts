@@ -1,5 +1,5 @@
 import axios from "axios";
-import {PostOrdering} from "../../treeTopic/postOrdering";
+import {TreeOrderBy} from "../../treeTopic/treeOrderBy";
 import {Tag, Topic} from '../../types/models';
 
 const state = {
@@ -12,7 +12,7 @@ const getters = {
   topic: state => state.topics[0],
   is_mode_tree: state => state.topics[0].discuss_mode === 'tree',
   is_mode_linear: state => state.topics[0].discuss_mode === 'linear',
-  treeTopicPostOrdering(state): PostOrdering {
+  treeTopicPostOrdering(state): TreeOrderBy {
     return state.treePostOrdering;
   },
 };
@@ -53,7 +53,7 @@ const mutations = {
 
     index > -1 ? topic.tags!.splice(index, 1) : topic.tags!.push(tag);
   },
-  postOrdering(state, ordering: PostOrdering): void {
+  postOrdering(state, ordering: TreeOrderBy): void {
     state.treePostOrdering = ordering;
   },
 };
