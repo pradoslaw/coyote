@@ -176,6 +176,7 @@ export interface Post {
   text: string;
   html: string;
   score: number;
+  orderingScore: number;
   url: string;
   is_read: boolean;
   is_locked: boolean;

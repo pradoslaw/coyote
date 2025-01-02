@@ -58,7 +58,10 @@ class PostResource extends JsonResource
     private function postResourceToArray(): array
     {
         return [
-            ...$this->post->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed', 'user_id', 'deleter_name', 'delete_reason']),
+            ...$this->post->only([
+                'id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed', 'user_id', 'deleter_name', 'delete_reason',
+            ]),
+            'orderingScore'        => $this->post->score,
             'created_at'           => $this->post->created_at->toIso8601String(),
             'updated_at'           => $this->post->updated_at?->toIso8601String(),
             'deleted_at'           => $this->post->deleted_at ? Carbon::parse($this->post->deleted_at)->toIso8601String() : null,

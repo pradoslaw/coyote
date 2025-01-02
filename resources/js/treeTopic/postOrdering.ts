@@ -38,14 +38,14 @@ function postOrdering(ordering: PostOrdering): (a, b) => number {
 }
 
 function orderByScoreThenCreationDate(a: Post, b: Post): number {
-  if (a.score === b.score) {
+  if (a.orderingScore === b.orderingScore) {
     return orderByCreationDateDesc(a, b);
   }
   return orderByScoreDesc(a, b);
 }
 
 function orderByScoreDesc(a: Post, b: Post): number {
-  return b.score - a.score;
+  return b.orderingScore - a.orderingScore;
 }
 
 function orderByCreationDateAsc(a: Post, b: Post): number {
