@@ -30,7 +30,7 @@ export class TreeMap<K, V> {
       return [node.value, ...node.children.flatMap(itemWithChildren)];
     }
 
-    return itemWithChildren(node);
+    return node.children.flatMap(itemWithChildren);
   }
 }
 
