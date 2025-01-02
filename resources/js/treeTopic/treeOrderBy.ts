@@ -6,8 +6,14 @@ export type TreeOrderBy =
   'orderByCreationDateOldest' |
   'orderByMostLikes';
 
+export type Sorter = (a, b) => number;
+
 export function postsOrdered(posts: Post[], ordering: TreeOrderBy): TreePost[] {
-  const tree = new TreeTopicRecords<Post>(postOrdering(ordering));
+  return postsToTreePosts(posts, postOrdering(ordering));
+}
+
+function postsToTreePosts(posts: Post[], sorter: Sorter): TreePost[] {
+  const tree = new TreeTopicRecords<Post>(sorter);
   const postsWithChildren = new Set();
   for (const post of posts) {
     if (!post.parentPostId) {
@@ -27,7 +33,7 @@ export function postsOrdered(posts: Post[], ordering: TreeOrderBy): TreePost[] {
   }));
 }
 
-function postOrdering(ordering: TreeOrderBy): (a, b) => number {
+function postOrdering(ordering: TreeOrderBy): Sorter {
   if (ordering === 'orderByCreationDateNewest') {
     return orderByCreationDateDesc;
   }
