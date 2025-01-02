@@ -1,6 +1,6 @@
 import axios from "axios";
-import {postsOrdered} from "../../treeTopic/treeOrderBy";
 import {TreeMap} from "../../treeTopic/treeMap";
+import {postOrdering, postsToTreePosts} from "../../treeTopic/treeOrderBy";
 import {Forum, Paginator, Post, PostComment, PostLog, Topic, TreePost, User} from "../../types/models";
 
 type Function<A, R> = (argument: A) => R;
@@ -40,10 +40,12 @@ const getters = {
     return Array.from(getters.treeTopicPostsMap.values());
   },
   treeTopicPostsMap(state, getters, rootState, rootGetters): Map<number, TreePost> {
-    const treePosts = new Map<number, TreePost>();
-    postsOrdered(getters.posts, rootGetters['topics/treeTopicPostOrdering'])
-      .forEach(treePost => treePosts.set(treePost.post.id, treePost));
-    return treePosts;
+    const map = new Map<number, TreePost>();
+    const treePosts = postsToTreePosts(getters.posts, postOrdering(rootGetters['topics/treeTopicPostOrdering']));
+    for (const treePost of treePosts) {
+      map.set(treePost.post.id, treePost);
+    }
+    return map;
   },
   exists(state) {
     return (postId: number): boolean => {
