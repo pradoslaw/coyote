@@ -104,15 +104,13 @@
             </div>
 
             <div class="media-body">
-              <h5 class="mb-0 post-author">
+              <span class="mb-0 post-author me-2">
                 <vue-username v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"/>
                 <span v-else>{{ post.user_name }}</span>
-              </h5>
-
+              </span>
               <a :href="post.url" class="text-muted small">
                 <vue-timeago :datetime="post.created_at"/>
               </a>
-
               <span class="ms-1" v-if="post.edit_count && is_mode_tree" :title="'edytowany ' + post.edit_count + 'x, ostatnio przez ' + post.editor.name + ', ' + editedTimeAgo">
                 (edytowany)
               </span>
@@ -130,9 +128,9 @@
                   :is-online="post.user.is_online"
                   class="post-avatar img-thumbnail neon-post-user-avatar"
                 />
-
-                <span v-if="post.user.group_name && !is_mode_tree" class="badge badge-secondary mb-1">{{ post.user.group_name }}</span>
-
+                <span v-if="post.user.group_name && !is_mode_tree" class="badge badge-secondary mb-1">
+                  {{ post.user.group_name }}
+                </span>
                 <ul class="post-stats list-unstyled">
                   <li v-if="is_mode_linear">
                     <strong>Rejestracja:</strong>
