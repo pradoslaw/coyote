@@ -3,13 +3,13 @@
     v-for="cssClass in parentGuiderails"
     class="position-absolute post-guiderail" :class="cssClass"
   />
-  <div class="position-absolute post-guiderail post-guiderail-to-parent" v-if="linksToParent">
+  <div class="position-absolute post-guiderail post-guiderail-to-parent" v-if="linksToParent"/>
+  <div class="position-absolute post-guiderail post-guiderail-to-child" v-if="linksToChild">
     <div class="position-absolute post-guiderail-button d-flex justify-content-center align-items-center cursor-pointer" @click="toggle" style="font-size:0.7em;">
       <vue-icon name="postGuiderailExpanded" v-if="expanded"/>
       <vue-icon name="postGuiderailCollapsed" v-else/>
     </div>
   </div>
-  <div class="position-absolute post-guiderail post-guiderail-to-child" v-if="linksToChild"/>
 </template>
 
 <script lang="ts">

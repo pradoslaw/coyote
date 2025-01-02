@@ -6,7 +6,7 @@ $guiderail-width:            1px;
 $guiderail-post-top-offset:  18px;
 $post-top-margin:            22px;
 $button-width:               18px;
-$button-top-offset:          17px;
+$button-bottom-offset:       38px;
 $post-border-width:          1px; // change to 0px in modern look&feel
 
 .tree-post.indent {
@@ -36,10 +36,10 @@ $post-border-width:          1px; // change to 0px in modern look&feel
 }
 
 .post-guiderail-button {
-  left:             - $button-width/2 - $guiderail-width/2;
+  left:             - ($button-width + $guiderail-width)/2;
   width:            $button-width;
   height:           $button-width;
-  top:              $post-top-margin + $guiderail-post-top-offset - $button-width/2 - $guiderail-width - $button-top-offset;
+  bottom:           $button-bottom-offset - ($button-width + $guiderail-width)/2;
 
   @include theme.property(border, $guiderail-width solid #dddddd, $guiderail-width solid #333333);
   border-radius:    $button-width/2;
