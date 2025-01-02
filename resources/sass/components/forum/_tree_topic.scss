@@ -1,1 +1,24 @@
+@use "../../../feature/theme/theme" as theme;
 @use "./post_guiderails";
+
+.tree-post {
+  .card-post {
+    background: none !important;
+    border:     none !important;
+    .card-body {
+      @include theme.light {
+        background: white;
+        border:     1px solid #dddddd;
+      }
+      @include theme.dark {
+        background: #1a1a1a;
+        border:     1px solid #2f2f2f;
+      }
+      border-radius: 0.25rem;
+    }
+    .card-footer {
+      border:     none !important;
+      background: none !important;
+    }
+  }
+}

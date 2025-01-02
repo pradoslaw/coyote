@@ -1,5 +1,5 @@
 <template>
-  <div class="tree-post position-relative" :class="postIndentCssClasses">
+  <div class="position-relative" :class="[postIndentCssClasses, {'tree-post':is_mode_tree}]">
     <vue-post-guiderail
       v-if="guiderailVisible"
       :links-to-parent="linksToParent"
