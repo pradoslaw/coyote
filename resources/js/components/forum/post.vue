@@ -8,7 +8,7 @@
       :expanded="postFolded"
       @toggle="guiderailToggle"
     />
-    <div class="card card-post card-post-folded neon-post-folded" v-if="postFolded" style="margin-left:15px;">
+    <div class="card card-post card-post-folded neon-post-folded" v-if="postFolded">
       <div class="card-body cursor-pointer p-1" @click="postUnfold">
         <div class="d-flex align-items-center">
           <span class="mx-2" v-text="postAnswersAuthorsSeeMore"/>
