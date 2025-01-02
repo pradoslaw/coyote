@@ -371,7 +371,7 @@
       :expanded="childrenFolded"
       @toggle="guiderailToggle"
     />
-    <div class="card card-post card-post-folded neon-post-folded" style="margin-left:44px;">
+    <div class="card card-post card-post-folded neon-post-folded" style="margin-left:88px;">
       <div class="card-body cursor-pointer p-1" @click="unfoldChildren">
         <div class="d-flex align-items-center">
           <span class="mx-2" v-text="postAnswersAuthorsSeeMore"/>
