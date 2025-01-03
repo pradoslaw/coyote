@@ -41,6 +41,14 @@
   }
 }
 
+.neon-homepage-forum-summary {
+  @include lookAndFeel(--summary-background,
+          (light: style.$new-1, dark:style.$new-2),
+          (light: #f6f6f6, dark:#1a1a1a));
+
+  background: var(--summary-background) !important; // overrides .card
+}
+
 .neon-category-not-read {
   @include lookAndFeel(--subscribe-active-color, style.$red-500, style.$red-500);
   background-color: var(--subscribe-active-color) !important; // overrides .card-topics .on
