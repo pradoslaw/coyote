@@ -249,17 +249,6 @@
           </div>
         </div>
 
-        <div :class="{'collapse': isCollapsed}" class="card-footer neon-post-footer" v-if="!hidden && is_mode_tree && scoreDescriptionVisible">
-          <div class="row">
-            <div class="d-none" :class="{'d-lg-block col-lg-2':is_mode_linear}" v-if="is_mode_linear"/>
-            <div class="col-12 d-flex py-1" :class="{'col-lg-10':is_mode_linear}">
-              <div class="text-muted ps-2">
-                {{ scoreDescription }}
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div :class="{'collapse': isCollapsed}" class="card-footer neon-post-footer" v-if="!authorBlocked">
           <div class="row">
             <div class="d-none" :class="{'d-lg-block col-lg-2':is_mode_linear}" v-if="is_mode_linear"/>
@@ -411,7 +400,6 @@ import VueIcon from "../icon";
 import {default as mixins} from '../mixins/user.js';
 import VueTags from '../tags.vue';
 import VueUserName from "../user-name.vue";
-import {voteDescription} from "../voteDescription";
 import VueFlag from './../flags/flag.vue';
 import VueButton from './../forms/button.vue';
 import VueSelect from './../forms/select.vue';
@@ -689,16 +677,6 @@ export default {
         return null;
       }
       return users.length > 10 ? users.slice(0, 10).concat('...').join("\n") : users.join("\n");
-    },
-    scoreDescriptionVisible(): boolean {
-      return this.post.score > 1;
-    },
-    scoreDescription(): string {
-      return voteDescription(
-        this.post.score,
-        this.post.is_voted,
-        this.otherVoters,
-      );
     },
     otherVoters(): string[] | null {
       if (this.post.voters) {
