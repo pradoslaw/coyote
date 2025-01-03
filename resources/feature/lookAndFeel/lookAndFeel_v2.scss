@@ -50,7 +50,7 @@
 
 .neon-category-default-icon {
   @include lookAndFeel(--category-default-icon-color,
-          (light: style.$green-800, dark:style.$green-050),
+          (light: style.$green-800, dark:style.$green-100),
           (light: #5e7813, dark:#acacac));
   color: var(--category-default-icon-color) !important;
 }
