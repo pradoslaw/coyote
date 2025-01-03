@@ -50,7 +50,7 @@
 
 .neon-category-default-icon {
   @include lookAndFeel(--category-default-icon-color,
-          (light: style.$green-700, dark:style.$green-050),
+          (light: style.$green-800, dark:style.$green-050),
           (light: #5e7813, dark:#acacac));
   color: var(--category-default-icon-color) !important;
 }
@@ -61,7 +61,7 @@ $lavary-tab-anchor: 'nav-link';
 @include modern {
   .neon-tabs {
     @include theme.var(--tab-border-color, (light: style.$navy-100, dark: style.$navy-700));
-    @include theme.var(--tab-border-active-color, style.$green-500);
+    @include theme.var(--tab-border-active-color, style.$green-600);
     @include theme.var(--tab-text-active-color, (light: style.$neutral-900, dark: style.$neutral-050));
     @include theme.var(--tab-text-inactive-color, (light: style.$neutral-700, dark: style.$neutral-200));
 
