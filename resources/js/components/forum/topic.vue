@@ -43,7 +43,7 @@
               </a>
             </h5>
 
-            <div v-if="totalPages > 1" class="d-none d-sm-inline ms-2 topic-pagination">
+            <div v-if="totalPages > 1 && !isTree" class="d-none d-sm-inline ms-2 topic-pagination">
               <vue-icon name="topicPages" class="neon-topic-page-icon"/>
               {{ ' ' }}
               <a :href="topic.url + '?page=1'" class="neon-topic-page">1</a>
@@ -191,6 +191,9 @@ export default {
     ...mapActions('topics', ['subscribe']),
   },
   computed: {
+    isTree() {
+      return this.$props.topic.discuss_mode === 'tree';
+    },
     totalPages() {
       return Math.ceil((this.topic.replies + 1) / this.postsPerPage);
     },
