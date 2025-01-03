@@ -88,19 +88,3 @@
 @import "../js/components/defaultAvatar";
 
 @import "../../node_modules/@riddled/4play/src/style";
-
-#cache-break {
-  opacity: 0.01; // increment this value to break cache
-  
-  /**
-   * Webpack [contenthash] take into account contents of .css/.scss files,
-   * but PurgeCss removes unused css elements. When editing .twig file,
-   * when using new style (e.g. bootstrap "pe-2", font-awesome "fa-chart-bar"),
-   * then it becomes used, PurgeCss ceases to purge it, but the [contenthash]
-   * doesn't change, and thus an obsolete .css file is served. This should be fixed
-   * by updating configuration, so changes made by PurgeCss should be reflected
-   * in .css filename hash.
-   * Workaround is to introduce a superficial style change, to cause [contenthash] 
-   * change.
-   */
-}

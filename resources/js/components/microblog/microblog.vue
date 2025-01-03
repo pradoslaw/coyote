@@ -1,6 +1,6 @@
 <template>
   <!-- we use below ID in mounted() method -->
-  <div :id="`entry-${microblog.id}`" class="card card-default microblog">
+  <div :id="`entry-${microblog.id}`" class="card card-default microblog neon-card neon-microblog">
     <div class="card-body">
       <div v-if="microblog.deleted_at" class="alert alert-danger">
         Ten wpis został usunięty. Możesz go przywrócić jeżeli chcesz.
@@ -19,16 +19,16 @@
                 <vue-username :user="microblog.user"/>
               </h5>
               <ul class="list-inline mb-0 list-inline-bullet-sm microblog-statistic">
-                <li class="list-inline-item">
+                <li class="list-inline-item neon-microblog-details">
                   <a :href="microblog.url" class="small">
                     <vue-timeago :datetime="microblog.created_at"/>
                   </a>
                 </li>
-                <li class="list-inline-item small">
+                <li class="list-inline-item small neon-microblog-details">
                   {{ microblog.views }}
                   {{ declination(microblog.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}
                 </li>
-                <li v-if="microblog.is_sponsored" class="list-inline-item small">
+                <li v-if="microblog.is_sponsored" class="list-inline-item small neon-microblog-details">
                   Sponsorowane
                 </li>
               </ul>

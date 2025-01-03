@@ -64,7 +64,7 @@
                   <i v-else class="not-read" title="Nowy post"/>
                   {{ ' ' }}
                   <a :href="post.url" class="small text-body">
-                    <vue-timeago :datetime="post.created_at"/>
+                    <vue-timeago :datetime="post.created_at" class="neon-post-date"/>
                   </a>
                 </div>
               </div>

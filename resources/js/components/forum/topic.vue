@@ -9,7 +9,7 @@
           @click.left="mark"
           :href="getUrl()"
           :class="{'not-read': !topic.is_read}"
-          class="topic-icon me-2 d-none d-md-flex"
+          class="topic-icon me-2 d-none d-md-flex neon-topic-default-icon"
         >
           <vue-icon name="topicStateSticky" v-if="topic.is_sticky"/>
           <vue-icon name="topicStateLocked" v-else-if="topic.is_locked"/>
@@ -28,7 +28,9 @@
                 <vue-icon name="topicAccepted"/>
                 {{ ' ' }}
               </a>
-              <a :href="getUrl()" :class="{'topic-unread': !topic.is_read}">{{ topic.title }}</a>
+              <a :href="getUrl()" :class="{'topic-unread': !topic.is_read}" class="neon-topic-title">
+                {{ topic.title }}
+              </a>
               <small v-if="showCategoryName" class="d-inline d-xl-none">
                 w
                 <a :href="topic.forum.url">
@@ -42,27 +44,29 @@
             </h5>
 
             <div v-if="totalPages > 1" class="d-none d-sm-inline ms-2 topic-pagination">
-              <vue-icon name="topicPages"/>
+              <vue-icon name="topicPages" class="neon-topic-page-icon"/>
               {{ ' ' }}
-              <a :href="topic.url + '?page=1'">1</a>
+              <a :href="topic.url + '?page=1'" class="neon-topic-page">1</a>
               {{ ' ' }}
               <template v-if="totalPages > 4">
                 ...
                 {{ ' ' }}
               </template>
-              <a v-if="totalPages === 4" :href="topic.url + '?page=2'">
+              <a v-if="totalPages === 4" :href="topic.url + '?page=2'" class="neon-topic-page">
                 2
                 {{ ' ' }}
               </a>
               <template v-for="i in paginatorPages">
-                <a :href="topic.url + '?page=' + i">{{ i }}</a>
+                <a :href="topic.url + '?page=' + i" class="neon-topic-page">
+                  {{ i }}
+                </a>
                 {{ ' ' }}
               </template>
             </div>
 
             <ul class="topic-statistic list-inline small mt-1 mt-sm-0 mb-0 d-block d-sm-inline ms-sm-auto flex-sm-shrink-0">
               <li class="list-inline-item small" title="Liczba odpowiedzi">
-                <vue-icon name="topicRepliesReplyPresent" v-if="topic.is_replied" class="topic-has-reply"/>
+                <vue-icon name="topicRepliesReplyPresent" v-if="topic.is_replied" class="topic-has-reply neon-topic-replies-icon"/>
                 <vue-icon name="topicRepliesReplyMissing" v-else/>
                 {{ number(topic.replies) }}
               </li>
@@ -97,7 +101,9 @@
       </div>
 
       <div v-if="showCategoryName" class="col-xl-1 d-none d-xl-block text-center text-truncate">
-        <a :href="topic.forum.url" class="small" :title="topic.forum.name">{{ topic.forum.name }}</a>
+        <a :href="topic.forum.url" class="small neon-topic-list-category-name" :title="topic.forum.name">
+          {{ topic.forum.name }}
+        </a>
       </div>
 
       <div class="col-xl-2 col-lg-2 col-md-12">

@@ -14,7 +14,7 @@
         <h2 class="h4">
           Co nowego na forum?
         </h2>
-        <div class="card card-forum">
+        <div class="card card-forum neon-homepage-forum-summary">
           <div class="card-body">
             <div class="row">
               <div class="col-lg-6">
@@ -57,7 +57,7 @@
                                class="title">
                               {{ topic.title }}
                             </a>
-                            <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">
+                            <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category neon-link">
                               {{ topic.forum }}
                             </a>
                             <small class="topic-created float-end">
@@ -131,7 +131,7 @@
                           </a>
                         </div>
                         <div class="media-body">
-                          <p>{{ activity.headline|raw }}</p>
+                          <p class="neon-recent-activity-headline">{{ activity.headline|raw }}</p>
                           <small>{{ activity.created_at|format_date }}</small>
                           <strong>{{ activity.excerpt }}</strong>
                         </div>
@@ -177,7 +177,7 @@
             Reputacja użytkowników
           </h4>
 
-          <div class="card card-default card-reputation tab-content">
+          <div class="card card-default card-reputation tab-content neon-card neon-reputation">
             <div class="pt-2 px-3">
               <div id="reputation-tabs" class="nav nav-pills">
                 <span data-bs-toggle="tab" data-bs-target="#week" class="nav-link {{ settings.reputationMode == 'week' ? 'active' }}">

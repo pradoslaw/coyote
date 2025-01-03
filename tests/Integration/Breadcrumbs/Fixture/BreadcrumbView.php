@@ -14,7 +14,7 @@ trait BreadcrumbView
         $breadcrumbs = [];
         $dom = new ViewDom($this->htmlView($uri));
         /** @var \DOMElement $breadcrumb */
-        foreach ($dom->elements(xPath:"/html/body/footer//ul/li[@class='breadcrumb-item']/*") as $breadcrumb) {
+        foreach ($dom->elements(xPath:"/html/body/footer//ul/li[@class='breadcrumb-item neon-breadcrumb']/*") as $breadcrumb) {
             $name = \trim($breadcrumb->textContent);
             if (empty($name)) {
                 continue;
