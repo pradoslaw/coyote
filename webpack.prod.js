@@ -72,7 +72,6 @@ const plugins = [
         /^tooltip/,
         /^bs-tooltip/,
         /^ps/,
-        /^cool-lightbox/,
         /^tag/,
         /:not/,
         /^pre/,

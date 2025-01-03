@@ -1,10 +1,8 @@
 @import "helpers/variables";
 @import "helpers/mixins";
-
-@import "vendor/bootstrap";
+@import "bootstrap/scss/bootstrap";
 @import "helpers/bootstrap";
 @import "icons/icons";
-
 @import "base/reset";
 
 @import "layout/footer";
