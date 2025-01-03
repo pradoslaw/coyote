@@ -28,7 +28,7 @@
                 <vue-icon name="topicAccepted"/>
                 {{ ' ' }}
               </a>
-              <a :href="getUrl()" :class="{'topic-unread': !topic.is_read}" class="neon-topic-title">
+              <a :href="getUrl()" :class="{'topic-unread neon-topic-title-unread': !topic.is_read}" class="neon-topic-title">
                 {{ topic.title }}
               </a>
               <small v-if="showCategoryName" class="d-inline d-xl-none">

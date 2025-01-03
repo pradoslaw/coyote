@@ -162,6 +162,12 @@
   color: var(--topic-list-title-color) !important;
 }
 
+.neon-topic-title-unread {
+  @include legacy {
+    color: #80a41a !important;
+  }
+}
+
 $lavary-tab:        'nav-item';
 $lavary-tab-anchor: 'nav-link';
 
