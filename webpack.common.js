@@ -107,7 +107,7 @@ module.exports = {
   },
   resolve: {
     mainFields: ['main', 'module'],
-    extensions: ['.ts', '.tsx', '.js', '.vue'],
+    extensions: ['.ts', '.tsx', '.js'],
     alias: {
       vue: 'vue/dist/vue.esm-bundler',
     },

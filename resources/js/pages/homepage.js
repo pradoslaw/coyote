@@ -2,7 +2,7 @@ import axios from 'axios';
 import PerfectScrollbar from 'perfect-scrollbar';
 import {mapGetters} from "vuex";
 
-import VueMicroblog from "../components/microblog/microblog";
+import VueMicroblog from "../components/microblog/microblog.vue";
 import store from "../store/index.ts";
 import {createVueAppNotifications} from '../vue';
 import {default as LiveMixin} from './microblog/live';

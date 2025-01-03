@@ -12,24 +12,15 @@
 </template>
 
 <script>
-  import VueError from './error';
+import VueError from './error.vue';
 
-  export default {
-    components: { 'vue-error': VueError },
-    props: {
-      name: {
-        type: String,
-        require: true
-      },
-      errors: {
-        type: [Array, String]
-      },
-      help: {
-        type: String
-      },
-      label: {
-        type: String
-      }
-    }
-  }
+export default {
+  components: {'vue-error': VueError},
+  props: {
+    name: {type: String, require: true},
+    errors: {type: [Array, String]},
+    help: {type: String},
+    label: {type: String},
+  },
+};
 </script>
