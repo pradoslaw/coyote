@@ -47,22 +47,14 @@ const getters = {
     return getters.posts;
   },
   treeTopicPostsFirst(state, getters): Post {
-    if (getters.isLinearized) {
-      return getters.posts[0];
-    }
-    return getters.treeTopicPosts[0].post;
+    return getters.posts[0];
   },
   treeTopicPostsRemaining(state, getters): TreePost[] {
     if (getters.isLinearized) {
       return getters.posts.slice(1).map(post => ({post, treeItem: flatTreeItem}));
     }
-    return getters.treeTopicPosts.slice(1);
-  },
-  treeTopicPosts(state, getters): TreePost[] {
-    return Array.from(getters.treeTopicPostsMap.values());
-  },
-  isLinearized(state, getters, rootState, rootGetters): boolean {
-    return rootGetters['topics/treeTopicOrder'] === 'linear';
+    const treePosts: TreePost[] = Array.from(getters.treeTopicPostsMap.values());
+    return treePosts.slice(1);
   },
   treeTopicPostsMap(state, getters, rootState, rootGetters): Map<number, TreePost> {
     const map = new Map<number, TreePost>();
@@ -71,6 +63,9 @@ const getters = {
       map.set(treePost.post.id, treePost);
     }
     return map;
+  },
+  isLinearized(state, getters, rootState, rootGetters): boolean {
+    return rootGetters['topics/treeTopicOrder'] === 'linear';
   },
   exists(state) {
     return (postId: number): boolean => {
