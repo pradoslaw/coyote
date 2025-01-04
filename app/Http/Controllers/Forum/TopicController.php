@@ -40,11 +40,13 @@ class TopicController extends BaseController
         /** @var Gate $gate */
         $gate = app(Gate::class);
 
-        $page = (int)$request->get('page');
-        $perPage = $this->postsPerPage($request);
 
         if ($topic->is_tree) {
-            $perPage = 150;
+            $page = 1;
+            $perPage = 200;
+        } else {
+            $page = (int)$request->get('page');
+            $perPage = $this->postsPerPage($request);            
         }
 
         // user with forum-update ability WILL see every post
