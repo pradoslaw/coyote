@@ -110,4 +110,16 @@ describe('tree list', () => {
     const topic = new TreeTopicRecords<string>(() => 0);
     assertEquals([], topic.flatTreeItems());
   });
+
+  test('retrieve only children of particular subtree', () => {
+    const topic = new TreeTopicRecords<string>(() => 0);
+    topic.setRoot(15, 'root');
+    addChild(topic, 16, 15, 'a');
+    addChild(topic, 17, 16, 'b');
+    addChild(topic, 18, 17, "c");
+    assertEquals([
+      {nestLevel: 2, item: 'b', hasNextSibling: false},
+      {nestLevel: 3, item: 'c', hasNextSibling: false},
+    ], topic.flatTreeItemsChildrenOf(17));
+  });
 });

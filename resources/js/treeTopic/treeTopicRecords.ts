@@ -45,18 +45,22 @@ export class TreeTopicRecords<T> {
   }
 
   flatTreeItems(): TreeItem<T>[] {
-    return this.flatRecords().map((record): TreeItem<T> => ({
+    if (this.root) {
+      return this.flatTreeItemsChildrenOf(this.root.id);
+    }
+    return [];
+  }
+
+  flatTreeItemsChildrenOf(id: number): TreeItem<T>[] {
+    return this.flattened([this.records.get(id)!]).map(this.recordToTreeItem);
+  }
+
+  private recordToTreeItem(record: Record<T>): TreeItem<T> {
+    return {
       item: record.payload,
       nestLevel: record.level,
       hasNextSibling: !record.isLastChild,
-    }));
-  }
-
-  private flatRecords(): Record<T>[] {
-    if (this.root) {
-      return this.flattened([this.root]);
-    }
-    return [];
+    };
   }
 
   private flattened(records: Record<T>[]): Record<T>[] {

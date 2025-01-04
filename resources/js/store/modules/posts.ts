@@ -1,6 +1,7 @@
 import axios from "axios";
 import {TreeMap} from "../../treeTopic/treeMap";
-import {postOrdering, postsToTreePosts, TreeOrderBy} from "../../treeTopic/treeOrderBy";
+import {postOrdering, Sorter, TreeOrderBy} from "../../treeTopic/treeOrderBy";
+import {TreeItem, TreeTopicRecords} from "../../treeTopic/treeTopicRecords";
 import {Forum, Paginator, Post, PostComment, PostLog, Topic, TreePost, User} from "../../types/models";
 import {TreeTopicOrder} from "./topics";
 
@@ -47,6 +48,9 @@ const getters = {
     return getters.posts;
   },
   treeTopicPostsFirst(state, getters): Post {
+    return getters.treeTopicRoot;
+  },
+  treeTopicRoot(state, getters): Post {
     return getters.posts[0];
   },
   treeTopicPostsRemaining(state, getters): TreePost[] {
@@ -55,16 +59,38 @@ const getters = {
     }
     return Array.from(getters.treeTopicPostsMap.values());
   },
-  treeTopicPostsMap(state, getters, rootState, rootGetters): Map<number, TreePost> {
+  treeTopicPostsMap(state, getters): Map<number, TreePost> {
     const map = new Map<number, TreePost>();
-    const treePosts = postsToTreePosts(getters.posts, postOrdering(topicOrderToTreeOrdering(rootGetters['topics/treeTopicOrder'])));
-    for (const treePost of treePosts) {
-      if (treePost.post.parentPostId === null) {
-        continue;
+    const posts = getters.posts;
+    const sorter = getters.postOrdering;
+    const tree = new TreeTopicRecords<Post>(sorter);
+    const postsWithChildren = new Set();
+    for (const post of posts) {
+      if (!post.parentPostId) {
+        tree.setRoot(post.id, post);
+      } else {
+        tree.addChild(post.id, post.parentPostId, post, post.childrenFolded);
+        postsWithChildren.add(post.parentPostId);
       }
-      map.set(treePost.post.id, treePost);
+    }
+    const flatTreeItems: TreeItem<Post>[] = tree.flatTreeItemsChildrenOf(getters.treeTopicRoot.id);
+    for (const item of flatTreeItems) {
+      const post: Post = item.item;
+      if (post.parentPostId !== null) {
+        map.set(post.id, {
+          post: post,
+          treeItem: {
+            nestLevel: item.nestLevel,
+            hasNextSibling: item.hasNextSibling,
+            hasChildren: postsWithChildren.has(post.id),
+          },
+        });
+      }
     }
     return map;
+  },
+  postOrdering(state, getters, rootState, rootGetters): Sorter {
+    return postOrdering(topicOrderToTreeOrdering(rootGetters['topics/treeTopicOrder']));
   },
   isLinearized(state, getters, rootState, rootGetters): boolean {
     return rootGetters['topics/treeTopicOrder'] === 'linear';

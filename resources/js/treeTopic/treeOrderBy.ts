@@ -1,5 +1,4 @@
-import {Post, TreePost} from "../types/models";
-import {TreeTopicRecords} from "./treeTopicRecords";
+import {Post} from "../types/models";
 
 export type TreeOrderBy =
   'orderByCreationDateNewest' |
@@ -7,27 +6,6 @@ export type TreeOrderBy =
   'orderByMostLikes';
 
 export type Sorter = (a, b) => number;
-
-export function postsToTreePosts(posts: Post[], sorter: Sorter): TreePost[] {
-  const tree = new TreeTopicRecords<Post>(sorter);
-  const postsWithChildren = new Set();
-  for (const post of posts) {
-    if (!post.parentPostId) {
-      tree.setRoot(post.id, post);
-    } else {
-      tree.addChild(post.id, post.parentPostId, post, post.childrenFolded);
-      postsWithChildren.add(post.parentPostId);
-    }
-  }
-  return tree.flatTreeItems().map(item => ({
-    post: item.item,
-    treeItem: {
-      nestLevel: item.nestLevel,
-      hasNextSibling: item.hasNextSibling,
-      hasChildren: postsWithChildren.has(item.item.id),
-    },
-  }));
-}
 
 export function postOrdering(ordering: TreeOrderBy): Sorter {
   if (ordering === 'orderByCreationDateNewest') {
