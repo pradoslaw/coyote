@@ -1,5 +1,4 @@
 import axios from "axios";
-import {TreeOrderBy} from "../../treeTopic/treeOrderBy";
 import {Tag, Topic} from '../../types/models';
 
 const state = {
@@ -16,6 +15,10 @@ const getters = {
   is_mode_linear: state => state.topics[0].discuss_mode === 'linear',
   treeTopicOrder(state): TreeTopicOrder {
     return state.treeTopicOrder;
+  },
+  treeTopicSelectedSubtreePostId(state, getters): number {
+    const topic: Topic = getters.topic;
+    return topic.treeSelectedSubtreePostId;
   },
 };
 

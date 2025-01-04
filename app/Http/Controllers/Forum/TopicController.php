@@ -19,6 +19,7 @@ use Coyote\Services\Forum\TreeBuilder\Builder;
 use Coyote\Services\Forum\TreeBuilder\JsonDecorator;
 use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Coyote\Services\Parser\Extensions\Emoji;
+use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
@@ -40,13 +41,12 @@ class TopicController extends BaseController
         /** @var Gate $gate */
         $gate = app(Gate::class);
 
-
         if ($topic->is_tree) {
             $page = 1;
             $perPage = 200;
         } else {
             $page = (int)$request->get('page');
-            $perPage = $this->postsPerPage($request);            
+            $perPage = $this->postsPerPage($request);
         }
 
         // user with forum-update ability WILL see every post
@@ -109,8 +109,10 @@ class TopicController extends BaseController
         $resource = new PostCollection($paginate);
         $resource->setRelations($topic, $forum);
         $resource->setTracker($tracker);
+        $topicResource = new TopicResource($tracker);
         if ($request->filled('p')) {
             $resource->setSelectedPostId($request->get('p'));
+            $topicResource->setSelectedPostId($request->get('p'));
         }
         if (!$hasAccessToDeletedPosts) {
             $resource->obscureDeletedPosts();
@@ -142,7 +144,8 @@ class TopicController extends BaseController
                 'paginationPerPage'     => $paginate->perPage(),
                 'reasons'               => $reasons,
                 'model'                 => $topic, // we need eloquent model in twig to show information about locked/moved topic
-                'topic'                 => (new TopicResource($tracker))->toResponse($request)->getData(true),
+                'topic'                 => $topicResource->toResponse($request)->getData(true),
+                'treeTopicSeeWholeUrl'  => UrlBuilder::topic($topic),
                 'poll'                  => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
                 'is_writeable'          => $gate->allows('write', $forum) && $gate->allows('write', $topic),
                 'all_forums'            => $allForums,

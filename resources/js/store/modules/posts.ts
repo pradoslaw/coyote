@@ -73,14 +73,18 @@ const getters = {
         postsWithChildren.add(post.parentPostId);
       }
     }
-    const flatTreeItems: TreeItem<Post>[] = tree.flatTreeItemsChildrenOf(getters.treeTopicRoot.id);
+    const flatTreeItems: TreeItem<Post>[] = tree.flatTreeItemsChildrenOf(getters.treeSelectedSubtreePostId);
+    let parentNestLevel: number | null = null;
     for (const item of flatTreeItems) {
       const post: Post = item.item;
       if (post.parentPostId !== null) {
+        if (parentNestLevel === null) {
+          parentNestLevel = item.nestLevel - 1;
+        }
         map.set(post.id, {
           post: post,
           treeItem: {
-            nestLevel: item.nestLevel,
+            nestLevel: item.nestLevel - parentNestLevel,
             hasNextSibling: item.hasNextSibling,
             hasChildren: postsWithChildren.has(post.id),
           },
@@ -88,6 +92,9 @@ const getters = {
       }
     }
     return map;
+  },
+  treeSelectedSubtreePostId(state, getters, rootState, rootGetters): number {
+    return rootGetters['topics/treeTopicSelectedSubtreePostId'];
   },
   postOrdering(state, getters, rootState, rootGetters): Sorter {
     return postOrdering(topicOrderToTreeOrdering(rootGetters['topics/treeTopicOrder']));

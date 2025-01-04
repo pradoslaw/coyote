@@ -33,6 +33,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class TopicResource extends JsonResource
 {
+    private ?int $selectedPostId = null;
+
     public function toArray(Request $request): array
     {
         $only = $this->resource->only([
@@ -43,28 +45,34 @@ class TopicResource extends JsonResource
         return array_merge(
             $only,
             [
-                'created_at'           => $this->created_at->toIso8601String(),
-                'last_post_created_at' => $this->last_post_created_at->toIso8601String(),
-                'url'                  => url(UrlBuilder::topic($this->resource->getModel())),
-                'is_read'              => $this->isRead(),
-                'replies'              => $this->replies($request),
-                'forum'                => [
+                'created_at'                => $this->created_at->toIso8601String(),
+                'last_post_created_at'      => $this->last_post_created_at->toIso8601String(),
+                'url'                       => url(UrlBuilder::topic($this->resource->getModel())),
+                'is_read'                   => $this->isRead(),
+                'replies'                   => $this->replies($request),
+                'forum'                     => [
                     'id'   => $this->forum->id,
                     'name' => $this->forum->name,
                     'slug' => $this->forum->slug,
                     'url'  => UrlBuilder::forum($this->forum),
                 ],
-                'tags'                 => TagResource::collection($this->whenLoaded('tags')),
-                'is_subscribed'        => $this->isSubscribed($request),
-                'user'                 => new UserResource($this->whenLoaded('user')),
-                'owner_id'             => $this->whenLoaded('firstPost', fn() => $this->firstPost->user_id),
-                'last_post'            => $this->whenLoaded('lastPost', function () {
+                'tags'                      => TagResource::collection($this->whenLoaded('tags')),
+                'is_subscribed'             => $this->isSubscribed($request),
+                'user'                      => new UserResource($this->whenLoaded('user')),
+                'owner_id'                  => $this->whenLoaded('firstPost', fn() => $this->firstPost->user_id),
+                'last_post'                 => $this->whenLoaded('lastPost', function () {
                     $this->lastPost->setRelation('forum', $this->forum)->setRelation('topic', $this->resource);
                     return new PostResource($this->lastPost);
                 }),
-                'discuss_mode'         => $this->discussMode(),
+                'discuss_mode'              => $this->discussMode(),
+                'treeSelectedSubtreePostId' => $this->selectedPostId ?? $this->resource->first_post_id,
             ],
         );
+    }
+
+    public function setSelectedPostId(int $postId): void
+    {
+        $this->selectedPostId = $postId;
     }
 
     private function replies(Request $request): int

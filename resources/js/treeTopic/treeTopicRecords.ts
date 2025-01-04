@@ -52,7 +52,10 @@ export class TreeTopicRecords<T> {
   }
 
   flatTreeItemsChildrenOf(id: number): TreeItem<T>[] {
-    return this.flattened([this.records.get(id)!]).map(this.recordToTreeItem);
+    if (this.records.has(id)) {
+      return this.flattened([this.records.get(id)!]).map(this.recordToTreeItem);
+    }
+    return [];
   }
 
   private recordToTreeItem(record: Record<T>): TreeItem<T> {

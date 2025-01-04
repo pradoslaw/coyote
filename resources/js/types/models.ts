@@ -246,6 +246,7 @@ export interface Topic {
   subscribers?: number;
   owner_id?: number | null;
   discuss_mode: 'tree' | 'linear';
+  treeSelectedSubtreePostId: number;
 }
 
 export interface Message {
