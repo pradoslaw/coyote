@@ -1,40 +1,40 @@
 @charset "UTF-8";
 
-$fa-font-path: "/fonts/font-awesome";
+$fa-font-path:                     "/fonts/font-awesome";
 
 @font-face {
   font-family: 'Font Awesome 6 Pro';
-  font-style: normal;
+  font-style:  normal;
   font-weight: 300;
-  src: url('#{$fa-font-path}/fa-light-300.woff2') format('woff2'),
-  url('#{$fa-font-path}/fa-light-300.ttf') format('truetype');
+  src:         url('#{$fa-font-path}/fa-light-300.woff2') format('woff2'),
+               url('#{$fa-font-path}/fa-light-300.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Font Awesome 6 Pro';
-  font-style: normal;
+  font-style:  normal;
   font-weight: 400;
-  src: url('#{$fa-font-path}/fa-regular-400.woff2') format('woff2'),
-  url('#{$fa-font-path}/fa-regular-400.ttf') format('truetype');
+  src:         url('#{$fa-font-path}/fa-regular-400.woff2') format('woff2'),
+               url('#{$fa-font-path}/fa-regular-400.ttf') format('truetype');
 }
 
 .fa-light {
   font-family: 'Font Awesome 6 Pro', 'Font Awesome 6 Free';
-  font-style: normal;
+  font-style:  normal;
   font-weight: 300;
-  display: inline-block;
+  display:     inline-block;
 }
 
 .fa-regular {
   font-family: 'Font Awesome 6 Pro', 'Font Awesome 6 Free';
-  font-style: normal;
+  font-style:  normal;
   font-weight: 400;
-  display: inline-block;
+  display:     inline-block;
 }
 
 .fa-brand {
   font-family: 'Font Awesome 6 Brands';
-  font-style: normal;
+  font-style:  normal;
 }
 
 //@import "@fortawesome/fontawesome-pro/scss/fontawesome";
@@ -53,42 +53,42 @@ $fa-font-path: "/fonts/font-awesome";
 
 @mixin content-icon($icon) { // regular
   font-family: 'Font Awesome 6 Pro', 'Font Awesome 6 Free';
-  content: fa-content($icon);
+  content:     fa-content($icon);
   font-weight: 400;
 }
 
 @mixin content-icon-solid($icon) {
   font-family: 'Font Awesome 6 Pro', 'Font Awesome 6 Free';
-  content: fa-content($icon);
+  content:     fa-content($icon);
   font-weight: 900;
 }
 
 @mixin content-icon-brand($icon) {
   font-family: 'Font Awesome 6 Brands';
-  content: fa-content($icon);
+  content:     fa-content($icon);
   font-weight: 400;
 }
 
-$icon-post-quote: $fa-var-reply;
+$icon-post-quote:                  $fa-var-reply;
 
-$icon-profile-statement: $fa-var-quote-left;
-$icon-wiki-author-statement: $fa-var-quote-left;
+$icon-profile-statement:           $fa-var-quote-left;
+$icon-wiki-author-statement:       $fa-var-quote-left;
 
-$icon-application-github-profile: $fa-var-github;
+$icon-application-github-profile:  $fa-var-github;
 $icon-job-board-search-tag-remove: $fa-var-xmark;
-$icon-wiki-categories: $fa-var-folder-open;
+$icon-wiki-categories:             $fa-var-folder-open;
 
-$icon-job-offer-company-headline: $fa-var-quote-left;
-$icon-register-benefit: $fa-var-check;
+$icon-job-offer-company-headline:  $fa-var-quote-left;
+$icon-register-benefit:            $fa-var-check;
 
 $icon-category-topic-mark-as-read: $fa-var-eye;
 
-$icon-category-sort-asc: $fa-var-sort-up;
-$icon-category-sort-desc: $fa-var-sort-down;
+$icon-category-sort-asc:           $fa-var-sort-up;
+$icon-category-sort-desc:          $fa-var-sort-down;
 
-$icon-admin-table-sort: $fa-var-sort;
-$icon-admin-table-sort-asc: $fa-var-sort-down;
-$icon-admin-table-sort-desc: $fa-var-sort-up;
+$icon-admin-table-sort:            $fa-var-sort;
+$icon-admin-table-sort-asc:        $fa-var-sort-down;
+$icon-admin-table-sort-desc:       $fa-var-sort-up;
 
 .fa-square-question:before {
   content: "\f2fd";
