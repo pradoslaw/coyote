@@ -53,13 +53,15 @@ const getters = {
     if (getters.isLinearized) {
       return getters.posts.slice(1).map(post => ({post, treeItem: flatTreeItem}));
     }
-    const treePosts: TreePost[] = Array.from(getters.treeTopicPostsMap.values());
-    return treePosts.slice(1);
+    return Array.from(getters.treeTopicPostsMap.values());
   },
   treeTopicPostsMap(state, getters, rootState, rootGetters): Map<number, TreePost> {
     const map = new Map<number, TreePost>();
     const treePosts = postsToTreePosts(getters.posts, postOrdering(topicOrderToTreeOrdering(rootGetters['topics/treeTopicOrder'])));
     for (const treePost of treePosts) {
+      if (treePost.post.parentPostId === null) {
+        continue;
+      }
       map.set(treePost.post.id, treePost);
     }
     return map;
@@ -100,10 +102,11 @@ const getters = {
       let current: Post = post;
       let level = 1;
       while (true) {
-        if (current.parentPostId === null) {
+        const treeMap: Map<number, TreePost> = getters.treeTopicPostsMap;
+        if (!treeMap.has(current.parentPostId!)) {
           return parentLevels;
         }
-        const parentPost: TreePost = getters.treeTopicPostsMap.get(current.parentPostId);
+        const parentPost: TreePost = treeMap.get(current.parentPostId!)!;
         if (parentPost.treeItem.hasNextSibling) {
           parentLevels.push(level);
         }
