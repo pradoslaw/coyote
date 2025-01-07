@@ -453,15 +453,15 @@ export default {
   },
   created(): void {
     this.$data.isCollapsed = this.hidden;
-    this.$data.galleryImages = this.$props.post.assets.map(asset => asset.url);
   },
-  mounted() {
+  mounted(): void {
     if (this.is_mode_tree && !this.post.deleted_at) {
       this.loadVoters(this.post);
     }
     const postContent = this.$refs['postContent'];
     const images = postContent.querySelectorAll('img:not(.img-smile)');
     images.forEach((image, index) => {
+      this.$data.galleryImages.push(image.src);
       image.addEventListener('click', () => {
         this.$data.galleryImageIndex = index;
       });
