@@ -25,7 +25,6 @@ const state: Paginator = {
 
 const flatTreeItem: TreePostItem = {
   indent: 0,
-  nestLevel: 0,
   linksToParent: false,
   parentLevels: [],
   linksToChildren: false,
@@ -84,7 +83,6 @@ const getters = {
       return {
         post: subtreeItem.post,
         treeItem: {
-          nestLevel,
           indent,
           linksToParent: indent > 0,
           parentLevels: parentLevelsWithSiblings(subtreeItem.post)

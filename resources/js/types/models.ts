@@ -205,7 +205,6 @@ export interface TreePost {
 
 export interface TreePostItem {
   indent: number;
-  nestLevel: number;
   linksToParent: boolean;
   parentLevels: number[],
   linksToChildren: boolean;
