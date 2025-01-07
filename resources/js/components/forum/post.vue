@@ -609,19 +609,11 @@ export default {
     postIndentCssClasses(): string[] {
       if (!this.$props.treeItem) return [];
       const indent = this.$props.treeItem.indent;
-      if (indent === 0) return ['indent', 'indent-none'];
-      if (indent === 1) return ['indent', 'indent-1'];
-      if (indent === 2) return ['indent', 'indent-2'];
-      if (indent === 3) return ['indent', 'indent-3'];
-      if (indent === 4) return ['indent', 'indent-4'];
-      if (indent === 5) return ['indent', 'indent-5'];
-      if (indent === 6) return ['indent', 'indent-6'];
-      if (indent === 7) return ['indent', 'indent-7'];
-      if (indent === 8) return ['indent', 'indent-8'];
-      if (indent === 9) return ['indent', 'indent-9'];
-      if (indent === 10) return ['indent', 'indent-10'];
-      if (indent === 11) return ['indent', 'indent-11'];
-      return ['indent', 'indent-12'];
+      const indentCssClasses = [
+        'indent-none', 'indent-1', 'indent-2', 'indent-3', 'indent-4', 'indent-5',
+        'indent-6', 'indent-7', 'indent-8', 'indent-9', 'indent-10', 'indent-11',
+      ];
+      return ['indent', indentCssClasses[indent]];
     },
     guiderailVisible(): boolean {
       return !!this.$props.treeItem;
