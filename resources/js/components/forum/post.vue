@@ -22,7 +22,7 @@
       </div>
       <div
         :id="anchor"
-        class="card card-post neon-post flex-grow-1"
+        class="card card-post neon-post flex-grow-1 mb-0"
         :class="{'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed': isCollapsed}">
         <div v-if="post.deleted_at"
              @click="toggleDeletedPost"
@@ -341,12 +341,6 @@
             </div>
           </div>
         </div>
-        <div v-if="hasDeeperChildren" class="mt-2">
-          <a :href="postSubTreeUrl">
-            <vue-icon name="postGuiderailExpanded"/>
-            {{ postAnswersAuthorsSeeMore }}
-          </a>
-        </div>
         <div class="row" v-if="is_mode_tree && !post.deleted_at && treeTopicReplyVisible">
           <div class="d-none d-lg-block col-lg-2" v-if="is_mode_linear"/>
           <div class="col-12" :class="{'col-lg-10':is_mode_linear}">
@@ -360,26 +354,35 @@
       <vue-gallery :images="galleryImages" :index="galleryImageIndex" @close="closeGallery"/>
     </div>
   </div>
-  <div class="tree-post position-relative" :class="postIndentCssClasses" v-if="childrenFolded">
-    <vue-post-guiderail
-      v-if="guiderailVisible"
-      link-to-child="none"
-      :links-to-parent="false"
-      :parent-levels="parentLevels"
-      :expanded="childrenFolded"
-      @toggle="guiderailToggle"
-    />
-    <div class="card card-post card-post-folded neon-post-folded" style="margin-left:88px;">
-      <div class="card-body cursor-pointer p-1" @click="unfoldChildren">
-        <div class="d-flex align-items-center">
-          <span class="mx-2" v-text="postAnswersAuthorsSeeMore"/>
-          <div v-for="author in postAnswersAuthors" style="width:38px;">
-            <vue-avatar
-              :photo="author.photo"
-              :name="author.name"
-              :initials="author.initials"
-              class="img-thumbnail me-1"/>
-          </div>
+  <div style="margin-bottom:18px;">
+    <div class="tree-post position-relative" :class="postIndentCssClasses" v-if="hasDeeperChildren || childrenFolded">
+      <vue-post-guiderail
+        v-if="guiderailVisible"
+        link-to-child="none"
+        :links-to-parent="false"
+        :parent-levels="parentLevels"
+        :expanded="childrenFolded"
+        @toggle="guiderailToggle"
+      />
+      <div class="d-flex align-items-center" style="margin-left:50px;">
+        <div v-if="hasDeeperChildren">
+          <a class="me-2" :href="postSubTreeUrl">
+            <vue-icon name="postGuiderailExpanded"/>
+            {{ postAnswersAuthorsSeeMore }}
+          </a>
+        </div>
+        <div v-if="childrenFolded">
+          <a class="me-2" @click="unfoldChildren" href="javascript:">
+            <vue-icon name="postGuiderailExpanded"/>
+            {{ postAnswersAuthorsSeeMore }}
+          </a>
+        </div>
+        <div v-for="author in postAnswersAuthors" style="width:38px;">
+          <vue-avatar
+            :photo="author.photo"
+            :name="author.name"
+            :initials="author.initials"
+            class="img-thumbnail me-1"/>
         </div>
       </div>
     </div>
