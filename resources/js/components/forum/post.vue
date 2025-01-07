@@ -182,7 +182,7 @@
                 </span>
               </div>
               <div class="post-content neon-post-content" :style="is_mode_tree ? {minHeight:'initial'} : {}">
-                <div v-html="post.html"/>
+                <div v-html="post.html" ref="postContent"/>
                 <ul v-if="post.assets.length" class="list-unstyled mb-1">
                   <li v-for="asset in post.assets" class="small">
                     <vue-icon name="postAssetDownload"/>
@@ -352,6 +352,7 @@
         </div>
         <vue-modal ref="delete-modal" @delete="deletePostCloseModalDelete" :reasons="reasons"/>
       </div>
+      <vue-gallery :images="galleryImages" :index="galleryImageIndex" @close="closeGallery"/>
     </div>
   </div>
   <div class="tree-post position-relative" :class="postIndentCssClasses" v-if="childrenFolded">
@@ -400,6 +401,7 @@ import VueIcon from "../icon";
 import {default as mixins} from '../mixins/user.js';
 import VueTags from '../tags.vue';
 import VueUserName from "../user-name.vue";
+import VueGallery from "./../../components/microblog/gallery.vue";
 import VueFlag from './../flags/flag.vue';
 import VueButton from './../forms/button.vue';
 import VueSelect from './../forms/select.vue';
@@ -413,6 +415,7 @@ export default {
   name: 'post',
   mixins: [mixins],
   components: {
+    'vue-gallery': VueGallery,
     VuePostGuiderail,
     'vue-avatar': VueAvatar,
     'vue-button': VueButton,
@@ -444,17 +447,30 @@ export default {
       commentDefault: {text: '', post_id: this.post.id},
       postDefault: {text: '', html: '', assets: []},
       treeTopicReplyVisible: false,
+      galleryImages: [],
+      galleryImageIndex: null as number | null,
     };
   },
   created(): void {
     this.$data.isCollapsed = this.hidden;
+    this.$data.galleryImages = this.$props.post.assets;
   },
   mounted() {
     if (this.is_mode_tree && !this.post.deleted_at) {
       this.loadVoters(this.post);
     }
+    const postContent = this.$refs['postContent'];
+    const images = postContent.querySelectorAll('img:not(.img-smile)');
+    images.forEach((image, index) => {
+      image.addEventListener('click', () => {
+        this.$data.galleryImageIndex = index;
+      });
+    });
   },
   methods: {
+    closeGallery(): void {
+      this.$data.galleryImageIndex = null;
+    },
     toggleDeletedPost(): void {
       if (!this.postObscured) {
         this.$data.isCollapsed = !this.$data.isCollapsed;
