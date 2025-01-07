@@ -632,17 +632,11 @@ export default {
       return 'toggle-and-link';
     },
     parentsWithSiblings(): number[] {
-      return this.parentLevelsWithSiblings
+      const parentLevelsWithSiblings = store.getters['posts/parentLevelsWithSiblings'](this.$props.post);
+      return parentLevelsWithSiblings
         .map(parentLevel => this.$props.treeItem.nestLevel - parentLevel)
         .filter(nestLevel => nestLevel > 1)
         .map(nestLevel => this.$props.treeItem.nestLevel - nestLevel);
-    },
-    parentLevelsWithSiblings(): number[] {
-      const parentsWithSiblings = store.getters['posts/parentLevelsWithSiblings'](this.$props.post);
-      if (this.$props.treeItem.hasNextSibling) {
-        parentsWithSiblings.push(0);
-      }
-      return parentsWithSiblings;
     },
     postDropdownVisible(): boolean {
       return this.postDropdownItems.length > 0;

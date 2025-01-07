@@ -131,11 +131,15 @@ const getters = {
       return () => [];
     }
     return function (post: Post): number[] {
+      const treeMap: Map<number, TreePost> = getters.treeTopicPostsMap;
       const parentLevels: number[] = [];
+      const currentTreePost = treeMap.get(post.id)!;
+      if (currentTreePost.treeItem.hasNextSibling) {
+        parentLevels.push(0);
+      }
       let current: Post = post;
       let level = 1;
       while (true) {
-        const treeMap: Map<number, TreePost> = getters.treeTopicPostsMap;
         if (!treeMap.has(current.parentPostId!)) {
           return parentLevels;
         }
