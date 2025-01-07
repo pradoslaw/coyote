@@ -28,6 +28,7 @@ const flatTreeItem: TreePostItem = {
   linksToParent: false,
   parentLevels: [],
   linksToChildren: false,
+  hasDeeperChildren: false,
 };
 
 function topicOrderToTreeOrdering(topicOrder: TreeTopicOrder): TreeOrderBy {
@@ -76,21 +77,51 @@ const getters = {
       return parentLevels;
     }
 
+    const subTreeDepth = 7;
     const from: SubTreeItem[] = Array.from(treeMap.values());
-    return from.map(function (subtreeItem: SubTreeItem): TreePost {
-      const nestLevel = subtreeItem.nestLevel - subtreeItem.subtreeNestLevel;
-      const indent = nestLevel - 1;
-      return {
-        post: subtreeItem.post,
-        treeItem: {
-          indent,
-          linksToParent: indent > 0,
-          parentLevels: parentLevelsWithSiblings(subtreeItem.post)
-            .filter(parentLevel => (nestLevel - parentLevel - 1) > 0),
-          linksToChildren: subtreeItem.hasChildren,
-        },
-      };
-    });
+    return from
+      .map(function (subtreeItem: SubTreeItem): TreePost {
+        const nestLevel = subtreeItem.nestLevel - subtreeItem.subtreeNestLevel;
+        const indent = nestLevel - 1;
+        return {
+          post: subtreeItem.post,
+          treeItem: {
+            indent,
+            linksToParent: indent > 0,
+            parentLevels: parentLevelsWithSiblings(subtreeItem.post)
+              .filter(parentLevel => (nestLevel - parentLevel - 1) > 0),
+            linksToChildren: subtreeItem.hasChildren,
+            hasDeeperChildren: subtreeItem.hasChildren,
+          },
+        };
+      })
+      .flatMap((treePost: TreePost): TreePost[] => {
+        if (treePost.treeItem.indent > subTreeDepth - 1) {
+          return [];
+        }
+        if (treePost.treeItem.indent === subTreeDepth - 1) {
+          return [{
+            post: treePost.post,
+            treeItem: {
+              indent: treePost.treeItem.indent,
+              linksToParent: treePost.treeItem.linksToParent,
+              parentLevels: treePost.treeItem.parentLevels,
+              linksToChildren: false,
+              hasDeeperChildren: treePost.treeItem.hasDeeperChildren,
+            },
+          }];
+        }
+        return [{
+          post: treePost.post,
+          treeItem: {
+            indent: treePost.treeItem.indent,
+            linksToParent: treePost.treeItem.linksToParent,
+            parentLevels: treePost.treeItem.parentLevels,
+            linksToChildren: treePost.treeItem.linksToChildren,
+            hasDeeperChildren: false,
+          },
+        }];
+      });
   },
   treeTopicPostsMap(state, getters): Map<number, SubTreeItem> {
     const map = new Map<number, SubTreeItem>();

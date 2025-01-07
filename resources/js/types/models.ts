@@ -208,6 +208,7 @@ export interface TreePostItem {
   linksToParent: boolean;
   parentLevels: number[],
   linksToChildren: boolean;
+  hasDeeperChildren: boolean;
 }
 
 export interface SubTreeItem {

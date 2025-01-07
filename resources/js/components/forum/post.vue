@@ -248,7 +248,6 @@
             />
           </div>
         </div>
-
         <div :class="{'collapse': isCollapsed}" class="card-footer neon-post-footer" v-if="!authorBlocked">
           <div class="row">
             <div class="d-none" :class="{'d-lg-block col-lg-2':is_mode_linear}" v-if="is_mode_linear"/>
@@ -341,6 +340,12 @@
               </div>
             </div>
           </div>
+        </div>
+        <div v-if="hasDeeperChildren" class="mt-2">
+          <a :href="postSubTreeUrl">
+            <vue-icon name="postGuiderailExpanded"/>
+            {{ postAnswersAuthorsSeeMore }}
+          </a>
         </div>
         <div class="row" v-if="is_mode_tree && !post.deleted_at && treeTopicReplyVisible">
           <div class="d-none d-lg-block col-lg-2" v-if="is_mode_linear"/>
@@ -620,6 +625,15 @@ export default {
     },
     linksToParent(): boolean {
       return this.$props.treeItem.linksToParent;
+    },
+    hasDeeperChildren(): boolean {
+      if (this.$props.treeItem) {
+        return this.$props.treeItem.hasDeeperChildren;
+      }
+      return false;
+    },
+    postSubTreeUrl(): string {
+      return this.$props.post.url;
     },
     linkToChild(): ChildLink {
       if (!this.$props.treeItem.linksToChildren) {
