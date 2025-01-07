@@ -187,9 +187,14 @@
     img {
       opacity: 0.35;
     }
-
     pre {
       opacity: 0.5;
+    }
+  }
+
+  &.preview {
+    img:not(.img-smile) {
+      cursor: default;
     }
   }
 }
