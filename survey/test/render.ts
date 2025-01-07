@@ -8,10 +8,19 @@ interface IconSet {
   [keyof: string]: string;
 }
 
-export function render(component: any, props: Record<string, unknown> = {}, icons: IconSet = {}): Component {
+interface Slots {
+  [slotName: string]: string;
+}
+
+export function render(
+  component: any,
+  props: Record<string, unknown> = {},
+  icons: IconSet = {},
+  slots: Slots = {},
+): Component {
   const global = vueWithNotifications({icons});
   return new Component(
-    mount(component, {props, global}),
+    mount(component, {props, global, slots}),
     mount({template: '<vue-library-notifications :dangerously-set-inner-html="true"/>'}, {global}),
   );
 }

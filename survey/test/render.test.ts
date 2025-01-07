@@ -173,6 +173,12 @@ describe('render', () => {
     const component = render(icon, {}, {foo: 'bar'});
     assertEquals(component.text(), 'bar');
   });
+
+  test('passes slot', () => {
+    const component = {template: '<div><slot/></div>'};
+    const el = render(component, {}, {}, {default: 'foo'});
+    assertEquals(el.textBy('div'), 'foo');
+  });
 });
 
 const counter = {
