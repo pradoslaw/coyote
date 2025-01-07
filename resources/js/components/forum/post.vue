@@ -402,6 +402,7 @@ import {confirmModal} from "../../plugins/modals";
 import {formatTimeAgo, VueTimeAgo} from "../../plugins/timeago.js";
 import store from "../../store/index";
 import {notify} from "../../toast";
+import {User} from "../../types/models";
 import {nextTick} from "../../vue";
 import VueAvatar from '../avatar.vue';
 import VueDeleteModal from "../delete-modal.vue";
@@ -593,11 +594,18 @@ export default {
     childrenFolded(): boolean {
       return this.$props.post.childrenFolded;
     },
-    postAnswersAuthorsDistinct(): string {
-      return store.getters['posts/postAnswersAuthorsDistinct'](this.$props.post.id);
+    postAnswersAuthors(): User[] {
+      if (this.$props.treeItem) {
+        return this.$props.treeItem.childrenAuthors;
+      }
+      return [];
     },
-    postAnswersAuthors(): string {
-      return store.getters['posts/postAnswersAuthors'](this.$props.post.id);
+    postAnswersAuthorsDistinct(): User[] {
+      const map = new Map<number, User>();
+      for (const author of this.postAnswersAuthors) {
+        map.set(author.id, author);
+      }
+      return Array.from(map.values());
     },
     postAnswersAuthorsSeeMore(): string {
       const answers = this.postAnswersAuthors.length;

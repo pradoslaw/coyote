@@ -5,8 +5,6 @@ import {TreeItem, TreeTopicRecords} from "../../treeTopic/treeTopicRecords";
 import {Forum, Paginator, Post, PostComment, PostLog, SubTreeItem, Topic, TreePost, TreePostItem, User} from "../../types/models";
 import {TreeTopicOrder} from "./topics";
 
-type Function<A, R> = (argument: A) => R;
-
 type ParentChild = {
   postId: number,
   comment: PostComment
@@ -77,6 +75,15 @@ const getters = {
       return parentLevels;
     }
 
+    function postAnswersAuthors(postId: number): User[] {
+      const posts: Post[] = Object.values(state.data);
+      const postsTree = new TreeMap<number, Post>();
+      for (const post of posts) {
+        postsTree.put(post.id, post, post.parentPostId || undefined);
+      }
+      return postsTree.childrenOf(postId).map(post => post.user!);
+    }
+
     const subTreeDepth = 9;
     const from: SubTreeItem[] = Array.from(treeMap.values());
     return from
@@ -92,6 +99,7 @@ const getters = {
               .filter(parentLevel => (nestLevel - parentLevel - 1) > 0),
             linksToChildren: subtreeItem.hasChildren,
             hasDeeperChildren: subtreeItem.hasChildren,
+            childrenAuthors: postAnswersAuthors(subtreeItem.post.id),
           },
         };
       })
@@ -106,6 +114,7 @@ const getters = {
               parentLevels: treePost.treeItem.parentLevels,
               linksToChildren: false,
               hasDeeperChildren: treePost.treeItem.hasDeeperChildren,
+              childrenAuthors: treePost.treeItem.childrenAuthors,
             },
           };
         }
@@ -117,6 +126,7 @@ const getters = {
             parentLevels: treePost.treeItem.parentLevels,
             linksToChildren: treePost.treeItem.linksToChildren,
             hasDeeperChildren: false,
+            childrenAuthors: treePost.treeItem.childrenAuthors,
           },
         };
       });
@@ -171,25 +181,7 @@ const getters = {
   currentPage(state): number {
     return state.current_page;
   },
-  postAnswersAuthorsDistinct(state: Paginator, getters): Function<number, User[]> {
-    return (postId: number): User[] => {
-      const map = new Map<number, User>();
-      for (const author of getters.postAnswersAuthors(postId)) {
-        map.set(author.id, author);
-      }
-      return Array.from(map.values());
-    };
-  },
-  postAnswersAuthors(state: Paginator): Function<number, User[]> {
-    return (postId: number): User[] => {
-      const posts: Post[] = Object.values(state.data);
-      const postsTree = new TreeMap<number, Post>();
-      for (const post of posts) {
-        postsTree.put(post.id, post, post.parentPostId || undefined);
-      }
-      return postsTree.childrenOf(postId).map(post => post.user!);
-    };
-  },
+
   totalPages(state): number {
     return state.last_page;
   },
