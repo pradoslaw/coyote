@@ -458,16 +458,27 @@ export default {
     if (this.is_mode_tree && !this.post.deleted_at) {
       this.loadVoters(this.post);
     }
-    const postContent = this.$refs['postContent'];
-    const images = postContent.querySelectorAll('img:not(.img-smile)');
-    images.forEach((image, index) => {
-      this.$data.galleryImages.push(image.src);
-      image.addEventListener('click', () => {
-        this.$data.galleryImageIndex = index;
+    this.resetGalleryImages();
+  },
+  watch: {
+    post(): void {
+      this.$data.galleryImages = [];
+      nextTick(() => {
+        this.resetGalleryImages();
       });
-    });
+    },
   },
   methods: {
+    resetGalleryImages(): void {
+      const postContent = this.$refs['postContent'];
+      const images = postContent.querySelectorAll('img:not(.img-smile)');
+      images.forEach((image, index) => {
+        this.$data.galleryImages.push(image.src);
+        image.addEventListener('click', () => {
+          this.$data.galleryImageIndex = index;
+        });
+      });
+    },
     closeGallery(): void {
       this.$data.galleryImageIndex = null;
     },
