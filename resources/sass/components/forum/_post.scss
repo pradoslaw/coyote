@@ -29,19 +29,19 @@
       @include color-theme(#505050, #979797);
 
       @include light {
-        --bs-btn-active-bg: white;
+        --bs-btn-active-bg:           white;
         --bs-btn-active-border-color: rgb(224, 224, 224);
         &:hover {
           background: white;
-          border: 1px solid rgb(224, 224, 224);
+          border:     1px solid rgb(224, 224, 224);
         }
       }
       @include dark {
-        --bs-btn-active-bg: #2b2b2b;
+        --bs-btn-active-bg:           #2b2b2b;
         --bs-btn-active-border-color: #323232;
         &:hover {
           background: #2b2b2b;
-          border: 1px solid #323232;
+          border:     1px solid #323232;
         }
       }
     }
@@ -71,22 +71,22 @@
     @include not-read-bullet;
 
     margin-bottom: -2px;
-    display: inline-block;
+    display:       inline-block;
   }
 }
 
 .post-delete,
 .comment-delete,
 {
-  color: $alert-warning-color;
+  color:            $alert-warning-color;
   background-color: $alert-warning-background;
-  font-size: 11px;
-  border-bottom: 1px solid $alert-warning-border;
+  font-size:        11px;
+  border-bottom:    1px solid $alert-warning-border;
 }
 
 .post-avatar {
-  margin: 5px 0;
-  display: block;
+  margin:    5px 0;
+  display:   block;
   max-width: 70px;
 }
 
@@ -97,12 +97,12 @@
 
   .badge {
     font-size: 90%;
-    padding: 1px 5px;
+    padding:   1px 5px;
   }
 }
 
 .post-stats {
-  font-size: $font-size-sm;
+  font-size:     $font-size-sm;
   margin-bottom: 0;
 
   li {
@@ -110,8 +110,8 @@
   }
 
   strong {
-    display: inline-block;
-    width: 50%;
+    display:     inline-block;
+    width:       50%;
     font-weight: normal;
 
     @include media-breakpoint-down(xl) {
@@ -126,24 +126,24 @@
 
 .post-vote {
   vertical-align: top;
-  float: right;
-  line-height: 120%;
-  padding-top: 1rem;
+  float:          right;
+  line-height:    120%;
+  padding-top:    1rem;
 }
 
 .post-content {
-  min-height: 89px;
-  word-wrap: break-word;
-  line-height: 139%;
-  overflow: hidden;
+  min-height:    89px;
+  word-wrap:     break-word;
+  line-height:   139%;
+  overflow:      hidden;
   padding-right: 10px;
-  margin-top: -3px;
+  margin-top:    -3px;
 
   @include link-color-darker;
 
   a {
     text-decoration: underline;
-    font-weight: normal;
+    font-weight:     normal;
 
     &.mention {
       font-weight: bold;
@@ -155,21 +155,21 @@
   }
 
   hr {
-    margin: 15px 0 5px 0;
+    margin:           15px 0 5px 0;
     border-top-color: darken($gray-lighter, 10%);
-    width: 25%;
+    width:            25%;
   }
 
   footer {
-    color: $gray-light;
-    font-size: 90%;
+    color:      $gray-light;
+    font-size:  90%;
     background: transparent;
   }
 
   img:not(.img-smile) {
-    display: block;
-    margin: 1rem 0;
-    max-width: 100%;
+    display:    block;
+    margin:     1rem 0;
+    max-width:  100%;
     object-fit: contain;
   }
 
@@ -199,10 +199,10 @@
 }
 
 .edit-info {
-  font-size: 11px;
-  padding: 5px 0;
+  font-size:  11px;
+  padding:    5px 0;
   margin-top: 10px;
-  color: $body-color;
+  color:      $body-color;
 
   a {
     color: $body-color;
@@ -214,11 +214,11 @@
 }
 
 .vote-count, .vote-up, .vote-accept {
-  color: lighten($gray-light, 10%);
+  color:      lighten($gray-light, 10%);
 
-  width: 36px;
+  width:      36px;
   text-align: center;
-  display: block;
+  display:    block;
 }
 
 .vote-up, .vote-accept {
@@ -230,7 +230,7 @@
 }
 
 .vote-count {
-  margin: 5px 0 15px 0;
+  margin:      5px 0 15px 0;
   line-height: 120%;
 }
 
@@ -240,12 +240,12 @@
 
 .vote-up, .vote-count {
   font-size: $font-size-lg;
-  z-index: 1; // @see https://4programmers.net/Forum/Coyote/348514-kod_zaslania_liste_lapek?p=1741365#comment-690455
+  z-index:   1; // @see https://4programmers.net/Forum/Coyote/348514-kod_zaslania_liste_lapek?p=1741365#comment-690455
 }
 
 .vote-accept {
   margin-top: 10px;
-  font-size: $font-size-lg + 1rem;
+  font-size:  $font-size-lg + 1rem;
 
   &.on {
     color: $primary;
@@ -262,26 +262,26 @@ blockquote {
   color: $gray-light;
 
   > h5 a {
-    color: #5e7813;
-    position: relative;
+    color:        #5e7813;
+    position:     relative;
     padding-left: 16px;
-    font-family: Helvetica, sans-serif;
-    font-size: .8rem;
+    font-family:  Helvetica, sans-serif;
+    font-size:    .8rem;
 
     &:before {
       @include content-icon-solid($icon-post-quote);
-      color: $gray;
+      color:    $gray;
       position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0.8;
+      top:      0;
+      left:     0;
+      opacity:  0.8;
     }
   }
 }
 
 .youtube-player {
-  width: 420px;
-  height: 236.25px;
+  width:   420px;
+  height:  236.25px;
   display: block;
 }
 
