@@ -377,7 +377,7 @@
             {{ postAnswersAuthorsSeeMore }}
           </a>
         </div>
-        <div v-for="author in postAnswersAuthors" style="width:38px;">
+        <div v-for="author in postAnswersAuthorsDistinct" style="width:38px;">
           <vue-avatar
             :photo="author.photo"
             :name="author.name"
@@ -592,6 +592,9 @@ export default {
     ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
     childrenFolded(): boolean {
       return this.$props.post.childrenFolded;
+    },
+    postAnswersAuthorsDistinct(): string {
+      return store.getters['posts/postAnswersAuthorsDistinct'](this.$props.post.id);
     },
     postAnswersAuthors(): string {
       return store.getters['posts/postAnswersAuthors'](this.$props.post.id);

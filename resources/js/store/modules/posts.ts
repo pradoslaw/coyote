@@ -171,6 +171,15 @@ const getters = {
   currentPage(state): number {
     return state.current_page;
   },
+  postAnswersAuthorsDistinct(state: Paginator, getters): Function<number, User[]> {
+    return (postId: number): User[] => {
+      const map = new Map<number, User>();
+      for (const author of getters.postAnswersAuthors(postId)) {
+        map.set(author.id, author);
+      }
+      return Array.from(map.values());
+    };
+  },
   postAnswersAuthors(state: Paginator): Function<number, User[]> {
     return (postId: number): User[] => {
       const posts: Post[] = Object.values(state.data);
