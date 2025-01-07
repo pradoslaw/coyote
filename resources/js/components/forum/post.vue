@@ -622,7 +622,7 @@ export default {
       return this.$props.treeItem.linksToParent;
     },
     linkToChild(): ChildLink {
-      if (!this.$props.treeItem.hasChildren) {
+      if (!this.$props.treeItem.linksToChildren) {
         return 'none';
       }
       if (this.childrenFolded) {

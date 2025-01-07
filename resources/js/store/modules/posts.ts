@@ -28,7 +28,7 @@ const flatTreeItem: TreePostItem = {
   nestLevel: 0,
   linksToParent: false,
   parentLevels: [],
-  hasChildren: false,
+  linksToChildren: false,
 };
 
 function topicOrderToTreeOrdering(topicOrder: TreeTopicOrder): TreeOrderBy {
@@ -89,7 +89,7 @@ const getters = {
           linksToParent: indent > 0,
           parentLevels: parentLevelsWithSiblings(subtreeItem.post)
             .filter(parentLevel => (nestLevel - parentLevel - 1) > 0),
-          hasChildren: subtreeItem.hasChildren,
+          linksToChildren: subtreeItem.hasChildren,
         },
       };
     });
