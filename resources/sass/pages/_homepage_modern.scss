@@ -671,18 +671,6 @@ body.homepage-modern {
     }
   }
 
-  .microblog-wrap {
-    &:after {
-      @include dark {
-        background: linear-gradient(
-                        to bottom,
-                        rgba(255, 255, 255, 0) 0,
-                        $opposite-color-dark 65%
-        );
-      }
-    }
-  }
-
   .recent-activity a,
   .interesting-topics a.category,
   {

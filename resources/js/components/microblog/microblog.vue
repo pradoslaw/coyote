@@ -72,36 +72,32 @@
             </div>
           </div>
 
-          <div v-show="!microblog.is_editing" :class="{'microblog-wrap': isWrapped}">
-            <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"/>
-            <div ref="microblog-text" v-html="microblog.html" class="microblog-text"/>
+          <div v-show="!microblog.is_editing">
+            <vue-see-more>
+              <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"/>
+              <div ref="microblog-text" v-html="microblog.html" class="microblog-text"/>
 
-            <a v-if="opg" :href="opg.metadata.url" :title="opg.metadata.title" class="card microblog-opg" target="_blank">
-              <div :alt="opg.metadata.title" class="card-img-top" :style="`background-image: url(${opg.url})`"/>
-              <div class="card-body">
-                <h5 class="card-title text-truncate">{{ opg.metadata.title }}</h5>
-                <p class="card-text text-truncate">{{ opg.metadata.description }}</p>
-                <small class="text-muted">{{ opg.metadata.url }}</small>
-              </div>
-            </a>
-
-            <div v-if="images.length" class="row mb-2">
-              <div
-                v-for="(image, imageIndex) in images"
-                :key="imageIndex"
-                class="col-6 col-md-3"
-              >
-                <a @click.prevent="index = imageIndex" :href="image.url">
-                  <img :alt="`Załącznik ${imageIndex}`" class="img-thumbnail" :src="image.thumbnail">
-                </a>
-              </div>
-            </div>
-            <div v-if="isWrapped" @click="unwrap" class="show-more">
-              <a href="javascript:">
-                <vue-icon name="microblogFoldedUnfold"/>
-                Zobacz całość
+              <a v-if="opg" :href="opg.metadata.url" :title="opg.metadata.title" class="card microblog-opg" target="_blank">
+                <div :alt="opg.metadata.title" class="card-img-top" :style="`background-image: url(${opg.url})`"/>
+                <div class="card-body">
+                  <h5 class="card-title text-truncate">{{ opg.metadata.title }}</h5>
+                  <p class="card-text text-truncate">{{ opg.metadata.description }}</p>
+                  <small class="text-muted">{{ opg.metadata.url }}</small>
+                </div>
               </a>
-            </div>
+
+              <div v-if="images.length" class="row mb-2">
+                <div
+                  v-for="(image, imageIndex) in images"
+                  :key="imageIndex"
+                  class="col-6 col-md-3"
+                >
+                  <a @click.prevent="index = imageIndex" :href="image.url">
+                    <img :alt="`Załącznik ${imageIndex}`" class="img-thumbnail" :src="image.thumbnail">
+                  </a>
+                </div>
+              </div>
+            </vue-see-more>
           </div>
           <vue-form
             v-if="microblog.is_editing"
@@ -200,6 +196,7 @@ import VueFlag from '../flags/flag.vue';
 import VueIcon from "../icon";
 import {MicroblogMixin} from "../mixins/microblog";
 import {default as mixins} from '../mixins/user.js';
+import VueSeeMore from "../seeMore/seeMore.vue";
 import VueTags from '../tags.vue';
 import VueUserName from "../user-name.vue";
 
@@ -213,6 +210,7 @@ export default {
   mixins: [mixins, MicroblogMixin],
   store,
   components: {
+    VueSeeMore,
     VueIcon,
     'vue-avatar': VueAvatar,
     'vue-username': VueUserName,
@@ -234,10 +232,6 @@ export default {
     };
   },
   mounted() {
-    if (this.wrap && this.$refs['microblog-text'].clientHeight > 300) {
-      this.isWrapped = true;
-    }
-
     const pageHitHandler = () => {
       const rect = this.$refs['microblog-text'].getBoundingClientRect();
 
@@ -261,10 +255,6 @@ export default {
     reply(user: User) {
       this.$data.commentDefault.text += `@${useBrackets(user.name)}: `;
       this.$refs['comment-form'].focus();
-    },
-
-    unwrap() {
-      this.isWrapped = false;
     },
 
     deleteItem() {

@@ -1,17 +1,12 @@
 import Prism from 'prismjs';
 
-import {notify} from "../../toast";
 import {confirmModal} from "../../plugins/modals";
 import store from "../../store/index";
+import {notify} from "../../toast";
 import {Microblog, User} from "../../types/models";
 import {nextTick} from "../../vue";
 
 export const MicroblogMixin = {
-  data() {
-    return {
-      isWrapped: false,
-    };
-  },
   props: {
     microblog: {
       type: Object,
@@ -21,10 +16,8 @@ export const MicroblogMixin = {
   methods: {
     edit(microblog: Microblog) {
       store.commit('microblogs/TOGGLE_EDIT', microblog);
-
       if (microblog.is_editing) {
         nextTick(() => this.$refs.form.focus());
-        this.isWrapped = false;
       }
     },
     delete(action: string, microblog: Microblog) {

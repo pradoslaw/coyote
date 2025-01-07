@@ -309,11 +309,5 @@ body.homepage-legacy {
     h4 {
       color: #c8c8c8;
     }
-
-    .microblog-wrap {
-      &:after {
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, #1a1a1a 65%);
-      }
-    }
   }
 }
