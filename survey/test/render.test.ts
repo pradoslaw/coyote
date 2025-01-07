@@ -3,7 +3,7 @@ import {nextTick} from 'vue';
 import {notify} from "../../resources/js/toast";
 import {VueInstance} from "../src/vue";
 import {assertEquals, assertFalse, assertMatch, assertTrue} from "./assert";
-import {render} from "./render";
+import {Component, render} from "./render";
 
 describe('render', () => {
   test('accept vue property', () => {
@@ -179,6 +179,39 @@ describe('render', () => {
     const el = render(component, {}, {}, {default: 'foo'});
     assertEquals(el.textBy('div'), 'foo');
   });
+
+  test('stubs computed properties', () => {
+    const component = {
+      template: '<div/>',
+      mounted(this: Vue): void {
+        this.$emit('event', this.value);
+      },
+      computed: {
+        value(): number {
+          return 2;
+        },
+      },
+    };
+    const instance: Component = render(component, {}, {}, {}, {
+      value(): number {
+        return 3;
+      },
+    });
+    assertEquals(instance.emittedValue('event'), 3);
+  });
+
+  test("does not override other computed", () => {
+    const component = {
+      template: '<div :data-value="value"/>',
+      computed: {
+        value(): number {
+          return 2;
+        },
+      },
+    };
+    const instance: Component = render(component);
+    assertEquals(instance.attributeOf('div', 'data-value'), '2');
+  });
 });
 
 const counter = {
@@ -201,4 +234,9 @@ const counter = {
 
 interface Members {
   count: number;
+}
+
+interface Vue {
+  $refs: { [refName: string]: HTMLElement };
+  $emit<T>(eventName: string, value?: T): void;
 }

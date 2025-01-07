@@ -12,15 +12,22 @@ interface Slots {
   [slotName: string]: string;
 }
 
+interface Computed {
+  [computedName: string]: () => any;
+}
+
 export function render(
   component: any,
   props: Record<string, unknown> = {},
   icons: IconSet = {},
   slots: Slots = {},
+  computed: Computed = {},
 ): Component {
   const global = vueWithNotifications({icons});
   return new Component(
-    mount(component, {props, global, slots}),
+    mount(component, {
+      props, global, slots, computed: {...component.computed, ...computed},
+    }),
     mount({template: '<vue-library-notifications :dangerously-set-inner-html="true"/>'}, {global}),
   );
 }
@@ -122,6 +129,10 @@ export class Component {
 
   private async emit<T>(child: ComponentPublicInstance, eventName: string, args: any[]): Promise<void> {
     child.$emit(eventName, ...args);
+    await this.waitForRefresh();
+  }
+
+  public async waitForRefresh(): Promise<void> {
     await nextTick();
   }
 }
