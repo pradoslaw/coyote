@@ -200,11 +200,20 @@ export interface Post {
 
 export interface TreePost {
   post: Post;
-  treeItem: TreeItem;
+  treeItem: TreePostItem;
 }
 
-export interface TreeItem {
+export interface TreePostItem {
+  indent: number;
   nestLevel: number;
+  linksToParent: boolean;
+  hasChildren: boolean;
+}
+
+export interface SubTreeItem {
+  post: Post;
+  nestLevel: number;
+  subtreeNestLevel: number;
   hasNextSibling: boolean;
   hasChildren: boolean;
 }

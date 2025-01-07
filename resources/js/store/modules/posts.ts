@@ -2,7 +2,7 @@ import axios from "axios";
 import {TreeMap} from "../../treeTopic/treeMap";
 import {postOrdering, Sorter, TreeOrderBy} from "../../treeTopic/treeOrderBy";
 import {TreeItem, TreeTopicRecords} from "../../treeTopic/treeTopicRecords";
-import {Forum, Paginator, Post, PostComment, PostLog, Topic, TreePost, User} from "../../types/models";
+import {Forum, Paginator, Post, PostComment, PostLog, SubTreeItem, Topic, TreePost, TreePostItem, User} from "../../types/models";
 import {TreeTopicOrder} from "./topics";
 
 type Function<A, R> = (argument: A) => R;
@@ -23,9 +23,10 @@ const state: Paginator = {
   total: 0,
 };
 
-const flatTreeItem = {
+const flatTreeItem: TreePostItem = {
+  indent: 0,
   nestLevel: 0,
-  hasNextSibling: false,
+  linksToParent: false,
   hasChildren: false,
 };
 
@@ -57,10 +58,23 @@ const getters = {
     if (getters.isLinearized) {
       return getters.posts.slice(1).map(post => ({post, treeItem: flatTreeItem}));
     }
-    return Array.from(getters.treeTopicPostsMap.values());
+    const from: SubTreeItem[] = Array.from(getters.treeTopicPostsMap.values());
+    return from.map(function (subtreeItem: SubTreeItem): TreePost {
+      const nestLevel = subtreeItem.nestLevel - subtreeItem.subtreeNestLevel;
+      const indent = nestLevel - 1;
+      return {
+        post: subtreeItem.post,
+        treeItem: {
+          nestLevel,
+          indent,
+          linksToParent: indent > 0,
+          hasChildren: subtreeItem.hasChildren,
+        },
+      };
+    });
   },
-  treeTopicPostsMap(state, getters): Map<number, TreePost> {
-    const map = new Map<number, TreePost>();
+  treeTopicPostsMap(state, getters): Map<number, SubTreeItem> {
+    const map = new Map<number, SubTreeItem>();
     const posts = getters.posts;
     const sorter = getters.postOrdering;
     const tree = new TreeTopicRecords<Post>(sorter);
@@ -83,11 +97,10 @@ const getters = {
         }
         map.set(post.id, {
           post: post,
-          treeItem: {
-            nestLevel: item.nestLevel - parentNestLevel,
-            hasNextSibling: item.hasNextSibling,
-            hasChildren: postsWithChildren.has(post.id),
-          },
+          nestLevel: item.nestLevel,
+          subtreeNestLevel: parentNestLevel,
+          hasNextSibling: item.hasNextSibling,
+          hasChildren: postsWithChildren.has(post.id),
         });
       }
     }
@@ -131,13 +144,13 @@ const getters = {
       return () => [];
     }
     return function (post: Post): number[] {
-      const treeMap: Map<number, TreePost> = getters.treeTopicPostsMap;
+      const treeMap: Map<number, SubTreeItem> = getters.treeTopicPostsMap;
       const parentLevels: number[] = [];
       let nextPostId: number | null = post.id;
       let nextLevel = 0;
       while (nextPostId && treeMap.has(nextPostId)) {
-        const nextPost: TreePost = treeMap.get(nextPostId)!;
-        if (nextPost.treeItem.hasNextSibling) {
+        const nextPost: SubTreeItem = treeMap.get(nextPostId)!;
+        if (nextPost.hasNextSibling) {
           parentLevels.push(nextLevel);
         }
         ++nextLevel;

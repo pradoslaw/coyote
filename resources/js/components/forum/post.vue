@@ -600,27 +600,26 @@ export default {
     },
     postIndentCssClasses(): string[] {
       if (!this.$props.treeItem) return [];
-      const level = this.$props.treeItem.nestLevel;
-      if (level === 0) return ['indent', 'indent-none'];
-      if (level === 1) return ['indent', 'indent-none'];
-      if (level === 2) return ['indent', 'indent-1'];
-      if (level === 3) return ['indent', 'indent-2'];
-      if (level === 4) return ['indent', 'indent-3'];
-      if (level === 5) return ['indent', 'indent-4'];
-      if (level === 6) return ['indent', 'indent-5'];
-      if (level === 7) return ['indent', 'indent-6'];
-      if (level === 8) return ['indent', 'indent-7'];
-      if (level === 9) return ['indent', 'indent-8'];
-      if (level === 10) return ['indent', 'indent-9'];
-      if (level === 11) return ['indent', 'indent-10'];
-      if (level === 12) return ['indent', 'indent-11'];
+      const indent = this.$props.treeItem.indent;
+      if (indent === 0) return ['indent', 'indent-none'];
+      if (indent === 1) return ['indent', 'indent-1'];
+      if (indent === 2) return ['indent', 'indent-2'];
+      if (indent === 3) return ['indent', 'indent-3'];
+      if (indent === 4) return ['indent', 'indent-4'];
+      if (indent === 5) return ['indent', 'indent-5'];
+      if (indent === 6) return ['indent', 'indent-6'];
+      if (indent === 7) return ['indent', 'indent-7'];
+      if (indent === 8) return ['indent', 'indent-8'];
+      if (indent === 9) return ['indent', 'indent-9'];
+      if (indent === 10) return ['indent', 'indent-10'];
+      if (indent === 11) return ['indent', 'indent-11'];
       return ['indent', 'indent-12'];
     },
     guiderailVisible(): boolean {
       return !!this.$props.treeItem;
     },
     linksToParent(): boolean {
-      return this.$props.treeItem.nestLevel > 1;
+      return this.$props.treeItem.linksToParent;
     },
     linkToChild(): ChildLink {
       if (!this.$props.treeItem.hasChildren) {
