@@ -133,23 +133,17 @@ const getters = {
     return function (post: Post): number[] {
       const treeMap: Map<number, TreePost> = getters.treeTopicPostsMap;
       const parentLevels: number[] = [];
-      const currentTreePost = treeMap.get(post.id)!;
-      if (currentTreePost.treeItem.hasNextSibling) {
-        parentLevels.push(0);
-      }
-      let current: Post = post;
-      let level = 1;
-      while (true) {
-        if (!treeMap.has(current.parentPostId!)) {
-          return parentLevels;
+      let nextPostId: number | null = post.id;
+      let nextLevel = 0;
+      while (nextPostId && treeMap.has(nextPostId)) {
+        const nextPost: TreePost = treeMap.get(nextPostId)!;
+        if (nextPost.treeItem.hasNextSibling) {
+          parentLevels.push(nextLevel);
         }
-        const parentPost: TreePost = treeMap.get(current.parentPostId!)!;
-        if (parentPost.treeItem.hasNextSibling) {
-          parentLevels.push(level);
-        }
-        current = parentPost.post;
-        ++level;
+        ++nextLevel;
+        nextPostId = nextPost.post.parentPostId;
       }
+      return parentLevels;
     };
   },
   commentExists(state) {
