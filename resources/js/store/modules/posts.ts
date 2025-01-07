@@ -77,7 +77,7 @@ const getters = {
       return parentLevels;
     }
 
-    const subTreeDepth = 7;
+    const subTreeDepth = 9;
     const from: SubTreeItem[] = Array.from(treeMap.values());
     return from
       .map(function (subtreeItem: SubTreeItem): TreePost {
@@ -95,12 +95,10 @@ const getters = {
           },
         };
       })
-      .flatMap((treePost: TreePost): TreePost[] => {
-        if (treePost.treeItem.indent > subTreeDepth - 1) {
-          return [];
-        }
+      .filter((treePost: TreePost): boolean => treePost.treeItem.indent < subTreeDepth)
+      .map((treePost: TreePost): TreePost => {
         if (treePost.treeItem.indent === subTreeDepth - 1) {
-          return [{
+          return {
             post: treePost.post,
             treeItem: {
               indent: treePost.treeItem.indent,
@@ -109,9 +107,9 @@ const getters = {
               linksToChildren: false,
               hasDeeperChildren: treePost.treeItem.hasDeeperChildren,
             },
-          }];
+          };
         }
-        return [{
+        return {
           post: treePost.post,
           treeItem: {
             indent: treePost.treeItem.indent,
@@ -120,7 +118,7 @@ const getters = {
             linksToChildren: treePost.treeItem.linksToChildren,
             hasDeeperChildren: false,
           },
-        }];
+        };
       });
   },
   treeTopicPostsMap(state, getters): Map<number, SubTreeItem> {
