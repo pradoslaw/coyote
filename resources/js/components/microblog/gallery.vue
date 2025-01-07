@@ -2,15 +2,14 @@
   <vue-easy-lightbox
     :visible="visible"
     :imgs="lightboxImages"
-    :index="index"
+    :index="index!"
     :move-disabled="true"
     :rotate-disabled="true"
     :zoom-disabled="true"
     :pinch-disabled="true"
     :dblclick-disabled="true"
     :mask-closable="false"
-    @hide="close"
-  >
+    @hide="close">
     <template v-slot:toolbar/>
   </vue-easy-lightbox>
 </template>
@@ -32,11 +31,11 @@ export default {
     },
   },
   computed: {
+    lightboxImages(): object[] {
+      return this.$props.images;
+    },
     visible(): boolean {
       return this.$props.index !== null;
-    },
-    lightboxImages(): object[] {
-      return this.$props.images.map(image => ({src: image.url}));
     },
   },
 };

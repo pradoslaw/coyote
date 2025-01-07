@@ -453,7 +453,7 @@ export default {
   },
   created(): void {
     this.$data.isCollapsed = this.hidden;
-    this.$data.galleryImages = this.$props.post.assets;
+    this.$data.galleryImages = this.$props.post.assets.map(asset => asset.url);
   },
   mounted() {
     if (this.is_mode_tree && !this.post.deleted_at) {

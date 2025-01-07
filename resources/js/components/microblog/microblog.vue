@@ -181,7 +181,7 @@
         </div>
       </div>
     </div>
-    <vue-gallery :images="images" :index="index" @close="index = null"/>
+    <vue-gallery :images="imageUrls" :index="index" @close="index = null"/>
   </div>
 </template>
 
@@ -194,7 +194,7 @@ import {copyToClipboard} from '../../plugins/clipboard';
 import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from "../../store";
 import {notify} from "../../toast";
-import {User} from '../../types/models';
+import {Asset, User} from '../../types/models';
 import VueAvatar from '../avatar.vue';
 import VueFlag from '../flags/flag.vue';
 import VueIcon from "../icon";
@@ -298,11 +298,14 @@ export default {
       return this.microblog.comments_count! - Object.keys(this.microblog.comments).length;
     },
 
-    images() {
+    images(): Asset[] {
       return this
         .microblog
         .assets
         .filter(asset => IsImage(asset.name!) && !asset.metadata);
+    },
+    imageUrls(): string[] {
+      return this.images.map(asset => asset.url);
     },
 
     opg() {
