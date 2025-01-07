@@ -4,7 +4,7 @@
       v-if="guiderailVisible"
       :links-to-parent="linksToParent"
       :link-to-child="linkToChild"
-      :parent-levels="parentsWithSiblings"
+      :parent-levels="parentLevels"
       :expanded="childrenFolded"
       @toggle="guiderailToggle"
     />
@@ -360,7 +360,7 @@
       v-if="guiderailVisible"
       link-to-child="none"
       :links-to-parent="false"
-      :parent-levels="parentsWithSiblings"
+      :parent-levels="parentLevels"
       :expanded="childrenFolded"
       @toggle="guiderailToggle"
     />
@@ -630,12 +630,8 @@ export default {
       }
       return 'toggle-and-link';
     },
-    parentsWithSiblings(): number[] {
-      const parentLevelsWithSiblings = store.getters['posts/parentLevelsWithSiblings'](this.$props.post);
-      return parentLevelsWithSiblings
-        .map(parentLevel => this.$props.treeItem.nestLevel - parentLevel)
-        .filter(nestLevel => nestLevel > 1)
-        .map(nestLevel => this.$props.treeItem.nestLevel - nestLevel);
+    parentLevels(): number[] {
+      return this.$props.treeItem.parentLevels;
     },
     postDropdownVisible(): boolean {
       return this.postDropdownItems.length > 0;

@@ -27,6 +27,7 @@ const flatTreeItem: TreePostItem = {
   indent: 0,
   nestLevel: 0,
   linksToParent: false,
+  parentLevels: [],
   hasChildren: false,
 };
 
@@ -58,7 +59,25 @@ const getters = {
     if (getters.isLinearized) {
       return getters.posts.slice(1).map(post => ({post, treeItem: flatTreeItem}));
     }
-    const from: SubTreeItem[] = Array.from(getters.treeTopicPostsMap.values());
+
+    const treeMap: Map<number, SubTreeItem> = getters.treeTopicPostsMap;
+
+    function parentLevelsWithSiblings(post: Post): number[] {
+      const parentLevels: number[] = [];
+      let nextPostId: number | null = post.id;
+      let nextLevel = 0;
+      while (nextPostId && treeMap.has(nextPostId)) {
+        const nextPost: SubTreeItem = treeMap.get(nextPostId)!;
+        if (nextPost.hasNextSibling) {
+          parentLevels.push(nextLevel);
+        }
+        ++nextLevel;
+        nextPostId = nextPost.post.parentPostId;
+      }
+      return parentLevels;
+    }
+
+    const from: SubTreeItem[] = Array.from(treeMap.values());
     return from.map(function (subtreeItem: SubTreeItem): TreePost {
       const nestLevel = subtreeItem.nestLevel - subtreeItem.subtreeNestLevel;
       const indent = nestLevel - 1;
@@ -68,6 +87,8 @@ const getters = {
           nestLevel,
           indent,
           linksToParent: indent > 0,
+          parentLevels: parentLevelsWithSiblings(subtreeItem.post)
+            .filter(parentLevel => (nestLevel - parentLevel - 1) > 0),
           hasChildren: subtreeItem.hasChildren,
         },
       };
@@ -138,26 +159,6 @@ const getters = {
   },
   isLastPage(state, getters): boolean {
     return getters.currentPage >= getters.totalPages;
-  },
-  parentLevelsWithSiblings(state, getters): Function<Post, number[]> {
-    if (getters.isLinearized) {
-      return () => [];
-    }
-    return function (post: Post): number[] {
-      const treeMap: Map<number, SubTreeItem> = getters.treeTopicPostsMap;
-      const parentLevels: number[] = [];
-      let nextPostId: number | null = post.id;
-      let nextLevel = 0;
-      while (nextPostId && treeMap.has(nextPostId)) {
-        const nextPost: SubTreeItem = treeMap.get(nextPostId)!;
-        if (nextPost.hasNextSibling) {
-          parentLevels.push(nextLevel);
-        }
-        ++nextLevel;
-        nextPostId = nextPost.post.parentPostId;
-      }
-      return parentLevels;
-    };
   },
   commentExists(state) {
     return (postId: number, postCommentId: number): boolean => {
