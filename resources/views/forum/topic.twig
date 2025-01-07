@@ -161,12 +161,14 @@
                 <option value="linear">Spłaszczone</option>
               </select>
             </div>
-            <div>
-              <a class="btn btn-secondary mt-4" href="{{ treeTopicSeeWholeUrl }}">
-                {{ icon('treeTopicSeeFull') }}
-                Zobacz cały wątek
-              </a>
-            </div>
+            {% if treeTopicSeeWhole %}
+              <div>
+                <a class="btn btn-secondary mt-4" href="{{ treeTopicSeeWholeUrl }}">
+                  {{ icon('treeTopicSeeFull') }}
+                  Zobacz cały wątek
+                </a>
+              </div>
+            {% endif %}
           </div>
         </template>
       </div>

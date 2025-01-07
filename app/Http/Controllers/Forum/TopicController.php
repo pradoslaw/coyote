@@ -113,6 +113,9 @@ class TopicController extends BaseController
         if ($request->filled('p')) {
             $resource->setSelectedPostId($request->get('p'));
             $topicResource->setSelectedPostId($request->get('p'));
+            $isSubtree = true;
+        } else {
+            $isSubtree = false;
         }
         if (!$hasAccessToDeletedPosts) {
             $resource->obscureDeletedPosts();
@@ -146,6 +149,7 @@ class TopicController extends BaseController
                 'model'                 => $topic, // we need eloquent model in twig to show information about locked/moved topic
                 'topic'                 => $topicResource->toResponse($request)->getData(true),
                 'treeTopicSeeWholeUrl'  => UrlBuilder::topic($topic),
+                'treeTopicSeeWhole'     => $isSubtree,
                 'poll'                  => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
                 'is_writeable'          => $gate->allows('write', $forum) && $gate->allows('write', $topic),
                 'all_forums'            => $allForums,
