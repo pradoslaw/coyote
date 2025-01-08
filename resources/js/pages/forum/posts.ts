@@ -35,7 +35,15 @@ export default {
   created() {
     store.commit('posts/init', window.pagination);
     store.commit('topics/init', [window.topic]);
-    store.dispatch('posts/foldChildrenOfLevel', 4);
+    if (store.getters['topics/is_mode_tree']) {
+      const isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+      if (isMobile) {
+        store.dispatch('posts/foldChildrenOfLevel', 2);
+      } else if (!store.getters['topics/treeTopicSelectedSubtreePostId']) {
+        store.dispatch('posts/foldChildrenOfLevel', 3);
+      } else {
+      }
+    }
     store.commit('topics/setReasons', this.reasons);
     store.commit('forums/init', [window.forum]);
     store.commit('poll/init', window.poll);
