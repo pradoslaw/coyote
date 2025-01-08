@@ -44,7 +44,7 @@ class TopicController extends BaseController
 
         if ($topic->is_tree) {
             $page = 1;
-            $perPage = 200;
+            $perPage = 400;
         } else {
             $page = (int)$request->get('page');
             $perPage = $this->postsPerPage($request);
