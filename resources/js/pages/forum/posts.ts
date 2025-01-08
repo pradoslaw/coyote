@@ -35,6 +35,7 @@ export default {
   created() {
     store.commit('posts/init', window.pagination);
     store.commit('topics/init', [window.topic]);
+    store.dispatch('posts/foldChildrenOfLevel', 4);
     store.commit('topics/setReasons', this.reasons);
     store.commit('forums/init', [window.forum]);
     store.commit('poll/init', window.poll);

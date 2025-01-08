@@ -373,7 +373,7 @@
             {{ postAnswersAuthorsSeeMore }}
           </a>
         </div>
-        <div v-if="childrenFolded">
+        <div v-if="childrenFolded && hasChildren">
           <a class="me-2" @click="unfoldChildren" href="javascript:">
             <vue-icon name="postGuiderailExpanded"/>
             {{ postAnswersAuthorsSeeMore }}
@@ -603,6 +603,9 @@ export default {
         return this.$props.treeItem.childrenAuthors;
       }
       return [];
+    },
+    hasChildren(): boolean {
+      return this.postAnswersAuthors.length > 0;
     },
     postAnswersAuthorsDistinct(): User[] {
       const map = new Map<number, User>();

@@ -23,10 +23,12 @@ const state: Paginator = {
 
 const flatTreeItem: TreePostItem = {
   indent: 0,
+  level: 1,
   linksToParent: false,
   parentLevels: [],
   linksToChildren: false,
   hasDeeperChildren: false,
+  childrenAuthors: [],
 };
 
 function topicOrderToTreeOrdering(topicOrder: TreeTopicOrder): TreeOrderBy {
@@ -94,6 +96,7 @@ const getters = {
           post: subtreeItem.post,
           treeItem: {
             indent,
+            level: subtreeItem.nestLevel,
             linksToParent: indent > 0,
             parentLevels: parentLevelsWithSiblings(subtreeItem.post)
               .filter(parentLevel => (nestLevel - parentLevel - 1) > 0),
@@ -110,6 +113,7 @@ const getters = {
             post: treePost.post,
             treeItem: {
               indent: treePost.treeItem.indent,
+              level: treePost.treeItem.level,
               linksToParent: treePost.treeItem.linksToParent,
               parentLevels: treePost.treeItem.parentLevels,
               linksToChildren: false,
@@ -122,6 +126,7 @@ const getters = {
           post: treePost.post,
           treeItem: {
             indent: treePost.treeItem.indent,
+            level: treePost.treeItem.level,
             linksToParent: treePost.treeItem.linksToParent,
             parentLevels: treePost.treeItem.parentLevels,
             linksToChildren: treePost.treeItem.linksToChildren,
@@ -425,6 +430,15 @@ const actions = {
 
   updateVoters({commit, rootState}, {postId, users}: { postId: number, users: string[] }) {
     commit('updateVoters', {postId, users, user: rootState.user.user});
+  },
+
+  foldChildrenOfLevel({commit, getters}, level: number): void {
+    const treePosts: TreePost[] = getters.treeTopicPostsRemaining;
+    for (const treePost of treePosts) {
+      if (treePost.treeItem.level === level) {
+        commit('foldChildren', treePost.post);
+      }
+    }
   },
 };
 
