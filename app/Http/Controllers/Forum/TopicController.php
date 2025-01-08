@@ -10,6 +10,7 @@ use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\PollResource;
 use Coyote\Http\Resources\PostCollection;
 use Coyote\Http\Resources\TopicResource;
+use Coyote\Post;
 use Coyote\Repositories\Criteria\Post\WithSubscribers;
 use Coyote\Repositories\Criteria\Post\WithTrashedInfo;
 use Coyote\Repositories\Criteria\WithTrashed;
@@ -110,13 +111,26 @@ class TopicController extends BaseController
         $resource->setRelations($topic, $forum);
         $resource->setTracker($tracker);
         $topicResource = new TopicResource($tracker);
+
+        $isSubtree = false;
+        $seeWholeUrl = null;
+        $seePreviousUrl = null;
         if ($request->filled('p')) {
-            $resource->setSelectedPostId($request->get('p'));
-            $topicResource->setSelectedPostId($request->get('p'));
-            $isSubtree = true;
-        } else {
-            $isSubtree = false;
+            $postId = $request->get('p');
+            $post = Post::query()->find($postId);
+            if ($post) {
+                $resource->setSelectedPostId($postId);
+                $topicResource->setSelectedPostId($postId);
+                $isSubtree = true;
+                $seeWholeUrl = UrlBuilder::topic($topic);
+                if ($post->treeParentPost === null) {
+                    $isSubtree = false;
+                } else {
+                    $seePreviousUrl = UrlBuilder::post($post->treeParentPost);
+                }
+            }
         }
+
         if (!$hasAccessToDeletedPosts) {
             $resource->obscureDeletedPosts();
         }
@@ -140,24 +154,25 @@ class TopicController extends BaseController
         $post = array_first($posts['data']);
         return $this
             ->view('forum.topic', [
-                'threadStartUrl'        => route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
-                'posts'                 => $posts,
-                'forum'                 => $forum,
-                'paginationCurrentPage' => $paginate->currentPage(),
-                'paginationPerPage'     => $paginate->perPage(),
-                'reasons'               => $reasons,
-                'model'                 => $topic, // we need eloquent model in twig to show information about locked/moved topic
-                'topic'                 => $topicResource->toResponse($request)->getData(true),
-                'treeTopicSeeWholeUrl'  => UrlBuilder::topic($topic),
-                'treeTopicSeeWhole'     => $isSubtree,
-                'poll'                  => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
-                'is_writeable'          => $gate->allows('write', $forum) && $gate->allows('write', $topic),
-                'all_forums'            => $allForums,
-                'emojis'                => Emoji::all(),
-                'user_forums'           => $userForums,
-                'description'           => excerpt($post['text'], 100),
-                'flags'                 => $this->flags($forum),
-                'schema_topic'          => $this->discussionForumPosting($topic, $post['html']),
+                'threadStartUrl'          => route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
+                'posts'                   => $posts,
+                'forum'                   => $forum,
+                'paginationCurrentPage'   => $paginate->currentPage(),
+                'paginationPerPage'       => $paginate->perPage(),
+                'reasons'                 => $reasons,
+                'model'                   => $topic, // we need eloquent model in twig to show information about locked/moved topic
+                'topic'                   => $topicResource->toResponse($request)->getData(true),
+                'treeTopicIsSubtree'      => $isSubtree,
+                'treeTopicSeeWholeUrl'    => $seeWholeUrl,
+                'treeTopicSeePreviousUrl' => $seePreviousUrl,
+                'poll'                    => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
+                'is_writeable'            => $gate->allows('write', $forum) && $gate->allows('write', $topic),
+                'all_forums'              => $allForums,
+                'emojis'                  => Emoji::all(),
+                'user_forums'             => $userForums,
+                'description'             => excerpt($post['text'], 100),
+                'flags'                   => $this->flags($forum),
+                'schema_topic'            => $this->discussionForumPosting($topic, $post['html']),
             ]);
     }
 

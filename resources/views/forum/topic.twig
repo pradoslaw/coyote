@@ -143,8 +143,23 @@
         {% endif %}
 
         <template v-if="is_mode_tree && treeTopicPostsRemaining.length > 0">
-          <div class="d-flex justify-content-between mb-4">
-            <div>
+          {% if treeTopicIsSubtree %}
+            <div class="d-flex justify-content-between mb-4">
+              <div>
+                <a class="btn btn-secondary mt-4" href="{{ treeTopicSeePreviousUrl }}">
+                  {{ icon('treeTopicSeePrevious') }}
+                  Zobacz poprzedni
+                </a>
+              </div>
+              <div>
+                <a class="btn btn-secondary mt-4" href="{{ treeTopicSeeWholeUrl }}">
+                  {{ icon('treeTopicSeeFull') }}
+                  Zobacz cały wątek
+                </a>
+              </div>
+            </div>
+          {% else %}
+            <div class="mb-4">
               <label for="tree-post-ordering2" class="text-muted">
                 Kolejność postów
               </label>
@@ -161,15 +176,7 @@
                 <option value="linear">Spłaszczone</option>
               </select>
             </div>
-            {% if treeTopicSeeWhole %}
-              <div>
-                <a class="btn btn-secondary mt-4" href="{{ treeTopicSeeWholeUrl }}">
-                  {{ icon('treeTopicSeeFull') }}
-                  Zobacz cały wątek
-                </a>
-              </div>
-            {% endif %}
-          </div>
+          {% endif %}
         </template>
       </div>
 

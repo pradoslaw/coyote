@@ -302,6 +302,7 @@ readonly class FontAwesomePro
             'postGuiderailCollapsed'                    => 'fa-solid fa-minus',
             'treeTopicPostOrder'                        => 'fa-light fa-arrow-down-z-a',
             'treeTopicSeeFull'                          => 'fa-light fa-list-tree',
+            'treeTopicSeePrevious'                      => 'fa-light fa-arrow-up-left',
 
             // post history
             'postHistoryVersion'                        => 'fa-light fa-file',
