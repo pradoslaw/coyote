@@ -117,7 +117,7 @@ class TopicController extends BaseController
         $seePreviousUrl = null;
         if ($request->filled('p')) {
             $postId = $request->get('p');
-            $post = Post::query()->find($postId);
+            $post = Post::query()->withTrashed()->find($postId);
             if ($post) {
                 $resource->setSelectedPostId($postId);
                 $topicResource->setSelectedPostId($postId);
