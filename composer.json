@@ -81,8 +81,8 @@
     "psr-4": {
       "Tests\\": "tests/",
       "Tests\\Browser\\": "tests/Browser/",
-      "Tests\\Grid\\": "tests/Grid/",
       "Tests\\Legacy\\": "tests/Legacy/",
+      "Tests\\Legacy\\IntegrationOld\\": "tests/Legacy/IntegrationOld/",
       "Tests\\Integration\\": "tests/Integration/",
       "Neon\\Test\\": "neon/test/"
     },
