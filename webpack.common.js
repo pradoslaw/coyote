@@ -4,7 +4,6 @@ const {WebpackManifestPlugin} = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const {VueLoaderPlugin} = require('vue-loader');
-const SvgSpriteMapPlugin = require('svg-spritemap-webpack-plugin');
 
 module.exports = {
   devtool: 'source-map', // slower but better
@@ -142,49 +141,6 @@ module.exports = {
 
     new WebpackManifestPlugin({
       fileName: 'manifest.json',
-    }),
-
-    new SvgSpriteMapPlugin([
-      'resources/images/logos/logo-php.svg',
-      'resources/images/logos/logo-java.svg',
-      'resources/images/logos/logo-javascript.svg',
-      'resources/images/logos/logo-cpp.svg',
-      'resources/images/logos/logo-csharp.svg',
-      'resources/images/logos/logo-css.svg',
-      'resources/images/logos/logo-android.svg',
-      'resources/images/logos/logo-lazarus.svg',
-      'resources/images/logos/logo-postgresql.svg',
-      'resources/images/logos/logo-rust.svg',
-      'resources/images/logos/logo-go.svg',
-      'resources/images/logos/logo-unity.svg',
-    ], {
-      output: {
-        filename: 'img/sprites-[contenthash].svg',
-
-        svg: {
-          // Disable `width` and `height` attributes on the root SVG element
-          // as these will skew the sprites when using the <view> via fragment identifiers
-          sizes: false,
-        },
-        svgo: false,
-      },
-      sprite: {
-        generate: {
-          // Generate <use> tags within the sprite map as the <view> tag will use this
-          use: true,
-
-          // Generate <view> tags within the svg to use in css via fragment identifier url
-          // and add -fragment suffix for the identifier to prevent naming collisions with the symbol identifier
-          view: '-fragment',
-
-          // Generate <symbol> tags within the SVG to use in HTML via <use> tag
-          symbol: true,
-        },
-      },
-      styles: {
-        format: 'fragment',
-        filename: path.join(__dirname, 'resources/sass/generated/_sprites.scss'),
-      },
     }),
   ],
 };
