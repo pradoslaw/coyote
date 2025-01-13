@@ -61,8 +61,8 @@ class NginxTest extends TestCase
     {
         $response = $this->get("http://nginx/Forum/", allowRedirect:true); // slash at the end
         $stylesheetHref = $this->stylesheetHref($response);
-        $this->assertStringStartsWith('/css/core-', $stylesheetHref);
-        $this->assertStringStartsNotWith('/Forum/css/core-', $stylesheetHref);
+        $this->assertStringStartsWith('/css/stylesEager-', $stylesheetHref);
+        $this->assertStringStartsNotWith('/Forum/css/stylesEager-', $stylesheetHref);
     }
 
     private function stylesheetHref(Response $response): string
