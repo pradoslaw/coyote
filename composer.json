@@ -79,10 +79,10 @@
   "autoload-dev": {
     "psr-4": {
       "Tests\\": "tests/",
-      "Tests\\Browser\\": "tests/Browser/",
-      "Tests\\Grid\\": "tests/Grid/",
-      "Tests\\Legacy\\": "tests/Legacy/",
-      "Tests\\Integration\\": "tests/Integration/",
+      "Tests\\Unit\\": "tests/Unit/",
+      "Tests\\Legacy\\Browser\\": "tests/Legacy/Browser/",
+      "Tests\\Legacy\\IntegrationOld\\": "tests/Legacy/IntegrationOld/",
+      "Tests\\Legacy\\IntegrationNew\\": "tests/Legacy/IntegrationNew/",
       "Neon\\Test\\": "neon/test/"
     },
     "files": [

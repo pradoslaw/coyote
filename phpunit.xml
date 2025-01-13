@@ -10,10 +10,11 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="Legacy">
-            <directory suffix="Test.php">./tests/Legacy</directory>
+            <directory suffix="Test.php">./tests/Legacy/IntegrationOld/</directory>
+            <directory suffix="Test.php">./tests/Legacy/IntegrationNew/</directory>
         </testsuite>
-        <testsuite name="Integration">
-            <directory suffix="Test.php">./tests/Integration/</directory>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit/</directory>
         </testsuite>
     </testsuites>
     <php>
