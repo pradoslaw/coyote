@@ -5,10 +5,14 @@ use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Laravel\Dusk\Browser;
+use Laravel\Dusk\Chrome\SupportsChrome;
+use Laravel\Dusk\Concerns\ProvidesBrowser;
+use RuntimeException;
 use Tests\Legacy\IntegrationOld\CreatesApplication;
 
-abstract class DuskTestCase extends \Laravel\Dusk\TestCase
+abstract class DuskTestCase extends \Illuminate\Foundation\Testing\TestCase
 {
+    use ProvidesBrowser, SupportsChrome;
     use CreatesApplication;
 
     protected function setUp(): void
@@ -18,6 +22,14 @@ abstract class DuskTestCase extends \Laravel\Dusk\TestCase
         Browser::$storeScreenshotsAt = base_path('tests/Legacy/Browser/screenshots');
         Browser::$storeConsoleLogAt = base_path('tests/Legacy/Browser/console');
         Browser::$storeSourceAt = base_path('tests/Legacy/Browser/source');
+        Browser::$userResolver = function () {
+            throw new RuntimeException('User resolver has not been set.');
+        };
+    }
+
+    private function baseUrl(): string
+    {
+        return \rTrim(config('app.url'), '/');
     }
 
     protected function driver(): RemoteWebDriver
