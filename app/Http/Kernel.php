@@ -35,9 +35,6 @@ class Kernel extends Foundation\Http\Kernel
 
     /** @var array */
     protected $middlewareGroups = [
-        'neon' => [
-            Middleware\EncryptCookies::class,
-        ],
         'web'  => [
             Middleware\EncryptCookies::class,
             AddQueuedCookiesToResponse::class,

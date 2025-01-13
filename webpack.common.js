@@ -186,17 +186,5 @@ module.exports = {
         filename: path.join(__dirname, 'resources/sass/generated/_sprites.scss'),
       },
     }),
-
-    // {
-    //   apply(compiler) {
-    //     compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
-    //       exec(path.join(__dirname, './neon/buildStyle.sh'),
-    //         (err, stdout, stderr) => {
-    //           if (stdout) process.stdout.write(stdout);
-    //           if (stderr) process.stderr.write(stderr);
-    //         });
-    //     });
-    //   },
-    // },
   ],
 };

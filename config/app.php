@@ -193,6 +193,7 @@ return [
         // Obsluga sesji przez Coyote (nadpisujemy domyslny driver)
         Coyote\Providers\SessionServiceProvider::class,
         Coyote\Providers\EventServiceProvider::class,
+        Coyote\Providers\Neon\ServiceProvider::class,
         Coyote\Providers\RouteServiceProvider::class,
         Coyote\Providers\ViewServiceProvider::class,
         Coyote\Providers\AuthServiceProvider::class,

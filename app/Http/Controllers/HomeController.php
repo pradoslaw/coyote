@@ -20,10 +20,6 @@ use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\Services\Session\Renderer;
 use Illuminate\Contracts\Cache;
 use Illuminate\View\View;
-use Neon\Domain;
-use Neon\StaticEvents;
-use Neon\View\Components;
-use Neon\View\Language\Polish;
 
 class HomeController extends Controller
 {
@@ -44,22 +40,18 @@ class HomeController extends Controller
         $date = new DiscreetDate(date('Y-m-d H:i:s'));
 
         return $this->view(!$service->isChoiceModern() ? 'home' : 'home_modern', [
-            'flags'       => $this->flags(),
-            'microblogs'  => $this->getMicroblogs(),
-            'interesting' => $this->topic->interesting(),
-            'newest'      => $this->topic->newest(),
-            'activities'  => $this->getActivities(),
-            'reputation'  => $cache->remember('homepage:reputation', 30 * 60, fn() => [
+            'flags'         => $this->flags(),
+            'microblogs'    => $this->getMicroblogs(),
+            'interesting'   => $this->topic->interesting(),
+            'newest'        => $this->topic->newest(),
+            'activities'    => $this->getActivities(),
+            'reputation'    => $cache->remember('homepage:reputation', 30 * 60, fn() => [
                 'week'    => $this->reputation->reputationSince($date->startOfThisWeek(), limit:5),
                 'month'   => $this->reputation->reputationSince($date->startOfThisMonth(), limit:5),
                 'quarter' => $this->reputation->reputationSince($date->startOfThisQuarter(), limit:5),
             ]),
-            'emojis'      => Emoji::all(),
-            'events'      => \array_map(
-                fn(Domain\Event\Event $event) => new Components\Event\Event(new Polish(), $event),
-                (new StaticEvents())->fetchEvents(),
-            ),
-
+            'emojis'        => Emoji::all(),
+            'events'        => [],
             'globalViewers' => $this->globalViewers(),
         ])
             ->with('settings', $this->getSettings());
