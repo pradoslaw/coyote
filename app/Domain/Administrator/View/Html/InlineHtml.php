@@ -64,7 +64,7 @@ class InlineHtml extends Html
         if ($item->tagName === 'iframe') {
             return $this->badge('contentMarkerIFrame', 'iframe');
         }
-        if ($item->tagName === 'pre') {
+        if ($item->getAttribute('class') === 'markdown-code') {
             return $this->badge('contentMarkerCode', 'code');
         }
         if ($item->tagName === 'br') {

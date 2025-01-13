@@ -1,3 +1,8 @@
 @charset "UTF-8";
 
 @use "legacyApp";
+@use "../feature/post/copyButton";
+
+.cache-break {
+  opacity: 0.01;
+}

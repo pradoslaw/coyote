@@ -21,7 +21,7 @@ import './store/index.ts';
 import './gdpr.ts';
 import '../feature/stickyAside/sticky-aside.js';
 import '../feature/lookAndFeel/lookAndFeel';
-
+import '../feature/post/copyButton';
 import '../../survey/src/survey';
 
 Prism.highlightAll();

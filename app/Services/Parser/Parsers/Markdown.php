@@ -13,6 +13,7 @@ use Coyote\Services\Parser\WikiLinksInlineParser;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
 use League\CommonMark\Extension\Strikethrough\StrikethroughExtension;
 use League\CommonMark\Extension\Table\TableExtension;
 use League\CommonMark\Extension\TaskList\TaskListExtension;
@@ -23,9 +24,7 @@ class Markdown implements Parser
     public function __construct(
         protected UserRepository $user,
         protected PageRepository $page,
-        protected string         $host)
-    {
-    }
+        protected string         $host) {}
 
     public function parse(string $text): string
     {
@@ -41,9 +40,9 @@ class Markdown implements Parser
         $environment->addExtension(new YoutubeLinkExtension());
         $environment->addInlineParser(new EmojiParser());
         $environment->addRenderer(EmojiNode::class, new EmojiRenderer());
+        $environment->addRenderer(FencedCode::class, new FencedCodeRenderer());
 
         $converter = new MarkdownConverter($environment);
-
         return $converter->convert($text);
     }
 }

@@ -3,11 +3,10 @@
 return [
     'Core.Encoding'        => 'UTF-8',
     'Cache.SerializerPath' => storage_path('app/purifier'),
-
     'HTML.Allowed' => 'b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol,li,span,' .
         'img[width|height|alt|src|title|class],sub,sup,pre,code[class],div,kbd,mark,h1,h2,h3,h4,h5,h6,blockquote,del,' .
-        'table,thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp,iframe[src|class|allowfullscreen]',
-
+        'table,thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp,iframe[src|class|allowfullscreen],div[class]',
+    'Attr.AllowedClasses'            => ['markdown-code', 'img-smile', 'youtube-player', 'mention', 'copy-button'],
     'CSS.AllowedProperties'          => 'font,font-size,font-weight,font-style,font-family,text-decoration,color,background-color,background-image,text-align',
     'AutoFormat.AutoParagraph'       => false,
     'AutoFormat.RemoveEmpty'         => false, // nie usuwaj pustych atrybutow typu <a></a>

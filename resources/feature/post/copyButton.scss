@@ -1,0 +1,27 @@
+.markdown-code {
+  position: relative;
+
+  .copy-button {
+    display:          none;
+    position:         absolute;
+    padding:          2px 8px;
+    border-radius:    8px;
+    background-color: #f5f2f0; // background of code block
+    color:            #838383;
+    border:           1px solid currentColor;
+    right:            12px;
+    top:              12px;
+    z-index:          1;
+    cursor:           pointer;
+    font-size:        0.8em;
+    &:hover {
+      background-color: lighten(#f5f2f0, 2%);
+    }
+  }
+
+  &:hover {
+    .copy-button {
+      display: block;
+    }
+  }
+}
