@@ -8,7 +8,7 @@
     :zoom-disabled="true"
     :pinch-disabled="true"
     :dblclick-disabled="true"
-    :mask-closable="false"
+    :mask-closable="true"
     @hide="close">
     <template v-slot:toolbar/>
   </vue-easy-lightbox>
