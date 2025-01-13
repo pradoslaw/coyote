@@ -90,7 +90,7 @@ return [
     |
     | List of allowed extensions
     */
-    'upload_mimes'    => 'jpg,jpeg,gif,png,zip,rar,txt,pdf,doc,docx,xls,xlsx,cpp,7z,7zip,patch,webm,webp',
+    'upload_mimes'    => 'jpg,jpeg,gif,png,zip,rar,txt,pdf,doc,docx,xls,xlsx,py,cpp,pas,7z,7zip,patch,webm,webp',
 
     /*
     | --------------------------------------------------------------------------
