@@ -33,11 +33,7 @@ class ServiceProvider extends RouteServiceProvider
     {
         $this
             ->get('/events', [
-                'uses' => function (Request $request) {
-                    /** @var Application $application */
-                    $application = $this->app->get(Application::class);
-                    return $application->html($this->startSessionGetCsrf($request));
-                },
+                'uses' => fn() => redirect('https://wydarzenia.4programmers.net/'),
             ])
             ->middleware('neon');
     }
