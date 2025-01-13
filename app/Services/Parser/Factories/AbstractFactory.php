@@ -40,9 +40,9 @@ abstract class AbstractFactory
     {
         $key = $this->cache->key($text);
 
-        if ($this->cache->has($key)) {
-            return $this->cache->get($key);
-        }
+//        if ($this->cache->has($key)) {
+//            return $this->cache->get($key);
+//        }
 
         /** @var CompositeParser $parser */
         $parser = $closure();
