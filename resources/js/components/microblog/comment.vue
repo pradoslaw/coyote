@@ -45,7 +45,7 @@
             </span>
           </li>
           <li v-if="isAuthorized" class="list-inline-item">
-            <span :data-metadata="comment.metadata" :data-url="comment.url" class="microblog-comment-action">
+            <span class="microblog-comment-action" @click="flagComment">
               Zgłoś
             </span>
           </li>
@@ -113,6 +113,7 @@
 import {mapActions, mapGetters, mapState} from "vuex";
 
 import declination from '../../libs/declination';
+import {openFlagModal} from "../../plugins/flags";
 import {VueTimeAgo} from '../../plugins/timeago.js';
 import store from "../../store/index";
 import VueAvatar from '../avatar.vue';
@@ -143,6 +144,9 @@ export default {
   },
   methods: {
     ...mapActions('microblogs', ['vote', 'loadVoters']),
+    flagComment(): void {
+      openFlagModal(this.$props.comment.url, this.$props.comment.metadata);
+    },
     reply() {
       this.$emit('reply', this.comment.user);
     },
