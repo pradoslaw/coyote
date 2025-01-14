@@ -176,11 +176,11 @@ class ViewMaterialsTest extends TestCase
     }
 
     private function material(
-        string  $type = null,
-        string  $markdown = null,
+        ?string  $type = null,
+        ?string  $markdown = null,
         Carbon  $createdAt = new Carbon(),
         ?Carbon $deletedAt = null,
-        string  $authorUsername = null,
+        ?string  $authorUsername = null,
     ): Material
     {
         return new Material(

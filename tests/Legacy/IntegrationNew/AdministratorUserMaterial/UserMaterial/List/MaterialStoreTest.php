@@ -305,7 +305,7 @@ class MaterialStoreTest extends TestCase
 
     private function request(int    $page = 1,
                              int    $pageSize = 1,
-                             string $type = null,
+                             ?string $type = null,
                              ?bool  $deleted = null,
                              ?bool  $reported = null,
                              ?int   $authorId = null,

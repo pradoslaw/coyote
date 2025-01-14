@@ -44,7 +44,7 @@ class ViewersTest extends TestCase
         return \array_fill(0, $size, $this->user());
     }
 
-    private function user(string $name = null, string $group = null): ViewerUser
+    private function user(?string $name = null, ?string $group = null): ViewerUser
     {
         return new ViewerUser($name ?? '', $group, $group, null, '');
     }

@@ -130,7 +130,7 @@ class Test extends TestCase
         return (new Post(['text' => $markdown]))->html;
     }
 
-    private function newPostInTopic(string $forumSlug = null, string $topicTitle = null): array
+    private function newPostInTopic(?string $forumSlug = null, ?string $topicTitle = null): array
     {
         $topic = $this->storeThread(
             new Forum(['slug' => $forumSlug]),
@@ -138,7 +138,7 @@ class Test extends TestCase
         return [$topic->id, $topic->first_post_id];
     }
 
-    private function newPost(string $forumSlug = null, string $topicTitle = null): string
+    private function newPost(?string $forumSlug = null, ?string $topicTitle = null): string
     {
         $topic = $this->storeThread(
             new Forum(['slug' => $forumSlug]),

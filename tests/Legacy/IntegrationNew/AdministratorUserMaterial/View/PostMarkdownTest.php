@@ -212,7 +212,7 @@ class PostMarkdownTest extends TestCase
         return new SubstringHtml(new InlineHtml(new PostMarkdown($postContent)), 100);
     }
 
-    private function mark(string $iconName, string $title = null): string
+    private function mark(string $iconName, ?string $title = null): string
     {
         $icons = new Icons();
         return '<span class="badge badge-material-element">' .

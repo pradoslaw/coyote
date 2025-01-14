@@ -33,7 +33,7 @@ trait CreatesApplication
         return factory(Topic::class)->create(array_merge($data, ['forum_id' => $forumId]));
     }
 
-    public function createForum(array $data = [], int $groupId = null): Forum
+    public function createForum(array $data = [], ?int $groupId = null): Forum
     {
         if ($groupId) {
             $data['is_prohibited'] = true;

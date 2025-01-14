@@ -344,7 +344,7 @@ class DispatchPostNotificationsTest extends TestCase
         Notification::assertSentToTimes($postAuthor, SubmittedNotification::class, 0);
     }
 
-    private function newUser(string $username = null, bool $canMentionUsers = null): User
+    private function newUser(?string $username = null, ?bool $canMentionUsers = null): User
     {
         $factoryBuilder = factory(User::class);
         if ($canMentionUsers) {
@@ -377,7 +377,7 @@ class DispatchPostNotificationsTest extends TestCase
         $user->relations()->create(['related_user_id' => $blocked->id, 'is_blocked' => true]);
     }
 
-    private function userAddsPost(User $user, string $postMarkdown = null): Post
+    private function userAddsPost(User $user, ?string $postMarkdown = null): Post
     {
         $attributes = [
             'user_id'  => $user->id,
@@ -392,9 +392,9 @@ class DispatchPostNotificationsTest extends TestCase
     }
 
     private function someoneWritesPost(
-        Topic $topic = null,
-        Post  $treeResponseTo = null,
-        User  $author = null,
+        ?Topic $topic = null,
+        ?Post  $treeResponseTo = null,
+        ?User  $author = null,
     ): array
     {
         /** @var Post $post */
@@ -423,7 +423,7 @@ class DispatchPostNotificationsTest extends TestCase
             ]);
     }
 
-    private function userEditsPost(User $editor, Post $post, string $postMarkdown = null): void
+    private function userEditsPost(User $editor, Post $post, ?string $postMarkdown = null): void
     {
         $post->editor_id = $editor->id;
         $post->wasRecentlyCreated = false;

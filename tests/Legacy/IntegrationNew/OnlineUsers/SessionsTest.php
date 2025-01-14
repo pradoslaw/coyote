@@ -131,7 +131,7 @@ class SessionsTest extends TestCase
         $this->assertSame(0, $this->viewers()->guestsCount);
     }
 
-    private function viewAsUser(int $userId, string $path = null): void
+    private function viewAsUser(int $userId, ?string $path = null): void
     {
         $this->laravel->databaseTable('sessions')->insert([
             'id'      => '',
@@ -141,7 +141,7 @@ class SessionsTest extends TestCase
         ]);
     }
 
-    private function viewAsGuest(string $path = null): void
+    private function viewAsGuest(?string $path = null): void
     {
         $this->laravel->databaseTable('sessions')->insert([
             'id'      => '',

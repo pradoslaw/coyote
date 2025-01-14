@@ -27,7 +27,7 @@ trait CallbackRequests
         return $this->oAuthLogged('google', 'irrelevant', $oAuthUsername, 'irrelevant');
     }
 
-    function oAuthLoggedIn(string $email, string $username = null, string $provider = null, string $providerId = null): void
+    function oAuthLoggedIn(string $email, ?string $username = null, ?string $provider = null, ?string $providerId = null): void
     {
         $this->oAuthLogged(
             $provider ?? 'google',
