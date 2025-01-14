@@ -1,4 +1,4 @@
-FROM php:8.3.2-fpm-bullseye as backend
+FROM php:8.4.2-fpm-bookworm as backend
 
 LABEL maintainer="4programmers.net <support@4programmers.net>"
 
