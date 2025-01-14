@@ -2,6 +2,7 @@
 
 namespace Tests\Legacy\IntegrationOld\Controllers\Job;
 
+use Coyote\Country;
 use Coyote\Coupon;
 use Coyote\Firm;
 use Coyote\Job;
@@ -16,10 +17,9 @@ class PaymentControllerTest extends TestCase
 {
     use DatabaseTransactions, WithFaker;
 
-    /**
-     * @var Job
-     */
-    private $job;
+    private Job $job;
+    private Country $poland;
+    private Country $austria;
 
     public function setUp(): void
     {
@@ -30,6 +30,9 @@ class PaymentControllerTest extends TestCase
         $this->assertNotEmpty(config('services.stripe.key'));
         $this->assertNotEmpty(config('services.stripe.secret'));
         $this->assertEquals('testing', config('app.env'));
+
+        $this->poland = Country::query()->where('code', '=', 'PL')->firstOrFail();
+        $this->austria = Country::query()->where('code', '=', 'AT')->firstOrFail();
     }
 
     public function testSubmitInvalidFormWithoutAnyData()
@@ -116,7 +119,7 @@ class PaymentControllerTest extends TestCase
                 'invoice'        => [
                     'name'        => $name = $faker->company,
                     'vat_id'      => $vat = '8943139460',
-                    'country_id'  => $countryId = 14,
+                    'country_id'  => $this->poland->id,
                     'address'     => $address = $faker->address,
                     'city'        => $city = $faker->city,
                     'postal_code' => $postalCode = $faker->postcode,
@@ -133,7 +136,7 @@ class PaymentControllerTest extends TestCase
 
         $this->assertEquals($payment->invoice->name, $name);
         $this->assertEquals($payment->invoice->vat_id, $vat);
-        $this->assertEquals($payment->invoice->country_id, $countryId);
+        $this->assertEquals($payment->invoice->country_id, $this->poland->id);
         $this->assertEquals($payment->invoice->address, $address);
         $this->assertEquals($payment->invoice->city, $city);
         $this->assertEquals($payment->invoice->postal_code, $postalCode);
@@ -159,7 +162,7 @@ class PaymentControllerTest extends TestCase
                 'invoice'        => [
                     'name'        => $firm->name,
                     'vat_id'      => $vat = '8943139460',
-                    'country_id'  => $countryId = 14,
+                    'country_id'  => $this->poland->id,
                     'address'     => $firm->street,
                     'city'        => $firm->city,
                     'postal_code' => $postalCode = $faker->postcode,
@@ -171,7 +174,7 @@ class PaymentControllerTest extends TestCase
 
         $this->assertEquals($payment->invoice->name, $firm->name);
         $this->assertEquals($payment->invoice->vat_id, $vat);
-        $this->assertEquals($payment->invoice->country_id, $countryId);
+        $this->assertEquals($payment->invoice->country_id, $this->poland->id);
         $this->assertEquals($payment->invoice->address, $firm->street);
         $this->assertEquals($payment->invoice->city, $firm->city);
         $this->assertEquals($payment->invoice->postal_code, $postalCode);
@@ -197,16 +200,15 @@ class PaymentControllerTest extends TestCase
                 'invoice'        => [
                     'name'        => $this->faker->company,
                     'vat_id'      => '8943139460',
-                    'country_id'  => 14,
+                    'country_id'  => $this->poland->id,
                     'address'     => $this->faker->address,
                     'city'        => $this->faker->city,
-                    'postal_code' => $postalCode = $this->faker->postcode,
+                    'postal_code' => $this->faker->postcode,
                 ],
             ]);
 
         $response->assertStatus(200);
         $payment->refresh();
-
         $this->assertEquals($payment->invoice->netPrice(), $payment->plan->price - 10);
     }
 
@@ -402,7 +404,7 @@ class PaymentControllerTest extends TestCase
                     'city'        => $this->faker->city,
                     'postal_code' => $this->faker->postcode,
                     'vat_id'      => '12312312',
-                    'country_id'  => 14,
+                    'country_id'  => $this->poland->id,
                 ],
             ],
         );
@@ -429,7 +431,7 @@ class PaymentControllerTest extends TestCase
                 'invoice'        => [
                     'name'        => $this->faker->company,
                     'vat_id'      => '8943139460',
-                    'country_id'  => 14,
+                    'country_id'  => $this->poland->id,
                     'address'     => $this->faker->address,
                     'city'        => $this->faker->city,
                     'postal_code' => $this->faker->postcode,
@@ -455,7 +457,7 @@ class PaymentControllerTest extends TestCase
                 'invoice'        => [
                     'name'        => $this->faker->company,
                     'vat_id'      => 'U12345678',
-                    'country_id'  => $countryId = 1,
+                    'country_id'  => $this->austria->id,
                     'address'     => $this->faker->address,
                     'city'        => $this->faker->city,
                     'postal_code' => $this->faker->postcode,
@@ -467,14 +469,13 @@ class PaymentControllerTest extends TestCase
 
         $payment->refresh();
 
-        $this->assertEquals($payment->invoice->country_id, $countryId);
+        $this->assertEquals($payment->invoice->country_id, $this->austria->id);
         $this->assertEquals($payment->invoice->grossPrice(), $this->job->plan->price);
     }
 
     public function testSubmitFormToForeignCitizen()
     {
         $payment = $this->job->getUnpaidPayment();
-
         $this->actingAs($this->job->user)->json(
             'POST',
             "/Praca/Payment/{$payment->id}",
@@ -483,17 +484,15 @@ class PaymentControllerTest extends TestCase
                 'price'          => $payment->plan->gross_price,
                 'invoice'        => [
                     'name'        => $this->faker->company,
-                    'country_id'  => $countryId = 1,
+                    'country_id'  => $this->austria->id,
                     'address'     => $this->faker->address,
                     'city'        => $this->faker->city,
                     'postal_code' => $this->faker->postcode,
                 ],
             ],
         );
-
         $payment->refresh();
-
-        $this->assertEquals($payment->invoice->country_id, $countryId);
+        $this->assertEquals($payment->invoice->country_id, $this->austria->id);
         $this->assertEquals($payment->invoice->grossPrice(), $this->job->plan->price * 1.23);
     }
 }
