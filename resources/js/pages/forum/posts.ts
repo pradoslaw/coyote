@@ -39,8 +39,8 @@ export default {
       const isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
       if (isMobile) {
         store.dispatch('posts/foldChildrenOfLevel', 2);
-      } else if (!store.getters['topics/treeTopicSelectedSubtreePostId']) {
-        store.dispatch('posts/foldChildrenOfLevel', 3);
+      } else if (!store.getters['topics/treeTopicSelectedSubtree']) {
+        store.dispatch('posts/foldChildrenOfLevel', 2);
       } else {
       }
     }

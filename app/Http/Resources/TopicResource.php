@@ -65,6 +65,7 @@ class TopicResource extends JsonResource
                     return new PostResource($this->lastPost);
                 }),
                 'discuss_mode'              => $this->discussMode(),
+                'treeSelectedSubtree'       => $this->selectedPostId != null,
                 'treeSelectedSubtreePostId' => $this->selectedPostId ?? $this->resource->first_post_id,
             ],
         );

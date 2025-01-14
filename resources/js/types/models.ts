@@ -258,6 +258,7 @@ export interface Topic {
   subscribers?: number;
   owner_id?: number | null;
   discuss_mode: 'tree' | 'linear';
+  treeSelectedSubtree: boolean;
   treeSelectedSubtreePostId: number;
 }
 

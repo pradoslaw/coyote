@@ -16,6 +16,10 @@ const getters = {
   treeTopicOrder(state): TreeTopicOrder {
     return state.treeTopicOrder;
   },
+  treeTopicSelectedSubtree(state, getters): boolean {
+    const topic: Topic = getters.topic;
+    return topic.treeSelectedSubtree;
+  },
   treeTopicSelectedSubtreePostId(state, getters): number {
     const topic: Topic = getters.topic;
     return topic.treeSelectedSubtreePostId;
