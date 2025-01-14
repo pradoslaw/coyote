@@ -18,7 +18,10 @@ class Purifier implements Parser
             'HTML.Allowed'                   => 'b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol,li,span,' .
                 'img[width|height|alt|src|title|class],sub,sup,pre,code[class],div,kbd,mark,h1,h2,h3,h4,h5,h6,blockquote,del,' .
                 'table,thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp,iframe[src|class|allowfullscreen],div[class]',
-            'Attr.AllowedClasses'            => ['markdown-code', 'img-smile', 'youtube-player', 'mention', 'copy-button'],
+            'Attr.AllowedClasses'            => [
+                'markdown-code', 'img-smile', 'youtube-player', 'mention', 'copy-button',
+                ...$this->allowedLanguageClasses(),
+            ],
             'CSS.AllowedProperties'          => 'font,font-size,font-weight,font-style,font-family,text-decoration,color,background-color,background-image,text-align',
             'AutoFormat.AutoParagraph'       => false,
             'AutoFormat.RemoveEmpty'         => false, // nie usuwaj pustych atrybutow typu <a></a>
@@ -68,5 +71,18 @@ class Purifier implements Parser
             $video->attr_transform_post[] = new SetAttribute('controls', 'controls');
         }
         return (new HTMLPurifier)->purify($text, $this->config);
+    }
+
+    private function allowedLanguageClasses(): array
+    {
+        $languages = [
+            'ada', 'asm', 'basic', 'bash', 'sh', 'batch', 'bat', 'brainfuck', 'bf', 'c', 'c++', 'cpp', 'c#', 'cs',
+            'clojure', 'clj', 'css', 'scss', 'sass', 'less', 'csv', 'pascal', 'delphi', 'dockerfile', 'elixir',
+            'erlang', 'f#', 'fsharp', 'fortran', 'go', 'groovy', 'graphql', 'html', 'hs', 'haskell', 'ini', 'java',
+            'js', 'json', 'julia', 'jsx', 'kt', 'kotlin', 'latex', 'tex', 'lisp', 'lua', 'markdown', 'md', 'matlab',
+            'perl', 'php', 'prolog', 'powershell', 'ps', 'py', 'python', 'r', 'rs', 'rust', 'rb', 'ruby', 'rss', 'atom',
+            'scala', 'sql', 'twig', 'tsx', 'ts', 'vb', 'xml', 'svg', 'yaml', 'yml',
+        ];
+        return \array_map(fn(string $lang) => "language-$lang", $languages);
     }
 }
