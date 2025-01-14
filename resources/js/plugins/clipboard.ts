@@ -15,3 +15,19 @@ export function copyToClipboard(message: string): boolean {
     document.body.removeChild(input);
   }
 }
+
+export function copyToClipboardMultiline(message: string): boolean {
+  const textarea = document.createElement('textarea');
+  textarea.textContent = message;
+  textarea.style.border = 'none';
+  textarea.style.outline = 'none';
+  textarea.style.boxShadow = 'none';
+  textarea.style.background = 'transparent';
+  try {
+    document.body.appendChild(textarea);
+    textarea.select();
+    return document.execCommand('copy');
+  } finally {
+    document.body.removeChild(textarea);
+  }
+}

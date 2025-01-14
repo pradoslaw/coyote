@@ -1,4 +1,4 @@
-import {copyToClipboard} from '../../js/plugins/clipboard';
+import {copyToClipboardMultiline} from '../../js/plugins/clipboard';
 import {notify} from "../../js/toast";
 
 window.addEventListener('load', () => {
@@ -7,7 +7,7 @@ window.addEventListener('load', () => {
       const copyButton = event.target as HTMLElement;
       const markdownCode = copyButton.parentElement!;
       const codeSource = markdownCode.querySelector('pre code')!.textContent!;
-      copyToClipboard(codeSource);
+      copyToClipboardMultiline(codeSource);
       notify({type: 'success', text: 'Kod znajduje się w schowku!'});
     });
   });
