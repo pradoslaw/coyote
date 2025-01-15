@@ -12378,16 +12378,16 @@
         },
         {
             "name": "rawr/phpunit-data-provider",
-            "version": "3.3.0",
+            "version": "3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/t-regx/phpunit-data-provider.git",
-                "reference": "69b1c46e542e94beb140a7a004dce148778f49d9"
+                "reference": "a8bbc37340cee2976265ec06fe1694f499233f67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/t-regx/phpunit-data-provider/zipball/69b1c46e542e94beb140a7a004dce148778f49d9",
-                "reference": "69b1c46e542e94beb140a7a004dce148778f49d9",
+                "url": "https://api.github.com/repos/t-regx/phpunit-data-provider/zipball/a8bbc37340cee2976265ec06fe1694f499233f67",
+                "reference": "a8bbc37340cee2976265ec06fe1694f499233f67",
                 "shasum": ""
             },
             "require": {
@@ -12415,7 +12415,7 @@
             "description": "Lightweight builder for PhpUnit data providers",
             "support": {
                 "issues": "https://github.com/t-regx/phpunit-data-provider/issues",
-                "source": "https://github.com/t-regx/phpunit-data-provider/tree/3.3.0"
+                "source": "https://github.com/t-regx/phpunit-data-provider/tree/3.3.1"
             },
             "funding": [
                 {
@@ -12423,7 +12423,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-18T16:20:03+00:00"
+            "time": "2025-01-15T11:18:37+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -13408,6 +13408,6 @@
         "ext-libxml": "*",
         "ext-simplexml": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
