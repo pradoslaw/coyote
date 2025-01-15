@@ -3,14 +3,10 @@ namespace Coyote\Services\Parser\Parsers;
 
 use Coyote\Repositories\Eloquent\WordRepository;
 use Illuminate\Support;
-use TRegx\SafeRegex\Exception\PregException;
-use TRegx\SafeRegex\preg;
 
 class Censore extends HashParser implements Parser
 {
-    public function __construct(private WordRepository $word)
-    {
-    }
+    public function __construct(private WordRepository $word) {}
 
     protected function parseHashed(string $text): string
     {
@@ -20,11 +16,7 @@ class Censore extends HashParser implements Parser
             $word = '#(?<![\p{L}\p{N}_])' . $wordPattern . '(?![\p{L}\p{N}_])#iu';
             $words[$word] = $rule->replacement;
         }
-        try {
-            $text = preg::replace(array_keys($words), array_values($words), $text);
-        } catch (PregException $ignored) {
-        }
-        return $text;
+        return \preg_replace(array_keys($words), array_values($words), $text);
     }
 
     private function censoreRules(): Support\Collection
