@@ -47,5 +47,15 @@ jobs:
       - name: Install packages
         run: make install
 
-      - name: Run tests
-        run: docker compose exec -T -u nginx php php vendor/bin/phpunit
+      - name: Run unit and legacy tests
+        run: docker compose exec -T -u nginx php php vendor/bin/phpunit --testsuite Unit,Legacy
+
+      - name: Run acceptance tests
+        run: docker compose exec -T -u nginx php php vendor/bin/phpunit --testsuite Acceptance
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: failed-acceptance-tests
+          path: tests/Acceptance/*.FAIL.png
+          if-no-files-found: ignore
