@@ -39,7 +39,11 @@ class Url
         if (!$this->file->getFilename()) {
             return ''; // because __toString() requires string value
         }
+        return $this->withoutHostname($this->file->getFilesystem()->url($this->file->path()));
+    }
 
-        return $this->file->getFilesystem()->url($this->file->path());
+    private function withoutHostname($url): string
+    {
+        return \parse_url($url)['path'];
     }
 }
