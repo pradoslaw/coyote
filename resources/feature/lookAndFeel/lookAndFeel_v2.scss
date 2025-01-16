@@ -89,6 +89,7 @@
   color:  var(--color) !important;
   border: 1px solid var(--color) !important;
 
+  &.neon-follows,
   &:hover {
     @include lookAndFeel(--hover-color, (light:style.$white, dark:style.$neutral-900), black);
 
