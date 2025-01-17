@@ -1,5 +1,7 @@
-@use "./bootstrap" as bootstrap;
+$grid-breakpoints: (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px, xxl: 1400px);
 
 @mixin size($size) {
-  @include bootstrap.media-breakpoint-up($size) {@content}
+  @media (min-width: map-get($grid-breakpoints, $size)) {
+    @content;
+  }
 }

@@ -1,7 +1,5 @@
 @charset "UTF-8";
 
-@import "bootstrap/scss/mixins/breakpoints";
-
 @mixin size($size) {
   @if ($size == 'intermediate') {
     @include media-breakpoint-only(sm) {

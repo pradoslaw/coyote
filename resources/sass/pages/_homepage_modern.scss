@@ -1,7 +1,5 @@
 @charset "UTF-8";
 
-@import "bootstrap/scss/mixins/breakpoints";
-@import "bootstrap/scss/mixins/text-truncate";
 @import "../../feature/theme/theme";
 
 @mixin size($size) {

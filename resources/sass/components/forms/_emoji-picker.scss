@@ -1,5 +1,3 @@
-@import "bootstrap/scss/mixins/breakpoints";
-
 .emoji-picker-container {
   @include media-breakpoint-up(sm) {
     position: absolute;

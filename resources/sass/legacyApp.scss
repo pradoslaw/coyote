@@ -4,7 +4,13 @@
 @import "bootstrap/scss/functions";
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/mixins";
-@import "helpers/bootstrap";
+
+$alert-warning-color: #714907;
+$alert-warning-background: #f7e8cf;
+$alert-warning-border: #f4dfbb;
+$alert-danger-color: #712b29;
+$alert-danger-background: #f7dddc;
+$alert-danger-border: #f4cfce;
 
 @import "core/logos";
 @import "core/links";

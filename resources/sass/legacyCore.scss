@@ -1,6 +1,15 @@
 @import "helpers/variables";
 @import "helpers/mixins";
 @import "bootstrap/scss/bootstrap";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/mixins/buttons";
+$alert-warning-color: #714907;
+$alert-warning-background: #f7e8cf;
+$alert-warning-border: #f4dfbb;
+$alert-danger-color: #712b29;
+$alert-danger-background: #f7dddc;
+$alert-danger-border: #f4cfce;
 @import "helpers/bootstrap";
 @import "icons/icons";
 @import "base/reset";

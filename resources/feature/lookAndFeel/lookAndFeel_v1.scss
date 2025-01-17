@@ -1,7 +1,6 @@
 @use "../theme/theme" as theme;
 @use "./size" as size;
 @use "./style-guide" as style;
-@use "./bootstrap" as bootstrap;
 @use "./feel.scss" as feel;
 
 $post-radius:             8px;
@@ -289,7 +288,7 @@ body {
       border: var(--bs-card-border-width) solid var(--bs-card-border-color);
     }
     .card-body {
-      border-bottom: 1px solid bootstrap.$card-border-color;
+      border-bottom: 1px solid #dddddd;
       &:nth-child(even) {
         @include theme.property(background-color, #fafafa, #252525);
       }
