@@ -110,6 +110,7 @@
   color: var(--category-default-icon-color) !important;
 }
 
+.neon-reputation,
 .neon-microblog {
   @include lookAndFeel(--microblog-background,
           (light: style.$white, dark: style.$neutral-800),

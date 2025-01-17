@@ -12,8 +12,8 @@ readonly class WebDriver
     private string $baseUrl;
 
     public function __construct(
-        private RemoteWebDriver $driver,
-        private string          $screenshotPath,
+        public RemoteWebDriver $driver,
+        private string         $screenshotPath,
     )
     {
         $this->baseUrl = 'http://nginx';
@@ -73,6 +73,19 @@ readonly class WebDriver
         return $this->driver->findElement(WebDriverBy::cssSelector($selector));
     }
 
+    public function findByXPath(string $xPath): RemoteWebElement
+    {
+        return $this->driver->findElement(WebDriverBy::xpath($xPath));
+    }
+
+    public function findByText(string $text, string $htmlTag): RemoteWebElement
+    {
+        if (\str_contains($text, "'")) {
+            throw new \RuntimeException('Quoting link text not supported yet.');
+        }
+        return $this->driver->findElement(WebDriverBy::xpath("//{$htmlTag}[normalize-space()='$text']"));
+    }
+
     public function currentUrl(): string
     {
         return $this->loadedPageUrl() ?? throw new \RuntimeException('The browser has not been navigated yet.');
@@ -117,4 +130,5 @@ readonly class WebDriver
     {
         return \sPrintF('%s/%s.png', \rTrim($this->screenshotPath, '/'), $screenshotFilename);
     }
+
 }

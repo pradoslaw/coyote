@@ -18,10 +18,10 @@
           <div class="card-body">
             <div class="row">
               <div class="col-lg-6">
-                <ul id="forum-tabs" class="nav nav-pills nav-forum">
+                <ul id="forum-tabs" class="nav nav-pills nav-forum neon-tabber">
                   <li class="nav-item">
                     <span
-                        class="nav-link {{ settings.topicMode == 'interesting' ? 'active' }}"
+                        class="nav-link neon-tabber-tab {{ settings.topicMode == 'interesting' ? 'active' }}"
                         title="Zobacz najciekawsze wątki na forum"
                         data-bs-target="#interesting"
                         data-bs-toggle="tab">
@@ -30,7 +30,7 @@
                   </li>
                   <li class="nav-item">
                     <span
-                        class="nav-link {{ settings.topicMode == 'newest' ? 'active' }}"
+                        class="nav-link neon-tabber-tab {{ settings.topicMode == 'newest' ? 'active' }}"
                         title="Lista najnowszych wątków na forum"
                         data-bs-target="#newest"
                         data-bs-toggle="tab">
@@ -179,16 +179,16 @@
 
           <div class="card card-default card-reputation tab-content neon-card neon-reputation">
             <div class="pt-2 px-3">
-              <div id="reputation-tabs" class="nav nav-pills">
-                <span data-bs-toggle="tab" data-bs-target="#week" class="nav-link {{ settings.reputationMode == 'week' ? 'active' }}">
+              <div id="reputation-tabs" class="nav nav-pills neon-tabber">
+                <span data-bs-toggle="tab" data-bs-target="#week" class="nav-link neon-tabber-tab {{ settings.reputationMode == 'week' ? 'active' }}">
                   <span class="long-name">W tym tygodniu</span>
                   <span class="short-name">Tyg.</span>
                 </span>
-                <span data-bs-toggle="tab" data-bs-target="#month" class="nav-link {{ settings.reputationMode == 'month' ? 'active' }}">
+                <span data-bs-toggle="tab" data-bs-target="#month" class="nav-link neon-tabber-tab {{ settings.reputationMode == 'month' ? 'active' }}">
                   <span class="long-name">W tym miesiącu</span>
                   <span class="short-name">Mies.</span>
                 </span>
-                <span data-bs-toggle="tab" data-bs-target="#quarter" class="nav-link {{ settings.reputationMode == 'quarter' ? 'active' }}">
+                <span data-bs-toggle="tab" data-bs-target="#quarter" class="nav-link neon-tabber-tab {{ settings.reputationMode == 'quarter' ? 'active' }}">
                   <span class="long-name">W tym kwartale</span>
                   <span class="short-name">Kwar.</span>
                 </span>

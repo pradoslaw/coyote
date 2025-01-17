@@ -231,12 +231,14 @@ body {
 
 .neon-tabber {
   .neon-tabber-tab {
+    &.active {
+      border-bottom-color: var(--tabber-active-border-color) !important; // overrides .nav-pills .nav-link.active
+    }
     &.neon-tabber-tab-active {
       border-bottom-color: var(--tabber-active-border-color) !important; // overrides .nav-pills .nav-link.active
     }
   }
 }
-
 
 .neon-notification-alert-count {
   background: var(--notification-count-alert-color) !important; // overrides .navbar .badge
