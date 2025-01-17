@@ -117,17 +117,12 @@ body {
   background: var(--default-avatar-background);
 }
 
-.look-and-feel-legacy {
-  .neon-logo {
-    height: 30px;
-  }
+.neon-logo {
+  width:  15px;
+  height: 20px;
 }
 
 .look-and-feel-modern {
-  .neon-logo {
-    width:  15px;
-    height: 20px;
-  }
   .neon-post-user-avatar {
     border:  none;
     padding: 0;

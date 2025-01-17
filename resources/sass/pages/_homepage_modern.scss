@@ -19,12 +19,6 @@
   }
 }
 
-header nav.navbar {
-  .logo {
-    height: 30px;
-  }
-}
-
 @mixin icon {
   i.fa-fw {
     @content;
