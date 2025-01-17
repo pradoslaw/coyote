@@ -38,7 +38,7 @@
         {% endif %}
 
         <form method="get" @submit.prevent="search" autocomplete="off">
-          <div class="card card-default mt-3">
+          <div class="card mt-3">
             <div class="job-search-form card-body">
               <div class="input-item keyword-search" :class="{'extended': selectedTab === 'tech'}">
                 <span class="fa-icon">
@@ -209,7 +209,7 @@
             {{ icon('jobBoardSubscribedOffers') }}
             Ulubione ogłoszenia
           </h4>
-          <div id="js-subscribed" class="card card-default card-media" style="max-height: 400px">
+          <div id="js-subscribed" class="card card-media" style="max-height: 400px">
             <div class="card-body">
               <vue-job-tiny v-for="job in subscriptions" :job="job" :key="job.id"></vue-job-tiny>
             </div>

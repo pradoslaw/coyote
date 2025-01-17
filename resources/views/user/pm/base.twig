@@ -5,7 +5,7 @@
 {% block content %}
   <h2>{{ page_name }}</h2>
 
-  <div id="app-pm" class="card card-default">
+  <div id="app-pm" class="card">
     <div class="card-body">
       <nav class="nav nav-pills card-tabs">
         <a href="{{ route('user.pm') }}" class="nav-link {{ app.make('request').path() != 'User/Pm/Submit' ? 'active' }}">

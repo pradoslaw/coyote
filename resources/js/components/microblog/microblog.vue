@@ -1,6 +1,6 @@
 <template>
   <!-- we use below ID in mounted() method -->
-  <div :id="`entry-${microblog.id}`" class="card card-default microblog neon-card neon-microblog">
+  <div :id="`entry-${microblog.id}`" class="card microblog neon-card neon-microblog">
     <div class="card-body">
       <div v-if="microblog.deleted_at" class="alert alert-danger">
         Ten wpis został usunięty. Możesz go przywrócić jeżeli chcesz.

@@ -6,7 +6,7 @@
 {% block content %}
   <h2>Ostatnia wizyta</h2>
 
-  <div class="card card-default">
+  <div class="card">
     <div class="card-body">
 
       <div>
@@ -43,7 +43,7 @@
 
   <h2>Ustawienia bezpieczeństwa</h2>
 
-  <div id="box-security" class="card card-default">
+  <div id="box-security" class="card">
     <div class="card-body">
       {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.security')}) }}
 

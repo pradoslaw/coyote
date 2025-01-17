@@ -4,7 +4,7 @@
 {% block container %}
   {{ activity.chartLibrarySource }}
 
-  <div class="card card-default">
+  <div class="card">
     <div class="card-header">
       Użytkownik: {{ navigation.mention }}
     </div>
@@ -55,7 +55,7 @@
     </ul>
   </div>
 
-  <div class="card card-default">
+  <div class="card">
     <div class="card-header">
       {{ icon('adminUserStatistics') }}
       Statystyki użytkownika {{ navigation.mention }}
@@ -86,7 +86,7 @@
 
       <div class="d-lg-flex">
         <div class="col-lg-6 px-0">
-          <div class="card card-default">
+          <div class="card">
             <div class="card-header">
               Posty dodawane w kategoriach ({{ activity.postsStatistic.all }})
             </div>
@@ -98,7 +98,7 @@
               {% endif %}
             </div>
           </div>
-          <div class="card card-default">
+          <div class="card">
             <div class="card-header">
               Głosy otrzymane w kategoriach
             </div>
@@ -112,7 +112,7 @@
           </div>
         </div>
         <div class="col-lg-6 px-0 ps-lg-3">
-          <div class="card card-default">
+          <div class="card">
             <div class="card-header">
               Usunięte posty
             </div>
@@ -138,7 +138,7 @@
               </li>
             </ul>
           </div>
-          <div class="card card-default">
+          <div class="card">
             <div class="card-header">
               Powody zgłoszeń na posty użytkownika
             </div>
@@ -157,7 +157,7 @@
     </div>
   </div>
 
-  <div class="card card-default">
+  <div class="card">
     <div class="card-header">
       {{ icon('adminUserSettings') }}
       Ustawienia użytkownika {{ navigation.mention }}

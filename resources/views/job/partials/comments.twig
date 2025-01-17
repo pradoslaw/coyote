@@ -8,7 +8,7 @@
       resource-id="{{ job.id }}"
       resource="Coyote\Job"
   ></vue-comment-form>
-  <div v-if="commentsCount > 0" class="card card-default">
+  <div v-if="commentsCount > 0" class="card">
     <div class="card-body">
       <vue-comment
           v-for="comment in comments"

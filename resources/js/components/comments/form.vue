@@ -1,5 +1,5 @@
 <template>
-  <div class="card card-default">
+  <div class="card">
     <div class="card-body">
       <div class="media">
         <div class="me-2">

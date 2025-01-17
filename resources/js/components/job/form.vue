@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card card-default">
+    <div class="card">
       <div class="card-header">
         Podstawowe informacje
       </div>
@@ -94,7 +94,7 @@
       </div>
     </div>
 
-    <div class="card card-default">
+    <div class="card">
       <div class="card-header">
         Szczegółowe informacje
       </div>

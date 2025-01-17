@@ -68,12 +68,12 @@
       {% endif %}
 
       <div class="tab-content">
-        <div id="offer" class="card card-default tab-pane active">
+        <div id="offer" class="card tab-pane active">
           {% include 'job.partials.offer' %}
         </div>
 
         {% if is_author %}
-          <div id="applications" class="card card-default tab-pane">
+          <div id="applications" class="card tab-pane">
             {% include 'job.partials.applications' %}
           </div>
         {% endif %}
@@ -92,7 +92,7 @@
             Informacje o ofercie
           </h4>
 
-          <div class="card card-default">
+          <div class="card">
             <div class="card-body">
               <ul class="list-unstyled">
                 <li title="Data opublikowania">
@@ -122,7 +122,7 @@
             {{ icon('jobOfferMoreLikeThis') }}
             Podobne oferty
           </h4>
-          <div class="card card-default card-media">
+          <div class="card card-media">
             <div class="card-body">
               {% include 'components.jobs' with {'jobs': mlt} %}
             </div>

@@ -2,7 +2,7 @@
 {% block title %}Uprawnienia w kategorii {{ parent() }}{% endblock %}
 
 {% block container %}
-    <div class="card card-default">
+    <div class="card">
         <div class="card-body">
             {{ form_open({url: route('adm.forum.permissions.save'), method: 'get', class: 'form-inline'}) }}
             <div class="form-group d-flex">
@@ -16,7 +16,7 @@
     </div>
 
     {% if grid is defined %}
-        <div class="card card-default">
+        <div class="card">
             <div class="card-body">
                 {{ grid(grid) }}
 

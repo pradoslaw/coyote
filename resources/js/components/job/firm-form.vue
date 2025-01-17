@@ -1,5 +1,5 @@
 <template>
-  <div class="card card-default">
+  <div class="card">
     <div class="card-header">
       Dane firmy
     </div>

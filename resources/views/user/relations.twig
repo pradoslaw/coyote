@@ -4,7 +4,7 @@
 {% block content %}
   <h2>Zablokowani oraz obserwowani użytkownicy</h2>
 
-  <div v-cloak id="js-followers" class="card card-default">
+  <div v-cloak id="js-followers" class="card">
     <div class="card-body">
       <div class="list-group list-group-flush">
         <div v-for="follower in followers" :key="follower.user_id" class="list-group-item ps-0 pe-0">

@@ -7,7 +7,7 @@
   {{ form_start(form) }}
 
   <h2>Ustawienia główne</h2>
-  <section class="card card-default">
+  <section class="card">
     <div class="card-body">
       {% if emailConfirmation %}
         <div class="alert alert-info">
@@ -21,7 +21,7 @@
   </section>
 
   <h2>Zgody</h2>
-  <section class="card card-default">
+  <section class="card">
     <div class="card-body">
       {{ form_row(form.terms) }}
       {{ form_row(form.marketing_agreement) }}
@@ -36,7 +36,7 @@
   </section>
 
   <h2>Informacje</h2>
-  <section class="card card-default">
+  <section class="card">
     <div class="card-body">
       {{ form_row(form.website) }}
       {{ form_row(form.github) }}
@@ -51,7 +51,7 @@
   </section>
 
   <h2>Forum</h2>
-  <section class="card card-default">
+  <section class="card">
     <div class="card-body">
       {{ form_row(form.allow_subscribe) }}
       {{ form_row(form.group_id) }}
@@ -62,7 +62,7 @@
   </section>
 
   <h2>Widok</h2>
-  <section class="card card-default">
+  <section class="card">
     <div class="card-body">
       {{ form_row(form.date_format) }}
       {{ form_row(form.allow_sticky_header) }}

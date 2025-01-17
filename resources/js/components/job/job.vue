@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'highlight': job.is_highlight}" class="card card-default card-job mb-3">
+  <div :class="{'highlight': job.is_highlight}" class="card card-job mb-3">
     <span v-if="order === 0 && job.is_on_top" class="label top-spot-badge d-none d-sm-block">
       Promowane
     </span>

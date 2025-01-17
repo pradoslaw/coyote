@@ -18,7 +18,7 @@
           Spróbuj innej metody płatności bądź skontaktuj się z administracją serwisu.
         </p>
       </div>
-      <div class="card card-default">
+      <div class="card">
         <div class="card-header">
           {{ icon('paymentSecureConnection') }}
           Płatność poprzez bezpieczne połączenie
@@ -43,7 +43,7 @@
             </li>
           </ul>
 
-          <div v-show="form.payment_method === 'card'" class="card card-default">
+          <div v-show="form.payment_method === 'card'" class="card">
             <div class="card-body">
               <div id="card-form">
                 <div id="card-element">
@@ -73,7 +73,7 @@
       </div>
 
       {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
-      <div v-if="grossPrice > 0" class="card card-default">
+      <div v-if="grossPrice > 0" class="card">
         <div class="card-header">
           {{ icon('paymentInvoiceData') }}
           Dane do faktury
@@ -140,7 +140,7 @@
     </form>
 
     <aside class="col-md-3">
-      <div class="card card-default card-review" v-cloak>
+      <div class="card card-review" v-cloak>
         <div class="card-header">
           Twoja płatność obejmuje
         </div>

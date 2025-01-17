@@ -95,7 +95,7 @@ const VueResultTopic = {
     const createElement = h;
     let items: VNode[] = [];
     this.hits.forEach(hit => items.push(createElement(VueTopic, {topic: hit, postsPerPage: window.postsPerPage, showCategoryName: true})));
-    return createElement('div', {class: 'card card-default card-topics'}, items);
+    return createElement('div', {class: 'card card- card-topics'}, items);
   },
 };
 
