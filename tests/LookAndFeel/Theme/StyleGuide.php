@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Acceptance\Theme;
+namespace Tests\LookAndFeel\Theme;
 
 class StyleGuide
 {

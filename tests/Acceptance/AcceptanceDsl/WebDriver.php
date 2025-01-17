@@ -78,14 +78,6 @@ readonly class WebDriver
         return $this->driver->findElement(WebDriverBy::xpath($xPath));
     }
 
-    public function findByText(string $text, string $htmlTag): RemoteWebElement
-    {
-        if (\str_contains($text, "'")) {
-            throw new \RuntimeException('Quoting link text not supported yet.');
-        }
-        return $this->driver->findElement(WebDriverBy::xpath("//{$htmlTag}[normalize-space()='$text']"));
-    }
-
     public function currentUrl(): string
     {
         return $this->loadedPageUrl() ?? throw new \RuntimeException('The browser has not been navigated yet.');

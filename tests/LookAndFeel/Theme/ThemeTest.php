@@ -1,7 +1,6 @@
 <?php
-namespace Tests\Acceptance\Theme;
+namespace Tests\LookAndFeel\Theme;
 
-use Facebook\WebDriver\Remote\RemoteWebElement;
 use PHPUnit\Framework\Attributes\AfterClass;
 use PHPUnit\Framework\Attributes\BeforeClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -16,7 +15,7 @@ class ThemeTest extends TestCase
     #[BeforeClass]
     public static function initializeTestRunner(): void
     {
-        self::$runner = new TestRunner('/var/www/tests/Acceptance/Theme/');
+        self::$runner = new TestRunner('/var/www/tests/LookAndFeel/Theme/');
         self::$runner->clearScreenshots();
         self::$runner->webDriver->navigate('/');
         self::$runner->webDriver->find('#gdpr-all')->click();
@@ -61,7 +60,7 @@ class ThemeTest extends TestCase
     #[Test]
     public function homepageNewsActiveTabColor(): void
     {
-        $activeBorder = $this->borderColor('Najciekawsze');
+        $activeBorder = $this->borderBottomColor('.neon-homepage-forum-summary .neon-tabber-tab.active');
         $activeBorder->inMode('modern', 'light')->is('green-500');
         $activeBorder->inMode('modern', 'dark')->is('green-500');
         $activeBorder->inMode('legacy', 'light')->is('#d7661c');
@@ -71,7 +70,7 @@ class ThemeTest extends TestCase
     #[Test]
     public function homepageReputationActiveTabColor(): void
     {
-        $activeBorder = $this->borderColor('W tym tygodniu', parent:true);
+        $activeBorder = $this->borderBottomColor('.neon-reputation .neon-tabber-tab.active');
         $activeBorder->inMode('modern', 'light')->is('green-500');
         $activeBorder->inMode('modern', 'dark')->is('green-500');
         $activeBorder->inMode('legacy', 'light')->is('#d7661c');
@@ -104,27 +103,15 @@ class ThemeTest extends TestCase
             fn(WebDriver $driver) => $driver->find($cssSelector));
     }
 
-    private function borderColor(string $text, bool $parent = false): Property
-    {
-        return $this->property('border-bottom-color',
-            $this->find($text, null, null, $parent));
-    }
-
     private function color(string $cssSelector): Property
     {
         return $this->property('color', fn(WebDriver $driver) => $driver->find($cssSelector));
     }
 
-    private function find(?string $text, ?string $htmlTag, ?string $cssClass, ?bool $parent): callable
+    private function borderBottomColor(string $cssSelector): Property
     {
-        return function (WebDriver $driver) use ($text, $htmlTag, $cssClass, $parent): RemoteWebElement {
-            $xPath = '//';
-            $xPath .= $htmlTag ?? '*';
-            $xPath .= $text ? "[normalize-space()='$text']" : '';
-            $xPath .= $cssClass ? "[contains(@class, '$cssClass')]" : '';
-            $xPath .= $parent ? '/parent::*' : '';
-            return $driver->findByXPath($xPath);
-        };
+        return $this->property('border-bottom-color',
+            fn(WebDriver $driver) => $driver->find($cssSelector));
     }
 
     private function property(string $cssProperty, callable $producer): Property

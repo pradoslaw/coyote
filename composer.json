@@ -80,6 +80,7 @@
     "psr-4": {
       "Tests\\": "tests/",
       "Tests\\Acceptance\\": "tests/Acceptance/",
+      "Tests\\LookAndFeel\\": "tests/LookAndFeel/",
       "Tests\\Unit\\": "tests/Unit/",
       "Tests\\Legacy\\Browser\\": "tests/Legacy/Browser/",
       "Tests\\Legacy\\IntegrationOld\\": "tests/Legacy/IntegrationOld/",
