@@ -55,11 +55,13 @@
     color:           inherit;
   }
 
-  .card-img-top {
-    background-size:     cover;
-    background-position: center center;
-    background-repeat:   no-repeat;
-    height:              220px;
+  .microblog-opg-image {
+    background-size:         cover;
+    background-position:     center center;
+    background-repeat:       no-repeat;
+    height:                  220px;
+    border-top-left-radius:  5px;
+    border-top-right-radius: 5px;
   }
 
   .card-body {

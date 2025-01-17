@@ -78,7 +78,7 @@
               <div ref="microblog-text" v-html="microblog.html" class="microblog-text"/>
 
               <a v-if="opg" :href="opg.metadata.url" :title="opg.metadata.title" class="card microblog-opg" target="_blank">
-                <div :alt="opg.metadata.title" class="card-img-top" :style="`background-image: url(${opg.url})`"/>
+                <div class="microblog-opg-image" :style="`background-image: url(${opg.url})`"/>
                 <div class="card-body">
                   <h5 class="text-truncate mb-0">{{ opg.metadata.title }}</h5>
                   <p class="text-truncate">{{ opg.metadata.description }}</p>
@@ -227,7 +227,7 @@ export default {
   },
   data() {
     return {
-      index: null as number | null,
+      index: null as number|null,
       commentDefault: {parent_id: this.microblog.id, text: '', assets: []},
     };
   },

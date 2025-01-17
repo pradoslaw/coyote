@@ -88,8 +88,3 @@
     @include border-radius(0 0 var(--#{$prefix}card-inner-border-radius) var(--#{$prefix}card-inner-border-radius));
   }
 }
-
-.card-img-top {
-  width: 100%; // Required because we use flexbox and this inherently applies align-self: stretch
-  @include border-top-radius(var(--#{$prefix}card-inner-border-radius));
-}
