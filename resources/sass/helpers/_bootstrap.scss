@@ -1,14 +1,16 @@
-@each $name, $color in $theme-colors {
+@import "bootstrap/scss/mixins/buttons";
+
+@each $name, $color in ("primary": $primary, "secondary": $secondary, "danger": $danger) {
   .btn-#{$name} {
     @if $name == 'secondary' {
       @include button-variant($background: $color, $border: #ccc);
     } @else {
       @include button-variant(
-              $background: $color,
-              $border: $color,
-              $color: #fff,
-              $hover-color: #fff,
-              $active-color: #fff,
+              $background:     $color,
+              $border:         $color,
+              $color:          #fff,
+              $hover-color:    #fff,
+              $active-color:   #fff,
               $disabled-color: #fff);
     }
   }
@@ -37,9 +39,9 @@ a {
 }
 
 hr {
-  border: 0;
+  border:     0;
   border-top: 1px solid #0000001a;
-  opacity: 1;
+  opacity:    1;
 }
 
 .navbar-dark .navbar-nav .nav-link {
@@ -65,27 +67,27 @@ hr {
 }
 
 .form-text {
-  display: block;
+  display:    block;
   margin-top: .25rem;
 }
 
 .form-row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-left: -5px;
+  display:      flex;
+  flex-wrap:    wrap;
+  margin-left:  -5px;
   margin-right: -5px
 }
 
 .form-row > .col,
 .form-row > [class*=col-] {
-  padding-left: 5px;
+  padding-left:  5px;
   padding-right: 5px;
 }
 
 .form-inline {
   align-items: center;
-  display: flex;
-  flex-flow: row wrap;
+  display:     flex;
+  flex-flow:   row wrap;
 }
 
 @media(min-width: 576px) {
@@ -95,20 +97,20 @@ hr {
     }
 
     .form-group, label {
-      align-items: center;
-      display: flex;
+      align-items:   center;
+      display:       flex;
       margin-bottom: 0;
     }
 
     .form-group {
-      flex: 0 0 auto;
+      flex:      0 0 auto;
       flex-flow: row wrap;
     }
 
     .form-control {
-      display: inline-block;
+      display:        inline-block;
       vertical-align: middle;
-      width: auto;
+      width:          auto;
     }
 
     .form-control-plaintext {
@@ -120,7 +122,7 @@ hr {
     }
 
     .custom-control {
-      align-items: center;
+      align-items:     center;
       justify-content: center;
     }
 
@@ -135,11 +137,11 @@ hr {
 
   &.dropdown-menu-end {
     right: 0;
-    left: auto;
+    left:  auto;
   }
 
   &.dropdown-menu-start {
-    left: 0;
+    left:  0;
     right: auto;
   }
 
@@ -148,7 +150,7 @@ hr {
 
     &:hover {
       background-color: #e9ecef;
-      color: #16181b;
+      color:            #16181b;
     }
 
     &.active {
@@ -165,35 +167,35 @@ hr {
   }
 
   .media-body {
-    flex-grow: 1;
+    flex-grow:  1;
     flex-basis: 0;
   }
 }
 
 .table, table {
   > :not(caption) > * > * {
-    color: unset;
+    color:            unset;
     background-color: unset;
   }
 }
 
 .nav-tabs .nav-link:focus {
-  color: unset;
+  color:                                 unset;
   --bs-nav-tabs-link-hover-border-color: #404040 #404040 #404040;
 }
 
 .close {
-  color: black;
-  float: right;
-  font-size: 1.275rem;
-  font-weight: 700;
-  line-height: 1;
-  opacity: 0.5;
-  text-shadow: 0 1px 0 #fff;
+  color:            black;
+  float:            right;
+  font-size:        1.275rem;
+  font-weight:      700;
+  line-height:      1;
+  opacity:          0.5;
+  text-shadow:      0 1px 0 #fff;
   background-color: #0000;
-  border: 0;
-  padding: 0;
-  transition: opacity 0.5s;
+  border:           0;
+  padding:          0;
+  transition:       opacity 0.5s;
 
   &:hover {
     opacity: 0.75;

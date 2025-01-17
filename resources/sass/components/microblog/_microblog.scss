@@ -44,11 +44,6 @@
 
 .microblog-text,
 .comment-text {
-  // emoticons are NOT responsive
-  img:not(.img-smile) {
-    @include img-fluid();
-  }
-
   img.img-smile {
     height: 1em;
   }

@@ -101,10 +101,6 @@ article > header {
     font-size: $font-size-sm;
   }
 
-  img:not(.img-smile) {
-    @include img-fluid;
-  }
-
   img.img-smile {
     height: 1em;
   }
@@ -224,13 +220,6 @@ article > header {
 .wiki-categories {
   margin-bottom: 10px;
   vertical-align: middle;
-
-  .btn-warning {
-    padding: 4px;
-    font-weight: bold;
-    box-shadow: 1px 1px $alert-warning-border;
-    margin: 0 5px;
-  }
 }
 
 #blog {

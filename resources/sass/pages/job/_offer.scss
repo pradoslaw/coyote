@@ -96,10 +96,6 @@
       font-size: $font-size-sm;
     }
 
-    img:not(.img-smile) {
-      @include img-fluid;
-    }
-
     img.img-smile {
       height: 1em;
     }

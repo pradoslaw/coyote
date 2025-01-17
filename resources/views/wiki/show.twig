@@ -14,7 +14,7 @@
             {{ icon('wikiCategories') }}
           </span>
           {% for category in categories %}
-            <a class="btn btn-sm btn-warning" title="Strona znajduje się w kategorii: {{ category.title }}" href="{{ url(category.path) }}">
+            <a class="btn btn-sm btn-secondary" title="Strona znajduje się w kategorii: {{ category.title }}" href="{{ url(category.path) }}">
               {{ category.title }}
             </a>
           {% endfor %}

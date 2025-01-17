@@ -16,7 +16,7 @@
 
   .job-options {
     margin-bottom: 0;
-    color: $text-muted;
+    color: #333333bf;
     font-size: 11px;
 
     a {
@@ -64,7 +64,7 @@
 
   .list-group-item {
     display: inline-block;
-    border-radius: $border-radius-lg !important;
+    border-radius: .5rem !important;
     margin-right: 5px;
     background: darken($tag-bg, 2%);
     border: none;
@@ -128,8 +128,8 @@
   margin-top: 5px;
   padding: 0 5px;
   z-index: 1000;
-  border-top-right-radius: $border-radius-sm;
-  border-bottom-right-radius: $border-radius-sm;
+  border-top-right-radius: .25rem;
+  border-bottom-right-radius: .25rem;
 
   &:before {
     content: "";

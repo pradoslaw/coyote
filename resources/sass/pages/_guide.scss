@@ -38,7 +38,6 @@
   }
 
   img:not(.img-smile) {
-    @include img-fluid;
     filter: blur(.5rem);
   }
 

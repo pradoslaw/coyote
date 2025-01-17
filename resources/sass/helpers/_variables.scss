@@ -35,6 +35,8 @@ $font-family-sans-serif: Arial, Verdana, Helvetica, sans-serif !default;
 
 $font-size-base: 0.85rem;
 $font-size-sm: 0.75rem;
+$font-size-lg: $font-size-base * 1.25;
+
 $h1-font-size: $font-size-base * 2;
 $h4-font-size: $font-size-base * 1.4;
 $small-font-size: 92%; // bootstrap 3 backward compatibility

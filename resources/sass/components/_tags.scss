@@ -106,8 +106,8 @@
 
 .tag-editor {
   white-space: nowrap;
-  border-bottom: 1px solid $border-color;
-  padding-bottom: $input-padding-y-sm;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 0.25rem;
   width: 100%;
   position: relative;
   cursor: default;
@@ -131,7 +131,7 @@
 
   .suggest {
     background-color: transparent;
-    border: 1px solid $border-color;
+    border: 1px solid #dee2e6;
     opacity: .7;
 
     &:hover {
