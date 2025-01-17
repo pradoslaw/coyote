@@ -1,14 +1,11 @@
 <?php
-
 namespace Coyote\Providers;
 
-use Coyote\Services\Parser\Factories\WikiFactory;
-use Illuminate\Support\ServiceProvider;
-use Coyote\Services\Parser\Factories\SigFactory;
+use Coyote\Services\Parser\Factories\JobFactory;
 use Coyote\Services\Parser\Factories\PmFactory;
 use Coyote\Services\Parser\Factories\PostFactory;
-use Coyote\Services\Parser\Factories\CommentFactory;
-use Coyote\Services\Parser\Factories\JobFactory;
+use Coyote\Services\Parser\Factories\WikiFactory;
+use Illuminate\Support\ServiceProvider;
 
 class ParserServiceProvider extends ServiceProvider
 {
@@ -29,17 +26,8 @@ class ParserServiceProvider extends ServiceProvider
         //
     }
 
-    /**
-     * Register the application services.
-     *
-     * @return void
-     */
-    public function register()
+    public function register(): void
     {
-        $this->app->singleton('parser.sig', function ($app) {
-            return new SigFactory($app);
-        });
-
         $this->app->singleton('parser.pm', function ($app) {
             return new PmFactory($app);
         });
@@ -68,12 +56,11 @@ class ParserServiceProvider extends ServiceProvider
          * UWAGA! Po dodaniu nowego elementu do tablicy trzeba wykonac php artisan clear-compiled
          */
         return [
-            'parser.sig',
             'parser.pm',
             'parser.post',
             'parser.comment',
             'parser.job',
-            'parser.wiki'
+            'parser.wiki',
         ];
     }
 }

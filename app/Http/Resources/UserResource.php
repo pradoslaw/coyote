@@ -6,6 +6,7 @@ use Coyote\Services\Media\File;
 use Coyote\Services\Parser\Factories\SigFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use function app;
 
 /**
  * @property File $photo
@@ -31,18 +32,16 @@ class UserResource extends JsonResource
                 'initials'   => (new Initials)->of($this->name),
             ],
             $this->isSignatureAllowed($request)
-                ? ['sig' => $this->getParser()->parse($this->sig)]
+                ? ['sig' => $this->parsedSignature($this->sig)]
                 : [],
         );
     }
 
-    private function getParser(): SigFactory
+    private function parsedSignature(string $userSig): string
     {
-        static $instance = null;
-        if ($instance === null) {
-            $instance = app('parser.sig');
-        }
-        return $instance;
+        /** @var SigFactory $signature */
+        $signature = app(SigFactory::class);
+        return $signature->parse($userSig);
     }
 
     private function isSignatureAllowed(Request $request): bool

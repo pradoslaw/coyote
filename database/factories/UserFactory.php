@@ -16,6 +16,7 @@ $factory->define(\Coyote\User::class, function (Faker $faker) {
         'guest_id'        => $faker->uuid,
         'allow_subscribe' => true,
         'visited_at'      => now(),
+        'sig'             => 'Lorem ipsum dolor sit amet.',
     ];
 });
 

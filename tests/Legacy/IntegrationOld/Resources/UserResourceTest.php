@@ -10,7 +10,7 @@ class UserResourceTest extends TestCase
 {
     public function testSimpleUserModelWithoutOptionalFields()
     {
-        $user = factory(User::class)->make();
+        $user = factory(User::class)->make(['sig' => null]);
 
         $this->assertArrayNotHasKey('allow_sig', $user);
         $this->assertArrayNotHasKey('allow_count', $user);
@@ -19,8 +19,8 @@ class UserResourceTest extends TestCase
         $resource = (new UserResource($user))->resolve(request());
 
         $this->assertArrayNotHasKey('allow_sig', $resource);
-        $this->assertArrayNotHasKey('allow_count', $user);
-        $this->assertArrayNotHasKey('sig', $user);
+        $this->assertArrayNotHasKey('allow_count', $resource);
+        $this->assertArrayNotHasKey('sig', $resource);
     }
 
     public function testUserModelWithOptionalFields()
