@@ -172,7 +172,7 @@
           {{ globalViewers|raw }}
         </div>
 
-        <section class="box mt-4">
+        <section class="box my-4">
           <h4>Reputacja użytkowników</h4>
           <div class="card-reputation tab-content neon-card neon-reputation">
             <div class="pt-2 px-3">
@@ -193,7 +193,7 @@
             </div>
 
             {% for tab, users in reputation %}
-              <div id="{{ tab }}" role="tabpanel" class="card-body tab-pane {{ settings.reputationMode == tab ? 'active' }}">
+              <div id="{{ tab }}" role="tabpanel" class="p-3 tab-pane {{ settings.reputationMode == tab ? 'active' }}">
                 {% for user in users %}
                   <div class="media">
                     <div class="me-2">
@@ -226,9 +226,11 @@
                     </div>
                   </div>
                 {% else %}
-                  <small class="d-block text-muted text-center my-4">
-                    Bądź pierwszą osobą która otrzyma punkty reputacji w tym okresie.
-                  </small>
+                  <div class="py-4">
+                    <small class="d-block text-muted text-center py-4">
+                      Bądź pierwszą osobą która otrzyma punkty reputacji w tym okresie.
+                    </small>
+                  </div>
                 {% endfor %}
               </div>
             {% endfor %}
