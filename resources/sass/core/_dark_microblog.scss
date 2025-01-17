@@ -1,70 +1,65 @@
 body.theme-dark {
-  .microblog .card-body {
+  .microblog {
     color: #acacac;
 
-    .media {
-      > .media-body {
+    .media-heading a {
+      color: #789b17;
+    }
 
-        .media-heading a {
+    .microblog-statistic {
+      color: #8f9ba5;
+
+      a {
+        color: inherit;
+      }
+    }
+
+    .microblog-actions {
+      a.btn {
+        color: inherit;
+
+        &:hover {
+          border:           1px solid #2f2f2f;
+          background-image: linear-gradient(to bottom, #2f2f2f 0%, #212121 100%);
+          color:            #acacac;
+        }
+      }
+    }
+
+    .microblog-comments {
+      .show-all-comments a {
+        color: #acacac;
+
+        &:hover {
+          color: #d7661c;
+        }
+      }
+
+      .media {
+        border-color: #2f2f2f;
+
+        a.username, a.username:hover {
           color: #789b17;
         }
 
-        .microblog-statistic {
-          color: #8f9ba5;
+        ul.microblog-comment-list {
+          li {
+            a, a:hover {
+              color: #8f9ba5;
 
-          a {
-            color: inherit;
-          }
-        }
-
-        .microblog-actions {
-          a.btn {
-            color: inherit;
-
-            &:hover {
-              border: 1px solid #2f2f2f;
-              background-image: linear-gradient(to bottom, #2f2f2f 0%, #212121 100%);
-              color: #acacac;
-            }
-          }
-        }
-
-        .microblog-comments {
-          .show-all-comments a {
-            color: #acacac;
-
-            &:hover {
-              color: #d7661c;
-            }
-          }
-
-          .media {
-            border-color: #2f2f2f;
-
-            a.username, a.username:hover {
-              color: #789b17;
-            }
-
-            ul.microblog-comment-list {
-              li {
-                a, a:hover {
-                  color: #8f9ba5;
-
-                  &.vote-active, .vote-active:hover {
-                    color: #789b17;
-                  }
-                }
+              &.vote-active, .vote-active:hover {
+                color: #789b17;
               }
             }
           }
+        }
+      }
 
-          .microblog-input {
-            background-color: #1e1e1e;
+      .microblog-input {
+        background-color: #1e1e1e;
 
-            .btn-comment-submit {
-              color: #acacac;
-            }
-          }
+        .btn-comment-submit {
+          color: #acacac;
         }
       }
     }
@@ -77,8 +72,8 @@ body.theme-dark {
 
     .dropdown-menu {
       background-color: #272727;
-      border-color: #404040;
-      box-shadow: 0 0 10px rgb(0 0 0 / 25%);
+      border-color:     #404040;
+      box-shadow:       0 0 10px rgb(0 0 0 / 25%);
 
       &:before {
         border-bottom-color: #404040;

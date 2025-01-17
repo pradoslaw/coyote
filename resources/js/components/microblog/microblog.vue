@@ -1,18 +1,17 @@
 <template>
   <!-- we use below ID in mounted() method -->
-  <div :id="`entry-${microblog.id}`" class="card microblog neon-card neon-microblog">
-    <div class="card-body">
+  <div :id="`entry-${microblog.id}`" class="microblog neon-card neon-microblog mb-3 p-3" style="border-radius:8px;">
+    <div >
       <div v-if="microblog.deleted_at" class="alert alert-danger">
         Ten wpis został usunięty. Możesz go przywrócić jeżeli chcesz.
       </div>
-
-      <div class="media">
+      <div class="d-flex">
         <div class="d-none d-sm-block me-2">
           <a v-profile="microblog.user.id">
             <vue-avatar v-bind="microblog.user" :is-online="microblog.user.is_online" class="i-45 d-block img-thumbnail"/>
           </a>
         </div>
-        <div class="media-body">
+        <div class="flex-grow-1 ">
           <div class="d-flex flex-nowrap">
             <div class="flex-shrink-0 me-auto">
               <h5 class="media-heading">

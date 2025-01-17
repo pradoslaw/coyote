@@ -13,11 +13,12 @@
 .neon-card,
 .neon-microblog,
 .neon-reputation {
+  border-radius: 8px;
   @include feel.modern {
     border: none;
   }
   @include feel.legacy {
-    // TODO backport border of card back to the microblog
+    @include theme.property(border, 1px solid #dddddd, 1px solid rgb(47, 47, 47));
   }
 }
 
