@@ -10,7 +10,6 @@
 @import "bootstrap/scss/root";
 @import "bootstrap/scss/reboot";
 @import "bootstrap/scss/type";
-@import "bootstrap/scss/images";
 @import "bootstrap/scss/containers";
 @import "bootstrap/scss/grid";
 @import "bootstrap/scss/tables";
@@ -35,12 +34,21 @@
 @import "bootstrap/scss/helpers";
 @import "bootstrap/scss/utilities/api";
 
-$alert-warning-color: #714907;
+.img-thumbnail {
+  padding:          .25rem;
+  background-color: #fafafa;
+  border:           1px solid #dee2e6;;
+  border-radius:    0.375rem;
+  max-width:        100%;
+  height:           auto;
+}
+
+$alert-warning-color:      #714907;
 $alert-warning-background: #f7e8cf;
-$alert-warning-border: #f4dfbb;
-$alert-danger-color: #712b29;
-$alert-danger-background: #f7dddc;
-$alert-danger-border: #f4cfce;
+$alert-warning-border:     #f4dfbb;
+$alert-danger-color:       #712b29;
+$alert-danger-background:  #f7dddc;
+$alert-danger-border:      #f4cfce;
 @import "helpers/bootstrap";
 @import "icons/icons";
 @import "base/reset";
