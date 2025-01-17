@@ -78,6 +78,26 @@ class ThemeTest extends TestCase
         $activeBorder->inMode('legacy', 'dark')->is('#d7661c');
     }
 
+    #[Test]
+    public function microblogContentLink(): void
+    {
+        $microblogContentLink = $this->color('.microblog-text a');
+        $microblogContentLink->inMode('modern', 'light')->is('green-800');
+        $microblogContentLink->inMode('modern', 'dark')->is('green-050');
+        $microblogContentLink->inMode('legacy', 'light')->is('#5e7813');
+        $microblogContentLink->inMode('legacy', 'dark')->is('#789b17');
+    }
+
+    #[Test]
+    public function microblogCommentContentLink(): void
+    {
+        $microblogContentLink = $this->color('.comment-text a');
+        $microblogContentLink->inMode('modern', 'light')->is('green-800');
+        $microblogContentLink->inMode('modern', 'dark')->is('green-050');
+        $microblogContentLink->inMode('legacy', 'light')->is('#5e7813');
+        $microblogContentLink->inMode('legacy', 'dark')->is('#789b17');
+    }
+
     private function background(string $cssSelector): Property
     {
         return $this->property('background-color',
@@ -88,6 +108,11 @@ class ThemeTest extends TestCase
     {
         return $this->property('border-bottom-color',
             $this->find($text, null, null, $parent));
+    }
+
+    private function color(string $cssSelector): Property
+    {
+        return $this->property('color', fn(WebDriver $driver) => $driver->find($cssSelector));
     }
 
     private function find(?string $text, ?string $htmlTag, ?string $cssClass, ?bool $parent): callable

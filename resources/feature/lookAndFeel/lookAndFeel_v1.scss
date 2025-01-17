@@ -199,7 +199,8 @@ body {
     @include theme.dark {
       color:      style.$neutral-900;
       background: style.$green-500;
-      &:hover {background: #00c041; color: style.$neutral-900} // overrides color in _buttons.scss
+      &:hover {background: #00c041; color: style.$neutral-900}
+      // overrides color in _buttons.scss
       &:active {background: #00e34d;}
       &:disabled {background: rgba(style.$green-500, 0.3);}
     }
@@ -214,6 +215,8 @@ body {
   }
 }
 
+.comment-text,
+.microblog-text,
 .neon-post-content {
   a {
     color: var(--post-content-link-color) !important; // overrides a:not(.badge)
