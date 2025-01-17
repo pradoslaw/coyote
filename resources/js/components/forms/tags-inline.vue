@@ -31,7 +31,7 @@
 
     <ul class="tag-clouds">
       <li v-for="tag in tags">
-        <span>
+        <span class="neon-tag">
           {{ tag.name }}
           <a @click="toggleTag(tag)" class="remove">
             <vue-icon name="tagRemove"/>
@@ -58,7 +58,7 @@
 
     <vue-dropdown :items="filteredTags" @select="toggleTag" ref="dropdown" class="tag-dropdown mt-2 w-100">
       <template v-slot:item="slot">
-        <span>{{ slot.item.name }}</span>
+        <span class="neon-tag" v-text="slot.item.name"/>
         <small>×{{ slot.item.topics + slot.item.microblogs + slot.item.jobs }}</small>
       </template>
     </vue-dropdown>

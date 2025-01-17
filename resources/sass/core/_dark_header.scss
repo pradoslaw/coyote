@@ -111,21 +111,6 @@ body.theme-dark {
     }
   }
 
-  .btn-toggle-theme {
-    &.open,
-    &:hover {
-      color: #80a41a;
-    }
-
-    .dropdown-menu {
-      .dropdown-item.active {
-        &:hover {
-          background: none;
-        }
-      }
-    }
-  }
-
   .nav-search {
     .search-bar {
       border: none;

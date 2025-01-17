@@ -15,7 +15,6 @@
 
     .side-menu-item,
     > a {
-      color: $gray-dark;
       display: block;
       opacity: .8;
       @include text-truncate;
@@ -33,11 +32,6 @@
     > a {
       cursor: pointer;
       padding: 6px 0;
-
-      &:hover {
-        color: $primary;
-        text-decoration: none;
-      }
 
       &:focus {
         text-decoration: none;

@@ -2,7 +2,7 @@
   <button
     v-if="shouldShow"
     class="btn btn-follow neon-secondary-button"
-    :class="{follows, 'neon-follows':follows}"
+    :class="{follows}"
     @click="checkAuth(toggleState)"
   >
     <vue-icon name="userFollow"/>

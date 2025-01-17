@@ -22,10 +22,10 @@
       <div v-if="!comment.is_editing" class="w-100">
         <vue-username :user="comment.user"/>
         <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"/>
-        <div class="comment-text" v-html="comment.html"/>
+        <div class="comment-text neon-contains-a-color-link" v-html="comment.html"/>
         <ul class="d-none d-sm-block list-inline list-inline-bullet-sm microblog-comment-list small m-0">
           <li class="list-inline-item">
-            <a :href="comment.url">
+            <a :href="comment.url" class="text-muted cursor-pointer">
               <vue-timeago :datetime="comment.created_at"/>
             </a>
           </li>
@@ -35,19 +35,19 @@
               @mouseenter.once="loadVoters(comment)"
               :aria-label="commentVoters"
               :class="{'vote-active': comment.is_voted}"
-              class="microblog-comment-action"
+              class="text-muted cursor-pointer"
               data-balloon-pos="up"
               data-balloon-break>
               {{ commentLabel }}
             </span>
           </li>
           <li class="list-inline-item">
-            <span @click="checkAuth(reply)" class="microblog-comment-action">
+            <span @click="checkAuth(reply)" class="text-muted cursor-pointer">
               Odpowiedz
             </span>
           </li>
           <li v-if="isAuthorized" class="list-inline-item">
-            <span class="microblog-comment-action" @click="flagComment">
+            <span class="text-muted cursor-pointer" @click="flagComment">
               Zgłoś
             </span>
           </li>

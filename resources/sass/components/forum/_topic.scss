@@ -2,8 +2,6 @@
 @import "../../icons/icons";
 
 .card-topics {
-  margin-bottom: 25px;
-
   .topic-icon {
     position:        relative;
     align-items:     center;
@@ -49,7 +47,7 @@
     margin-right: .25rem;
   }
 
-  .card-body {
+  .topic-list-item {
     &.tagged {
       background-color: $unread-bg;
     }
@@ -66,19 +64,10 @@
     }
   }
 
-  // desktop
   @include media-breakpoint-up(sm) {
     .topic-row {
       display:   flex;
       flex-wrap: nowrap;
-    }
-
-    .card-body {
-      padding: .5rem 1rem;
-
-      > .row {
-        align-items: center;
-      }
     }
   }
 
@@ -97,18 +86,6 @@
       margin-left:   auto;
       margin-top:    -4px; // same height on every row whether tag exists
       margin-bottom: 0; // remove margin bottom on large screen
-    }
-  }
-
-  i.fa-bell {
-    font-size: .75rem;
-
-    &.on {
-      color: lighten($alt-link-hover-color, 5%);
-    }
-
-    &:not(.on) {
-      opacity: .7;
     }
   }
 }
@@ -151,14 +128,12 @@ a.not-read {
   }
 }
 
-.topic-username {
-  color: #333;
-}
+@include media-breakpoint-up(sm) {
+  .topic-list-item {
+    padding: .5rem 1rem;
 
-.topic-statistic {
-  color: #6c757d;
-
-  .topic-has-reply {
-    color: #80a41a;
+    > .row {
+      align-items: center;
+    }
   }
 }

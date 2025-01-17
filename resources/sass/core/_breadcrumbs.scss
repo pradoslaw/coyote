@@ -1,4 +1,18 @@
+@use "../../feature/lookAndFeel/feel" as feel;
+@use "../../feature/lookAndFeel/style-guide" as style;
 @import "../helpers/variables";
+
+@include feel.modern {
+  .breadcrumb {
+    --bs-breadcrumb-divider-color: #{style.$green-500};
+  }
+}
+
+@include feel.legacy {
+  .breadcrumb {
+    --bs-breadcrumb-divider-color: #80a41a;
+  }
+}
 
 ul.breadcrumb {
   font-size: 0.95em;
@@ -33,20 +47,20 @@ ul.breadcrumb {
 }
 
 #breadcrumb-fixed {
-  position: fixed;
-  opacity: 0.9;
-  box-shadow: 0 2px 4px rgba(220, 218, 216, 0.75);
-  background: $gray-lighter;
-  border-bottom: 1px solid $card-border-color;
-  border-left: 1px solid $card-border-color;
-  border-right: 1px solid $card-border-color;
-  padding: 5px 8px;
-  top: 48px;
-  bottom: 0;
-  z-index: 999;
+  position:                   fixed;
+  opacity:                    0.9;
+  box-shadow:                 0 2px 4px rgba(220, 218, 216, 0.75);
+  background:                 $gray-lighter;
+  border-bottom:              1px solid $card-border-color;
+  border-left:                1px solid $card-border-color;
+  border-right:               1px solid $card-border-color;
+  padding:                    5px 8px;
+  top:                        48px;
+  bottom:                     0;
+  z-index:                    999;
   border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
-  height: 30px;
+  border-bottom-left-radius:  5px;
+  height:                     30px;
 
   ul {
     margin: 0 !important;

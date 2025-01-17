@@ -60,17 +60,7 @@ class ThemeTest extends TestCase
     #[Test]
     public function homepageNewsActiveTabColor(): void
     {
-        $activeBorder = $this->borderBottomColor('.neon-homepage-forum-summary .neon-tabber-tab.active');
-        $activeBorder->inMode('modern', 'light')->is('green-500');
-        $activeBorder->inMode('modern', 'dark')->is('green-500');
-        $activeBorder->inMode('legacy', 'light')->is('#d7661c');
-        $activeBorder->inMode('legacy', 'dark')->is('#d7661c');
-    }
-
-    #[Test]
-    public function homepageReputationActiveTabColor(): void
-    {
-        $activeBorder = $this->borderBottomColor('.neon-reputation .neon-tabber-tab.active');
+        $activeBorder = $this->borderBottomColor('.neon-tabber-tab.active');
         $activeBorder->inMode('modern', 'light')->is('green-500');
         $activeBorder->inMode('modern', 'dark')->is('green-500');
         $activeBorder->inMode('legacy', 'light')->is('#d7661c');
@@ -84,17 +74,7 @@ class ThemeTest extends TestCase
         $microblogContentLink->inMode('modern', 'light')->is('green-800');
         $microblogContentLink->inMode('modern', 'dark')->is('green-050');
         $microblogContentLink->inMode('legacy', 'light')->is('#5e7813');
-        $microblogContentLink->inMode('legacy', 'dark')->is('#789b17');
-    }
-
-    #[Test]
-    public function microblogCommentContentLink(): void
-    {
-        $microblogContentLink = $this->color('.comment-text a');
-        $microblogContentLink->inMode('modern', 'light')->is('green-800');
-        $microblogContentLink->inMode('modern', 'dark')->is('green-050');
-        $microblogContentLink->inMode('legacy', 'light')->is('#5e7813');
-        $microblogContentLink->inMode('legacy', 'dark')->is('#789b17');
+        $microblogContentLink->inMode('legacy', 'dark')->is('#637f14');
     }
 
     private function background(string $cssSelector): Property

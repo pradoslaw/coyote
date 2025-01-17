@@ -1,6 +1,6 @@
 <template>
   <div v-click-away="blurInput" :class="{'nav-search-mobile': isMobile}" class="nav-search">
-    <div :class="{'active': isActive}" class="search-bar ms-md-4 me-md-4 neon-navbar-search-bar">
+    <div :class="{'active': isActive}" class="search-bar ms-md-4 me-md-4 neon-tile neon-tile--dimmed">
       <span class="ms-2 me-2">
         <vue-icon name="autocompleteSearch"/>
       </span>
@@ -60,11 +60,10 @@
         </ul>
       </div>
     </div>
-
     <div v-if="!isMobile" class="d-md-none navbar-nav ms-auto me-2">
-      <a @click="toggleMobile" href="javascript:" class="nav-link">
+      <span @click="toggleMobile">
         <vue-icon name="navigationSearch"/>
-      </a>
+      </span>
     </div>
   </div>
 </template>
@@ -248,7 +247,7 @@ export default {
   },
   computed: {
     ...mapGetters('user', ['isAuthorized']),
-    endpoint(): string | null {
+    endpoint(): string|null {
       return this.innerValue.trim() === '' ? (this.isAuthorized ? '/completion/hub/' : null) : '/completion/';
     },
     categories() {

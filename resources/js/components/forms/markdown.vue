@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'is-invalid': isInvalid}" class="editor">
+  <div :class="{'is-invalid': isInvalid}" class="neon-tile editor">
     <vue-tabs @change="switchTab" :items="tabs" :current-tab="tabs.indexOf(currentTab)" type="pills" class="mb-2">
       <div v-if="isContent" class="btn-toolbar ms-auto">
         <div class="btn-group d-inline me-2 ms-2 mt-1" role="group">
@@ -18,8 +18,7 @@
 
     <div style="position:relative">
       <div v-show="isContent">
-        <div :class="['form-control', {'is-invalid': error !== null}]"
-             style="height:inherit; outline:none; box-shadow:none; border:none; padding-left:0; padding-right:0;">
+        <div :class="{'is-invalid': error !== null}" style="height:inherit; outline:none; box-shadow:none; border:none; padding-left:0; padding-right:0;">
           <vue-editor
             ref="editor"
             v-model="valueLocal"
@@ -504,7 +503,7 @@ export default {
 
 function avatarIcon() {
   const icon = document.createElement('i');
-  icon.className = iconClass(window['icons'],'autocompleteUserNoAvatar', {});
+  icon.className = iconClass(window['icons'], 'autocompleteUserNoAvatar', {});
   const container = document.createElement('span');
   container.style.display = 'inline-block';
   container.className = "i-16 me-2 text-center";

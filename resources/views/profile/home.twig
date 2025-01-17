@@ -17,113 +17,111 @@
         </div>
       {% endif %}
 
-      <div id="js-profile" class="card">
-        <div class="card-body">
-          <div class="media">
-            <div class="me-3">
-              <div class="img-thumbnail" style="min-width:128px;">
-                {{ user_avatar(user.photo, user.name) }}
-              </div>
+      <div id="js-profile" class="neon-tile neon-rounded p-3 mt-1 mb-3">
+        <div class="d-flex">
+          <div class="me-3">
+            <div class="neon-avatar-border" style="width:144px;height:144px;">
+              {{ user_avatar(user.photo, user.name) }}
+            </div>
+            <div>
+              {% if user.id != user('id') %}
+                <a class="btn btn-secondary mt-2 w-100" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
+                  {{ icon('profileUserSendMessage') }}
+                  <span class="ms-1">Wiadomość</span>
+                </a>
+              {% endif %}
+            </div>
+            <div v-cloak v-if="isAuthorized">
+              <vue-follow-button :user-id="{{ user.id }}" class="mt-2 w-100"></vue-follow-button>
+            </div>
+          </div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between">
+              <h1 class="m-0">{{ user.name }}</h1>
               <div>
-                {% if user.id != user('id') %}
-                  <a class="btn btn-secondary mt-2 w-100" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
-                    {{ icon('profileUserSendMessage') }}
-                    <span class="ms-1">Wiadomość</span>
+                <button class="btn btn-secondary d-block" data-bs-toggle="dropdown">
+                  {{ icon('profileMenuDropdown') }}
+                </button>
+                <div class="dropdown-menu">
+                  <a v-if="isBlocked(user.id)" @click="unblock(user.id)" href="javascript:" class="dropdown-item" rel="nofollow">
+                    {{ icon('profileUserUnblock') }}
+                    Odblokuj użytkownika
                   </a>
-                {% endif %}
-              </div>
-              <div v-cloak v-if="isAuthorized">
-                <vue-follow-button :user-id="{{ user.id }}" class="mt-2 w-100"></vue-follow-button>
+                  <a v-else @click="block" href="javascript:" class="dropdown-item" rel="nofollow">
+                    {{ icon('profileUserBlock') }}
+                    Zablokuj użytkownika
+                  </a>
+                </div>
               </div>
             </div>
-            <div class="media-body">
-              <div class="d-flex justify-content-between">
-                <h1 class="m-0">{{ user.name }}</h1>
-                <div>
-                  <button class="btn btn-secondary d-block" data-bs-toggle="dropdown">
-                    {{ icon('profileMenuDropdown') }}
-                  </button>
-                  <div class="dropdown-menu">
-                    <a v-if="isBlocked(user.id)" @click="unblock(user.id)" href="javascript:" class="dropdown-item" rel="nofollow">
-                      {{ icon('profileUserUnblock') }}
-                      Odblokuj użytkownika
-                    </a>
-                    <a v-else @click="block" href="javascript:" class="dropdown-item" rel="nofollow">
-                      {{ icon('profileUserBlock') }}
-                      Zablokuj użytkownika
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <ol class="list-inline mb-0">
-                {% if user.position %}
-                  <li class="list-inline-item">
-                    <h5 class="mb-0">
-                      {{ user.position }}
+            <ol class="list-inline mb-0">
+              {% if user.position %}
+                <li class="list-inline-item">
+                  <h5 class="mb-0">
+                    {{ user.position }}
 
-                      {% if user.firm %}
-                        <small class="text-muted">@ {{ user.firm }}</small>
-                      {% endif %}
-                    </h5>
-                  </li>
-                {% endif %}
-
-                {% if user.location %}
-                  <li class="list-inline-item">
-                    {{ icon('profileUserResidence') }}
-                    {{ user.location }}
-                  </li>
-                {% endif %}
-              </ol>
-
-              <ol class="metadata list-inline">
-                {% if user.website %}
-                  <li class="list-inline-item" title="Strona WWW">
-                    {{ icon('profileUserWebsite') }}
-                    <a href="{{ user.website }}">{{ user.website }}</a>
-                  </li>
-                {% endif %}
-                {% if user.github %}
-                  <li class="list-inline-item" title="Link do konta Github">
-                    {{ icon('profileUserGithub') }}
-                    <a href="{{ user.github }}">{{ github(user.github) }}</a>
-                  </li>
-                {% endif %}
-                {% if user.visited_at %}
-                  <li class="list-inline-item" title="Ostatnia wizyta">
-                    {{ icon('profileUserLastVisitDate') }}
-                    {{ user.visited_at|format_date }}
-                  </li>
-                {% endif %}
-                <li class="list-inline-item" title="Data rejestracji">
-                  {{ icon('profileUserRegisterDate') }}
-                  {{ user.created_at|format_date }}
+                    {% if user.firm %}
+                      <small class="text-muted">@ {{ user.firm }}</small>
+                    {% endif %}
+                  </h5>
                 </li>
-                <li class="list-inline-item" title="Liczba wizyt">
-                  {{ icon('profileUserVisits') }}
-                  {{ user.visits|number_format(0, ',', ' ') }} wizyt
-                </li>
-
-                {% if user.birthyear %}
-                  <li class="list-inline-item" title="Wiek">
-                    {{ icon('profileUserAge') }}
-                    {{ "now"|date("Y") - user.birthyear }} lat
-                  </li>
-                {% endif %}
-              </ol>
-
-              {% if user.bio %}
-                <div class="statement">
-                  {{ icon('userAboutMe') }}
-                  {{ user.bio }}
-                </div>
               {% endif %}
 
-              <div v-cloak class="row">
-                <div v-for="(skills, name) in groupedSkills" class="col-sm mb-2 mb-sm-0 profile-user-skill">
-                  <strong class="d-block text-muted mb-3">${ name }</strong>
-                  <vue-tags :tags="skills" class="tag-clouds-md"></vue-tags>
-                </div>
+              {% if user.location %}
+                <li class="list-inline-item">
+                  {{ icon('profileUserResidence') }}
+                  {{ user.location }}
+                </li>
+              {% endif %}
+            </ol>
+
+            <ol class="metadata list-inline">
+              {% if user.website %}
+                <li class="list-inline-item" title="Strona WWW">
+                  {{ icon('profileUserWebsite') }}
+                  <a href="{{ user.website }}">{{ user.website }}</a>
+                </li>
+              {% endif %}
+              {% if user.github %}
+                <li class="list-inline-item" title="Link do konta Github">
+                  {{ icon('profileUserGithub') }}
+                  <a href="{{ user.github }}">{{ github(user.github) }}</a>
+                </li>
+              {% endif %}
+              {% if user.visited_at %}
+                <li class="list-inline-item" title="Ostatnia wizyta">
+                  {{ icon('profileUserLastVisitDate') }}
+                  {{ user.visited_at|format_date }}
+                </li>
+              {% endif %}
+              <li class="list-inline-item" title="Data rejestracji">
+                {{ icon('profileUserRegisterDate') }}
+                {{ user.created_at|format_date }}
+              </li>
+              <li class="list-inline-item" title="Liczba wizyt">
+                {{ icon('profileUserVisits') }}
+                {{ user.visits|number_format(0, ',', ' ') }} wizyt
+              </li>
+
+              {% if user.birthyear %}
+                <li class="list-inline-item" title="Wiek">
+                  {{ icon('profileUserAge') }}
+                  {{ "now"|date("Y") - user.birthyear }} lat
+                </li>
+              {% endif %}
+            </ol>
+
+            {% if user.bio %}
+              <div class="statement">
+                {{ icon('userAboutMe') }}
+                {{ user.bio }}
+              </div>
+            {% endif %}
+
+            <div v-cloak class="row">
+              <div v-for="(skills, name) in groupedSkills" class="col-sm mb-2 mb-sm-0 profile-user-skill">
+                <strong class="d-block text-muted mb-3">${ name }</strong>
+                <vue-tags :tags="skills" class="tag-clouds-md"></vue-tags>
               </div>
             </div>
           </div>
@@ -145,7 +143,7 @@
 
       <div id="js-microblog" class="row mt-3">
         {% if user.id == user('id') %}
-          <div class="media mb-3">
+          <div class="d-flex mb-3">
             <div class="me-3 d-none d-sm-block">
               <a href="{{ route('profile', [user('id')]) }}">
                 <div class="img-thumbnail" style="width: 50px; height: 50px;">
@@ -153,7 +151,7 @@
                 </div>
               </a>
             </div>
-            <div class="media-body" style="min-width:0;">
+            <div class="flex-grow-1" style="min-width:0;">
               <vue-form @save="scrollToMicroblog" :popular-tags="popularTags" :microblog="microblogDefault"></vue-form>
             </div>
           </div>
@@ -167,37 +165,33 @@
           {{ icon('profileActions') }}
           Poznaj
         </h4>
-
-        <ul class="side-menu">
+        <ul class="list-style-none text-muted">
           {% if user.id != user('id') %}
-            <li class="action-link">
+            <li class="mb-2 pt-1 cursor-pointer">
               <a href="{{ route('user.pm.submit', {to: user.name}) }}">
-                {{ icon('profileUserSendMessage') }}
+                <span class="me-1">{{ icon('profileUserSendMessage') }}</span>
                 Wyślij wiadomość
               </a>
             </li>
           {% endif %}
-
-          <li class="action-link">
+          <li class="mb-2 pt-1 cursor-pointer">
             <a href="{{ route('forum.user', [user.id]) }}">
-              {{ icon('profileUserFindPosts') }}
+              <span class="me-1">{{ icon('profileUserFindPosts') }}</span>
               Znajdź posty użytkownika
             </a>
           </li>
-
           {% if can('adm-access') %}
             {% if not user.is_blocked and user.id != user('id') %}
-              <li class="action-link">
+              <li class="mb-2 pt-1 cursor-pointer">
                 <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}">
-                  {{ icon('profileUserBan') }}
+                  <span class="me-1">{{ icon('profileUserBan') }}</span>
                   Zbanuj tego użytkownika
                 </a>
               </li>
             {% endif %}
-
-            <li class="action-link">
+            <li class="mb-2 pt-1 cursor-pointer">
               <a href="{{ route('adm.users.show', [user.id]) }}">
-                {{ icon('profileUserShowInAdmin') }}
+                <span class="me-1">{{ icon('profileUserShowInAdmin') }}</span>
                 Pokaż w panelu administracyjnym
               </a>
             </li>

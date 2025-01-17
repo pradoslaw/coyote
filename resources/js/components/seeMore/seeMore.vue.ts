@@ -14,10 +14,10 @@ export default {
         <slot/>
       </div>
       <div class="see-more__unwrap" v-if="wrapped">
-        <a href="javascript:" @click="unwrap">
+        <span @click="unwrap" class="neon-color-link">
           <vue-icon name="microblogFoldedUnfold"/>
           Zobacz całość
-        </a>
+        </span>
       </div>
     </div>
   `,

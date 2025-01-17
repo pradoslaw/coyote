@@ -3,16 +3,4 @@
   border-radius: 32px;
   bottom: 32px;
   right: 32px;
-  
-  body.theme-light & {
-    background: #f3f7e6;
-    border: 8px solid white;
-    box-shadow: 0 8px 24px rgb(0, 0, 0, 0.125);
-  }
-
-  body.theme-dark & {
-    background: #141414;
-    border: 8px solid black;
-    box-shadow: 0 8px 12px rgb(0, 0, 0, 0.75);
-  }
 }

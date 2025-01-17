@@ -33,7 +33,7 @@
     <div id="js-skeleton">
       {% for post in posts.data %}
         <div class="card card-post neon-post">
-          <div class="card-header d-none d-lg-block neon-post-header">
+          <div class="d-none d-lg-block px-2 py-1 backport-post-header">
             <div class="row">
               <div class="col-2">
                 <div style="height: 20px"></div>
@@ -75,7 +75,7 @@
             </div>
           </div>
 
-          <div class="card-footer neon-post-footer">
+          <div class="px-2 py-1 backport-post-footer">
             <div class="row">
               <div class="d-none d-lg-block col-lg-2"></div>
 
@@ -262,20 +262,20 @@
         <ul class="list-style-none text-muted mt-2">
           <li class="mb-2 pt-1 cursor-pointer" :class="{'on': topic.is_subscribed}" v-if="isAuthorized" @click="subscribe(topic)">
             <span class="me-1">
-              <vue-icon v-if="topic.is_subscribed" name="topicSubscribed" class="neon-subscribe neon-subscribe-active"></vue-icon>
+              <vue-icon v-if="topic.is_subscribed" name="topicSubscribed" class="neon-subscribe neon-subscribe--active"></vue-icon>
               <vue-icon v-else name="topicSubscribe" class="neon-subscribe"></vue-icon>
             </span>
             ${ topic.is_subscribed ? 'Zakończ obserwację' :  'Obserwuj wątek' }
           </li>
           <li class="mb-2 pt-1 cursor-pointer">
-            <a href="{{ threadStartUrl }}" rel="nofollow" class="neon-no-color">
+            <a href="{{ threadStartUrl }}" rel="nofollow">
               <span class="me-1">{{ icon('topicGoToBeginning') }}</span>
               Przejdź na początek wątku
             </a>
           </li>
           {% if can('update', forum) %}
             <li class="mb-2 pt-1 cursor-pointer">
-              <a href="{{ route('forum.stream', [model.id]) }}" title="Zobacz dziennik zdarzeń" rel="nofollow" class="neon-no-color">
+              <a href="{{ route('forum.stream', [model.id]) }}" title="Zobacz dziennik zdarzeń" rel="nofollow">
                 <span class="me-1">{{ icon('topicLog') }}</span>
                 Dziennik zdarzeń
               </a>

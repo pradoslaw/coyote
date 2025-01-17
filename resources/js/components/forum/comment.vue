@@ -38,7 +38,7 @@
               <vue-icon name="postCommentReport"/>
             </a>
           </div>
-          <span v-html="comment.html" class="comment-text"/>
+          <span v-html="comment.html" class="comment-text neon-contains-a-color-link"/>
         </div>
       </div>
     </template>

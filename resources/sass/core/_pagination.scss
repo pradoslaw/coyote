@@ -1,17 +1,30 @@
+@use "../../feature/theme/theme" as theme;
+@use 'sass:color';
+
+.pagination { // bootstrap
+  --bs-pagination-color:          inherit;
+  --bs-pagination-hover-color:    inherit;
+  @include theme.var(--bs-pagination-bg, (light:#ddd, dark:#161616));
+  @include theme.var(--bs-pagination-hover-bg, (light: #{color.scale(#ddd, $lightness: 30%)}, dark: #{color.scale(#161616, $lightness: 10%)}));
+  @include theme.var(--bs-pagination-active-bg, (light:#333, dark:black));
+  @include theme.var(--bs-pagination-disabled-bg, (light:#eee, dark:#1e1e1e));
+  @include theme.var(--bs-pagination-disabled-color, (light:#333, dark:#888));
+}
+
 .page-link,
 .page-item.disabled > .page-link {
   border-radius: 5px;
-  margin: 0 2px;
+  margin:        0 2px;
 }
 
 .page-item.active > .page-link {
   font-weight: bold;
 }
 
-@include media-breakpoint-down(md)  {
+@include media-breakpoint-down(md) {
   .pagination-sm .page-link {
     font-size: $font-size-sm;
-    padding: $pagination-padding-y-sm - .1rem $pagination-padding-x-sm - .1rem;
+    padding:   $pagination-padding-y-sm - .1rem $pagination-padding-x-sm - .1rem;
   }
 
   .pagination {

@@ -47,7 +47,7 @@
             <ul class="tag-clouds">
               {% for tag in tags.others %}
                 <li class="mb-1 me-1">
-                  <a href="{{ route('microblog.tag', [tag.name]) }}">
+                  <a href="{{ route('microblog.tag', [tag.name]) }}" class="neon-tag">
                     {{ tag.name }}
                   </a>
                   <small>&times; {{ tag.count }}</small>

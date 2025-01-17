@@ -71,7 +71,7 @@
     {{ form_open({url: route('logout'), name: 'logout-form'}) }}
     {{ form_close() }}
 
-    <nav class="navbar navbar-expand-lg {{ __dark_theme ? 'navbar-dark' : 'navbar-light' }}">
+    <nav class="navbar navbar-expand-lg {{ __dark_theme ? 'navbar-dark' : 'navbar-light' }} neon-divider-b">
       <div class="container-3xl d-flex flex-wrap">
         <a rel="home" class="navbar-brand order-0" href="{{ route('home') }}" title="4programmers.net - Strona główna">
           <img
@@ -89,7 +89,7 @@
           <ul class="navbar-nav">
             {% for item in __master_menu.roots() %}
               <li class="{{ item.attr.class }}">
-                <a href="{{ item.url }}" class="nav-link neon-navbar-link">
+                <a href="{{ item.url }}" class="nav-link">
                   {{ item.title|raw }}
                 </a>
 
@@ -107,7 +107,7 @@
               </li>
             {% endfor %}
             <li class="nav-item">
-              <a href="https://wydarzenia.4programmers.net/" class="nav-link neon-navbar-link">
+              <a href="https://wydarzenia.4programmers.net/" class="nav-link">
                 Wydarzenia
               </a>
             </li>
@@ -148,9 +148,11 @@
                         opacity: 0.5;
                         cursor: pointer;
                     }
+
                     .option:hover {
                         text-decoration: underline;
                     }
+
                     .option-active {
                         font-weight: bold;
                     }
@@ -190,18 +192,16 @@
                   Panel administracyjny
                 </a>
               {% endif %}
-
               <div class="dropdown-divider"></div>
-
-              <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out" rel="nofollow">
+              <span onclick="document['logout-form'].submit()" class="dropdown-item">
                 {{ icon('logout') }}
                 Wyloguj
-              </a>
+              </span>
             </div>
           </div>
         {% else %}
           <div class="form-inline order-2 ms-auto">
-            <a class="btn btn-sm btn-login me-1 neon-navbar-link" href="{{ route('login') }}" style="border:none;">
+            <a class="me-1 neon-small me-3 ms-3" href="{{ route('login') }}">
               Zaloguj się
             </a>
             <a class="btn btn-sm btn-primary btn-register" href="{{ route('register') }}">
@@ -209,7 +209,6 @@
             </a>
           </div>
         {% endif %}
-
         <button class="navbar-toggler shadow-none order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-menu">
           <div class="button-open">
             {{ icon('mobileMenuOpen') }}

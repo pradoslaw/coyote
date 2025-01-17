@@ -14,7 +14,7 @@
         <h2 class="h4">
           Co nowego na forum?
         </h2>
-        <div class="card card-forum neon-homepage-forum-summary p-3">
+        <div class="neon-tile neon-tile--muted neon-rounded mb-3 p-3">
           <div class="row">
             <div class="col-lg-6">
               <ul id="forum-tabs" class="nav nav-pills nav-forum neon-tabber">
@@ -42,7 +42,7 @@
                 <div class="tab-content">
                   <div role="tabpanel" class="tab-pane {{ settings.topicMode == 'interesting' ? 'active' }}" id="interesting">
                     {% for topic in interesting %}
-                      <div class="row">
+                      <div class="row neon-divider-b">
                         <span class="display-count col-sm-2 col-lg-3 col-xl-2 d-none d-sm-block p-0">
                           <strong class="text-nowrap">{{ topic.views }}</strong>
                           <small class="text-nowrap">
@@ -56,7 +56,7 @@
                              class="title">
                             {{ topic.title }}
                           </a>
-                          <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category neon-link">
+                          <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category neon-color-link">
                             {{ topic.forum }}
                           </a>
                           <small class="topic-created float-end">
@@ -83,7 +83,7 @@
                              class="title">
                             {{ topic.title }}
                           </a>
-                          <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category neon-link">
+                          <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category neon-color-link">
                             {{ topic.forum }}
                           </a>
                           <small class="float-end topic-created">
@@ -96,7 +96,6 @@
                 </div>
               </div>
             </div>
-
             <div id="stream-wrapper" class="col-lg-6">
               <ul class="nav nav-pills nav-forum">
                 <li class="nav-item">
@@ -106,10 +105,10 @@
                 </li>
               </ul>
               <div id="stream">
-                <div class="recent-activity">
+                <div class="recent-activity neon-divider-l">
                   {% for activity in activities %}
                     <div class="media">
-                      <div class="homepage-activity {{ activity.object }} d-none d-sm-block" title="{{ activity.headline|striptags|unescape }}">
+                      <div class="neon-tile__timeline-icon homepage-activity {{ activity.object }} d-none d-sm-block" title="{{ activity.headline|striptags|unescape }}">
                         <div class="d-block activity-icon">
                           {% if activity.object == 'microblog' %}
                             {{ icon('homepageActivityMicroblog') }}
@@ -130,9 +129,9 @@
                         </a>
                       </div>
                       <div class="media-body">
-                        <p class="neon-recent-activity-headline">{{ activity.headline|raw }}</p>
+                        <p class="neon-contains-a-color-link">{{ activity.headline|raw }}</p>
                         <small>{{ activity.created_at|format_date }}</small>
-                        <strong>{{ activity.excerpt }}</strong>
+                        <strong class="neon-divider-l">{{ activity.excerpt }}</strong>
                       </div>
                     </div>
                   {% endfor %}
@@ -154,11 +153,9 @@
       </section>
 
       <ul class="mt-3 mb-3 d-flex justify-content-center pagination">
-        <li class="page-item">
-          <a class="page-link" href="{{ route('microblog.home') }}">
-            Pokaż więcej
-          </a>
-        </li>
+        <a class="page-link" href="{{ route('microblog.home') }}">
+          Pokaż więcej
+        </a>
       </ul>
     </main>
 
@@ -172,7 +169,7 @@
 
         <section class="box my-4">
           <h4>Reputacja użytkowników</h4>
-          <div class="card-reputation tab-content neon-card neon-reputation">
+          <div class="tab-content neon-tile neon-rounded variable-names card-reputation">
             <div class="pt-2 px-3">
               <div id="reputation-tabs" class="nav nav-pills neon-tabber">
                 <span data-bs-toggle="tab" data-bs-target="#week" class="nav-link neon-tabber-tab {{ settings.reputationMode == 'week' ? 'active' }}">
@@ -203,7 +200,7 @@
                     </div>
                     <div class="flex-grow-1">
                       <span class="mb-1 d-block">
-                        <a data-user-id="{{ user.id }}" href="{{ route('profile', [user.id]) }}" class="reputation-username">
+                        <a data-user-id="{{ user.id }}" href="{{ route('profile', [user.id]) }}">
                           {{ user.name }}
                         </a>
                       </span>

@@ -55,7 +55,9 @@
       <div class="form-group">
         {{ form_row(form.password) }}
         <div class="text-end" style="margin-top:-10px;">
-          <a href="{{ url('Password') }}">Zapomniałeś hasła?</a>
+          <a href="{{ url('Password') }}" class="neon-color-link">
+            Zapomniałeś hasła?
+          </a>
         </div>
       </div>
       <div class="text-center" style="margin-top:-10px;">
@@ -65,7 +67,7 @@
 
       <div class="text-center mt-4 mb-4">
         Nie masz konta?
-        <a href="{{ route('register') }}">
+        <a href="{{ route('register') }}" class="neon-color-link">
           Zarejestruj się
         </a>
       </div>

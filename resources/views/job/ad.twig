@@ -1,13 +1,13 @@
 <section class="box {{ major_tag ? major_tag.name|replace({'.': '-', '#': 'sharp', 'c++': 'cpp'})|trim('.') }}">
-  <div class="card card-hire-me card-media">
-    <div class="card-header">
+  <div class="neon-tile neon-rounded mb-4 card-hire-me card-media" style="overflow:hidden;">
+    <div class="hire-me-header px-3 py-2">
       <h4>
         <a href="{{ route('job.home') }}" title="Szukaj pracy jako programista">
           Szukaj pracy {{ (major_tag.exists ? (' w ' ~ (major_tag.getOriginal('logo') ? ('<img src="' ~ logo(major_tag.logo) ~ '" alt="' ~ major_tag.name ~ '">') : major_tag.real_name|default(major_tag.name))))|raw }}
         </a>
       </h4>
     </div>
-    <div class="card-body">
+    <div class="p-3">
       {% include 'components.jobs' %}
 
       <div class="media justify-content-center">

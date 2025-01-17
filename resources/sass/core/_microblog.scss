@@ -4,18 +4,8 @@
   background-color: #eee;
 }
 
-.microblog-statistic {
-  color: #6c757d;
-}
-
 ul.microblog-comment-list {
   li a {
-    color: #6c757d;
-
-    &:hover {
-      color: #4c6210;
-    }
-
     &.vote-active {
       color: #90ba1d;
 
@@ -27,6 +17,5 @@ ul.microblog-comment-list {
 }
 
 .microblog-comment-action {
-  @include color-theme(#6c757d, #8f9ba5);
   cursor: pointer;
 }

@@ -1,6 +1,183 @@
 @use "../theme/theme" as theme;
-@use "./lookAndFeel_v1.scss";
-@use "./lookAndFeel_v2.scss";
+@use "./style-guide" as style;
+@use "./feel" as feel;
+@use "./size" as size;
+
+body {
+  &.look-and-feel-modern {
+    @include theme.background(style.$navy-050, style.$neutral-900);
+  }
+  &.look-and-feel-legacy {
+    @include theme.background(#fafafa, #252525);
+  }
+}
+
+a:not(.btn) {
+  color: inherit;
+}
+
+.neon-contains-a-color-link a,
+.neon-color-link {
+  @include feel.modern {
+    @include theme.property(color, style.$green-800, style.$green-050);
+  }
+  @include feel.legacy {
+    @include theme.property(color, #5e7813, #637f14);
+  }
+}
+
+.neon-username-author {
+  padding:       1px 5px;
+  border-radius: 4px;
+  font-size:     0.88em;
+  @include feel.modern {
+    @include theme.property(color, white, style.$neutral-800);
+    @include theme.property(background-color, style.$green-800, style.$green-050);
+  }
+  @include feel.legacy {
+    @include theme.property(color, white, #1d1d1d);
+    @include theme.property(background-color, #80a41a, #789b17);
+  }
+}
+
+.neon-logo {
+  width:  15px;
+  height: 20px;
+}
+
+.neon-tile {
+  @include feel.modern {
+    @include theme.property(background, white, style.$neutral-800);
+  }
+  @include feel.legacy {
+    @include theme.property(background, white, #1a1a1a);
+    @include theme.property(border, 1px solid #dddddd, 1px solid #2f2f2f);
+  }
+}
+
+.neon-tile--muted {
+  @include feel.modern {
+    @include theme.property(background, style.$new-1, style.$new-2);
+  }
+  @include feel.legacy {
+    @include theme.light {
+      background: #f6f6f6;
+      border:     1px solid #ddd;
+    }
+  }
+}
+
+.neon-tile--dimmed { // searchbar in dark theme can be little more blend into the body
+  @include feel.legacy {
+    @include theme.dark {
+      background: style.$neutral-800;
+    }
+  }
+  @include feel.legacy {
+    @include theme.dark {
+      background: #2a2a2a;
+    }
+  }
+}
+
+.neon-tag {
+  @include feel.modern {
+    @include theme.property(background, style.$navy-100, style.$neutral-800);
+    color: inherit;
+  }
+  @include feel.legacy {
+    @include theme.property(background, #eee, #1e1e1e);
+    color: inherit;
+  }
+}
+
+.neon-rounded {
+  border-radius: 8px;
+}
+
+.neon-rounded-top {
+  border-top-left-radius:  8px;
+  border-top-right-radius: 8px;
+}
+
+.neon-scroll-top {
+  border-width: 8px;
+  border-style: solid;
+  @include theme.property(border-color, white, black);
+  @include theme.property(box-shadow, 0 8px 24px rgb(0, 0, 0, 0.125), 0 8px 12px rgb(0, 0, 0, 0.75));
+
+  @include feel.modern {
+    @include theme.property(color, style.$green-800, style.$green-500);
+    @include theme.property(background, style.$green-050, style.$green-950);
+  }
+  @include feel.legacy {
+    color: #80a41a;
+    @include theme.property(background, #f3f7e6, #141414);
+  }
+}
+
+.neon-placeholder,
+.default-avatar {
+  @include feel.modern {
+    @include theme.property(color, style.$green-800, style.$green-500);
+    @include theme.property(background, style.$green-050, style.$green-950);
+  }
+
+  @include feel.legacy {
+    @include theme.property(color, #435b00, #789b17);
+    @include theme.property(background, #f3f7e6, #141414);
+  }
+}
+
+.neon-avatar-border {
+  @include feel.modern {
+    @include theme.property(background, white, style.$green-950);
+  }
+  @include feel.legacy {
+    @include theme.property(background, white, style.$green-950);
+  }
+}
+
+@include feel.legacy {
+  .topic-list-item {
+    @include theme.property(border-bottom, 1px solid #ddd, 1px solid #242a30);
+  }
+}
+
+@include feel.var(--zebra-background,
+        (light: #f6f7f9, dark: #212425),
+        (light: #f6f6f6, dark: #1e1e1e));
+
+.neon-zebra__header {
+  background: var(--zebra-background);
+}
+
+.neon-zebra__list-item:nth-child(even) {
+  background: var(--zebra-background);
+}
+
+.neon-divider-b {
+  @include feel.legacy {
+    @include theme.property(border-bottom, 1px solid #e6e6e6, 1px solid #2f2f2f);
+  }
+}
+
+.neon-divider-l {
+  @include theme.property(border-left, 1px solid #e6e6e6, 1px solid #2f2f2f);
+}
+
+.neon-tile__timeline-icon {
+  @include theme.light {
+    color:      #777777;
+    background: #ffffff;
+    border:     1px solid #dddddd;
+  }
+  @include theme.dark {
+    color:      #acacac;
+    background: #121212;
+    border:     1px solid #2f2f2f;
+  }
+}
 
 .neon-avatar-border {
   border-radius: 5px;
@@ -17,11 +194,88 @@
   }
 }
 
+@include feel.legacy {
+  .backport-post-header,
+  .backport-post-footer {
+    background: #33333308;
+  }
+  @include theme.var(--border, (light:1px solid #ddd, dark:1px solid #2f2f2f));
+}
+
+@include feel.modern {
+  @include theme.var(--border, (light:1px solid #e9ecef, dark:1px solid #2a2e30));
+}
+
+.backport-post-header {
+  border-bottom: var(--border);
+}
+
+.backport-post-footer {
+  border-top: var(--border);
+}
+
 .list-style-none {
   list-style:   none;
   padding-left: 0;
 }
 
-a.neon-no-color {
-  color: inherit;
+.neon-small {
+  font-size: 12px;
+}
+
+.btn.btn-primary { // this overrides bootstrap, break this dependency in the future
+  @include feel.modern {
+    border: none;
+
+    @include theme.light {
+      --bs-btn-color:          #{style.$white};
+      --bs-btn-hover-color:    #{style.$white};
+      --bs-btn-active-color:   #{style.$white};
+      --bs-btn-disabled-color: #{style.$white};
+      --bs-btn-bg:             #{style.$green-500};
+      --bs-btn-hover-bg:       #007e2b;
+      --bs-btn-active-bg:      #006522;
+      --bs-btn-disabled-bg:    #{rgba(style.$green-500, 0.3)};
+    }
+
+    @include theme.dark {
+      --bs-btn-color:          #{style.$neutral-900};
+      --bs-btn-hover-color:    #{style.$neutral-900};
+      --bs-btn-active-color:   #{style.$neutral-900};
+      --bs-btn-disabled-color: #{style.$neutral-900};
+      --bs-btn-bg:             #{style.$green-500};
+      --bs-btn-hover-bg:       #00c041;
+      --bs-btn-active-bg:      #00e34d;
+      --bs-btn-disabled-bg:    #{rgba(style.$green-500, 0.3)};
+    }
+  }
+  @include feel.legacy {
+    @include theme.dark {
+      --bs-btn-color:          #1a1a1a;
+      --bs-btn-hover-color:    #1a1a1a;
+      --bs-btn-active-color:   #1a1a1a;
+      --bs-btn-disabled-color: #1a1a1a;
+    }
+  }
+}
+
+.btn.btn-follow {
+  @include feel.modern {
+    color:  style.$green-500;
+    border: 1px solid style.$green-500;
+    &:hover {
+      background-color: style.$green-500;
+      @include theme.property(color, style.$white, style.$neutral-900);
+    }
+  }
+}
+
+.neon-forum-aside {
+  @include feel.both {
+    @include size.size(xl) {
+      background: none;
+      padding:    0 !important; // to override p-4
+      border:     none;
+    }
+  }
 }

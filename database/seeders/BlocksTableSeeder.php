@@ -70,7 +70,7 @@ class BlocksTableSeeder extends Seeder
     </div>
 
     <div class="col-sm-4">
-        <div class="footer-bubble">
+        <div class="footer-bubble neon-tile neon-tile--muted neon-rounded">
             <h6>Skontaktuj się z nami</h6>
             <ol>
                 <li>

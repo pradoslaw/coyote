@@ -1,9 +1,22 @@
+@use "../../feature/lookAndFeel/feel" as feel;
+@use "../../feature/lookAndFeel/style-guide" as style;
+
 .is-online {
-  width: 15px;
-  height: 15px;
   border-radius: 50%;
-  position: absolute;
-  bottom: -5px;
-  right: -5px;
-  border: 2px solid #fff;
+  position:      absolute;
+  bottom:        -5px;
+  right:         -5px;
+
+  @include feel.modern {
+    border:           none;
+    background-color: style.$green-500;
+    width:            11px;
+    height:           11px;
+  }
+  @include feel.legacy {
+    border:           2px solid #fff;
+    background-color: #80a41a;
+    width:            15px;
+    height:           15px;
+  }
 }

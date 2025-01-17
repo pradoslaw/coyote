@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@use "../../../feature/theme/theme" as theme;
 @import "../../../feature/theme/theme";
 @import "../../helpers/mixins";
 @import "../../helpers/variables";
@@ -112,10 +113,6 @@
       width: 100%;
     }
   }
-
-  small {
-    color: #333333bf;
-  }
 }
 
 .post-vote {
@@ -149,9 +146,9 @@
   }
 
   hr {
-    margin:           15px 0 5px 0;
-    border-top-color: darken($gray-lighter, 10%);
-    width:            25%;
+    margin: 15px 0 5px 0;
+    width:  25%;
+    @include theme.property(border-top-color, #eee, #2f2f2f);
   }
 
   footer {
@@ -203,11 +200,6 @@
   font-size:  11px;
   padding:    5px 0;
   margin-top: 10px;
-  color:      $body-color;
-
-  a {
-    color: $body-color;
-  }
 
   .btn-history {
     text-decoration: none;

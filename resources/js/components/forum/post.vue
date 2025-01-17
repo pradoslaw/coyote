@@ -22,7 +22,8 @@
       </div>
       <div
         :id="anchor"
-        class="card card-post neon-post flex-grow-1 mb-0"
+        class="neon-tile neon-rounded card-post neon-post flex-grow-1 mb-0"
+        :style="{minWidth:0}"
         :class="{'is-deleted': hidden, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed': isCollapsed}">
         <div v-if="post.deleted_at"
              @click="toggleDeletedPost"
@@ -48,10 +49,10 @@
           <vue-icon name="postAuthorBlocked"/>
           Treść posta została ukryta, ponieważ autorem jest zablokowany przez Ciebie użytkownik.
         </div>
-        <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed && is_mode_linear}" class="card-header d-none neon-post-header">
+        <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed && is_mode_linear}" class="d-none p-2 backport-post-header">
           <div class="row">
             <div class="col-2">
-              <h5 class="mb-0 post-author">
+              <h5 class="mb-0 post-author ms-2">
                 <vue-username v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"/>
                 <span v-else>{{ post.user_name }}</span>
               </h5>
@@ -63,8 +64,8 @@
                   <vue-icon v-if="post.is_read" name="postWasRead"/>
                   <i v-else class="not-read" title="Nowy post"/>
                   {{ ' ' }}
-                  <a :href="post.url" class="small text-body">
-                    <vue-timeago :datetime="post.created_at" class="neon-post-date"/>
+                  <a :href="post.url" class="small">
+                    <vue-timeago :datetime="post.created_at"/>
                   </a>
                 </div>
               </div>
@@ -179,7 +180,7 @@
                   <vue-icon name="postAccept"/>
                 </span>
               </div>
-              <div class="post-content neon-post-content" :style="is_mode_tree ? {minHeight:'initial'} : {}">
+              <div class="post-content neon-contains-a-color-link" :style="is_mode_tree ? {minHeight:'initial'} : {}">
                 <vue-see-more :height="700">
                   <div v-html="post.html" ref="postContent"/>
                 </vue-see-more>
@@ -248,7 +249,7 @@
             />
           </div>
         </div>
-        <div :class="{'collapse': isCollapsed}" class="card-footer neon-post-footer" v-if="!authorBlocked">
+        <div :class="{'collapse': isCollapsed, 'backport-post-footer':is_mode_linear}" class="px-2 py-1" v-if="!authorBlocked">
           <div class="row">
             <div class="d-none" :class="{'d-lg-block col-lg-2':is_mode_linear}" v-if="is_mode_linear"/>
             <div class="col-12 d-flex" :class="{'col-lg-10':is_mode_linear}">

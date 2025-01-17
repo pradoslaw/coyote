@@ -1,6 +1,6 @@
 <template>
-  <div class="card-section card neon-collapsable-section">
-    <div class="pb-2 pt-1 ps-lg-3 pt-lg-2 pe-lg-2">
+  <div class="neon-tile neon-rounded mb-3">
+    <div class="pb-2 pt-1 ps-lg-3 pt-lg-2 pe-lg-2 neon-zebra__header neon-rounded-top">
       <div class="d-flex justify-content-between">
         <div class="cursor-pointer">
           <span v-if="collapsable" @click="collapse">
@@ -31,10 +31,10 @@
     </div>
     <section v-if="!isCollapse" class="card-categories mb-0">
       <template v-for="(category, index) in categories">
-        <div v-if="!category.is_hidden" :class="{'not-read': !category.is_read}" class="px-3 py-2 neon-collapsable-section-item toolbox-container">
+        <div v-if="!category.is_hidden" :class="{'not-read': !category.is_read}" class="px-3 py-2 toolbox-container neon-zebra__list-item">
           <div class="row">
             <div class="col-6 col-md-12 col-lg-5 d-flex align-items-center">
-              <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative me-2 neon-category-default-icon">
+              <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative me-2 neon-color-link">
                 <span v-if="category.is_locked" class="logo">
                   <vue-icon name="forumCategoryLocked"/>
                 </span>
@@ -44,7 +44,7 @@
               </a>
               <div class="overflow-hidden">
                 <h3>
-                  <a :href="category.url" class="neon-forum-category">
+                  <a :href="category.url">
                     {{ category.name }}
                   </a>
                 </h3>
@@ -54,7 +54,7 @@
                     <vue-icon name="categorySectionChildWasRead" v-if="child.is_read"/>
                     <i v-else class="not-read" title="Nowe posty w tej kategorii"/>
                     {{ ' ' }}
-                    <a :href="child.url" class="neon-forum-category-subcategory">
+                    <a :href="child.url">
                       {{ child.name }}
                     </a>
                     {{ ' ' }}
@@ -67,14 +67,14 @@
                 <li class="list-inline-item">
                   <strong>{{ number(category.topics) }}</strong>
                   {{ ' ' }}
-                  <small class="text-muted text-wide-spacing">
+                  <small class="text-muted">
                     {{ declination(category.topics, ['wątek', 'wątków', 'wątków']) }}
                   </small>
                 </li>
                 <li class="list-inline-item">
                   <strong>{{ number(category.posts) }}</strong>
                   {{ ' ' }}
-                  <small class="text-muted text-wide-spacing">
+                  <small class="text-muted">
                     {{ declination(category.posts, ['post', 'postów', 'postów']) }}
                   </small>
                 </li>
@@ -96,7 +96,7 @@
                 </a>
                 <div class="media-body overflow-hidden">
                   <p class="text-truncate mb-1">
-                    <a :href="getUrl(category)" class="category-last-topic neon-forum-category-last-topic">
+                    <a :href="getUrl(category)">
                       {{ category.topic.title }}
                     </a>
                   </p>

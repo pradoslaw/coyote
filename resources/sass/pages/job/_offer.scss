@@ -9,9 +9,9 @@
     }
 
     section {
-      padding: 20px 0;
+      padding:       20px 0;
       border-bottom: 1px solid $card-border-color;
-      clear: both;
+      clear:         both;
 
       &:first-child {
         padding: 0 0 10px 0;
@@ -36,7 +36,7 @@
   }
 
   h1 {
-    font-size: 22px;
+    font-size:     22px;
     margin-bottom: 10px;
 
     @include media-breakpoint-down(md) {
@@ -50,8 +50,8 @@
 
   .employer {
     margin-right: 3px;
-    font-size: 14px;
-    font-weight: normal;
+    font-size:    14px;
+    font-weight:  normal;
   }
 
   .salary {
@@ -63,12 +63,12 @@
   }
 
   blockquote {
-    font-style: italic;
-    padding: 0 0 0 30px;
-    position: relative;
+    font-style:  italic;
+    padding:     0 0 0 30px;
+    position:    relative;
     border-left: none;
-    font-size: $font-size-lg;
-    margin: 18px 0 17px 20px;
+    font-size:   $font-size-lg;
+    margin:      18px 0 17px 20px;
 
     &:after {
       @include content-icon-solid($icon-job-offer-company-headline);
@@ -77,15 +77,15 @@
   }
 
   .requirements {
-    border-bottom: 0 !important;
+    border-bottom:  0 !important;
     padding-bottom: 0 !important;
 
     strong {
-      color: $gray-light;
+      color:          $gray-light;
       padding-bottom: 5px;
-      margin-bottom: 10px;
-      border-bottom: 1px solid $card-border-color;
-      display: block;
+      margin-bottom:  10px;
+      border-bottom:  1px solid $card-border-color;
+      display:        block;
     }
   }
 
@@ -115,10 +115,8 @@
   }
 }
 
-.side-menu {
-  li a {
-    padding-left: 0;
-  }
+.side-menu li a {
+  padding-left: 0;
 }
 
 #box-job-firm {
@@ -126,8 +124,8 @@
     margin-bottom: 0;
 
     li {
-      padding: 5px 0;
-      color: $gray;
+      padding:   5px 0;
+      color:     $gray;
       font-size: $font-size-base - 0.1rem;
 
       a {
@@ -136,7 +134,7 @@
 
       i {
         margin-right: 4px;
-        font-size: $font-size-base + 0.1rem;
+        font-size:    $font-size-base + 0.1rem;
       }
     }
   }
@@ -147,12 +145,12 @@
 
 .job-navlinks {
   i {
-    color: lighten($primary, 5);
+    color:     lighten($primary, 5);
     font-size: 10px;
   }
 
   a {
-    color: #626262;
+    color:     #626262;
     font-size: 12px;
   }
 }
@@ -161,9 +159,9 @@
 // ---------------------------
 
 #gallery {
-  line-height: 0;
-  padding: 0;
-  margin: 10px 0 0 0;
+  line-height:          0;
+  padding:              0;
+  margin:               10px 0 0 0;
 
   -webkit-column-count: 3;
   -webkit-column-gap:   0;
@@ -173,16 +171,16 @@
   column-gap:           0;
 
   img, .yt {
-    width: 100% !important;
+    width:  100% !important;
     height: auto !important;
   }
 
   img {
     &:hover {
-      background-color: #000;
-      opacity: 0.6;
+      background-color:   #000;
+      opacity:            0.6;
       -webkit-transition: .3s ease-in-out;
-      transition: .3s ease-in-out;
+      transition:         .3s ease-in-out;
     }
   }
 

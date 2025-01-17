@@ -3,7 +3,7 @@
     <div class="card-header">
       <div class="row d-none d-lg-flex">
         <div class="col-2">
-          <h5 class="mb-0 post-author">
+          <h5 class="mb-0 post-author ms-2">
             <vue-username v-if="log.user" :user="log.user"/>
             <span v-else>{{ log.user_name }}</span>
           </h5>

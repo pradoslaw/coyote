@@ -1,19 +1,6 @@
 .btn-toggle-theme {
-  color: rgb(0, 0, 0, 0.5);
-  transition: none;
-
-  &.open,
-  &:hover {
-    color: rgba(0, 0, 0, 0.7);
-  }
-
-  > i {
-    color: inherit;
-  }
-
   .dropdown-item.active {
     cursor: default;
-
     i {
       color: #90ba1d;
     }

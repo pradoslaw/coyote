@@ -76,7 +76,7 @@
       {{ form_row(form.password_confirmation) }}
       {{ form_row(form.email) }}
       {{ form_row(form.email_confirmation) }}
-      <div style="max-height:56px; overflow-y:auto;" class="mb-3">
+      <div style="max-height:56px; overflow-y:auto;" class="mb-3 neon-contains-a-color-link">
         {{ form_row(form.terms) }}
         {{ form_row(form.marketing_agreement) }}
         <div class="form-group">
@@ -100,7 +100,7 @@
       {{ form_end(form) }}
       <div class="text-center mb-4">
         Masz już konto?
-        <a href="{{ route('login') }}">
+        <a href="{{ route('login') }}" class="neon-color-link">
           Zaloguj się
         </a>
       </div>

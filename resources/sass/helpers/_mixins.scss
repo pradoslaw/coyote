@@ -1,7 +1,5 @@
 @mixin link-color-darker {
-  a:not(.badge) {
-    color: $link-color-darker;
-  }
+
 }
 
 @mixin list-inline($name, $spacing) {
@@ -24,7 +22,7 @@
 @mixin not-read-bullet {
   width: 12px;
   height: 12px;
-  background-color: #d7661c;
+  background-color: var(--neon-subscribe-color);
   border-radius: 50%;
   border: 2px solid #fff;
 }

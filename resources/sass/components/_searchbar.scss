@@ -1,3 +1,5 @@
+@use "../../feature/theme/theme" as theme;
+
 .nav-search {
   width: 100%;
   align-items: center;
@@ -11,7 +13,6 @@
     position: relative;
     border-radius: 3px;
     padding: 5px;
-    background-color: var(--header-search-bg);
 
     &:after {
       content: 'Shift+/';
@@ -29,20 +30,19 @@
   }
 
   input {
-    background-color: var(--header-search-bg);
+    background-color: transparent;
     padding: 0;
-    color: var(--header-color);
     width: 100%;
     line-height: 22px;
     outline: 0;
     font-size: .8rem;
     border: none;
+    @include theme.property(color, var(--header-color), #acacac);
   }
 
   .active {
     &.search-bar {
-      background-color: #fff;
-
+      @include theme.property(background-color, white, black);
       &:after {
         display: none; // temp code
       }

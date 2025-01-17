@@ -1,6 +1,6 @@
 <template>
   <!-- we use below ID in mounted() method -->
-  <div :id="`entry-${microblog.id}`" class="microblog neon-card neon-microblog mb-3 p-3" style="border-radius:8px;">
+  <div :id="`entry-${microblog.id}`" class="microblog neon-tile mb-3 p-3" style="border-radius:8px;">
     <div>
       <div v-if="microblog.deleted_at" class="alert alert-danger">
         Ten wpis został usunięty. Możesz go przywrócić jeżeli chcesz.
@@ -19,17 +19,17 @@
               <h5 class="media-heading">
                 <vue-username :user="microblog.user"/>
               </h5>
-              <ul class="list-inline mb-0 list-inline-bullet-sm microblog-statistic">
-                <li class="list-inline-item neon-microblog-details">
+              <ul class="list-inline mb-0 list-inline-bullet-sm">
+                <li class="list-inline-item text-muted">
                   <a :href="microblog.url" class="small">
                     <vue-timeago :datetime="microblog.created_at"/>
                   </a>
                 </li>
-                <li class="list-inline-item small neon-microblog-details">
+                <li class="list-inline-item small text-muted">
                   {{ microblog.views }}
                   {{ declination(microblog.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}
                 </li>
-                <li v-if="microblog.is_sponsored" class="list-inline-item small neon-microblog-details">
+                <li v-if="microblog.is_sponsored" class="list-inline-item small text-muted">
                   Sponsorowane
                 </li>
               </ul>
@@ -76,7 +76,7 @@
           <div v-show="!microblog.is_editing">
             <vue-see-more>
               <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"/>
-              <div ref="microblog-text" v-html="microblog.html" class="microblog-text"/>
+              <div ref="microblog-text" v-html="microblog.html" class="microblog-text neon-contains-a-color-link"/>
 
               <a v-if="opg" :href="opg.metadata.url" :title="opg.metadata.title" class="card microblog-opg" target="_blank">
                 <div class="microblog-opg-image" :style="`background-image: url(${opg.url})`"/>
@@ -121,8 +121,8 @@
               {{ microblog.votes }} {{ declination(microblog.votes, ['głos', 'głosy', 'głosów']) }}
             </span>
             <span @click="checkAuth(subscribe, microblog)" class="microblog-action" title="Wł/Wył obserwowanie tego wpisu">
-              <vue-icon name="microblogSubscribed" v-if="microblog.is_subscribed" class="text-primary"/>
-              <vue-icon name="microblogSubscribe" v-else/>
+              <vue-icon name="microblogSubscribed" v-if="microblog.is_subscribed" class="neon-subscribe neon-subscribe--active"/>
+              <vue-icon name="microblogSubscribe" v-else class="neon-subscribe"/>
               {{ ' ' }}
               <span class="d-none d-sm-inline">Obserwuj</span>
             </span>

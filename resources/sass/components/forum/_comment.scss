@@ -1,5 +1,7 @@
+@use "../../../feature/theme/theme" as theme;
+
 .post-comments {
-  margin: 15px 0 5px;
+  margin:    15px 0 5px;
   font-size: .75rem;
 
   @include media-breakpoint-up(sm) {
@@ -8,9 +10,9 @@
 
   .badge {
     font-weight: 400;
-    padding: 1px 5px;
-    margin-top: -1px;
-    font-size: 100%;
+    padding:     1px 5px;
+    margin-top:  -1px;
+    font-size:   100%;
   }
 }
 
@@ -19,13 +21,13 @@
 }
 
 .post-comment {
-  border-top: 1px solid $card-border-color;
-  padding: 5px 0 5px 0;
+  @include theme.property(border-top, 1px solid #ddd, 1px solid #2f2f2f);
+  padding:   5px 0 5px 0;
   word-wrap: break-word;
 
   .btn-comment {
     padding: 0 5px;
-    color: $gray;
+    color:   $gray;
     display: none;
   }
 

@@ -1,4 +1,6 @@
 @charset "UTF-8";
+@use "../../feature/lookAndFeel/feel" as feel;
+@use "../../feature/lookAndFeel/style-guide" as style;
 
 .nav {
   > li > a:focus {
@@ -8,13 +10,13 @@
 
 .nav > li > a {
   @include media-breakpoint-down(sm) {
-    padding: 5px;
+    padding:   5px;
     font-size: 12px;
   }
 }
 
 .nav-link {
-  color: $gray-light;
+  color:  $gray-light;
   cursor: pointer;
 
   &:hover {
@@ -36,19 +38,22 @@
   border-bottom: 1px solid $card-border-color;
 
   .nav-link {
-    cursor: pointer;
-    color: #777777;
+    cursor:        pointer;
+    color:         #777777;
     border-bottom: 2px solid transparent;
 
     &.active {
       color: black;
 
-      &,
-      &:hover,
-      &:focus,
-      &:active,
-      {
-        border-bottom-color: $alt-link-hover-color;
+      @include feel.legacy {
+        &, &:hover, &:focus, &:active {
+          border-bottom-color: #d7661c;
+        }
+      }
+      @include feel.modern {
+        &, &:hover, &:focus, &:active {
+          border-bottom-color: style.$green-500;
+        }
       }
     }
   }

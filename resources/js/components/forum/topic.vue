@@ -1,5 +1,5 @@
 <template>
-  <div class="card-body neon-collapsable-section-item" :class="{'not-read': !topic.is_read, 'flagged': flag != null, 'tagged': highlight}">
+  <div class="card-body topic-list-item neon-zebra__list-item" :class="{'not-read': !topic.is_read, 'flagged': flag != null, 'tagged': highlight}">
     <div class="row">
       <div
         :class="showCategoryName ? 'col-xl-9 col-lg-10' : 'col-xl-10 col-lg-10'"
@@ -9,7 +9,7 @@
           @click.left="mark"
           :href="getUrl()"
           :class="{'not-read': !topic.is_read}"
-          class="topic-icon me-2 d-none d-md-flex neon-topic-default-icon"
+          class="topic-icon me-2 d-none d-md-flex neon-color-link"
         >
           <vue-icon name="topicStateSticky" v-if="topic.is_sticky"/>
           <vue-icon name="topicStateLocked" v-else-if="topic.is_locked"/>
@@ -20,7 +20,7 @@
           <div class="topic-row">
             <h5 class="topic-subject text-truncate m-0">
               <span v-if="isAuthorized" @click="subscribe(topic)" title="Kliknij aby wł/wył obserwowanie wątku" class="cursor-pointer">
-                <vue-icon name="topicSubscribed" v-if="topic.is_subscribed" class="on neon-subscribe neon-subscribe-active"/>
+                <vue-icon name="topicSubscribed" v-if="topic.is_subscribed" class="neon-subscribe neon-subscribe--active"/>
                 <vue-icon name="topicSubscribe" v-else class="neon-subscribe"/>
                 {{ ' ' }}
               </span>
@@ -28,7 +28,7 @@
                 <vue-icon name="topicAccepted"/>
                 {{ ' ' }}
               </a>
-              <a :href="getUrl()" :class="{'topic-unread neon-topic-title-unread': !topic.is_read}" class="neon-topic-title">
+              <a :href="getUrl()" :class="{'topic-unread': !topic.is_read, 'neon-color-link': !topic.is_read}">
                 {{ topic.title }}
               </a>
               <small v-if="showCategoryName" class="d-inline d-xl-none">
@@ -44,27 +44,27 @@
             </h5>
 
             <div v-if="totalPages > 1 && !isTree" class="d-none d-sm-inline ms-2 topic-pagination">
-              <vue-icon name="topicPages" class="neon-topic-page-icon"/>
+              <vue-icon name="topicPages" class="neon-color-link"/>
               {{ ' ' }}
-              <a :href="topic.url + '?page=1'" class="neon-topic-page">1</a>
+              <a :href="topic.url + '?page=1'" class="neon-color-link">1</a>
               {{ ' ' }}
               <template v-if="totalPages > 4">
                 ...
                 {{ ' ' }}
               </template>
-              <a v-if="totalPages === 4" :href="topic.url + '?page=2'" class="neon-topic-page">
+              <a v-if="totalPages === 4" :href="topic.url + '?page=2'" class="neon-color-link">
                 2
                 {{ ' ' }}
               </a>
               <template v-for="i in paginatorPages">
-                <a :href="topic.url + '?page=' + i" class="neon-topic-page">
+                <a :href="topic.url + '?page=' + i" class="neon-color-link">
                   {{ i }}
                 </a>
                 {{ ' ' }}
               </template>
             </div>
 
-            <ul class="topic-statistic list-inline small mt-1 mt-sm-0 mb-0 d-block d-sm-inline ms-sm-auto flex-sm-shrink-0">
+            <ul class="list-inline small mt-1 mt-sm-0 mb-0 d-block d-sm-inline ms-sm-auto flex-sm-shrink-0">
               <li class="list-inline-item small" title="Liczba odpowiedzi">
                 <vue-icon name="topicRepliesReplyPresent" v-if="topic.is_replied" class="topic-has-reply neon-topic-replies-icon"/>
                 <vue-icon name="topicRepliesReplyMissing" v-else/>
@@ -84,12 +84,11 @@
 
           <div class="d-flex mt-1">
             <div class="d-none d-lg-inline small text-truncate">
-              <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`"
-                 class="text-muted topic-date">
+              <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`">
                 <vue-timeago :datetime="topic.created_at"/>
               </a>,
-              <vue-username v-if="topic.user" :user="topic.user" class="mt-1 topic-username"/>
-              <span v-else class="topic-username">{{ topic.user_name }}</span>
+              <vue-username v-if="topic.user" :user="topic.user" class="mt-1"/>
+              <span v-else>{{ topic.user_name }}</span>
             </div>
             <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs">
               <li v-for="tag in topic.tags">
@@ -101,7 +100,7 @@
       </div>
 
       <div v-if="showCategoryName" class="col-xl-1 d-none d-xl-block text-center text-truncate">
-        <a :href="topic.forum.url" class="small neon-topic-list-category-name" :title="topic.forum.name">
+        <a :href="topic.forum.url" class="small" :title="topic.forum.name">
           {{ topic.forum.name }}
         </a>
       </div>
@@ -115,11 +114,11 @@
           </a>
           <div class="media-body small text-truncate">
             <p class="mb-0 d-inline d-md-block">
-              <vue-username v-if="topic.last_post.user" :user="topic.last_post.user" class="topic-username"></vue-username>
-              <span class="topic-username" v-else>{{ topic.last_post.user_name }}</span>
+              <vue-username v-if="topic.last_post.user" :user="topic.last_post.user"/>
+              <span class="topic-username" v-else v-text="topic.last_post.user_name"/>
             </p>
             {{ ' ' }}
-            <a :href="topic.url + `?p=${topic.last_post.id}#id${topic.last_post.id}`" title="Zobacz ostatni post" class="text-muted">
+            <a :href="topic.url + `?p=${topic.last_post.id}#id${topic.last_post.id}`" title="Zobacz ostatni post">
               <vue-timeago :datetime="topic.last_post.created_at"/>
             </a>
           </div>

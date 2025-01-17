@@ -7,7 +7,7 @@
     border: 1px solid $primary;
   }
 
-  .card-header {
+  .hire-me-header {
     text-align: center;
     background-color: $primary;
     background-image: url('/img/escheresque.png');
@@ -42,7 +42,7 @@
       > .card-hire-me {
         border: 1px solid $color;
 
-        .card-header {
+        .hire-me-header {
           background-color: $color;
         }
       }

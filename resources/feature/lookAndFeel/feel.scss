@@ -16,6 +16,12 @@
   }
 }
 
+@mixin both {
+  @if & {
+    .look-and-feel-legacy &, .look-and-feel-modern & {@content}
+  }
+}
+
 @mixin var($cssVarName, $modern, $legacy) {
   @include modern {@include theme.var($cssVarName, $modern)}
   @include legacy {@include theme.var($cssVarName, $legacy)}
