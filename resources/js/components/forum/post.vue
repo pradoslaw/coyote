@@ -71,13 +71,6 @@
             </div>
           </div>
         </div>
-        <vue-post-review
-          v-if="post.has_review"
-          :post-id="post.id"
-          :review-style="post.review_style"
-          @close="closePostReview"
-          @answer="postReviewAnswer"
-        />
         <div :class="{'collapse': isCollapsed}" class="card-body">
           <div class="media mb-2" :class="{'d-lg-none':is_mode_linear}">
             <div class="media-left me-2" v-if="is_mode_linear">
@@ -392,7 +385,6 @@
 </template>
 
 <script lang="ts">
-import axios from "axios";
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import pl from 'date-fns/locale/pl';
 import {mapActions, mapGetters, mapState} from "vuex";
@@ -421,7 +413,6 @@ import VueCommentForm from "./comment-form.vue";
 import VueComment from './comment.vue';
 import VueForm from './form.vue';
 import VuePostGuiderail, {ChildLink} from "./post-guiderail.vue";
-import VuePostReview, {ReviewAnswer} from "./post-review.vue";
 
 export default {
   name: 'post',
@@ -442,7 +433,6 @@ export default {
     'vue-tags': VueTags,
     'vue-timeago': VueTimeAgo,
     'vue-username': VueUserName,
-    'vue-post-review': VuePostReview,
   },
   emits: ['reply'],
   props: {
@@ -512,11 +502,6 @@ export default {
     },
     closePostReview(): void {
       this.post.has_review = false;
-    },
-    postReviewAnswer(type: ReviewAnswer): void {
-      axios.post('/User/Settings/Ajax', {
-        postsReviewed: {type, postId: this.post.id},
-      });
     },
     ...mapActions('posts', ['vote', 'accept', 'subscribe', 'unsubscribe', 'loadComments', 'loadVoters']),
     formatDistanceToNow(date) {
