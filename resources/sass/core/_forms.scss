@@ -10,7 +10,7 @@
 
 .custom-switch {
   .custom-control-label::before {
-    background-color: $body-bg;
+    background-color: #fafafa;
   }
 
   .custom-control-input:checked ~ .custom-control-label {

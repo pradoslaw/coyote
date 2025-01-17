@@ -59,12 +59,12 @@
   }
 
   .notification {
-    border-bottom: 1px solid $body-bg;
+    border-bottom: 1px solid #fafafa;
     padding: 6px;
     position: relative; // we need this to position remove button in notification
 
     &:hover {
-      background-color: $body-bg;
+      background-color: #fafafa;
 
       .btn-action {
         display: block;
