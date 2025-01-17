@@ -4,7 +4,7 @@ namespace Tests\Acceptance\AcceptanceDsl;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverBy;
-use Laravel\Dusk;
+use Facebook\WebDriver\WebDriverDimension;
 use PHPUnit\Framework\Assert;
 
 readonly class WebDriver
@@ -32,9 +32,10 @@ readonly class WebDriver
         return \explode("\n", $this->find('body')->getText());
     }
 
-    public function screenshot(string $screenshotFilename): void
+    public function screenshot(string $screenshotFilename, ?int $width = null): void
     {
-        $this->fitViewportToContent();
+        $this->fitViewportToContent($width);
+        \uSleep(300 * 1000);
         $this->driver->takeScreenshot($this->formatScreenshotPath($screenshotFilename));
     }
 
@@ -78,6 +79,14 @@ readonly class WebDriver
         return $this->driver->findElement(WebDriverBy::xpath($xPath));
     }
 
+    public function findByText(string $text, string $htmlTag): RemoteWebElement
+    {
+        if (\str_contains($text, "'")) {
+            throw new \RuntimeException('Quoting link text not supported yet.');
+        }
+        return $this->driver->findElement(WebDriverBy::xpath("//{$htmlTag}[normalize-space()='$text']"));
+    }
+
     public function currentUrl(): string
     {
         return $this->loadedPageUrl() ?? throw new \RuntimeException('The browser has not been navigated yet.');
@@ -113,9 +122,15 @@ readonly class WebDriver
         return $this->driver->findElements(WebDriverBy::cssSelector($selector));
     }
 
-    private function fitViewportToContent(): void
+    private function fitViewportToContent(?int $width): void
     {
-        new Dusk\Browser($this->driver)->fitContent();
+        $html = $this->driver->findElement(WebDriverBy::tagName('html'));
+        $this->resize($width ?? $html->getSize()->getWidth(), $html->getSize()->getHeight());
+    }
+
+    public function resize(int $width, int $height): void
+    {
+        $this->driver->manage()->window()->setSize(new WebDriverDimension($width, $height));
     }
 
     private function formatScreenshotPath(string $screenshotFilename): string
@@ -123,4 +138,17 @@ readonly class WebDriver
         return \sPrintF('%s/%s.png', \rTrim($this->screenshotPath, '/'), $screenshotFilename);
     }
 
+    public function disableCssTransitions(): void
+    {
+        $this->driver->executeScript('
+            const style = document.createElement("style")
+            style.textContent = "* {transition:none!important;animation:none!important;-webkit-font-smoothing:none!important;text-rendering:optimizeSpeed!important;}"
+            document.head.appendChild(style)
+        ');
+    }
+
+    public function hideKeyboardCursor(): void
+    {
+        $this->driver->executeScript('document.activeElement.blur();');
+    }
 }

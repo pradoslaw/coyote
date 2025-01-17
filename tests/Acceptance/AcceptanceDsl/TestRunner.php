@@ -26,9 +26,9 @@ readonly class TestRunner
         $this->webDriver->clearLocalStorage();
     }
 
-    public function captureScreenshotForTest(TestCase $testCase): void
+    public function captureScreenshotForTest(TestCase $testCase, ?int $width = null): void
     {
-        $this->webDriver->screenshot($this->screenshotFilename($testCase));
+        $this->webDriver->screenshot($this->screenshotFilename($testCase), $width);
     }
 
     private function screenshotFilename(TestCase $testCase): string
@@ -47,12 +47,12 @@ readonly class TestRunner
 
     public function clearScreenshots(): void
     {
-        $this->clear(\rTrim($this->screenshotPath, '/') . '/*.png');
+        $this->clear('*.png');
     }
 
-    private static function clear(string $pathMask): void
+    public function clear(string $pathMask): void
     {
-        foreach (\glob($pathMask) as $file) {
+        foreach (\glob(\rTrim($this->screenshotPath, '/') . '/' . \lTrim($pathMask, '/')) as $file) {
             \unlink($file);
         }
     }
