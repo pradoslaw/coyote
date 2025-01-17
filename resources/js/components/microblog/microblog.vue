@@ -80,8 +80,8 @@
               <a v-if="opg" :href="opg.metadata.url" :title="opg.metadata.title" class="card microblog-opg" target="_blank">
                 <div :alt="opg.metadata.title" class="card-img-top" :style="`background-image: url(${opg.url})`"/>
                 <div class="card-body">
-                  <h5 class="card-title text-truncate">{{ opg.metadata.title }}</h5>
-                  <p class="card-text text-truncate">{{ opg.metadata.description }}</p>
+                  <h5 class="text-truncate mb-0">{{ opg.metadata.title }}</h5>
+                  <p class="text-truncate">{{ opg.metadata.description }}</p>
                   <small class="text-muted">{{ opg.metadata.url }}</small>
                 </div>
               </a>

@@ -10,24 +10,22 @@
 
     a {
       font-size: 16px;
-      color: $link-color-darker;
+      color:     $link-color-darker;
     }
   }
 
   textarea {
-    resize: none;
-
-    // we need padding-right because of submit button next to textarea comment form
+    resize:        none;
     padding-right: 32px;
   }
 
   .media-body {
-    min-width: 0;  // thanks to this, text will not overflow its parent
+    min-width: 0; // thanks to this, text will not overflow its parent
   }
 }
 
 .microblog-text {
-  padding: 10px 0;
+  padding:  10px 0;
   overflow: hidden;
   position: relative;
 
@@ -54,21 +52,21 @@
 
   &:hover {
     text-decoration: none;
-    color: inherit;
+    color:           inherit;
   }
 
   .card-img-top {
-    background-size: cover;
+    background-size:     cover;
     background-position: center center;
-    background-repeat: no-repeat;
-    height: 220px;
+    background-repeat:   no-repeat;
+    height:              220px;
   }
 
   .card-body {
     padding: .75rem;
   }
 
-  .card-title, p {
+  p {
     margin-bottom: .5rem;
   }
 
@@ -79,21 +77,21 @@
 
 .show-more {
   position: absolute;
-  bottom: 0;
-  z-index: 9;
-  display: none;
+  bottom:   0;
+  z-index:  9;
+  display:  none;
 }
 
 .microblog-tags {
-  overflow: hidden;
-  height: 28px;
-  margin-left: auto;
+  overflow:     hidden;
+  height:       28px;
+  margin-left:  auto;
   margin-right: .25rem;
 
   .tag-clouds-md {
-    white-space: nowrap;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    white-space:                nowrap;
+    overflow-x:                 scroll;
+    overflow-y:                 hidden;
     -webkit-overflow-scrolling: touch;
   }
 }
