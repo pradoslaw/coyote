@@ -1,0 +1,22 @@
+@use "../theme/theme" as theme;
+
+@mixin modern {
+  @if & {
+    .look-and-feel-modern & {@content}
+  } @else {
+    .look-and-feel-modern {@content}
+  }
+}
+
+@mixin legacy {
+  @if & {
+    .look-and-feel-legacy & {@content}
+  } @else {
+    .look-and-feel-legacy {@content}
+  }
+}
+
+@mixin var($cssVarName, $modern, $legacy) {
+  @include modern {@include theme.var($cssVarName, $modern)}
+  @include legacy {@include theme.var($cssVarName, $legacy)}
+}

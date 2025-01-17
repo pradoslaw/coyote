@@ -2,12 +2,13 @@
 @use "./size" as size;
 @use "./style-guide" as style;
 @use "./bootstrap" as bootstrap;
+@use "./feel.scss" as feel;
 
 $post-radius:             8px;
 $forum-aside-radius:      8px;
 $category-section-radius: 8px;
 
-.look-and-feel-modern {
+@include feel.modern {
   @include theme.var(--body-background, (light: style.$navy-050, dark: style.$neutral-900));
   @include theme.var(--post-background, (light: style.$white, dark: style.$neutral-800));
   @include theme.var(--post-border, (light: none, dark: none));
@@ -87,7 +88,7 @@ body {
   border:     none !important; // overrides .card {border}
 }
 
-.look-and-feel-legacy {
+@include feel.legacy {
   .neon-post-folded {
     background:   var(--post-header-background) !important; // overrides .card {background}
     border-width: 1px !important; // overrides modern .neon-post-folded
@@ -122,7 +123,7 @@ body {
   height: 20px;
 }
 
-.look-and-feel-modern {
+@include feel.modern {
   .neon-post-user-avatar {
     border:  none;
     padding: 0;
@@ -158,13 +159,13 @@ body {
   font-weight: normal !important; // overrides .badge {font-weight}
 }
 
-.look-and-feel-modern {
+@include feel.modern {
   .neon-navbar-user-avatar {
     --var-navbar-user-avatar-padding: 0;
   }
 }
 
-.look-and-feel-legacy {
+@include feel.legacy {
   .neon-navbar-user-avatar {
     --var-navbar-user-avatar-padding: 0.25rem;
   }
@@ -179,7 +180,7 @@ body {
   }
 }
 
-.look-and-feel-modern {
+@include feel.modern {
   .neon-primary-button {
     border: none;
 
@@ -202,7 +203,7 @@ body {
   }
 }
 
-.look-and-feel-legacy {
+@include feel.legacy {
   .neon-primary-button {
     @include theme.dark {
       color: #1a1a1a !important; // overrides .btn:hover
@@ -249,7 +250,7 @@ body {
   }
 }
 
-.look-and-feel-legacy {
+@include feel.legacy {
   .navbar {
     @include theme.property(border-bottom, 1px solid #e2e2e2, 2px solid #2f2f2f);
   }
@@ -270,19 +271,19 @@ body {
   }
 }
 
-.look-and-feel-modern {
+@include feel.modern {
   .neon-collapsable-section {
     border: none;
   }
 }
 
-.look-and-feel-legacy {
+@include feel.legacy {
   .neon-collapsable-section {
     @include theme.property(border, 1px solid #ddd, 1px solid #acacac);
   }
 }
 
-.look-and-feel-legacy {
+@include feel.legacy {
   .card.card-topics {
     @include theme.light {
       border: var(--bs-card-border-width) solid var(--bs-card-border-color);

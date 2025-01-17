@@ -1,30 +1,10 @@
 @use "../theme/theme" as theme;
 @use "./style-guide" as style;
-
-@mixin modern {
-  @if & {
-    .look-and-feel-modern & {@content}
-  } @else {
-    .look-and-feel-modern {@content}
-  }
-}
-
-@mixin legacy {
-  @if & {
-    .look-and-feel-legacy & {@content}
-  } @else {
-    .look-and-feel-legacy {@content}
-  }
-}
-
-@mixin lookAndFeel($cssVarName, $modern, $legacy) {
-  @include modern {@include theme.var($cssVarName, $modern)}
-  @include legacy {@include theme.var($cssVarName, $legacy)}
-}
+@use "./feel.scss" as feel;
 
 .neon-subscribe {
   &.neon-subscribe-active {
-    @include lookAndFeel(--subscribe-active-color, style.$red-500, style.$red-500);
+    @include feel.var(--subscribe-active-color, style.$red-500, style.$red-500);
     color: var(--subscribe-active-color) !important; // overrides .card-topics .on
   }
 }
@@ -33,16 +13,16 @@
 .neon-card,
 .neon-microblog,
 .neon-reputation {
-  @include modern {
+  @include feel.modern {
     border: none;
   }
-  @include legacy {
+  @include feel.legacy {
     // TODO backport border of card back to the microblog
   }
 }
 
 .neon-homepage-forum-summary {
-  @include lookAndFeel(--summary-background,
+  @include feel.var(--summary-background,
           (light: style.$new-1, dark:style.$new-2),
           (light: #f6f6f6, dark:#1a1a1a));
 
@@ -50,17 +30,17 @@
 }
 
 .neon-category-not-read {
-  @include lookAndFeel(--subscribe-active-color, style.$red-500, style.$red-500);
+  @include feel.var(--subscribe-active-color, style.$red-500, style.$red-500);
   background-color: var(--subscribe-active-color) !important; // overrides .card-topics .on
 
-  @include lookAndFeel(--category-not-read-border,
+  @include feel.var(--category-not-read-border,
           (light: style.$white, dark:style.$neutral-800),
           (light: #5e7813, dark:#acacac)); // TODO backport border of kropka
   border-color:     var(--category-not-read-border) !important;
 }
 
 .neon-forum-category {
-  @include lookAndFeel(--category-color,
+  @include feel.var(--category-color,
           (light: style.$neutral-700, dark:style.$neutral-200),
           (light: #5e7813, dark:#acacac));
   color: var(--category-color) !important;
@@ -71,7 +51,7 @@
   border-color: var(--post-background) !important;
 }
 
-@include lookAndFeel(--link-color,
+@include feel.var(--link-color,
         (light: style.$neutral-700, dark:style.$neutral-200),
         (light: #5e7813, dark:#acacac));
 
@@ -84,14 +64,14 @@
 }
 
 .neon-secondary-button {
-  @include lookAndFeel(--color, style.$green-500, #80a41a);
+  @include feel.var(--color, style.$green-500, #80a41a);
 
   color:  var(--color) !important;
   border: 1px solid var(--color) !important;
 
   &.neon-follows,
   &:hover {
-    @include lookAndFeel(--hover-color, (light:style.$white, dark:style.$neutral-900), black);
+    @include feel.var(--hover-color, (light:style.$white, dark:style.$neutral-900), black);
 
     background-color: var(--color) !important;
     color:            var(--hover-color) !important;
@@ -104,7 +84,7 @@
 .neon-topic-default-icon,
 .neon-topic-replies-icon,
 .neon-category-default-icon { // ten sam co w linkach, post counter, username
-  @include lookAndFeel(--category-default-icon-color,
+  @include feel.var(--category-default-icon-color,
           (light: style.$green-800, dark:style.$green-050),
           (light: #5e7813, dark:#acacac));
   color: var(--category-default-icon-color) !important;
@@ -112,7 +92,7 @@
 
 .neon-reputation,
 .neon-microblog {
-  @include lookAndFeel(--microblog-background,
+  @include feel.var(--microblog-background,
           (light: style.$white, dark: style.$neutral-800),
           (light: white, dark:#1a1a1a));
   background: var(--microblog-background) !important; // overrides .card background
@@ -120,7 +100,7 @@
 
 .neon-recent-activity-headline a,
 .neon-link {
-  @include lookAndFeel(--link-color,
+  @include feel.var(--link-color,
           (light: style.$green-800, dark:style.$green-050),
           (light: #80a41a, dark:#80a41a));
   color: var(--link-color) !important;
@@ -128,7 +108,7 @@
 
 .neon-microblog-details a, // overrides _reboot.scss a
 .neon-microblog-details {
-  @include lookAndFeel(--microblog-subtitle-color,
+  @include feel.var(--microblog-subtitle-color,
           (light: style.$neutral-500, dark:style.$neutral-300),
           (light: #6c757d, dark:#8f9ba5));
 
@@ -136,20 +116,20 @@
 }
 
 .neon-post-date {
-  @include lookAndFeel(--date-color,
+  @include feel.var(--date-color,
           (light: style.$neutral-800, dark:style.$neutral-300),
           (light: #333333, dark:#acacac));
   color: var(--date-color);
 }
 
 .neon-navbar-search-bar {
-  @include legacy {
+  @include feel.legacy {
     border: 1px solid #ccc;
   }
 }
 
 .neon-breadcrumb {
-  @include lookAndFeel(--category-default-icon-color,
+  @include feel.var(--category-default-icon-color,
           (light: style.$green-800, dark:style.$green-050),
           (light: #5e7813, dark:#acacac));
   &:before {
@@ -158,14 +138,14 @@
 }
 
 .neon-topic-title {
-  @include lookAndFeel(--topic-list-title-color,
+  @include feel.var(--topic-list-title-color,
           (light: style.$neutral-600, dark:style.$neutral-200),
           (light: black, dark:#acacac));
   color: var(--topic-list-title-color) !important;
 }
 
 .neon-topic-title-unread {
-  @include legacy {
+  @include feel.legacy {
     color: #80a41a !important;
   }
 }
@@ -173,7 +153,7 @@
 $lavary-tab:        'nav-item';
 $lavary-tab-anchor: 'nav-link';
 
-@include modern {
+@include feel.modern {
   .neon-tabs {
     @include theme.var(--tab-border-color, (light: style.$neutral-050, dark: style.$neutral-700));
     @include theme.var(--tab-border-active-color, style.$green-500);
@@ -197,7 +177,7 @@ $lavary-tab-anchor: 'nav-link';
   }
 }
 
-@include legacy {
+@include feel.legacy {
   .nav-tabs {
     @include theme.dark {
       border-bottom-color: #404040;

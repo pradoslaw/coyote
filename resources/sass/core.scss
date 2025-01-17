@@ -1,6 +1,5 @@
 @charset "UTF-8";
 
 @use "./legacyCore.scss";
-@use "../feature/lookAndFeel/lookAndFeel_v1.scss";
-@use "../feature/lookAndFeel/lookAndFeel_v2.scss";
+@use "../feature/lookAndFeel/lookAndFeel";
 @use "../js/components/seeMore/seeMore";
