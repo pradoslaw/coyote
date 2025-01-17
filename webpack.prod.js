@@ -71,8 +71,6 @@ const plugins = [
       greedy: [
         /hire-me$/,
         /dropdown-menu/,
-        /^tooltip/,
-        /^bs-tooltip/,
         /^ps/,
         /^tag/,
         /:not/,
