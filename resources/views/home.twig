@@ -14,130 +14,128 @@
         <h2 class="h4">
           Co nowego na forum?
         </h2>
-        <div class="card card-forum neon-homepage-forum-summary">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-lg-6">
-                <ul id="forum-tabs" class="nav nav-pills nav-forum neon-tabber">
-                  <li class="nav-item">
-                    <span
-                        class="nav-link neon-tabber-tab {{ settings.topicMode == 'interesting' ? 'active' }}"
-                        title="Zobacz najciekawsze wątki na forum"
-                        data-bs-target="#interesting"
-                        data-bs-toggle="tab">
-                      Najciekawsze
-                    </span>
-                  </li>
-                  <li class="nav-item">
-                    <span
-                        class="nav-link neon-tabber-tab {{ settings.topicMode == 'newest' ? 'active' }}"
-                        title="Lista najnowszych wątków na forum"
-                        data-bs-target="#newest"
-                        data-bs-toggle="tab">
-                      Nowe wątki
-                    </span>
-                  </li>
-                </ul>
+        <div class="card card-forum neon-homepage-forum-summary p-3">
+          <div class="row">
+            <div class="col-lg-6">
+              <ul id="forum-tabs" class="nav nav-pills nav-forum neon-tabber">
+                <li class="nav-item">
+                  <span
+                      class="nav-link neon-tabber-tab {{ settings.topicMode == 'interesting' ? 'active' }}"
+                      title="Zobacz najciekawsze wątki na forum"
+                      data-bs-target="#interesting"
+                      data-bs-toggle="tab">
+                    Najciekawsze
+                  </span>
+                </li>
+                <li class="nav-item">
+                  <span
+                      class="nav-link neon-tabber-tab {{ settings.topicMode == 'newest' ? 'active' }}"
+                      title="Lista najnowszych wątków na forum"
+                      data-bs-target="#newest"
+                      data-bs-toggle="tab">
+                    Nowe wątki
+                  </span>
+                </li>
+              </ul>
 
-                <div id="box-forum-headline" class="interesting-topics">
-                  <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane {{ settings.topicMode == 'interesting' ? 'active' }}" id="interesting">
-                      {% for topic in interesting %}
-                        <div class="row">
-                          <span class="display-count col-sm-2 col-lg-3 col-xl-2 d-none d-sm-block p-0">
-                            <strong class="text-nowrap">{{ topic.views }}</strong>
-                            <small class="text-nowrap">
-                              {{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}
-                            </small>
-                          </span>
+              <div id="box-forum-headline" class="interesting-topics">
+                <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane {{ settings.topicMode == 'interesting' ? 'active' }}" id="interesting">
+                    {% for topic in interesting %}
+                      <div class="row">
+                        <span class="display-count col-sm-2 col-lg-3 col-xl-2 d-none d-sm-block p-0">
+                          <strong class="text-nowrap">{{ topic.views }}</strong>
+                          <small class="text-nowrap">
+                            {{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}
+                          </small>
+                        </span>
 
-                          <div class="col-12 col-sm-10 col-lg-9 col-xl-10">
-                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}"
-                               href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}"
-                               class="title">
-                              {{ topic.title }}
-                            </a>
-                            <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category neon-link">
-                              {{ topic.forum }}
-                            </a>
-                            <small class="topic-created float-end">
-                              {{ topic.last_post_created_at|format_date }}
-                            </small>
-                          </div>
-                        </div>
-                      {% endfor %}
-                    </div>
-
-                    <div role="tabpanel" class="tab-pane {{ settings.topicMode == 'newest' ? 'active' }}" id="newest">
-                      {% for topic in newest %}
-                        <div class="row">
-                          <span class="display-count col-sm-2 col-lg-3 col-xl-2 d-none d-sm-block p-0">
-                            <strong class="text-nowrap">{{ topic.views }}</strong>
-                            <small class="text-nowrap">
-                              {{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}
-                            </small>
-                          </span>
-
-                          <div class="col-12 col-sm-10 col-lg-9 col-xl-10">
-                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}"
-                               href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}"
-                               class="title">
-                              {{ topic.title }}
-                            </a>
-                            <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category neon-link">
-                              {{ topic.forum }}
-                            </a>
-                            <small class="float-end topic-created">
-                              {{ topic.last_post_created_at|format_date }}
-                            </small>
-                          </div>
-                        </div>
-                      {% endfor %}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div id="stream-wrapper" class="col-lg-6">
-                <ul class="nav nav-pills nav-forum">
-                  <li class="nav-item">
-                    <span class="nav-link nav-link-style-only">
-                      Ostatnia aktywność
-                    </span>
-                  </li>
-                </ul>
-                <div id="stream">
-                  <div class="recent-activity">
-                    {% for activity in activities %}
-                      <div class="media">
-                        <div class="homepage-activity {{ activity.object }} d-none d-sm-block" title="{{ activity.headline|striptags|unescape }}">
-                          <div class="d-block activity-icon">
-                            {% if activity.object == 'microblog' %}
-                              {{ icon('homepageActivityMicroblog') }}
-                            {% elseif activity.object == 'comment' %}
-                              {{ icon('homepageActivityPostComment') }}
-                            {% elseif activity.object == 'topic' %}
-                              {{ icon('homepageActivityTopic') }}
-                            {% elseif activity.object == 'post' %}
-                              {{ icon('homepageActivityPost') }}
-                            {% endif %}
-                          </div>
-                        </div>
-                        <div class="d-none d-sm-block me-2">
-                          <a href="{{ route('profile', [activity.user_id]) }}">
-                            <div class="media-object">
-                              {{ user_avatar(activity.user.photo, activity.user.name) }}
-                            </div>
+                        <div class="col-12 col-sm-10 col-lg-9 col-xl-10">
+                          <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}"
+                             href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}"
+                             class="title">
+                            {{ topic.title }}
                           </a>
-                        </div>
-                        <div class="media-body">
-                          <p class="neon-recent-activity-headline">{{ activity.headline|raw }}</p>
-                          <small>{{ activity.created_at|format_date }}</small>
-                          <strong>{{ activity.excerpt }}</strong>
+                          <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category neon-link">
+                            {{ topic.forum }}
+                          </a>
+                          <small class="topic-created float-end">
+                            {{ topic.last_post_created_at|format_date }}
+                          </small>
                         </div>
                       </div>
                     {% endfor %}
                   </div>
+
+                  <div role="tabpanel" class="tab-pane {{ settings.topicMode == 'newest' ? 'active' }}" id="newest">
+                    {% for topic in newest %}
+                      <div class="row">
+                        <span class="display-count col-sm-2 col-lg-3 col-xl-2 d-none d-sm-block p-0">
+                          <strong class="text-nowrap">{{ topic.views }}</strong>
+                          <small class="text-nowrap">
+                            {{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}
+                          </small>
+                        </span>
+
+                        <div class="col-12 col-sm-10 col-lg-9 col-xl-10">
+                          <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}"
+                             href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}"
+                             class="title">
+                            {{ topic.title }}
+                          </a>
+                          <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category neon-link">
+                            {{ topic.forum }}
+                          </a>
+                          <small class="float-end topic-created">
+                            {{ topic.last_post_created_at|format_date }}
+                          </small>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="stream-wrapper" class="col-lg-6">
+              <ul class="nav nav-pills nav-forum">
+                <li class="nav-item">
+                  <span class="nav-link nav-link-style-only">
+                    Ostatnia aktywność
+                  </span>
+                </li>
+              </ul>
+              <div id="stream">
+                <div class="recent-activity">
+                  {% for activity in activities %}
+                    <div class="media">
+                      <div class="homepage-activity {{ activity.object }} d-none d-sm-block" title="{{ activity.headline|striptags|unescape }}">
+                        <div class="d-block activity-icon">
+                          {% if activity.object == 'microblog' %}
+                            {{ icon('homepageActivityMicroblog') }}
+                          {% elseif activity.object == 'comment' %}
+                            {{ icon('homepageActivityPostComment') }}
+                          {% elseif activity.object == 'topic' %}
+                            {{ icon('homepageActivityTopic') }}
+                          {% elseif activity.object == 'post' %}
+                            {{ icon('homepageActivityPost') }}
+                          {% endif %}
+                        </div>
+                      </div>
+                      <div class="d-none d-sm-block me-2">
+                        <a href="{{ route('profile', [activity.user_id]) }}">
+                          <div class="media-object">
+                            {{ user_avatar(activity.user.photo, activity.user.name) }}
+                          </div>
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <p class="neon-recent-activity-headline">{{ activity.headline|raw }}</p>
+                        <small>{{ activity.created_at|format_date }}</small>
+                        <strong>{{ activity.excerpt }}</strong>
+                      </div>
+                    </div>
+                  {% endfor %}
                 </div>
               </div>
             </div>
