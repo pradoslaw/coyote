@@ -259,66 +259,52 @@
             Akcje
           </h4>
         </div>
-        <ul class="side-menu mt-2">
-          <li :class="{'on': topic.is_subscribed}" class="btn-subscribe action-link" v-if="isAuthorized">
-            <a @click="subscribe(topic)" href="javascript:">
-              <template v-if="topic.is_subscribed">
-                <vue-icon name="topicSubscribed" class="neon-subscribe neon-subscribe-active"></vue-icon>
-                <span>Zakończ obserwację</span>
-              </template>
-              <template v-else>
-                <vue-icon name="topicSubscribe" class="neon-subscribe"></vue-icon>
-                <span>Obserwuj wątek</span>
-              </template>
-            </a>
+        <ul class="list-style-none text-muted mt-2">
+          <li class="mb-2 pt-1 cursor-pointer" :class="{'on': topic.is_subscribed}" v-if="isAuthorized" @click="subscribe(topic)">
+            <span class="me-1">
+              <vue-icon v-if="topic.is_subscribed" name="topicSubscribed" class="neon-subscribe neon-subscribe-active"></vue-icon>
+              <vue-icon v-else name="topicSubscribe" class="neon-subscribe"></vue-icon>
+            </span>
+            ${ topic.is_subscribed ? 'Zakończ obserwację' :  'Obserwuj wątek' }
           </li>
-          <li class="action-link">
-            <a href="{{ threadStartUrl }}">
-              {{ icon('topicGoToBeginning') }}
-              <span>Przejdź na początek wątku</span>
+          <li class="mb-2 pt-1 cursor-pointer">
+            <a href="{{ threadStartUrl }}" rel="nofollow" class="neon-no-color">
+              <span class="me-1">{{ icon('topicGoToBeginning') }}</span>
+              Przejdź na początek wątku
             </a>
           </li>
           {% if can('update', forum) %}
-            <li class="action-link">
-              <a href="{{ route('forum.stream', [model.id]) }}" title="Zobacz dziennik zdarzeń">
-                {{ icon('topicLog') }}
-                <span>Dziennik zdarzeń</span>
-              </a>
-            </li>
-
-            <li class="action-link">
-              <a @click="$refs['update-modal'].open();" href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" rel="nofollow">
-                {{ icon('topicActionRename') }}
-                <span>Zmień tytuł</span>
+            <li class="mb-2 pt-1 cursor-pointer">
+              <a href="{{ route('forum.stream', [model.id]) }}" title="Zobacz dziennik zdarzeń" rel="nofollow" class="neon-no-color">
+                <span class="me-1">{{ icon('topicLog') }}</span>
+                Dziennik zdarzeń
               </a>
             </li>
           {% endif %}
-
+          {% if can('update', forum) %}
+            <li class="mb-2 pt-1 cursor-pointer" @click="$refs['update-modal'].open();" title="Kliknij, aby szybko zmienić tytuł wątku">
+              <span class="me-1">{{ icon('topicActionRename') }}</span>
+              Zmień tytuł
+            </li>
+          {% endif %}
           {% if can('lock', forum) %}
-            <li class="action-link">
-              <a @click="lock" href="javascript:" title="Kliknij, aby zablokować wątek" rel="nofollow">
+            <li class="mb-2 pt-1 cursor-pointer" @click="lock" title="Kliknij, aby zablokować wątek">
+              <span class="me-1">
                 <vue-icon name="topicActionUnlock" v-if="topic.is_locked"></vue-icon>
                 <vue-icon name="topicActionLock" v-else></vue-icon>
-                <span v-if="topic.is_locked">Odblokuj wątek</span>
-                <span v-else>Zablokuj wątek</span>
-              </a>
+              </span>
+              ${ topic.is_locked ? 'Odblokuj wątek' : 'Zablokuj wątek' }
             </li>
           {% endif %}
-
           {% if can('move', forum) %}
-            <li class="action-link">
-              <a @click="$refs['forum-modal'].open();" title="Przenieść ten temat do innej kategorii forum" href="javascript:" rel="nofollow">
-                {{ icon('topicActionMove') }}
-                <span>Przenieś wątek</span>
-              </a>
+            <li class="mb-2 pt-1 cursor-pointer" @click="$refs['forum-modal'].open();" title="Przenieść ten temat do innej kategorii forum">
+              <span class="me-1">{{ icon('topicActionMove') }}</span>
+              Przenieś wątek
             </li>
           {% endif %}
-
-          <li class="action-link">
-            <a href="javascript:" rel="nofollow" @click="copyTopicLink">
-              {{ icon('topicShare') }}
-              <span>Udostępnij</span>
-            </a>
+          <li class="mb-2 pt-1 cursor-pointer" @click="copyTopicLink">
+            <span class="me-1">{{ icon('topicShare') }}</span>
+            Udostępnij
           </li>
         </ul>
 
