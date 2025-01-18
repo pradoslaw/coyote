@@ -253,9 +253,9 @@
             <div class="d-none" :class="{'d-lg-block col-lg-2':is_mode_linear}" v-if="is_mode_linear"/>
             <div class="col-12 d-flex" :class="{'col-lg-10':is_mode_linear}">
               <div v-if="!post.deleted_at">
-                <button
+                <span
                   v-if="!hidden && is_mode_tree"
-                  class="btn btn-sm"
+                  class="post-action"
                   @click="checkAuth(vote, post)"
                   :aria-label="voters"
                   data-balloon-pos="up"
@@ -267,13 +267,13 @@
                   <vue-icon name="postVote" v-else/>
                   <span v-text="post.score" class="ms-1"/>
                   <span class="d-none d-sm-inline ms-1">Doceń</span>
-                </button>
+                </span>
 
                 <div class="dropdown d-inline-block">
-                  <button class="btn btn-sm" data-bs-toggle="dropdown">
+                  <span class="post-action" data-bs-toggle="dropdown">
                     <vue-icon name="postShare"/>
                     <span class="d-none d-sm-inline ms-1">Udostępnij</span>
-                  </button>
+                  </span>
                   <div class="dropdown-menu dropdown-menu-start">
                     <span v-for="item in shareDropdownItems" class="dropdown-item" @click="item.action">
                       <vue-icon :name="item.iconName"/>
@@ -281,8 +281,7 @@
                     </span>
                   </div>
                 </div>
-
-                <button class="btn btn-sm" v-if="post.permissions.accept" @click="accept(post)" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną">
+                <span class="post-action" v-if="post.permissions.accept" @click="accept(post)" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną">
                   <template v-if="post.is_accepted">
                     <vue-icon name="postAcceptAccepted" class="text-primary"/>
                     <span class="d-none d-sm-inline ms-1">Zaakceptuj</span>
@@ -291,34 +290,29 @@
                     <vue-icon name="postAccept"/>
                     <span class="d-none d-sm-inline ms-1">Zaakceptuj</span>
                   </template>
-                </button>
-
-                <template v-if="is_mode_linear">
-                  <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
-                    <span v-if="isCommenting" class="text-primary">
-                      <vue-icon name="postCommentActive"/>
-                    </span>
-                    <vue-icon v-else name="postComment"/>
-                    <span class="d-none d-sm-inline ms-1">Komentuj</span>
-                  </button>
-                </template>
+                </span>
+                <span v-if="is_mode_linear && !post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="post-action">
+                  <span v-if="isCommenting" class="text-primary">
+                    <vue-icon name="postCommentActive"/>
+                  </span>
+                  <vue-icon v-else name="postComment"/>
+                  <span class="d-none d-sm-inline ms-1">Komentuj</span>
+                </span>
               </div>
-
               <div v-if="post.permissions.write" :class="{'ms-auto':is_mode_linear}">
                 <template v-if="!post.deleted_at">
-                  <button @click="replyMentionAuthor" class="btn btn-sm btn-fast-reply" title="Odpowiedz na ten post" v-if="is_mode_linear">
+                  <span @click="replyMentionAuthor" class="post-action" title="Odpowiedz na ten post" v-if="is_mode_linear">
                     <vue-icon name="postMentionAuthor"/>
-                  </button>
-                  <button @click="replyQuoteContent" class="btn btn-sm" title="Dodaj cytat do pola odpowiedzi" v-if="!treeTopicPostFirst">
+                  </span>
+                  <span @click="replyQuoteContent" class="post-action" title="Dodaj cytat do pola odpowiedzi" v-if="!treeTopicPostFirst">
                     <vue-icon name="postAnswerQuote"/>
                     <span class="d-none d-sm-inline ms-1">Odpowiedz</span>
-                  </button>
+                  </span>
                 </template>
-
                 <div v-if="postDropdownVisible" class="dropdown float-end">
-                  <button class="btn btn-sm" data-bs-toggle="dropdown">
+                  <span class="post-action" data-bs-toggle="dropdown">
                     <vue-icon name="postMenuDropdown"/>
-                  </button>
+                  </span>
                   <div class="dropdown-menu dropdown-menu-end">
                     <template v-for="item in postDropdownItems">
                       <div v-if="item.divider" class="dropdown-divider"/>

@@ -18,25 +18,25 @@
   }
 }
 
-.microblog-actions {
-  .microblog-action {
-    display:       inline-block;
-    border-radius: 4px;
-    padding:       2px 7px; // overrides bootstrap padding
-    color:         inherit;
-    border:        1px solid transparent;
-    cursor:        pointer;
+.post-action,
+.microblog-action {
+  font-size:     0.95em;
+  display:       inline-block;
+  border-radius: 4px;
+  padding:       2px 7px; // overrides bootstrap padding
+  color:         inherit;
+  border:        1px solid transparent;
+  cursor:        pointer;
 
-    &:hover {
-      @include theme.light {
-        border:           1px solid #ddd;
-        background-image: linear-gradient(to bottom, #fff 0%, #eee 100%)
-      }
+  &:hover {
+    @include theme.light {
+      border:     1px solid #ddd;
+      background: #f7f7f7
+    }
 
-      @include theme.dark {
-        border:           1px solid #2f2f2f;
-        background-image: linear-gradient(to bottom, #2f2f2f 0%, #212121 100%);
-      }
+    @include theme.dark {
+      border:     1px solid #2f2f2f;
+      background: #292929;
     }
   }
 }
