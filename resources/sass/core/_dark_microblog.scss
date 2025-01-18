@@ -14,18 +14,6 @@ body.theme-dark {
       }
     }
 
-    .microblog-actions {
-      a.btn {
-        color: inherit;
-
-        &:hover {
-          border:           1px solid #2f2f2f;
-          background-image: linear-gradient(to bottom, #2f2f2f 0%, #212121 100%);
-          color:            #acacac;
-        }
-      }
-    }
-
     .microblog-comments {
       .show-all-comments a {
         color: #acacac;

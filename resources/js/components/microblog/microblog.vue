@@ -108,49 +108,49 @@
             @cancel="edit(microblog)"
             @save="edit(microblog)"/>
           <div class="microblog-actions">
-            <a @click="checkAuth(vote, microblog)"
-               @mouseenter.once="loadVoters(microblog)"
-               href="javascript:"
-               class="btn btn-gradient"
-               :aria-label="voters"
-               data-balloon-pos="up"
-               data-balloon-break>
+            <span
+              @click="checkAuth(vote, microblog)"
+              @mouseenter.once="loadVoters(microblog)"
+              class="btn microblog-action"
+              :aria-label="voters"
+              data-balloon-pos="up"
+              data-balloon-break>
               <vue-icon name="microblogVoted" v-if="microblog.is_voted" class="text-primary"/>
               <vue-icon name="microblogVote" v-else/>
               {{ ' ' }}
               {{ microblog.votes }} {{ declination(microblog.votes, ['głos', 'głosy', 'głosów']) }}
-            </a>
-            <a @click="checkAuth(subscribe, microblog)" href="javascript:" class="btn btn-gradient" title="Wł/Wył obserwowanie tego wpisu">
+            </span>
+            <span @click="checkAuth(subscribe, microblog)" class="btn microblog-action" title="Wł/Wył obserwowanie tego wpisu">
               <vue-icon name="microblogSubscribed" v-if="microblog.is_subscribed" class="text-primary"/>
               <vue-icon name="microblogSubscribe" v-else/>
               {{ ' ' }}
               <span class="d-none d-sm-inline">Obserwuj</span>
-            </a>
-            <a @click="checkAuth(reply, microblog.user)" href="javascript:" class="btn btn-gradient" title="Odpowiedz na ten wpis">
+            </span>
+            <span @click="checkAuth(reply, microblog.user)" class="btn microblog-action" title="Odpowiedz na ten wpis">
               <vue-icon name="microblogAddComment"/>
               {{ ' ' }}
               <span class="d-none d-sm-inline">Komentuj</span>
-            </a>
-            <a @click.prevent="copy" :href="microblog.url" class="btn btn-gradient" title="Kopiuj link do schowka">
+            </span>
+            <span @click="copy" class="btn microblog-action" title="Kopiuj link do schowka">
               <vue-icon name="microblogShare"/>
               {{ ' ' }}
               <span class="d-none d-sm-inline">Udostępnij</span>
-            </a>
-            <a v-if="isAuthorized" href="javascript:" :data-metadata="microblog.metadata" :data-url="microblog.url" class="btn btn-gradient" title="Zgłoś ten wpis">
+            </span>
+            <span v-if="isAuthorized" :data-metadata="microblog.metadata" :data-url="microblog.url" class="btn microblog-action" title="Zgłoś ten wpis">
               <vue-icon name="microblogReport"/>
               {{ ' ' }}
               <span class="d-none d-sm-inline">Zgłoś</span>
-            </a>
+            </span>
           </div>
           <div ref="comments" class="microblog-comments">
             <div v-if="microblog.comments_count > Object.keys(microblog.comments).length" class="show-all-comments">
-              <a @click="loadComments(microblog)" href="javascript:">
+              <span @click="loadComments(microblog)">
                 <vue-icon name="microblogCommentsFoldedUnfold"/>
                 Zobacz
                 {{ declination(totalComments, ['pozostały', 'pozostałe', 'pozostałe']) }}
                 {{ totalComments }}
                 {{ declination(totalComments, ['komentarz', 'komentarze', 'komentarzy']) }}
-              </a>
+              </span>
             </div>
 
             <vue-comment v-for="comment in microblog.comments" :key="comment.id" :comment="comment" @reply="reply"/>

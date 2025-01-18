@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@use "../../feature/theme/theme" as theme;
+
 .btn-xs {
   padding: 0.1rem 0.4rem;
 }
@@ -16,13 +18,21 @@
   }
 }
 
-.btn-gradient {
-  padding: 2px 7px;
-  color: $gray-light;
-  position: relative;
+.microblog-actions {
+  .microblog-action {
+    padding: 2px 7px; // overrides bootstrap padding
+    color:   inherit;
 
-  &:hover {
-    border: 1px solid $card-border-color;
-    @include gradient-y(#fff, $gray-lighter);
+    &:hover {
+      @include theme.light {
+        border:           1px solid #ddd;
+        background-image: linear-gradient(to bottom, #fff 0%, #eee 100%)
+      }
+
+      @include theme.dark {
+        border:           1px solid #2f2f2f;
+        background-image: linear-gradient(to bottom, #2f2f2f 0%, #212121 100%);
+      }
+    }
   }
 }
