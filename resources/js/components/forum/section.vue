@@ -52,7 +52,7 @@
                 <ul v-if="category.children" class="list-inline list-sub d-md-block d-lg-block">
                   <li v-for="child in category.children" class="list-inline-item">
                     <vue-icon name="categorySectionChildWasRead" v-if="child.is_read"/>
-                    <i v-else class="not-read neon-category-not-read" title="Nowe posty w tej kategorii"/>
+                    <i v-else class="not-read" title="Nowe posty w tej kategorii"/>
                     {{ ' ' }}
                     <a :href="child.url" class="neon-forum-category-subcategory">
                       {{ child.name }}

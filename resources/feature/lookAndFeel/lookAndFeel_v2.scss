@@ -30,16 +30,6 @@
   background: var(--summary-background) !important; // overrides .card
 }
 
-.neon-category-not-read {
-  @include feel.var(--subscribe-active-color, style.$red-500, style.$red-500);
-  background-color: var(--subscribe-active-color) !important; // overrides .card-topics .on
-
-  @include feel.var(--category-not-read-border,
-          (light: style.$white, dark:style.$neutral-800),
-          (light: #5e7813, dark:#acacac)); // TODO backport border of kropka
-  border-color:     var(--category-not-read-border) !important;
-}
-
 .neon-forum-category {
   @include feel.var(--category-color,
           (light: style.$neutral-700, dark:style.$neutral-200),
