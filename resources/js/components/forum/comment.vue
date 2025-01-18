@@ -13,8 +13,10 @@
     />
     <template v-else>
       <div class="d-flex">
-        <div class="neon-avatar-border">
-          <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="i-35"/>
+        <div>
+          <div class="neon-avatar-border">
+            <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="i-35"/>
+          </div>
         </div>
         <div class="ms-2">
           <div>
