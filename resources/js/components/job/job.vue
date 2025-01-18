@@ -7,10 +7,12 @@
       <div class="media">
         <div class="d-none d-sm-block me-3">
           <a :href="job.url">
-            <img
-              :src="job.firm.logo || '/img/logo-gray.png'"
-              :alt="job.firm.logo ? job.firm.name : ''"
-              class="i-95">
+            <img v-if="job.firm.logo" :src="job.firm.logo" :alt="job.firm.name" class="i-95">
+            <div v-else class="i-95">
+              <div class="neon-placeholder d-flex align-items-center justify-content-center h-100">
+                <vue-icon name="jobOfferMissingLogo" style="font-size:3em;"/>
+              </div>
+            </div>
           </a>
         </div>
         <div class="media-body">
@@ -93,6 +95,9 @@ export default {
     VueIcon,
     'vue-salary': VueSalary,
     'vue-location': VueLocation,
+  },
+  created() {
+    console.log(this.$props.job.firm);
   },
   methods: {
     subscribe() {

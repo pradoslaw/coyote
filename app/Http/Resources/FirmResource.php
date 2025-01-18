@@ -33,6 +33,7 @@ class FirmResource extends JsonResource
             'created_at' => $this->created_at->toIso8601String(),
             'updated_at' => $this->updated_at->toIso8601String(),
             'logo'       => (string)$this->logo->url(),
+            'hasLogo'    => $this->logo->getFilename() && $this->logo->size() > 0,
             'url'        => route('job.firm', $this->slug),
         ]);
     }

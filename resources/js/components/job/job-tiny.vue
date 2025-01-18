@@ -2,7 +2,12 @@
   <div class="media text-truncate">
     <a class="media-link" :href="job.url" :title="fullTitle">
       <div class="d-none d-xl-inline-block me-2">
-        <img :src="job.firm.logo || '/img/logo-gray.png'" :alt="job.firm.logo ? job.firm.name : ''" class="i-45">
+        <img :src="job.firm.logo" :alt="job.firm.name" class="i-45" v-if="job.firm.logo">
+        <div class="i-45" v-else>
+          <div class="neon-placeholder d-flex align-items-center justify-content-center h-100">
+            <vue-icon name="jobOfferMissingLogo" style="font-size:1.5em;"/>
+          </div>
+        </div>
       </div>
 
       <div class="media-body">
@@ -38,12 +43,14 @@
 </template>
 
 <script>
+  import VueIcon from '../icon';
   import VueSalary from './salary.vue';
   import VueLocation from './location.vue';
 
   export default {
     props: ['job'],
     components: {
+      VueIcon,
       'vue-salary': VueSalary,
       'vue-location': VueLocation
     },

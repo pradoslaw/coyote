@@ -394,6 +394,7 @@ readonly class FontAwesomePro
             'jobOfferBenefitCustom'                     => $faTick,
             'jobOfferBenefitRemove'                     => 'fa-light fa-circle-minus',
             'jobOfferFirmNameAdd'                       => 'fa-light fa-circle-plus',
+            'jobOfferMissingLogo'                       => 'fa-light fa-laptop-code',
 
             // job board filters
             'jobBoardFilterOpen'                        => 'fa-light fa-angle-down',
