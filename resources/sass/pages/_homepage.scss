@@ -280,13 +280,9 @@ body.homepage-legacy {
 
     .card-reputation {
       background-color: #1a1a1a;
-
-      .media-body {
-        a.reputation-username {
-          color: #acacac;
-        }
+      a.reputation-username {
+        color: #acacac;
       }
-
       .media {
         border-bottom-color: #2f2f2f;
 

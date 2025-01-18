@@ -10,14 +10,6 @@ body.theme-dark {
     {
       color: #acacac;
 
-      &:hover {
-        color: #b2b2b2;
-      }
-
-      &.active {
-        background: #1a1a1a;
-      }
-
       &:before,
       &:after {
         display: none;
