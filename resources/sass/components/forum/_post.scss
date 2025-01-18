@@ -163,8 +163,8 @@
   img:not(.img-smile) {
     display:    block;
     margin:     1rem 0;
-    max-width:  276px;
-    max-height: 188px;
+    max-width:  min(480px, 100%);
+    max-height: 320px;
     object-fit: contain;
     cursor:     pointer;
   }
