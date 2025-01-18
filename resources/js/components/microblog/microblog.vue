@@ -11,7 +11,7 @@
             <vue-avatar v-bind="microblog.user" :is-online="microblog.user.is_online" class="i-45 d-block img-thumbnail"/>
           </a>
         </div>
-        <div class="flex-grow-1 ">
+        <div class="flex-grow-1" style="min-width:0;">
           <div class="d-flex flex-nowrap">
             <div class="flex-shrink-0 me-auto">
               <h5 class="media-heading">
