@@ -23,6 +23,7 @@ use Coyote\Services\Guest;
 use Coyote\Topic;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Lavary;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Item;
 use Lavary\Menu\Menu;
@@ -90,7 +91,17 @@ class HomeController extends BaseController
             }
         }
 
-        return parent::view($view, $data)->with(['tabs' => $this->tabs, 'title' => $currentTab != 'categories' ? $title : '']);
+        return parent::view($view, $data)->with([
+            'title'     => $currentTab != 'categories' ? $title : '',
+            'forumTabs' => collect($this->tabs->all())
+                ->map(function (Lavary\Menu\Item $menuItem): array {
+                    return [
+                        'label'    => $menuItem->title,
+                        'selected' => $menuItem->active,
+                        'href'     => $menuItem->url(),
+                    ];
+                }),
+        ]);
     }
 
     /**

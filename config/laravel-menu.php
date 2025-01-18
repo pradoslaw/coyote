@@ -50,6 +50,6 @@ return [
         'Wszystkie'   => ['route' => 'forum.all', 'class' => 'nav-item neon-forum-tab'],
         'Obserwowane' => ['route' => 'forum.subscribes', 'class' => 'nav-item neon-forum-tab', 'data' => ['role' => true]],
         'Moje'        => ['route' => 'forum.mine', 'class' => 'nav-item neon-forum-tab', 'data' => ['role' => true], 'title' => 'Wątki w których brałem udział'],
-        'Moje tagi'   => ['route' => 'forum.interesting', 'class' => 'nav-item neon-forum-tab', 'title' => 'Wątki zawierające moje tagi'],
+        'Moje tagi'   => ['route' => 'forum.interesting', 'class' => 'nav-item neon-forum-tab', 'data' => ['role' => true], 'title' => 'Wątki zawierające moje tagi'],
     ],
 ];

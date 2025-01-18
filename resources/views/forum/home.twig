@@ -10,8 +10,13 @@
 {% block content %}
 
   <h1>Forum</h1>
-
-  {{ tabs.asUl({'class': 'nav nav-tabs mb-0 neon-tabs'})|raw }}
+  <div class="nav nav-pills mb-0">
+    {% for tab in forumTabs %}
+      <a href="{{ tab.href }}" class="nav-link {{ tab.selected ? 'active' }}">
+        {{ tab.label }}
+      </a>
+    {% endfor %}
+  </div>
 
   {% include "forum.partials.top" %}
 
