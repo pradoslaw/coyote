@@ -9,12 +9,12 @@
     <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-end">
       <div class="dropdown-header">
         <div v-if="!isEmpty" class="float-end">
-          <a @click="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="me-1">
+          <span @click="openAll" title="Otwórz nowe w nowej karcie" class="cursor-pointer me-1">
             <vue-icon name="notificationsOpenInNewTab"/>
-          </a>
-          <a @click="markAllAsRead" title="Oznacz jako przeczytane" href="javascript:">
+          </span>
+          <span @click="markAllAsRead" title="Oznacz jako przeczytane" class="cursor-pointer">
             <vue-icon name="notificationsMarkAllAsRead"/>
-          </a>
+          </span>
         </div>
         <a title="Przejdź do listy powiadomień" href="/User/Notifications">
           Powiadomienia
