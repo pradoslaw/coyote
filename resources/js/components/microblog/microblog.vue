@@ -111,7 +111,7 @@
             <span
               @click="checkAuth(vote, microblog)"
               @mouseenter.once="loadVoters(microblog)"
-              class="btn microblog-action"
+              class="microblog-action"
               :aria-label="voters"
               data-balloon-pos="up"
               data-balloon-break>
@@ -120,23 +120,23 @@
               {{ ' ' }}
               {{ microblog.votes }} {{ declination(microblog.votes, ['głos', 'głosy', 'głosów']) }}
             </span>
-            <span @click="checkAuth(subscribe, microblog)" class="btn microblog-action" title="Wł/Wył obserwowanie tego wpisu">
+            <span @click="checkAuth(subscribe, microblog)" class="microblog-action" title="Wł/Wył obserwowanie tego wpisu">
               <vue-icon name="microblogSubscribed" v-if="microblog.is_subscribed" class="text-primary"/>
               <vue-icon name="microblogSubscribe" v-else/>
               {{ ' ' }}
               <span class="d-none d-sm-inline">Obserwuj</span>
             </span>
-            <span @click="checkAuth(reply, microblog.user)" class="btn microblog-action" title="Odpowiedz na ten wpis">
+            <span @click="checkAuth(reply, microblog.user)" class="microblog-action" title="Odpowiedz na ten wpis">
               <vue-icon name="microblogAddComment"/>
               {{ ' ' }}
               <span class="d-none d-sm-inline">Komentuj</span>
             </span>
-            <span @click="copy" class="btn microblog-action" title="Kopiuj link do schowka">
+            <span @click="copy" class="microblog-action" title="Kopiuj link do schowka">
               <vue-icon name="microblogShare"/>
               {{ ' ' }}
               <span class="d-none d-sm-inline">Udostępnij</span>
             </span>
-            <span v-if="isAuthorized" :data-metadata="microblog.metadata" :data-url="microblog.url" class="btn microblog-action" title="Zgłoś ten wpis">
+            <span v-if="isAuthorized" :data-metadata="microblog.metadata" :data-url="microblog.url" class="microblog-action" title="Zgłoś ten wpis">
               <vue-icon name="microblogReport"/>
               {{ ' ' }}
               <span class="d-none d-sm-inline">Zgłoś</span>

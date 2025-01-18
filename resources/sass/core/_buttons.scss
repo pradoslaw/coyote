@@ -20,8 +20,12 @@
 
 .microblog-actions {
   .microblog-action {
-    padding: 2px 7px; // overrides bootstrap padding
-    color:   inherit;
+    display:       inline-block;
+    border-radius: 4px;
+    padding:       2px 7px; // overrides bootstrap padding
+    color:         inherit;
+    border:        1px solid transparent;
+    cursor:        pointer;
 
     &:hover {
       @include theme.light {
