@@ -1,35 +1,34 @@
 <template>
   <div class="card-section card neon-collapsable-section">
     <div class="pb-2 pt-1 ps-lg-3 pt-lg-2 pe-lg-2">
-      <h2 class="section-name mb-0 float-start">
-        <span v-if="collapsable" @click="collapse">
-          <vue-icon name="categorySectionFolded" v-if="isCollapse"/>
-          <vue-icon name="categorySectionFold" v-else/>
-          {{ name }}
-        </span>
-        <template v-else>{{name}}</template>
-      </h2>
-
-      <div
-        v-if="isAuthorized && !categories[0].parent_id"
-        class="dropdown float-end dropleft"
-        :class="{'open': isDropdown}"
-        v-click-away="hideDropdown"
-      >
-        <span @click="isDropdown = !isDropdown" class="card-cog mt-2 me-2">
-          <vue-icon name="categorySectionMenu"/>
-        </span>
-        <div :class="{'d-block': isDropdown}" class="dropdown-menu">
-          <span v-for="category in categories" class="dropdown-item" @click="toggle(category)">
-            <vue-icon name="categorySectionMenuItemEnabled" v-if="!category.is_hidden"/>
-            <vue-icon empty v-else/>
-            {{ category.name }}
+      <div class="d-flex justify-content-between">
+        <div class="cursor-pointer">
+          <span v-if="collapsable" @click="collapse">
+            <vue-icon name="categorySectionFolded" v-if="isCollapse"/>
+            <vue-icon name="categorySectionFold" v-else/>
+            {{ name }}
           </span>
+          <template v-else v-text="name"/>
+        </div>
+        <div
+          v-if="isAuthorized && !categories[0].parent_id"
+          class="dropdown dropleft"
+          :class="{'open': isDropdown}"
+          v-click-away="hideDropdown"
+        >
+          <span @click="isDropdown = !isDropdown" class="card-cog mt-2 me-2">
+            <vue-icon name="categorySectionMenu"/>
+          </span>
+          <div :class="{'d-block': isDropdown}" class="dropdown-menu">
+            <span v-for="category in categories" class="dropdown-item" @click="toggle(category)">
+              <vue-icon name="categorySectionMenuItemEnabled" v-if="!category.is_hidden"/>
+              <vue-icon empty v-else/>
+              {{ category.name }}
+            </span>
+          </div>
         </div>
       </div>
-      <div class="clearfix"/>
     </div>
-
     <section v-if="!isCollapse" class="card-categories mb-0">
       <template v-for="(category, index) in categories">
         <div v-if="!category.is_hidden" :class="{'not-read': !category.is_read}" class="px-3 py-2 neon-collapsable-section-item toolbox-container">
