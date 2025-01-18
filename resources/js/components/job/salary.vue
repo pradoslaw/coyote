@@ -21,7 +21,7 @@
                 {{ currency_symbol }}
             </template>
         </strong>
-
+        {{ ' ' }}
         <small v-if="salary_from && salary_to" class="text-muted">{{ is_gross ? 'brutto' : 'netto' }}</small>
         <small v-if="rate" class="text-muted">{{ rate }}</small>
     </p>
