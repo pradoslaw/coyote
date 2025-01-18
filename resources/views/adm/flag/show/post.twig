@@ -17,13 +17,7 @@
     </div>
     <div class="card-body">
       <div class="row">
-        <div class="col-2">
-          {% if post.author.displayAvatar %}
-            <div class="post-avatar img-thumbnail">
-              {{ user_avatar(post.author.avatar, post.author.name) }}
-            </div>
-          {% endif %}
-        </div>
+        <div class="col-2"></div>
         <div class="col-10 post-content">
           {{ post.content }}
         </div>

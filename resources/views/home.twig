@@ -124,7 +124,7 @@
                       </div>
                       <div class="d-none d-sm-block me-2">
                         <a href="{{ route('profile', [activity.user_id]) }}">
-                          <div class="media-object">
+                          <div style="width:42px;height:42px;" class="neon-avatar-border">
                             {{ user_avatar(activity.user.photo, activity.user.name) }}
                           </div>
                         </a>
@@ -196,11 +196,12 @@
                   <div class="media">
                     <div class="me-2">
                       <a href="{{ route('profile', [user.id]) }}">
-                        {{ user_avatar(user.photo, user.name) }}
+                        <div class="neon-avatar-border">
+                          {{ user_avatar(user.photo, user.name) }}
+                        </div>
                       </a>
                     </div>
-
-                    <div class="media-body">
+                    <div class="flex-grow-1">
                       <span class="mb-1 d-block">
                         <a data-user-id="{{ user.id }}" href="{{ route('profile', [user.id]) }}" class="reputation-username">
                           {{ user.name }}

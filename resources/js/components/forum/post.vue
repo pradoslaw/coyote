@@ -10,15 +10,15 @@
     />
     <div class="d-flex">
       <div>
-        <vue-avatar
-          v-if="post.user && is_mode_tree"
-          :name="post.user.name"
-          :photo="post.user.photo"
-          :initials="post.user.initials"
-          :is-online="post.user.is_online"
-          class="img-thumbnail neon-post-user-avatar me-1"
-          style="width:40px; z-index:1;"
-        />
+        <div class="neon-avatar-border me-1" v-if="post.user && is_mode_tree">
+          <vue-avatar
+            :name="post.user.name"
+            :photo="post.user.photo"
+            :initials="post.user.initials"
+            :is-online="post.user.is_online"
+            style="width:40px; z-index:1;"
+          />
+        </div>
       </div>
       <div
         :id="anchor"
@@ -74,14 +74,15 @@
         <div :class="{'collapse': isCollapsed}" class="card-body">
           <div class="media mb-2" :class="{'d-lg-none':is_mode_linear}">
             <div class="media-left me-2" v-if="is_mode_linear">
-              <vue-avatar
-                v-if="post.user"
-                :name="post.user.name"
-                :photo="post.user.photo"
-                :is-online="post.user.is_online"
-                :initials="post.user.initials"
-                class="d-block i-35 img-thumbnail"
-              />
+              <div class="neon-avatar-border" v-if="post.user">
+                <vue-avatar
+                  :name="post.user.name"
+                  :photo="post.user.photo"
+                  :is-online="post.user.is_online"
+                  :initials="post.user.initials"
+                  class="i-35"
+                />
+              </div>
             </div>
 
             <div class="media-body">
@@ -101,14 +102,18 @@
           <div class="row">
             <div class="d-none" :class="{'d-lg-block col-lg-2':is_mode_linear}" v-if="is_mode_linear">
               <template v-if="post.user">
-                <vue-avatar
-                  v-if="post.user"
-                  :name="post.user.name"
-                  :photo="post.user.photo"
-                  :initials="post.user.initials"
-                  :is-online="post.user.is_online"
-                  class="post-avatar img-thumbnail neon-post-user-avatar"
-                />
+                <div class="d-flex">
+                  <div class="neon-avatar-border">
+                    <vue-avatar
+                      v-if="post.user"
+                      :name="post.user.name"
+                      :photo="post.user.photo"
+                      :initials="post.user.initials"
+                      :is-online="post.user.is_online"
+                      class="i-70"
+                    />
+                  </div>
+                </div>
                 <span v-if="post.user.group_name && !is_mode_tree" class="badge badge-secondary mb-1">
                   {{ post.user.group_name }}
                 </span>
@@ -451,7 +456,7 @@ export default {
       postDefault: {text: '', html: '', assets: []},
       treeTopicReplyVisible: false,
       galleryImages: [],
-      galleryImageIndex: null as number | null,
+      galleryImageIndex: null as number|null,
     };
   },
   created(): void {
@@ -706,7 +711,7 @@ export default {
       }
       return users.length > 10 ? users.slice(0, 10).concat('...').join("\n") : users.join("\n");
     },
-    otherVoters(): string[] | null {
+    otherVoters(): string[]|null {
       if (this.post.voters) {
         return this.post.voters.filter((name: string) => name !== this.user.name);
       }

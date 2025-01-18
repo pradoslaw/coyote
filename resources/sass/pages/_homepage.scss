@@ -166,13 +166,6 @@ body.homepage-legacy {
       @include media-breakpoint-down(md) {
         padding: 0;
       }
-
-      .default-avatar {
-        svg {
-          width: 38px;
-          height: 38px;
-        }
-      }
     }
 
     .media-body {

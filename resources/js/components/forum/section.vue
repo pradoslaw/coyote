@@ -90,7 +90,9 @@
             <div v-if="!category.is_redirected" class="col-12 col-lg-5 position-relative">
               <div v-if="category.post" class="media">
                 <a v-profile="category.post.user ? category.post.user.id : null">
-                  <vue-avatar v-bind="category.post.user" class="i-38 me-2 d-none d-sm-block img-thumbnail"/>
+                  <div class="neon-avatar-border d-none d-sm-block me-2">
+                    <vue-avatar v-bind="category.post.user" class="i-38"/>
+                  </div>
                 </a>
                 <div class="media-body overflow-hidden">
                   <p class="text-truncate mb-1">

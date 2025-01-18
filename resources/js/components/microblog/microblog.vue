@@ -1,14 +1,16 @@
 <template>
   <!-- we use below ID in mounted() method -->
   <div :id="`entry-${microblog.id}`" class="microblog neon-card neon-microblog mb-3 p-3" style="border-radius:8px;">
-    <div >
+    <div>
       <div v-if="microblog.deleted_at" class="alert alert-danger">
         Ten wpis został usunięty. Możesz go przywrócić jeżeli chcesz.
       </div>
       <div class="d-flex">
         <div class="d-none d-sm-block me-2">
           <a v-profile="microblog.user.id">
-            <vue-avatar v-bind="microblog.user" :is-online="microblog.user.is_online" class="i-45 d-block img-thumbnail"/>
+            <div class="neon-avatar-border">
+              <vue-avatar v-bind="microblog.user" :is-online="microblog.user.is_online" class="i-45"/>
+            </div>
           </a>
         </div>
         <div class="flex-grow-1" style="min-width:0;">

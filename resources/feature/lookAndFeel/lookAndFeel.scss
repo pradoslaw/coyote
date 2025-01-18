@@ -1,2 +1,16 @@
+@use "../theme/theme" as theme;
 @use "./lookAndFeel_v1.scss";
 @use "./lookAndFeel_v2.scss";
+
+.neon-avatar-border {
+  border-radius: 5px;
+  border-width:  3px;
+  border-style:  solid;
+  @include theme.property(border-color, white, black);
+
+  .user-avatar,
+  .default-avatar {
+    border-radius: 2px;
+    overflow:      hidden;
+  }
+}

@@ -2,7 +2,9 @@
   <div :id="anchor" :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false, 'border border-danger': comment.deleted_at}" class="media">
     <div class="me-2">
       <a v-profile="comment.user.id">
-        <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="i-35 d-block img-thumbnail"></vue-avatar>
+        <div class="neon-avatar-border">
+          <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="i-35"/>
+        </div>
       </a>
     </div>
 

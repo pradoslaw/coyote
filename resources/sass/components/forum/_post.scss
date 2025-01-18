@@ -84,12 +84,6 @@
   border-bottom:    1px solid $alert-warning-border;
 }
 
-.post-avatar {
-  margin:    5px 0;
-  display:   block;
-  max-width: 70px;
-}
-
 .post-author {
   @include text-truncate;
 

@@ -109,9 +109,10 @@
       <div class="col-xl-2 col-lg-2 col-md-12">
         <div class="media m-md-0">
           <a v-profile="this.topic.last_post.user ? this.topic.last_post.user.id : null">
-            <vue-avatar v-bind="topic.last_post.user" class="i-35 me-2 d-none d-md-inline-block position-relative img-thumbnail"></vue-avatar>
+            <div class="neon-avatar-border me-2 d-none d-md-inline-block">
+              <vue-avatar v-bind="topic.last_post.user" class="i-35"/>
+            </div>
           </a>
-
           <div class="media-body small text-truncate">
             <p class="mb-0 d-inline d-md-block">
               <vue-username v-if="topic.last_post.user" :user="topic.last_post.user" class="topic-username"></vue-username>

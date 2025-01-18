@@ -13,7 +13,9 @@
     />
     <template v-else>
       <div class="d-flex">
-        <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="img-thumbnail media-object i-35 flex-grow-0 flex-shrink-0"/>
+        <div class="neon-avatar-border">
+          <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="i-35"/>
+        </div>
         <div class="ms-2">
           <div>
             <vue-username :user="comment.user" :owner="comment.user.id === topic.owner_id"/>
