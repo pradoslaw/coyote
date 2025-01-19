@@ -40,7 +40,7 @@
   @each $name, $color in (java, #5484a4), (javascript, #e0c536), (csharp, #873b89), (php, #aabdd6), (python, #447c9c), (cpp, #649cd3), (c, #acbccc) {
     > .#{$name} {
       > .card-hire-me {
-        border: 2px solid $color;
+        border: 1px solid $color;
 
         .card-header {
           background-color: $color;
