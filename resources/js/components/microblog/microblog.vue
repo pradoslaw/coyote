@@ -144,7 +144,7 @@
           </div>
           <div ref="comments" class="microblog-comments">
             <div v-if="microblog.comments_count > Object.keys(microblog.comments).length" class="show-all-comments">
-              <span @click="loadComments(microblog)">
+              <span @click="loadComments(microblog)" class="cursor-pointer">
                 <vue-icon name="microblogCommentsFoldedUnfold"/>
                 Zobacz
                 {{ declination(totalComments, ['pozostały', 'pozostałe', 'pozostałe']) }}

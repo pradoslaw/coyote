@@ -210,13 +210,13 @@
               <div class="post-comments" v-if="is_mode_linear">
                 <div v-if="post.comments_count > Object.keys(post.comments).length"
                      class="d-inline-block mb-2 show-all-comments">
-                  <a @click="loadComments(post)" href="javascript:">
+                  <span @click="loadComments(post)" class="cursor-pointer">
                     <vue-icon name="postFoldedCommentsUnfold"/>
                     Zobacz
                     {{ declination(totalComments, ['pozostały', 'pozostałe', 'pozostałe']) }}
                     {{ totalComments }}
                     {{ declination(totalComments, ['komentarz', 'komentarze', 'komentarzy']) }}
-                  </a>
+                  </span>
                 </div>
                 <vue-comment
                   v-for="comment in post.comments"
