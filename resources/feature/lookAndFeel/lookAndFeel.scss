@@ -203,7 +203,7 @@ a:not(.btn) {
 }
 
 @include feel.modern {
-  @include theme.var(--border, (light:1px solid #e9ecef, dark:1px solid #2a2e30));
+  @include theme.var(--border, (light:1px solid style.$neutral-050, dark:1px solid style.$neutral-700));
 }
 
 .backport-post-header {
