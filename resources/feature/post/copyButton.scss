@@ -1,21 +1,33 @@
+@use "../../feature/theme/theme" as theme;
+
 .markdown-code {
   position: relative;
 
   .copy-button {
-    display:          none;
-    position:         absolute;
-    padding:          2px 8px;
-    border-radius:    8px;
-    background-color: #f5f2f0; // background of code block
-    color:            #838383;
-    border:           1px solid currentColor;
-    right:            12px;
-    top:              12px;
-    z-index:          1;
-    cursor:           pointer;
-    font-size:        0.8em;
-    &:hover {
-      background-color: lighten(#f5f2f0, 2%);
+    display:       none;
+    position:      absolute;
+    padding:       2px 8px;
+    border-radius: 8px;
+    border:        1px solid currentColor;
+    right:         12px;
+    top:           12px;
+    z-index:       1;
+    cursor:        pointer;
+    font-size:     0.8em;
+
+    @include theme.light {
+      color:            #838383;
+      background-color: #f5f2f0; // background of code block
+      &:hover {
+        background-color: lighten(#f5f2f0, 2%);
+      }
+    }
+
+    @include theme.dark {
+      border: 1px solid #838383;
+      &:hover {
+        background-color: #1a1a1a;
+      }
     }
   }
 
