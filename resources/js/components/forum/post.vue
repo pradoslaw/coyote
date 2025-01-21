@@ -291,7 +291,7 @@
                     <span class="d-none d-sm-inline ms-1">Zaakceptuj</span>
                   </template>
                 </span>
-                <span v-if="is_mode_linear && !post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="post-action">
+                <span v-if="is_mode_linear && (!post.is_locked || post.permissions.write)" @click="checkAuth(comment)" class="post-action">
                   <span v-if="isCommenting" class="text-primary">
                     <vue-icon name="postCommentActive"/>
                   </span>
