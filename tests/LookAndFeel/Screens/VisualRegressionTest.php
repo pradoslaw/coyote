@@ -75,6 +75,16 @@ class VisualRegressionTest extends TestCase
 
     #[Test]
     #[DoesNotPerformAssertions]
+    public function topicSidebar(): void
+    {
+        $this->navigate('/Forum/Python/1');
+        $this->changeViewportSize(800);
+        $this->openSidebar();
+        $this->captureScreenshots();
+    }
+
+    #[Test]
+    #[DoesNotPerformAssertions]
     public function login(): void
     {
         $this->visit('/Login');
@@ -103,18 +113,34 @@ class VisualRegressionTest extends TestCase
 
     private function visit(string $url): void
     {
+        $this->navigate($url);
+        $this->changeViewportSize(1200);
+        $this->captureScreenshots();
+    }
+
+    private function navigate(string $url): void
+    {
         self::$runner->webDriver->navigate($url);
         self::$runner->webDriver->disableCssTransitions();
         self::$runner->webDriver->hideKeyboardCursor();
         self::$runner->webDriver->driver->executeScript("if (document.querySelector('.execution-time')) document.querySelector('.execution-time').remove();");
         $this->closeGdpr();
-        self::$runner->webDriver->resize(1200, 300);
+    }
+
+    private function changeViewportSize(?int $width): void
+    {
+        self::$runner->webDriver->resize($width ?? 1200, 300);
+        self::$runner->webDriver->enlargeToContent($width ?? 1200);
+    }
+
+    private function captureScreenshots(): void
+    {
         $names = [];
         foreach ([false, true] as $dark) {
             foreach ([false, true] as $modern) {
                 $filename = $this->screenshotFilename($modern, $dark);
                 $this->setTheme($modern, $dark);
-                self::$runner->webDriver->screenshot($filename, 1200);
+                self::$runner->webDriver->screenshot($filename);
                 $names[] = "$filename.png";
             }
         }
@@ -139,5 +165,10 @@ class VisualRegressionTest extends TestCase
         if ($gdpr->isDisplayed()) {
             $gdpr->click();
         }
+    }
+
+    private function openSidebar(): void
+    {
+        self::$runner->webDriver->find('#btn-toggle-sidebar')->click();
     }
 }

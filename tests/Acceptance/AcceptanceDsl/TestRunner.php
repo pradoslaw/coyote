@@ -28,7 +28,7 @@ readonly class TestRunner
 
     public function captureScreenshotForTest(TestCase $testCase, ?int $width = null): void
     {
-        $this->webDriver->screenshot($this->screenshotFilename($testCase), $width);
+        $this->webDriver->screenshotFit($this->screenshotFilename($testCase), $width);
     }
 
     private function screenshotFilename(TestCase $testCase): string

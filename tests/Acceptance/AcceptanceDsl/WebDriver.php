@@ -32,10 +32,15 @@ readonly class WebDriver
         return \explode("\n", $this->find('body')->getText());
     }
 
-    public function screenshot(string $screenshotFilename, ?int $width = null): void
+    public function screenshotFit(string $screenshotFilename, ?int $width = null): void
     {
-        $this->fitViewportToContent($width);
+        $this->enlargeToContent($width);
         \uSleep(300 * 1000);
+        $this->screenshot($screenshotFilename);
+    }
+
+    public function screenshot(string $screenshotFilename): void
+    {
         $this->driver->takeScreenshot($this->formatScreenshotPath($screenshotFilename));
     }
 
@@ -122,10 +127,10 @@ readonly class WebDriver
         return $this->driver->findElements(WebDriverBy::cssSelector($selector));
     }
 
-    private function fitViewportToContent(?int $width): void
+    public function enlargeToContent(?int $width): void
     {
-        $html = $this->driver->findElement(WebDriverBy::tagName('html'));
-        $this->resize($width ?? $html->getSize()->getWidth(), $html->getSize()->getHeight());
+        $size = $this->driver->findElement(WebDriverBy::tagName('html'))->getSize();
+        $this->resize($width ?? $size->getWidth(), $size->getHeight());
     }
 
     public function resize(int $width, int $height): void
