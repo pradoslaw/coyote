@@ -4,65 +4,61 @@
 {% block wrapper %}
   <div class="row">
     <div class="col-8">
-      <div id="box-start" class="card">
-        <div class="card-body">
-          <div class="media">
-            <div id="js-user" class="d-none d-sm-block me-3">
-              <vue-thumbnail
-                  :url="url"
-                  :only-image="true"
-                  upload-url="{{ route('user.photo.upload') }}"
-                  @upload="setPhoto"
-                  @delete="deletePhoto"
-              ></vue-thumbnail>
-            </div>
+      <div id="box-start" class="neon-tile neon-rounded p-3">
+        <div class="d-flex">
+          <div id="js-user" class="d-none d-sm-block me-3">
+            <vue-thumbnail
+                :url="url"
+                :only-image="true"
+                upload-url="{{ route('user.photo.upload') }}"
+                @upload="setPhoto"
+                @delete="deletePhoto"
+            ></vue-thumbnail>
+          </div>
+          <div class="flex-grow-1" style="min-width:0;">
+            <ul class="metadata list-inline">
+              <li class="list-inline-item" title="Ostatnia wizyta">
+                {{ icon('userLastVisitDate') }}
+                {{ user('visited_at')|format_date }}
+              </li>
+              <li class="list-inline-item" title="Twoje aktualne IP">
+                {{ icon('userIpAddress') }}
+                {{ ip }}
+              </li>
+              <li class="list-inline-item" title="Data rejestracji">
+                {{ icon('userRegisterDate') }}
+                {{ user('created_at')|format_date }}
+              </li>
+              <li class="list-inline-item" title="Liczba wizyt">
+                {{ icon('userVisits') }}
+                {{ user('visits')|number_format(0, ',', ' ') }}
+              </li>
+            </ul>
+            <div class="mt-2">
+              <h6>
+                {{ icon('userReputation') }}
+                Twoja reputacja
+              </h6>
 
-            <div class="media-body">
-              <ul class="metadata list-inline">
-                <li class="list-inline-item" title="Ostatnia wizyta">
-                  {{ icon('userLastVisitDate') }}
-                  {{ user('visited_at')|format_date }}
-                </li>
-                <li class="list-inline-item" title="Twoje aktualne IP">
-                  {{ icon('userIpAddress') }}
-                  {{ ip }}
-                </li>
-                <li class="list-inline-item" title="Data rejestracji">
-                  {{ icon('userRegisterDate') }}
-                  {{ user('created_at')|format_date }}
-                </li>
-                <li class="list-inline-item" title="Liczba wizyt">
-                  {{ icon('userVisits') }}
-                  {{ user('visits')|number_format(0, ',', ' ') }}
-                </li>
-              </ul>
+              <div class="progress">
+                <div class="progress-bar"
+                     role="progressbar"
+                     aria-valuenow="{{ rank.percentage }}"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="width: {{ rank.percentage }}%;"></div>
 
-              <div class="mt-2">
-                <h6>
-                  {{ icon('userReputation') }}
-                  Twoja reputacja
-                </h6>
+                <span class="rep">
+                  <strong>{{ user('reputation')|number_format(0, '', ' ') }}</strong>
+                  <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small>
+                </span>
 
-                <div class="progress">
-                  <div class="progress-bar"
-                       role="progressbar" 
-                       aria-valuenow="{{ rank.percentage }}" 
-                       aria-valuemin="0" 
-                       aria-valuemax="100" 
-                       style="width: {{ rank.percentage }}%;"></div>
-
-                  <span class="rep">
-                    <strong>{{ user('reputation')|number_format(0, '', ' ') }}</strong>
-                    <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small>
+                {% if total_users > 0 %}
+                  <span class="rank" title="Miejsce w rankingu">
+                    <strong>#{{ rank.rank }}</strong>
+                    <small>/ {{ total_users }}</small>
                   </span>
-
-                  {% if total_users > 0 %}
-                    <span class="rank" title="Miejsce w rankingu">
-                      <strong>#{{ rank.rank }}</strong>
-                      <small>/ {{ total_users }}</small>
-                    </span>
-                  {% endif %}
-                </div>
+                {% endif %}
               </div>
             </div>
           </div>

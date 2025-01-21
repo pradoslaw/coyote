@@ -1,22 +1,19 @@
 #vcard {
-  padding: 2px;
-  position: absolute;
-  box-shadow: 0 3px 9px #444;
-  z-index: 3;
+  padding:          2px;
+  position:         absolute;
+  box-shadow:       0 3px 9px #444;
+  z-index:          3;
   background-color: $gray-dark;
-  border-radius: 6px;
+  border-radius:    6px;
 }
 
 #vcard-content {
-  background-color: #fff;
-  padding: 15px;
+  padding:       15px;
   border-radius: 4px;
-
   .list-inline {
-    color: $gray-light;
+    color:     $gray-light;
     font-size: 12px;
     max-width: 328px;
-
     li {
       max-width: 160px;
     }
