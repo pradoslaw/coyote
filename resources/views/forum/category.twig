@@ -26,17 +26,24 @@
         :order="section.order"
         :categories="section.categories"
     ></vue-section>
-
     {% include 'forum.partials.topics' %}
-
     <section class="d-flex mt-3">
       {% include 'forum.partials.per_page' with {label: 'Liczba wątków na stronę', perPage: topics.perPage()} %}
     </section>
-
     <vue-notifications></vue-notifications>
   </main>
+  <script>
+    var forums = {{ forums|json_encode|raw }};
+    var topics = {{ topics|json_encode|raw }};
+    var postsPerPage = {{ postsPerPage }};
+    var flags = {{ flags|json_encode|raw }};
+    var groupStickyTopics = true;
+    var tags = {{ tags.user|json_encode|raw }};
+  </script>
+{% endblock %}
 
-  {% embed "forum.partials.sidebar.twig" %}
+{% block sidebar %}
+  {% embed 'forum.partials.sidebar' %}
     {% block side_menu %}
       {% include 'forum.partials.post_count' %}
       <div class="box mb-5">
@@ -61,13 +68,4 @@
       </div>
     {% endblock %}
   {% endembed %}
-
-  <script>
-    var forums = {{ forums|json_encode|raw }};
-    var topics = {{ topics|json_encode|raw }};
-    var postsPerPage = {{ postsPerPage }};
-    var flags = {{ flags|json_encode|raw }};
-    var groupStickyTopics = true;
-    var tags = {{ tags.user|json_encode|raw }};
-  </script>
 {% endblock %}

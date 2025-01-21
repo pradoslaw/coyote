@@ -25,7 +25,16 @@
       </div>
     </div>
   </main>
+{% endblock %}
 
+{% block body %}
+  <script>
+    var tags = {{ tags.user|json_encode|raw }};
+  </script>
+  {{ parent() }}
+{% endblock %}
+
+{% block sidebar %}
   {% embed 'forum.partials.sidebar' %}
     {% block side_menu %}
       <div class="box">
@@ -40,11 +49,4 @@
       </div>
     {% endblock %}
   {% endembed %}
-{% endblock %}
-
-{% block body %}
-  <script>
-    var tags = {{ tags.user|json_encode|raw }};
-  </script>
-  {{ parent() }}
 {% endblock %}

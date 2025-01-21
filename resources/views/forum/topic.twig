@@ -250,6 +250,20 @@
     </div>
   </main>
 
+  <script>
+    var pagination = {{ posts|json_encode|raw }};
+    var topic = {{ topic|json_encode|raw }};
+    var poll = {{ poll|json_encode|raw }};
+    var forum = {{ forum|json_encode|raw }};
+    var allForums = {{ all_forums|json_encode|raw }};
+    var reasons = {{ reasons|json_encode|raw }};
+    var tags = {{ tags.user|json_encode|raw }};
+    var flags = {{ flags|json_encode|raw }};
+    var emojis = {{ emojis|json_encode|raw }};
+  </script>
+{% endblock %}
+
+{% block sidebar %}
   {% embed 'forum.partials.sidebar' %}
     {% block side_menu %}
       <div id="js-sidebar" class="box mb-5" v-cloak>
@@ -311,20 +325,16 @@
         {% if can('move', forum) %}
           <vue-modal ref="forum-modal">
             <template v-slot:title>Czy chcesz przenieść?</template>
-
             <template v-slot:buttons>
               <button @click="$refs['forum-modal'].close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
               <vue-button @click="move" :disabled="isProcessing" class="btn btn-danger danger">Tak, przenieś</vue-button>
             </template>
-
             <p>Czy na pewno chcesz przenieść wątek do innej kategorii?</p>
-
             <p>
               <select v-model="forumId" class="form-control form-control-sm">
                 <option v-for="forum in sortedForums" :key="forum.id" :value="forum.id" v-html="forum.name"></option>
               </select>
             </p>
-
             <p>
               <vue-select name="reason_id" :options="reasons" v-model="reasonId" class="form-control-sm" placeholder="-- wybierz --"></vue-select>
             </p>
@@ -334,17 +344,14 @@
         {% if can('update', forum) %}
           <vue-modal ref="update-modal">
             <template v-slot:title>Zmień tytuł</template>
-
             <template v-slot:buttons>
               <button @click="$refs['update-modal'].close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
               <vue-button @click="changeTitle" :disabled="isProcessing" class="btn btn-danger danger">Zmień tytuł</vue-button>
             </template>
-
             <input type="text" name="title" v-model="topic.title" @keydown.enter="changeTitle" class="form-control">
           </vue-modal>
         {% endif %}
       </div>
-
       <div class="mb-5">
         {{ globalViewers|raw }}
       </div>
@@ -353,16 +360,4 @@
       </div>
     {% endblock %}
   {% endembed %}
-
-  <script>
-    var pagination = {{ posts|json_encode|raw }};
-    var topic = {{ topic|json_encode|raw }};
-    var poll = {{ poll|json_encode|raw }};
-    var forum = {{ forum|json_encode|raw }};
-    var allForums = {{ all_forums|json_encode|raw }};
-    var reasons = {{ reasons|json_encode|raw }};
-    var tags = {{ tags.user|json_encode|raw }};
-    var flags = {{ flags|json_encode|raw }};
-    var emojis = {{ emojis|json_encode|raw }};
-  </script>
 {% endblock %}

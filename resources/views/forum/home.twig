@@ -8,7 +8,6 @@
 {% import 'components.forms' as forms %}
 
 {% block content %}
-
   <h1>Forum</h1>
   <div class="nav nav-pills mb-0">
     {% for tab in forumTabs %}
@@ -37,6 +36,16 @@
     <vue-notifications></vue-notifications>
   </main>
 
+  <script>
+    var forums = {{ forums|json_encode|raw }};
+    var collapse = {{ collapse|json_encode|raw }};
+    var showCategoryName = true;
+    var postsPerPage = {{ postsPerPage|number_format }};
+    var tags = {{ tags.user|json_encode|raw }};
+  </script>
+{% endblock %}
+
+{% block sidebar %}
   {% embed 'forum.partials.sidebar' %}
     {% block side_menu %}
       {% include 'forum.partials.post_count' %}
@@ -59,12 +68,4 @@
       </div>
     {% endblock %}
   {% endembed %}
-
-  <script>
-    var forums = {{ forums|json_encode|raw }};
-    var collapse = {{ collapse|json_encode|raw }};
-    var showCategoryName = true;
-    var postsPerPage = {{ postsPerPage|number_format }};
-    var tags = {{ tags.user|json_encode|raw }};
-  </script>
 {% endblock %}
