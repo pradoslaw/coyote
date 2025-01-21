@@ -8,9 +8,10 @@ class ImageProcess
 
     public function mergeHorizontally(array $inputFiles, string $outputFile): void
     {
+        $minWidth = 1200;
         $sizes = \array_map($this->getSize(...), $inputFiles);
         $outputHeight = max(array_map(fn(array $size) => $size[1], $sizes));
-        $outputWidth = array_sum(array_map(fn(array $size) => $size[0], $sizes));
+        $outputWidth = array_sum(array_map(fn(array $size) => max($size[0], $minWidth), $sizes));
 
         $output = imagecreatetruecolor($outputWidth, $outputHeight);
 
@@ -19,7 +20,7 @@ class ImageProcess
             $image = imagecreatefrompng($this->basePath . $filePath);
             $srcSize = $this->getSize($filePath);
             imagecopy($output, $image, $lastX, 0, 0, 0, $srcSize[0], $srcSize[1]);
-            $lastX += $srcSize[0];
+            $lastX += \max($srcSize[0], $minWidth);
         }
         imagepng($output, $this->basePath . $outputFile, 0);
     }

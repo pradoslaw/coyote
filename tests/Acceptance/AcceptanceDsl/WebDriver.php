@@ -1,6 +1,8 @@
 <?php
 namespace Tests\Acceptance\AcceptanceDsl;
 
+use Facebook\WebDriver\Exception\ElementClickInterceptedException;
+use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverBy;
@@ -44,6 +46,16 @@ readonly class WebDriver
         $this->driver->takeScreenshot($this->formatScreenshotPath($screenshotFilename));
     }
 
+    public function screenshotElement(string $filename, string $cssSelector): void
+    {
+        $this->screenshotSeleniumElement($filename, $this->find($cssSelector));
+    }
+
+    public function screenshotSeleniumElement(string $filename, RemoteWebElement $element): void
+    {
+        $element->takeElementScreenshot($this->formatScreenshotPath($filename));
+    }
+
     public function fillInput(string $cssSelector, string $value): void
     {
         $this->find($cssSelector)->sendKeys($value);
@@ -61,7 +73,12 @@ readonly class WebDriver
 
     public function pressButton(string $buttonText): void
     {
-        $this->findButtonByText($buttonText)->click();
+        try {
+            $this->findButtonByText($buttonText)->click();
+        } catch (ElementClickInterceptedException $exception) {
+            $this->driver->takeScreenshot($this->formatScreenshotPath('ElementClickInterceptedException'));
+            throw $exception;
+        }
     }
 
     private function findButtonByText(string $buttonText): RemoteWebElement
@@ -76,20 +93,20 @@ readonly class WebDriver
 
     public function find(string $selector): RemoteWebElement
     {
-        return $this->driver->findElement(WebDriverBy::cssSelector($selector));
+        try {
+            return $this->driver->findElement(WebDriverBy::cssSelector($selector));
+        } catch (NoSuchElementException $exception) {
+            $this->driver->takeScreenshot($this->formatScreenshotPath('NoSuchElementException'));
+            throw $exception;
+        }
     }
 
-    public function findByXPath(string $xPath): RemoteWebElement
-    {
-        return $this->driver->findElement(WebDriverBy::xpath($xPath));
-    }
-
-    public function findByText(string $text, string $htmlTag): RemoteWebElement
+    public function findByText(string $text): RemoteWebElement
     {
         if (\str_contains($text, "'")) {
             throw new \RuntimeException('Quoting link text not supported yet.');
         }
-        return $this->driver->findElement(WebDriverBy::xpath("//{$htmlTag}[normalize-space()='$text']"));
+        return $this->driver->findElement(WebDriverBy::xpath("//*/text()[normalize-space(.)='$text']/.."));
     }
 
     public function currentUrl(): string
@@ -138,7 +155,7 @@ readonly class WebDriver
         $this->driver->manage()->window()->setSize(new WebDriverDimension($width, $height));
     }
 
-    private function formatScreenshotPath(string $screenshotFilename): string
+    public function formatScreenshotPath(string $screenshotFilename): string
     {
         return \sPrintF('%s/%s.png', \rTrim($this->screenshotPath, '/'), $screenshotFilename);
     }
@@ -156,4 +173,5 @@ readonly class WebDriver
     {
         $this->driver->executeScript('document.activeElement.blur();');
     }
+
 }
