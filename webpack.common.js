@@ -45,13 +45,7 @@ module.exports = {
               url: false,
             },
           },
-          {
-            loader: 'sass-loader',
-            options: {
-              implementation: require('sass-embedded'),
-              sourceMap: true,
-            },
-          },
+          'sass-loader',
         ],
       },
       {
