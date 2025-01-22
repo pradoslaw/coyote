@@ -34,7 +34,7 @@ class AdController extends Controller
 
         return view('job.ad', [
             'jobs'         => $result->getSource(),
-            'inverse_tags' => [$majorTag->name],
+            'selectedTags' => [$majorTag->name],
             'major_tag'    => $majorTag,
         ]);
     }

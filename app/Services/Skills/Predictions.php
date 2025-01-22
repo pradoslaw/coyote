@@ -3,11 +3,11 @@
 namespace Coyote\Services\Skills;
 
 use Coyote\Guest;
-use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
+use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
+use Coyote\Tag;
 use Coyote\User;
 use Illuminate\Http\Request;
-use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 
 class Predictions
 {

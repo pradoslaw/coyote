@@ -34,7 +34,11 @@
         {% if job.tags %}
           <ul class="tag-clouds tag-clouds-xs">
             {% for tag in job.tags[0:3] %}
-              <li><span class="{{ tag in inverse_tags ? 'inverse' }}">{{ tag }}</span></li>
+              <li>
+                <span class="{{ tag in selectedTags ? 'selectedTag' }}">
+                  {{ tag }}
+                </span>
+              </li>
             {% endfor %}
           </ul>
         {% endif %}
