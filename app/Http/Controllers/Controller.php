@@ -47,6 +47,7 @@ abstract class Controller extends \Illuminate\Routing\Controller
     {
         if (!$this->request->ajax()) {
             $data['breadcrumbLegacyComponent'] = $this->breadcrumb->render();
+            $data['breadcrumbs'] = $this->breadcrumb->breadcrumbsModel();
         }
         return view($view, $data);
     }

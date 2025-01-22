@@ -1,0 +1,25 @@
+{% macro titleBanner(title, crumbs=null) %}
+  <div class="title-banner {{ false ? 'title-banner--brand' }} neon-rounded p-4">
+    <ul class="title-banner__crumbs">
+      <li class="title-banner__crumbs-item">
+        <a href="{{ crumbs.rootHref }}" class="d-none d-sm-inline-block">
+          {{ crumbs.rootTitle }}
+        </a>
+        <a href="{{ crumbs.rootHref }}" class="d-block d-sm-none">
+          {{ icon('breadcrumbRoot') }}
+        </a>
+      </li>
+      {% for crumb in crumbs.breadcrumbs %}
+        <li class="title-banner__crumbs-separator">
+          »
+        </li>
+        <li class="title-banner__crumbs-item">
+          <a href="{{ crumb.href }}">
+            {{ crumb.title }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+    <div class="title-banner__title">{{ title }}</div>
+  </div>
+{% endmacro %}

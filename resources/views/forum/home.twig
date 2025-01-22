@@ -6,9 +6,13 @@
 {% block keywords %}C/C++, C#, Delphi, PHP, WWW, webdesign, webmaster, SQL, .NET, PHP, MySQL, Oracle, PostgreSQL, algorytmy, programowanie{% endblock %}
 
 {% import 'legacyComponents.forms' as forms %}
+{% from 'titleBanner.titleBanner' import titleBanner %}
 
 {% block content %}
-  <h1>Forum</h1>
+  <h1 class="neon-legacy">Forum</h1>
+  <div class="neon-modern mb-3">
+    {{ titleBanner(title:'Forum', crumbs:breadcrumbs) }}
+  </div>
   <div class="nav nav-pills mb-0">
     {% for tab in forumTabs %}
       <a href="{{ tab.href }}" class="nav-link {{ tab.selected ? 'active' }}">

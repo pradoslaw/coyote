@@ -1,0 +1,22 @@
+{% macro membersRadar(totalUsers, onlineUsers, guests) %}
+  <div class="d-flex neon-tile neon-rounded members-banner py-4 px-2 px-xl-4">
+    <div class="members-banner-border-right col-4 px-4">
+      <span class="members-banner__title">Członkowie</span>
+      <br>
+      <span class="members-banner__value">{{ totalUsers }}</span>
+    </div>
+    <div class="members-banner-border-right col-4 px-4">
+      <span class="members-banner__title">
+        <span class="members-banner__online-indicator d-inline-block me-1"></span>
+        Online
+      </span>
+      <br>
+      <span class="members-banner__value">{{ onlineUsers }}</span>
+    </div>
+    <div class="col-4 px-4">
+      <span class="members-banner__title">Goście</span>
+      <br>
+      <span class="members-banner__value">{{ guests }}</span>
+    </div>
+  </div>
+{% endmacro %}

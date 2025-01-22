@@ -1,0 +1,36 @@
+@use "../../theme/theme" as theme;
+@use "../../lookAndFeel/style-guide" as style;
+@use "../banners" as banners;
+
+.members-banner {
+  &__title {
+    white-space: nowrap;
+    @include theme.color(#646466, #c8c8c8);
+    @include banners.bannerTextTopLight;
+  }
+
+  &__value {
+    @include banners.bannerTextBottomHeavy;
+  }
+
+  &__online-indicator {
+    width:         8px;
+    height:        8px;
+    border-radius: 4px;
+    background:    style.$green-500;
+    animation:     online-indicator-blinking 1600ms alternate infinite;
+    @include theme.var(--online-indicator-opacity-lower, (light:0.1, dark:0.4));
+    @keyframes online-indicator-blinking {
+      from {
+        opacity: 1.0;
+      }
+      to {
+        opacity: var(--online-indicator-opacity-lower);
+      }
+    }
+  }
+}
+
+.members-banner-border-right {
+  @include theme.property(border-right, 1px solid #dddddd, 1px solid #2f2f2f);
+}

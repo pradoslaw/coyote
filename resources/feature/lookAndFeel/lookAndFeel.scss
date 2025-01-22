@@ -1,7 +1,7 @@
-@use "../theme/theme" as theme;
+@use "../theme/theme";
 @use "./style-guide" as style;
-@use "./feel" as feel;
-@use "./size" as size;
+@use "./feel";
+@use "./size";
 
 body {
   &.look-and-feel-modern {
@@ -26,12 +26,15 @@ a:not(.btn) {
   }
 }
 
+$modern-tile-background-light: style.$white;
+$modern-tile-background-dark:  style.$neutral-800;
+
 .neon-username-author {
   padding:       1px 5px;
   border-radius: 4px;
   font-size:     0.88em;
   @include feel.modern {
-    @include theme.property(color, white, style.$neutral-800);
+    @include theme.property(color, $modern-tile-background-light, $modern-tile-background-dark);
     @include theme.property(background-color, style.$green-800, style.$green-050);
   }
   @include feel.legacy {
@@ -47,7 +50,7 @@ a:not(.btn) {
 
 .neon-tile {
   @include feel.modern {
-    @include theme.property(background, white, style.$neutral-800);
+    @include theme.property(background, $modern-tile-background-light, $modern-tile-background-dark);
   }
   @include feel.legacy {
     @include theme.property(background, white, #1a1a1a);
@@ -70,7 +73,7 @@ a:not(.btn) {
 .neon-tile--dimmed { // searchbar in dark theme can be little more blend into the body
   @include feel.legacy {
     @include theme.dark {
-      background: style.$neutral-800;
+      background: $modern-tile-background-dark;
     }
   }
   @include feel.legacy {
@@ -277,5 +280,17 @@ a:not(.btn) {
       padding:    0 !important; // to override p-4
       border:     none;
     }
+  }
+}
+
+.neon-modern {
+  @include feel.legacy {
+    display: none;
+  }
+}
+
+.neon-legacy {
+  @include feel.modern {
+    display: none;
   }
 }

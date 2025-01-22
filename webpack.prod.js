@@ -17,6 +17,7 @@ const plugins = [
       path.join(__dirname, 'resources/js/**/*.js'),
       path.join(__dirname, 'resources/feature/**/*.js'),
       path.join(__dirname, 'resources/feature/**/*.ts'),
+      path.join(__dirname, 'resources/feature/**/*.twig'),
       path.join(__dirname, 'survey/**/*.*'),
     ]),
     safelist: {

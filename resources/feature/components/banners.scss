@@ -1,0 +1,12 @@
+@use "../theme/theme";
+@use "../lookAndFeel/style-guide" as style;
+
+@mixin bannerTextTopLight {
+  font-size: 0.85em;
+}
+
+@mixin bannerTextBottomHeavy {
+  font-size:   1.33em;
+  font-weight: bold;
+  @include theme.color(style.$neutral-700, style.$neutral-050);
+}

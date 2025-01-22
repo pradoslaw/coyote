@@ -4,14 +4,17 @@
 {% block keywords %}{% endblock %}
 
 {% import 'legacyComponents.forms' as forms %}
+{% from 'titleBanner.titleBanner' import titleBanner %}
 
 {% block content %}
-  <div class="row">
+  <div class="row neon-legacy">
     <div class="col-md-12">
       <h1>{{ forum.title|default(forum.name) }}</h1>
     </div>
   </div>
-
+  <div class="neon-modern mb-3">
+    {{ titleBanner(title:forum.title|default(forum.name), crumbs:breadcrumbs) }}
+  </div>
   <nav>
     {{ topics.render()|raw }}
   </nav>

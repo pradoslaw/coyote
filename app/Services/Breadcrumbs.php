@@ -36,6 +36,18 @@ class Breadcrumbs
         ]));
     }
 
+    public function breadcrumbsModel(): array
+    {
+        return [
+            'rootTitle'   => '4programmers',
+            'rootHref'    => route('home'),
+            'breadcrumbs' => array_map(fn(Breadcrumb $breadcrumb) => [
+                'title' => $breadcrumb->name,
+                'href'  => $breadcrumb->url,
+            ], \array_slice($this->breadcrumbs, 0, -1)),
+        ];
+    }
+
     private function breadcrumbsWithLeaf(): array
     {
         return $this->lastBreadcrumbIsLeaf($this->breadcrumbs);

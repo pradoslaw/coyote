@@ -40,7 +40,10 @@ class TrialServiceProvider extends ServiceProvider
     private function add(Factory $viewFactory): void
     {
         $viewFactory->composer('home', function (View $view) {
-            $view->with(['isHomepageModern' => false]);
+            $view->with([
+                'isHomepageModern' => false,
+                'homepageMembers'  => $this->members(),
+            ]);
         });
         $viewFactory->composer('home_modern', function (View $view) {
             $view->with([
@@ -95,7 +98,7 @@ class TrialServiceProvider extends ServiceProvider
         $renderer = app(Renderer::class);
         $viewers = $renderer->sessionViewers('/');
         return [
-            'usersTotal'   => \number_format(User::query()->count(), thousands_separator:'.'),
+            'usersTotal'   => \number_format(User::query()->withTrashed()->count(), thousands_separator:'.'),
             'usersOnline'  => \count($viewers->users) + $viewers->guestsCount,
             'guestsOnline' => $viewers->guestsCount,
         ];

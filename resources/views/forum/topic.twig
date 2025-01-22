@@ -5,13 +5,17 @@
 
 {% import 'legacyComponents.forms' as forms %}
 {% import 'legacyComponents.modals' as modals %}
+{% from 'titleBanner.titleBanner' import titleBanner %}
 
 {% block content %}
   {{ schema_topic }}
 
-  <h1 class="topic-title pe-4">
+  <h1 class="topic-title pe-4 neon-legacy">
     {{ model.title }}
   </h1>
+  <div class="neon-modern mb-3">
+    {{ titleBanner(title: model.title, crumbs:breadcrumbs) }}
+  </div>
 
   {% if model.locked_at and model.locker.id %}
     <p class="alert alert-warning mt-2 mb-2">
@@ -279,7 +283,7 @@
               <vue-icon v-if="topic.is_subscribed" name="topicSubscribed" class="neon-subscribe neon-subscribe--active"></vue-icon>
               <vue-icon v-else name="topicSubscribe" class="neon-subscribe"></vue-icon>
             </span>
-            ${ topic.is_subscribed ? 'Zakończ obserwację' :  'Obserwuj wątek' }
+            ${ topic.is_subscribed ? 'Zakończ obserwację' : 'Obserwuj wątek' }
           </li>
           <li class="mb-2 pt-1 cursor-pointer">
             <a href="{{ threadStartUrl }}" rel="nofollow">

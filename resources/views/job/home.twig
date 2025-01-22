@@ -24,15 +24,20 @@
 {% block description %}Praca dla programistów. Pracodawco: umieść u nas swoją ofertę pracy - już od 1 zł za dzień. Znajdź u nas pracownika wśród 50 000 programistów.{% endblock %}
 {% block keywords %}programowanie, praca, C#, Java, PHP, Android, Kotlin, Python, programista, HTML, CSS, webdesign, JavaScript, jQuery, C, C++, webmastering{% endblock %}
 
+{% from 'titleBanner.titleBanner' import titleBanner %}
+
 {% block container %}
   <div id="js-job">
-    <div class="row">
+    <div class="row neon-legacy">
       <div class="col-md-12">
         <h1>Praca</h1>
       </div>
     </div>
     <div class="row">
       <div class="col-md-9 col-12">
+        <div class="neon-modern mb-3">
+          {{ titleBanner(title:'Praca', crumbs:breadcrumbs) }}
+        </div>
         {% if auth_check() %}
           <vue-tabs :items="tabs" current-tab="/Praca" class="mt-4"></vue-tabs>
         {% endif %}

@@ -15,15 +15,19 @@
 {% block keywords %}blog, programista, programiści, newsy{% endblock %}
 
 {% import 'legacyComponents.modals' as modal %}
+{% from 'titleBanner.titleBanner' import titleBanner %}
 
 {% block container %}
-  <div class="row mb-2">
+  <div class="row mb-2 neon-legacy">
     <div class="col-md-12">
       <h1>{{ headingTitle }}</h1>
     </div>
   </div>
   <div id="js-microblog" class="row">
     <div class="col-md-9">
+      <div class="neon-modern mb-3">
+        {{ titleBanner(title: headingTitle, crumbs:breadcrumbs) }}
+      </div>
       {% if auth_check() %}
         <div class="d-flex justify-content-end">
           <a class="btn btn-primary btn-sm neon-primary-button" href="{{ microblogNewUrl }}">

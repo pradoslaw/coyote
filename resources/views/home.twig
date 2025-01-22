@@ -4,10 +4,19 @@
 {% block keywords %}programowanie, programista, c++, c, c#, php, delphi, pascal, python, javascript, node.js, css, sass, html, kurs, mysql, mongodb, postgresql, oracle{% endblock %}
 
 {% import 'legacyComponents.modals' as modal %}
+{% from 'titleBanner.titleBanner' import titleBanner %}
+{% from 'membersRadar.membersRadar' import membersRadar %}
 
 {% block container %}
   {{ render_block('homepage_banner') }}
-
+  <div class="row neon-modern">
+    <div class="col-lg-8">
+      {{ titleBanner(title:'Największa społeczność programistyczna w Polsce', crumbs:breadcrumbs) }}
+    </div>
+    <div class="col-lg-4 mt-lg-0">
+      {{ membersRadar(homepageMembers.usersTotal, homepageMembers.usersOnline, homepageMembers.guestsOnline) }}
+    </div>
+  </div>
   <div class="row">
     <main class="col-md-8">
       <section id="box-forum" class="box mt-4">
