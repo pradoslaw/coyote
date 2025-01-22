@@ -1,7 +1,3 @@
-@mixin link-color-darker {
-
-}
-
 @mixin list-inline($name, $spacing) {
   .#{$name} {
     .list-inline-item:not(:last-child) {

@@ -37,8 +37,6 @@
     }
   }
 
-  @include link-color-darker();
-
   span > a {
     text-decoration: underline;
   }

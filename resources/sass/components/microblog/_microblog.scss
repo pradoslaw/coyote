@@ -28,8 +28,6 @@
   overflow: hidden;
   position: relative;
 
-  @include link-color-darker;
-
   a {
     text-decoration: underline;
   }

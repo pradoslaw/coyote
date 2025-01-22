@@ -3,8 +3,6 @@
 #search-results {
   h2 {
     font-size: $font-size-lg;
-    @include link-color-darker;
-
     max-width: 50%;
   }
 
@@ -14,8 +12,6 @@
   }
 
   .children {
-    @include link-color-darker;
-
     font-size: $font-size-sm;
     padding-left: 1rem;
 
