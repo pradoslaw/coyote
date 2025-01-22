@@ -193,7 +193,7 @@
                   <div class="media">
                     <div class="me-2">
                       <a href="{{ route('profile', [user.id]) }}">
-                        <div class="neon-avatar-border">
+                        <div class="neon-avatar-border i-45">
                           {{ user_avatar(user.photo, user.name) }}
                         </div>
                       </a>
@@ -204,14 +204,12 @@
                           {{ user.name }}
                         </a>
                       </span>
-
                       <div class="progress">
                         <div class="progress-bar" role="progressbar"
                              aria-valuenow="{{ user.percentage|round }}"
                              aria-valuemin="0"
                              aria-valuemax="100"
                              style="width: {{ user.percentage|round }}%;"></div>
-
                         <span class="rep">
                           <strong>{{ user.reputation|number_format(0, '', ' ') }}</strong>
                           <small>

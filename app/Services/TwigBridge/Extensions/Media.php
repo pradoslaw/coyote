@@ -25,12 +25,13 @@ class Media extends AbstractExtension
     public function userAvatar(?string $photo, string $name): Html
     {
         if ($photo === null || $photo === '') {
-            $initials = (new Initials())->of($name);
-            return new StringHtml((new InitialsSvg($initials))->imageSvg());
+            $initials = new Initials()->of($name);
+            return new StringHtml(new InitialsSvg($initials)->imageSvg());
         }
         $photoUrl = $this->photo($photo);
         $htmlUsername = \htmlSpecialChars($name);
-        return new StringHtml('<img class="user-avatar mw-100" src="' . $photoUrl . '" alt="' . $htmlUsername . '">');
+        return new StringHtml('<img class="user-avatar mw-100" src="' . $photoUrl . '" alt="' . $htmlUsername . '" ' .
+            'style="width:100%; height:100%; object-fit:cover; object-position:center;">');
     }
 
     public function logo($filename, $secure = null): string
