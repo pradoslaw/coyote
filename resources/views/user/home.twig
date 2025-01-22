@@ -1,5 +1,11 @@
 {% extends 'user.base' %}
-{% block title %}Moje konto{{ parent() }}{% endblock %}
+
+{% from 'reputationBar.reputationBar' import reputationBar %}
+
+{% block title %}
+  Moje konto
+  {{ parent() }}
+{% endblock %}
 
 {% block wrapper %}
   <div class="row">
@@ -35,31 +41,11 @@
               </li>
             </ul>
             <div class="mt-2">
-              <h6>
-                {{ icon('userReputation') }}
-                Twoja reputacja
-              </h6>
-
-              <div class="progress">
-                <div class="progress-bar"
-                     role="progressbar"
-                     aria-valuenow="{{ rank.percentage }}"
-                     aria-valuemin="0"
-                     aria-valuemax="100"
-                     style="width: {{ rank.percentage }}%;"></div>
-
-                <span class="rep">
-                  <strong>{{ user('reputation')|number_format(0, '', ' ') }}</strong>
-                  <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small>
-                </span>
-
-                {% if total_users > 0 %}
-                  <span class="rank" title="Miejsce w rankingu">
-                    <strong>#{{ rank.rank }}</strong>
-                    <small>/ {{ total_users }}</small>
-                  </span>
-                {% endif %}
+              <div class="d-flex justify-content-between mb-1">
+                <div>{{ icon('userReputation') }} Twoja reputacja</div>
+                <b>#{{ rank.rank }}/{{ total_users }}</b>
               </div>
+              {{ reputationBar(user('reputation'), rank.percentage) }}
             </div>
           </div>
         </div>

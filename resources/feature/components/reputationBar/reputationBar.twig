@@ -1,0 +1,11 @@
+{% macro reputationBar(absoluteValue, percentage) %}
+  {% from 'progressBar.progressBar' import progressBar %}
+  <div class="d-flex align-items-center">
+    <span>
+      <b>{{ absoluteValue }}</b> pkt
+    </span>
+    <div class="flex-grow-1 ms-2">
+      {{ progressBar(percentage) }}
+    </div>
+  </div>
+{% endmacro %}

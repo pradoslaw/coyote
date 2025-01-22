@@ -1,3 +1,5 @@
+{% from 'reputationBar.reputationBar' import reputationBar %}
+
 {% set visited_at = user.visited_at|format_date %}
 {% set created_at = user.created_at|format_date %}
 
@@ -49,14 +51,7 @@
             {{ icon('vCardReputation') }}
             Reputacja
           </h6>
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;"></div>
-            <span class="rep">
-              <strong>{{ user.reputation|number_format(0, '', ' ') }}</strong>
-              <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small>
-            </span>
-          </div>
-
+          {{ reputationBar(user.reputation, rank.percentage) }}
           {% if user.location %}
             <div class="mt-3">
               <h6 class="mb-0">

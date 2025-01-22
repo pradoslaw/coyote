@@ -6,6 +6,7 @@
 {% import 'legacyComponents.modals' as modal %}
 {% from 'titleBanner.titleBanner' import titleBanner %}
 {% from 'membersRadar.membersRadar' import membersRadar %}
+{% from 'progressBar.progressBar' import progressBar %}
 
 {% block container %}
   {{ render_block('homepage_banner') }}
@@ -198,9 +199,9 @@
             </div>
 
             {% for tab, users in reputation %}
-              <div id="{{ tab }}" role="tabpanel" class="p-3 tab-pane {{ settings.reputationMode == tab ? 'active' }}">
+              <div id="{{ tab }}" role="tabpanel" class="p-3 pb-1 tab-pane {{ settings.reputationMode == tab ? 'active' }}">
                 {% for user in users %}
-                  <div class="media">
+                  <div class="media mb-4">
                     <div class="me-2">
                       <a href="{{ route('profile', [user.id]) }}">
                         <div class="neon-avatar-border i-45">
@@ -214,18 +215,14 @@
                           {{ user.name }}
                         </a>
                       </span>
-                      <div class="progress">
-                        <div class="progress-bar" role="progressbar"
-                             aria-valuenow="{{ user.percentage|round }}"
-                             aria-valuemin="0"
-                             aria-valuemax="100"
-                             style="width: {{ user.percentage|round }}%;"></div>
-                        <span class="rep">
-                          <strong>{{ user.reputation|number_format(0, '', ' ') }}</strong>
-                          <small>
-                            {{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}
-                          </small>
+                      <div class="d-flex align-items-center">
+                        <span style="min-width:54px;">
+                          <b>{{ user.reputation }}</b> pkt
                         </span>
+                        <div class="flex-grow-1 ms-1 me-3">
+                          {{ progressBar(user.percentage|round) }}
+                        </div>
+                        <b>{{ loop.index }}</b>
                       </div>
                     </div>
                   </div>

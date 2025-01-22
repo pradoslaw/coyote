@@ -37,31 +37,6 @@ body.homepage-legacy {
       width:  40px;
       height: 40px;
     }
-
-    .progress {
-      width: 70%;
-    }
-
-    .media {
-      border-bottom:     1px solid $card-border-color;
-      padding-bottom:    10px;
-      padding-top:       10px;
-      position:          relative;
-      counter-increment: number;
-
-      &:after {
-        content:   counter(number);
-        font-size: 40px;
-        color:     $card-border-color;
-        position:  absolute;
-        right:     10px;
-        top:       9px;
-      }
-
-      &:last-child {
-        border-bottom: none;
-      }
-    }
   }
 
   #box-forum {

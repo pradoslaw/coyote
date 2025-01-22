@@ -1,0 +1,30 @@
+@use "../../lookAndFeel/style-guide" as style;
+@use "../../lookAndFeel/feel" as feel;
+@use "../../theme/theme" as theme;
+
+@function gradient($from, $to) {
+  @return linear-gradient(90deg, $from 0%, $to 66%);
+}
+
+.progress-bar2 { // 2 is to make sure we're not in conflict with bootstrap
+  position:      relative;
+  @include theme.background(style.$neutral-050, style.$neutral-700);
+  @include feel.var(--height, 3px, 5px);
+  height:        var(--height);
+  border-radius: var(--height);
+
+  &__fill {
+    position:      absolute;
+    height:        inherit;
+    border-radius: inherit;
+
+    @include feel.modern {
+      @include theme.background(
+                      gradient(style.$neutral-050, style.$green-500),
+                      gradient(style.$neutral-700, style.$green-500));
+    }
+    @include feel.legacy {
+      @include theme.background(#aed91d, #637f14);
+    }
+  }
+}
