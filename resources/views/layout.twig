@@ -63,8 +63,10 @@
 
   {% include 'legacyComponents.gdpr' %}
 
-  <script type="application/json" id="survey">{{ survey|json_encode|raw }}</script>
-  <div id="js-survey"></div>
+  {% if survey is defined %}
+    <script type="application/json" id="survey">{{ survey|json_encode|raw }}</script>
+    <div id="js-survey"></div>
+  {% endif %}
 
 {% block header %}
   <header class="{{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }}">
@@ -224,7 +226,9 @@
 
   <div class="container-fluid">
     {% block breadcrumbs %}
-      {{ breadcrumbLegacyComponent }}
+      {% if breadcrumbLegacyComponent is defined %}
+        {{ breadcrumbLegacyComponent }}
+      {% endif %}
     {% endblock breadcrumbs %}
     <noscript>
       <div class="row">
@@ -272,7 +276,9 @@
 {% block footer %}
   <footer class="container-fluid mt-4">
     <div class="footer-top">
-      {{ breadcrumbLegacyComponent }}
+      {% if breadcrumbLegacyComponent is defined %}
+        {{ breadcrumbLegacyComponent }}
+      {% endif %}
     </div>
     <div class="footer-inner row">
       <div class="col-12">

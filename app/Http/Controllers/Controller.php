@@ -46,10 +46,7 @@ abstract class Controller extends \Illuminate\Routing\Controller
     protected function view($view = null, $data = [])
     {
         if (!$this->request->ajax()) {
-            $breadcrumbs = $this->breadcrumb->render();
-            if ($breadcrumbs) {
-                $data['breadcrumbLegacyComponent'] = $breadcrumbs;
-            }
+            $data['breadcrumbLegacyComponent'] = $this->breadcrumb->render();
         }
         return view($view, $data);
     }

@@ -23,10 +23,10 @@ class Breadcrumbs
         $this->breadcrumbs[] = new Breadcrumb($name, $url, false, $leafWithLink);
     }
 
-    public function render(): ?Html
+    public function render(): Html|string
     {
         if (empty($this->breadcrumbs)) {
-            return null;
+            return '';
         }
         return new StringHtml(view('legacyComponents/breadcrumb', [
             'root_name'         => config('app.name'),
