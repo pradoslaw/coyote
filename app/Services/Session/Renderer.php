@@ -21,15 +21,18 @@ class Renderer
         $this->spacer = new Spacer(8);
     }
 
-    public function render(string $requestUri, bool $local, bool $iconVisible = true): View
+    public function render(string $requestUri, bool $local, bool $includeHeading = true): View
     {
         $viewers = $this->sessionViewers($requestUri);
-
         [$users, $superfluous] = $this->spacer->fitInSpace($viewers->usersWithoutGroup());
-
-        return view('legacyComponents.viewers', [
+        if ($includeHeading) {
+            $type = 'legacyComponents.viewers';
+        } else {
+            $type = 'legacyComponents.viewersNoSection';
+        }
+        return view($type, [
             'local'             => $local,
-            'iconVisible'       => $iconVisible,
+            'iconVisible'       => $includeHeading,
             'guestsCount'       => $viewers->guestsCount,
             'usersCount'        => \count($viewers->users),
             'title'             => $local

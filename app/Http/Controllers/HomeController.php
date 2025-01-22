@@ -78,7 +78,7 @@ class HomeController extends Controller
     {
         /** @var Renderer $renderer */
         $renderer = app(Renderer::class);
-        return $renderer->render('/', local:false, iconVisible:false);
+        return $renderer->render('/', local:false, includeHeading:false);
     }
 
     private function flags(): array

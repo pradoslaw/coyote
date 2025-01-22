@@ -1,0 +1,41 @@
+<div class="viewers-online">
+  <div class="mb-1 viewers-users-group">
+    {% for user in usersWithGroup %}
+      <a
+          href="{{ user.profileUrl }}"
+          class="viewer-pill d-inline-flex mb-1 neon-tile"
+          title="{{ user.name }} (online) - {{ user.groupName }}"
+          style="color:inherit;"
+      >
+        <div class="viewer-pill-avatar d-inline-block">
+          {{ user_avatar(user.avatarUrl, user.name) }}
+        </div>
+        <span class="viewer-pill-title">
+          <b>{{ user.name }}</b>
+          <br>
+          <small>{{ user.groupShortName }}</small>
+        </span>
+      </a>
+    {% endfor %}
+  </div>
+  <div class="viewers-users">
+    {% for user in usersWithoutGroup %}
+      <a class="circle d-inline-block" title="{{ user.name }} (online)" style="color:inherit;" href="{{ user.profileUrl }}">
+        {{ user_avatar(user.avatarUrl, user.name) }}
+      </a>
+    {% endfor %}
+    {% if superfluousCount > 0 %}
+      <span class="circle circle-number d-inline-block" title="Jeszcze {{ superfluousCount }} innych użytkowników (online)">
+        +{{ superfluousCount }}
+      </span>
+    {% endif %}
+    {% if  guestsCount > 0 %}
+      <p>
+        <small class="text-muted">
+          +{{ declination(guestsCount, ['niezalogowany', 'niezalogowanych', 'niezalogowanych']) }}
+          online
+        </small>
+      </p>
+    {% endif %}
+  </div>
+</div>
