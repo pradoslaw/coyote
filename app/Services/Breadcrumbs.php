@@ -2,9 +2,10 @@
 namespace Coyote\Services;
 
 use Coyote\Domain\Breadcrumb;
+use Coyote\Domain\Html;
 use Coyote\Domain\Seo;
 use Coyote\Domain\Seo\Schema\BreadcrumbList;
-use Illuminate\View\View;
+use Coyote\Domain\StringHtml;
 
 class Breadcrumbs
 {
@@ -22,17 +23,17 @@ class Breadcrumbs
         $this->breadcrumbs[] = new Breadcrumb($name, $url, false, $leafWithLink);
     }
 
-    public function render(): ?View
+    public function render(): ?Html
     {
         if (empty($this->breadcrumbs)) {
             return null;
         }
-        return view('legacyComponents/breadcrumb', [
+        return new StringHtml(view('legacyComponents/breadcrumb', [
             'root_name'         => config('app.name'),
             'root_href'         => route('home'),
             'breadcrumbs'       => $this->breadcrumbsWithLeaf(),
             'schema_breadcrumb' => new Seo\Schema(new BreadcrumbList($this->breadcrumbs)),
-        ]);
+        ]));
     }
 
     private function breadcrumbsWithLeaf(): array

@@ -224,11 +224,8 @@
 
   <div class="container-fluid">
     {% block breadcrumbs %}
-      {% if breadcrumb is defined %}
-        {{ breadcrumb|raw }}
-      {% endif %}
+      {{ breadcrumbLegacyComponent }}
     {% endblock breadcrumbs %}
-
     <noscript>
       <div class="row">
         <div class="col-xs">
@@ -275,9 +272,7 @@
 {% block footer %}
   <footer class="container-fluid mt-4">
     <div class="footer-top">
-      {% if breadcrumb is defined %}
-        {{ breadcrumb|raw }}
-      {% endif %}
+      {{ breadcrumbLegacyComponent }}
     </div>
     <div class="footer-inner row">
       <div class="col-12">
