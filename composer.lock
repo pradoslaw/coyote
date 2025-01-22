@@ -7211,16 +7211,16 @@
         },
         {
             "name": "rawr/t-regx",
-            "version": "0.17.0",
+            "version": "0.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/t-regx/T-Regx.git",
-                "reference": "0d71199ee775149e96822678b5bb935dfdf1a020"
+                "reference": "39f6cb4cd580f20ff75fae8c09f65915949d028c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/t-regx/T-Regx/zipball/0d71199ee775149e96822678b5bb935dfdf1a020",
-                "reference": "0d71199ee775149e96822678b5bb935dfdf1a020",
+                "url": "https://api.github.com/repos/t-regx/T-Regx/zipball/39f6cb4cd580f20ff75fae8c09f65915949d028c",
+                "reference": "39f6cb4cd580f20ff75fae8c09f65915949d028c",
                 "shasum": ""
             },
             "require": {
@@ -7271,7 +7271,7 @@
             ],
             "support": {
                 "issues": "https://github.com/t-regx/T-Regx/issues",
-                "source": "https://github.com/t-regx/T-Regx/tree/0.17.0"
+                "source": "https://github.com/t-regx/T-Regx/tree/0.17.1"
             },
             "funding": [
                 {
@@ -7279,7 +7279,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-27T17:34:30+00:00"
+            "time": "2025-01-22T20:38:27+00:00"
         },
         {
             "name": "rcrowe/twigbridge",
