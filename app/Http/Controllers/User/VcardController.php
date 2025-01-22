@@ -10,7 +10,7 @@ class VcardController extends Controller
 {
     public function index(\Coyote\User $user, UserRepositoryInterface $repository): View
     {
-        return view('components.vcard')
+        return view('legacyComponents.vcard')
           ->with('user', $user)
           ->with([
             'rank'        => $repository->rank($user->id),

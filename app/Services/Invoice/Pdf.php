@@ -41,7 +41,7 @@ class Pdf
      */
     protected function view(Payment $payment)
     {
-        return view('components.invoice', [
+        return view('legacyComponents.invoice', [
             'invoice'           => $payment->invoice,
             'currency'          => $payment->invoice->currency->symbol,
             'vendor'            => $this->vendor

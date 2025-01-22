@@ -27,7 +27,7 @@ class Breadcrumbs
         if (empty($this->breadcrumbs)) {
             return null;
         }
-        return view('components/breadcrumb', [
+        return view('legacyComponents/breadcrumb', [
             'root_name'         => config('app.name'),
             'root_href'         => route('home'),
             'breadcrumbs'       => $this->breadcrumbsWithLeaf(),

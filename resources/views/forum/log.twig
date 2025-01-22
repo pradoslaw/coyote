@@ -1,6 +1,6 @@
 {% extends 'forum.base' %}
 {% block title %}Historia edycji posta w {{ topic.title }}{{ parent() }}{% endblock %}
-{% import 'components.widgets' as widgets %}
+{% import 'legacyComponents.widgets' as widgets %}
 {% set url = route('forum.post.log', [post.id]) %}
 
 {% block container %}

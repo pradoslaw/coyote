@@ -5,7 +5,7 @@
 
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="body">
-        {% include 'components.toolbar' %}
+        {% include 'legacyComponents.toolbar' %}
         {{ form_textarea(name, value, {'class': 'form-control'}|merge(attr)) }}
     </div>
     <div role="tabpanel" class="tab-pane" id="preview"></div>

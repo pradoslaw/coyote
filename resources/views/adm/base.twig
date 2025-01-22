@@ -1,6 +1,6 @@
 {% extends 'layout' %}
 
-{% import 'components.modals' as modals %}
+{% import 'legacyComponents.modals' as modals %}
 
 {% block body %}
   <div class="container d-flex administrator-panel">
@@ -47,7 +47,7 @@
   {{ modals.confirm('Czy na pewno usunąć?', 'Czy usunąć ten wpis?', 'modal-delete') }}
   {{ form_close() }}
 
-  {% import 'components.widgets' as widgets %}
+  {% import 'legacyComponents.widgets' as widgets %}
 
   {{ widgets.jquery() }}
 

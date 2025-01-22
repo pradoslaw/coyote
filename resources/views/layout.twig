@@ -56,12 +56,12 @@
 {{ render_region('body') }}
 
 {% block body %}
-  {% import 'components.forms' as forms %}
-  {% import 'components.widgets' as widgets %}
+  {% import 'legacyComponents.forms' as forms %}
+  {% import 'legacyComponents.widgets' as widgets %}
 
   {{ schema_organization }}
 
-  {% include 'components.gdpr' %}
+  {% include 'legacyComponents.gdpr' %}
 
   <script type="application/json" id="survey">{{ survey|json_encode|raw }}</script>
   <div id="js-survey"></div>

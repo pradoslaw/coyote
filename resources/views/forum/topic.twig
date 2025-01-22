@@ -3,8 +3,8 @@
 {% block title %}{{ model.title ~ (paginationCurrentPage > 1 ? (' - Strona ' ~ paginationCurrentPage)) }}{{ parent() }}{% endblock %}
 {% block description %}{{ description }}{% endblock %}
 
-{% import 'components.forms' as forms %}
-{% import 'components.modals' as modals %}
+{% import 'legacyComponents.forms' as forms %}
+{% import 'legacyComponents.modals' as modals %}
 
 {% block content %}
   {{ schema_topic }}

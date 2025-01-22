@@ -27,7 +27,7 @@ class Renderer
 
         [$users, $superfluous] = $this->spacer->fitInSpace($viewers->usersWithoutGroup());
 
-        return view('components.viewers', [
+        return view('legacyComponents.viewers', [
             'local'             => $local,
             'iconVisible'       => $iconVisible,
             'guestsCount'       => $viewers->guestsCount,
