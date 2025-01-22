@@ -1,19 +1,17 @@
 <template>
   <div class="position-relative">
-    <div class="user-avatar" style="height:inherit;width:inherit;">
-      <img :src="photo" 
-           :alt="name"
-           class="d-block" 
-           loading="lazy" 
-           v-if="hasAvatar" 
-           :style="{width:'100%','height':'100%','object-fit':'cover','object-position':'center'}">
-      <div class="default-avatar" v-else>
-        <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
-          <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" fill="currentColor">
-            {{ initials }}
-          </text>
-        </svg>
-      </div>
+    <img :src="photo"
+         :alt="name"
+         class="d-block user-avatar"
+         loading="lazy"
+         v-if="hasAvatar"
+         :style="{width:'100%','height':'100%','object-fit':'cover','object-position':'center'}">
+    <div class="user-avatar default-avatar" v-else>
+      <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+        <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" fill="currentColor">
+          {{ initials }}
+        </text>
+      </svg>
     </div>
     <div v-if="isOnline" class="is-online"/>
   </div>

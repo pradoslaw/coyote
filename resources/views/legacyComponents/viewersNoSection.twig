@@ -20,7 +20,7 @@
   </div>
   <div class="viewers-users">
     {% for user in usersWithoutGroup %}
-      <a class="circle d-inline-block" title="{{ user.name }} (online)" style="color:inherit;" href="{{ user.profileUrl }}">
+      <a class="circle d-inline-block circle-user-avatar" title="{{ user.name }} (online)" style="color:inherit;" href="{{ user.profileUrl }}">
         {{ user_avatar(user.avatarUrl, user.name) }}
       </a>
     {% endfor %}

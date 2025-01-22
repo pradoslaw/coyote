@@ -1,11 +1,13 @@
 <template>
   <div :class="{'unread': ! notification.is_read}" class="notification">
     <div :title="notification.headline" class="media">
-      <a class="user-link" :href="`/Profile/${notification.user_id}`" title="Kliknij, aby wyświetlić profil użytkownika">
-        <vue-avatar
-          :photo="notification.photo"
-          :initials="notification.initials"
-          class="i-35 me-2"/>
+      <a class="user-link me-2" :href="`/Profile/${notification.user_id}`" title="Kliknij, aby wyświetlić profil użytkownika">
+        <div class="neon-avatar-border">
+          <vue-avatar
+            :photo="notification.photo"
+            :initials="notification.initials"
+            class="i-35"/>
+        </div>
       </a>
       <a @mousedown="markAsRead(notification)" @touchstart="markAsRead(notification)" :href="notification.url" class="media-body text-truncate">
         <header class="notification-header">

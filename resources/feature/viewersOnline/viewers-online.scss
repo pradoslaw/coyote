@@ -1,4 +1,4 @@
-@import "../theme/theme";
+@use "../theme/theme";
 
 .viewers-online {
   .viewer-pill {
@@ -12,6 +12,7 @@
       height:        32px;
       border-radius: 16px;
       overflow:      hidden;
+      background:    white;
 
       img {
         width:      32px;
@@ -50,23 +51,27 @@
         font-size:   0.8em;
       }
 
-      @include light {
+      @include theme.light {
         background: white;
       }
-      @include dark {
+      @include theme.dark {
         background: #2e2e2e;
       }
 
       &.circle-number-muted {
-        @include light {
+        @include theme.light {
           color:      #888;
           background: #f5f5f5;
         }
-        @include dark {
+        @include theme.dark {
           color:      #777;
           background: #252525;;
           border:     1px solid #3f3f3f;
         }
+      }
+
+      &.circle-user-avatar {
+        background: white;
       }
     }
   }
