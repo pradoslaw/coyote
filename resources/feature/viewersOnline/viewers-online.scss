@@ -1,4 +1,6 @@
 @use "../theme/theme";
+@use "../lookAndFeel/lookAndFeel";
+@use "../lookAndFeel/feel";
 
 .viewers-online {
   .viewer-pill {
@@ -45,9 +47,14 @@
       width:         32px;
       height:        32px;
 
+      @include feel.var(--tile-color,
+              (light:lookAndFeel.$modern-tile-background-light, dark:lookAndFeel.$modern-tile-background-dark),
+              (light:white, dark:#1a1a1a));
+      border:        3px solid var(--tile-color);
+
       &.circle-number {
         text-align:  center;
-        line-height: 32px;
+        line-height: 28px;
         font-size:   0.8em;
       }
 
