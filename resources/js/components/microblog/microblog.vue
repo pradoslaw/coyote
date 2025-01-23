@@ -156,20 +156,18 @@
             <vue-comment v-for="comment in microblog.comments" :key="comment.id" :comment="comment" @reply="reply"/>
 
             <form v-if="isAuthorized" method="POST">
-              <div class="media microblog-input rounded border-top-0">
-                <div class="me-1">
-                  <a v-profile="user.id">
-                    <div class="user-avatar-border i-35">
-                      <vue-avatar
-                        :photo="user.photo"
-                        :name="user.name"
-                        :initials="user.initials"
-                        class="d-block img-thumbnail"
-                      />
-                    </div>
-                  </a>
-                </div>
-                <div class="media-body position-relative">
+              <div class="media">
+                <a v-profile="user.id">
+                  <div class="user-avatar-border i-35">
+                    <vue-avatar
+                      :photo="user.photo"
+                      :name="user.name"
+                      :initials="user.initials"
+                      class="d-block img-thumbnail"
+                    />
+                  </div>
+                </a>
+                <div class="media-body position-relative ms-1">
                   <vue-comment-form :microblog="commentDefault" ref="comment-form"/>
                 </div>
               </div>

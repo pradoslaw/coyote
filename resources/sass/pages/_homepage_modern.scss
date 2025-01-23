@@ -383,15 +383,6 @@ body.homepage-modern {
           }
         }
 
-        .microblog-input {
-          @include background-theme($body-background-light, $body-background-dark);
-
-          textarea {
-            border: none;
-            @include background-theme($card-background-light, $card-background-dark);
-          }
-        }
-
         .microblog-comment-action {
           color: inherit;
         }

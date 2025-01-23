@@ -7,7 +7,6 @@
   .media {
     border-top: 1px solid #e9ecef;
     padding: 6px 5px;
-    margin-top: 5px;
 
     &.not-read {
       @include not-read-border;
