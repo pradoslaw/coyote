@@ -1,9 +1,10 @@
 @charset "UTF-8";
 
+@use "../../feature/lookAndFeel/style-guide" as style;
 @import "../icons/icons";
 
 .link-broken {
-  color: $alt-link-hover-color !important;
+  color:         $alt-link-hover-color !important;
   border-bottom: 1px dotted $alt-link-hover-color;
 
   &:hover {
@@ -13,31 +14,31 @@
 
 #interface {
   background: url('/img/horizontal.png') repeat-x 0 50%, url('/img/vertical.png') no-repeat 0 100%;
-  margin: 17px 0;
-  overflow: hidden;
-  width: 52.1%;
-  float: right;
+  margin:     17px 0;
+  overflow:   hidden;
+  width:      52.1%;
+  float:      right;
 
   @include media-breakpoint-down(sm) {
     background: none;
-    float: none;
-    width: 100%;
+    float:      none;
+    width:      100%;
   }
 }
 
 #folder {
-  border: 1px solid $card-border-color;
+  border:           1px solid $card-border-color;
   background-color: #f6f6f6;
 
   ol {
-    width: 80%;
+    width:  80%;
     margin: auto;
 
     li {
-      border: none;
+      border:     none;
       background: none;
-      padding: 2px 0 2px 20px;
-      position: relative;
+      padding:    2px 0 2px 20px;
+      position:   relative;
       @include text-truncate();
 
       &:before {
@@ -46,7 +47,7 @@
       }
 
       a {
-        color: $gray-darker;
+        color:     $gray-darker;
         font-size: 12px;
       }
 
@@ -77,7 +78,7 @@ article > header {
   }
 
   h5 {
-    font-size: 14px;
+    font-size:  14px;
     margin-top: 10px;
 
     a {
@@ -112,15 +113,15 @@ article > header {
 
 #box-author {
   blockquote {
-    border: none;
+    border:    none;
     font-size: 1.05rem;
-    position: relative;
-    padding: 0 0 0 25px;
-    margin: 0;
+    position:  relative;
+    padding:   0 0 0 25px;
+    margin:    0;
 
     &:before {
       @include content-icon-solid($icon-wiki-author-statement);
-      left: 0;
+      left:  0;
       color: $gray-light;
     }
   }
@@ -135,8 +136,8 @@ article > header {
 #box-authors {
   ul {
     list-style-type: none;
-    margin: 0;
-    padding: 0;
+    margin:          0;
+    padding:         0;
 
     li {
       border-bottom: 1px solid $gray-lighter;
@@ -146,21 +147,21 @@ article > header {
       }
 
       a {
-        padding: 5px 0;
-        display: block;
-        font-size: $font-size-sm;
+        padding:     5px 0;
+        display:     block;
+        font-size:   $font-size-sm;
         text-shadow: 1px 1px 1px #fff;
-        color: $gray;
+        color:       $gray;
 
         &:hover {
           text-decoration: none;
-          color: $alt-link-hover-color;
+          color:           $alt-link-hover-color;
         }
 
         small {
-          color: lighten($gray-light, 15%);
-          display: block;
-          float: right;
+          color:       lighten($gray-light, 15%);
+          display:     block;
+          float:       right;
           padding-top: 7px;
         }
       }
@@ -172,7 +173,7 @@ article > header {
   margin-bottom: 20px;
 
   textarea {
-    resize: vertical;
+    resize:     vertical;
     min-height: 60px;
   }
 
@@ -184,25 +185,25 @@ article > header {
     position: relative;
 
     &:after, &:before {
-      right: 100%;
-      top: 22px;
-      border: solid transparent;
-      height: 0;
-      width: 0;
-      position: absolute;
+      right:          100%;
+      top:            22px;
+      border:         solid transparent;
+      height:         0;
+      width:          0;
+      position:       absolute;
       pointer-events: none;
     }
 
     &:after {
       border-right-color: #fafafa;
-      border-width: 8px;
-      margin-top: -8px;
+      border-width:       8px;
+      margin-top:         -8px;
     }
 
     &:before {
       border-right-color: $card-border-color;
-      border-width: 9px;
-      margin-top: -9px;
+      border-width:       9px;
+      margin-top:         -9px;
     }
 
     form.comment-form {
@@ -216,7 +217,7 @@ article > header {
 }
 
 .wiki-categories {
-  margin-bottom: 10px;
+  margin-bottom:  10px;
   vertical-align: middle;
 }
 
@@ -261,14 +262,13 @@ article > header {
 .wiki-log {
   strong {
     a {
-      color: $primary;
       font-size: 12px;
     }
   }
 
   p {
-    padding: 4px 0;
-    margin: 0;
+    padding:   4px 0;
+    margin:    0;
     font-size: 12px;
   }
 
@@ -279,8 +279,8 @@ article > header {
 
 .root-map {
   margin-top: 20px;
-  padding: 0;
-  font-size: $font-size-sm;
+  padding:    0;
+  font-size:  $font-size-sm;
 
   a {
     color: $gray;
@@ -301,10 +301,9 @@ article > header {
 
 #diff {
   ins {
-    color: green;
+    color: style.$green-500;
   }
-
   del {
-    color: red;
+    color: style.$red-500;
   }
 }
