@@ -118,18 +118,16 @@
                 <div class="recent-activity neon-divider-l">
                   {% for activity in activities %}
                     <div class="media">
-                      <div class="neon-tile__timeline-icon homepage-activity {{ activity.object }} d-none d-sm-block" title="{{ activity.headline|striptags|unescape }}">
-                        <div class="d-block activity-icon">
-                          {% if activity.object == 'microblog' %}
-                            {{ icon('homepageActivityMicroblog') }}
-                          {% elseif activity.object == 'comment' %}
-                            {{ icon('homepageActivityPostComment') }}
-                          {% elseif activity.object == 'topic' %}
-                            {{ icon('homepageActivityTopic') }}
-                          {% elseif activity.object == 'post' %}
-                            {{ icon('homepageActivityPost') }}
-                          {% endif %}
-                        </div>
+                      <div class="neon-tile__timeline-icon homepage-activity {{ activity.object }} d-none d-sm-flex justify-content-center align-items-center" title="{{ activity.headline|striptags|unescape }}">
+                        {% if activity.object == 'microblog' %}
+                          {{ icon('homepageActivityMicroblog') }}
+                        {% elseif activity.object == 'comment' %}
+                          {{ icon('homepageActivityPostComment') }}
+                        {% elseif activity.object == 'topic' %}
+                          {{ icon('homepageActivityTopic') }}
+                        {% elseif activity.object == 'post' %}
+                          {{ icon('homepageActivityPost') }}
+                        {% endif %}
                       </div>
                       <div class="d-none d-sm-block me-2">
                         <a href="{{ route('profile', [activity.user_id]) }}">
