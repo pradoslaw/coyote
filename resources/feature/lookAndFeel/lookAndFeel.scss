@@ -85,7 +85,7 @@ $modern-tile-background-dark:  style.$neutral-800;
 
 .neon-tag {
   @include feel.modern {
-    @include theme.property(background, style.$navy-100, style.$neutral-800);
+    @include theme.property(background, style.$navy-100, style.$navy-950);
     color: inherit;
   }
   @include feel.legacy {

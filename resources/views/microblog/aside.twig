@@ -34,7 +34,7 @@
         <ul class="tag-clouds tag-clouds-md">
           {% for tag in tags.tech %}
             <li class="d-block mb-1">
-              <a href="{{ route('microblog.tag', [tag.name]) }}">
+              <a href="{{ route('microblog.tag', [tag.name]) }}" class="neon-tag">
                 {% if tag.logo.filename %}
                   <img alt="{{ tag.name }}" src="{{ logo(tag.logo) }}"/>
                 {% endif %}

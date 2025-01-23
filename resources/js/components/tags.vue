@@ -1,7 +1,7 @@
 <template>
   <ul v-if="tags.length" class="tag-clouds">
     <li v-for="tag in tags">
-      <component :is="tagName" :href="tag.url">
+      <component :is="tagName" :href="tag.url" class="neon-tag">
         <img v-if="tag.logo" :alt="tag.name" :src="tag.logo">
         {{ tag.real_name || tag.name }}
         <a v-if="editable" @click="deleteTag(tag)" class="remove">

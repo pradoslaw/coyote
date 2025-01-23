@@ -18,15 +18,6 @@ section#events {
     }
   }
 
-  body.theme-dark & .tag-clouds li a {
-    color: #acacac;
-    background: #252525;
-
-    &:hover {
-      color: #a2775d;
-    }
-  }
-
   #showAllEvents {
     color: #80a41a;
     cursor: pointer;
