@@ -64,8 +64,8 @@
   {% include 'legacyComponents.gdpr' %}
 
   {% if survey is defined %}
-    <script type="application/json" id="survey">{{ survey|json_encode|raw }}</script>
-    <div id="js-survey"></div>
+  <script type="application/json" id="survey">{{ survey|json_encode|raw }}</script>
+  <div id="js-survey"></div>
   {% endif %}
 
 {% block header %}
@@ -290,14 +290,16 @@
         </span>
       </div>
     </div>
-    <div id="footer-copyright">
-      <div class="container-3xl d-flex">
-        <div>
-          Copyright &copy; 2000-{{ year }}
-          <a href="https://4programmers.net/" class="logo" title="4programmers.net - programowanie"></a>
-        </div>
-        <div class="ms-auto">
-          Coyote {{ config('app.version') }}: <span class="execution-time">{{ timer() }}</span>
+    <div class="footer-copyright">
+      <div class="container-3xl ">
+        <div class="d-flex align-items-center">
+          <span>
+            Copyright &copy; 2000-{{ year }}
+          </span>
+          <a href="https://4programmers.net/" class="d-block logo" title="4programmers.net - programowanie"></a>
+          <span class="ms-auto">
+            Coyote {{ config('app.version') }}: <span class="execution-time">{{ timer() }}</span>
+          </span>
         </div>
       </div>
     </div>

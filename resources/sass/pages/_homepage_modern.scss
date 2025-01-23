@@ -720,15 +720,4 @@ body.homepage-modern {
   .page-link {
     @include background-theme($opposite-color-light, $opposite-color-dark);
   }
-
-  #footer-copyright {
-    .logo {
-      @include light {
-        background-image: url('/img/logo-footer-modern-light.svg');
-      }
-      @include dark {
-        background-image: url('/img/logo-footer-modern-dark.svg');
-      }
-    }
-  }
 }

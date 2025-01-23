@@ -1,16 +1,18 @@
 @charset "UTF-8";
+@use "../../feature/theme/theme";
+@use "../../feature/lookAndFeel/feel";
 
 @import "../components/floaters";
 
 footer {
   .footer-top {
-    padding: 10px 0;
+    padding:  10px 0;
     position: relative;
 
     ul.breadcrumb {
       li {
         display: inline;
-        color: #f2f2f2;
+        color:   #f2f2f2;
 
         a, span {
           color: #969696;
@@ -25,12 +27,12 @@ footer {
 
   .footer-inner {
     overflow: hidden;
-    padding: 17px 0 21px;
+    padding:  17px 0 21px;
 
     ul {
       list-style-type: none;
 
-      padding-left: 3px;
+      padding-left:    3px;
 
       li {
         padding: 4px 0 4px 0;
@@ -38,7 +40,7 @@ footer {
     }
 
     h6 {
-      color: #505050;
+      color:          #505050;
       text-transform: uppercase;
 
       a {
@@ -48,7 +50,7 @@ footer {
 
     a {
       font-size: $font-size-sm;
-      color: #6c757d;
+      color:     #6c757d;
     }
 
     @include media-breakpoint-up('md') {
@@ -70,15 +72,15 @@ footer {
     }
 
     .footer-bubble {
-      padding: 10px 20px;
-      position: relative;
+      padding:   10px 20px;
+      position:  relative;
       max-width: 280px;
-      margin: 35px 0;
+      margin:    35px 0;
 
       ol {
-        margin: 11px 0;
+        margin:          11px 0;
         list-style-type: none;
-        padding: 0;
+        padding:         0;
 
         li {
           padding: 6px 0;
@@ -87,39 +89,52 @@ footer {
     }
   }
 
-  #footer-copyright {
+  .footer-copyright {
     font-size: 11px;
-    color: $gray-light;
-    padding: 10px 0;
+    padding:   10px 0;
 
     a {
       color: inherit;
     }
 
     .logo {
-      background: url('/img/logo-footer-light.svg') no-repeat 10px 0;
-      width: 110px;
-      height: 14px;
-      display: inline-block;
+      background:    no-repeat;
+      width:         90px;
+      height:        16px;
+      margin-left:   8px;
+      margin-bottom: 3px; // This is to align flex image to flex text in footer
 
-      body.theme-dark & {
-        background-image: url('/img/logo-footer-dark.svg');
+      @include feel.legacy {
+        @include theme.light {
+          background-image: url('/img/logo-footer-light.svg');
+        }
+        @include theme.dark {
+          background-image: url('/img/logo-footer-dark.svg');
+        }
+      }
+      @include feel.modern {
+        @include theme.light {
+          background-image: url('/img/logo-footer-modern-light.svg');
+        }
+        @include theme.dark {
+          background-image: url('/img/logo-footer-modern-dark.svg');
+        }
       }
     }
   }
 
   .scroll-top {
     @include floater;
-    box-sizing: content-box;
-    font-size: 16px;
-    display: none;
-    width: 48px;
-    height: 48px;
+    box-sizing:  content-box;
+    font-size:   16px;
+    display:     none;
+    width:       48px;
+    height:      48px;
     line-height: 48px;
-    position: fixed;
-    text-align: center;
-    cursor: pointer;
-    color: #80a41a;
+    position:    fixed;
+    text-align:  center;
+    cursor:      pointer;
+    color:       #80a41a;
 
     body.scrolled-down & {
       display: block;
