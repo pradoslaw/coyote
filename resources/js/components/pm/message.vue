@@ -27,7 +27,7 @@
       </a>
 
       <a v-if="clickableText" :href="'/User/Pm/Show/' + message.id" class="excerpt">{{ message.excerpt ? message.excerpt : '(kliknij, aby przeczytać)' }}</a>
-      <div v-else class="pm-text" v-html="message.text"/>
+      <div v-else class="pm-text neon-contains-a-color-link" v-html="message.text"/>
 
       <small v-if="last && message.folder === SENTBOX && message.read_at" class="text-muted">
         <vue-icon name="privateMessageReadAt"/>
