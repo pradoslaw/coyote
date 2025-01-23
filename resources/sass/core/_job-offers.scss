@@ -2,68 +2,7 @@
   color: $gray;
 }
 
-#hire-me {
-  .card-hire-me {
-    border: 1px solid $primary;
-  }
-
-  .hire-me-header {
-    text-align: center;
-    background-color: $primary;
-    background-image: url('/img/escheresque.png');
-
-    h4 {
-      margin: 0;
-      color: #fff;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    img {
-      max-width: 30px;
-      border-radius: 50%;
-      margin-left: 5px;
-      padding: 2px;
-      background-color: #fff;
-    }
-  }
-
-  .media {
-    &:last-child {
-      padding: 10px 0 0 0;
-    }
-  }
-
-  @each $name, $color in (java, #5484a4), (javascript, #e0c536), (csharp, #873b89), (php, #aabdd6), (python, #447c9c), (cpp, #649cd3), (c, #acbccc) {
-    > .#{$name} {
-      > .card-hire-me {
-        border: 1px solid $color;
-
-        .hire-me-header {
-          background-color: $color;
-        }
-      }
-    }
-  }
-}
-
 .card-media {
-  .card-body {
-    padding: 10px;
-  }
-
-  .media {
-    margin: 0;
-    border-bottom: 1px solid $card-border-color;
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-
   .media-link {
     display: flex;
     text-decoration: none;

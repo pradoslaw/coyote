@@ -297,3 +297,10 @@ $modern-tile-background-dark:  style.$neutral-800;
     display: none;
   }
 }
+
+.neon-divider {
+  border:           0;
+  border-top-width: 1px;
+  border-top-style: solid;
+  @include theme.property(border-top-color, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
+}

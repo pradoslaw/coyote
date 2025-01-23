@@ -1,41 +1,35 @@
 {% for job in jobs %}
   <div class="media text-truncate">
-    <a class="media-link" href="{{ route('job.offer', [job.id, job.slug]) }}" title="{{ job.title ~ (job.firm ? " @ #{job.firm.name}" ) }}">
+    <a class="media-link"
+       href="{{ route('job.offer', [job.id, job.slug]) }}"
+       title="{{ job.title }}">
       <div class="me-2 i-45 d-none d-xl-inline-block">
-        {% if job.firm.hasLogo %}
-          <img src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}">
+        {% if job.firm.logo %}
+          <img src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}" style="max-width:100%;max-height:100%;">
         {% else %}
           <div class="neon-placeholder h-100 d-flex justify-content-center align-items-center">
             {{ icon('jobOfferMissingLogo') }}
           </div>
         {% endif %}
       </div>
-
       <div class="media-body">
         <h5 class="mb-1">{{ job.title|raw }}</h5>
-
         <p>
           <span class="employer">{{ job.firm.name }}</span>
-
           <small class="text-muted">
-            {% include 'job.partials.location' with {
-              locations: job.locations,
-              linkable: false
-            } %}
+            {% include 'job.partials.location' with {locations: job.locations, linkable: false} %}
           </small>
         </p>
-
         <p>
           {% if job.salary_from or job.salary_to %}
             {% include 'job.partials.salary' %}
           {% endif %}
         </p>
-
         {% if job.tags %}
           <ul class="tag-clouds tag-clouds-xs">
             {% for tag in job.tags[0:3] %}
               <li>
-                <span class="{{ tag in selectedTags ? 'selectedTag' }}">
+                <span class="neon-tag {{ tag in selectedTags ? 'selectedTag' }}">
                   {{ tag }}
                 </span>
               </li>
@@ -45,4 +39,5 @@
       </div>
     </a>
   </div>
+  <hr class="neon-divider m-0">
 {% endfor %}

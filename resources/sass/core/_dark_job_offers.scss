@@ -3,46 +3,6 @@ body.theme-dark {
     color: #acacac;
   }
 
-  #hire-me {
-    .card-hire-me {
-      border-color: #2f2f2f;
-    }
-
-    .card-header {
-      background-color: $primary;
-
-      h4 {
-        color: #fff;
-      }
-
-      img {
-        background-color: transparent;
-      }
-    }
-
-    @each $name, $color in (java, #ae2e2e), (javascript, #968425), (csharp, #873b89), (php, #3d72b7), (python, #447c9c), (cpp, #48739e), (c, #acbccc) {
-      > .#{$name} {
-        > .card-hire-me {
-          border-color: $color;
-
-          .hire-me-header {
-            background-color: $color;
-          }
-        }
-      }
-    }
-  }
-
-  .card-media {
-    .media {
-      border-bottom-color: #2f2f2f;
-    }
-
-    .media-link h5 {
-      color: #90ba1d;
-    }
-  }
-
   #job-offer.card-body {
     .media {
       .media-body {
