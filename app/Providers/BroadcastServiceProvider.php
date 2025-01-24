@@ -1,22 +1,16 @@
 <?php
-
 namespace Coyote\Providers;
 
+use Illuminate\Broadcasting\BroadcastManager;
+use Illuminate\Contracts\Broadcasting\Factory;
 use Illuminate\Support\ServiceProvider;
-use \Illuminate\Contracts\Broadcasting\Factory;
 
 class BroadcastServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
-        /** @var \Illuminate\Broadcasting\Broadcasters\Broadcaster $broadcast */
+        /** @var BroadcastManager $broadcast */
         $broadcast = $this->app[Factory::class];
-
         $broadcast->routes();
     }
 }
