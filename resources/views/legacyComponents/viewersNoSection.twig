@@ -4,8 +4,8 @@
       <a
           href="{{ user.profileUrl }}"
           class="viewer-pill d-inline-flex mb-1 neon-tile"
-          title="{{ user.name }} (online) - {{ user.groupName }}"
           style="color:inherit;"
+          data-user-id="{{ user.vCardId }}"
       >
         <div class="viewer-pill-avatar d-inline-block">
           {{ user_avatar(user.avatarUrl, user.name) }}
@@ -20,7 +20,7 @@
   </div>
   <div class="viewers-users">
     {% for user in usersWithoutGroup %}
-      <a class="circle d-inline-block circle-user-avatar" title="{{ user.name }} (online)" style="color:inherit;" href="{{ user.profileUrl }}">
+      <a class="circle d-inline-block circle-user-avatar" style="color:inherit;" href="{{ user.profileUrl }}" data-user-id="{{ user.vCardId }}">
         {{ user_avatar(user.avatarUrl, user.name) }}
       </a>
     {% endfor %}

@@ -31,6 +31,7 @@ class ViewersStore
             $this->groupShortName($user->group_name),
             $user->photo->getFilename(),
             \route('profile', [$user->id]),
+            $user->id,
         );
     }
 

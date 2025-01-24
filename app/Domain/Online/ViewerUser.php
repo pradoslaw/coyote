@@ -9,5 +9,6 @@ readonly class ViewerUser
         public ?string $groupShortName,
         public ?string $avatarUrl,
         public string  $profileUrl,
+        public int     $vCardId,
     ) {}
 }
