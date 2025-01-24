@@ -1,8 +1,12 @@
 <template>
   <div class="thumbnail">
-    <div class="position-relative img-thumbnail text-center">
+    <div class="position-relative img-thumbnail text-center i-95">
       <template v-if="url">
-        <img v-if="isImage" :src="url" class="mw-100"/>
+        <img
+          v-if="isImage"
+          :src="url"
+          :style="{width:'100%','height':'100%','object-fit':'cover','object-position':'center'}"
+        />
         <div v-else class="placeholder-mask" style="font-size:2em;">
           <vue-icon name="thumbnailAssetUploadedFile"/>
         </div>
