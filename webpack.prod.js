@@ -90,16 +90,16 @@ const plugins = [
   }),
 ];
 
-if (process.env.RELEASE) {
-  plugins.push(new SentryPlugin({
-    include: "./public",
-    authToken: process.env.SENTRY_API_KEY,
-    release: process.env.RELEASE,
-    ignore: ["node_modules"],
-    org: "coyote",
-    project: "frontend",
-  }));
-}
+// if (process.env.RELEASE) {
+//   plugins.push(new SentryPlugin({
+//     include: "./public",
+//     authToken: process.env.SENTRY_API_KEY,
+//     release: process.env.RELEASE,
+//     ignore: ["node_modules"],
+//     org: "coyote",
+//     project: "frontend",
+//   }));
+// }
 
 module.exports = merge(common, {
   mode: "production",
