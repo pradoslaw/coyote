@@ -1,5 +1,6 @@
 import * as Models from "../types/models";
 import {createVueApp, createVueAppNotifications, setAxiosErrorVueNotification} from "../vue";
+import VueFeedback from './forum/feedback';
 
 import VueForum from './forum/homepage';
 import VueLog from './forum/log';
@@ -36,6 +37,7 @@ exists('#js-post') && createVueAppNotifications('Posts', '#js-post', VuePosts);
 exists('#js-log') && createVueApp('Log', '#js-log', VueLog);
 createVueApp('Sidebar', '#js-sidebar', VueSidebar);
 createVueApp('Tags', '#js-tags', VueTags);
+createVueApp('Feedback', '#js-feedback', VueFeedback);
 
 function exists(selector: string): boolean {
   return !!document.querySelector(selector);

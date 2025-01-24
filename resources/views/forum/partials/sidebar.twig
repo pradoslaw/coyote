@@ -50,6 +50,39 @@
     {% include 'forum.partials.tags' with {'tags': tags.popular} %}
   </div>
 
+  <div class="box mt-5">
+    <h4 class="heading">
+      {{ icon('shareFeedback') }}
+      Podziel się opinią
+    </h4>
+    <div id="js-feedback">
+      <div class="text-muted cursor-pointer" @click="edit" v-if="isInitial">
+        ${placeholder}
+      </div>
+      <template v-else-if="isSuccess">
+        <div class="my-3">
+          Dziękujemy za Twoją wartościową opinię!
+        </div>
+      </template>
+      <template v-else>
+        <textarea
+            :placeholder="placeholder"
+            v-model="feedback"
+            class="form-control mb-2"
+            ref="inputField"
+            style="min-height:60px; max-height:300px;"
+            maxlength="1000"></textarea>
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-secondary btn-sm me-2" @click="cancel">
+            Anuluj
+          </button>
+          <button class="btn btn-primary btn-sm" @click="send">
+            Wyślij
+          </button>
+        </div>
+      </template>
+    </div>
+  </div>
   {% block related %}
   {% endblock %}
 </aside>
