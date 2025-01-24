@@ -26,7 +26,7 @@ function showVCard(event) {
 
       const vcard = document.getElementById('vcard');
       vcard.style.top = `${anchorPoint.top + 20}px`;
-      vcard.style.left = `${Math.min(anchorPoint.left, window.innerWidth - 450)}px`;
+      vcard.style.left = `${Math.min(anchorPoint.left, window.innerWidth - 520)}px`;
 
       vcard.addEventListener('mouseenter', () => clearTimeout(tooltipTimer));
       vcard.addEventListener('mouseleave', removeVCard);
