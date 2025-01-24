@@ -32,7 +32,7 @@
 
         <ul class="tag-clouds tag-clouds-xs">
           <li v-for="tag in limitedTags">
-            <span>
+            <span class="neon-tag">
               {{ tag.name }}
             </span>
           </li>

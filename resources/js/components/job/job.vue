@@ -42,7 +42,7 @@
           <small v-else class="text-muted float-end">{{ job.boost_at }}</small>
           <ul class="tag-clouds tag-clouds-sm">
             <li v-for="tag in limitedTags">
-              <a :href="tag.url" :title="'Znajdź oferty zawierające ' + tag.name">
+              <a :href="tag.url" :title="'Znajdź oferty zawierające ' + tag.name" class="neon-tag">
                 <img v-if="tag.logo" :alt="tag.name" :src="tag.logo">
                 {{ tag.real_name || tag.name }}
               </a>

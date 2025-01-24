@@ -92,7 +92,9 @@
             </div>
             <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs">
               <li v-for="tag in topic.tags">
-                <a :href="tag.url">{{ tag.name }}</a>
+                <a :href="tag.url" class="neon-tag">
+                  {{ tag.name }}
+                </a>
               </li>
             </ul>
           </div>
