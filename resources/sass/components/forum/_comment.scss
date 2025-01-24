@@ -16,8 +16,20 @@
   }
 }
 
-.comment-delete {
-  opacity: 0.7;
+.comment-delete-border {
+  opacity:       0.7;
+  @include theme.property(border, 1px solid #f4dfbb, 1px solid #5f3e26);
+  border-radius: 8px;
+  .comment-delete {
+    border-radius: 7px;
+  }
+}
+
+.comment-delete-border--expanded {
+  .comment-delete {
+    border-bottom-left-radius:  0;
+    border-bottom-right-radius: 0;
+  }
 }
 
 .post-comment {

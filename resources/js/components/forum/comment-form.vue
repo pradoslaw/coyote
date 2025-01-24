@@ -27,17 +27,13 @@
 
 <script lang="ts">
 import store from "../../store/index";
-import {PostComment} from "../../types/models";
 import VueCommentAutocomplete from '../CommentAutocomplete.vue';
 import VueButton from '../forms/button.vue';
 
 export default {
   name: 'post-comment-form',
   props: {
-    comment: {
-      type: Object as () => PostComment,
-      required: true,
-    },
+    comment: {type: Object, required: true},
   },
   components: {
     'vue-comment-autocomplete': VueCommentAutocomplete,

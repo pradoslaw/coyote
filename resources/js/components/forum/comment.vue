@@ -1,51 +1,52 @@
 <template>
-  <div :id="anchor"
-       :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false}"
-       class="post-comment"
-       v-if="!authorBlocked">
+  <div :id="anchor" :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false}" class="post-comment">
     <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"/>
-    <vue-comment-form
-      v-if="comment.is_editing"
-      :comment="comment"
-      @save="$store.commit('posts/editEnd', comment)"
-      @cancel="$store.commit('posts/editEnd', comment)"
-      ref="comment-form"
-    />
-    <template v-else>
-      <div class="d-flex">
-        <div>
-          <div class="neon-avatar-border">
-            <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="i-35"/>
-          </div>
-        </div>
-        <div class="ms-2">
+    <div :class="{'comment-delete-border':authorBlocked, 'comment-delete-border--expanded':authorBlocked && blockedExpanded}">
+      <div class="comment-delete p-2 cursor-pointer" v-if="authorBlocked" @click="blockedToggle">
+        <vue-icon name="postCommentAuthorBlocked"/>
+        Treść komentarza została ukryta, ponieważ autorem jest zablokowany przez Ciebie użytkownik.
+      </div>
+      <div v-if="!authorBlocked || blockedExpanded">
+        <vue-comment-form
+          v-if="comment.is_editing && !authorBlocked"
+          :comment="comment"
+          @save="$store.commit('posts/editEnd', comment)"
+          @cancel="$store.commit('posts/editEnd', comment)"
+          ref="comment-form"
+        />
+        <div class="d-flex" v-else>
           <div>
-            <vue-username :user="comment.user" :owner="comment.user.id === topic.owner_id"/>
-            {{ ' ' }}
-            <a :href="comment.url">
-              <vue-timeago :datetime="comment.created_at" class="text-muted small"/>
-            </a>
-            <a v-if="comment.editable" @click="edit" href="javascript:" title="Edytuj ten komentarz" class="btn-comment">
-              <vue-icon name="postCommentEdit"/>
-            </a>
-            <a v-if="comment.editable" @click="deleteComment" href="javascript:" title="Usuń ten komentarz" class="btn-comment">
-              <vue-icon name="postCommentDelete"/>
-            </a>
-            <a v-if="comment.editable" @click="migrate" href="javascript:" title="Zamień w post" class="btn-comment">
-              <vue-icon name="postCommentConvertToPost"/>
-            </a>
-            <a :data-metadata="comment.metadata" :data-url="comment.url" title="Zgłoś ten komentarz" href="javascript:" class="btn-comment">
-              <vue-icon name="postCommentReport"/>
-            </a>
+            <div class="neon-avatar-border">
+              <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="i-35"/>
+            </div>
           </div>
-          <span v-html="comment.html" class="comment-text neon-contains-a-color-link"/>
+          <div class="ms-2">
+            <div>
+              <vue-username :user="comment.user" :owner="comment.user.id === topic.owner_id"/>
+              {{ ' ' }}
+              <a :href="comment.url">
+                <vue-timeago :datetime="comment.created_at" class="text-muted small"/>
+              </a>
+              <template v-if="!authorBlocked">
+                <span v-if="comment.editable" @click="edit" title="Edytuj ten komentarz" class="btn-comment cursor-pointer">
+                  <vue-icon name="postCommentEdit"/>
+                </span>
+                <span v-if="comment.editable" @click="deleteComment" title="Usuń ten komentarz" class="btn-comment cursor-pointer">
+                  <vue-icon name="postCommentDelete"/>
+                </span>
+                <span v-if="comment.editable" @click="migrate" title="Zamień w post" class="btn-comment cursor-pointer">
+                  <vue-icon name="postCommentConvertToPost"/>
+                </span>
+                <span :data-metadata="comment.metadata" :data-url="comment.url" title="Zgłoś ten komentarz" class="btn-comment cursor-pointer">
+                  <vue-icon name="postCommentReport"/>
+                </span>
+              </template>
+            </div>
+            <span v-html="comment.html" class="comment-text neon-contains-a-color-link"/>
+          </div>
         </div>
       </div>
-    </template>
-  </div>
-  <div class="post-comment comment-delete" v-else>
-    <vue-icon name="postCommentAuthorBlocked"/>
-    Treść komentarza została ukryta, ponieważ autorem jest zablokowany przez Ciebie użytkownik.
+    </div>
   </div>
 </template>
 
@@ -82,6 +83,7 @@ export default {
   data() {
     return {
       isEditing: false,
+      blockedExpanded: false,
     };
   },
   computed: {
@@ -103,6 +105,9 @@ export default {
     },
   },
   methods: {
+    blockedToggle() {
+      this.$data.blockedExpanded = !this.$data.blockedExpanded;
+    },
     edit() {
       store.commit('posts/editStart', this.comment);
       nextTick(() => this.$refs['comment-form'].focus());
