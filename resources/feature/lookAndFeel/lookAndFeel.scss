@@ -269,9 +269,20 @@ $modern-tile-background-dark:  style.$neutral-800;
   @include feel.modern {
     color:  style.$green-500;
     border: 1px solid style.$green-500;
+    &.follows,
     &:hover {
       background-color: style.$green-500;
       @include theme.property(color, style.$white, style.$neutral-900);
+    }
+  }
+
+  @include feel.legacy {
+    color:  #80a41a;
+    border: 1px solid #80a41a;
+    &.follows,
+    &:hover {
+      background-color: #80a41a;
+      @include theme.property(color, white, #1a1a1a);
     }
   }
 }

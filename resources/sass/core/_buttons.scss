@@ -6,18 +6,6 @@
   padding: 0.1rem 0.4rem;
 }
 
-.btn-follow {
-  @extend .btn-outline-primary;
-
-  &.follows {
-    @extend .btn-primary;
-
-    &:hover {
-      @extend .btn-danger;
-    }
-  }
-}
-
 .post-action,
 .microblog-action {
   font-size:     0.95em;
@@ -33,7 +21,6 @@
       border:     1px solid #ddd;
       background: #f7f7f7
     }
-
     @include theme.dark {
       border:     1px solid #2f2f2f;
       background: #292929;
