@@ -14,7 +14,7 @@ export default {
         <slot/>
       </div>
       <div class="see-more__unwrap" v-if="wrapped">
-        <span @click="unwrap" class="neon-color-link">
+        <span @click="unwrap" class="neon-color-link cursor-pointer">
           <vue-icon name="microblogFoldedUnfold"/>
           Zobacz całość
         </span>
