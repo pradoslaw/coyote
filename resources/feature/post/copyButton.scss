@@ -24,7 +24,8 @@
     }
 
     @include theme.dark {
-      border: 1px solid #838383;
+      border:           1px solid #838383;
+      background-color: #101010; // background of code block
       &:hover {
         background-color: #1a1a1a;
       }
