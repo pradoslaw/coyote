@@ -2,28 +2,28 @@
 {% set salary_to = job.salary_to|number_format(0, ' ', ' ') %}
 {% set net_label = net_label|default(false) %}
 
-<strong class="text-primary">
-    {% if salary_from == salary_to %}
-        {{ salary_from }}
-    {% elseif salary_from and salary_to %}
-        {{ salary_from }} - {{ salary_to }}
-    {% elseif salary_from %}
-        od {{ salary_from }}
-    {% elseif salary_to %}
-        do {{ salary_to }}
-    {% endif %}
+<span class="neon-placeholder p-2 neon-rounded">
+  {% if salary_from == salary_to %}
+    {{ salary_from }}
+  {% elseif salary_from and salary_to %}
+    {{ salary_from }} - {{ salary_to }}
+  {% elseif salary_from %}
+    od {{ salary_from }}
+  {% elseif salary_to %}
+    do {{ salary_to }}
+  {% endif %}
 
-    {% if salary_from or salary_to %}
-        {{ job.currency_symbol }}
-    {% endif %}
-</strong>
+  {% if salary_from or salary_to %}
+    {{ job.currency_symbol }}
+  {% endif %}
+</span>
 
 {% if job.is_gross %}
-    <small class="text-muted">brutto</small>
+  <small class="text-muted">brutto</small>
 {% elseif net_label %}
-    <small class="text-muted">netto</small>
+  <small class="text-muted">netto</small>
 {% endif %}
 
 {% if job.rate != constant('Coyote\\Job::MONTHLY') and rate_label %}
-    <small class="text-muted">/ {{ rates_list[job.rate] }}</small>
+  <small class="text-muted">/ {{ rates_list[job.rate] }}</small>
 {% endif %}

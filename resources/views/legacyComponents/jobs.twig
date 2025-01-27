@@ -13,18 +13,20 @@
         {% endif %}
       </div>
       <div class="media-body">
-        <h5 class="mb-1">{{ job.title|raw }}</h5>
+        <h5 class="mb-1 neon-color-link">
+          {{ job.title|raw }}
+        </h5>
         <p>
           <span class="employer">{{ job.firm.name }}</span>
           <small class="text-muted">
             {% include 'job.partials.location' with {locations: job.locations, linkable: false} %}
           </small>
         </p>
-        <p>
-          {% if job.salary_from or job.salary_to %}
+        {% if job.salary_from or job.salary_to %}
+          <p class="my-2">
             {% include 'job.partials.salary' %}
-          {% endif %}
-        </p>
+          </p>
+        {% endif %}
         {% if job.tags %}
           <ul class="tag-clouds tag-clouds-xs">
             {% for tag in job.tags[0:3] %}
