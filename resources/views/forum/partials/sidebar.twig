@@ -4,52 +4,6 @@
 
   {{ render_block('job_ads') }}
 
-  {% if auth_check() %}
-    <div id="js-tags" class="box">
-      <h4 class="heading">
-        {{ icon('tagsSubscribed') }}
-        Moje tagi
-
-        <a @click="toggleEdit" href="javascript:" class="btn btn-secondary btn-sm float-end" style="margin-top: -4px" rel="nofollow">
-          {{ icon('tagsSubscribedEdit') }}
-        </a>
-      </h4>
-
-      <form v-if="isEditing">
-        <div class="row mt-3">
-          <div class="col-9">
-            <input :value="inlineTags" @keyup.esc="isEditing = false" ref="input" class="form-control form-control-sm">
-          </div>
-          <div class="col-2">
-            <vue-button :disabled="isProcessing" @click="saveTags" class="btn btn-primary btn-sm">Zapisz</vue-button>
-          </div>
-        </div>
-      </form>
-
-      <template v-else>
-        <ul v-if="tags.length" class="mt-3 tag-clouds cloud">
-          <li v-for="tag in tags">
-            <a :href="`/Forum/Tag/${ encodeURIComponent(tag.name) }`">${ tag.name }</a><small>× ${ tag.topics }</small>
-          </li>
-        </ul>
-
-        <div v-else class="mt-3 tag-clouds">
-          <a @click="toggleEdit" class="text-muted" href="javascript:" rel="nofollow">
-            Brak tagów. Kliknij, aby dodać...
-          </a>
-        </div>
-      </template>
-    </div>
-  {% endif %}
-
-  <div class="box mt-5">
-    <h4 class="heading">
-      {{ icon('tagsPopularForum') }}
-      Popularne tagi
-    </h4>
-    {% include 'forum.partials.tags' with {'tags': tags.popular} %}
-  </div>
-
   <div class="box mt-5">
     <h4 class="heading">
       {{ icon('shareFeedback') }}
@@ -83,6 +37,56 @@
       </template>
     </div>
   </div>
+
+  {% if auth_check() %}
+    <div id="js-tags" class="box mt-5">
+      <h4 class="heading">
+        {{ icon('tagsSubscribed') }}
+        Moje tagi
+
+        <a @click="toggleEdit" href="javascript:" class="btn btn-secondary btn-sm float-end" style="margin-top: -4px" rel="nofollow">
+          {{ icon('tagsSubscribedEdit') }}
+        </a>
+      </h4>
+
+      <form v-if="isEditing">
+        <div class="row mt-3">
+          <div class="col-9">
+            <input :value="inlineTags" @keyup.esc="isEditing = false" ref="input" class="form-control form-control-sm">
+          </div>
+          <div class="col-2">
+            <vue-button :disabled="isProcessing" @click="saveTags" class="btn btn-primary btn-sm">Zapisz</vue-button>
+          </div>
+        </div>
+      </form>
+
+      <template v-else>
+        <ul v-if="tags.length" class="mt-3 tag-clouds cloud">
+          <li v-for="tag in tags">
+            <a :href="`/Forum/Tag/${ encodeURIComponent(tag.name) }`" class="neon-tag">
+              ${ tag.name }
+            </a>
+            <small>× ${ tag.topics }</small>
+          </li>
+        </ul>
+
+        <div v-else class="mt-3 tag-clouds">
+          <a @click="toggleEdit" class="text-muted" href="javascript:" rel="nofollow">
+            Brak tagów. Kliknij, aby dodać...
+          </a>
+        </div>
+      </template>
+    </div>
+  {% endif %}
+
+  <div class="box mt-5">
+    <h4 class="heading">
+      {{ icon('tagsPopularForum') }}
+      Popularne tagi
+    </h4>
+    {% include 'forum.partials.tags' with {'tags': tags.popular} %}
+  </div>
+
   {% block related %}
   {% endblock %}
 </aside>
