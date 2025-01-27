@@ -3,9 +3,10 @@ name: Production deployment
 on:
   workflow_dispatch:
     inputs:
-      git-ref:
-        description: Git revision (optional)
-        required: false
+      nonBreakingChange:
+        description: 'Non-breaking change'
+        required: true
+        type: boolean
 
 jobs:
   deploy:
@@ -32,8 +33,9 @@ jobs:
       - name: Push to docker registry
         run: docker push -a 4programmers/coyote
 
-      - name: Update production docker images
+      - name: Update production docker images (full update)
         uses: appleboy/ssh-action@master
+        if: ${{ !inputs.nonBreakingChange }}
         with:
           host: ${{ secrets.PRODUCTION_IP }}
           username: ${{ secrets.PRODUCTION_LOGIN }}
@@ -42,6 +44,20 @@ jobs:
           envs: GITHUB_SHA
           script: |
             sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_php
+            sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_worker
+            sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_cron
+
+      - name: Update production docker images (non-breaking change)
+        uses: appleboy/ssh-action@master
+        if: ${{ inputs.nonBreakingChange }}
+        with:
+          host: ${{ secrets.PRODUCTION_IP }}
+          username: ${{ secrets.PRODUCTION_LOGIN }}
+          key: ${{ secrets.PRODUCTION_KEY }}
+          port: 22
+          envs: GITHUB_SHA
+          script: |
+            sudo docker service update --image 4programmers/coyote:$GITHUB_SHA --update-order start-first --update-delay 10s coyote_php
             sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_worker
             sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_cron
 
