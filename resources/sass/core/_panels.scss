@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+@use "../../feature/lookAndFeel/feel" as feel;
 @import "../icons/icons";
 
 .card {
@@ -8,9 +9,11 @@
 
 .box {
   > h4 {
-    position: relative;
-    color: $box-header-color;
+    position:  relative;
     font-size: 110%;
+    @include feel.legacy {
+      color: $box-header-color;
+    }
 
     a {
       color: inherit;
@@ -26,66 +29,66 @@
 // przezroczyste tlo. dodano jedynie obramowanie.  np. w mikroblogach czy na stronie kategorii tekstow
 .card-transparent {
   background-color: transparent;
-  border: 1px solid $card-border-color;
+  border:           1px solid $card-border-color;
 }
 
 // panel wykorzystywany np. na forum czy w panelu usera.
 .card-wrapper {
-  box-shadow: inset 1px 1px #fff;
+  box-shadow:       inset 1px 1px #fff;
   background-color: #e2e7e1;
-  border: 1px solid #c7c7c7;
+  border:           1px solid #c7c7c7;
 
   > .card-body {
     padding: 4px 10px 8px 10px;
 
     > form > h2,
     > h2 {
-      font-size: 14px;
-      color: #464646;
+      font-size:   14px;
+      color:       #464646;
       text-shadow: white 0 1px 0;
-      margin: 5px 0 10px 2px;
+      margin:      5px 0 10px 2px;
     }
   }
 }
 
 #sort {
   list-style-type: none;
-  float: left;
-  height: 30px;
-  padding: 0;
-  margin-bottom: 10px;
-  margin-top: 7px;
+  float:           left;
+  height:          30px;
+  padding:         0;
+  margin-bottom:   10px;
+  margin-top:      7px;
 
   li {
-    display: inline-block;
+    display:      inline-block;
     margin-right: 6px;
 
     a {
-      display: block;
-      color: $body-color;
-      padding: 6px 10px;
-      font-size: 12px;
-      text-shadow: #fff 0 1px 0;
-      opacity: .8;
+      display:         block;
+      color:           $body-color;
+      padding:         6px 10px;
+      font-size:       12px;
+      text-shadow:     #fff 0 1px 0;
+      opacity:         .8;
       text-decoration: none;
     }
   }
 
   .desc, .asc {
-    margin-right: 10px;
-    padding-right: 24px;
-    padding-top: 5px;
-    padding-bottom: 4px;
+    margin-right:     10px;
+    padding-right:    24px;
+    padding-top:      5px;
+    padding-bottom:   4px;
     background-color: #444;
-    border-radius: 10px;
-    color: #fff;
-    text-shadow: none;
-    opacity: 1.0;
-    position: relative;
+    border-radius:    10px;
+    color:            #fff;
+    text-shadow:      none;
+    opacity:          1.0;
+    position:         relative;
 
     &:after {
-      position: absolute;
-      right: 9px;
+      position:  absolute;
+      right:     9px;
       font-size: 14px;
     }
   }

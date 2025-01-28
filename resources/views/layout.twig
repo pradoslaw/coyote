@@ -51,7 +51,6 @@
     class="
     {{ auth_guest() or user('allow_sticky_header') ? 'padding-top' }} 
     {{ __dark_theme ? 'theme-dark' : 'theme-light' }} 
-    {{ isHomepageModern ? 'homepage-modern' : 'homepage-legacy' }}
     {{ lookAndFeelModern ? 'look-and-feel-modern' : 'look-and-feel-legacy' }}">
 {{ render_region('body') }}
 

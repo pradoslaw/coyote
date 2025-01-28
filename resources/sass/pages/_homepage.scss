@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@use "../../feature/theme/theme";
+
 @mixin size($size) {
   @if ($size == 'intermediate') {
     @include media-breakpoint-only(sm) {
@@ -31,140 +33,121 @@
   }
 }
 
-body.homepage-legacy {
-  .card-reputation {
-    img, svg {
-      width:  40px;
-      height: 40px;
+.card-reputation {
+  img, svg {
+    width:  40px;
+    height: 40px;
+  }
+}
+
+#box-forum {
+  #stream-wrapper {
+    @include media-breakpoint-down(xl) {
+      margin-top:            20px;
+      background-position-x: 10px;
+      padding-left:          15px;
     }
   }
 
-  #box-forum {
-    #stream-wrapper {
-      @include media-breakpoint-down(xl) {
-        margin-top:            20px;
-        background-position-x: 10px;
-        padding-left:          15px;
-      }
+  #stream {
+    height:   365px;
+    position: relative;
+    overflow: hidden;
+
+    @include media-breakpoint-down(md) {
+      padding-left: 15px;
     }
+  }
 
-    #stream {
-      height:   365px;
-      position: relative;
-      overflow: hidden;
+  #box-forum-headline {
+    margin-top: 20px;
 
-      @include media-breakpoint-down(md) {
-        padding-left: 15px;
-      }
-    }
+    .row {
+      padding: 4px 0 4px 0;
+      margin:  0;
 
-    #box-forum-headline {
-      margin-top: 20px;
+      .display-count {
+        strong {
+          display:    block;
+          text-align: center;
+          font-size:  16px;
+        }
 
-      .row {
-        padding: 4px 0 4px 0;
-        margin:  0;
-
-        .display-count {
-          strong {
-            display:    block;
-            text-align: center;
-            font-size:  16px;
-          }
-
-          small {
-            display:    block;
-            color:      #7d7d7d;
-            text-align: center;
-            font-size:  10px;
-          }
+        small {
+          display:    block;
+          color:      #7d7d7d;
+          text-align: center;
+          font-size:  10px;
         }
       }
-
-      a.title {
-        display: block;
-        @include text-truncate();
-      }
-
-      a.category {
-        font-size: 11px;
-      }
-
-      .float-end {
-        color:     $gray-light;
-        font-size: 10px;
-      }
     }
 
-    .recent-activity {
-      margin: 10px 0 0 10px;
-
-      @include media-breakpoint-down(md) {
-        border-left: none;
-        margin-left: 0;
-      }
+    a.title {
+      display: block;
+      @include text-truncate();
     }
 
-    .media {
-      padding:   0 0 0 20px;
+    a.category {
       font-size: 11px;
-      position:  relative;
-      overflow:  visible;
-
-      &:not(:first-child) {
-        margin-top: 15px;
-      }
-
-      .homepage-activity {
-        border-radius: 50%;
-        position:      absolute;
-        width:         20px;
-        height:        20px;
-        left:          -11px;
-        top:           8px;
-
-        &::selection {
-          text-shadow: none;
-        }
-      }
-
-      @include media-breakpoint-down(md) {
-        padding: 0;
-      }
     }
 
-    .media-body {
-      min-width: 0; // makes flex children not exceed parent width
-
-      p {
-        margin: 0;
-        @include text-truncate();
-      }
-
-      strong {
-        font-weight: normal;
-        padding:     0 0 0 10px;
-        margin:      10px 0 0 1px;
-        display:     block;
-        font-family: "Open Sans", sans-serif;
-      }
+    .float-end {
+      color:     $gray-light;
+      font-size: 10px;
     }
   }
 
-  &.theme-dark {
-    .card-reputation {
-      .media {
-        border-bottom-color: #2f2f2f;
+  .recent-activity {
+    margin: 10px 0 0 10px;
 
-        &:after {
-          color: #2f2f2f;
-        }
+    @include media-breakpoint-down(md) {
+      border-left: none;
+      margin-left: 0;
+    }
+  }
+
+  .media {
+    padding:   0 0 0 20px;
+    font-size: 11px;
+    position:  relative;
+    overflow:  visible;
+
+    &:not(:first-child) {
+      margin-top: 15px;
+    }
+
+    .homepage-activity {
+      border-radius: 50%;
+      position:      absolute;
+      width:         20px;
+      height:        20px;
+      left:          -11px;
+      top:           8px;
+
+      &::selection {
+        text-shadow: none;
       }
     }
 
-    h2.h4,
-    h4 {
-      color: #c8c8c8;
+    @include media-breakpoint-down(md) {
+      padding: 0;
+    }
+  }
+
+  .media-body {
+    min-width: 0; // makes flex children not exceed parent width
+
+    p {
+      margin: 0;
+      @include text-truncate();
+    }
+
+    strong {
+      font-weight: normal;
+      padding:     0 0 0 10px;
+      margin:      10px 0 0 1px;
+      display:     block;
+      font-family: "Open Sans", sans-serif;
     }
   }
 }

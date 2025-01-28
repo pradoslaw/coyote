@@ -1,7 +1,6 @@
 <?php
 namespace Coyote\Feature\Trial;
 
-use Coyote\Domain\Settings\UserTheme;
 use Coyote\Services\Session\Renderer;
 use Coyote\User;
 use Illuminate\Contracts\View\View;
@@ -45,51 +44,6 @@ class TrialServiceProvider extends ServiceProvider
                 'homepageMembers'  => $this->members(),
             ]);
         });
-        $viewFactory->composer('home_modern', function (View $view) {
-            $view->with([
-                'isHomepageModern' => true,
-                'homepageMembers'  => $this->members(),
-            ]);
-        });
-//        $viewFactory->composer(['home', 'home_modern'], $this->addViewField(...));
-    }
-
-    private function addViewField(View $view): void
-    {
-        /** @var TrialService $service */
-        $service = app(TrialService::class);
-        $view->with([
-            'survey' => [
-                'trial'         => [
-                    'title'       => 'Wygląd strony głównej.',
-                    'reason'      => 'Redesign strony głównej forum programistycznego został przeprowadzony w celu podniesienia estetyki i spójności wizualnej. Pomimo braku istotnych zmian w layoutcie, skupiono się na uwydatnieniu i poprawieniu kluczowych elementów, aby strona stała się bardziej przyjazna, przejrzysta i nowoczesna.',
-                    'solution'    => 'W pierwszej kolejności, zadbano o dostosowanie kolorystyki strony do koncepcji brandingu. Dodatkowo wyrównano paddingi i marginesy, a także zwiększono odstępy między poszczególnymi elementami, co dodało stronie przestrzeni i poprawiło jej przejrzystość.',
-                    'dueDateTime' => '2024-11-19 23:59:59',
-                    'imageLight'  => [
-                        'imageLegacy' => '/img/survey/homepage/legacy.light.png',
-                        'imageModern' => '/img/survey/homepage/modern.light.png',
-                    ],
-                    'imageDark'   => [
-                        'imageLegacy' => '/img/survey/homepage/legacy.dark.png',
-                        'imageModern' => '/img/survey/homepage/modern.dark.png',
-                    ],
-                ],
-                'userSession'   => [
-                    'stage'      => $service->getUserStage(),
-                    'choice'     => $service->getUserChoice(),
-                    'badgeLong'  => $service->isUserBadgeLong(),
-                    'assortment' => $service->getUserAssortment(),
-                ],
-                'userThemeDark' => $this->userTheme()->isThemeDark(),
-            ],
-        ]);
-    }
-
-    private function userTheme(): UserTheme
-    {
-        /** @var UserTheme $theme */
-        $theme = $this->app[UserTheme::class];
-        return $theme;
     }
 
     private function members(): array

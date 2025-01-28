@@ -39,7 +39,7 @@ class HomeController extends Controller
         $this->topic->pushCriteria(new SkipHiddenCategories($this->userId));
         $date = new DiscreetDate(date('Y-m-d H:i:s'));
 
-        return $this->view(!$service->isChoiceModern() ? 'home' : 'home_modern', [
+        return $this->view('home', [
             'flags'         => $this->flags(),
             'microblogs'    => $this->getMicroblogs(),
             'interesting'   => $this->topic->interesting(),
