@@ -14,18 +14,13 @@ class LookAndFeelServiceProvider extends ServiceProvider
     {
         /** @var Factory $view */
         $view = $this->app['view'];
-
         $view->composer('layout', function (View $view) {
             $view->with([
                 'accessToLookAndFeel' => auth()->check(),
                 'lookAndFeelModern'   => $this->lookAndFeel() === 'modern',
             ]);
         });
-
         Route::middleware(['web', 'auth'])->group(function () {
-            Route::get('/LookAndFeel/StyleGuide', function (StyleGuide $guide, StyleGuideView $view) {
-                return $view->view($guide->getPrimitiveColorGroups());
-            });
             Route::post('/LookAndFeel', function (Request $request) {
                 $this->setLookAndFeel($request->get('lookAndFeel') === 'modern');
             });
