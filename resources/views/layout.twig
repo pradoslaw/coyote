@@ -142,33 +142,6 @@
                 {% endif %}
               </a>
 
-              {% if accessToLookAndFeel %}
-                <div class="dropdown-divider"></div>
-                <style>
-                    .option {
-                        opacity: 0.5;
-                        cursor: pointer;
-                    }
-
-                    .option:hover {
-                        text-decoration: underline;
-                    }
-
-                    .option-active {
-                        font-weight: bold;
-                    }
-                </style>
-                <span class="dropdown-item" title="Przełącz Look&amp;Feel forum" id="lookAndFeelSwitcher" style="cursor:default;">
-                  {{ icon('lookAndFeel') }}
-                  <span class="me-2">
-                    Look&amp;Feel:
-                  </span>
-                  <span class="option {{ lookAndFeelModern ?: 'option-active' }}" @click="lookAndFeelSwitchLegacy">Początkowy</span>
-                  /
-                  <span class="option {{ lookAndFeelModern ?'option-active' }}" @click="lookAndFeelSwitchModern">Nowy</span>
-                </span>
-              {% endif %}
-
               <div class="dropdown-divider"></div>
 
               <a class="dropdown-item" href="{{ route('profile', [user('id')]) }}">
@@ -193,6 +166,33 @@
                   Panel administracyjny
                 </a>
               {% endif %}
+
+              {% if accessToLookAndFeel %}
+                <style>
+                    .option {
+                        opacity: 0.5;
+                        cursor: pointer;
+                    }
+
+                    .option:hover {
+                        text-decoration: underline;
+                    }
+
+                    .option-active {
+                        font-weight: bold;
+                    }
+                </style>
+                <span class="dropdown-item" title="Przełącz Look&amp;Feel forum" id="lookAndFeelSwitcher" style="cursor:default;">
+                  {{ icon('lookAndFeel') }}
+                  <span class="me-2">
+                    Look&amp;Feel:
+                  </span>
+                  <span class="option {{ lookAndFeelModern ?: 'option-active' }}" @click="lookAndFeelSwitchLegacy">Retro</span>
+                  /
+                  <span class="option {{ lookAndFeelModern ?'option-active' }}" @click="lookAndFeelSwitchModern">Aktualny</span>
+                </span>
+              {% endif %}
+
               <div class="dropdown-divider"></div>
               <span onclick="document['logout-form'].submit()" class="dropdown-item">
                 {{ icon('logout') }}
