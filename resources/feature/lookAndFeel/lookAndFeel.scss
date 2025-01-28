@@ -190,10 +190,6 @@ $modern-tile-background-dark:  style.$neutral-800;
   z-index:       2;
   position:      relative; // Only to create a stacking context for z-index
 
-  .user-avatar:not(.default-avatar) {
-    background: white;
-  }
-
   .user-avatar, .default-avatar {
     border-radius: 2px;
     overflow:      hidden;

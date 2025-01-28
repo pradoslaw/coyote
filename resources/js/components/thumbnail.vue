@@ -1,17 +1,18 @@
 <template>
   <div class="thumbnail">
-    <div class="position-relative img-thumbnail text-center i-95">
+    <div class="position-relative text-center i-95">
       <template v-if="url">
         <img
           v-if="isImage"
           :src="url"
+          class="neon-rounded"
           :style="{width:'100%','height':'100%','object-fit':'cover','object-position':'center'}"
         />
-        <div v-else class="placeholder-mask" style="font-size:2em;">
+        <div v-else class="placeholder-mask neon-rounded" style="font-size:2em;">
           <vue-icon name="thumbnailAssetUploadedFile"/>
         </div>
       </template>
-      <div v-else class="bg-light placeholder-mask" style="font-size:2em;">
+      <div v-else class="bg-light placeholder-mask neon-rounded" style="font-size:2em;">
         <vue-icon v-if="!isProcessing" name="thumbnailAssetAdd"/>
       </div>
       <a v-if="url" href="javascript:" class="thumbnail-mask" @click="insertImage"/>
