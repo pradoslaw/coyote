@@ -1,24 +1,27 @@
+@use "../../feature/theme/theme" as theme;
+@use "../../feature/lookAndFeel/style-guide" as style;
+
 .employer {
   color: $gray;
 }
 
 .card-media {
   .media-link {
-    display: flex;
+    display:         flex;
     text-decoration: none;
-    padding-bottom: 7px;
-    padding-top: 7px;
+    padding-bottom:  7px;
+    padding-top:     7px;
   }
 
   h5 {
     padding-bottom: 1px;
-    font-size: $font-size-base;
-    font-weight: bold;
+    font-size:      $font-size-base;
+    font-weight:    bold;
   }
 
   p {
     font-size: $font-size-sm;
-    margin: 3px 0;
+    margin:    3px 0;
 
     a {
       color: inherit;
@@ -37,7 +40,9 @@
 .card-job {
   .media {
     p.location {
-      border-bottom: 1px solid #dee2e6;
+      @include theme.property(border-bottom, 
+              1px solid style.$neutral-050, 
+              1px solid style.$neutral-700);
     }
   }
 }

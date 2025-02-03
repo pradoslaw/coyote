@@ -1,6 +1,7 @@
 @charset "UTF-8";
 @use "../../feature/theme/theme";
 @use "../../feature/lookAndFeel/feel";
+@use "../../feature/lookAndFeel/style-guide" as style;
 
 @import "../components/floaters";
 
@@ -40,7 +41,6 @@ footer {
     }
 
     h6 {
-      color:          #505050;
       text-transform: uppercase;
 
       a {
@@ -50,12 +50,13 @@ footer {
 
     a {
       font-size: $font-size-sm;
-      color:     #6c757d;
     }
 
     @include media-breakpoint-up('md') {
       .col-md-2 {
-        border-left: 1px solid #ddd;
+        @include theme.property(border-left,
+                1px solid style.$neutral-050,
+                1px solid style.$neutral-700);
 
         &:first-child {
           border-left: none;

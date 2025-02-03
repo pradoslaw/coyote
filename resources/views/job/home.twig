@@ -39,7 +39,7 @@
           {{ titleBanner(title:'Praca', crumbs:breadcrumbs) }}
         </div>
         {% if auth_check() %}
-          <vue-tabs :items="tabs" current-tab="/Praca" class="mt-4"></vue-tabs>
+          <vue-tabs :items="tabs" type="pills" current-tab="/Praca" class="mt-4"></vue-tabs>
         {% endif %}
 
         <form method="get" @submit.prevent="search" autocomplete="off">
@@ -63,7 +63,7 @@
                     ref="q"
                     name="q"
                     type="search"
-                    class="form-control"
+                    class="neon-input neon-input--no-border"
                     placeholder="Szukaj po tytule, nazwie firmy"
                     autocomplete="off"
                     autofocus>
@@ -96,10 +96,9 @@
                     tabindex="2"
                     ref="city"
                     type="search"
-                    class="form-control"
+                    class="neon-input neon-input--no-border"
                     placeholder="Nazwa miejscowości"
-                    autocomplete="off"
-                >
+                    autocomplete="off">
                 <a @click="selectTab('location')" href="javascript:" rel="nofollow" class="fa-icon">
                   <vue-icon name="jobBoardFilterOpen" v-if="isTabSelected('location')"></vue-icon>
                   <vue-icon name="jobBoardFilterClosed" v-else></vue-icon>
@@ -115,10 +114,8 @@
                     @focus="selectTab('salary')"
                     placeholder="> 0"
                     type="text"
-                    class="form-control"
-                    tabindex="3"
-                >
-
+                    class="neon-input neon-input--no-border"
+                    tabindex="3">
                 <select v-model="defaultCurrency" name="currency" class="form-control">
                   <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
                     ${ currency.name + ' (' + currency.symbol + ')' }

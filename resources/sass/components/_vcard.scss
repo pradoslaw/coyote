@@ -1,13 +1,17 @@
-#vcard {
-  padding:          2px;
-  position:         absolute;
-  box-shadow:       0 3px 9px #444;
-  z-index:          3;
-  background-color: $gray-dark;
-  border-radius:    6px;
+@use "../../feature/theme/theme";
+@use "../../feature/lookAndFeel/style-guide" as style;
+
+.vcard {
+  position:      absolute;
+  z-index:       3;
+  border-radius: 6px;
+  @include theme.property(border, 2px solid style.$neutral-050, 2px solid style.$neutral-700);
+  @include theme.light {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
 }
 
-#vcard-content {
+.vcard-content {
   padding:       15px;
   border-radius: 4px;
   .list-inline {
@@ -16,6 +20,12 @@
     max-width: 328px;
     li {
       max-width: 160px;
+    }
+  }
+  @include theme.dark {
+    .list-inline {
+      color:               #acacac;
+      border-bottom-color: #2f2f2f !important;
     }
   }
 }

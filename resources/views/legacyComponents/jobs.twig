@@ -1,5 +1,5 @@
 {% for job in jobs %}
-  <div class="media text-truncate">
+  <div class="media text-truncate mb-2">
     <a class="media-link"
        href="{{ route('job.offer', [job.id, job.slug]) }}"
        title="{{ job.title }}">
@@ -41,5 +41,4 @@
       </div>
     </a>
   </div>
-  <hr class="neon-divider m-0">
 {% endfor %}

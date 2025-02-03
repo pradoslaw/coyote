@@ -132,8 +132,9 @@
 
       {% if job.features %}
         <section>
-          <h3 class="mt-3">Metodologia pracy</h3>
-
+          <h3 class="mt-3 neon-color-link">
+            Metodologia pracy
+          </h3>
           <ul class="features list-group list-group-horizontal row">
             {% for feature in job.features %}
               <li class="list-group-item col-12 col-sm-6 {{ feature.pivot.checked ? 'checked' }}">

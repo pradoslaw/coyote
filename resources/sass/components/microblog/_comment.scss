@@ -1,12 +1,13 @@
-// Comments block
-// -------------------------
+@use "../../../feature/theme/theme";
+@use "../../../feature/lookAndFeel/feel" as feel;
+@use "../../../feature/lookAndFeel/style-guide" as style;
 
 .microblog-comments {
   margin-top: 10px;
 
   .media {
     border-top: 1px solid #e9ecef;
-    padding: 6px 5px;
+    padding:    6px 5px;
 
     &.not-read {
       @include not-read-border;
@@ -16,7 +17,7 @@
   // User name in comment
   // ---------------------
   .media-body a[data-user-id] {
-    margin-right: 3px;
+    margin-right:   3px;
     vertical-align: top;
   }
 
@@ -25,7 +26,7 @@
 
   .comment-text {
     font-size: 12px;
-    display: inline;
+    display:   inline;
 
     // markdown moze "produkowac" <p> w tresci komentarza. pierwsza linia komentarza musi byc na rowni
     // z loginem stad takie dziwne zabiegi majace na celu zachowanie odstepow od paragrafow z jednoczesnym
@@ -45,33 +46,60 @@
     a {
       text-decoration: underline;
     }
-    
+
     img {
       max-width: 180px;
     }
   }
 
   .btn-comment-submit {
-    color: $gray;
-    position: absolute;
-    bottom: 0;
-    right: 2px;
+    color:      $gray;
+    position:   absolute;
+    bottom:     0;
+    right:      2px;
     background: none;
-    font-size: 15px;
+    font-size:  15px;
   }
+}
+
+.neon-input,
+.comment-form {
+  @include theme.property(border, 1px solid style.$neutral-050, 1px solid style.$neutral-700);
+  background:      none;
+  display:         block;
+  width:           100%;
+  padding:         0.375rem 0.75rem;
+  appearance:      none;
+  background-clip: padding-box;
+  border-radius:   var(--bs-border-radius);
+  outline:         none;
+
+  &:focus-visible,
+  &:focus {
+    @include feel.modern {
+      border-color: style.$green-500;
+    }
+    @include feel.legacy {
+      border-color: #789b17;
+    }
+  }
+}
+
+.neon-input--no-border {
+  border: none;
 }
 
 .show-all-comments {
   padding: 2px 0 2px 5px;
 
   a {
-    color: $gray;
+    color:     $gray;
     font-size: 12px;
 
     &:hover,
     &:focus {
       text-decoration: none;
-      color: $alt-link-hover-color;
+      color:           $alt-link-hover-color;
     }
   }
 }

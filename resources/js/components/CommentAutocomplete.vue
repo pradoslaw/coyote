@@ -2,7 +2,7 @@
   <div class="position-relative">
     <textarea
       v-autosize
-      class="form-control"
+      class="comment-form"
       :maxlength="maxLength + 16"
       :placeholder="placeholder"
       :disabled="disabled"

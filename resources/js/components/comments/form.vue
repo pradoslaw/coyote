@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="neon-tile neon-rounded p-2">
     <div class="card-body">
       <div class="media">
         <div class="me-2">

@@ -158,12 +158,12 @@
             <form v-if="isAuthorized" method="POST">
               <div class="media">
                 <a v-profile="user.id">
-                  <div class="user-avatar-border i-35">
+                  <div class="neon-avatar-border i-35">
                     <vue-avatar
                       :photo="user.photo"
                       :name="user.name"
                       :initials="user.initials"
-                      class="d-block img-thumbnail"
+                      class="d-block"
                     />
                   </div>
                 </a>
