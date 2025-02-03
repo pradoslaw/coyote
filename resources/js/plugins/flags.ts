@@ -21,7 +21,7 @@ new MutationObserver(bindEvents).observe(document.body, {attributes: true, child
 
 function bindEvents(): void {
   document
-    .querySelectorAll('a[data-metadata]')
+    .querySelectorAll('*[data-metadata]')
     .forEach(link => link.addEventListener('click', clickHandler));
 }
 

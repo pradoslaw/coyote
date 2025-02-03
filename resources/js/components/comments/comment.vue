@@ -55,9 +55,9 @@
             <a @click="checkAuth(reply)" href="javascript:" class="text-muted">Odpowiedz</a>
           </li>
           <li v-if="isAuthorized" class="list-inline-item">
-            <a href="javascript:" :data-metadata="comment.metadata" :data-url="comment.url" class="btn-report text-muted">
+            <span :data-metadata="comment.metadata" :data-url="comment.url" class="btn-report text-muted">
               Zgłoś
-            </a>
+            </span>
           </li>
         </ul>
       </div>
