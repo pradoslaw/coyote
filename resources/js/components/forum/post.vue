@@ -181,9 +181,7 @@
                 </span>
               </div>
               <div class="post-content neon-contains-a-color-link" :style="is_mode_tree ? {minHeight:'initial'} : {}">
-                <vue-see-more :height="700">
-                  <div v-html="post.html" ref="postContent"/>
-                </vue-see-more>
+                <div v-html="post.html" ref="postContent"/>
                 <ul v-if="post.assets.length" class="list-unstyled mb-1">
                   <li v-for="asset in post.assets" class="small">
                     <vue-icon name="postAssetDownload"/>
@@ -402,7 +400,6 @@ import VueAvatar from '../avatar.vue';
 import VueDeleteModal from "../delete-modal.vue";
 import VueIcon from "../icon";
 import {default as mixins} from '../mixins/user.js';
-import VueSeeMore from "../seeMore/seeMore.vue";
 import VueTags from '../tags.vue';
 import VueUserName from "../user-name.vue";
 import VueGallery from "./../../components/microblog/gallery.vue";
@@ -418,7 +415,6 @@ export default {
   name: 'post',
   mixins: [mixins],
   components: {
-    VueSeeMore,
     'vue-gallery': VueGallery,
     VuePostGuiderail,
     'vue-avatar': VueAvatar,
