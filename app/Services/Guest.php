@@ -16,9 +16,7 @@ class Guest
     protected ?\Coyote\Guest $model = null;
     private ?Carbon $defaultSessionTime;
 
-    public function __construct(private ?string $guestId)
-    {
-    }
+    public function __construct(private ?string $guestId) {}
 
     public function setDefaultSessionTime(Carbon $defaultSessionTime): self
     {

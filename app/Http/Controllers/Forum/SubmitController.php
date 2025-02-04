@@ -128,18 +128,13 @@ class SubmitController extends BaseController
                 }
             }
 
-            // url to the post
-            $url = UrlBuilder::post($post);
-
             if ($topic->wasRecentlyCreated || $post->id === $topic->first_post_id) {
-                $object = (new Stream_Topic)->map($topic, $post->html);
-                $target = (new Stream_Forum)->map($forum);
-
-                $tags = array_unique((array)$request->input('tags', []));
-                $topic->setTags($tags);
+                $object = new Stream_Topic()->map($topic, $post->html);
+                $target = new Stream_Forum()->map($forum);
+                $topic->setTags(array_unique((array)$request->input('tags', [])));
             } else {
-                $object = (new Stream_Post(['url' => $url]))->map($post);
-                $target = (new Stream_Topic())->map($topic);
+                $object = new Stream_Post(['url' => UrlBuilder::post($post)])->map($post);
+                $target = new Stream_Topic()->map($topic);
             }
 
             stream($activity, $object, $target);
