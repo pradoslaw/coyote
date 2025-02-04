@@ -8,14 +8,6 @@
     margin-top: 0;
   }
 
-  @include media-breakpoint-down(sm) {
-    .nav-tabs {
-      li:nth-child(3), li:nth-child(4), li:nth-child(5) {
-        display: none;
-      }
-    }
-  }
-
   @include media-breakpoint-down(xl) {
     padding-right: 0;
   }

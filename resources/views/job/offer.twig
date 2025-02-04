@@ -31,11 +31,18 @@
       {% endif %}
 
       {% if is_author %}
-        <ul class="nav nav-tabs mb-3">
-          <li class="nav-item"><a class="nav-link active" href="#offer" role="tab" data-bs-toggle="tab">Ogłoszenie</a></li>
-          <li class="nav-item"><a class="nav-link" href="#applications" role="tab" data-bs-toggle="tab">Kandydaci
+        <ul class="nav nav-pills mb-3">
+          <li class="nav-item">
+            <a class="nav-link active" href="#offer" role="tab" data-bs-toggle="tab">
+              Ogłoszenie
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#applications" role="tab" data-bs-toggle="tab">
+              Kandydaci
               <small>({{ applications|length }})</small>
-            </a></li>
+            </a>
+          </li>
         </ul>
       {% endif %}
 

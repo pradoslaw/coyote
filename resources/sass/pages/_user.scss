@@ -131,21 +131,6 @@
   }
 }
 
-// nie chcemy aby zakladki na bialym tle mialy szare tlo. chodzi tutaj o zakladki formularza pisania
-// nowej wiadomosci (umozliwiajace przelaczenie sie w tryb edycji oraz podgladu)
-#app-pm {
-  .nav-tabs {
-    .nav-link.active {
-      &,
-      &:focus,
-      &:hover {
-        background-color: transparent;
-        border-bottom-color: #fff;
-      }
-    }
-  }
-}
-
 #js-skills {
   .form-group:last-child {
     margin-bottom: 0;

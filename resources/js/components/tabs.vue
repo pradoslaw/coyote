@@ -1,5 +1,5 @@
 <template>
-  <div :class="['nav', `nav-${this.type}`, 'neon-tabber']">
+  <div class="nav nav-pills">
     <div v-for="(item, key) in items" :key="key" class="nav-item">
       <a
         :href="typeof key === 'string' ? key : 'javascript:'"
@@ -21,13 +21,6 @@ export default {
       default: [],
     },
     currentTab: null,
-    type: {
-      type: String,
-      default: 'tabs',
-      validator(value: string): boolean {
-        return value === 'tabs' || value === 'pills';
-      },
-    },
   },
 };
 </script>

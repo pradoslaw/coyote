@@ -113,7 +113,5 @@ $(() => {
 
       const textarea = new Textarea($('textarea[name="text"]', $form)[0]);
       textarea.insertAtCaret("\n", "\n", textarea.isSelected() ? textarea.getSelection() : markdown);
-
-      $('.nav-tabs a:first').tab('show');
     });
 });

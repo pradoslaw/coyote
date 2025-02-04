@@ -48,10 +48,6 @@ hr {
   color: #eee;
 }
 
-.nav-tabs .nav-link {
-  border-bottom: none;
-}
-
 .text-muted {
   color: #6c757d !important;
 }
@@ -177,11 +173,6 @@ hr {
     color:            unset;
     background-color: unset;
   }
-}
-
-.nav-tabs .nav-link:focus {
-  color:                                 unset;
-  --bs-nav-tabs-link-hover-border-color: #404040 #404040 #404040;
 }
 
 .close {

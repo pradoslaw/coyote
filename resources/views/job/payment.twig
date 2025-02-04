@@ -25,7 +25,7 @@
         </div>
 
         <div class="card-body" id="payment-methods" v-show="grossPrice > 0">
-          <ul class="nav nav-tabs mb-3">
+          <ul class="nav nav-pills mb-3">
             <li class="nav-item">
               <a @click="setPaymentMethod('card')" :class="{'active': form.payment_method === 'card'}" href="javascript:" class="nav-link" rel="nofollow">
                 <strong class="d-block mb-1">
