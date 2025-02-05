@@ -22,8 +22,8 @@ use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
@@ -47,20 +47,11 @@ class SubmitController extends BaseController
         return $this->userId && $this->auth->can('sticky', $forum);
     }
 
-    /**
-     * @param PostRequest $request
-     * @param Forum $forum
-     * @param Topic|null $topic
-     * @param Post $post
-     * @return \Illuminate\Http\JsonResponse|object
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function save(PostRequest $request, Forum $forum, ?Topic $topic, Post $post)
+    public function save(PostRequest $request, Forum $forum, ?Topic $topic, Post $post): JsonResponse
     {
         if (!$topic->exists) {
             $topic = $this->topic->makeModel();
             $topic->forum()->associate($forum);
-
             if ($request->get('discussMode') === 'tree') {
                 Gate::authorize('alpha-access');
                 $topic->is_tree = true;
@@ -71,17 +62,14 @@ class SubmitController extends BaseController
 
         if (!$post->exists) {
             $post->forum()->associate($forum);
-
             if ($this->userId) {
                 $post->user()->associate($this->auth);
             }
-
             $post->ip = $request->ip();
             $post->browser = str_limit($this->request->browser(), 250);
             $post->tree_parent_post_id = $this->request->get('treeAnswerPostId', null);
         } else {
             $this->authorize('update', [$post]);
-
             $post->topic()->associate($topic);
         }
 
@@ -104,9 +92,7 @@ class SubmitController extends BaseController
 
             $activity = $post->id ? new Stream_Update($actor) : new Stream_Create($actor);
 
-            $poll = $this->savePoll($request, $topic->poll_id);
-            $topic->poll()->associate($poll);
-
+            $topic->poll()->associate($this->savePoll($request, $topic->poll_id));
             $topic->save();
 
             $post->topic()->associate($topic);
@@ -120,9 +106,7 @@ class SubmitController extends BaseController
 
             if ($post->wasRecentlyCreated && $this->userId) {
                 $topic->last_post_id = $post->id;
-
                 $post->subscribe($this->userId, true);
-
                 if ($this->auth->allow_subscribe) {
                     $topic->subscribe($this->userId, true);
                 }
@@ -160,12 +144,12 @@ class SubmitController extends BaseController
         }
         broadcast(new PostSaved($post, $previousPostHtml))->toOthers();
 
-        $resource = (new PostResource($post))->setTracker($tracker)->response($this->request);
-
-        // mark topic as read after publishing
-        $post->wasRecentlyCreated ? $tracker->asRead($post->created_at) : null;
-
-        return $resource->setStatusCode($post->wasRecentlyCreated ? Response::HTTP_CREATED : Response::HTTP_OK);
+        $postResource = new PostResource($post);
+        $postResource->setTracker($tracker);
+        $response = $postResource->response($this->request);
+        $post->wasRecentlyCreated ? $tracker->asRead($post->created_at) : null; // mark topic as read after publishing
+        $response->setStatusCode($post->wasRecentlyCreated ? 201 : 200);
+        return $response;
     }
 
     /**
