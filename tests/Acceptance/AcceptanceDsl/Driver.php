@@ -1,45 +1,48 @@
 <?php
 namespace Tests\Acceptance\AcceptanceDsl;
 
+use Tests\Acceptance\AcceptanceDsl\Internal\WebDriver;
+
 readonly class Driver
 {
-    public function __construct(private WebDriver $driver) {}
+    private WebDriver $web;
+    private string $diagnosticArtifactPath;
 
-    public function closeGdpr(): void
+    public function __construct()
     {
-        $this->driver->navigate('/');
-        $this->driver->find('#gdpr-all')->click();
+        $this->web = new WebDriver();
+        $this->diagnosticArtifactPath = '/var/www/tests/Acceptance/';
     }
 
-    public function registerUser(string $username, string $password, string $email): void
+    public function clearClientData(): void
     {
-        $this->driver->navigate('/Register');
-        $this->driver->fillInput('input[name="name"]', $username);
-        $this->driver->fillInput('input[name="password"]', $password);
-        $this->driver->fillInput('input[name="password_confirmation"]', $password);
-        $this->driver->fillInput('input[name="email"]', $email);
-        $this->driver->selectCheckbox('input[name="terms"][type="checkbox"]');
-        $this->driver->pressButton('Utwórz konto');
+        $this->web->clearCookies();
     }
 
-    public function hasRegistrationConfirmation(): bool
+    public function close(): void
     {
-        return \in_array(
-            'Konto zostało utworzone. Na podany adres e-mail, przesłany został link aktywacyjny.',
-            $this->driver->currentTextNodes());
+        $this->web->close();
     }
 
-    public function loginUser(string $username, string $password): void
+    public function includeDiagnosticArtifact(string $testCaseName): void
     {
-        $this->driver->navigate('/Login');
-        $this->driver->fillInput('input[name="name"]', $username);
-        $this->driver->fillInput('input[name="password"]', $password);
-        $this->driver->pressButton('Zaloguj się');
+        $this->web->captureScreenshot($this->diagnosticArtifactPath, $testCaseName);
     }
 
-    public function readLoggedUserEmail(): string
+    private function navigateToAdminPanel(): void
     {
-        $this->driver->navigate('/User/Settings');
-        return $this->driver->readInputValue('input[name="email"]');
+        $this->web->navigate('/Login');
+        $this->closeGdpr();
+        $this->web->fillByCss('input[name="name"]', 'admin');
+        $this->web->fillByCss('input[name="password"]', 'admin');
+        $this->web->click('Zaloguj się');
+        $this->web->navigate('/Adm/Dashboard');
+        $this->web->fillByCss('input[name="password"]', 'admin');
+        $this->web->click('Logowanie');
+    }
+
+    private function closeGdpr(): void
+    {
+        $this->web->click('Tylko niezbędne');
     }
 }

@@ -1,32 +1,26 @@
 <?php
 namespace Tests\Acceptance\AcceptanceDsl;
 
-class Dsl
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\TestCase;
+
+readonly class Dsl
 {
-    public Driver $driver;
-    private ?string $id = null;
+    private Driver $driver;
 
-    public function __construct(WebDriver $web)
+    public function __construct()
     {
-        $this->driver = new Driver($web);
+        $this->driver = new Driver();
+        $this->driver->clearClientData();
     }
 
-    public function registerUser(
-        ?string $username = 'John',
-        ?string $email = 'john@doe',
-    ): void
+    public function close(): void
     {
-        $this->id = \uniqId();
-        $this->driver->registerUser($username . $this->id, 'passwd', $email . $this->id);
+        $this->driver->close();
     }
 
-    public function loginUser(string $username): void
+    public function includeDiagnosticArtifact(TestCase $testCase): void
     {
-        $this->driver->loginUser($username . $this->id, 'passwd');
-    }
-
-    public function readLoggedUserEmail(): string
-    {
-        return \str_replace($this->id, '', $this->driver->readLoggedUserEmail());
+        $this->driver->includeDiagnosticArtifact($testCase->name());
     }
 }
