@@ -72,6 +72,16 @@
             </div>
           </div>
         </div>
+        <template v-if="isDraft">
+          <vue-post-review review-style="warning" v-if="isAuthorized">
+            Twój post jeszcze nie jest widoczny na forum.
+          </vue-post-review>
+          <vue-post-review review-style="warning" v-else>
+            Twój post został zapisany.
+            <a href="/Register" class="fw-normal"><u>Wybierz dla siebie nazwę użytkownika</u></a>,
+            żeby post stał się widoczny dla wszystkich.
+          </vue-post-review>
+        </template>
         <div :class="{'collapse': isCollapsed}" class="card-body">
           <div class="media mb-2" :class="{'d-lg-none':is_mode_linear}">
             <div class="media-left me-2" v-if="is_mode_linear">
@@ -410,6 +420,7 @@ import VueCommentForm from "./comment-form.vue";
 import VueComment from './comment.vue';
 import VueForm from './form.vue';
 import VuePostGuiderail, {ChildLink} from "./post-guiderail.vue";
+import VuePostReview from "./post-review.vue";
 
 export default {
   name: 'post',
@@ -429,6 +440,7 @@ export default {
     'vue-tags': VueTags,
     'vue-timeago': VueTimeAgo,
     'vue-username': VueUserName,
+    'vue-post-review': VuePostReview,
   },
   emits: ['reply'],
   props: {
@@ -437,6 +449,7 @@ export default {
     uploadMaxSize: {type: Number, default: 20},
     uploadMimes: {type: String},
     treeTopicPostFirst: {type: Boolean, required: false},
+    isDraft: {type: Boolean, default: false},
   },
   data() {
     return {
@@ -468,6 +481,9 @@ export default {
     },
   },
   methods: {
+    publishDraft(): void {
+      console.log('publish');
+    },
     resetGalleryImages(): void {
       const postContent = this.$refs['postContent'];
       const images = postContent.querySelectorAll('img:not(.img-smile)');
@@ -499,7 +515,12 @@ export default {
     closePostReview(): void {
       this.post.has_review = false;
     },
-    ...mapActions('posts', ['vote', 'accept', 'subscribe', 'unsubscribe', 'loadComments', 'loadVoters']),
+    loadVoters(post): void {
+      if (!this.$props.isDraft) {
+        this.$store.dispatch('posts/loadVoters', post);
+      }
+    },
+    ...mapActions('posts', ['vote', 'accept', 'subscribe', 'unsubscribe', 'loadComments']),
     formatDistanceToNow(date) {
       return formatDistanceToNow(new Date(date), {locale: pl});
     },

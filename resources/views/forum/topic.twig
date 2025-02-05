@@ -200,7 +200,7 @@
           :post="post"
           @reply="reply"
       ></vue-post-wrapper>
-
+      <vue-post-wrapper v-if="draftPost" :post="draftPost" :is-draft="true"></vue-post-wrapper>
       <div class="page-pagination d-flex mb-3" v-if="is_mode_linear">
         <div class="page-page-selector me-auto">
           <vue-pagination @change="changePage" :current-page="currentPage" :total-pages="totalPages" class="pagination-sm"></vue-pagination>
@@ -211,12 +211,15 @@
         </div>
       </div>
 
-      {% if is_writeable %}
+      {% if is_writeable or not auth_check() %}
         <vue-form
             id="js-submit-form"
             ref="js-submit-form"
-            v-if="is_mode_linear"
+            v-if="is_mode_linear && draftPost===null"
             :post="undefinedPost"
+            :guest-form="{{ auth_check() ? 'false':'true' }}"
+            @guest-form-saved="guestFormSaved"
+            :is-draft="true"
             @save="savedForm"
         ></vue-form>
       {% endif %}
@@ -229,26 +232,6 @@
           </a>
         {% endif %}
       </section>
-
-      {% if not auth_check() %}
-        <div class="d-flex justify-content-center">
-          <div>
-            <div class="alert alert-info">
-              <p class="mb-0">
-                Zarejestruj się i dołącz do największej społeczności programistów w Polsce.
-              </p>
-              <p class="mb-0">
-                Otrzymaj wsparcie, dziel się wiedzą i rozwijaj swoje umiejętności z najlepszymi.
-              </p>
-            </div>
-            <div class="d-flex justify-content-end">
-              <a href="{{ route('register') }}" class="btn btn-primary">
-                Utwórz konto
-              </a>
-            </div>
-          </div>
-        </div>
-      {% endif %}
 
       <vue-notifications></vue-notifications>
     </div>
@@ -264,6 +247,7 @@
     var tags = {{ tags.user|json_encode|raw }};
     var flags = {{ flags|json_encode|raw }};
     var emojis = {{ emojis|json_encode|raw }};
+    var draftPost = {{ draftPost|json_encode|raw }};
   </script>
 {% endblock %}
 

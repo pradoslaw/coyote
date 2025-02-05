@@ -1,5 +1,5 @@
 <template>
-  <vue-post :post="post" :tree-item="treeItem" @reply="reply" :tree-topic-post-first="treeTopicPostFirst"/>
+  <vue-post :post="post" :tree-item="treeItem" @reply="reply" :tree-topic-post-first="treeTopicPostFirst" :is-draft="isDraft"/>
 </template>
 
 <script lang="ts">
@@ -13,6 +13,7 @@ export default {
     post: {type: Object, required: true},
     treeItem: {type: Object, required: false},
     treeTopicPostFirst: {type: Boolean, required: false},
+    isDraft: {type: Boolean, default: false},
   },
   methods: {
     reply(post: Post, scrollIntoForm: boolean): void {

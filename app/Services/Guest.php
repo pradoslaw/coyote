@@ -69,4 +69,10 @@ class Guest
             $this->model->id = $this->guestId;
         }
     }
+
+    public function createIfMissing(): void
+    {
+        $this->load();
+        $this->model->save();
+    }
 }
