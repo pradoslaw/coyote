@@ -157,7 +157,7 @@
           Anuluj
         </button>
         {{ ' ' }}
-        <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm neon-primary-button" @click="save">
+        <vue-button :processing="isProcessing" :disabled="post.text.trim().length === 0" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm neon-primary-button" @click="save">
           <template v-if="post.id">Zapisz</template>
           <template v-else>Dodaj post</template>
         </vue-button>
