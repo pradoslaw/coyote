@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {postJobBoardMilestone} from '../../../feature/jobBoard/jobBoard';
 
 import VueButton from '../../components/forms/button.vue';
 import VueCheckbox from '../../components/forms/checkbox.vue';
@@ -70,9 +71,11 @@ createVueAppNotifications('Payment', '#js-payment', {
         if (result.error) {
           notify({type: 'error', text: result.error.message});
           this.isProcessing = false;
+          postJobBoardMilestone('payment-attempt-failed-card');
         } else {
           // The payment has been processed!
           if (result.paymentIntent.status === 'succeeded') {
+            postJobBoardMilestone('payment-success-card');
             window.location.href = success_url;
           }
         }
@@ -93,12 +96,14 @@ createVueAppNotifications('Payment', '#js-payment', {
       );
 
       if (error) {
+        postJobBoardMilestone('payment-attempt-failed-p24');
         notify({type: 'error', text: error});
         this.isProcessing = false;
       }
     },
 
     makePayment() {
+      postJobBoardMilestone('payment-attempt');
       const data = Object.assign(this.form, {price: this.grossPrice});
 
       this.errors = {};
@@ -114,8 +119,8 @@ createVueAppNotifications('Payment', '#js-payment', {
           this[`${this.form.payment_method}Payment`](response.data);
         })
         .catch(err => {
+          postJobBoardMilestone('payment-attempt-failed-data');
           this.isProcessing = false;
-          console.error(err);
           if (err.response?.status === 422) {
             this.errors = err.response.data.errors;
           } else {

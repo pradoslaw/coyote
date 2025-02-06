@@ -233,6 +233,7 @@ return [
         Coyote\Feature\Trial\TrialServiceProvider::class,
         Coyote\Feature\DraftPost\DraftPostServiceProvider::class,
         Coyote\Feature\Questionnaire\QuestionnaireServiceProvider::class,
+        Coyote\Feature\JobBoard\JobBoardServiceProvider::class,
     ],
 
     /*

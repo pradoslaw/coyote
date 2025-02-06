@@ -24,6 +24,7 @@ import '../feature/lookAndFeel/lookAndFeel';
 import '../feature/post/copyButton';
 import '../../survey/src/survey';
 import '../feature/questionnaire/questionnaire';
+import '../feature/jobBoard/jobBoard';
 
 Prism.highlightAll();
 

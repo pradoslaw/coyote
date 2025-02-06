@@ -94,6 +94,7 @@
 </template>
 
 <script>
+import {postJobBoardMilestone} from "../../../feature/jobBoard/jobBoard";
 import VueIcon from '../icon';
 import {default as mixins} from '../mixins/form';
 
@@ -113,6 +114,7 @@ export default {
   methods: {
     changePlan(planId) {
       this.valueLocal = planId;
+      postJobBoardMilestone('change-plan-' + planId);
     },
   },
   mixins: [mixins],
