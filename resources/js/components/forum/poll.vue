@@ -12,31 +12,23 @@
 
     <div v-for="item in pollSync.items" :key="item.id" :class="{'voted': pollSync.votes.includes(item.id)}" class="row">
       <div class="col-sm-6">
-        <div v-if="isVoteable" :class="{'custom-checkbox': pollSync.max_items > 1, 'custom-radio': pollSync.max_items === 1}" class="custom-control">
-          <!-- bug na IE 11 nie pozwala na użycie :type, musimy użyć type -->
+        <div v-if="isVoteable" :class="{'custom-checkbox': pollSync.max_items > 1, 'custom-radio': pollSync.max_items === 1}" class="custom-control d-flex flex-nowrap">
           <input
+            type="checkbox"
             v-if="pollSync.max_items > 1"
             :id="`item-${item.id}`"
             v-model="checkedOptions"
             :value="item.id"
-            type="checkbox"
-            class="custom-control-input"
-          >
-
+            class="custom-control-input">
           <input
             v-else
             :id="`item-${item.id}`"
             v-model="checkedOptions"
             :value="item.id"
             type="radio"
-            class="custom-control-input"
-          >
-
-          <label :for="`item-${item.id}`" class="custom-control-label">
-            {{ item.text }}
-          </label>
+            class="custom-control-input">
+          <label :for="`item-${item.id}`" class="custom-control-label" v-text="item.text"/>
         </div>
-
         <template v-else>{{ item.text }}</template>
       </div>
 
