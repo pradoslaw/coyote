@@ -115,7 +115,7 @@
               :aria-label="voters"
               data-balloon-pos="up"
               data-balloon-break>
-              <vue-icon name="microblogVoted" v-if="microblog.is_voted" class="text-primary"/>
+              <vue-icon name="microblogVoted" v-if="microblog.is_voted" class="neon-primary-color"/>
               <vue-icon name="microblogVote" v-else/>
               {{ ' ' }}
               {{ microblog.votes }} {{ declination(microblog.votes, ['głos', 'głosy', 'głosów']) }}

@@ -26,6 +26,15 @@ a:not(.btn) {
   }
 }
 
+.neon-primary-color {
+  @include feel.modern {
+    color: style.$green-500;
+  }
+  @include feel.legacy {
+    @include theme.property(color, #5e7813, #637f14);
+  }
+}
+
 $modern-tile-background-light: style.$white;
 $modern-tile-background-dark:  style.$neutral-800;
 

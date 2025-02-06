@@ -80,12 +80,8 @@ body.theme-dark {
         .card-body {
           .post-vote {
             strong.vote-count,
-            a.vote-up {
+            .vote-up {
               color: #919191;
-
-              &.on {
-                color: #789b17;
-              }
             }
 
             a.vote-accept.on {

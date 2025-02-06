@@ -75,7 +75,7 @@
                 {{ number(topic.views) }}
               </li>
               <li v-if="topic.score > 0" class="list-inline-item small" title="Liczba głosów oddanych na ten wątek">
-                <vue-icon name="topicVotesVotePresent" v-if="topic.is_voted" class="text-primary"/>
+                <vue-icon name="topicVotesVotePresent" v-if="topic.is_voted" class="neon-primary-color"/>
                 <vue-icon name="topicVotesVoteMissing" v-else/>
                 {{ number(topic.score) }}
               </li>

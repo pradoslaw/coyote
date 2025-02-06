@@ -172,20 +172,17 @@
                   data-balloon-break
                   v-text="post.score"
                 />
-                <a
+                <span
                   v-if="!hidden && is_mode_linear"
-                  :class="{'on': post.is_voted}"
                   :aria-label="voters"
                   @click="checkAuth(vote, post)"
                   @mouseenter.once="loadVoters(post)"
                   data-balloon-pos="left"
                   data-balloon-break
-                  class="vote-up"
-                  href="javascript:"
-                >
-                  <vue-icon name="postVoted" v-if="post.is_voted"/>
+                  class="vote-up cursor-pointer">
+                  <vue-icon name="postVoted" v-if="post.is_voted" class="neon-primary-color"/>
                   <vue-icon name="postVote" v-else/>
-                </a>
+                </span>
                 <span v-if="post.is_accepted" class="vote-accept on">
                   <vue-icon name="postAccept"/>
                 </span>
