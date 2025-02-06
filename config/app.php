@@ -232,6 +232,7 @@ return [
         Coyote\Providers\SeoServiceProvider::class,
         Coyote\Feature\Trial\TrialServiceProvider::class,
         Coyote\Feature\DraftPost\DraftPostServiceProvider::class,
+        Coyote\Feature\Questionnaire\QuestionnaireServiceProvider::class,
     ],
 
     /*

@@ -533,6 +533,10 @@ readonly class FontAwesomePro
             // look&feel
             'lookAndFeel'                               => 'fa-light fa-palette',
             'shareFeedback'                             => 'fa-light fa-comment-pen',
+
+            // questionnaire
+            'questionnaire'                             => 'fa-light fa-comment-question',
+            'questionnaireClose'                        => $genericClose,
         ];
     }
 }

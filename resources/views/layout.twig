@@ -58,6 +58,30 @@
   {% import 'legacyComponents.forms' as forms %}
   {% import 'legacyComponents.widgets' as widgets %}
 
+  {% if questionnaire is defined %}
+  <div class="sem:questionnaireQuestion questionnaire position-fixed d-flex justify-content-center" style="width:100%; z-index:5; visibility:hidden;">
+    <div class="questionnaire__modal neon-tile neon-rounded px-3 py-1 d-flex align-items-center">
+      <div class="me-2">
+        {{ icon('questionnaire') }}
+      </div>
+      <div class="me-4">
+        {{ questionnaire.question }}
+        <div class="text-muted">
+          {{ questionnaire.subtitle }}
+        </div>
+      </div>
+      {% for answer in questionnaire.answers %}
+        <button class="sem:questionnaireAnswer btn btn-sm btn-secondary me-1">
+          {{ answer }}
+        </button>
+      {% endfor %}
+      <div class="sem:questionnaireClose cursor-pointer">
+        {{ icon('questionnaireClose') }}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
   {{ schema_organization }}
 
   {% include 'legacyComponents.gdpr' %}
