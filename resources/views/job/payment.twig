@@ -27,19 +27,18 @@
         <div class="card-body" id="payment-methods" v-show="grossPrice > 0">
           <ul class="nav nav-pills mb-3">
             <li class="nav-item">
-              <a @click="setPaymentMethod('card')" :class="{'active': form.payment_method === 'card'}" href="javascript:" class="nav-link" rel="nofollow">
+              <span @click="setPaymentMethod('card')" :class="{'active': form.payment_method === 'card'}"  class="nav-link" rel="nofollow">
                 <strong class="d-block mb-1">
                   Karta kredytowa/debetowa
                 </strong>
-              </a>
+              </span>
             </li>
-
             <li class="nav-item">
-              <a @click="setPaymentMethod('p24')" :class="{'active': form.payment_method === 'p24'}" href="javascript:" class="nav-link" rel="nofollow">
+              <span @click="setPaymentMethod('p24')" :class="{'active': form.payment_method === 'p24'}"  class="nav-link" rel="nofollow">
                 <strong class="d-block mb-1">
-                  Przelew bankowy
+                  BLIK lub przelew
                 </strong>
-              </a>
+              </span>
             </li>
           </ul>
 
@@ -49,11 +48,13 @@
                 <div id="card-element">
                   <!-- Elements will create input elements here -->
                 </div>
-
                 <!-- We'll put the error messages in this element -->
                 <div id="card-errors" role="alert"></div>
               </div>
             </div>
+          </div>
+          <div v-show="form.payment_method === 'p24'">
+            Po kliknięciu "Zapłać i zapisz", zostaniesz przekierowany do formularza płatności online.
           </div>
         </div>
 
