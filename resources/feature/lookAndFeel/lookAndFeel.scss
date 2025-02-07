@@ -31,7 +31,7 @@ a:not(.btn) {
     @include theme.property(color, style.$green-500, style.$green-050);
   }
   @include feel.legacy {
-    @include theme.property(color, #5e7813, #637f14);
+    @include theme.property(color, #80a41a, #637f14);
   }
 }
 

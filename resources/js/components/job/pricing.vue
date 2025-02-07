@@ -2,48 +2,58 @@
   <div>
     <div id="plan-table" class="clearfix mt-4 mb-4">
       <ul class="plan-benefits">
-        <li>
+        <li class="plan-benefit">
           <div>Publikacja ogłoszenia na okres <strong>40 dni</strong></div>
         </li>
-        <li>
+        <li class="plan-benefit">
           <div>
             Promocja ogłoszenia w kanałach social media
-            <span data-balloon-pos="up" aria-label="Jedynie ogłoszenia z podanymi widełkami płacowymi">
+            <span
+              class="neon-color-link-light"
+              data-balloon-pos="up"
+              aria-label="Jedynie ogłoszenia z podanymi widełkami płacowymi">
               <vue-icon name="pricingHelpExample"/>
             </span>
           </div>
         </li>
-        <li>
+        <li class="plan-benefit">
           <div>
             <strong>Podbicie</strong> ogłoszenia
-            <span data-balloon-pos="right" aria-label="W okresie promowania oferty, podbijemy Twoje ogłoszenie na górę listy ogłoszeń. Dzięki temu więcej ludzi będzie mogło je zobaczyć.">
+            <span
+              class="neon-color-link-light"
+              data-balloon-pos="right"
+              aria-label="W okresie promowania oferty, podbijemy Twoje ogłoszenie na górę listy ogłoszeń. Dzięki temu więcej ludzi będzie mogło je zobaczyć.">
               <vue-icon name="pricingHelpExample"/>
             </span>
           </div>
         </li>
-        <li>
+        <li class="plan-benefit">
           <div>
             <strong>Reklama</strong> oferty na forum i stronie głównej
-            <a href="javascript:" class="plan-tooltip-wrapper">
-              <vue-icon name="pricingHelpExample"/>
+            <span class="plan-tooltip-wrapper">
+              <span class="neon-color-link-light">
+                <vue-icon name="pricingHelpExample"/>
+              </span>
               <div class="plan-tooltip">
                 <img src="/img/offer-example.jpg">
               </div>
-            </a>
+            </span>
           </div>
         </li>
-        <li>
+        <li class="plan-benefit">
           <div>
             <strong>Wyróżnienie</strong> kolorem
-            <a href="javascript:" class="plan-tooltip-wrapper">
-              <vue-icon name="pricingHelpExample"/>
+            <span class="plan-tooltip-wrapper">
+              <span class="neon-color-link-light">
+                <vue-icon name="pricingHelpExample"/>
+              </span>
               <div class="plan-tooltip">
                 <img src="/img/offer-color-example.png">
               </div>
-            </a>
+            </span>
           </div>
         </li>
-        <li>
+        <li class="plan-benefit">
           <div>Wyróżnienie ogłoszenia <strong>na górze listy</strong> wyszukiwania</div>
         </li>
       </ul>
@@ -69,7 +79,7 @@
                 {{ plan.boost }}x
               </strong>
               <template v-else>
-                <span v-if="plan.benefits.length >= n" class="text-primary">
+                <span v-if="plan.benefits.length >= n" class="neon-color-link-light">
                   <vue-icon name="pricingBenefitPresent"/>
                 </span>
                 <span v-else class="text-muted">

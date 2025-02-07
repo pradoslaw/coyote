@@ -1,35 +1,29 @@
-// Panel with plan options
-// -----------------------------
+@use "../../../feature/lookAndFeel/feel" as feel;
+@use "../../../feature/lookAndFeel/style-guide" as style;
 
 #plan-table {
   .plan-benefits, .plan-features {
-    margin: 0;
+    margin:          0;
     list-style-type: none;
 
     > li {
-      border-bottom: 1px solid $card-border-color;
+      border-bottom:  1px solid $card-border-color;
       vertical-align: middle;
-      height: 45px;
+      height:         45px;
     }
   }
 
   .plan-benefits {
     margin-top: 91px;
-    padding: 0;
-    width: 30%;
-    float: left;
+    padding:    0;
+    width:      30%;
+    float:      left;
 
-    > li {
-      font-size: 14px;
-      padding: 12px 0;
-      display: flex;
+    .plan-benefit {
+      font-size:   14px;
+      padding:     12px 0;
+      display:     flex;
       align-items: center;
-
-      .fa-circle-question {
-        font-size: 16px;
-        cursor: help;
-        color: $primary;
-      }
     }
   }
 
@@ -38,7 +32,7 @@
 
     > li {
       font-size: 17px;
-      padding: 12px 0;
+      padding:   12px 0;
 
       &:last-child {
         border-bottom: none;
@@ -46,23 +40,23 @@
 
       &.feature-button {
         padding: 21px;
-        height: auto;
+        height:  auto;
       }
     }
   }
 
   .plan {
     background-color: #fff;
-    border: 2px solid transparent;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
-    text-align: center;
-    width: 23%;
-    float: left;
+    border:           2px solid transparent;
+    box-shadow:       0 0 25px rgba(0, 0, 0, 0.15);
+    text-align:       center;
+    width:            23%;
+    float:            left;
 
     > .plan-header {
       background-color: #f0f2f6;
-      margin: -2px -2px 0;
-      padding: 7px 0;
+      margin:           -2px -2px 0;
+      padding:          7px 0;
 
       > .plan-price, > .plan-price-old {
         display: inline-block;
@@ -73,51 +67,56 @@
       }
 
       > .plan-price-old {
-        font-size: 15px;
-        margin-top: -10px;
+        font-size:       15px;
+        margin-top:      -10px;
         text-decoration: line-through;
-        opacity: .8;
+        opacity:         .8;
       }
 
       > .plan-name {
         font-size: 15px;
-        color: inherit;
-        position: relative;
+        color:     inherit;
+        position:  relative;
 
         > strong {
           font-size: 17px;
         }
 
         &:after {
-          content: '';
-          height: 2px;
-          width: 50px;
-          position: absolute;
-          left: calc(50% - 25px);
+          content:          '';
+          height:           2px;
+          width:            50px;
+          position:         absolute;
+          left:             calc(50% - 25px);
           background-color: #e4e4e4;
-          bottom: -8px;
+          bottom:           -8px;
         }
       }
     }
 
     &.selected {
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+      box-shadow:   0 0 25px rgba(0, 0, 0, 0.25);
       border-color: $primary;
-      margin-left: -5px;
+      margin-left:  -5px;
       margin-right: -5px;
-      margin-top: -10px;
-      z-index: 1;
-      position: relative;
-      width: 24%;
+      margin-top:   -10px;
+      z-index:      1;
+      position:     relative;
+      width:        24%;
 
       > .plan-header {
-        background-color: $primary;
-        color: #fff;
+        @include feel.modern {
+          background-color: style.$green-500;
+        }
+        @include feel.legacy {
+          background-color: $primary;
+        }
+        color:   #fff;
         padding: 12px 0;
       }
 
       .feature-button {
-        padding: 30px 0;
+        padding:   30px 0;
         font-size: 20px;
       }
     }
@@ -126,9 +125,9 @@
 
 .custom-plan {
   .custom-plan-container {
-    width: 250px;
+    width:      250px;
     text-align: left;
-    margin: auto;
+    margin:     auto;
   }
 
   .custom-plan-info {

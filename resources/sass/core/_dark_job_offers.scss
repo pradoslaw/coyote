@@ -18,7 +18,7 @@ body.theme-dark {
   }
 
   #plan-table {
-    .plan-benefits > li {
+    .plan-benefits .plan-benefit {
       border-bottom-color: #2f2f2f;
     }
 
@@ -29,15 +29,9 @@ body.theme-dark {
       .plan-header {
         background: rgba(255, 255, 255, 0.03);
       }
-
-      &.selected {
-        .plan-header {
-          background-color: #80a41a;
-        }
-      }
     }
 
-    .plan-benefits > li,
+    .plan-benefits .plan-benefit,
     .plan-features > li {
       border-bottom-color: #2f2f2f;
     }
