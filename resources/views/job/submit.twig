@@ -14,7 +14,7 @@
 
       <div id="js-submit-form" class="job-form" v-cloak>
         {% if not is_plan_ongoing %}
-          <vue-pricing :plans="plans" v-model="job.plan_id" email="{{ config('mail.from.address') }}"></vue-pricing>
+          <vue-pricing :plans="plans" v-model="job.plan_id"></vue-pricing>
         {% endif %}
 
         <vue-tabs @change="switchTab" type="pills" :items="tabs" :current-tab="currentTab" id="js-tabs" class="mt-2 mb-4"></vue-tabs>

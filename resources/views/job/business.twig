@@ -9,115 +9,16 @@
     var plans = {{ plans|raw }};
     var plan = {{ default_plan|raw }};
   </script>
-
   <div id="js-business" class="row">
-    <div class="col-md-9">
-      <h1 class="text-center mt-4 mb-4">Szukasz programistów do swojego zespołu? <strong>Rekrutuj najlepszych kandydatów z 4programmers.net!</strong></h1>
+    <div class="col-xl-2">
+    </div>
+    <div class="col-xl-8">
+      <h1 class="text-center mt-4 mb-4">
+        Dodaj ofertę pracy w kilku <br>
+        prostych krokach
+      </h1>
 
-      <div class="business-benefits list-group list-group-flush list-group-horizontal mt-4 mb-4">
-        <div class="list-group-item w-50 text-center bg-transparent border-0">
-          <span class="text-primary">
-            {{ icon('jobLandingCommunity') }}
-          </span>
-          <h4 class="mt-2">
-            Aktywna społeczność ponad <br><strong>250 000 programistów</strong>
-          </h4>
-        </div>
-        <div class="list-group-item w-50 text-center bg-transparent border-0">
-          <span class="text-primary">
-            {{ icon('jobLandingForumIt') }}
-          </span>
-          <h4 class="mt-2">
-            Najbardziej merytoryczne forum IT w kraju
-          </h4>
-        </div>
-
-        <div class="list-group-item w-50 text-center bg-transparent border-0">
-          <span class="text-primary">
-            {{ icon('jobLandingMonthlyViews') }}
-          </span>
-          <h4 class="mt-2">Średnio ponad <strong>1.5 miliona</strong> odsłon miesięcznie</h4>
-        </div>
-        <div class="list-group-item w-50 text-center bg-transparent border-0">
-          <span class="text-primary">
-            {{ icon('jobLandingKnowledgeShareEstablishmentYear') }}
-          </span>
-          <h4 class="mt-2">Miejsce wymiany wiedzy już <br><strong>od 2000 roku</strong></h4>
-        </div>
-      </div>
-
-      <h2 class="text-center mt-4 mb-4">
-        Dajemy Ci do dyspozycji 3 atrakcyjne plany taryfowe.
-      </h2>
-
-      <vue-pricing :plans="plans" v-model="plan.id" email="{{ config('mail.from.address') }}"></vue-pricing>
-
-      <h2 class="text-center mt-4 mb-4">Co zyskujesz dodając ogłoszenie na 4programmers.net?</h2>
-
-      <ul class="business-benefits list-group list-group-flush list-group-horizontal d-flex flex-row flex-wrap">
-        <li class="list-group-item w-50 bg-transparent border-0">
-          <span class="text-primary" style="font-size:2em;">
-            {{ icon('jobLandingBenefit') }}
-          </span>
-          <span>Prosty, uniwersalny szablon ofert</span>
-        </li>
-
-        <li class="list-group-item w-50 bg-transparent border-0">
-          <span class="text-primary" style="font-size:2em;">
-            {{ icon('jobLandingBenefit') }}
-          </span>
-          <span>Bardzo konkurencyjne ceny w 3 pakietach</span>
-        </li>
-
-        <li class="list-group-item w-50 bg-transparent border-0">
-          <span class="text-primary" style="font-size:2em;">
-            {{ icon('jobLandingBenefit') }}
-          </span>
-          <span>Jasno określasz swoje widełki wynagrodzenia</span>
-        </li>
-
-        <li class="list-group-item w-50 bg-transparent border-0">
-          <span class="text-primary" style="font-size:2em;">
-            {{ icon('jobLandingBenefit') }}
-          </span>
-          <span>Grupa kandydatów wyłącznie z branży IT</span>
-        </li>
-
-        <li class="list-group-item w-50 bg-transparent border-0">
-          <span class="text-primary" style="font-size:2em;">
-            {{ icon('jobLandingBenefit') }}
-          </span>
-          <span>Korzystasz z szybkich i wygodnych form płatności</span>
-        </li>
-
-        <li class="list-group-item w-50 bg-transparent border-0">
-          <span class="text-primary" style="font-size:2em;">
-            {{ icon('jobLandingBenefit') }}
-          </span>
-          <span>Procentowo deklarujesz ilość pracy zdalnej</span>
-        </li>
-
-        <li class="list-group-item w-50 bg-transparent border-0">
-          <span class="text-primary" style="font-size:2em;">
-            {{ icon('jobLandingBenefit') }}
-          </span>
-          <span>Ciekawe opcje wyróżniania oferty</span>
-        </li>
-
-        <li class="list-group-item w-50 bg-transparent border-0">
-          <span class="text-primary" style="font-size:2em;">
-            {{ icon('jobLandingBenefit') }}
-          </span>
-          <span>Budujesz pozytywny wizerunek pracodawcy</span>
-        </li>
-
-        <li class="list-group-item w-50 bg-transparent border-0">
-          <span class="text-primary" style="font-size:2em;">
-            {{ icon('jobLandingBenefit') }}
-          </span>
-          <span>Możesz dodawać zdjęcia do Twoich ogłoszeń</span>
-        </li>
-      </ul>
+      <vue-pricing :plans="plans" v-model="plan.id"></vue-pricing>
 
       <div class="text-center">
         <span class="edge">
@@ -126,21 +27,11 @@
 
         <p class="mt-3">
           Masz pytania? Skontaktuj się z nami pod adresem
-          <a href="mailto:{{ config('mail.from.address') }}">
+          <a href="mailto:{{ config('mail.from.address') }}" class="neon-color-link">
             {{ config('mail.from.address') }}
           </a>.
         </p>
       </div>
-    </div>
-
-    <div class="col-md-3 hidden-sm d-none d-sm-block">
-      <section id="post-offer">
-        <span class="edge">
-          <a :href="submitUrl" class="btn btn-primary jobboard-add-offer-landing-2">
-            Dodaj ofertę pracy
-          </a>
-        </span>
-      </section>
     </div>
   </div>
 {% endblock %}

@@ -99,17 +99,11 @@ import VueIcon from '../icon';
 import {default as mixins} from '../mixins/form';
 
 export default {
+  mixins: [mixins],
   components: {VueIcon},
   props: {
-    plans: {
-      type: Array,
-    },
-    modelValue: {
-      type: Number,
-    },
-    email: {
-      type: String,
-    },
+    plans: {type: Array},
+    modelValue: {type: Number},
   },
   methods: {
     changePlan(planId) {
@@ -117,6 +111,5 @@ export default {
       postJobBoardMilestone('change-plan-' + planId);
     },
   },
-  mixins: [mixins],
 };
 </script>
