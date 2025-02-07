@@ -11,16 +11,17 @@
           Możesz wybrać jedną z pośród kilku firm przypisanych do Twojego konta.
         </span>
       </div>
-      <vue-form-group :errors="errors['firm.name']" label="Nazwa firmy" class="border-bottom">
+      <vue-form-group :errors="errors['firm.name']" label="Nazwa firmy">
         <div class="input-group">
           <a @click="addFirm" class="input-group-text text-decoration-none" href="javascript:" title="Dodaj nową firmę">
             <vue-icon name="jobOfferFirmNameAdd"/>
           </a>
-          <vue-text v-model="firm.name" :is-invalid="'firm.name' in errors" name="firm[name]"/>
+          <vue-text
+            v-model="firm.name"
+            :is-invalid="'firm.name' in errors"
+            name="firm[name]"
+            placeholder="Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa."/>
         </div>
-        <span class="form-text text-muted">
-          Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.
-        </span>
       </vue-form-group>
       <div class="border-bottom form-group">
         <div class="form-group">

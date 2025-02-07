@@ -45,9 +45,8 @@ createVueAppNotifications('Job submit', '#js-submit-form', {
       const tabs = ['offer', 'firm'];
       postJobBoardMilestone('change-tabs-' + tabs[tab] + (mode ? '-' + mode : ''));
       this.currentTab = tab;
-      window.scrollTo(0, document.getElementById('js-tabs').offsetTop);
+      window.scrollTo(0, 0);
     },
-
     submitForm() {
       postJobBoardMilestone('save-offer-attempt');
       this.isSubmitting = true;

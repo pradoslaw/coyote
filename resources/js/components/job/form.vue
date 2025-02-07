@@ -90,10 +90,8 @@
         </div>
 
         <div class="form-group">
-          <label class="col-form-label">Kluczowe technologie (wymagane lub mile widziane)</label>
-
-          <vue-tags-inline @change="addTag" placeholder="Np. java, c#, ms-sql" class="form-control"></vue-tags-inline>
-
+          <label class="col-form-label">Kluczowe technologie (konieczne lub mile widziane)</label>
+          <vue-tags-inline @change="addTag" placeholder="Np. java, python, kotlin, aws, docker, typescript, sql, nginx" class="form-control"></vue-tags-inline>
           <span class="form-text text-muted" v-if="errors.tags != null">{{ errors.tags[0] }}</span>
           <span class="form-text text-muted" v-else-if="suggestions.length === 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
           <span class="form-text text-muted" v-else-if="suggestions.length > 0">
@@ -108,16 +106,14 @@
         </div>
 
         <div class="border-bottom form-group">
-          <label class="col-form-label">Opis oferty (opcjonalnie)</label>
-
+          <label class="col-form-label">Opis oferty</label>
           <vue-rich-editor v-model="job.description"/>
-          <span class="form-text text-muted">Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.</span>
-
+          <span class="form-text text-muted">Miejsce na szczegółowy opis oferty. Pole nie jest wymagane.</span>
           <input type="hidden" name="description" v-model="job.description">
         </div>
 
         <div class="form-group border-bottom">
-          <label class="col-form-label">Narzędzia oraz metodologia pracy</label>
+          <label class="col-form-label">Narzędzia oraz metodologie pracy</label>
 
           <ol class="features list-group list-group-horizontal d-flex flex-row flex-wrap">
             <li class="list-group-item w-50" v-for="(feature, index) in job.features" :class="{checked: feature.checked}">
