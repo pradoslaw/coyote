@@ -26,6 +26,15 @@ a:not(.btn) {
   }
 }
 
+.neon-color-link-light {
+  @include feel.modern {
+    @include theme.property(color, style.$green-500, style.$green-050);
+  }
+  @include feel.legacy {
+    @include theme.property(color, #5e7813, #637f14);
+  }
+}
+
 .neon-primary-color {
   @include feel.modern {
     color: style.$green-500;

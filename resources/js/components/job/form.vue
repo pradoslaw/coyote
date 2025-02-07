@@ -9,6 +9,9 @@
           <label class="col-form-label">Twój plan</label>
           <div class="col-12 mb-2">
             {{ plan.name }} ({{ plan.price }}zł)
+            <a href="/Praca/Oferta" class="neon-color-link-light">
+              <u>Zmień</u>
+            </a>
           </div>
         </div>
         <div class="form-row border-bottom">

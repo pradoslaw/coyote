@@ -47,7 +47,7 @@
           <div>Wyróżnienie ogłoszenia <strong>na górze listy</strong> wyszukiwania</div>
         </li>
       </ul>
-      <div class="plan" v-for="plan in plans" :class="{'selected': valueLocal === plan.id}" @click="changePlan(plan.id)">
+      <div class="plan" v-for="(plan, index) in plans" :class="{'selected': index === 1}">
         <div class="plan-header">
           <h4 class="plan-name">
             Ogłoszenie
@@ -78,13 +78,9 @@
               </template>
             </li>
             <li class="feature-button">
-              <button class="btn btn-secondary" v-if="valueLocal !== plan.id" @click.prevent="changePlan(plan.id)">
-                Wybierz
+              <button type="button" class="btn btn-primary" @click="selectPlan(plan.id)">
+                Wybierz plan
               </button>
-              <span class="text-primary" v-else>
-                <vue-icon name="pricingSelected"/>
-                Wybrano
-              </span>
             </li>
           </ul>
         </div>
@@ -96,19 +92,21 @@
 <script>
 import {postJobBoardMilestone} from "../../../feature/jobBoard/jobBoard";
 import VueIcon from '../icon';
-import {default as mixins} from '../mixins/form';
 
 export default {
-  mixins: [mixins],
   components: {VueIcon},
   props: {
     plans: {type: Array},
     modelValue: {type: Number},
   },
+  model: {
+    prop: 'modelValue',
+    event: 'update:modelValue',
+  },
   methods: {
-    changePlan(planId) {
-      this.valueLocal = planId;
-      postJobBoardMilestone('change-plan-' + planId);
+    selectPlan(planId) {
+      this.$emit('select', planId);
+      postJobBoardMilestone('select-plan-' + planId);
     },
   },
 };

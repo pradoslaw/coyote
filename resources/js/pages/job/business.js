@@ -14,9 +14,9 @@ createVueApp('Business', '#js-business', {
   mounted() {
     postJobBoardMilestone('see-landing');
   },
-  computed: {
-    submitUrl() {
-      return `/Praca/Submit?default_plan=${this.plan.id}`;
+  methods: {
+    submitUrl(planId) {
+      window.location.href = `/Praca/Submit?default_plan=${planId}`;
     },
   },
 });
