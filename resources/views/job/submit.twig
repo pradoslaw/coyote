@@ -4,7 +4,8 @@
 
 {% block container %}
   <div class="row">
-    <main class="col-lg-9 col-12-md">
+    <div class="d-none d-xl-block col-xl-2"></div>
+    <main class="col-12 col-xl-8">
       <div class="card card-body bg-light p-2 border-0 text-center" v-loader>
         <span class="lead justify-content-center ms-1">
           {{ icon('jobBoardLoading', {spin}) }}
@@ -67,51 +68,6 @@
         <vue-notifications></vue-notifications>
       </div>
     </main>
-
-    <aside class="col-lg-3">
-      <div id="hint-container">
-        <div id="hint-title" class="alert alert-warning">
-          <h4>Ile kosztuje dodanie ogłoszenia?</h4>
-          <p>
-            Masz możliwość wyboru jednego z trzech pakietów. Koszt najtańszego pakietu to niecałe <strong>1 zł</strong> za dzień.
-          </p>
-
-          <h4 class="mt-3">Możliwe opcje promowania oferty pracy</h4>
-          <p>
-            {{ icon('jobBoardPackageBenefit') }}
-            Ogłoszenie wyświetlane nad tymi darmowymi.
-          </p>
-          <p>
-            {{ icon('jobBoardPackageBenefit') }}
-            Reklama na stronie głównej oraz forum.
-          </p>
-          <p>
-            {{ icon('jobBoardPackageBenefit') }}
-            Podświetlenie oferty.
-          </p>
-          <p>
-            {{ icon('jobBoardPackageBenefit') }}
-            3x podbicie oferty.
-          </p>
-          <h4 class="mt-3">Formy płatności</h4>
-          <p>
-            Za opcję promowania zapłacisz kartą Visa, Mastercard lub Maestro jak i również <strong>szybkim</strong> przelewem bankowym.
-            Operatorem płatności jest firma PayLane oraz serwis Przelewy24.pl.
-          </p>
-
-          <h4 class="mt-3">Faktura VAT</h4>
-          <p>
-            Fakturę VAT prześlemy Ci na e-mail. Dane do faktury podasz w ostatnim kroku.
-          </p>
-
-          <h4 class="mt-3">Pomoc</h4>
-          <p>
-            Jeżeli masz problem z publikacją ogłoszenia lub płatnością, chętnie Ci pomożemy! Napisz do nas na
-            <a href="mailto:{{ config('mail.from.address') }}"><u>{{ config('mail.from.address') }}</u></a>.
-          </p>
-        </div>
-      </div>
-    </aside>
   </div>
 
   <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false&libraries=places"></script>
