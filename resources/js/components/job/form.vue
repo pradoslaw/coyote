@@ -50,11 +50,15 @@
           </div>
           <div class="row">
             <div class="col-12">
-              <div class="custom-control custom-checkbox mt-2 mb-3">
-                <vue-checkbox id="is_remote" class="custom-control-input" name="is_remote" v-model="job.is_remote"></vue-checkbox>
-                <label for="is_remote" class="custom-control-label">Możliwa praca zdalna w zakresie</label>
-
-                <vue-select name="remote_range" :options="remoteRange" v-model="job.remote_range" class="form-control-sm d-inline-block" style="width: 100px; margin-top: -5px"></vue-select>
+              <div class="mt-2 mb-3 d-flex align-items-center">
+                <vue-checkbox id="is_remote" name="is_remote" v-model="job.is_remote" class="me-2"/>
+                <label for="is_remote" class="me-2">Możliwa praca zdalna w zakresie</label>
+                <vue-select
+                  name="remote_range"
+                  :options="remoteRange"
+                  v-model="job.remote_range"
+                  class="form-control-sm d-inline-block"
+                  style="width: 100px;"/>
               </div>
             </div>
           </div>
@@ -66,8 +70,7 @@
           </label>
           <div>
             od
-            <vue-text type="number" name="salary_from" class="d-inline-block" v-model="job.salary_from" :is-invalid="'salary_from' in errors"></vue-text>
-
+            <vue-text type="number" name="salary_from" class="d-inline-block" v-model="job.salary_from" :is-invalid="'salary_from' in errors"/>
             do
             <vue-text type="number" name="salary_to" class="d-inline-block" v-model="job.salary_to" :is-invalid="'salary_to' in errors"/>
             <vue-select name="currency_id" class="d-inline-block" :options="currenciesValues" v-model="job.currency_id"/>
