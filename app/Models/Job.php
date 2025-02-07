@@ -432,20 +432,16 @@ class Job extends Model
         $this->attributes['salary_to'] = $value === null ? null : (int)trim($value);
     }
 
-    /**
-     * @return int
-     */
-    public function getDeadlineAttribute()
+    public function getDeadlineAttribute(): int
     {
-        return (new Carbon($this->deadline_at))->diff(Carbon::now(), false)->days;
+        $deadline = new Carbon($this->deadline_at);
+        $current = Carbon::now();
+        return $deadline->diff($current)->dayz;
     }
 
-    /**
-     * @return bool
-     */
-    public function getIsExpiredAttribute()
+    public function getIsExpiredAttribute(): bool
     {
-        return (new Carbon($this->deadline_at))->isPast();
+        return new Carbon($this->deadline_at)->isPast();
     }
 
     /**
