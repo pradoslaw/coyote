@@ -73,9 +73,13 @@
             <vue-text type="number" name="salary_from" class="d-inline-block" v-model="job.salary_from" :is-invalid="'salary_from' in errors"/>
             do
             <vue-text type="number" name="salary_to" class="d-inline-block" v-model="job.salary_to" :is-invalid="'salary_to' in errors"/>
+            {{' '}}
             <vue-select name="currency_id" class="d-inline-block" :options="currenciesValues" v-model="job.currency_id"/>
+            {{' '}}
             <vue-select name="is_gross" class="d-inline-block" :options="['Netto', 'Brutto']" v-model="isGross"/>
+            {{' '}}
             <vue-select name="rate" class="d-inline-block" :options="rates" v-model="job.rate"/>
+            {{' '}}
             <vue-select name="employment" class="d-inline-block" :options="employments" v-model="job.employment"/>
             <span class="form-text text-muted">
               Podanie tych informacji nie jest obowiązkowe, ale dzięki temu Twoja oferta zainteresuje więcej osób. Obiecujemy!
@@ -102,15 +106,7 @@
 
           <vue-tags :tags="job.tags" :editable="true" @delete="REMOVE_TAG" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" class="tag-clouds-md mt-3"/>
         </div>
-      </div>
-    </div>
 
-    <div class="card">
-      <div class="card-header">
-        Szczegółowe informacje
-      </div>
-
-      <div class="card-body">
         <div class="border-bottom form-group">
           <label class="col-form-label">Opis oferty (opcjonalnie)</label>
 

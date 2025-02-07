@@ -2,7 +2,7 @@
   <select
     :name="name"
     v-model="valueLocal"
-    class="form-control"
+    class="form-control form-select"
     :class="{'is-invalid': isInvalid}"
     ref="select"
   >
