@@ -63,23 +63,16 @@ class SubmitController extends Controller
         }
 
         $this->authorize('update', $job);
-
         $this->breadcrumb($job);
-
-        // get all firms assigned to user...
         $this->firm->pushCriteria(new EagerLoading(['benefits', 'assets']));
-
-        $firms = FirmResource::collection($this->firm->findAllBy('user_id', $this->userId));
 
         return $this->view('job.submit', [
             'job'              => new JobFormResource($job),
-            'firms'            => $firms,
-
-            // is plan is still going on?
+            'firms'            => FirmResource::collection($this->firm->findAllBy('user_id', $this->userId)),
             'is_plan_ongoing'  => $job->is_publish,
             'plans'            => $this->plan->active()->toJson(),
             'currencies'       => Currency::all(),
-            'default_benefits' => Benefit::getBenefitsList(), // default benefits,
+            'default_benefits' => Benefit::getBenefitsList(),
             'employees'        => Firm::getEmployeesList(),
         ]);
     }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote;
 
 use Carbon\Carbon;
@@ -8,6 +7,7 @@ use Coyote\Models\Scopes\ForUser;
 use Coyote\Models\Subscription;
 use Coyote\Services\Eloquent\HasMany;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\RoutesNotifications;
 
@@ -44,9 +44,9 @@ use Illuminate\Notifications\RoutesNotifications;
  * @property User $user
  * @property Firm $firm
  * @property Tag[] $tags
- * @property Location[] $locations
- * @property Currency[] $currency
- * @property Feature[] $features
+ * @property Location[]|Eloquent\Collection $locations
+ * @property Currency[]|Eloquent\Collection $currency
+ * @property Feature[]|Eloquent\Collection $features
  * @property int $plan_id
  * @property bool $is_boost
  * @property bool $is_publish
