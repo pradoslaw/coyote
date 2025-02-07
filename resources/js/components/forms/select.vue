@@ -4,6 +4,7 @@
     v-model="valueLocal"
     class="form-control form-select"
     :class="{'is-invalid': isInvalid}"
+    :disabled="$props.disabled"
     ref="select"
   >
     <option v-if="placeholder" :value="null" v-text="placeholder"/>
@@ -18,25 +19,12 @@ export default {
     event: 'update:modelValue',
   },
   props: {
-    name: {
-      type: String,
-      require: true,
-    },
-    modelValue: {
-      type: [String, Number, Array],
-    },
-    options: {
-      type: [Object, Array],
-      require: true,
-    },
-    placeholder: {
-      type: [String],
-      require: false,
-    },
-    isInvalid: {
-      type: Boolean,
-      default: false,
-    },
+    name: {type: String, require: true},
+    modelValue: {type: [String, Number, Array]},
+    options: {type: [Object, Array], require: true},
+    placeholder: {type: [String], require: false},
+    isInvalid: {type: Boolean, default: false},
+    disabled: {type: Boolean, default: false},
   },
   computed: {
     valueLocal: {

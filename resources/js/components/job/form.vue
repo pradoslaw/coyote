@@ -50,6 +50,7 @@
             <label for="is_remote" class="me-2">Możliwa praca zdalna w zakresie</label>
             <vue-select
               name="remote_range"
+              :disabled="!job.is_remote"
               :options="remoteRange"
               v-model="job.remote_range"
               class="form-control-sm d-inline-block"
