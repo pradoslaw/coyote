@@ -1,160 +1,155 @@
 <template>
-  <div class="card">
-    <div class="card-header">
-      Dane firmy
+  <div class="neon-tile neon-rounded px-4 py-2">
+    <div v-if="Object.keys(firmsSelect).length" class="border-bottom form-group">
+      <label class="col-form-label">Wybierz firmę z listy</label>
+      <vue-select :options="firmsSelect" placeholder="-- zapisane firmy --" v-model="defaultFirm"/>
+      <span class="form-text text-muted">
+        Możesz wybrać jedną z pośród kilku firm przypisanych do Twojego konta.
+      </span>
     </div>
-    <div class="card-body">
-      <div v-if="Object.keys(firmsSelect).length" class="border-bottom form-group">
-        <label class="col-form-label">Wybierz firmę z listy</label>
-        <vue-select :options="firmsSelect" placeholder="-- zapisane firmy --" v-model="defaultFirm"/>
-        <span class="form-text text-muted">
-          Możesz wybrać jedną z pośród kilku firm przypisanych do Twojego konta.
-        </span>
+    <vue-form-group :errors="errors['firm.name']" label="Nazwa firmy">
+      <div class="input-group">
+        <a @click="addFirm" class="input-group-text text-decoration-none" href="javascript:" title="Dodaj nową firmę">
+          <vue-icon name="jobOfferFirmNameAdd"/>
+        </a>
+        <vue-text
+          v-model="firm.name"
+          :is-invalid="'firm.name' in errors"
+          name="firm[name]"
+          placeholder="Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa."/>
       </div>
-      <vue-form-group :errors="errors['firm.name']" label="Nazwa firmy">
-        <div class="input-group">
-          <a @click="addFirm" class="input-group-text text-decoration-none" href="javascript:" title="Dodaj nową firmę">
-            <vue-icon name="jobOfferFirmNameAdd"/>
-          </a>
-          <vue-text
-            v-model="firm.name"
-            :is-invalid="'firm.name' in errors"
-            name="firm[name]"
-            placeholder="Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa."/>
-        </div>
-      </vue-form-group>
-      <div class="border-bottom form-group">
-        <div class="form-group">
-          <div class="custom-control custom-radio">
-            <input type="radio" id="is_agency_0" class="is_agency custom-control-input" name="is_agency" v-model="firm.is_agency" :value="false">
-            <label for="is_agency_0" class="custom-control-label">
-              Bezpośredni pracodawca
-            </label>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="custom-control custom-radio">
-            <input type="radio" id="is_agency_1" class="is_agency custom-control-input" name="is_agency" v-model="firm.is_agency" :value="true">
-            <label for="is_agency_1" class="custom-control-label">
-              Agencja pośrednictwa / IT outsourcing
-            </label>
-          </div>
-        </div>
-      </div>
-
+    </vue-form-group>
+    <div class="border-bottom form-group">
       <div class="form-group">
-        <label class="col-form-label">Logo</label>
-
-        <div class="row">
-          <div class="col-sm-2">
-            <vue-thumbnail
-              :url="firm.logo"
-              :only-image="true"
-              name="logo"
-              upload-url="/Firma/Logo"
-              @upload="addLogo"
-              @delete="removeLogo"/>
-          </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" id="is_agency_0" class="is_agency custom-control-input" name="is_agency" v-model="firm.is_agency" :value="false">
+          <label for="is_agency_0" class="custom-control-label">
+            Bezpośredni pracodawca
+          </label>
         </div>
       </div>
-
-      <vue-form-group :errors="errors['firm.website']" label="Strona WWW" class="border-bottom">
-        <vue-text v-model="firm.website" :is-invalid="'firm.website' in errors" name="firm[website]"></vue-text>
-
-        <span class="form-text text-muted">Firmowa strona WWW. Będzie ona wyświetlana przy ofercie.</span>
-      </vue-form-group>
-
-      <vue-form-group label="Opis firmy" class="border-bottom">
-        <vue-rich-editor v-model="firm.description"/>
-        <span class="form-text text-muted">Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?</span>
-      </vue-form-group>
-
-      <div class="form-group border-bottom" v-show="firm.is_agency === false">
-        <label class="col-form-label">Dodaj zdjęcia</label>
-
-        <div class="row mb-2">
-          <div class="col-sm-2" v-for="photo in gallery">
-            <vue-thumbnail
-              :url="photo.url"
-              :only-image="true"
-              @upload="addPhoto"
-              @delete="removePhoto">
-            </vue-thumbnail>
-          </div>
-
-          <div class="col-sm-2">
-            <vue-thumbnail @upload="addPhoto" name="asset"></vue-thumbnail>
-          </div>
+      <div class="form-group">
+        <div class="custom-control custom-radio">
+          <input type="radio" id="is_agency_1" class="is_agency custom-control-input" name="is_agency" v-model="firm.is_agency" :value="true">
+          <label for="is_agency_1" class="custom-control-label">
+            Agencja pośrednictwa / IT outsourcing
+          </label>
         </div>
       </div>
+    </div>
 
-      <vue-form-group :errors="errors['firm.youtube_url']" label="Nagranie wideo w Youtube" class="form-group">
-        <vue-text v-model="firm.youtube_url" :is-invalid="'firm.youtube_url' in errors" name="firm[youtube_url]"></vue-text>
+    <div class="form-group">
+      <label class="col-form-label">Logo</label>
 
-        <span class="form-text text-muted">Film promujący firmę będzie wyświetlany pod ogłoszeniem o pracę.</span>
-      </vue-form-group>
-
-      <vue-form-group :errors="errors['firm.employees']" label="Liczba pracowników w firmie">
-        <vue-select :options="employees" v-model="firm.employees" placeholder="--" name="firm[employees]"/>
-        <span class="form-text text-muted">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
-      </vue-form-group>
-
-      <vue-form-group :errors="errors['firm.founded']" label="Rok powstania" class="border-bottom">
-        <vue-select :options="founded" v-model="firm.founded" placeholder="--" name="firm[founded]"/>
-        <span class="form-text text-muted">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
-      </vue-form-group>
-
-      <vue-form-group label="Adres" class="border-bottom" v-show="firm.is_agency === false">
-        <vue-text autocomplete="off" v-model="address" @accept="changeAddress" name="address"/>
-        <span class="form-text text-muted">
-          Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.
-        </span>
-        <div id="map">
-          <vue-map @click="geocode" class="h-100" :latitude="firm.latitude || 51.919438" :longitude="firm.longitude || 19.145135999">
-            <vue-marker :latitude="firm.latitude" :longitude="firm.longitude"/>
-          </vue-map>
+      <div class="row">
+        <div class="col-sm-2">
+          <vue-thumbnail
+            :url="firm.logo"
+            :only-image="true"
+            name="logo"
+            upload-url="/Firma/Logo"
+            @upload="addLogo"
+            @delete="removeLogo"/>
         </div>
-      </vue-form-group>
+      </div>
+    </div>
 
-      <div class="form-group border-bottom" v-show="firm.is_agency === false">
-        <label class="col-form-label">Benefity</label>
-        <span class="form-text text-muted">
-          Kliknij na wybraną pozycję, aby zaznaczyć benefity jakie oferuje Twoja firma. Jeżeli nie ma go na liście, możesz dodać nową pozycję wpisując ją w
-          polu poniżej.
-        </span>
-        <ol class="benefits list-group list-group-horizontal d-flex flex-row flex-wrap">
-          <li
-            class="list-group-item w-50 clickable"
-            v-for="benefit in defaultBenefits"
-            :class="{checked: firm.benefits.includes(benefit)}"
-            @click="TOGGLE_BENEFIT(benefit)"
-          >
-            <vue-icon name="jobOfferBenefitPresent" v-if="firm.benefits.includes(benefit)"/>
-            <vue-icon name="jobOfferBenefitMissing" v-else/>
-            {{ benefit }}
-          </li>
-          <template v-for="benefit in firm.benefits">
-            <li class="list-group-item w-50 checked" v-if="!defaultBenefits.includes(benefit)">
-              <vue-icon name="jobOfferBenefitCustom"/>
-              <input maxlength="100" :value="benefit" class="form-control form-control-sm" @keydown.enter.prevent="">
-              <button class="btn btn-sm btn-delete text-danger" title="Usuń tę pozycję" @click.prevent="REMOVE_BENEFIT(benefit)">
-                <vue-icon name="jobOfferBenefitRemove"/>
-              </button>
-            </li>
-          </template>
-          <li class="list-group-item w-50 checked">
+    <vue-form-group :errors="errors['firm.website']" label="Strona WWW" class="border-bottom">
+      <vue-text v-model="firm.website" :is-invalid="'firm.website' in errors" name="firm[website]"></vue-text>
+
+      <span class="form-text text-muted">Firmowa strona WWW. Będzie ona wyświetlana przy ofercie.</span>
+    </vue-form-group>
+
+    <vue-form-group label="Opis firmy" class="border-bottom">
+      <vue-rich-editor v-model="firm.description"/>
+      <span class="form-text text-muted">Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?</span>
+    </vue-form-group>
+
+    <div class="form-group border-bottom" v-show="firm.is_agency === false">
+      <label class="col-form-label">Dodaj zdjęcia</label>
+
+      <div class="row mb-2">
+        <div class="col-sm-2" v-for="photo in gallery">
+          <vue-thumbnail
+            :url="photo.url"
+            :only-image="true"
+            @upload="addPhoto"
+            @delete="removePhoto">
+          </vue-thumbnail>
+        </div>
+
+        <div class="col-sm-2">
+          <vue-thumbnail @upload="addPhoto" name="asset"></vue-thumbnail>
+        </div>
+      </div>
+    </div>
+
+    <vue-form-group :errors="errors['firm.youtube_url']" label="Nagranie wideo w Youtube" class="form-group">
+      <vue-text v-model="firm.youtube_url" :is-invalid="'firm.youtube_url' in errors" name="firm[youtube_url]"></vue-text>
+
+      <span class="form-text text-muted">Film promujący firmę będzie wyświetlany pod ogłoszeniem o pracę.</span>
+    </vue-form-group>
+
+    <vue-form-group :errors="errors['firm.employees']" label="Liczba pracowników w firmie">
+      <vue-select :options="employees" v-model="firm.employees" placeholder="--" name="firm[employees]"/>
+      <span class="form-text text-muted">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
+    </vue-form-group>
+
+    <vue-form-group :errors="errors['firm.founded']" label="Rok powstania" class="border-bottom">
+      <vue-select :options="founded" v-model="firm.founded" placeholder="--" name="firm[founded]"/>
+      <span class="form-text text-muted">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
+    </vue-form-group>
+
+    <vue-form-group label="Adres" class="border-bottom" v-show="firm.is_agency === false">
+      <vue-text autocomplete="off" v-model="address" @accept="changeAddress" name="address"/>
+      <span class="form-text text-muted">
+        Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.
+      </span>
+      <div id="map">
+        <vue-map @click="geocode" class="h-100" :latitude="firm.latitude || 51.919438" :longitude="firm.longitude || 19.145135999">
+          <vue-marker :latitude="firm.latitude" :longitude="firm.longitude"/>
+        </vue-map>
+      </div>
+    </vue-form-group>
+
+    <div class="form-group border-bottom" v-show="firm.is_agency === false">
+      <label class="col-form-label">Benefity</label>
+      <span class="form-text text-muted">
+        Kliknij na wybraną pozycję, aby zaznaczyć benefity jakie oferuje Twoja firma. Jeżeli nie ma go na liście, możesz dodać nową pozycję wpisując ją w
+        polu poniżej.
+      </span>
+      <ol class="benefits list-group list-group-horizontal d-flex flex-row flex-wrap">
+        <li
+          class="list-group-item w-50 clickable"
+          v-for="benefit in defaultBenefits"
+          :class="{checked: firm.benefits.includes(benefit)}"
+          @click="TOGGLE_BENEFIT(benefit)"
+        >
+          <vue-icon name="jobOfferBenefitPresent" v-if="firm.benefits.includes(benefit)"/>
+          <vue-icon name="jobOfferBenefitMissing" v-else/>
+          {{ benefit }}
+        </li>
+        <template v-for="benefit in firm.benefits">
+          <li class="list-group-item w-50 checked" v-if="!defaultBenefits.includes(benefit)">
             <vue-icon name="jobOfferBenefitCustom"/>
-            <input
-              v-model="benefit"
-              type="text"
-              maxlength="100"
-              class="form-control form-control-sm"
-              @keydown.enter.prevent="addBenefit"
-              placeholder="Wpisz tekst i naciśnij Enter, aby dodać">
+            <input maxlength="100" :value="benefit" class="form-control form-control-sm" @keydown.enter.prevent="">
+            <button class="btn btn-sm btn-delete text-danger" title="Usuń tę pozycję" @click.prevent="REMOVE_BENEFIT(benefit)">
+              <vue-icon name="jobOfferBenefitRemove"/>
+            </button>
           </li>
-        </ol>
-        <div class="clearfix"/>
-      </div>
+        </template>
+        <li class="list-group-item w-50 checked">
+          <vue-icon name="jobOfferBenefitCustom"/>
+          <input
+            v-model="benefit"
+            type="text"
+            maxlength="100"
+            class="form-control form-control-sm"
+            @keydown.enter.prevent="addBenefit"
+            placeholder="Wpisz tekst i naciśnij Enter, aby dodać">
+        </li>
+      </ol>
+      <div class="clearfix"/>
     </div>
   </div>
 </template>

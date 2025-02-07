@@ -14,8 +14,7 @@
       </div>
 
       <div id="js-submit-form" class="job-form" v-cloak>
-        <vue-tabs @change="switchTab" :items="tabs" :current-tab="currentTab" id="js-tabs" class="mt-2 mb-4"></vue-tabs>
-
+        <vue-tabs @change="switchTab" :items="tabs" :current-tab="currentTab" id="js-tabs" class="mt-2 mb-2"></vue-tabs>
         <vue-job-form
             v-show="currentTab === 0"
             :job="job"
