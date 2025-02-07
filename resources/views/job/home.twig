@@ -39,7 +39,7 @@
           {{ titleBanner(title:'Oferty Pracy w IT - Odwiedza nas ponad 150 tys. unikalnych programistów miesięcznie', crumbs:breadcrumbs) }}
         </div>
         {% if auth_check() %}
-          <vue-tabs :items="tabs" type="pills" current-tab="/Praca" class="mt-4"></vue-tabs>
+          <vue-tabs :items="tabs" current-tab="/Praca" class="mt-4"></vue-tabs>
         {% endif %}
 
         <form method="get" @submit.prevent="search" autocomplete="off">

@@ -17,7 +17,7 @@
           <vue-pricing :plans="plans" v-model="job.plan_id"></vue-pricing>
         {% endif %}
 
-        <vue-tabs @change="switchTab" type="pills" :items="tabs" :current-tab="currentTab" id="js-tabs" class="mt-2 mb-4"></vue-tabs>
+        <vue-tabs @change="switchTab" :items="tabs" :current-tab="currentTab" id="js-tabs" class="mt-2 mb-4"></vue-tabs>
 
         <vue-job-form
             v-show="currentTab === 0"
