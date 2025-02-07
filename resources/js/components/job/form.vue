@@ -5,7 +5,12 @@
         Podstawowe informacje
       </div>
       <div class="card-body">
-
+        <div class="form-row border-bottom">
+          <label class="col-form-label">Twój plan</label>
+          <div class="col-12 mb-2">
+            {{ plan.name }} ({{ plan.price }}zł)
+          </div>
+        </div>
         <div class="form-row border-bottom">
           <vue-form-group :errors="errors['title']" class="col-sm-9">
             <template v-slot:label>
@@ -211,18 +216,10 @@ export default {
     'vue-rich-editor': VueRichEditor,
   },
   props: {
-    job: {
-      type: Object,
-      required: true,
-    },
-    currencies: {
-      type: Array,
-      required: true,
-    },
-    errors: {
-      type: Object,
-      required: false,
-    },
+    job: {type: Object, required: true},
+    currencies: {type: Array, required: true},
+    errors: {type: Object, required: false},
+    plan: {type: Object},
   },
   data() {
     return {

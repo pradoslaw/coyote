@@ -13,15 +13,12 @@
       </div>
 
       <div id="js-submit-form" class="job-form" v-cloak>
-        {% if not is_plan_ongoing %}
-          <vue-pricing :plans="plans" v-model="job.plan_id"></vue-pricing>
-        {% endif %}
-
         <vue-tabs @change="switchTab" :items="tabs" :current-tab="currentTab" id="js-tabs" class="mt-2 mb-4"></vue-tabs>
 
         <vue-job-form
             v-show="currentTab === 0"
             :job="job"
+            :plan="jobPlan"
             :errors="errors"
             :currencies="currencies"
         ></vue-job-form>
@@ -81,7 +78,7 @@
 
           <h4 class="mt-3">Możliwe opcje promowania oferty pracy</h4>
           <p>
-            {{ icon('jobBoardPackageBenefit') }} 
+            {{ icon('jobBoardPackageBenefit') }}
             Ogłoszenie wyświetlane nad tymi darmowymi.
           </p>
           <p>

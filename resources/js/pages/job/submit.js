@@ -35,6 +35,11 @@ createVueAppNotifications('Job submit', '#js-submit-form', {
   mounted() {
     document.querySelector('[v-loader]')?.remove();
   },
+  computed: {
+    jobPlan() {
+      return this.$data.plans.find(p => p.id === this.$data.job.plan_id);
+    },
+  },
   methods: {
     switchTab(tab, mode) {
       const tabs = ['offer', 'firm'];
