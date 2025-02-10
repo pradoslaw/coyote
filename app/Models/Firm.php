@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $street_number
  * @property string $postcode
  * @property string $website
- * @property string $description
+ * @property string|null $description
  * @property string $vat_id
  * @property int $country_id
  * @property \Coyote\Firm\Benefit[] $benefits
