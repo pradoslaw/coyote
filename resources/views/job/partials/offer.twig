@@ -92,10 +92,10 @@
                 <ul class="tag-clouds tag-clouds-md">
                   {% for tag in tags %}
                     <li>
-                      <a href="{{ route('job.tag', [tag.name|url_encode]) }}" title="Znajdź oferty zawierające {{ tag.real_name|default(tag.name) }}">{{ tag.real_name|default(tag.name) }}</a>
-
+                      <a href="{{ route('job.tag', [tag.name|url_encode]) }}" title="Znajdź oferty zawierające {{ tag.real_name|default(tag.name) }}" class="neon-tag">
+                        {{ tag.real_name|default(tag.name) }}
+                      </a>
                       {% set tooltip = ['mile widziane', 'średnio zaawansowany', 'zaawansowany'][tag.pivot.priority] %}
-
                       {% apply spaceless %}
                         <div class="progress-bar-dotted" title="{{ tooltip }}">
                           {% for i in 1..3 %}
