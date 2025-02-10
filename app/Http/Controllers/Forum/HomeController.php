@@ -121,12 +121,12 @@ class HomeController extends BaseController
             ->forum
             ->categories($this->guestId)
             ->mapCategory();
-        return $this->view('forum.home')
-            ->with([
-                'forums'      => ForumCollection::factory($forums),
-                'collapse'    => $this->collapse(),
-                'topicsTotal' => Topic::query()->count(),
-            ]);
+        return $this->view('forum.home', [
+            'forums'       => ForumCollection::factory($forums),
+            'collapse'     => $this->collapse(),
+            'topicsTotal'  => Topic::query()->count(),
+            'postsPerPage' => $this->postsPerPage($this->request),
+        ]);
     }
 
     public function all(): View
@@ -263,6 +263,8 @@ class HomeController extends BaseController
             ->get();
         return $this->view('forum.topics', [
             'topics'       => $topics,
+            'forums'       => [],
+            'collapse'     => $this->collapse(),
             'flags'        => FlagResource::collection($resourceFlags),
             'postsPerPage' => $this->postsPerPage($this->request),
             'renderParams' => $renderParams,

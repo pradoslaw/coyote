@@ -119,13 +119,7 @@ abstract class BaseController extends Controller
         return TagResource::collection($this->tag->findWhere(['name' => $tags]))->resolve($this->request);
     }
 
-    /**
-     * @param Request $request
-     * @param string $setting
-     * @param int $default
-     * @return int
-     */
-    protected function perPage(Request $request, $setting, $default)
+    protected function perPage(Request $request, string $setting, int $default): int
     {
         if ($request->filled('perPage')) {
             $perPage = max(10, min((int)$request->input('perPage'), 50));

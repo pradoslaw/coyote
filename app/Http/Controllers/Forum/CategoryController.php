@@ -65,7 +65,6 @@ class CategoryController extends BaseController
             ->setRepository($this->topic);
 
         $collapse = $this->collapse();
-        $postsPerPage = $this->postsPerPage($this->request);
 
         return $this->view('forum.category')->with([
             'forumList'    => $forumList,
@@ -74,7 +73,7 @@ class CategoryController extends BaseController
             'forums'       => $forums,
             'collapse'     => $collapse,
             'flags'        => $flags,
-            'postsPerPage' => $postsPerPage,
+            'postsPerPage' => $this->postsPerPage($this->request),
         ]);
     }
 
