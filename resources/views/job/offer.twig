@@ -93,6 +93,16 @@
                   {% endif %}
                 </div>
                 <div>
+                  <span v-cloak id="js-sidemenu" class="me-1">
+                    <div class="btn btn-secondary" @click="checkAuth(subscribe)">
+                      <span v-if="isSubscribed(job)">
+                        {{ icon('jobOfferSubscribed') }}
+                      </span>
+                      <span v-else>
+                        {{ icon('jobOfferSubscribe') }}
+                      </span>
+                    </div>
+                  </span>
                   {% if auth_check() %}
                     <span
                         class="btn btn-secondary me-1"
@@ -103,7 +113,7 @@
                   {% endif %}
                   {% if not job.is_expired %}
                     {% if job.enable_apply %}
-                      <a class="btn btn-primary"
+                      <a class="btn btn-primary px-4"
                          rel="nofollow"
                          href="{{ not preview ? route('job.application', [job.id]) : 'javascript:' }}"
                           {{ is_applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>
@@ -127,13 +137,11 @@
                   {{ job.firm.name }}
                 </a>
               {% endif %}
-
               {% if job.salary_from or job.salary_to %}
                 <p class="salary float-end">
                   {% include 'job.partials.salary' with {net_label: true, rate_label: true} %}
                 </p>
               {% endif %}
-
               {% if job.locations[0].city is not empty %}
                 <ul class="metadata list-inline location">
                   <li class="list-inline-item" title="Lokalizacja">
@@ -266,7 +274,14 @@
     </div>
 
     <aside class="col-md-3">
-      {% if can('job-update') %}
+      <div class="mb-3">
+        <a href="{{ route('job.submit') }}" class="btn btn-secondary d-block">
+          {{ icon('jobOfferNew') }}
+          Dodaj ofertę pracy
+        </a>
+      </div>
+
+      {% if can('job-update') or can('delete', job) %}
         <section id="box-job-firm" class="box">
           <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
             <ul class="list-unstyled">
@@ -288,54 +303,33 @@
                   </p>
                 </li>
               {% endif %}
+              <li>
+                <span class="text-muted">Zarządzanie ofertą</span>
+                {% if not job.is_expired and can('update', job) %}
+                  <div>
+                    <a href="{{ route('job.submit', [job.id]) }}">
+                      {{ icon('jobOfferEdit') }}
+                      Edytuj ofertę
+                    </a>
+                  </div>
+                {% endif %}
+                {% if can('delete', job) %}
+                  <div>
+                    <a href="#modal-delete" data-bs-toggle="modal">
+                      {{ icon('jobOfferRemove') }}
+                      Usuń tę ofertę pracy
+                    </a>
+                  </div>
+                {% endif %}
+              </li>
             </ul>
+            {% import 'legacyComponents.modals' as modals %}
+            {{ form_open({'url': route('job.delete', [job.id]) }) }}
+            {{ modals.confirm('Czy chcesz usunąć tę ofertę pracy?', 'Usuwanie', 'modal-delete') }}
+            {{ form_close() }}
           </div>
         </section>
       {% endif %}
-
-      <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
-        {% import 'legacyComponents.modals' as modals %}
-
-        <ul v-cloak id="js-sidemenu" class="side-menu">
-          <li>
-            <a @click="checkAuth(subscribe)" :class="{'on': isSubscribed(job)}" class="btn-subscribe" href="javascript:" rel="nofollow">
-              <span v-if="isSubscribed(job)">
-                {{ icon('jobOfferSubscribed') }}
-                Usuń z ulubionych
-              </span>
-              <span v-else>
-                {{ icon('jobOfferSubscribe') }}
-                Dodaj do ulubionych
-              </span>
-            </a>
-          </li>
-          {% if not job.is_expired and can('update', job) %}
-            <li>
-              <a class="btn-edit" href="{{ route('job.submit', [job.id]) }}">
-                {{ icon('jobOfferEdit') }}
-                Edycja oferty
-              </a>
-            </li>
-          {% endif %}
-          <li>
-            <a class="btn-add" href="{{ route('job.submit') }}">
-              {{ icon('jobOfferNew') }}
-              Dodaj ofertę pracy
-            </a>
-          </li>
-          {% if can('delete', job) %}
-            <li>
-              <a class="btn-delete" href="#modal-delete" data-bs-toggle="modal">
-                {{ icon('jobOfferRemove') }}
-                Usuń tę ofertę pracy
-              </a>
-            </li>
-          {% endif %}
-        </ul>
-        {{ form_open({'url': route('job.delete', [job.id]) }) }}
-        {{ modals.confirm('Czy chcesz usunąć tę ofertę pracy?', 'Usuwanie', 'modal-delete') }}
-        {{ form_close() }}
-      </div>
 
       <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
         <ul class="list-unstyled">
