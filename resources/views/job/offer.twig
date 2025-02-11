@@ -391,42 +391,40 @@
         </div>
       {% endif %}
 
-      <div class="neon-tile neon-rounded p-3 mb-3">
-        {% if tags|length > 0 %}
-          <section class="requirements">
-            {% for category, tags in tags %}
-              <div class="mb-3">
-                <span class="text-muted">{{ category }}</span>
-                <ul class="tag-clouds tag-clouds-md">
-                  {% for tag in tags %}
-                    <li>
-                      <a href="{{ route('job.tag', [tag.name|url_encode]) }}" title="Znajdź oferty zawierające {{ tag.real_name|default(tag.name) }}" class="neon-tag">
-                        {{ tag.real_name|default(tag.name) }}
-                      </a>
-                      {% set tooltip = ['mile widziane', 'średnio zaawansowany', 'zaawansowany'][tag.pivot.priority] %}
-                      {% apply spaceless %}
-                        <div class="progress-bar-dotted" title="{{ tooltip }}">
-                          {% for i in 1..3 %}
-                            {% if tag.pivot.priority >= i %}
-                              <span class="text-primary">
-                                {{ icon('jobOfferRequirementRanked') }}
-                              </span>
-                            {% else %}
-                              <span>
-                                {{ icon('jobOfferRequirementRank') }}
-                              </span>
-                            {% endif %}
-                          {% endfor %}
-                        </div>
-                      {% endapply %}
-                    </li>
-                  {% endfor %}
-                </ul>
-              </div>
-            {% endfor %}
-          </section>
-        {% endif %}
-      </div>
+      {% if tags|length > 0 %}
+        <div class="neon-tile neon-rounded p-3 mb-3">
+          {% for category, tags in tags %}
+            <div class="mb-3">
+              <span class="text-muted">{{ category }}</span>
+              <ul class="tag-clouds tag-clouds-md">
+                {% for tag in tags %}
+                  <li>
+                    <a href="{{ route('job.tag', [tag.name|url_encode]) }}" title="Znajdź oferty zawierające {{ tag.real_name|default(tag.name) }}" class="neon-tag">
+                      {{ tag.real_name|default(tag.name) }}
+                    </a>
+                    {% set tooltip = ['mile widziane', 'średnio zaawansowany', 'zaawansowany'][tag.pivot.priority] %}
+                    {% apply spaceless %}
+                      <div class="progress-bar-dotted" title="{{ tooltip }}">
+                        {% for i in 1..3 %}
+                          {% if tag.pivot.priority >= i %}
+                            <span class="text-primary">
+                              {{ icon('jobOfferRequirementRanked') }}
+                            </span>
+                          {% else %}
+                            <span>
+                              {{ icon('jobOfferRequirementRank') }}
+                            </span>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                    {% endapply %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
 
       <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
         <ul class="list-unstyled">
