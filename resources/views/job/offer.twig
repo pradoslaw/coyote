@@ -76,7 +76,200 @@
 
       <div class="tab-content">
         <div id="offer" class="tab-pane active neon-tile neon-rounded py-4 mb-3">
-          {% include 'job.partials.offer' %}
+          <div id="job-offer" class="card-body px-4">
+            {% if job.firm.logo.filename %}
+              <div>
+                <a title="Zobacz wszystkie oferty {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.slug]) }}">
+                  <img class="i-45" src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}">
+                </a>
+              </div>
+            {% endif %}
+            <section>
+              <h1>
+                {{ link_to_route('job.offer', job.title, [job.id|default(0), job.slug]) }}
+              </h1>
+              {% if job.firm.name %}
+                <a class="employer" title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.slug]) }}">{{ job.firm.name }}</a>
+              {% endif %}
+
+              {% if job.salary_from or job.salary_to %}
+                <p class="salary float-end">
+                  {% include 'job.partials.salary' with {net_label: true, rate_label: true} %}
+                </p>
+              {% endif %}
+
+              {% if job.locations[0].city is not empty %}
+                <ul class="metadata list-inline location">
+                  <li class="list-inline-item" title="Lokalizacja">
+                    {{ icon('jobOfferLocation') }}
+                    {% include 'job.partials.location' with {'locations': job.locations} %}
+                  </li>
+                </ul>
+              {% endif %}
+            </section>
+
+            <ul class="about-items list-group list-group-horizontal row">
+              <li class="list-group-item col-sm-6">
+                {{ icon('jobOfferContract') }}
+                <p>
+                  <strong>{{ employment_list[job.employment] }}</strong>
+                  <small>Umowa</small>
+                </p>
+              </li>
+
+              {% if job.seniority %}
+                <li class="list-group-item col-sm-6">
+                  {{ icon('jobOfferSeniority') }}
+                  <p>
+                    <strong>{{ seniority_list[job.seniority] }}</strong>
+                    <small>Poziom doświadczenia</small>
+                  </p>
+                </li>
+              {% endif %}
+
+              {% if job.firm.employees %}
+                <li class="list-group-item col-sm-6">
+                  {{ icon('jobOfferCompanyEmployees') }}
+                  <p>
+                    <strong>{{ employees_list[job.firm.employees] }} pracowników</strong>
+                    <small>Rozmiar firmy</small>
+                  </p>
+                </li>
+              {% endif %}
+
+              {% if job.firm.founded %}
+                <li class="list-group-item col-sm-6">
+                  {{ icon('jobOfferCompanyEstablishmentYear') }}
+                  <p>
+                    <strong>{{ job.firm.founded }}</strong>
+                    <small>Rok założenia firmy</small>
+                  </p>
+                </li>
+              {% endif %}
+
+              {% if job.firm.website %}
+                <li class="list-group-item col-sm-6">
+                  {{ icon('jobOfferCompanyWebsite') }}
+                  <p>
+                    <strong><a href="{{ job.firm.website }}">{{ job.firm.website }}</a></strong>
+                    <small>WWW</small>
+                  </p>
+                </li>
+              {% endif %}
+            </ul>
+
+            {% if job.description %}
+              <section>
+                <h3 class="mt-3">Opis oferty</h3>
+
+                <div class="text">
+                  {{ job.description|raw }}
+                </div>
+              </section>
+            {% endif %}
+
+            {% if job.features %}
+              <section>
+                <h3 class="mt-3 neon-color-link">
+                  Metodologia pracy
+                </h3>
+                <ul class="features list-group list-group-horizontal row">
+                  {% for feature in job.features %}
+                    <li class="list-group-item col-12 col-sm-6 {{ feature.pivot.checked ? 'checked' }}">
+                      {% if feature.pivot.checked %}
+                        {{ icon('jobOfferFeaturePresent') }}
+                      {% else %}
+                        {{ icon('jobOfferFeatureMissing') }}
+                      {% endif %}
+                      {{ feature.name }}
+                      {% if feature.pivot.getAttribute('value') %}
+                        <small class="text-muted"> ― {{ feature.pivot.getAttribute('value') }}</small>
+                      {% endif %}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </section>
+            {% endif %}
+
+            {% if job.firm.benefits|length %}
+              <section>
+                <h3 class="mt-3">Oferujemy</h3>
+
+                <ul class="benefits list-group list-group-horizontal row">
+                  {% for benefit in job.firm.benefits %}
+                    <li class="list-group-item col-12 col-sm-6 checked">
+                      {{ icon('jobOfferBenefit') }}
+                      {{ benefit.name }}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </section>
+            {% endif %}
+
+            {% if job.firm.name and (assets|length > 0 or job.firm.youtube_url) %}
+              <section>
+                <h3 class="mt-3">Praca w {{ job.firm.name }}</h3>
+
+                <div id="gallery">
+                  {% for asset in assets %}
+                    <a href="{{ asset.url }}" data-toggle="lightbox"><img alt="{{ asset.name }}" src="{{ asset.url }}"></a>
+                  {% endfor %}
+
+                  {% if job.firm.youtube_url and assets|length > 0 %}
+                    <div class="yt">
+                      <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="youtube-player" src="{{ job.firm.youtube_url }}" frameborder="0" allowfullscreen></iframe>
+                      </div>
+                    </div>
+                  {% endif %}
+                </div>
+
+                {% if job.firm.youtube_url and not assets|length %}
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="youtube-player" src="{{ job.firm.youtube_url }}" frameborder="0" allowfullscreen></iframe>
+                  </div>
+                {% endif %}
+              </section>
+            {% endif %}
+
+            {% if job.firm.name and (job.firm.headline or job.firm.description) %}
+              <section>
+                <h3 class="mt-3">O {{ job.firm.name }}</h3>
+
+                <div class="text">
+                  {% if job.firm.headline %}
+                    <blockquote>{{ job.firm.headline }}</blockquote>
+                  {% endif %}
+
+                  {{ job.firm.description|raw }}
+                </div>
+              </section>
+            {% endif %}
+
+            {% if job.firm.longitude and job.firm.latitude %}
+              <div id="map">
+                <vue-map class="h-100" latitude="{{ job.firm.latitude }}" longitude="{{ job.firm.longitude }}">
+                  <vue-marker latitude="{{ job.firm.latitude }}" longitude="{{ job.firm.longitude }}"></vue-marker>
+                </vue-map>
+              </div>
+            {% endif %}
+
+            {% if not job.is_expired %}
+              {% if not job.enable_apply %}
+                <h3 id="apply" class="mt-3">Informacje o rekrutacji</h3>
+
+                <div class="text">
+                  {{ job.recruitment|raw }}
+                </div>
+              {% else %}
+                <div id="apply" class="mt-4">
+                  <a class="btn btn-primary" rel="nofollow" href="{{ not preview ? route('job.application', [job.id]) : 'javascript:' }}" {{ is_applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>
+                    Aplikuj na to stanowisko
+                  </a>
+                </div>
+              {% endif %}
+            {% endif %}
+          </div>
         </div>
 
         {% if is_author %}
