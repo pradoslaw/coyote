@@ -256,46 +256,42 @@
             {% endif %}
           </div>
         </div>
-
         {% if is_author %}
           <div id="applications" class="card tab-pane">
             {% include 'job.partials.applications' %}
           </div>
         {% endif %}
       </div>
-
       {% include 'job.partials.comments' %}
     </div>
 
     <aside class="col-md-3">
-      <div class="neon-tile neon-rounded p-3 mb-3">
+      {% if can('job-update') %}
+        <section id="box-job-firm" class="box">
+          <div class="neon-tile neon-rounded p-3 mb-3">
+            <ul class="list-unstyled mb-0">
+              <li title="Data opublikowania" class="mb-2">
+                {{ icon('jobOfferPublishDate') }}
+                {{ job.boost_at|format_date }}
+              </li>
+              <li title="Liczba odsłon" class="counter mb-2">
+                {{ icon('jobOfferViews') }}
+                {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
+              </li>
+              {% if not job.is_expired %}
+                <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
+                  {{ icon('jobOfferExpiresInDays') }}
+                  {{ job.deadline }} dni do końca
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </section>
+      {% endif %}
+
+      <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
         {% import 'legacyComponents.modals' as modals %}
-        {% if not job.is_expired %}
-          <div class="mb-4">
-            {% set attr = {} %}
 
-            {% if job.enable_apply %}
-              {% set url = route('job.application', [job.id]) %}
-            {% elseif is_url(job.getOriginal('recruitment')) %}
-              {% set url = job.getOriginal('recruitment') %}
-              {% set attr = attr|merge({'target': '_blank'}) %}
-            {% else %}
-              {% set url = "#apply" %}
-            {% endif %}
-
-            {{ link_to(url, 'Aplikuj', attr|merge({class: 'btn d-block btn-primary col-12 col-lg-6'})) }}
-          </div>
-
-          <div class="row mb-4">
-            <div class="col-12">
-              <div>Dodatkowe pytania?</div>
-              {{ icon('jobOfferAdditionalQuestions') }}
-              <a href="#comments" style="font-size: 15px" class="text-muted">
-                Zadaj pytanie dotyczące tego ogłoszenia
-              </a>
-            </div>
-          </div>
-        {% endif %}
         <ul v-cloak id="js-sidemenu" class="side-menu">
           <li>
             <a @click="checkAuth(subscribe)" :class="{'on': isSubscribed(job)}" class="btn-subscribe" href="javascript:" rel="nofollow">
@@ -355,30 +351,33 @@
               </p>
             </li>
           {% endif %}
+          {% if not job.is_expired %}
+            <div>
+              {% set attr = {} %}
+              {% if job.enable_apply %}
+                {% set url = route('job.application', [job.id]) %}
+              {% elseif is_url(job.getOriginal('recruitment')) %}
+                {% set url = job.getOriginal('recruitment') %}
+                {% set attr = attr|merge({'target': '_blank'}) %}
+              {% else %}
+                {% set url = "#apply" %}
+              {% endif %}
+              {{ link_to(url, 'Aplikuj', attr|merge({class: 'btn d-block btn-primary w-full'})) }}
+            </div>
+          {% endif %}
         </ul>
       </div>
 
-      {% if can('job-update') %}
-        <section id="box-job-firm" class="box">
-          <div class="neon-tile neon-rounded p-3 mb-3">
-            <ul class="list-unstyled mb-0">
-              <li title="Data opublikowania" class="mb-2">
-                {{ icon('jobOfferPublishDate') }}
-                {{ job.boost_at|format_date }}
-              </li>
-              <li title="Liczba odsłon" class="counter mb-2">
-                {{ icon('jobOfferViews') }}
-                {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
-              </li>
-              {% if not job.is_expired %}
-                <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
-                  {{ icon('jobOfferExpiresInDays') }}
-                  {{ job.deadline }} dni do końca
-                </li>
-              {% endif %}
-            </ul>
+      {% if not job.is_expired %}
+        <div class="neon-tile neon-rounded p-3 mb-3">
+          <span class="text-muted">Dodatkowe pytania?</span>
+          <div>
+            {{ icon('jobOfferAdditionalQuestions') }}
+            <a href="#comments">
+              Zadaj pytanie dotyczące tego ogłoszenia
+            </a>
           </div>
-        </section>
+        </div>
       {% endif %}
 
       <div class="neon-tile neon-rounded p-3 mb-3">
@@ -386,7 +385,7 @@
           <section class="requirements">
             {% for category, tags in tags %}
               <div class="mb-3">
-                {{ category }}
+                <span class="text-muted">{{ category }}</span>
                 <ul class="tag-clouds tag-clouds-md">
                   {% for tag in tags %}
                     <li>
