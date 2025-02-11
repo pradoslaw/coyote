@@ -86,6 +86,10 @@
                            src="{{ logo(job.firm.logo) }}"
                            alt="{{ job.firm.name }}">
                     </a>
+                  {% else %}
+                    <div class="neon-placeholder size-100 rounded-full d-flex justify-content-center align-items-center" style="font-size:2.0em;">
+                      {{ icon('jobOfferMissingLogo') }}
+                    </div>
                   {% endif %}
                 </div>
                 <div>
