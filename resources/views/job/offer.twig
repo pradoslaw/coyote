@@ -266,11 +266,44 @@
         </div>
         {% if is_author %}
           <div id="applications" class="card tab-pane">
-            {% include 'job.partials.applications' %}
+            <div class="card-body">
+              <table class="table table-striped">
+                <tr>
+                  <th>Imię i nazwisko</th>
+                  <th>Adres e-mail</th>
+                  <th>Nr tel</th>
+                  <th>CV / Resume</th>
+                </tr>
+                {% for application in applications %}
+                  <tr>
+                    <td>{{ application.name }}</td>
+                    <td>{{ application.email }}</td>
+                    <td>{{ application.phone ?: '--' }}</td>
+                    <td>{{ application.cv ? link_to_route('job.application.download', application.realFilename(), [job.id, application.id]) : '--' }}</td>
+                  </tr>
+                {% else %}
+                  <tr>
+                    <td colspan="3" class="text-center">Brak kandydatów dla tej oferty pracy.</td>
+                  </tr>
+                {% endfor %}
+              </table>
+            </div>
           </div>
         {% endif %}
       </div>
-      {% include 'job.partials.comments' %}
+      <div id="js-comments" v-cloak>
+        <div class="mb-2" id="comments">
+          {{ icon('jobOfferComments') }}
+          Pytania i odpowiedzi
+        </div>
+        <vue-comment-form v-if="isAuthorized" resource-id="{{ job.id }}" resource="Coyote\Job"></vue-comment-form>
+        <div v-if="commentsCount > 0" class="card">
+          <div class="card-body">
+            <vue-comment v-for="comment in comments" :key="comment.id" :comment="comment"></vue-comment>
+          </div>
+        </div>
+        <vue-notifications></vue-notifications>
+      </div>
     </div>
 
     <aside class="col-md-3">
