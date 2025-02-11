@@ -1,5 +1,8 @@
 <template>
-  <vue-tinymce v-model="valueLocal" :init="options"/>
+  <vue-tinymce
+    :api-key="apiKey"
+    v-model="valueLocal"
+    :init="options"/>
 </template>
 
 <script lang="ts">
@@ -16,9 +19,10 @@ export default {
   },
   data() {
     return {
+      apiKey: atob('NXRqNW1mang1MDY4MXI2MnNreGhxa2g2dzlnMGl4Y2trdGg3eDl1bHVoYmI2bDl1'),
       options: {
-        selector: "textarea",
-        plugins: ["advlist lists spellchecker", "code", "paste", "autoresize"],
+        selector: 'textarea',
+        plugins: ['lists', 'codesample', 'link'],
         toolbar1: "bold italic underline strikethrough | bullist numlist | undo redo | outdent indent",
         menubar: false,
         toolbar_items_size: 'small',
@@ -27,7 +31,7 @@ export default {
         force_br_newlines: false,
         force_p_newlines: false,
         forced_root_block: '',
-        autoresize_bottom_margin: 20,
+        autoresize_bottom_margin: 10,
         convert_urls: false,
         indentation: '16px',
         content_style: "body, * {font-size: 14px !important; font-family: Arial, sans-serif !important;}",
