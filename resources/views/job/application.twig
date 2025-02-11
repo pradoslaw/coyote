@@ -4,21 +4,19 @@
 {% import 'legacyComponents.widgets' as widgets %}
 
 {% block container %}
-
   <script>
     var application = {{ application|json_encode|raw }};
     var job = {{ job|json_encode|raw }};
   </script>
 
   <div class="row" style="margin-top: 20px">
-    <div class="col-md-9">
+    <div class="col-md-1 d-none d-md-block"></div>
+    <div class="col-md-10">
       <div class="card">
         <div id="js-application" class="card-body">
           <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</h1>
           <h3 class="mb-3">Wypełnij poniższy formularz, aby zgłosić swoją ofertę</h3>
-
           <vue-form :application="application" :job="job"></vue-form>
-
           <p class="text-center text-muted mt-3 mb-3">
             <small>Wysyłając ten formularz akceptujesz nasz <a href="/Regulamin">Regulamin</a> oraz <a href="/Polityka_prywatności">Politykę prywatności</a>.</small>
           </p>
@@ -26,17 +24,10 @@
         </div>
       </div>
     </div>
-
-    <aside class="col-md-3">
-      {% include 'job.partials.sidemenu' %}
-      {{ render_block('job_ads') }}
-    </aside>
   </div>
 {% endblock %}
 
 {% block body %}
   {{ parent() }}
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.11/tinymce.min.js" integrity="sha512-3tlegnpoIDTv9JHc9yJO8wnkrIkq7WO7QJLi5YfaeTmZHvfrb1twMwqT4C0K8BLBbaiR6MOo77pLXO1/PztcLg==" crossorigin="anonymous"></script>
-
 {% endblock %}
