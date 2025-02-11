@@ -113,27 +113,6 @@
   padding-left: 0;
 }
 
-#box-job-firm {
-  ul {
-    margin-bottom: 0;
-
-    li {
-      padding:   5px 0;
-      color:     $gray;
-      font-size: $font-size-base - 0.1rem;
-
-      a {
-        color: inherit;
-      }
-
-      i {
-        margin-right: 4px;
-        font-size:    $font-size-base + 0.1rem;
-      }
-    }
-  }
-}
-
 // Navigation (back to all offers link)
 // -------------------------------------
 

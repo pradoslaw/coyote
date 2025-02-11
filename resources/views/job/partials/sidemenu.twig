@@ -1,7 +1,7 @@
 {% import 'legacyComponents.modals' as modals %}
 
 {% if not job.is_expired %}
-  <div class="mb-5">
+  <div class="mb-4">
     {% set attr = {} %}
 
     {% if job.enable_apply %}
@@ -18,7 +18,7 @@
 
   <div class="row mb-4">
     <div class="col-12">
-      <h3>Dodatkowe pytania?</h3>
+      <div>Dodatkowe pytania?</div>
       {{ icon('jobOfferAdditionalQuestions') }}
       <a href="#comments" style="font-size: 15px" class="text-muted">
         Zadaj pytanie dotyczące tego ogłoszenia

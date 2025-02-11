@@ -283,41 +283,34 @@
     </div>
 
     <aside class="col-md-3">
-      {% include 'job.partials.sidemenu' %}
+      <div class="neon-tile neon-rounded p-3 mb-3">
+        {% include 'job.partials.sidemenu' %}
+      </div>
 
       {% if can('job-update') %}
         <section id="box-job-firm" class="box">
-          <h4>
-            {{ icon('jobOfferDetails') }}
-            Informacje o ofercie
-          </h4>
-
-          <div class="card">
-            <div class="card-body">
-              <ul class="list-unstyled">
-                <li title="Data opublikowania">
-                  {{ icon('jobOfferPublishDate') }}
-                  {{ job.boost_at|format_date }}
+          <div class="neon-tile neon-rounded p-3 mb-3">
+            <ul class="list-unstyled mb-0">
+              <li title="Data opublikowania" class="mb-2">
+                {{ icon('jobOfferPublishDate') }}
+                {{ job.boost_at|format_date }}
+              </li>
+              <li title="Liczba odsłon" class="counter mb-2">
+                {{ icon('jobOfferViews') }}
+                {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
+              </li>
+              {% if not job.is_expired %}
+                <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
+                  {{ icon('jobOfferExpiresInDays') }}
+                  {{ job.deadline }} dni do końca
                 </li>
-
-                <li class="counter" title="Liczba odsłon">
-                  {{ icon('jobOfferViews') }}
-                  {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
-                </li>
-                {% if not job.is_expired %}
-                  <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
-                    {{ icon('jobOfferExpiresInDays') }}
-                    {{ job.deadline }} dni do końca
-                  </li>
-                {% endif %}
-              </ul>
-            </div>
+              {% endif %}
+            </ul>
           </div>
         </section>
       {% endif %}
-
       <section class="box">
-        <div class="card p-3">
+        <div class="neon-tile neon-rounded p-3 mb-3">
           {% if tags|length > 0 %}
             <section class="requirements">
               {% for category, tags in tags %}
@@ -354,21 +347,13 @@
           {% endif %}
         </div>
       </section>
-
       {% if mlt|length %}
         <section class="box">
-          <h4>
-            {{ icon('jobOfferMoreLikeThis') }}
-            Podobne oferty
-          </h4>
-          <div class="card card-media">
-            <div class="card-body">
-              {% include 'legacyComponents.jobs' with {'jobs': mlt} %}
-            </div>
+          <div class="neon-tile neon-rounded p-3 card-media">
+            {% include 'legacyComponents.jobs' with {'jobs': mlt} %}
           </div>
         </section>
       {% endif %}
-
     </aside>
   </div>
 {% endblock %}
