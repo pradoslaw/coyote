@@ -2,7 +2,9 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Carbon\Carbon;
 use Coyote\Currency;
+use Coyote\Domain\RouteVisits;
 use Coyote\Http\Resources\JobResource;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Repositories\Criteria\EagerLoading;
@@ -19,6 +21,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Jenssegers\Agent\Agent;
 
 class HomeController extends BaseController
 {
@@ -69,6 +72,11 @@ class HomeController extends BaseController
 
     private function load(): View
     {
+        $visits = app(RouteVisits::class);
+        $agent = new Agent();
+        if (!$agent->isRobot($this->request->userAgent())) {
+            $visits->visit($this->request->path(), Carbon::now()->toDateString());
+        }
         // set sort by score if keyword was provided and no sort was specified
         $defaultSort = $this->request->input('sort', $this->request->filled('q') ? SearchBuilder::SCORE : SearchBuilder::DEFAULT_SORT);
 
