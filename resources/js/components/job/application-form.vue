@@ -25,7 +25,7 @@
     </vue-form-group>
 
     <vue-form-group :errors="errors['salary']" label="Minimalne oczekiwania wynagrodzenie">
-      <vue-select v-model="applicationSync.salary" :options="salaryChoices" placeholder="Do negocjacji"></vue-select>
+      <vue-select v-model="applicationSync.salary" :options="salaryChoices" placeholder="Nie chcę podawać"></vue-select>
     </vue-form-group>
 
     <vue-form-group :errors="errors['dismissal_period']" label="Obecny okres wypowiedzenia">
