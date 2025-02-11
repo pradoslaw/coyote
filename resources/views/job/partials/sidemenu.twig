@@ -31,8 +31,8 @@
   <li>
     <a @click="checkAuth(subscribe)" :class="{'on': isSubscribed(job)}" class="btn-subscribe" href="javascript:" rel="nofollow">
       <span v-if="isSubscribed(job)">
-        Usuń z ulubionych
         {{ icon('jobOfferSubscribed') }}
+        Usuń z ulubionych
       </span>
       <span v-else>
         {{ icon('jobOfferSubscribe') }}
