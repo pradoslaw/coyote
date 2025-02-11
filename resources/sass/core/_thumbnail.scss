@@ -1,15 +1,24 @@
 $thumbnail-size: (
-        95: 95px,
-        70: 70px,
-        35: 35px,
-        38: 38px,
-        45: 45px,
-        16: 16px,
-);
+                   95: 95px,
+                   70: 70px,
+                   35: 35px,
+                   38: 38px,
+                   45: 45px,
+                   16: 16px,
+                 );
 
 @each $name, $size in $thumbnail-size {
   .i-#{$name} {
-    width: $size;
+    width:  $size;
     height: $size;
   }
+}
+
+.size-75 {
+  width:  75px;
+  height: 75px;
+}
+
+.rounded-full {
+  border-radius: 100%;
 }

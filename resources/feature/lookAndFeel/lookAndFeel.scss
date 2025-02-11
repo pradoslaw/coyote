@@ -166,8 +166,8 @@ $modern-tile-background-dark:  style.$neutral-800;
 }
 
 @include feel.var(--zebra-background,
-        (light: #f6f7f9, dark: #212425),
-        (light: #f6f6f6, dark: #1e1e1e));
+  (light: #f6f7f9, dark: #212425),
+  (light: #f6f6f6, dark: #1e1e1e));
 
 .neon-zebra__header {
   background: var(--zebra-background);
@@ -328,4 +328,25 @@ $modern-tile-background-dark:  style.$neutral-800;
   border-top-width: 1px;
   border-top-style: solid;
   @include theme.property(border-top-color, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
+}
+
+@function gradient($from, $to) {
+  @return linear-gradient(90deg, $from 0%, $to 100%);
+}
+
+.section-banner {
+  border-radius: 8px;
+  @include feel.modern {
+    @include theme.property(background,
+      gradient(#dcf2e3, $modern-tile-background-light),
+      gradient(style.$green-800, $modern-tile-background-dark)
+    );
+  }
+  @include feel.legacy {
+    $color: color-mix(in srgb, #80a41a, transparent 66%);
+    @include theme.property(background,
+      gradient($color, $modern-tile-background-light),
+      gradient($color, $modern-tile-background-dark)
+    );
+  }
 }

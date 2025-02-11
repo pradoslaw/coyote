@@ -2,7 +2,7 @@
 {% set salary_to = job.salary_to|number_format(0, ' ', ' ') %}
 {% set net_label = net_label|default(false) %}
 
-<span class="neon-placeholder p-2 neon-rounded">
+<span class="neon-placeholder p-2 neon-rounded me-2">
   {% if salary_from == salary_to %}
     {{ salary_from }}
   {% elseif salary_from and salary_to %}

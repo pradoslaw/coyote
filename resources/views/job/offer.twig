@@ -75,21 +75,53 @@
       {% endif %}
 
       <div class="tab-content">
-        <div id="offer" class="tab-pane active neon-tile neon-rounded py-4 mb-3">
-          <div id="job-offer" class="card-body px-4">
-            {% if job.firm.logo.filename %}
-              <div>
-                <a title="Zobacz wszystkie oferty {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.slug]) }}">
-                  <img class="i-45" src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}">
-                </a>
+        <div id="offer" class="tab-pane active neon-tile neon-rounded py-2 pb-4 mb-3">
+          <div class="px-2" style="margin-bottom:64px;">
+            <div class="section-banner px-4" style="height:80px; padding-top:80px;">
+              <div class="d-flex justify-content-between align-items-center" style="height:0;">
+                <div>
+                  {% if job.firm.logo.filename %}
+                    <a title="Zobacz wszystkie oferty {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.slug]) }}">
+                      <img class="size-75 rounded-full"
+                           src="{{ logo(job.firm.logo) }}"
+                           alt="{{ job.firm.name }}">
+                    </a>
+                  {% endif %}
+                </div>
+                <div>
+                  {% if auth_check() %}
+                    <span
+                        class="btn btn-secondary me-1"
+                        data-url="{{ route('job.offer', [job.id, job.slug], false) }}"
+                        data-metadata="{{ {"Coyote\\Job": job.id}|encrypt }}">
+                      {{ icon('jobOfferReport') }}
+                    </span>
+                  {% endif %}
+                  {% if not job.is_expired %}
+                    {% if job.enable_apply %}
+                      <a class="btn btn-primary"
+                         rel="nofollow"
+                         href="{{ not preview ? route('job.application', [job.id]) : 'javascript:' }}"
+                          {{ is_applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>
+                        Aplikuj
+                      </a>
+                    {% endif %}
+                  {% endif %}
+                </div>
               </div>
-            {% endif %}
+            </div>
+          </div>
+          <div id="job-offer" class="card-body px-4">
             <section>
               <h1>
                 {{ link_to_route('job.offer', job.title, [job.id|default(0), job.slug]) }}
               </h1>
               {% if job.firm.name %}
-                <a class="employer" title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.slug]) }}">{{ job.firm.name }}</a>
+                <a class="employer text-muted" 
+                   title="Zobacz oferty pracy z firmy {{ job.firm.name }}" 
+                   href="{{ route('job.firm', [job.firm.slug]) }}">
+                  {{ job.firm.name }}
+                </a>
               {% endif %}
 
               {% if job.salary_from or job.salary_to %}
@@ -257,7 +289,6 @@
             {% if not job.is_expired %}
               {% if not job.enable_apply %}
                 <h3 id="apply" class="mt-3">Informacje o rekrutacji</h3>
-
                 <div class="text">
                   {{ job.recruitment|raw }}
                 </div>

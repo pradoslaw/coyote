@@ -65,19 +65,6 @@
       </a>
     </li>
   {% endif %}
-
-  {% if auth_check() %}
-    <li>
-      <a class="btn-report"
-         href="javascript:"
-         rel="nofollow"
-         data-url="{{ route('job.offer', [job.id, job.slug], false) }}"
-         data-metadata="{{ {"Coyote\\Job": job.id}|encrypt }}">
-        {{ icon('jobOfferReport') }}
-        Zgłoś naruszenie
-      </a>
-    </li>
-  {% endif %}
 </ul>
 
 {{ form_open({'url': route('job.delete', [job.id]) }) }}
