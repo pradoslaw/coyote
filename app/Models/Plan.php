@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $discount
  * @property int $length
  * @property array $benefits
- * @property bool $is_default
+ * @property int $is_default
  * @property int $boost
  */
 class Plan extends Model
