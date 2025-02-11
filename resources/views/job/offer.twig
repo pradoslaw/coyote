@@ -121,8 +121,8 @@
                 {{ link_to_route('job.offer', job.title, [job.id|default(0), job.slug]) }}
               </h1>
               {% if job.firm.name %}
-                <a class="employer text-muted" 
-                   title="Zobacz oferty pracy z firmy {{ job.firm.name }}" 
+                <a class="employer text-muted"
+                   title="Zobacz oferty pracy z firmy {{ job.firm.name }}"
                    href="{{ route('job.firm', [job.firm.slug]) }}">
                   {{ job.firm.name }}
                 </a>
@@ -143,56 +143,6 @@
                 </ul>
               {% endif %}
             </section>
-
-            <ul class="about-items list-group list-group-horizontal row">
-              <li class="list-group-item col-sm-6">
-                {{ icon('jobOfferContract') }}
-                <p>
-                  <strong>{{ employment_list[job.employment] }}</strong>
-                  <small>Umowa</small>
-                </p>
-              </li>
-
-              {% if job.seniority %}
-                <li class="list-group-item col-sm-6">
-                  {{ icon('jobOfferSeniority') }}
-                  <p>
-                    <strong>{{ seniority_list[job.seniority] }}</strong>
-                    <small>Poziom doświadczenia</small>
-                  </p>
-                </li>
-              {% endif %}
-
-              {% if job.firm.employees %}
-                <li class="list-group-item col-sm-6">
-                  {{ icon('jobOfferCompanyEmployees') }}
-                  <p>
-                    <strong>{{ employees_list[job.firm.employees] }} pracowników</strong>
-                    <small>Rozmiar firmy</small>
-                  </p>
-                </li>
-              {% endif %}
-
-              {% if job.firm.founded %}
-                <li class="list-group-item col-sm-6">
-                  {{ icon('jobOfferCompanyEstablishmentYear') }}
-                  <p>
-                    <strong>{{ job.firm.founded }}</strong>
-                    <small>Rok założenia firmy</small>
-                  </p>
-                </li>
-              {% endif %}
-
-              {% if job.firm.website %}
-                <li class="list-group-item col-sm-6">
-                  {{ icon('jobOfferCompanyWebsite') }}
-                  <p>
-                    <strong><a href="{{ job.firm.website }}">{{ job.firm.website }}</a></strong>
-                    <small>WWW</small>
-                  </p>
-                </li>
-              {% endif %}
-            </ul>
 
             {% if job.description %}
               <section>
@@ -322,6 +272,27 @@
         {% include 'job.partials.sidemenu' %}
       </div>
 
+      <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
+        <ul class="list-unstyled">
+          <li>
+            <small class="text-muted">Umowa</small>
+            <p>
+              {{ icon('jobOfferContract') }}
+              {{ employment_list[job.employment] }}
+            </p>
+          </li>
+          {% if job.seniority %}
+            <li>
+              <small class="text-muted">Poziom doświadczenia</small>
+              <p>
+                {{ icon('jobOfferSeniority') }}
+                {{ seniority_list[job.seniority] }}
+              </p>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+
       {% if can('job-update') %}
         <section id="box-job-firm" class="box">
           <div class="neon-tile neon-rounded p-3 mb-3">
@@ -344,50 +315,80 @@
           </div>
         </section>
       {% endif %}
-      <section class="box">
-        <div class="neon-tile neon-rounded p-3 mb-3">
-          {% if tags|length > 0 %}
-            <section class="requirements">
-              {% for category, tags in tags %}
-                <div class="mb-3">
-                  {{ category }}
-                  <ul class="tag-clouds tag-clouds-md">
-                    {% for tag in tags %}
-                      <li>
-                        <a href="{{ route('job.tag', [tag.name|url_encode]) }}" title="Znajdź oferty zawierające {{ tag.real_name|default(tag.name) }}" class="neon-tag">
-                          {{ tag.real_name|default(tag.name) }}
-                        </a>
-                        {% set tooltip = ['mile widziane', 'średnio zaawansowany', 'zaawansowany'][tag.pivot.priority] %}
-                        {% apply spaceless %}
-                          <div class="progress-bar-dotted" title="{{ tooltip }}">
-                            {% for i in 1..3 %}
-                              {% if tag.pivot.priority >= i %}
-                                <span class="text-primary">
-                                  {{ icon('jobOfferRequirementRanked') }}
-                                </span>
-                              {% else %}
-                                <span>
-                                  {{ icon('jobOfferRequirementRank') }}
-                                </span>
-                              {% endif %}
-                            {% endfor %}
-                          </div>
-                        {% endapply %}
-                      </li>
-                    {% endfor %}
-                  </ul>
-                </div>
-              {% endfor %}
-            </section>
+
+      <div class="neon-tile neon-rounded p-3 mb-3">
+        {% if tags|length > 0 %}
+          <section class="requirements">
+            {% for category, tags in tags %}
+              <div class="mb-3">
+                {{ category }}
+                <ul class="tag-clouds tag-clouds-md">
+                  {% for tag in tags %}
+                    <li>
+                      <a href="{{ route('job.tag', [tag.name|url_encode]) }}" title="Znajdź oferty zawierające {{ tag.real_name|default(tag.name) }}" class="neon-tag">
+                        {{ tag.real_name|default(tag.name) }}
+                      </a>
+                      {% set tooltip = ['mile widziane', 'średnio zaawansowany', 'zaawansowany'][tag.pivot.priority] %}
+                      {% apply spaceless %}
+                        <div class="progress-bar-dotted" title="{{ tooltip }}">
+                          {% for i in 1..3 %}
+                            {% if tag.pivot.priority >= i %}
+                              <span class="text-primary">
+                                {{ icon('jobOfferRequirementRanked') }}
+                              </span>
+                            {% else %}
+                              <span>
+                                {{ icon('jobOfferRequirementRank') }}
+                              </span>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      {% endapply %}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endfor %}
+          </section>
+        {% endif %}
+      </div>
+
+      <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
+        <ul class="list-unstyled">
+          {% if job.firm.employees %}
+            <li>
+              <small class="text-muted">Rozmiar firmy</small>
+              <p>
+                {{ icon('jobOfferCompanyEmployees') }}
+                {{ employees_list[job.firm.employees] }} pracowników
+              </p>
+            </li>
           {% endif %}
-        </div>
-      </section>
+          {% if job.firm.founded %}
+            <li>
+              <small class="text-muted">Rok założenia firmy</small>
+              <p>
+                {{ icon('jobOfferCompanyEstablishmentYear') }}
+                {{ job.firm.founded }}
+              </p>
+            </li>
+          {% endif %}
+          {% if job.firm.website %}
+            <li>
+              <small class="text-muted">Strona</small>
+              <p>
+                {{ icon('jobOfferCompanyWebsite') }}
+                <a href="{{ job.firm.website }}">{{ job.firm.website }}</a>
+              </p>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+
       {% if mlt|length %}
-        <section class="box">
-          <div class="neon-tile neon-rounded p-3 card-media">
-            {% include 'legacyComponents.jobs' with {'jobs': mlt} %}
-          </div>
-        </section>
+        <div class="neon-tile neon-rounded p-3 card-media">
+          {% include 'legacyComponents.jobs' with {'jobs': mlt} %}
+        </div>
       {% endif %}
     </aside>
   </div>
@@ -401,7 +402,5 @@
     var subscriptions = {{ subscriptions|json_encode|raw }};
     var emojis = {{ emojis|json_encode|raw }};
   </script>
-
   {{ parent() }}
-
 {% endblock %}
