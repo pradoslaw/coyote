@@ -268,20 +268,24 @@
     <aside class="col-md-3">
       {% if can('job-update') %}
         <section id="box-job-firm" class="box">
-          <div class="neon-tile neon-rounded p-3 mb-3">
-            <ul class="list-unstyled mb-0">
-              <li title="Data opublikowania" class="mb-2">
-                {{ icon('jobOfferPublishDate') }}
-                {{ job.boost_at|format_date }}
-              </li>
-              <li title="Liczba odsłon" class="counter mb-2">
-                {{ icon('jobOfferViews') }}
-                {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
+          <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
+            <ul class="list-unstyled">
+              <li>
+                <small class="text-muted">Wyświetleń oferty</small>
+                <p>
+                  {{ icon('jobOfferViews') }}
+                  {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
+                </p>
               </li>
               {% if not job.is_expired %}
                 <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
-                  {{ icon('jobOfferExpiresInDays') }}
-                  {{ job.deadline }} dni do końca
+                  <span class="text-muted">
+                    Ważność oferty
+                  </span>
+                  <p>
+                    {{ icon('jobOfferExpiresInDays') }}
+                    {{ job.deadline }} dni do końca
+                  </p>
                 </li>
               {% endif %}
             </ul>
@@ -351,6 +355,13 @@
               </p>
             </li>
           {% endif %}
+          <li title="Data opublikowania">
+            <small class="text-muted">Opublikowano</small>
+            <p>
+              {{ icon('jobOfferPublishDate') }}
+              {{ job.boost_at|format_date }}
+            </p>
+          </li>
           {% if not job.is_expired %}
             <div>
               {% set attr = {} %}
