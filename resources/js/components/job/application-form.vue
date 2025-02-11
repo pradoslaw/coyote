@@ -1,42 +1,29 @@
 <template>
   <form>
     <vue-form-group :errors="errors['email']" label="Email" help="Nie wysyłamy spamu! Obiecujemy.">
-      <vue-text name="email" v-model="applicationSync.email" :is-invalid="'email' in errors"></vue-text>
+      <vue-text name="email" v-model="applicationSync.email" :is-invalid="'email' in errors"/>
     </vue-form-group>
-
     <vue-form-group :errors="errors['name']" label="Imię i nazwisko">
-      <vue-text name="name" v-model="applicationSync.name" :is-invalid="'name' in errors"></vue-text>
+      <vue-text name="name" v-model="applicationSync.name" :is-invalid="'name' in errors"/>
     </vue-form-group>
-
     <vue-form-group :errors="errors['phone']" label="Numer telefonu" help="Podanie numeru telefonu nie jest obowiązkowe, ale pozwoli na szybki kontakt.">
-      <vue-text name="phone" v-model="applicationSync.phone" :is-invalid="'phone' in errors"></vue-text>
+      <vue-text name="phone" v-model="applicationSync.phone" :is-invalid="'phone' in errors"/>
     </vue-form-group>
-
     <div class="form-group">
       <label class="col-form-label">CV/Resume</label>
-
-      <vue-thumbnail :url="applicationSync.cv" upload-url="/Praca/Upload" name="cv" @upload="addAsset" @delete="deleteAsset" class="w-25"></vue-thumbnail>
-
+      <vue-thumbnail :url="applicationSync.cv" upload-url="/Praca/Upload" name="cv" @upload="addAsset" @delete="deleteAsset" class="w-25"/>
       <span class="form-text">CV/résumé z rozszerzeniem *.pdf, *.doc, *.docx lub *.rtf. Maksymalnie 5 MB.</span>
     </div>
-
     <vue-form-group :errors="errors['github']" label="Konto Github" class="github">
-      <vue-text name="github" v-model="applicationSync.github" :is-invalid="'github' in errors"></vue-text>
+      <vue-text name="github" v-model="applicationSync.github" :is-invalid="'github' in errors"/>
     </vue-form-group>
-
-    <vue-form-group :errors="errors['salary']" label="Minimalne oczekiwania wynagrodzenie">
-      <vue-select v-model="applicationSync.salary" :options="salaryChoices" placeholder="Nie chcę podawać"></vue-select>
-    </vue-form-group>
-
     <vue-form-group :errors="errors['dismissal_period']" label="Obecny okres wypowiedzenia">
-      <vue-select v-model="applicationSync.dismissal_period" :options="dismissalPeriod" placeholder="Nie określono"></vue-select>
+      <vue-select v-model="applicationSync.dismissal_period" :options="dismissalPeriod" placeholder="Nie określono"/>
     </vue-form-group>
-
     <vue-form-group :errors="errors['text']" label="Wiadomość dla pracodawcy/zleceniodawcy" help="Taką wiadomość otrzyma osoba, która wystawiła ogłoszenie">
       <vue-rich-editor v-model="applicationSync.text"/>
-      <input type="hidden" name="text" v-model="applicationSync.text">
+      <input type="hidden" name="text" v-model="applicationSync.text"/>
     </vue-form-group>
-
     <div class="form-group">
       <div class="d-flex">
         <vue-checkbox v-model="applicationSync.remember" id="enable-invoice" class="me-2"></vue-checkbox>
@@ -45,7 +32,6 @@
         </label>
       </div>
     </div>
-
     <div class="form-group">
       <vue-button :disabled="isProcessing" @click="submitForm" class="btn btn-primary">
         Wyślij
