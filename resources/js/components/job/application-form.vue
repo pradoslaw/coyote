@@ -38,9 +38,8 @@
     </vue-form-group>
 
     <div class="form-group">
-      <div class="custom-control custom-checkbox">
-        <vue-checkbox v-model="applicationSync.remember" id="enable-invoice" class="custom-control-input"></vue-checkbox>
-
+      <div class="d-flex">
+        <vue-checkbox v-model="applicationSync.remember" id="enable-invoice" class="me-2"></vue-checkbox>
         <label class="custom-control-label" for="enable-invoice">
           Zapamiętaj dane podane w formularzu
         </label>
