@@ -15,42 +15,40 @@
 {% endblock %}
 
 {% block container %}
-  <div class="row mt-3">
-    <div class="col-12">
-      <div id="js-flags">
-        <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
+  <div class=" mt-3">
+    <div id="js-flags">
+      <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
+    </div>
+
+    {% if job.is_expired %}
+      <div class="alert alert-warning">
+        To ogłoszenie wygasło w dniu <strong>{{ job.deadline_at|format_date }}</strong>.
       </div>
+    {% endif %}
 
-      {% if job.is_expired %}
-        <div class="alert alert-warning">
-          To ogłoszenie wygasło w dniu <strong>{{ job.deadline_at|format_date }}</strong>.
-        </div>
-      {% endif %}
+    {% if is_author %}
+      <ul class="nav nav-pills mb-3">
+        <li class="nav-item">
+          <a class="nav-link active" href="#offer" role="tab" data-bs-toggle="tab">
+            Ogłoszenie
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#applications" role="tab" data-bs-toggle="tab">
+            Kandydaci
+            <small>({{ applications|length }})</small>
+          </a>
+        </li>
+      </ul>
+    {% endif %}
 
-      {% if is_author %}
-        <ul class="nav nav-pills mb-3">
-          <li class="nav-item">
-            <a class="nav-link active" href="#offer" role="tab" data-bs-toggle="tab">
-              Ogłoszenie
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#applications" role="tab" data-bs-toggle="tab">
-              Kandydaci
-              <small>({{ applications|length }})</small>
-            </a>
-          </li>
-        </ul>
-      {% endif %}
-
-      <div class="job-navlinks p-1">
-        <span class="text-primary">
-          {{ icon('jobOfferBack') }}
-        </span>
-        <a href="{{ previous_url ?: route('job.home') }}">
-          Powrót do listy ofert
-        </a>
-      </div>
+    <div class="job-navlinks p-1">
+      <span class="text-primary">
+        {{ icon('jobOfferBack') }}
+      </span>
+      <a href="{{ route('job.home') }}">
+        Powrót do listy ofert
+      </a>
     </div>
   </div>
 
@@ -122,30 +120,31 @@
               </div>
             </div>
           </div>
-          <div id="job-offer" class="card-body px-4">
+          <div class="card-body px-4">
             <section>
               <h1>
                 {{ link_to_route('job.offer', job.title, [job.id|default(0), job.slug]) }}
               </h1>
-              {% if job.firm.name %}
-                <a class="employer text-muted"
-                   title="Zobacz oferty pracy z firmy {{ job.firm.name }}"
-                   href="{{ route('job.firm', [job.firm.slug]) }}">
-                  {{ job.firm.name }}
-                </a>
-              {% endif %}
               {% if job.salary_from or job.salary_to %}
                 <p class="salary float-end">
                   {% include 'job.partials.salary' with {net_label: true, rate_label: true} %}
                 </p>
               {% endif %}
               {% if job.locations[0].city is not empty %}
-                <ul class="metadata list-inline location">
+                <ul class=" list-inline">
                   <li class="list-inline-item" title="Lokalizacja">
                     {{ icon('jobOfferLocation') }}
                     {% include 'job.partials.location' with {'locations': job.locations} %}
                   </li>
                 </ul>
+              {% endif %}
+
+              {% if job.firm.name %}
+                <a class="employer text-muted"
+                   title="Zobacz oferty pracy z firmy {{ job.firm.name }}"
+                   href="{{ route('job.firm', [job.firm.slug]) }}">
+                  {{ job.firm.name }}
+                </a>
               {% endif %}
             </section>
 
@@ -262,29 +261,27 @@
           </div>
         </div>
         {% if is_author %}
-          <div id="applications" class="card tab-pane">
-            <div class="card-body">
-              <table class="table table-striped">
+          <div id="applications" class="neon-tile neon-rounded p-3 mb-3 tab-pane">
+            <table class="table table-striped">
+              <tr>
+                <th>Imię i nazwisko</th>
+                <th>Adres e-mail</th>
+                <th>Nr tel</th>
+                <th>CV / Resume</th>
+              </tr>
+              {% for application in applications %}
                 <tr>
-                  <th>Imię i nazwisko</th>
-                  <th>Adres e-mail</th>
-                  <th>Nr tel</th>
-                  <th>CV / Resume</th>
+                  <td>{{ application.name }}</td>
+                  <td>{{ application.email }}</td>
+                  <td>{{ application.phone ?: '--' }}</td>
+                  <td>{{ application.cv ? link_to_route('job.application.download', application.realFilename(), [job.id, application.id]) : '--' }}</td>
                 </tr>
-                {% for application in applications %}
-                  <tr>
-                    <td>{{ application.name }}</td>
-                    <td>{{ application.email }}</td>
-                    <td>{{ application.phone ?: '--' }}</td>
-                    <td>{{ application.cv ? link_to_route('job.application.download', application.realFilename(), [job.id, application.id]) : '--' }}</td>
-                  </tr>
-                {% else %}
-                  <tr>
-                    <td colspan="3" class="text-center">Brak kandydatów dla tej oferty pracy.</td>
-                  </tr>
-                {% endfor %}
-              </table>
-            </div>
+              {% else %}
+                <tr>
+                  <td colspan="3" class="text-center">Brak kandydatów dla tej oferty pracy.</td>
+                </tr>
+              {% endfor %}
+            </table>
           </div>
         {% endif %}
       </div>
@@ -312,53 +309,51 @@
       </div>
 
       {% if can('job-update') or can('delete', job) %}
-        <section id="box-job-firm" class="box">
-          <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
-            <ul class="list-unstyled">
-              <li>
-                <small class="text-muted">Wyświetleń oferty</small>
+        <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
+          <ul class="list-unstyled">
+            <li>
+              <small class="text-muted">Wyświetleń oferty</small>
+              <p>
+                {{ icon('jobOfferViews') }}
+                {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
+              </p>
+            </li>
+            {% if not job.is_expired %}
+              <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
+                <span class="text-muted">
+                  Ważność oferty
+                </span>
                 <p>
-                  {{ icon('jobOfferViews') }}
-                  {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
+                  {{ icon('jobOfferExpiresInDays') }}
+                  {{ job.deadline }} dni do końca
                 </p>
               </li>
-              {% if not job.is_expired %}
-                <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
-                  <span class="text-muted">
-                    Ważność oferty
-                  </span>
-                  <p>
-                    {{ icon('jobOfferExpiresInDays') }}
-                    {{ job.deadline }} dni do końca
-                  </p>
-                </li>
+            {% endif %}
+            <li>
+              <span class="text-muted">Zarządzanie ofertą</span>
+              {% if not job.is_expired and can('update', job) %}
+                <div>
+                  <a href="{{ route('job.submit', [job.id]) }}">
+                    {{ icon('jobOfferEdit') }}
+                    Edytuj ofertę
+                  </a>
+                </div>
               {% endif %}
-              <li>
-                <span class="text-muted">Zarządzanie ofertą</span>
-                {% if not job.is_expired and can('update', job) %}
-                  <div>
-                    <a href="{{ route('job.submit', [job.id]) }}">
-                      {{ icon('jobOfferEdit') }}
-                      Edytuj ofertę
-                    </a>
-                  </div>
-                {% endif %}
-                {% if can('delete', job) %}
-                  <div>
-                    <a href="#modal-delete" data-bs-toggle="modal">
-                      {{ icon('jobOfferRemove') }}
-                      Usuń tę ofertę pracy
-                    </a>
-                  </div>
-                {% endif %}
-              </li>
-            </ul>
-            {% import 'legacyComponents.modals' as modals %}
-            {{ form_open({'url': route('job.delete', [job.id]) }) }}
-            {{ modals.confirm('Czy chcesz usunąć tę ofertę pracy?', 'Usuwanie', 'modal-delete') }}
-            {{ form_close() }}
-          </div>
-        </section>
+              {% if can('delete', job) %}
+                <div>
+                  <a href="#modal-delete" data-bs-toggle="modal">
+                    {{ icon('jobOfferRemove') }}
+                    Usuń tę ofertę pracy
+                  </a>
+                </div>
+              {% endif %}
+            </li>
+          </ul>
+          {% import 'legacyComponents.modals' as modals %}
+          {{ form_open({'url': route('job.delete', [job.id]) }) }}
+          {{ modals.confirm('Czy chcesz usunąć tę ofertę pracy?', 'Usuwanie', 'modal-delete') }}
+          {{ form_close() }}
+        </div>
       {% endif %}
 
       <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
@@ -403,18 +398,6 @@
         </ul>
       </div>
 
-      {% if not job.is_expired %}
-        <div class="neon-tile neon-rounded p-3 mb-3">
-          <span class="text-muted">Dodatkowe pytania?</span>
-          <div>
-            {{ icon('jobOfferAdditionalQuestions') }}
-            <a href="#comments">
-              Zadaj pytanie dotyczące tego ogłoszenia
-            </a>
-          </div>
-        </div>
-      {% endif %}
-
       {% if tags|length > 0 %}
         <div class="neon-tile neon-rounded p-3 mb-3">
           {% for category, tags in tags %}
@@ -452,6 +435,14 @@
 
       <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
         <ul class="list-unstyled">
+          {% if job.firm.name %}
+            <li>
+              <small class="text-muted">Firma</small>
+              <p>
+                {{ job.firm.name }}
+              </p>
+            </li>
+          {% endif %}
           {% if job.firm.employees %}
             <li>
               <small class="text-muted">Rozmiar firmy</small>
@@ -481,6 +472,18 @@
           {% endif %}
         </ul>
       </div>
+
+      {% if not job.is_expired %}
+        <div class="neon-tile neon-rounded p-3 mb-3">
+          <span class="text-muted">Dodatkowe pytania?</span>
+          <div>
+            {{ icon('jobOfferAdditionalQuestions') }}
+            <a href="#comments">
+              Zadaj pytanie dotyczące tego ogłoszenia
+            </a>
+          </div>
+        </div>
+      {% endif %}
 
       {% if mlt|length %}
         <div class="neon-tile neon-rounded p-3 card-media">

@@ -47,7 +47,6 @@ class OfferController extends Controller
             'employees_list'  => Firm::getEmployeesList(),
             'seniority_list'  => Job::getSeniorityList(),
             'subscribed'      => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
-            'previous_url'    => $this->request->session()->get('current_url'),
             'payment'         => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null,
             'tags'            => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory(),
             'comments'        => new CommentCollection($job->commentsWithChildren)->setOwner($job)->toArray($this->request),

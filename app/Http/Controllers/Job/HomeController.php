@@ -147,8 +147,6 @@ class HomeController extends BaseController
             'subscribed' => $this->getSubscribed(),
         ];
 
-        $this->request->session()->put('current_url', $this->request->fullUrl());
-
         return $this->view('job.home', $data + [
                 'currencies' => (object)Currency::all('name', 'id', 'symbol')->keyBy('id'),
                 'firm'       => $this->firmName,
