@@ -8,9 +8,6 @@
 {% block description %}{{ excerpt(job.description) }}{% endblock %}
 {% block keywords %}{{ keywords(job.description)|join(',') }}{% endblock %}
 {% block logo %}{{ job.firm.logo ? logo(job.firm.logo, true) : secure_asset('img/apple-touch.png') }}{% endblock %}
-
-{% set is_author = job.enable_apply and job.user_id == auth_user().id %}
-
 {% block head %}
   {{ parent() }}
 

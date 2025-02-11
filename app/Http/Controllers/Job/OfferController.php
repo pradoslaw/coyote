@@ -58,6 +58,7 @@ class OfferController extends Controller
             'emojis'          => Emoji::all(),
             'job'             => $job,
             'mlt'             => $this->job->search(new MoreLikeThisBuilder($job))->getSource(),
+            'is_author'       => $job->enable_apply && $job->user_id === auth()->user()?->id,
         ]);
     }
 
