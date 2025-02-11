@@ -46,18 +46,11 @@ class ApplicationController extends Controller
         return $this->view('job.application', [
             'job'         => $job,
             'application' => $application,
-        ])
-            ->with([
-                'subscribed' => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
-            ]);
+            'subscribed'  => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
+        ]);
     }
 
-    /**
-     * @param Job $job
-     * @param ApplicationRequest $request
-     * @return string
-     */
-    public function save(Job $job, ApplicationRequest $request)
+    public function save(Job $job, ApplicationRequest $request): string
     {
         $application = $this->transaction(function () use ($job, $request) {
             $target = (new Stream_Job)->map($job);
@@ -95,12 +88,6 @@ class ApplicationController extends Controller
         ]);
     }
 
-    /**
-     * @param FilesystemManager $filesystem
-     * @param Job $job
-     * @param $id
-     * @return mixed
-     */
     public function downloadApplication(FilesystemManager $filesystem, Job $job, $id)
     {
         abort_if($job->user_id !== $this->userId, 403);
