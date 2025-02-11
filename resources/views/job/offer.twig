@@ -121,31 +121,36 @@
             </div>
           </div>
           <div class="card-body px-4">
-            <section>
-              <h1>
-                {{ link_to_route('job.offer', job.title, [job.id|default(0), job.slug]) }}
-              </h1>
-              {% if job.salary_from or job.salary_to %}
-                <p class="salary float-end">
-                  {% include 'job.partials.salary' with {net_label: true, rate_label: true} %}
-                </p>
-              {% endif %}
-              {% if job.locations[0].city is not empty %}
-                <ul class=" list-inline">
-                  <li class="list-inline-item" title="Lokalizacja">
-                    {{ icon('jobOfferLocation') }}
-                    {% include 'job.partials.location' with {'locations': job.locations} %}
-                  </li>
-                </ul>
-              {% endif %}
-
-              {% if job.firm.name %}
-                <a class="employer text-muted"
-                   title="Zobacz oferty pracy z firmy {{ job.firm.name }}"
-                   href="{{ route('job.firm', [job.firm.slug]) }}">
-                  {{ job.firm.name }}
-                </a>
-              {% endif %}
+            <section class="d-lg-flex justify-content-between">
+              <div>
+                <h1>
+                  {{ link_to_route('job.offer', job.title, [job.id|default(0), job.slug]) }}
+                </h1>
+                {% if job.firm.name %}
+                  <a class="employer text-muted"
+                     title="Zobacz oferty pracy z firmy {{ job.firm.name }}"
+                     href="{{ route('job.firm', [job.firm.slug]) }}">
+                    {{ job.firm.name }}
+                  </a>
+                {% endif %}
+              </div>
+              <div class="mt-4 mt-lg-0">
+                {% if job.salary_from or job.salary_to %}
+                  <div class="d-lg-flex justify-content-end">
+                    <p>
+                      {% include 'job.partials.salary' with {net_label: true, rate_label: true} %}
+                    </p>
+                  </div>
+                {% endif %}
+                {% if job.locations[0].city is not empty %}
+                  <ul class=" list-inline">
+                    <li class="list-inline-item" title="Lokalizacja">
+                      {{ icon('jobOfferLocation') }}
+                      {% include 'job.partials.location' with {'locations': job.locations} %}
+                    </li>
+                  </ul>
+                {% endif %}
+              </div>
             </section>
 
             {% if job.description %}
