@@ -388,7 +388,7 @@ readonly class FontAwesomePro
             'jobOfferCompanyEstablishmentYear'          => 'fa-light fa-calendar',
             'jobOfferCompanyWebsite'                    => 'fa-light fa-link',
             'jobOfferLocationAdd'                       => 'fa-light fa-circle-plus',
-            'jobOfferLocationRemove'                    => 'fa-circle-minus',
+            'jobOfferLocationRemove'                    => 'fa-light fa-circle-minus',
             'jobOfferBenefitPresent'                    => $faTick,
             'jobOfferBenefitMissing'                    => $faCross,
             'jobOfferBenefitCustom'                     => $faTick,

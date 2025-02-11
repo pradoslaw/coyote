@@ -22,12 +22,14 @@
           </p>
         {% endif %}
 
-        <ul class="metadata list-inline location">
-          <li class="list-inline-item" title="Lokalizacja">
-            {{ icon('jobOfferLocation') }}
-            {% include 'job.partials.location' with {'locations': job.locations} %}
-          </li>
-        </ul>
+        {% if job.locations[0].city is not empty %}
+          <ul class="metadata list-inline location">
+            <li class="list-inline-item" title="Lokalizacja">
+              {{ icon('jobOfferLocation') }}
+              {% include 'job.partials.location' with {'locations': job.locations} %}
+            </li>
+          </ul>
+        {% endif %}
       </section>
 
       <ul class="about-items list-group list-group-horizontal row">
@@ -104,7 +106,7 @@
                                 {{ icon('jobOfferRequirementRanked') }}
                               </span>
                             {% else %}
-                              <span >
+                              <span>
                                 {{ icon('jobOfferRequirementRank') }}
                               </span>
                             {% endif %}
