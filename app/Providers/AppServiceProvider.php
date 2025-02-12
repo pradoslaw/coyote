@@ -14,6 +14,7 @@ use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Guest;
 use Coyote\Services\Invoice;
+use Coyote\Services\MimeTypeGuesser;
 use Coyote\User;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -24,6 +25,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Symfony\Component\Mime\MimeTypes;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -83,6 +85,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerMacros();
 
         Paginator::useBootstrap();
+        MimeTypes::setDefault(new MimeTypes(['text/x-c++' => ['cpp']]));
     }
 
     /**

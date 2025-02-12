@@ -1,30 +1,26 @@
 <?php
-
 namespace Coyote\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 class AssetRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user() !== null;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'asset' => 'required|mimes:' . config('filesystems.upload_mimes')
+            'asset' => 'required|mimes:' . config('filesystems.upload_mimes'),
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'asset' => 'Załączony plik musi mieć format: :values.',
         ];
     }
 }
