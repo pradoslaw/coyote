@@ -393,9 +393,11 @@
                       {% if job.firm.website %}
                         <li>
                           <small class="text-muted">Strona</small>
-                          <p>
+                          <p style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                             {{ icon('jobOfferCompanyWebsite') }}
-                            <a href="{{ job.firm.website }}">{{ job.firm.website }}</a>
+                            <a href="{{ job.firm.website }}" class="neon-color-link text-truncate">
+                              {{ job.firm.website }}
+                            </a>
                           </p>
                         </li>
                       {% endif %}
