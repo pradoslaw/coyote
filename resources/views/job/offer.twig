@@ -41,19 +41,14 @@
         </li>
       </ul>
     {% endif %}
-
-    <div class="job-navlinks p-1">
-      <span class="text-primary">
-        {{ icon('jobOfferBack') }}
-      </span>
-      <a href="{{ route('job.home') }}">
-        Powrót do listy ofert
-      </a>
-    </div>
   </div>
 
   <div class="row">
-    <div class="col-md-9">
+    {% if can('job-update') or can('delete', job) %}
+    {% else %}
+      <div class="col-md-1"></div>
+    {% endif %}
+    <div class="col-md-10">
       {% if payment and not session_has('success') %}
         <div class="alert alert-warning">
           <h4>
@@ -68,7 +63,14 @@
           </a>
         </div>
       {% endif %}
-
+      <div class="mb-1">
+        <a href="{{ route('job.home') }}">
+          <span class="neon-color-link-light">
+            {{ icon('jobOfferBack') }}
+          </span>
+          Powrót do listy ofert
+        </a>
+      </div>
       <div class="tab-content">
         <div id="offer" class="tab-pane active neon-tile neon-rounded py-2 pb-4 mb-3">
           <div class="px-2" style="margin-bottom:64px;">
@@ -439,8 +441,8 @@
       </div>
     </div>
 
-    <aside class="col-md-3">
-      {% if can('job-update') or can('delete', job) %}
+    {% if can('job-update') or can('delete', job) %}
+      <aside class="col-md-2">
         <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
           <ul class="list-unstyled">
             <li>
@@ -486,8 +488,8 @@
           {{ modals.confirm('Czy chcesz usunąć tę ofertę pracy?', 'Usuwanie', 'modal-delete') }}
           {{ form_close() }}
         </div>
-      {% endif %}
-    </aside>
+      </aside>
+    {% endif %}
   </div>
 {% endblock %}
 
