@@ -79,19 +79,21 @@
                 <div>
                   {% if job.firm.logo.filename %}
                     <a title="Zobacz wszystkie oferty {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.slug]) }}">
-                      <img class="size-75 rounded-full"
+                      <img class="size-75 neon-firmlogo-border"
                            src="{{ logo(job.firm.logo) }}"
                            alt="{{ job.firm.name }}">
                     </a>
                   {% else %}
-                    <div class="neon-placeholder size-100 rounded-full d-flex justify-content-center align-items-center" style="font-size:2.0em;">
-                      {{ icon('jobOfferMissingLogo') }}
+                    <div class="neon-avatar-border">
+                      <div class="neon-placeholder size-100 d-flex justify-content-center align-items-center" style="font-size:2.0em;">
+                        {{ icon('jobOfferMissingLogo') }}
+                      </div>
                     </div>
                   {% endif %}
                 </div>
                 <div>
                   <span v-cloak id="js-sidemenu" class="me-1">
-                    <div class="btn btn-secondary" @click="checkAuth(subscribe)">
+                    <div class="btn btn-secondary" @click="checkAuth(subscribe)" style="padding:0;width:33px;height:33px; display:inline-flex; align-items:center; justify-content:center;">
                       <span v-if="isSubscribed(job)">
                         {{ icon('jobOfferSubscribed') }}
                       </span>
@@ -103,6 +105,7 @@
                   {% if auth_check() %}
                     <span
                         class="btn btn-secondary me-1"
+                        style="padding:0;width:33px;height:33px; display:inline-flex; align-items:center; justify-content:center;"
                         data-url="{{ route('job.offer', [job.id, job.slug], false) }}"
                         data-metadata="{{ {"Coyote\\Job": job.id}|encrypt }}">
                       {{ icon('jobOfferReport') }}
@@ -327,7 +330,7 @@
                                 <div class="progress-bar-dotted" title="{{ tooltip }}">
                                   {% for i in 1..3 %}
                                     {% if tag.pivot.priority >= i %}
-                                      <span class="neon-color-link-light">
+                                      <span class="neon-color-primary">
                                         {{ icon('jobOfferRequirementRanked') }}
                                       </span>
                                     {% else %}

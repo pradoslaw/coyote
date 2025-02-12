@@ -26,6 +26,10 @@ a:not(.btn) {
   }
 }
 
+.neon-color-primary {
+  color: style.$green-500;
+}
+
 .neon-color-link-light {
   @include feel.modern {
     @include theme.property(color, style.$green-500, style.$green-050);
@@ -159,6 +163,10 @@ $modern-tile-background-dark:  style.$neutral-800;
   }
 }
 
+.neon-firmlogo-border {
+  background: white;
+}
+
 @include feel.legacy {
   .topic-list-item {
     @include theme.property(border-bottom, 1px solid #ddd, 1px solid #242a30);
@@ -200,6 +208,7 @@ $modern-tile-background-dark:  style.$neutral-800;
   }
 }
 
+.neon-firmlogo-border,
 .neon-avatar-border {
   border-radius: 5px;
   border-width:  3px;
@@ -207,7 +216,9 @@ $modern-tile-background-dark:  style.$neutral-800;
   @include theme.property(border-color, white, black);
   z-index:       2;
   position:      relative; // Only to create a stacking context for z-index
+}
 
+.neon-avatar-border {
   .user-avatar, .default-avatar {
     border-radius: 2px;
     overflow:      hidden;
@@ -352,5 +363,5 @@ $modern-tile-background-dark:  style.$neutral-800;
 }
 
 .neon-box {
-  border: 2px solid style.$neutral-050;
+  @include theme.property(border, 2px solid style.$neutral-050, 2px solid style.$neutral-700);
 }
