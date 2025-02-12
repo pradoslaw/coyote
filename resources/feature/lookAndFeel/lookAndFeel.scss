@@ -364,5 +364,5 @@ $modern-tile-background-dark:  style.$neutral-800;
 }
 
 .neon-box {
-  @include theme.property(border, 2px solid style.$neutral-050, 2px solid style.$neutral-700);
+  @include theme.property(border, 1px solid style.$neutral-050, 1px solid style.$neutral-700);
 }
