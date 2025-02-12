@@ -79,7 +79,7 @@
                 <div>
                   {% if job.firm.logo.filename %}
                     <a title="Zobacz wszystkie oferty {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.slug]) }}">
-                      <img class="size-75 neon-firmlogo-border"
+                      <img class="size-80 neon-firmlogo-border"
                            src="{{ logo(job.firm.logo) }}"
                            alt="{{ job.firm.name }}">
                     </a>

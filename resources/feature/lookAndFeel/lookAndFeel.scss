@@ -212,14 +212,19 @@ $modern-tile-background-dark:  style.$neutral-800;
 .neon-firmlogo-border,
 .neon-avatar-border {
   border-radius: 5px;
-  border-width:  3px;
   border-style:  solid;
-  @include theme.property(border-color, white, black);
   z-index:       2;
   position:      relative; // Only to create a stacking context for z-index
 }
 
+.neon-firmlogo-border {
+  border-width: 6px;
+  @include theme.property(border-color, white, style.$neutral-800);
+}
+
 .neon-avatar-border {
+  @include theme.property(border-color, white, black);
+  border-width: 3px;
   .user-avatar, .default-avatar {
     border-radius: 2px;
     overflow:      hidden;
