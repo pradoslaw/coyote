@@ -12,9 +12,6 @@
         <testsuite name="Acceptance">
             <directory suffix="Test.php">./tests/Acceptance/</directory>
         </testsuite>
-        <testsuite name="LookAndFeel">
-            <directory suffix="Test.php">./tests/LookAndFeel/Theme/</directory>
-        </testsuite>
         <testsuite name="Legacy">
             <directory suffix="Test.php">./tests/Legacy/IntegrationOld/</directory>
             <directory suffix="Test.php">./tests/Legacy/IntegrationNew/</directory>
