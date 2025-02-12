@@ -12,18 +12,15 @@
   {% elseif salary_to %}
     do {{ salary_to }}
   {% endif %}
-
   {% if salary_from or salary_to %}
     {{ job.currency_symbol }}
   {% endif %}
+  {% if job.is_gross %}
+    brutto
+  {% elseif net_label %}
+    netto
+  {% endif %}
+  {% if job.rate != constant('Coyote\\Job::MONTHLY') and rate_label %}
+    / {{ rates_list[job.rate] }}
+  {% endif %}
 </span>
-
-{% if job.is_gross %}
-  <small class="text-muted">brutto</small>
-{% elseif net_label %}
-  <small class="text-muted">netto</small>
-{% endif %}
-
-{% if job.rate != constant('Coyote\\Job::MONTHLY') and rate_label %}
-  <small class="text-muted">/ {{ rates_list[job.rate] }}</small>
-{% endif %}
