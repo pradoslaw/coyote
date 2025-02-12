@@ -38,7 +38,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Forum $forum
  * @property Topic $topic
  * @property Asset[] $assets
- * @property Vote[] $votes
+ * @property Vote[]|Eloquent\Collection $votes
  * @property Coyote\Post\Comment[]|Eloquent\Collection $comments
  * @property Flag[] $flags
  * @property User|null $user
