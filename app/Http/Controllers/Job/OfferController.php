@@ -10,10 +10,10 @@ use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\JobResource;
 use Coyote\Job;
 use Coyote\Repositories\Eloquent\JobRepository;
-use Coyote\Services\Elasticsearch\Builders\Job\MoreLikeThisBuilder;
 use Coyote\Services\Flags;
 use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\Services\UrlBuilder;
+use Illuminate\Support;
 use Illuminate\View\View;
 
 class OfferController extends Controller
@@ -56,19 +56,14 @@ class OfferController extends Controller
             'subscriptions'   => $this->subscriptions(),
             'emojis'          => Emoji::all(),
             'job'             => $job,
-            'mlt'             => $this->job->search(new MoreLikeThisBuilder($job))->getSource(),
             'is_author'       => $job->enable_apply && $job->user_id === auth()->user()?->id,
         ]);
     }
 
-    /**
-     * @param Job $job
-     * @return array|\Illuminate\Support\Collection
-     */
-    private function applications(Job $job)
+    private function applications(Job $job): Support\Collection
     {
         if ($this->userId !== $job->user_id) {
-            return [];
+            return Support\Collection::empty();
         }
         return $job->applications()->get();
     }

@@ -487,12 +487,6 @@
           {{ form_close() }}
         </div>
       {% endif %}
-
-      {% if mlt|length %}
-        <div class="neon-tile neon-rounded p-3 card-media">
-          {% include 'legacyComponents.jobs' with {'jobs': mlt} %}
-        </div>
-      {% endif %}
     </aside>
   </div>
 {% endblock %}
