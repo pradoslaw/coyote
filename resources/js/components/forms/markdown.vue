@@ -79,8 +79,8 @@
       </div>
     </div>
 
-    <div v-if="assets.length" class="pt-3 pb-3 ps-2 pe-2 d-flex">
-      <div v-for="item in assets" :key="item.id" class="col-sm-2">
+    <div v-if="assets.length" class="pt-3 pb-3 ps-2 pe-2 d-flex flex-wrap">
+      <div v-for="item in assets" :key="item.id" class="me-2 mb-2">
         <vue-thumbnail
           name="asset"
           data-balloon-pos="down"

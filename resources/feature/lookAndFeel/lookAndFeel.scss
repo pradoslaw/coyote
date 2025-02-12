@@ -141,6 +141,7 @@ $modern-tile-background-dark:  style.$neutral-800;
   }
 }
 
+.placeholder-mask,
 .neon-placeholder,
 .default-avatar {
   @include feel.modern {
