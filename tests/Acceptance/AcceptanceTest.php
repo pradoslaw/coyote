@@ -3,6 +3,8 @@ namespace Tests\Acceptance;
 
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\Acceptance\AcceptanceDsl\Dsl;
 
@@ -24,4 +26,8 @@ class AcceptanceTest extends TestCase
         }
         $this->dsl->close();
     }
+
+    #[Test]
+    #[DoesNotPerformAssertions]
+    public function emptyTest(): void {}
 }
