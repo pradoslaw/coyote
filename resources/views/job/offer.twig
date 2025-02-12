@@ -362,47 +362,49 @@
                     </div>
                   {% endif %}
 
-                  <div class="neon-tile neon-rounded p-4 pb-1 mb-3 neon-box">
-                    <ul class="list-unstyled">
-                      {% if job.firm.name %}
-                        <li>
-                          <small class="text-muted">Firma</small>
-                          <p>
-                            {{ job.firm.name }}
-                          </p>
-                        </li>
-                      {% endif %}
-                      {% if job.firm.employees %}
-                        <li>
-                          <small class="text-muted">Rozmiar firmy</small>
-                          <p>
-                            {{ icon('jobOfferCompanyEmployees') }}
-                            {{ employees_list[job.firm.employees] }} pracowników
-                          </p>
-                        </li>
-                      {% endif %}
-                      {% if job.firm.founded %}
-                        <li>
-                          <small class="text-muted">Rok założenia firmy</small>
-                          <p>
-                            {{ icon('jobOfferCompanyEstablishmentYear') }}
-                            {{ job.firm.founded }}
-                          </p>
-                        </li>
-                      {% endif %}
-                      {% if job.firm.website %}
-                        <li>
-                          <small class="text-muted">Strona</small>
-                          <p style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                            {{ icon('jobOfferCompanyWebsite') }}
-                            <a href="{{ job.firm.website }}" class="neon-color-link text-truncate">
-                              {{ job.firm.website }}
-                            </a>
-                          </p>
-                        </li>
-                      {% endif %}
-                    </ul>
-                  </div>
+                  {% if job.firm.name or job.firm.employees or job.firm.founded or job.firm.website %}
+                    <div class="neon-tile neon-rounded p-4 pb-1 mb-3 neon-box">
+                      <ul class="list-unstyled">
+                        {% if job.firm.name %}
+                          <li>
+                            <small class="text-muted">Firma</small>
+                            <p>
+                              {{ job.firm.name }}
+                            </p>
+                          </li>
+                        {% endif %}
+                        {% if job.firm.employees %}
+                          <li>
+                            <small class="text-muted">Rozmiar firmy</small>
+                            <p>
+                              {{ icon('jobOfferCompanyEmployees') }}
+                              {{ employees_list[job.firm.employees] }} pracowników
+                            </p>
+                          </li>
+                        {% endif %}
+                        {% if job.firm.founded %}
+                          <li>
+                            <small class="text-muted">Rok założenia firmy</small>
+                            <p>
+                              {{ icon('jobOfferCompanyEstablishmentYear') }}
+                              {{ job.firm.founded }}
+                            </p>
+                          </li>
+                        {% endif %}
+                        {% if job.firm.website %}
+                          <li>
+                            <small class="text-muted">Strona</small>
+                            <p style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                              {{ icon('jobOfferCompanyWebsite') }}
+                              <a href="{{ job.firm.website }}" class="neon-color-link text-truncate">
+                                {{ job.firm.website }}
+                              </a>
+                            </p>
+                          </li>
+                        {% endif %}
+                      </ul>
+                    </div>
+                  {% endif %}
 
                   {% if not job.is_expired %}
                     <div class="neon-tile neon-rounded p-4 mb-3 neon-box">
