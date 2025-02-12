@@ -301,13 +301,6 @@
     </div>
 
     <aside class="col-md-3">
-      <div class="mb-3">
-        <a href="{{ route('job.submit') }}" class="btn btn-secondary d-block">
-          {{ icon('jobOfferNew') }}
-          Dodaj ofertę pracy
-        </a>
-      </div>
-
       {% if can('job-update') or can('delete', job) %}
         <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
           <ul class="list-unstyled">
