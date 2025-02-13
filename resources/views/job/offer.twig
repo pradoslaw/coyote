@@ -470,15 +470,15 @@
               <small class="text-muted">Statystyki oferty</small>
               <p class="mb-0">
                 {{ icon('jobOfferViews') }}
-                {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }} oferty
+                {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
               </p>
               <p class="mb-0">
                 {{ icon('jobOfferViews') }}
-                {{ declination(job.ad_views, ['odsłona', 'odsłony', 'odsłon']) }} wizytówek oferty
+                {{ declination(job.ad_views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }} wizytówki
               </p>
               <p>
                 {{ icon('jobOfferApplications') }}
-                {{ applications|length }} aplikacji przez 4programmers
+                {{ applications|length }} aplikacji na stanowisko
               </p>
             </li>
             {% if not job.is_expired %}
