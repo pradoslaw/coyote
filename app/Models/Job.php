@@ -6,8 +6,8 @@ use Coyote\Job\Location;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Models\Subscription;
 use Coyote\Services\Eloquent\HasMany;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\RoutesNotifications;
 
@@ -56,6 +56,7 @@ use Illuminate\Notifications\RoutesNotifications;
  * @property Plan $plan
  * @property Comment[] $comments
  * @property Comment[] $commentsWithChildren
+ * @property integer|null $ad_views
  */
 class Job extends Model
 {
