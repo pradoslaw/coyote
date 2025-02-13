@@ -303,6 +303,7 @@ readonly class FontAwesomePro
             'treeTopicPostOrder'                        => 'fa-light fa-arrow-down-z-a',
             'treeTopicSeeFull'                          => 'fa-light fa-list-tree',
             'treeTopicSeePrevious'                      => 'fa-light fa-arrow-up-left',
+            'treeTopicPostTarget'                       => 'fa-light fa-arrow-turn-left',
 
             // post history
             'postHistoryVersion'                        => 'fa-light fa-file',

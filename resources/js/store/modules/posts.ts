@@ -31,6 +31,8 @@ const flatTreeItem: TreePostItem = {
   childrenAuthors: [],
 };
 
+type Function<A, B> = (argument: A) => B;
+
 function topicOrderToTreeOrdering(topicOrder: TreeTopicOrder): TreeOrderBy {
   const map = {
     'byScore': 'orderByMostLikes',
@@ -55,6 +57,16 @@ const getters = {
   treeTopicRoot(state, getters): Post {
     return getters.posts[0];
   },
+  treeTopicPostTargetId(state, getters, rootState, rootGetters): Function<number, number|null> {
+    return (postId: number): number|null => {
+      const post: Post = state.data[postId];
+      const topic: Topic = rootGetters["topics/topic"];
+      if (post.parentPostId != topic.first_post_id) {
+        return post.parentPostId;
+      }
+      return null;
+    };
+  },
   treeTopicPostsRemaining(state, getters): TreePost[] {
     if (getters.isLinearized) {
       return getters.posts.slice(1).map(post => ({post, treeItem: flatTreeItem}));
@@ -64,7 +76,7 @@ const getters = {
 
     function parentLevelsWithSiblings(post: Post): number[] {
       const parentLevels: number[] = [];
-      let nextPostId: number | null = post.id;
+      let nextPostId: number|null = post.id;
       let nextLevel = 0;
       while (nextPostId && treeMap.has(nextPostId)) {
         const nextPost: SubTreeItem = treeMap.get(nextPostId)!;
@@ -151,7 +163,7 @@ const getters = {
       }
     }
     const flatTreeItems: TreeItem<Post>[] = tree.flatTreeItemsChildrenOf(getters.treeSelectedSubtreePostId);
-    let parentNestLevel: number | null = null;
+    let parentNestLevel: number|null = null;
     for (const item of flatTreeItems) {
       const post: Post = item.item;
       if (post.parentPostId !== null) {
@@ -219,10 +231,10 @@ const mutations = {
   delete(state, post: Post): void {
     post.deleted_at = new Date();
   },
-  editStart(state, editable: Post | PostComment): void {
+  editStart(state, editable: Post|PostComment): void {
     editable.is_editing = true;
   },
-  editEnd(state, editable: Post | PostComment): void {
+  editEnd(state, editable: Post|PostComment): void {
     editable.is_editing = false;
   },
   addComment(state, {postId, comment}: ParentChild): void {
@@ -372,7 +384,7 @@ const actions = {
     });
   },
 
-  delete({commit}, {post, reasonId}: { post: Post, reasonId: number | null }) {
+  delete({commit}, {post, reasonId}: { post: Post, reasonId: number|null }) {
     return axios.delete(`/Forum/Post/Delete/${post.id}`, {data: {reason: reasonId}}).then(() => commit('delete', post));
   },
 

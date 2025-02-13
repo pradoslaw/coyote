@@ -1,4 +1,8 @@
 <template>
+  <div style="margin-left:56px;" v-if="isLinearized && hasPostTreeTarget" class="small text-muted">
+    <vue-icon name="treeTopicPostTarget"/>
+    Odpowiedź na #{{postTreeTargetId}}
+  </div>
   <div class="position-relative" :class="[postIndentCssClasses, {'tree-post':is_mode_tree}]">
     <vue-post-guiderail
       v-if="guiderailVisible"
@@ -592,8 +596,14 @@ export default {
     ...mapState('user', ['user']),
     ...mapState('topics', ['reasons']),
     ...mapGetters('user', ['isAuthorized']),
-    ...mapGetters('posts', ['posts']),
+    ...mapGetters('posts', ['posts', 'isLinearized']),
     ...mapGetters('topics', ['topic', 'is_mode_tree', 'is_mode_linear']),
+    postTreeTargetId(): number {
+      return store.getters['posts/treeTopicPostTargetId'](this.$props.post.id);
+    },
+    hasPostTreeTarget(): boolean {
+      return store.getters['posts/treeTopicPostTargetId'](this.$props.post.id) !== null;
+    },
     childrenFolded(): boolean {
       return this.$props.post.childrenFolded;
     },
