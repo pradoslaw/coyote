@@ -385,6 +385,7 @@ readonly class FontAwesomePro
             'jobOfferSubscribe'                         => 'fa-light fa-star',
             'jobOfferSubscribed'                        => 'fa-solid fa-star',
             'jobOfferViews'                             => 'fa-light fa-eye',
+            'jobOfferApplications'                      => 'fa-light fa-envelope',
             'jobOfferCompanyEmployees'                  => 'fa-light fa-users',
             'jobOfferCompanyEstablishmentYear'          => 'fa-light fa-calendar',
             'jobOfferCompanyWebsite'                    => 'fa-light fa-link',

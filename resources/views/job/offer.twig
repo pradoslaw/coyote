@@ -467,10 +467,14 @@
         <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
           <ul class="list-unstyled">
             <li>
-              <small class="text-muted">Wyświetleń oferty</small>
-              <p>
+              <small class="text-muted">Statystyki oferty</small>
+              <p class="mb-0">
                 {{ icon('jobOfferViews') }}
-                {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
+                {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }} oferty
+              </p>
+              <p>
+                {{ icon('jobOfferApplications') }}
+                {{ applications|length }} aplikacji przez 4programmers
               </p>
             </li>
             {% if not job.is_expired %}
