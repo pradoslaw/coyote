@@ -42,21 +42,22 @@ class OfferController extends Controller
         }
         $job->addReferer(url()->previous());
         return $this->view('job.offer', [
-            'rates_list'      => Job::getRatesList(),
-            'employment_list' => Job::getEmploymentList(),
-            'employees_list'  => Firm::getEmployeesList(),
-            'seniority_list'  => Job::getSeniorityList(),
-            'subscribed'      => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
-            'payment'         => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null,
-            'tags'            => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory(),
-            'comments'        => new CommentCollection($job->commentsWithChildren)->setOwner($job)->toArray($this->request),
-            'applications'    => $this->applications($job),
-            'flags'           => $this->flags(),
-            'assets'          => AssetsResource::collection($job->firm->assets)->toArray($this->request),
-            'subscriptions'   => $this->subscriptions(),
-            'emojis'          => Emoji::all(),
-            'job'             => $job,
-            'is_author'       => $job->enable_apply && $job->user_id === auth()->user()?->id,
+            'rates_list'        => Job::getRatesList(),
+            'employment_list'   => Job::getEmploymentList(),
+            'employees_list'    => Firm::getEmployeesList(),
+            'seniority_list'    => Job::getSeniorityList(),
+            'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
+            'payment'           => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null,
+            'tags'              => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory(),
+            'comments'          => new CommentCollection($job->commentsWithChildren)->setOwner($job)->toArray($this->request),
+            'applications'      => $this->applications($job),
+            'applicationsCount' => $job->applications()->count(),
+            'flags'             => $this->flags(),
+            'assets'            => AssetsResource::collection($job->firm->assets)->toArray($this->request),
+            'subscriptions'     => $this->subscriptions(),
+            'emojis'            => Emoji::all(),
+            'job'               => $job,
+            'is_author'         => $job->enable_apply && $job->user_id === auth()->user()?->id,
         ]);
     }
 

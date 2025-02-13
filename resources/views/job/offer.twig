@@ -474,11 +474,11 @@
               </p>
               <p class="mb-0">
                 {{ icon('jobOfferViews') }}
-                {{ declination(job.ad_views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }} wizytówki
+                {{ declination(job.ad_views|default('0'), ['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }} wizytówki
               </p>
               <p>
                 {{ icon('jobOfferApplications') }}
-                {{ applications|length }} aplikacji na stanowisko
+                {{ applicationsCount }} aplikacji na stanowisko
               </p>
             </li>
             {% if not job.is_expired %}
