@@ -464,8 +464,27 @@
 
     {% if can('job-update') or can('delete', job) %}
       <aside class="col-lg-2">
-        <div class="neon-tile neon-rounded p-3 pb-1 mb-3">
+        <div class="neon-tile neon-rounded p-3 pb-1 mt-4 mb-3">
           <ul class="list-unstyled">
+            <li class="mb-4">
+              <span class="text-muted">Zarządzanie ofertą</span>
+              {% if not job.is_expired and can('update', job) %}
+                <p class="mb-0">
+                  <a href="{{ route('job.submit', [job.id]) }}">
+                    {{ icon('jobOfferEdit') }}
+                    Edytuj ofertę
+                  </a>
+                </p>
+              {% endif %}
+              {% if can('delete', job) %}
+                <p class="mb-0">
+                  <a href="#modal-delete" data-bs-toggle="modal">
+                    {{ icon('jobOfferRemove') }}
+                    Usuń tę ofertę pracy
+                  </a>
+                </p>
+              {% endif %}
+            </li>
             <li>
               <small class="text-muted">Statystyki oferty</small>
               <p class="mb-0">
@@ -492,25 +511,6 @@
                 </p>
               </li>
             {% endif %}
-            <li>
-              <span class="text-muted">Zarządzanie ofertą</span>
-              {% if not job.is_expired and can('update', job) %}
-                <div>
-                  <a href="{{ route('job.submit', [job.id]) }}">
-                    {{ icon('jobOfferEdit') }}
-                    Edytuj ofertę
-                  </a>
-                </div>
-              {% endif %}
-              {% if can('delete', job) %}
-                <div>
-                  <a href="#modal-delete" data-bs-toggle="modal">
-                    {{ icon('jobOfferRemove') }}
-                    Usuń tę ofertę pracy
-                  </a>
-                </div>
-              {% endif %}
-            </li>
           </ul>
           {% import 'legacyComponents.modals' as modals %}
           {{ form_open({'url': route('job.delete', [job.id]) }) }}
