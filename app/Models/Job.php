@@ -445,37 +445,17 @@ class Job extends Model
         return new Carbon($this->deadline_at)->isPast();
     }
 
-    /**
-     * @return string
-     */
-    public function getCurrencySymbolAttribute()
+    public function getCurrencySymbolAttribute(): string
     {
         return $this->currency()->value('symbol');
     }
 
-//
-//    public function setTagsAttribute($tags)
-//    {
-//        $models = [];
-//
-//        foreach ($tags as $order => $tag) {
-//            $pivot = $this->tags()->newPivot(['priority' => $tag['priority'] ?? 1, 'order' => $order]);
-//
-//            $models[] = (new Tag($tag))->setRelation('pivot', $pivot);
-//        }
-//
-//        // set only if not empty. important!
-//        if ($models) {
-//            $this->setRelation('tags', collect($models));
-//        }
-//    }
-
-    public function setLocationsAttribute($locations)
+    public function setLocationsAttribute($locations): void
     {
         $models = [];
 
         // remove empty locations before adding...
-        foreach (array_filter(array_map('array_filter', $locations)) as $location) {
+        foreach (array_filter(array_map(array_filter(...), $locations)) as $location) {
             $models[] = new Job\Location($location);
         }
 
@@ -487,7 +467,6 @@ class Job extends Model
 
     /**
      * Set currency as name. This is being used on API routes
-     *
      */
     public function setCurrencyAttribute($currency)
     {

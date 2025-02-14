@@ -485,9 +485,9 @@
                 </p>
               {% endif %}
               <p class="mb-0">
-                <a href="{{ route('job.submit') }}">
+                <a href="{{ route('job.submit', {'copy': job.id}) }}">
                   {{ icon('jobOfferNew') }}
-                  Dodaj ofertę pracy
+                  Dodaj podobną ofertę
                 </a>
               </p>
             </li>

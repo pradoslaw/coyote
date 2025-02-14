@@ -19,6 +19,7 @@ use Coyote\Repositories\Eloquent\JobRepository;
 use Coyote\Repositories\Eloquent\PlanRepository;
 use Coyote\Services\Job\SubmitsJob;
 use Coyote\Services\UrlBuilder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class SubmitController extends Controller
@@ -50,11 +51,29 @@ class SubmitController extends Controller
         return $this->index($job, $visits);
     }
 
-    public function index(Job $job, RouteVisits $visits): View
+    public function index(Job $job, RouteVisits $visits): View|RedirectResponse
     {
         if (!$job->exists) {
             $job = $this->loadDefaults($job, $this->auth);
             $visits->visit($this->request->path(), Carbon::now()->toDateString());
+            if ($this->request->query->has('copy')) {
+                $copyJobId = $this->request->get('copy');
+                $otherJob = Job::query()->find($copyJobId);
+                if ($otherJob) {
+                    $fields = [
+                        'title', 'description', 'tags', 'is_remote', 'remote_range', 'is_gross',
+                        'salary_from', 'salary_to', 'currency_id', 'rate', 'employment',
+                        'email', 'phone', 'seniority', 'plan_id', 'enable_apply', 'recruitment',
+                        'firm', 'features',
+                    ];
+                    foreach ($fields as $field) {
+                        $job->$field = $otherJob->$field;
+                    }
+                    $job->locations = $otherJob->locations->toArray();
+                } else {
+                    return response()->redirectToRoute('job.submit');
+                }
+            }
         }
 
         if (!count($job->locations)) {
