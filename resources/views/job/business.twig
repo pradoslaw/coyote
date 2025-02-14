@@ -2,8 +2,6 @@
 
 {% block title %}Nasza oferta :: Praca {{ parent() }}{% endblock %}
 
-{% set submit_url = "'" ~ route('job.submit') ~ "?default_plan=' + default_plan.id" %}
-
 {% block container %}
   <script>
     var plans = {{ plans|raw }};
