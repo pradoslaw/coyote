@@ -7,10 +7,11 @@ createVueApp('Business', '#js-business', {
   components: {
     'vue-pricing': VuePricing,
   },
-  data: () => ({
-    plans,
-    plan,
-  }),
+  data() {
+    return {
+      plans,
+    };
+  },
   mounted() {
     postJobBoardMilestone('see-landing');
   },
