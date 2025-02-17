@@ -1,8 +1,8 @@
 <?php
-
 namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int $id
@@ -21,20 +21,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Plan extends Model
 {
-    /**
-     * @var bool
-     */
     public $timestamps = false;
-
-    /**
-     * @var array
-     */
     protected $casts = ['benefits' => 'json', 'price' => 'float', 'vat_rate' => 'float'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function currency()
+    public function currency(): HasOne
     {
         return $this->hasOne(Currency::class);
     }
