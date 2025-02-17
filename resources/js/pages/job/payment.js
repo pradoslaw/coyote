@@ -6,8 +6,8 @@ import VueCheckbox from '../../components/forms/checkbox.vue';
 import VueFormGroup from '../../components/forms/form-group.vue';
 import VueSelect from '../../components/forms/select.vue';
 import VueText from '../../components/forms/text.vue';
-import {createVueAppNotifications} from '../../vue';
 import {notify} from '../../toast';
+import {createVueAppNotifications} from '../../vue';
 
 const VAT_RATE = 1.23;
 
@@ -116,7 +116,12 @@ createVueAppNotifications('Payment', '#js-payment', {
           if (response.status === 201) {
             window.location.href = response.data;
           }
-          this[`${this.form.payment_method}Payment`](response.data);
+          if (this.form.payment_method === 'card') {
+            this.cardPayment(response.data);
+          }
+          if (this.form.payment_method === 'p24') {
+            this.p24Payment(response.data);
+          }
         })
         .catch(err => {
           postJobBoardMilestone('payment-attempt-failed-data');
