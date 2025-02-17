@@ -9,6 +9,8 @@ use Coyote\Services\Media\File;
 use Coyote\Services\Media\Logo;
 use Coyote\Services\Media\SerializeClass;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -100,28 +102,18 @@ class Firm extends Model
         ];
     }
 
-    /**
-     * @return HasMany
-     */
-    public function benefits()
+    public function benefits(): HasMany
     {
         $instance = new Firm\Benefit();
-
         return new HasMany($instance->newQuery(), $this, $instance->getTable() . '.' . $this->getForeignKey(), $this->getKeyName());
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function assets()
+    public function assets(): MorphMany
     {
         return $this->morphMany(Asset::class, 'content');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function country()
+    public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
     }
@@ -129,10 +121,9 @@ class Firm extends Model
     /**
      * @param string $name
      */
-    public function setNameAttribute($name)
+    public function setNameAttribute($name): void
     {
         $name = trim($name);
-
         $this->attributes['name'] = $name;
         $this->attributes['slug'] = str_slug($name, '_');
     }
@@ -149,13 +140,12 @@ class Firm extends Model
     public function setLogoAttribute($logo)
     {
         $this->attributes['logo'] = null;
-
         if ($logo) {
             $this->attributes['logo'] = trim(str_replace('/uploads', '', parse_url($logo, PHP_URL_PATH)), '/');
         }
     }
 
-    public function setYoutubeUrlAttribute($value)
+    public function setYoutubeUrlAttribute($value): void
     {
         $this->attributes['youtube_url'] = $this->getEmbedUrl($value);
     }
