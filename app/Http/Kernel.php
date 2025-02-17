@@ -53,6 +53,7 @@ class Kernel extends Foundation\Http\Kernel
             SubstituteBindings::class,
             Middleware\DefaultBindings::class,
             ForceRootUrl::class,
+            Middleware\SurveilRoutes::class,
         ],
     ];
 
