@@ -1,5 +1,7 @@
 @use "../../../feature/lookAndFeel/feel" as feel;
+@use "../../../feature/theme/theme" as theme;
 @use "../../../feature/lookAndFeel/style-guide" as style;
+@use "../../../feature/lookAndFeel/size" as size;
 
 #plan-table {
   .plan-benefits, .plan-features {
@@ -17,7 +19,6 @@
     margin-top: 91px;
     padding:    0;
     width:      30%;
-    float:      left;
 
     .plan-benefit {
       font-size:   14px;
@@ -51,7 +52,6 @@
     box-shadow:       0 0 25px rgba(0, 0, 0, 0.15);
     text-align:       center;
     width:            23%;
-    float:            left;
 
     > .plan-header {
       background-color: #f0f2f6;
@@ -132,5 +132,23 @@
 
   .custom-plan-info {
     font-size: 15px;
+  }
+}
+
+.dark-theme-invert {
+  @include theme.dark {
+    -webkit-filter: invert(1);
+    filter:         invert(1);
+  }
+}
+
+.testimonials {
+  display:   flex;
+  flex-wrap: wrap;
+  .testimonials__testimonial {
+    width: 50%;
+    @include size.size(md) {
+      width: 20%;
+    }
   }
 }

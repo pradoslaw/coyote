@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="plan-table" class="clearfix mt-4 mb-4">
+    <div id="plan-table" class="mt-4 mb-4 d-flex overflow-x-auto">
       <ul class="plan-benefits">
         <li class="plan-benefit">
           <div>Publikacja ogłoszenia na okres <strong>40 dni</strong></div>

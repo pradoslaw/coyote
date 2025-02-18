@@ -23,4 +23,31 @@
       </p>
     </div>
   </div>
+  <div class="text-center mt-4">
+    <p style="font-weight:500; font-size:24px; font-family:'Inter',sans-serif;">
+      Pomogliśmy z sukcesami między innymi takim firmom jak:
+    </p>
+    {% set logos = [
+      "/img/jobBoard/logo1.png",
+      "/img/jobBoard/logo2.png",
+      "/img/jobBoard/logo3.png",
+      "/img/jobBoard/logo4.png",
+      "/img/jobBoard/logo5.png",
+      "/img/jobBoard/logo6.png",
+      "/img/jobBoard/logo7.png",
+      "/img/jobBoard/logo8.png",
+      "/img/jobBoard/logo9.png",
+      "/img/jobBoard/logo10.png",
+    ] %}
+    <div class="testimonials">
+      {% for logo in logos %}
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 testimonials__testimonial">
+          <img
+              class="{{ loop.index0 in [0,1,3] ?: 'dark-theme-invert' }}"
+              src="{{ logo }}" 
+              style="max-width:76%; padding-left:12%;padding-right:12%;">
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock %}
