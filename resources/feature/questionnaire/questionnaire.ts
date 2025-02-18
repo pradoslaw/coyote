@@ -20,8 +20,9 @@ window.addEventListener('load', function () {
       question.remove();
     });
   }
-  setTimeout(() => {
-    question.style.visibility = 'visible';
-    axios.post('/Questionnaire/See', {});
-  }, 10 * 1000);
+  question.style.visibility = 'visible';
+  // setTimeout(() => {
+  //   question.style.visibility = 'visible';
+  //   axios.post('/Questionnaire/See', {});
+  // }, 10 * 1000);
 });

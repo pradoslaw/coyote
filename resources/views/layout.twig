@@ -59,25 +59,31 @@
   {% import 'legacyComponents.widgets' as widgets %}
 
   {% if questionnaire is defined %}
-  <div class="sem:questionnaireQuestion questionnaire position-fixed d-flex justify-content-center" style="width:100%; z-index:5; visibility:hidden;">
-    <div class="questionnaire__modal neon-tile neon-rounded px-3 py-1 d-flex align-items-center">
-      <div class="me-2">
-        {{ icon('questionnaire') }}
-      </div>
-      <div class="me-4">
-        {{ questionnaire.question }}
-        <div class="text-muted">
-          {{ questionnaire.subtitle }}
+  <div class="sem:questionnaireQuestion questionnaire position-fixed d-flex justify-content-center px-4" style="width:100%; z-index:5; visibility:hidden;">
+    <div class="questionnaire__modal neon-tile neon-rounded px-3 py-1 d-flex">
+      <div class="d-md-flex align-items-center">
+        <div class="mb-1 me-2 me-md-4">
+          <div class="d-flex justify-content-between">
+            <span>
+              {{ icon('questionnaire') }}
+              {{ questionnaire.question }}
+            </span>
+          </div>
+          <div class="text-muted">
+            {{ questionnaire.subtitle }}
+          </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          {% for answer in questionnaire.answers %}
+            <button class="sem:questionnaireAnswer btn btn-sm btn-secondary py-2 py-md-1 px-3 px-sm-3 px-md-2 me-3 me-md-1">
+              {{ answer }}
+            </button>
+          {% endfor %}
         </div>
       </div>
-      {% for answer in questionnaire.answers %}
-        <button class="sem:questionnaireAnswer btn btn-sm btn-secondary me-1">
-          {{ answer }}
-        </button>
-      {% endfor %}
-      <div class="sem:questionnaireClose cursor-pointer">
+      <span class="sem:questionnaireClose cursor-pointer align-self-md-center ms-0 ms-md-2">
         {{ icon('questionnaireClose') }}
-      </div>
+      </span>
     </div>
   </div>
   {% endif %}
@@ -193,18 +199,18 @@
 
               {% if accessToLookAndFeel %}
                 <style>
-                    .option {
-                        opacity: 0.5;
-                        cursor: pointer;
-                    }
+                  .option {
+                    opacity: 0.5;
+                    cursor: pointer;
+                  }
 
-                    .option:hover {
-                        text-decoration: underline;
-                    }
+                  .option:hover {
+                    text-decoration: underline;
+                  }
 
-                    .option-active {
-                        font-weight: bold;
-                    }
+                  .option-active {
+                    font-weight: bold;
+                  }
                 </style>
                 <span class="dropdown-item" title="Przełącz Look&amp;Feel forum" id="lookAndFeelSwitcher" style="cursor:default;">
                   {{ icon('lookAndFeel') }}
