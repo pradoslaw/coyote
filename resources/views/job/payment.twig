@@ -83,14 +83,14 @@
         <div class="card-body">
           <div class="row">
             <div class="col-sm-7">
-              <vue-form-group :errors="errors['invoice.name']" label="Nazwa firmy">
+              <vue-form-group :errors="errors['invoice.name']" label="Nazwa firmy *">
                 <vue-text v-model="form.invoice.name" :is-invalid="'invoice.name' in errors" name="invoice[name]"></vue-text>
               </vue-form-group>
             </div>
 
             <div class="col-sm-5">
               <div class="d-flex">
-                <vue-form-group :errors="errors['invoice.country_id']" label="Kraj" class="col-4">
+                <vue-form-group :errors="errors['invoice.country_id']" label="Kraj *" class="col-4">
                   <vue-select
                       :is-invalid="'invoice.country_id' in errors"
                       :options="countries"
@@ -108,19 +108,19 @@
 
           <div class="row">
             <div class="col-sm-4">
-              <vue-form-group :errors="errors['invoice.address']" label="Adres">
+              <vue-form-group :errors="errors['invoice.address']" label="Adres *">
                 <vue-text :is-invalid="'invoice.address' in errors" v-model="form.invoice.address" name="invoice[address]"></vue-text>
               </vue-form-group>
             </div>
 
             <div class="col-sm-3">
-              <vue-form-group :errors="errors['invoice.postal_code']" label="Kod pocztowy">
+              <vue-form-group :errors="errors['invoice.postal_code']" label="Kod pocztowy *">
                 <vue-text :is-invalid="'invoice.postal_code' in errors" v-model="form.invoice.postal_code" name="invoice[postal_code]"></vue-text>
               </vue-form-group>
             </div>
 
             <div class="col-sm-5">
-              <vue-form-group :errors="errors['invoice.city']" label="Miasto">
+              <vue-form-group :errors="errors['invoice.city']" label="Miasto *">
                 <vue-text :is-invalid="'invoice.city' in errors" v-model="form.invoice.city" name="invoice[city]"></vue-text>
               </vue-form-group>
             </div>
