@@ -12,13 +12,13 @@
         4Programmers każdego miesiąca odwiedza ponad <strong>150 000+</strong> programistów.
       </h2>
     </div>
-    <div class="d-md-flex align-items-end justify-content-center">
+    <div class="d-xl-flex align-items-end justify-content-center">
       {% set colors = [
         "pricing-plan--gray", "pricing-plan--yellow", "pricing-plan--blue",
         "pricing-plan--violet", "pricing-plan--green"
       ] %}
       {% for plan in plans %}
-        <div class="mb-4 px-md-2 {{ loop.index0 == 0 ? 'align-self-end' : 'align-self-stretch' }}">
+        <div class="width-xl-1/5 mb-4 px-md-2 {{ loop.index0 == 0 ? 'align-self-end' : 'align-self-stretch' }}">
           <div class="pricing-plan {{ colors[loop.index0] }} {{ loop.index0 == 0 ?: 'pricing-plan--tall' }}">
             <div class="pricing-plan__body">
               <div class="pricing-plan__content">

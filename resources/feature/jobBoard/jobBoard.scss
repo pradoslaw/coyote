@@ -128,9 +128,6 @@
     color:        var(--strong);
     margin-right: 4px;
   }
-  @include size.size(md) {
-    width: 330px;
-  }
 }
 
 .testimonials {
@@ -147,5 +144,11 @@
       -webkit-filter: invert(1);
       filter:         invert(1);
     }
+  }
+}
+
+@include size.size(xl) {
+  .width-xl-1\/5 {
+    width: 20%;
   }
 }

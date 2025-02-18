@@ -20,33 +20,60 @@ class BusinessController extends Controller
         return $this->view('job.business', [
             'plans' => [
                 [
-                    'name'           => 'Standard',
-                    'price'          => 39,
-                    'durationInDays' => 40,
-                    'createOfferUrl' => $this->createOfferUrl('Standard'),
-                ],
-                [
-                    'name'           => 'Plus',
-                    'price'          => 65,
-                    'durationInDays' => 40,
+                    'name'           => 'Free',
+                    'price'          => 0,
+                    'durationInDays' => 14,
                     'bulletPoints'   => [
-                        'Promocja ogłoszenia w kanałach social media',
-                        new StringHtml('Podbicie ogłoszenia <strong>1x</strong>'),
-                        new StringHtml('<strong>Reklama</strong> oferty na forum i stronie głównej'),
+                        'Za pierwsze ogłoszenie każdego miesiąca',
+                        'Tylko dla organizacji pożytku publicznego, uczelni wyższych oraz firm zatrudniających do 5 osób.',
                     ],
-                    'createOfferUrl' => $this->createOfferUrl('Plus'),
+                    'createOfferUrl' => $this->createOfferUrl('Free'),
                 ],
                 [
                     'name'           => 'Premium',
                     'price'          => 159,
-                    'durationInDays' => 40,
+                    'durationInDays' => 30,
                     'bulletPoints'   => [
-                        new StringHtml('Pakiet zawiera <strong>wszystkie punkty</strong> z planu Plus'),
-                        new StringHtml('Podbicie ogłoszenia <strong>3x</strong>'),
-                        new StringHtml('<strong>Wyróżnienie</strong> kolorem'),
-                        new StringHtml('Wyróżnienie ogłoszenia <strong>na górze listy</strong> wyszukiwania'),
+                        new StringHtml('Do wykorzystania w ciągu <strong>12 miesięcy</strong>'),
+                        new StringHtml('Gwarancja przedstawienia oferty min. <strong>1000 programistom</strong> lub zwrot pieniędzy'),
+                        new StringHtml('Gwarancja min. <strong>10,000 wyświetleń</strong> wizytówki Twojej oferty na portalu 4programmers'),
+                        new StringHtml('Automatyczne <strong>3 podbicia</strong>'),
+                        new StringHtml('Do <strong>10 lokalizacji</strong>'),
                     ],
                     'createOfferUrl' => $this->createOfferUrl('Premium'),
+                ],
+                [
+                    'name'           => 'Strategic',
+                    'price'          => 119,
+                    'fullPrice'      => 357,
+                    'durationInDays' => 30,
+                    'bulletPoints'   => [
+                        new StringHtml('Pakiet <strong>zawiera</strong> wszystkie punkty z planu Premium'),
+                    ],
+                    'discount'       => '25%',
+                    'createOfferUrl' => $this->createOfferUrl('Strategic'),
+                ],
+                [
+                    'name'           => 'Growth',
+                    'price'          => 99,
+                    'fullPrice'      => 495,
+                    'durationInDays' => 30,
+                    'bulletPoints'   => [
+                        new StringHtml('Pakiet <strong>zawiera</strong> wszystkie punkty z planu Premium'),
+                    ],
+                    'discount'       => '38%',
+                    'createOfferUrl' => $this->createOfferUrl('Growth'),
+                ],
+                [
+                    'name'           => 'Scale',
+                    'fullPrice'      => 1580,
+                    'price'          => 79,
+                    'durationInDays' => 30,
+                    'bulletPoints'   => [
+                        new StringHtml('Pakiet <strong>zawiera</strong> wszystkie punkty z planu Premium'),
+                    ],
+                    'discount'       => '50%',
+                    'createOfferUrl' => $this->createOfferUrl('Scale'),
                 ],
             ],
         ]);
