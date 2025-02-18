@@ -3,51 +3,90 @@
 {% block title %}Nasza oferta :: Praca {{ parent() }}{% endblock %}
 
 {% block container %}
-  <script>
-    var plans = {{ plans|raw }};
-  </script>
-  <div id="js-business" class="row">
-    <div class="col-xl-2">
-    </div>
-    <div class="col-xl-8">
-      <h1 class="text-center mt-4 mb-4">
-        Dodaj ofertę pracy w kilku <br>
-        prostych krokach
+  <div class="reset">
+    <div class="page-heading">
+      <h1 class="page-heading__title">
+        Znajdź najlepszych programistów szybciej i skuteczniej!
       </h1>
-      <vue-pricing :plans="plans" @select="submitUrl"></vue-pricing>
-      <p class="text-center mt-3">
-        Masz pytania? Skontaktuj się z nami pod adresem
-        <a href="mailto:{{ config('mail.from.address') }}" class="neon-color-link-light">
-          {{ config('mail.from.address') }}
-        </a>.
-      </p>
+      <h2 class="page-heading__subtitle">
+        4Programmers każdego miesiąca odwiedza ponad <strong>150 000+</strong> programistów.
+      </h2>
     </div>
-  </div>
-  <div class="text-center mt-4">
-    <p style="font-weight:500; font-size:24px; font-family:'Inter',sans-serif;">
-      Pomogliśmy z sukcesami między innymi takim firmom jak:
-    </p>
-    {% set logos = [
-      "/img/jobBoard/logo1.png",
-      "/img/jobBoard/logo2.png",
-      "/img/jobBoard/logo3.png",
-      "/img/jobBoard/logo4.png",
-      "/img/jobBoard/logo5.png",
-      "/img/jobBoard/logo6.png",
-      "/img/jobBoard/logo7.png",
-      "/img/jobBoard/logo8.png",
-      "/img/jobBoard/logo9.png",
-      "/img/jobBoard/logo10.png",
-    ] %}
-    <div class="testimonials">
-      {% for logo in logos %}
-        <div class="col-6 col-sm-4 col-md-3 col-lg-2 testimonials__testimonial">
-          <img
-              class="{{ loop.index0 in [0,1,3] ?: 'dark-theme-invert' }}"
-              src="{{ logo }}" 
-              style="max-width:76%; padding-left:12%;padding-right:12%;">
+    <div class="d-md-flex align-items-end justify-content-center">
+      {% set colors = [
+        "pricing-plan--gray", "pricing-plan--yellow", "pricing-plan--blue",
+        "pricing-plan--violet", "pricing-plan--green"
+      ] %}
+      {% for plan in plans %}
+        <div class="mb-4 px-md-2 {{ loop.index0 == 0 ? 'align-self-end' : 'align-self-stretch' }}">
+          <div class="pricing-plan {{ colors[loop.index0] }} {{ loop.index0 == 0 ?: 'pricing-plan--tall' }}">
+            <div class="pricing-plan__body">
+              <div class="pricing-plan__content">
+                <p class="pricing-plan__name">
+                  <span class="pricing-plan__name-icon">
+                    {{ icon('jobBoardPricingPlanName') }}
+                  </span>
+                  {{ plan.name }}
+                </p>
+                <hr class="pricing-plan__divider">
+                <p class="pricing-plan__price">{{ plan.price }} PLN</p>
+                <p>za ogłoszenie publikowane <strong>{{ plan.durationInDays }} dni</strong></p>
+                {% if plan.fullPrice %}
+                  <p class="mt-3">
+                    <strong class="pricing-plan__full-price">{{ plan.fullPrice }} PLN</strong> koszt całego pakietu
+                  </p>
+                {% endif %}
+                <hr class="pricing-plan__divider">
+                <ul>
+                  {% for bulletPoint in plan.bulletPoints %}
+                    <li class="pricing-plan__bullet-item">
+                      <span class="pricing-plan__bullet">
+                        {{ icon('jobBoardPricingPlanBulletPoint') }}
+                      </span>
+                      <span>{{ bulletPoint }}</span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% if plan.discount %}
+                <div class="pricing-plan__footer">
+                  Kup pakiet i zaoszczędź <strong>{{ plan.discount }}</strong>
+                </div>
+              {% endif %}
+            </div>
+            <a class="btn btn-primary mt-3" style="width:100%;" href="{{ plan.createOfferUrl }}">
+              Wybierz plan
+            </a>
+          </div>
         </div>
       {% endfor %}
+    </div>
+
+    <div class="page-heading">
+      <h1 class="page-heading__subtitle">
+        Pomogliśmy z sukcesami między innymi takim firmom jak:
+      </h1>
+    </div>
+    <div class="text-center mt-4">
+      {% set logos = [
+        "/img/jobBoard/logo1.png",
+        "/img/jobBoard/logo2.png",
+        "/img/jobBoard/logo3.png",
+        "/img/jobBoard/logo4.png",
+        "/img/jobBoard/logo5.png",
+        "/img/jobBoard/logo6.png",
+        "/img/jobBoard/logo7.png",
+        "/img/jobBoard/logo8.png",
+        "/img/jobBoard/logo9.png",
+        "/img/jobBoard/logo10.png",
+      ] %}
+      <div class="testimonials">
+        {% for logo in logos %}
+          <div class="testimonials__testimonial {{ loop.index0 in [0,1,3] ?: 'testimonials__testimonial--dark-invert' }}">
+            <img src="{{ logo }}" style="max-width:76%; padding-left:12%;padding-right:12%;">
+          </div>
+        {% endfor %}
+      </div>
     </div>
   </div>
 {% endblock %}

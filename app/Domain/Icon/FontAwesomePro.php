@@ -350,6 +350,8 @@ readonly class FontAwesomePro
             'jobBoardSearch'                            => 'fa-light fa-magnifying-glass',
             'jobBoardSearchLocation'                    => 'fa-light fa-location-dot',
             'jobBoardSubscribedOffers'                  => 'fa-light fa-heart',
+            'jobBoardPricingPlanBulletPoint'            => 'fa-light fa-check',
+            'jobBoardPricingPlanName'                   => 'fa-light fa-share-nodes',
 
             // job landing
             'jobLandingBenefit'                         => 'fa-light fa-circle-check',

@@ -2,7 +2,6 @@ import {postJobBoardMilestone} from '../../../feature/jobBoard/jobBoard';
 import VueButton from '../../components/forms/button.vue';
 import VueFirmForm from '../../components/job/firm-form.vue';
 import VueJobForm from '../../components/job/form.vue';
-import VuePricing from '../../components/job/pricing.vue';
 import VueTabs from '../../components/tabs.vue';
 import store from '../../store/index';
 import {createVueAppNotifications} from '../../vue';
@@ -26,7 +25,6 @@ createVueAppNotifications('Job submit', '#js-submit-form', {
     'vue-job-form': VueJobForm,
     'vue-firm-form': VueFirmForm,
     'vue-button': VueButton,
-    'vue-pricing': VuePricing,
     'vue-tabs': VueTabs,
   },
   created() {

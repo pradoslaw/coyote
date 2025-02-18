@@ -1,0 +1,151 @@
+@use "../../../public/fonts/inter/inter.css";
+@use "../lookAndFeel/feel" as feel;
+@use "../lookAndFeel/size" as size;
+@use "../lookAndFeel/style-guide" as style;
+@use "../theme/theme" as theme;
+
+@mixin icon($size, $borderRadius) {
+  display:         inline-flex;
+  justify-content: center;
+  align-items:     center;
+  width:           $size;
+  height:          $size;
+  border-radius:   $borderRadius;
+}
+
+.reset {
+  font-family: Inter, sans-serif;
+  font-size:   14px;
+  ul {
+    margin-bottom: 0;
+    padding-left:  0;
+    list-style:    none;
+  }
+  p {
+    margin: 0;
+  }
+}
+
+.page-heading {
+  text-align:    center;
+  @include theme.property(color, style.$neutral-700, style.$neutral-050);
+  margin-top:    80px;
+  margin-bottom: 48px;
+  .page-heading__title {
+    font-size:   32px;
+    font-weight: 600;
+  }
+  .page-heading__subtitle {
+    font-size:   18px;
+    font-weight: 400;
+    margin-top:  28px;
+  }
+}
+
+.pricing-plan {
+  @include theme.property(background, white, style.$neutral-800);
+  @include theme.property(color, style.$navy-800, style.$navy-050);
+  border-radius: 16px;
+  padding:       8px;
+  @mixin pricingPlanColors($weak, $medium, $strong) {
+    --weak:   #{$weak};
+    --medium: #{$medium};
+    --strong: #{$strong};
+  }
+  &.pricing-plan--gray {
+    @include pricingPlanColors(style.$neutral-050, style.$neutral-100, #0f1419);
+  }
+  &.pricing-plan--yellow {
+    @include pricingPlanColors(#f7f5e6, #dbd7bb, #3d3709);
+  }
+  &.pricing-plan--blue {
+    @include pricingPlanColors(#eff5ff, #dbeafe, #2563eb);
+  }
+  &.pricing-plan--violet {
+    @include pricingPlanColors(#ebe8fc, #cac5e9, #3620c2);
+  }
+  &.pricing-plan--green {
+    @include pricingPlanColors(#e7f7e6, #d5f0d3, #028d30);
+  }
+  &.pricing-plan--tall {
+    height:         100%;
+    display:        flex;
+    flex-direction: column;
+  }
+  .pricing-plan__name {
+    font-size:   18px;
+    font-weight: 500;
+  }
+  .pricing-plan__name-icon {
+    @include icon(32px, 8px);
+    background: white;
+    color:      var(--strong);
+  }
+  .pricing-plan__price,
+  .pricing-plan__full-price {
+    @include theme.property(color, var(--strong), var(--weak));
+  }
+  .pricing-plan__price {
+    font-size:   32px;
+    font-weight: 600;
+  }
+  .pricing-plan__full-price {
+    font-size:   16px;
+    font-weight: 500;
+  }
+  .pricing-plan__body {
+    @include theme.property(background, var(--weak), var(--strong));
+    border-radius:  8px;
+    flex-grow:      1;
+    display:        flex;
+    flex-direction: column;
+  }
+  .pricing-plan__content {
+    padding:   16px;
+    flex-grow: 1;
+  }
+  .pricing-plan__footer {
+    text-align:                 center;
+    padding:                    16px;
+    border-bottom-left-radius:  8px;
+    border-bottom-right-radius: 8px;
+    background:                 var(--medium);
+    color:                      var(--strong);
+  }
+  .pricing-plan__divider {
+    @include theme.property(border-top-color, white, style.$neutral-800);
+    border-top-width: 1px;
+  }
+  .pricing-plan__bullet-item {
+    margin-bottom: 4px;
+    display:       flex;
+  }
+  .pricing-plan__bullet {
+    @include icon(20px, 6px);
+    flex-shrink:  0;
+    display:      block;
+    background:   var(--medium);
+    color:        var(--strong);
+    margin-right: 4px;
+  }
+  @include size.size(md) {
+    width: 330px;
+  }
+}
+
+.testimonials {
+  display:   flex;
+  flex-wrap: wrap;
+  .testimonials__testimonial {
+    width: 50%;
+    @include size.size(md) {
+      width: 20%;
+    }
+  }
+  .testimonials__testimonial--dark-invert {
+    @include theme.dark {
+      -webkit-filter: invert(1);
+      filter:         invert(1);
+    }
+  }
+}
