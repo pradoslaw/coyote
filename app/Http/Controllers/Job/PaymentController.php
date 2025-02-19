@@ -44,7 +44,7 @@ class PaymentController extends Controller
                 }
                 return $next($request);
             },
-            ['except' => 'success']
+            ['except' => 'success'],
         );
 
         $this->breadcrumb->push('Praca', route('job.home'));
@@ -55,18 +55,8 @@ class PaymentController extends Controller
     {
         $this->breadcrumb->push($payment->job->title, UrlBuilder::job($payment->job));
         $this->breadcrumb->push('Płatność', route('job.payment', ['payment' => $payment]));
-
         $firm = $payment->job->firm ?? new Firm();
-
-//        if (empty($firm->country_id)) {
-//            $geoIp = app('geo-ip');
-//            $result = $geoIp->ip($this->request->ip());
-//
-//            $firm->country = $result->country_code ?? null;
-//        }
-
         $calculator = CalculatorFactory::payment($payment);
-
         return $this->view('job.payment', [
             'payment'    => $payment,
             'vat_rates'  => $this->vatRates,
