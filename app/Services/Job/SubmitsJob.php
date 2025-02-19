@@ -26,7 +26,7 @@ trait SubmitsJob
         $firm = $this->firm->loadDefaultFirm($user->id);
         $job->firm()->associate($firm);
         $job->firm->load(['benefits', 'assets']);
-        $job->plan_id = request('default_plan', $this->plan->findDefault()->id);
+        $job->plan_id = request('plan');
         $job->email = $user->email;
         $job->user_id = $user->id;
         $job->setRelation('features', $this->getDefaultFeatures($job, $user));

@@ -54,6 +54,9 @@ class SubmitController extends Controller
     public function index(Job $job, RouteVisits $visits): View|RedirectResponse
     {
         if (!$job->exists) {
+            if (!$this->request->has('plan') && !$this->request->has('copy')) {
+                return response()->redirectToRoute('job.business');
+            }
             $job = $this->loadDefaults($job, $this->auth);
             $visits->visit($this->request->path(), Carbon::now()->toDateString());
             if ($this->request->query->has('copy')) {
