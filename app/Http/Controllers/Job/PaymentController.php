@@ -77,11 +77,9 @@ class PaymentController extends Controller
 
         $calculator = CalculatorFactory::payment($payment);
         $calculator->setCoupon($coupon);
-
-        $country = $this->country->find($request->input('invoice.country_id'));
-
-        $vatRateCalculator = new VatRateCalculator();
-        $calculator->vatRate = $vatRateCalculator->vatRate($country, $request->input('invoice.vat_id'));
+        $calculator->vatRate = new VatRateCalculator()->vatRate(
+            $this->country->find($request->input('invoice.country_id')),
+            $request->input('invoice.vat_id'));
 
         if ($payment->job->firm_id) {
             // update firm's VAT ID
@@ -93,13 +91,12 @@ class PaymentController extends Controller
 
         try {
             // save invoice data. keep in mind that we do not setup invoice number until payment is done.
-            $invoice = $this->invoice->create(
-                array_merge(
-                    $request->input('invoice', []),
-                    ['user_id' => $this->auth->id]),
+            $invoice = $this->invoice->create([
+                ...$request->input('invoice', []),
+                'user_id' => $this->auth->id,
+            ],
                 $payment,
                 $calculator);
-
             $payment->invoice()->associate($invoice);
             $payment->save();
             $this->database->commit();
@@ -120,7 +117,7 @@ class PaymentController extends Controller
 
         $intent = PaymentIntent::create([
             'amount'               => $payment->invoice->grossPrice() * 100,
-            'currency'             => strtolower($payment->invoice->currency->name),
+            'currency'             => \strToLower($payment->invoice->currency->name),
             'metadata'             => ['id' => $payment->id],
             'payment_method_types' => [$request->input('payment_method')],
         ]);

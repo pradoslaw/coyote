@@ -9,7 +9,7 @@ use Coyote\Firm;
 use Coyote\Firm\Benefit;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\Job\JobRequest;
-use Coyote\Http\Resources\FirmFormResource as FirmResource;
+use Coyote\Http\Resources\FirmFormResource;
 use Coyote\Http\Resources\JobFormResource;
 use Coyote\Job;
 use Coyote\Notifications\Job\CreatedNotification;
@@ -87,10 +87,9 @@ class SubmitController extends Controller
         $this->authorize('update', $job);
         $this->breadcrumb($job);
         $this->firm->pushCriteria(new EagerLoading(['benefits', 'assets']));
-
         return $this->view('job.submit', [
             'job'              => new JobFormResource($job),
-            'firms'            => FirmResource::collection($this->firm->findAllBy('user_id', $this->userId)),
+            'firms'            => FirmFormResource::collection($this->firm->findAllBy('user_id', $this->userId)),
             'is_plan_ongoing'  => $job->is_publish,
             'plans'            => $this->plan->active()->toJson(),
             'currencies'       => Currency::all(),
@@ -134,11 +133,12 @@ class SubmitController extends Controller
 
         $this->transaction(function () use ($job, $request) {
             $this->saveRelations($job, $this->auth);
-
             if ($job->wasRecentlyCreated || !$job->is_publish) {
-                $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length]);
+                $job->payments()->create([
+                    'plan_id' => $job->plan_id,
+                    'days'    => $job->plan->length,
+                ]);
             }
-
             event(new JobWasSaved($job)); // we don't queue listeners for this event
         });
 
