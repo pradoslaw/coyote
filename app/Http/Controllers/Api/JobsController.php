@@ -1,7 +1,6 @@
 <?php
 namespace Coyote\Http\Controllers\Api;
 
-use Coyote\Events\JobWasSaved;
 use Coyote\Events\PaymentPaid;
 use Coyote\Firm;
 use Coyote\Http\Factories\MediaFactory;
@@ -13,16 +12,13 @@ use Coyote\Repositories\Criteria\EagerLoadingWithCount;
 use Coyote\Repositories\Criteria\Job\OnlyPublished;
 use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Coyote\Repositories\Criteria\Sort;
-use Coyote\Repositories\Eloquent\CouponRepository;
 use Coyote\Repositories\Eloquent\FirmRepository;
 use Coyote\Repositories\Eloquent\JobRepository;
 use Coyote\Repositories\Eloquent\PlanRepository;
 use Coyote\Services\SubmitJobService;
 use Coyote\User;
 use Illuminate\Contracts\Auth\Factory as Auth;
-use Illuminate\Database\Connection;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
@@ -30,8 +26,6 @@ use Illuminate\Routing\Controller;
 class JobsController extends Controller
 {
     use AuthorizesRequests, MediaFactory;
-
-    protected Request $request;
 
     public function __construct(
         private JobRepository  $job,
@@ -59,52 +53,32 @@ class JobsController extends Controller
         return new JobApiResource($job);
     }
 
-    public function save(Job $job, ApiRequest $request, Auth $auth, CouponRepository $repository, SubmitJobService $submitJob): Response
+    public function save(Job $job, ApiRequest $request, Auth $auth, SubmitJobService $submitJob): Response
     {
         /** @var User $user */
         $user = $auth->guard('api')->user();
-
         JobApiResource::$parser = app('parser.job');
-
         if (!$job->exists) {
             $job = $submitJob->loadDefaults($job, $user);
             $job->firm()->dissociate(); // default setting with API: firm is not assigned to the job
         }
-
         $job->fill(array_merge(['tags' => [], 'locations' => []], $request->all()));
-
         if ($request->filled('firm.name')) {
             $firm = $this->firm->loadFirm($user->id, $request->input('firm.name'));
-
             $firm->fill($request->input('firm'));
-
             if ($request->has('firm.logo')) {
-                $media = $this->getMediaFactory()->make('logo')->put(base64_decode($request->input('firm.logo')));
-                $firm->logo = $media->getFilename();
+                $firm->logo = $this->getMediaFactory()
+                    ->make('logo')
+                    ->put(base64_decode($request->input('firm.logo')))
+                    ->getFilename();
             }
-
             Firm::creating(function (Firm $model) use ($user) {
                 $model->user_id = $user->id;
             });
-
             $job->firm()->associate($firm);
         }
-
         $job->load('plan'); // reload plan relation as it might has changed
-        $this->request = $request;
-
-        app(Connection::class)->transaction(function () use ($submitJob, $job, $repository, $user) {
-            $submitJob->saveRelations($job, $user);
-            if ($job->wasRecentlyCreated || !$job->is_publish) {
-                $coupon = $repository->findCoupon($user->id, $job->plan->price);
-                $job->payments()->create([
-                    'plan_id'   => $job->plan_id,
-                    'days'      => $job->plan->length,
-                    'coupon_id' => $coupon->id ?? null,
-                ]);
-            }
-            event(new JobWasSaved($job)); // we don't queue listeners for this event
-        });
+        $submitJob->submitJobOffer($user, $job);
         $payment = $submitJob->getUnpaidPayment($job);
         if ($payment) {
             event(new PaymentPaid($payment));

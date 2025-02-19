@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Services;
 
+use Coyote\Events\JobWasSaved;
 use Coyote\Feature;
 use Coyote\Job;
 use Coyote\Payment;
@@ -11,6 +12,7 @@ use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\Tag;
 use Coyote\User;
+use Illuminate\Database\Connection;
 use Illuminate\Http\Request;
 
 readonly class SubmitJobService
@@ -18,7 +20,23 @@ readonly class SubmitJobService
     public function __construct(
         private JobRepository  $job,
         private FirmRepository $firm,
-        private Request        $request) {}
+        private Request        $request,
+        private Connection     $connection,
+    ) {}
+
+    public function submitJobOffer(User $user, Job $job): void
+    {
+        $this->connection->transaction(function () use ($user, $job) {
+            $this->saveRelations($job, $user);
+            if ($job->wasRecentlyCreated || !$job->is_publish) {
+                $job->payments()->create([
+                    'plan_id' => $job->plan_id,
+                    'days'    => $job->plan->length,
+                ]);
+            }
+            event(new JobWasSaved($job)); // we don't queue listeners for this event
+        });
+    }
 
     public function getUnpaidPayment(Job $job): ?Payment
     {

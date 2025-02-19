@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\Job;
 use Carbon\Carbon;
 use Coyote\Currency;
 use Coyote\Domain\RouteVisits;
-use Coyote\Events\JobWasSaved;
 use Coyote\Firm;
 use Coyote\Firm\Benefit;
 use Coyote\Http\Controllers\Controller;
@@ -109,16 +108,7 @@ class SubmitController extends Controller
         } else {
             $job->firm()->dissociate();
         }
-        $this->transaction(function () use ($job, $request) {
-            $this->submitJob->saveRelations($job, $this->auth);
-            if ($job->wasRecentlyCreated || !$job->is_publish) {
-                $job->payments()->create([
-                    'plan_id' => $job->plan_id,
-                    'days'    => $job->plan->length,
-                ]);
-            }
-            event(new JobWasSaved($job)); // we don't queue listeners for this event
-        });
+        $this->submitJob->submitJobOffer($this->auth, $job);
         if ($job->wasRecentlyCreated) {
             $job->user->notify(new CreatedNotification($job));
         }
