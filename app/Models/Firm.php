@@ -1,13 +1,14 @@
 <?php
-
 namespace Coyote;
 
+use Coyote\Firm\Benefit;
 use Coyote\Models\Asset;
 use Coyote\Services\Eloquent\HasMany;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\File;
 use Coyote\Services\Media\Logo;
 use Coyote\Services\Media\SerializeClass;
+use Illuminate\Database\Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -27,20 +28,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $description
  * @property string $vat_id
  * @property int $country_id
- * @property \Coyote\Firm\Benefit[] $benefits
+ * @property Benefit[]|Eloquent\Collection $benefits
  * @property Asset[] $assets
  * @property Logo $logo
- * @property \Coyote\Country $country
+ * @property Country $country
  */
 class Firm extends Model
 {
     use SoftDeletes, SerializeClass;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
         'logo',

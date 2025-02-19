@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Events;
 
 use Coyote\Payment;
@@ -9,16 +8,5 @@ class PaymentPaid
 {
     use SerializesModels;
 
-    /**
-     * @var Payment
-     */
-    public $payment;
-
-    /**
-     * @param Payment $payment
-     */
-    public function __construct(Payment $payment)
-    {
-        $this->payment = $payment;
-    }
+    public function __construct(public Payment $payment) {}
 }
