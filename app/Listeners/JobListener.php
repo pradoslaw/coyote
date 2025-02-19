@@ -8,6 +8,7 @@ use Coyote\Events\PaymentPaid;
 use Coyote\Jobs\UpdateJobOffers;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Services\Elasticsearch\Crawler;
+use Illuminate\Events\Dispatcher;
 
 // Uwaga! Tutaj specjalnie nie implementujemy interfejsu ShouldQueue poniewaz chcemy zeby usuniecie
 // czy dodanie oferty do indeksu nastapilo momentalnie.
@@ -58,17 +59,13 @@ class JobListener
         }
     }
 
-    /**
-     * Register the listeners for the subscriber.
-     *
-     * @param  \Illuminate\Events\Dispatcher  $events
-     */
-    public function subscribe($events)
+    public function subscribe(Dispatcher $events): void
     {
         $events->listen(JobWasSaved::class, 'Coyote\Listeners\JobListener@onJobSave');
         $events->listen(JobDeleting::class, 'Coyote\Listeners\JobListener@onJobDeleting');
 
         $events->listen(PaymentPaid::class, ChangePaymentStatus::class);
         $events->listen(PaymentPaid::class, BoostJobOffer::class);
+        $events->listen(PaymentPaid::class, GrantUserPlanBundle::class);
     }
 }

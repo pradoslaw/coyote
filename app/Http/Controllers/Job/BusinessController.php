@@ -28,6 +28,7 @@ class BusinessController extends Controller
                         'Tylko dla organizacji pożytku publicznego, uczelni wyższych oraz firm zatrudniających do 5 osób.',
                     ],
                     'createOfferUrl' => $this->createOfferUrl('Free'),
+                    'bundleSize'     => 1,
                 ],
                 [
                     'name'           => 'Premium',
@@ -41,6 +42,7 @@ class BusinessController extends Controller
                         new StringHtml('Do <strong>10 lokalizacji</strong>'),
                     ],
                     'createOfferUrl' => $this->createOfferUrl('Premium'),
+                    'bundleSize'     => 1,
                 ],
                 [
                     'name'           => 'Strategic',
@@ -52,6 +54,7 @@ class BusinessController extends Controller
                     ],
                     'discount'       => '25%',
                     'createOfferUrl' => $this->createOfferUrl('Strategic'),
+                    'bundleSize'     => 3,
                 ],
                 [
                     'name'           => 'Growth',
@@ -63,6 +66,8 @@ class BusinessController extends Controller
                     ],
                     'discount'       => '38%',
                     'createOfferUrl' => $this->createOfferUrl('Growth'),
+
+                    'bundleSize' => 5,
                 ],
                 [
                     'name'           => 'Scale',
@@ -74,6 +79,7 @@ class BusinessController extends Controller
                     ],
                     'discount'       => '50%',
                     'createOfferUrl' => $this->createOfferUrl('Scale'),
+                    'bundleSize'     => 20,
                 ],
             ],
         ]);

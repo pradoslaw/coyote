@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property array $benefits
  * @property int $is_default
  * @property int $boost
+ * @property int|null $bundle_size
  */
 class Plan extends Model
 {

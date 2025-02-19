@@ -22,11 +22,15 @@
           <div class="pricing-plan {{ colors[loop.index0] }} {{ loop.index0 == 0 ?: 'pricing-plan--tall' }}">
             <div class="pricing-plan__body">
               <div class="pricing-plan__content">
-                <p class="pricing-plan__name">
+                <p class="pricing-plan__name mb-2">
                   <span class="pricing-plan__name-icon">
                     {{ icon('jobBoardPricingPlanName') }}
                   </span>
                   {{ plan.name }}
+                </p>
+                <p>
+                  <strong>{{ plan.bundleSize }}</strong>
+                  {{ declination(plan.bundleSize, ['opublikowana oferta', 'opublikowane oferty', 'opublikowanych ofert'], true) }}
                 </p>
                 <hr class="pricing-plan__divider">
                 <p class="pricing-plan__price">{{ plan.price }} PLN</p>
