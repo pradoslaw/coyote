@@ -15,23 +15,20 @@ use Coyote\Job;
 use Coyote\Notifications\Job\CreatedNotification;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Eloquent\FirmRepository;
-use Coyote\Repositories\Eloquent\JobRepository;
 use Coyote\Repositories\Eloquent\PlanRepository;
-use Coyote\Services\Job\SubmitsJob;
+use Coyote\Services\SubmitJobService;
 use Coyote\Services\UrlBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class SubmitController extends Controller
 {
-    use SubmitsJob;
-
-    public function __construct(JobRepository $job, FirmRepository $firm, PlanRepository $plan)
+    public function __construct(
+        private FirmRepository   $firm,
+        private PlanRepository   $plan,
+        private SubmitJobService $submitJob)
     {
         parent::__construct();
-        $this->job = $job;
-        $this->firm = $firm;
-        $this->plan = $plan;
     }
 
     public function renew(Job $job, RouteVisits $visits)
@@ -51,7 +48,7 @@ class SubmitController extends Controller
             if (!$this->request->has('plan') && !$this->request->has('copy')) {
                 return response()->redirectToRoute('job.business');
             }
-            $job = $this->loadDefaults($job, $this->auth);
+            $job = $this->submitJob->loadDefaults($job, $this->auth);
             $visits->visit($this->request->path(), Carbon::now()->toDateString());
             if ($this->request->query->has('copy')) {
                 $otherJob = Job::query()->find($this->request->get('copy'));
@@ -91,7 +88,7 @@ class SubmitController extends Controller
         ]);
     }
 
-    public function save(JobRequest $request, Job $job): string
+    public function save(JobRequest $request, Job $job, SubmitJobService $jobService): string
     {
         $job->fill($request->all());
         if ($request->has('firm.name')) {
@@ -113,7 +110,7 @@ class SubmitController extends Controller
             $job->firm()->dissociate();
         }
         $this->transaction(function () use ($job, $request) {
-            $this->saveRelations($job, $this->auth);
+            $this->submitJob->saveRelations($job, $this->auth);
             if ($job->wasRecentlyCreated || !$job->is_publish) {
                 $job->payments()->create([
                     'plan_id' => $job->plan_id,
@@ -125,7 +122,7 @@ class SubmitController extends Controller
         if ($job->wasRecentlyCreated) {
             $job->user->notify(new CreatedNotification($job));
         }
-        $unpaidPayment = $this->getUnpaidPayment($job);
+        $unpaidPayment = $jobService->getUnpaidPayment($job);
         if ($unpaidPayment) {
             session()->flash('success', 'Oferta została dodana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');
             return route('job.payment', [$unpaidPayment]);

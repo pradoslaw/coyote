@@ -14,7 +14,10 @@ use Coyote\Repositories\Criteria\Job\OnlyPublished;
 use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Coyote\Repositories\Criteria\Sort;
 use Coyote\Repositories\Eloquent\CouponRepository;
-use Coyote\Services\Job\SubmitsJob;
+use Coyote\Repositories\Eloquent\FirmRepository;
+use Coyote\Repositories\Eloquent\JobRepository;
+use Coyote\Repositories\Eloquent\PlanRepository;
+use Coyote\Services\SubmitJobService;
 use Coyote\User;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Database\Connection;
@@ -26,9 +29,14 @@ use Illuminate\Routing\Controller;
 
 class JobsController extends Controller
 {
-    use AuthorizesRequests, SubmitsJob, MediaFactory;
+    use AuthorizesRequests, MediaFactory;
 
     protected Request $request;
+
+    public function __construct(
+        private JobRepository  $job,
+        private FirmRepository $firm,
+        private PlanRepository $plan) {}
 
     public function index(): ResourceCollection
     {
@@ -51,7 +59,7 @@ class JobsController extends Controller
         return new JobApiResource($job);
     }
 
-    public function save(Job $job, ApiRequest $request, Auth $auth, CouponRepository $repository): Response
+    public function save(Job $job, ApiRequest $request, Auth $auth, CouponRepository $repository, SubmitJobService $submitJob): Response
     {
         /** @var User $user */
         $user = $auth->guard('api')->user();
@@ -59,7 +67,7 @@ class JobsController extends Controller
         JobApiResource::$parser = app('parser.job');
 
         if (!$job->exists) {
-            $job = $this->loadDefaults($job, $user);
+            $job = $submitJob->loadDefaults($job, $user);
             $job->firm()->dissociate(); // default setting with API: firm is not assigned to the job
         }
 
@@ -85,8 +93,8 @@ class JobsController extends Controller
         $job->load('plan'); // reload plan relation as it might has changed
         $this->request = $request;
 
-        app(Connection::class)->transaction(function () use ($job, $repository, $user) {
-            $this->saveRelations($job, $user);
+        app(Connection::class)->transaction(function () use ($submitJob, $job, $repository, $user) {
+            $submitJob->saveRelations($job, $user);
             if ($job->wasRecentlyCreated || !$job->is_publish) {
                 $coupon = $repository->findCoupon($user->id, $job->plan->price);
                 $job->payments()->create([
@@ -97,7 +105,7 @@ class JobsController extends Controller
             }
             event(new JobWasSaved($job)); // we don't queue listeners for this event
         });
-        $payment = $this->getUnpaidPayment($job);
+        $payment = $submitJob->getUnpaidPayment($job);
         if ($payment) {
             event(new PaymentPaid($payment));
         }

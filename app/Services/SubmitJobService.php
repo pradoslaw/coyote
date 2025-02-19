@@ -1,12 +1,11 @@
 <?php
-namespace Coyote\Services\Job;
+namespace Coyote\Services;
 
 use Coyote\Feature;
 use Coyote\Job;
 use Coyote\Payment;
 use Coyote\Repositories\Eloquent\FirmRepository;
 use Coyote\Repositories\Eloquent\JobRepository;
-use Coyote\Repositories\Eloquent\PlanRepository;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
@@ -14,12 +13,17 @@ use Coyote\Tag;
 use Coyote\User;
 use Illuminate\Http\Request;
 
-trait SubmitsJob
+readonly class SubmitJobService
 {
     public function __construct(
         private JobRepository  $job,
         private FirmRepository $firm,
-        private PlanRepository $plan) {}
+        private Request        $request) {}
+
+    public function getUnpaidPayment(Job $job): ?Payment
+    {
+        return !$job->is_publish ? $job->getUnpaidPayment() : null;
+    }
 
     public function loadDefaults(Job $job, User $user): Job
     {
@@ -33,7 +37,7 @@ trait SubmitsJob
         return $job;
     }
 
-    protected function saveRelations(Job $job, User $user): Job
+    public function saveRelations(Job $job, User $user): Job
     {
         $activity = $job->id ? Stream_Update::class : Stream_Create::class;
         if ($job->firm) {
@@ -57,7 +61,7 @@ trait SubmitsJob
         return $job;
     }
 
-    protected function getDefaultFeatures(Job $job, User $user): array
+    private function getDefaultFeatures(Job $job, User $user): array
     {
         $features = $this->job->getDefaultFeatures($user->id);
         $models = [];
@@ -72,12 +76,7 @@ trait SubmitsJob
         return $models;
     }
 
-    protected function getUnpaidPayment(Job $job): ?Payment
-    {
-        return !$job->is_publish ? $job->getUnpaidPayment() : null;
-    }
-
-    protected function features(Request $request): array
+    private function features(Request $request): array
     {
         $features = [];
         foreach ($request->input('features', []) as $feature) {
@@ -87,7 +86,7 @@ trait SubmitsJob
         return $features;
     }
 
-    protected function tags(Request $request): array
+    private function tags(Request $request): array
     {
         $tags = [];
         $order = 0;
