@@ -40,8 +40,8 @@ class BoostJobOffer implements ShouldQueue
             $payment->coupon->delete();
         }
         $payment->save();
-        $this->publishJob($payment->job, $payment->plan, $payment->ends_at);
-        $this->indexJobOffer($payment);
+        self::publishJob($payment->job, $payment->plan, $payment->ends_at);
+        self::indexJobOffer($payment->job);
         $this->sendEmailWithInvoice($payment, $pdf);
     }
 
@@ -50,7 +50,7 @@ class BoostJobOffer implements ShouldQueue
         return $payment->invoice_id && $payment->invoice->name && $payment->invoice->netPrice();
     }
 
-    private function publishJob(Job $job, Plan $plan, Carbon $endsAt): void
+    public static function publishJob(Job $job, Plan $plan, Carbon $endsAt): void
     {
         foreach ($plan->benefits as $benefit) {
             if ($benefit !== 'is_social') { // column is_social does not exist in table
@@ -62,14 +62,13 @@ class BoostJobOffer implements ShouldQueue
         $job->save();
     }
 
-    private function indexJobOffer(Payment $payment): void
+    public static function indexJobOffer(Job $job): void
     {
-        new Crawler()->index($payment->job);
+        new Crawler()->index($job);
     }
 
     private function sendEmailWithInvoice(Payment $payment, ?string $pdf): void
     {
-        $notification = new SuccessfulPaymentNotification($payment, $pdf);
-        $payment->job->user->notify($notification);
+        $payment->job->user->notify(new SuccessfulPaymentNotification($payment, $pdf));
     }
 }

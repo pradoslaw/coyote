@@ -114,10 +114,10 @@ class SubmitController extends Controller
         }
         $unpaidPayment = $jobService->getUnpaidPayment($job);
         if ($unpaidPayment) {
-            session()->flash('success', 'Oferta została dodana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');
+            session()->flash('success', 'Oferta została zapisana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');
             return route('job.payment', [$unpaidPayment]);
         }
-        session()->flash('success', 'Oferta została prawidłowo dodana.');
+        session()->flash('success', 'Oferta została opublikowana.');
         return UrlBuilder::job($job);
     }
 

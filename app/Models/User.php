@@ -4,6 +4,7 @@ namespace Coyote;
 use Carbon\Carbon;
 use Coyote\Feature\Trial\TrialSession;
 use Coyote\Models\Scopes\ExcludeBlocked;
+use Coyote\Models\UserPlanBundle;
 use Coyote\Notifications\ResetPasswordNotification;
 use Coyote\Services\Media;
 use Coyote\Services\Media\File;
@@ -77,7 +78,7 @@ use Ramsey\Uuid\Uuid;
  * @property File $photo
  * @property bool $is_online
  * @property bool $alert_login
- * @property \Coyote\Notification\Setting $notificationSettings[]
+ * @property \Coyote\Notification\Setting[] $notificationSettings
  * @property Group[]|Collection $groups
  * @property Group $group
  * @property Relation $relations
@@ -87,6 +88,7 @@ use Ramsey\Uuid\Uuid;
  * @property string|null $gdpr
  * @property Guest|null $guest
  * @property TrialSession|null $trialSession
+ * @property UserPlanBundle[]|Eloquent\Collection $planBundles
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -336,5 +338,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function trialSession(): Eloquent\Relations\HasOne
     {
         return $this->hasOne(TrialSession::class);
+    }
+
+    public function planBundles(): HasMany
+    {
+        return $this->hasMany(UserPlanBundle::class);
     }
 }

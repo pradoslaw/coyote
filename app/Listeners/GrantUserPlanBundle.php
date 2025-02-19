@@ -14,7 +14,7 @@ class GrantUserPlanBundle
             $bundle->payment()->associate($payment);
             $bundle->plan()->associate($payment->plan);
             $bundle->user()->associate($payment->job->user);
-            $bundle->remaining = $payment->plan->bundle_size;
+            $bundle->remaining = $payment->plan->bundle_size - 1;
             $bundle->save();
         }
     }

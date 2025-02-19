@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property integer $remaining
+ * @property Plan $plan
  */
 class UserPlanBundle extends Model
 {

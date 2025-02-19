@@ -1,9 +1,12 @@
 <?php
 namespace Coyote\Services;
 
+use Carbon\Carbon;
 use Coyote\Events\JobWasSaved;
 use Coyote\Feature;
 use Coyote\Job;
+use Coyote\Listeners\BoostJobOffer;
+use Coyote\Models\UserPlanBundle;
 use Coyote\Payment;
 use Coyote\Repositories\Eloquent\FirmRepository;
 use Coyote\Repositories\Eloquent\JobRepository;
@@ -29,13 +32,30 @@ readonly class SubmitJobService
         $this->connection->transaction(function () use ($user, $job) {
             $this->saveRelations($job, $user);
             if ($job->wasRecentlyCreated || !$job->is_publish) {
-                $job->payments()->create([
-                    'plan_id' => $job->plan_id,
-                    'days'    => $job->plan->length,
-                ]);
+                $this->redeemPlanBundleOrCreatePayment($user, $job);
             }
             event(new JobWasSaved($job)); // we don't queue listeners for this event
         });
+    }
+
+    private function redeemPlanBundleOrCreatePayment(User $user, Job $job): void
+    {
+        /** @var UserPlanBundle|null $bundle */
+        $bundle = $user->planBundles()->where('plan_id', $job->plan_id)->first();
+        if ($bundle) {
+            if ($bundle->remaining > 0) {
+                $bundle->remaining--;
+                $bundle->save();
+                BoostJobOffer::publishJob($job, $bundle->plan, Carbon::now()->addDays($bundle->plan->length));
+                BoostJobOffer::indexJobOffer($job);
+                return;
+            }
+            $bundle->delete();
+        }
+        $job->payments()->create([
+            'plan_id' => $job->plan->id,
+            'days'    => $job->plan->length,
+        ]);
     }
 
     public function getUnpaidPayment(Job $job): ?Payment
