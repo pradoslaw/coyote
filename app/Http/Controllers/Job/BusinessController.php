@@ -54,7 +54,7 @@ class BusinessController extends Controller
 
     private function createOfferUrl(string $planName): string
     {
-        return route('job.submit', ['default_plan' => $this->planIdByName($planName)]);
+        return route('job.submit', ['plan' => $this->planIdByName($planName)]);
     }
 
     private function planIdByName(string $planName): int
