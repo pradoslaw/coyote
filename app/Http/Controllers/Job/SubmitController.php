@@ -37,17 +37,11 @@ class SubmitController extends Controller
     public function renew(Job $job, RouteVisits $visits)
     {
         abort_unless($job->is_expired, 404);
-
         unset($job->id);
         $job->exists = false; // new job offer
-
         $job->user_id = $this->userId;
-
-        // reset all plan values
-        $job->is_publish = $job->is_ads = $job->is_on_top = $job->is_highlight = false;
-        // reset views counter
-        $job->views = 1;
-
+        $job->is_publish = $job->is_ads = $job->is_on_top = $job->is_highlight = false; // reset all plan values
+        $job->views = 1; // reset views counter
         return $this->index($job, $visits);
     }
 
@@ -60,8 +54,7 @@ class SubmitController extends Controller
             $job = $this->loadDefaults($job, $this->auth);
             $visits->visit($this->request->path(), Carbon::now()->toDateString());
             if ($this->request->query->has('copy')) {
-                $copyJobId = $this->request->get('copy');
-                $otherJob = Job::query()->find($copyJobId);
+                $otherJob = Job::query()->find($this->request->get('copy'));
                 if ($otherJob) {
                     $fields = [
                         'title', 'description', 'tags', 'is_remote', 'remote_range', 'is_gross',
@@ -98,39 +91,27 @@ class SubmitController extends Controller
         ]);
     }
 
-    /**
-     * @param JobRequest $request
-     * @param Job $job
-     * @return string
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function save(JobRequest $request, Job $job)
+    public function save(JobRequest $request, Job $job): string
     {
         $job->fill($request->all());
-
         if ($request->has('firm.name')) {
             $job->firm->fill($request->input('firm'));
-
             // firm ID is present. user is changing assigned firm
             if ($request->filled('firm.id')) {
                 $job->firm->id = $request->input('firm.id');
                 $job->firm->exists = true;
-
                 // syncOriginalAttribute() is important if user changes firm
                 $job->firm->syncOriginalAttribute('id');
             } else {
                 $job->firm->exists = false;
-
                 unset($job->firm->id);
             }
-
             Firm::creating(function (Firm $model) {
                 $model->user_id = $this->userId;
             });
         } else {
             $job->firm()->dissociate();
         }
-
         $this->transaction(function () use ($job, $request) {
             $this->saveRelations($job, $this->auth);
             if ($job->wasRecentlyCreated || !$job->is_publish) {
@@ -141,34 +122,26 @@ class SubmitController extends Controller
             }
             event(new JobWasSaved($job)); // we don't queue listeners for this event
         });
-
         if ($job->wasRecentlyCreated) {
             $job->user->notify(new CreatedNotification($job));
         }
-
-        if ($unpaidPayment = $this->getUnpaidPayment($job)) {
+        $unpaidPayment = $this->getUnpaidPayment($job);
+        if ($unpaidPayment) {
             session()->flash('success', 'Oferta została dodana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');
-
             return route('job.payment', [$unpaidPayment]);
         }
-
         session()->flash('success', 'Oferta została prawidłowo dodana.');
-
         return UrlBuilder::job($job);
     }
 
-    /**
-     * @param Job $job
-     */
-    private function breadcrumb($job)
+    private function breadcrumb(Job $job): void
     {
         $this->breadcrumb->push('Praca', route('job.home'));
-
-        if (empty($job['id'])) {
-            $this->breadcrumb->push('Wystaw ofertę pracy', route('job.submit'));
-        } else {
-            $this->breadcrumb->push($job['title'], route('job.offer', [$job['id'], $job['slug']]));
+        if ($job->exists) {
+            $this->breadcrumb->push($job->title, route('job.offer', [$job->id, $job->slug]));
             $this->breadcrumb->push('Edycja oferty', route('job.submit'));
+        } else {
+            $this->breadcrumb->push('Wystaw ofertę pracy', route('job.submit'));
         }
     }
 }

@@ -67,7 +67,7 @@ trait SubmitsJob
                 'checked' => $checked,
                 'value'   => $checked ? ($feature['value'] ?? null) : null,
             ]);
-            $models[] = Feature::findOrNew($feature['id'])->setRelation('pivot', $pivot);
+            $models[] = Feature::query()->findOrNew($feature['id'])->setRelation('pivot', $pivot);
         }
         return $models;
     }
@@ -92,7 +92,7 @@ trait SubmitsJob
         $tags = [];
         $order = 0;
         foreach ($request->input('tags', []) as $tag) {
-            $model = Tag::firstOrCreate(['name' => $tag['name']]);
+            $model = Tag::query()->firstOrCreate(['name' => $tag['name']]);
             $tags[$model->id] = [
                 'priority' => $tag['priority'] ?? 0,
                 'order'    => ++$order,

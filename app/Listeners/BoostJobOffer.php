@@ -1,101 +1,75 @@
 <?php
-
 namespace Coyote\Listeners;
 
 ini_set('memory_limit', '1G');
 
 use Carbon\Carbon;
 use Coyote\Events\PaymentPaid;
+use Coyote\Job;
 use Coyote\Notifications\SuccessfulPaymentNotification;
 use Coyote\Payment;
+use Coyote\Plan;
 use Coyote\Services\Elasticsearch\Crawler;
-use Illuminate\Database\Connection;
+use Coyote\Services\Invoice;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Coyote\Services\Invoice\Enumerator as InvoiceEnumerator;
-use Coyote\Services\Invoice\Pdf as InvoicePdf;
+use Illuminate\Database\Connection;
 
 class BoostJobOffer implements ShouldQueue
 {
-    /**
-     * @var int
-     */
-    public $delay = 30;
+    public int $delay = 30;
 
-    /**
-     * @var InvoiceEnumerator
-     */
-    private $enumerator;
+    public function __construct(private Invoice\Enumerator $enumerator, private Invoice\Pdf $pdf) {}
 
-    /**
-     * @var InvoicePdf
-     */
-    private $pdf;
-
-    /**
-     * @param InvoiceEnumerator $enumerator
-     * @param InvoicePdf $pdf
-     */
-    public function __construct(InvoiceEnumerator $enumerator, InvoicePdf $pdf)
+    public function handle(PaymentPaid $event): void
     {
-        $this->enumerator = $enumerator;
-        $this->pdf = $pdf;
+        app(Connection::class)->transaction(fn() => $this->handlePaidPayment($event->payment));
     }
 
-    /**
-     * Handle the event.
-     *
-     * @param  PaymentPaid  $event
-     * @return void
-     */
-    public function handle(PaymentPaid $event)
+    private function handlePaidPayment(Payment $payment): void
     {
-        $payment = $event->payment;
-
-        app(Connection::class)->transaction(function () use ($payment) {
+        if ($this->shouldGenerateInvoice($payment)) {
+            $this->enumerator->enumerate($payment->invoice); // set up invoice number since it's already paid.
+            $pdf = $this->pdf->create($payment);
+        } else {
             $pdf = null;
-
-            // set up invoice only if firm name was provided. it's required!
-            if ($this->shouldGeneratePayment($payment)) {
-                // set up invoice number since it's already paid.
-                $this->enumerator->enumerate($payment->invoice);
-                // create pdf
-                $pdf = $this->pdf->create($payment);
-            }
-
-            $payment->status_id = Payment::PAID;
-
-            // establish plan's finish date
-            $payment->starts_at = Carbon::now();
-            $payment->ends_at = Carbon::now()->addDays($payment->days);
-
-            if ($payment->coupon) {
-                $payment->coupon->delete();
-            }
-
-            $payment->save();
-
-            foreach ($payment->plan->benefits as $benefit) {
-                if ($benefit !== 'is_social') { // column is_social does not exist in table
-                    $payment->job->{$benefit} = true;
-                }
-            }
-
-            $payment->job->boost_at = Carbon::now();
-            $payment->job->deadline_at = max($payment->job->deadline_at, $payment->ends_at);
-            $payment->job->save();
-
-            // index job offer
-            (new Crawler())->index($payment->job);
-
-            // send email with invoice
-            $payment->job->user->notify(
-                new SuccessfulPaymentNotification($payment, $pdf)
-            );
-        });
+        }
+        $payment->status_id = Payment::PAID;
+        $payment->starts_at = Carbon::now();
+        $payment->ends_at = Carbon::now()->addDays($payment->days);
+        if ($payment->coupon) {
+            $payment->coupon->delete();
+        }
+        $payment->save();
+        $this->publishJob($payment->job, $payment->plan, $payment->ends_at);
+        $this->indexJobOffer($payment);
+        $this->sendEmailWithInvoice($payment, $pdf);
     }
 
-    private function shouldGeneratePayment(Payment $payment): bool
+    private function shouldGenerateInvoice(Payment $payment): bool
     {
         return $payment->invoice_id && $payment->invoice->name && $payment->invoice->netPrice();
+    }
+
+    private function publishJob(Job $job, Plan $plan, Carbon $endsAt): void
+    {
+        foreach ($plan->benefits as $benefit) {
+            if ($benefit !== 'is_social') { // column is_social does not exist in table
+                $job->{$benefit} = true;
+            }
+        }
+        $job->boost_at = Carbon::now();
+        $job->deadline_at = max($job->deadline_at, $endsAt);
+        $job->save();
+    }
+
+    private function indexJobOffer(Payment $payment): void
+    {
+        new Crawler()->index($payment->job);
+    }
+
+    private function sendEmailWithInvoice(Payment $payment, ?string $pdf): void
+    {
+        $notification = new SuccessfulPaymentNotification($payment, $pdf);
+        $payment->job->user->notify($notification);
     }
 }
