@@ -18,7 +18,7 @@ class BusinessController extends Controller
             $visits->visit($this->request->path(), Carbon::now()->toDateString());
         }
         return $this->view('job.business', [
-            'plans' => [
+            'plans'        => [
                 [
                     'name'           => 'Free',
                     'price'          => 0,
@@ -44,6 +44,8 @@ class BusinessController extends Controller
                     'createOfferUrl' => $this->createOfferUrl('Premium'),
                     'bundleSize'     => 1,
                 ],
+            ],
+            'packagePlans' => [
                 [
                     'name'           => 'Strategic',
                     'price'          => 119,

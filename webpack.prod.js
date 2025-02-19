@@ -4,7 +4,6 @@ const glob = require('glob-all');
 const path = require('path');
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const PurgeCssPlugin = require('purgecss-webpack-plugin');
-const SentryPlugin = require("@sentry/webpack-plugin");
 const webpack = require('webpack');
 
 const plugins = [
@@ -61,6 +60,9 @@ const plugins = [
         'vue-notification-group',
         'vue-notification-wrapper',
         'neon-tab-active',
+        'width-xl-1/5',
+        'width-xl-3/5',
+        'width-xl-1/3',
       ],
       deep: [
         /^logo/,
@@ -89,17 +91,6 @@ const plugins = [
     'RELEASE': null,
   }),
 ];
-
-// if (process.env.RELEASE) {
-//   plugins.push(new SentryPlugin({
-//     include: "./public",
-//     authToken: process.env.SENTRY_API_KEY,
-//     release: process.env.RELEASE,
-//     ignore: ["node_modules"],
-//     org: "coyote",
-//     project: "frontend",
-//   }));
-// }
 
 module.exports = merge(common, {
   mode: "production",
